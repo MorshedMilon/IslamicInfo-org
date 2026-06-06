@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IslamicInfo — A Digital Sanctuary</title>
+<style>
+
+/* ============================================================
+   SANCTUARY CSS — Full self-contained design system
+   IslamicInfo.org  |  Updated May 2026
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+
+/* ── Design Tokens ── */
+:root {
+  --teal-50:  #F0FAFB;
+  --teal-100: #C8EEF1;
+  --teal-200: #8DD8DE;
+  --teal-300: #6AD7DE;
+  --teal-400: #3FBFC7;
+  --teal-500: #2CA4AB;
+  --teal-600: #0297A1;
+  --teal-650: #028890;
+  --teal-700: #00696E;
+  --teal-750: #005A5F;
+  --teal-800: #004E55;
+  --teal-900: #0A3A3D;
+
+  --gold-50:  #FDF8EC;
+  --gold-100: #F7E9C2;
+  --gold-200: #EFD48A;
+  --gold-300: #E5C570;
+  --gold-400: #D9B358;
+  --gold-500: #C5A059;
+  --gold-700: #9A7C3F;
+  --gold-900: #5A4420;
+
+  --ink-primary: #0F2A2C;
+  --ink-body:    #243738;
+  --ink-muted:   #6D797A;
+  --ink-subtle:  #9DA8A9;
+  --ink-faint:   #BCC9C9;
+  --ink-100:     #F5F8F8;
+  --ink-900:     #0A1314;
+
+  --surface:      #F4F7F7;
+  --surface-card: #FAFBFB;
+  --white:        #FFFFFF;
+
+  --elev-1: 0 1px 3px rgba(15,42,44,.06);
+  --elev-2: 0 4px 14px rgba(15,42,44,.08), 0 1px 3px rgba(15,42,44,.04);
+  --elev-3: 0 12px 32px rgba(0,105,110,.10), 0 4px 10px rgba(0,105,110,.06);
+  --elev-4: 0 24px 56px rgba(0,105,110,.13), 0 8px 18px rgba(0,105,110,.07);
+  --inner-light: inset 0 1px 0 rgba(255,255,255,.7);
+  --gold-aura: 0 0 0 1px rgba(197,160,89,.22), 0 8px 32px rgba(197,160,89,.18);
+
+  --grade-sahih: #0F6E56;
+  --grade-hasan: #5D8A3A;
+  --grade-daif:  #A86932;
+  --grade-mawdu: #B33A3A;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Inter', -apple-system, sans-serif;
+  --font-arabic:  'Amiri', 'Cormorant Garamond', serif;
+  --font-serif:   'Cormorant Garamond', Georgia, serif;
+  --font-mono:    ui-monospace, 'SF Mono', monospace;
+
+  --ease-reverent: cubic-bezier(.22,1,.36,1);
+  --ease: cubic-bezier(.22,1,.36,1);
+  --ease-premium: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  --r-sm:  10px; --r-md: 14px; --r-lg: 18px; --r-xl: 24px; --r-2xl: 32px;
+}
+
+/* ── Dark mode ── */
+[data-theme="dark"] {
+  --surface:      #0A1314;
+  --surface-card: #0F1B1D;
+  --white:        #152527;
+  --ink-primary:  #F5F8F8;
+  --ink-body:     #D4DCDD;
+  --ink-muted:    #9AAAAB;
+  --ink-subtle:   #6E7E80;
+  --ink-faint:    #2A3638;
+  --teal-700:     #1A8A91;
+  --teal-500:     #5BC1C7;
+  --teal-300:     #88E0E5;
+  --teal-50:      rgba(0,105,110,.15);
+  --teal-100:     rgba(0,105,110,.25);
+  --gold-50:      rgba(197,160,89,.10);
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.65;
+  background: var(--surface);
+  color: var(--ink-body);
+  scroll-behavior: smooth;
+  transition: background .3s, color .3s;
+}
+body {
+  background-color: var(--surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%2300696E' stroke-width='0.4' opacity='0.04'%3E%3Cpolygon points='60,6 72,32 100,32 78,50 86,76 60,60 34,76 42,50 20,32 48,32'/%3E%3Ccircle cx='60' cy='60' r='52'/%3E%3C/g%3E%3C/svg%3E");
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; }
+
+/* ── Ambient glow ── */
+.ambient {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 10%, rgba(0,105,110,.07), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 15%, rgba(197,160,89,.06), transparent 50%);
+}
+
+.shell { position: relative; z-index: 1; min-height: 100vh; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px,5vw,56px); }
+
+/* ============================================================
+   BISMILLAH GLOBAL COMPONENT
+   ============================================================ */
+.bismillah-bar {
+  text-align: center;
+  padding: 8px 0;
+  font-family: var(--font-arabic);
+  font-size: 20px;
+  direction: rtl;
+  background: linear-gradient(90deg, var(--teal-700), var(--gold-500), var(--teal-700));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: .04em;
+  line-height: 1.8;
+}
+[data-theme="dark"] .bismillah-bar {
+  background: linear-gradient(90deg, var(--teal-300), var(--gold-400), var(--teal-300));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 12px rgba(217,179,88,.6));
+}
+.bismillah-subbar {
+  text-align: center;
+  padding: 6px 0 4px;
+  background: rgba(0,105,110,.04);
+  border-bottom: 0.5px solid rgba(0,105,110,.10);
+}
+[data-theme="dark"] .bismillah-subbar {
+  background: rgba(0,105,110,.10);
+  border-bottom-color: rgba(0,105,110,.20);
+}
+
+/* Hero Bismillah — same visual weight as hijri-pill */
+.bismillah-hero {
+  font-family: var(--font-arabic);
+  font-size: 15px;
+  direction: rtl;
+  text-align: center;
+  color: var(--teal-700);
+  background: linear-gradient(90deg, var(--teal-700), var(--gold-500), var(--teal-700));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  letter-spacing: .06em;
+  line-height: 1.6;
+  opacity: .9;
+}
+[data-theme="dark"] .bismillah-hero {
+  background: linear-gradient(90deg, var(--teal-300), var(--gold-400), var(--teal-300));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 1;
+  filter: drop-shadow(0 0 10px rgba(217,179,88,.5));
+}
+
+/* Section Bismillah (above prayer strip, etc.) */
+.bismillah-section {
+  text-align: center;
+  font-family: var(--font-arabic);
+  font-size: 18px;
+  direction: rtl;
+  color: var(--gold-500);
+  opacity: .75;
+  margin-bottom: 12px;
+  letter-spacing: .03em;
+}
+[data-theme="dark"] .bismillah-section {
+  color: var(--gold-300);
+  opacity: 1;
+  text-shadow: 0 0 16px rgba(217,179,88,.5);
+}
+
+/* ============================================================
+   HEADER / NAV
+   ============================================================ */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,251,251,.92);
+  backdrop-filter: blur(24px) saturate(1.6);
+  border-bottom: 0.5px solid rgba(0,105,110,.10);
+  transition: background .3s, box-shadow .3s;
+}
+[data-theme="dark"] .site-header { background: rgba(10,19,20,.92); border-bottom-color: rgba(0,105,110,.2); }
+.site-header.scrolled { box-shadow: 0 1px 0 rgba(0,105,110,.10), var(--elev-1); }
+/* ── Header inner: Logo far-left | Nav center | Icons far-right ── */
+.site-header .container {
+  padding-left: clamp(16px,4vw,48px);
+  padding-right: clamp(16px,4vw,48px);
+  max-width: 100%;
+}
+.header-inner {
+  display: flex; align-items: center;
+  height: 60px; width: 100%; gap: 0;
+}
+
+/* Brand / Logo — far left, fixed width */
+.brand {
+  display: flex; align-items: center; gap: 8px;
+  flex-shrink: 0; margin-right: 0;
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 600; letter-spacing: -.02em;
+  color: var(--ink-primary); white-space: nowrap;
+  text-decoration: none;
+}
+.brand-mark { width: 34px; height: 34px; transition: transform .5s var(--ease-reverent); }
+.brand:hover .brand-mark { transform: scale(1.06); }
+.brand:hover .star { animation: star-spin .8s var(--ease-reverent) forwards; }
+.brand:hover .halo { animation: halo-pulse .9s ease infinite; }
+@keyframes star-spin { 0%{transform:rotate(0);}100%{transform:rotate(45deg) scale(1.15);} }
+@keyframes halo-pulse { 0%,100%{opacity:.25;} 50%{opacity:.7;} }
+.brand-text .info { color: var(--gold-500); }
+[data-theme="dark"] .brand-text .info { color: #C5A059; }
+[data-theme="dark"] .brand-text { color: #5BC1C7; }
+
+/* Nav — center, flex:1, single line spread */
+.nav {
+  flex: 1;
+  display: flex; align-items: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 2px;
+  overflow: hidden;
+}
+.nav-link {
+  font-size: 12.5px; color: var(--ink-muted);
+  padding: 5px 8px; border-radius: 8px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: all .25s var(--ease-premium); position: relative;
+  flex-shrink: 0;
+}
+.nav-link:hover {
+  color: var(--teal-700);
+  background: linear-gradient(135deg, rgba(0,105,110,.08), rgba(0,105,110,.04));
+  transform: scale(1.05);
+  box-shadow: 0 0 0 1px rgba(0,105,110,.12), 0 4px 12px rgba(0,105,110,.1);
+}
+[data-theme="dark"] .nav-link:hover {
+  color: var(--teal-300);
+  background: linear-gradient(135deg, rgba(0,105,110,.18), rgba(0,105,110,.08));
+  box-shadow: 0 0 12px rgba(88,193,199,.2), 0 0 0 1px rgba(0,105,110,.25);
+}
+.nav-link.active { color: var(--teal-700); font-weight: 500; }
+.nav-link.active::after {
+  content: ''; position: absolute; bottom: -1px; left: 6px; right: 6px;
+  height: 2px; background: linear-gradient(90deg, var(--teal-700), var(--gold-500));
+  border-radius: 2px;
+}
+
+/* Header tools — far right, remaining 20% */
+.header-tools { display: flex; gap: 6px; align-items: center; margin-left: auto; flex-shrink: 0; }
+.icon-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: none; background: transparent; cursor: pointer;
+  color: var(--ink-muted);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .25s var(--ease-premium);
+}
+.icon-btn:hover {
+  background: rgba(0,105,110,.08); color: var(--teal-700);
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(0,105,110,.2);
+}
+[data-theme="dark"] .icon-btn { color: #6E7E80; }
+[data-theme="dark"] .icon-btn:hover { background: rgba(0,105,110,.15); color: var(--teal-300); box-shadow: 0 0 12px rgba(88,193,199,.25); }
+
+/* ── Search popup ── */
+.search-popup-wrapper { position: relative; }
+.search-popup {
+  position: absolute; top: 44px; right: 0;
+  width: 340px; z-index: 200;
+  background: var(--surface-card);
+  border: 0.5px solid rgba(0,105,110,.18);
+  border-radius: var(--r-lg);
+  box-shadow: var(--elev-4);
+  backdrop-filter: blur(20px);
+  padding: 12px;
+  opacity: 0; pointer-events: none;
+  transform: translateY(-8px) scale(.97);
+  transition: opacity .3s var(--ease-premium), transform .3s var(--ease-premium);
+}
+.search-popup.open {
+  opacity: 1; pointer-events: all;
+  transform: translateY(0) scale(1);
+}
+[data-theme="dark"] .search-popup {
+  background: rgba(15,27,29,.97);
+  border-color: rgba(0,105,110,.3);
+}
+.search-popup input {
+  width: 100%; border: 1px solid rgba(0,105,110,.2); outline: none;
+  background: transparent; font: inherit; font-size: 14px;
+  color: var(--ink-primary); padding: 10px 14px; border-radius: 10px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.search-popup input:focus {
+  border-color: var(--teal-500);
+  box-shadow: 0 0 0 4px rgba(44,164,171,.15);
+}
+.search-popup input::placeholder { color: var(--ink-subtle); }
+.search-popup-btn {
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 8px; width: 100%; padding: 10px;
+  background: linear-gradient(135deg, var(--teal-600), var(--teal-500));
+  color: white; border: none; border-radius: 10px; cursor: pointer;
+  font-size: 13px; font-weight: 600; gap: 6px; font-family: var(--font-body);
+  transition: all .25s var(--ease-premium);
+}
+.search-popup-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,105,110,.35); }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface-card);
+  border: 0.5px solid rgba(0,42,44,.08);
+  border-radius: var(--r-lg);
+  box-shadow: var(--elev-1);
+  transition: transform .3s var(--ease-premium), box-shadow .3s, border-color .3s;
+}
+[data-theme="dark"] .card { background: #152527; border-color: rgba(0,105,110,.18); }
+.card:hover {
+  transform: translateY(-4px) rotate(0.5deg);
+  box-shadow: var(--elev-3), 0 0 0 1px rgba(0,105,110,.12), 0 0 20px rgba(0,105,110,.08);
+  border-color: rgba(0,105,110,.2);
+}
+[data-theme="dark"] .card:hover {
+  box-shadow: var(--elev-3), 0 0 20px rgba(88,193,199,.12);
+  border-color: rgba(88,193,199,.25);
+}
+.card-featured { border-color: rgba(0,105,110,.2); box-shadow: var(--elev-2); }
+
+/* ── Typography ── */
+.t-display-2xl {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 8vw, 78px);
+  font-weight: 600; line-height: 1.04;
+  letter-spacing: -.025em; color: var(--ink-primary);
+}
+.t-display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(30px,5vw,50px);
+  font-weight: 500; line-height: 1.1;
+  letter-spacing: -.02em; color: var(--ink-primary);
+}
+[data-theme="dark"] .t-display-2xl, [data-theme="dark"] .t-display-lg { color: var(--ink-primary); }
+
+.gradient-italic {
+  font-style: italic; font-weight: 500;
+  background: linear-gradient(90deg, var(--teal-700) 0%, var(--teal-500) 50%, var(--gold-500) 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--teal-700);
+  background: rgba(0,105,110,.08); border: 0.5px solid rgba(0,105,110,.18);
+  padding: 6px 14px; border-radius: 20px;
+}
+.hijri-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--teal-700);
+  background: rgba(0,105,110,.08); border: 0.5px solid rgba(0,105,110,.18);
+  padding: 7px 16px; border-radius: 20px;
+}
+.hijri-pill .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal-500); animation: pulse-dot 2.5s ease infinite;
+}
+.hijri-pill .sep { width: 1px; height: 12px; background: rgba(0,105,110,.25); }
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);} }
+
+.grade {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px;
+}
+.grade-sahih { color: var(--grade-sahih); background: rgba(15,110,86,.1); border: 0.5px solid rgba(15,110,86,.25); }
+.grade-hasan { color: var(--grade-hasan); background: rgba(93,138,58,.1); border: 0.5px solid rgba(93,138,58,.25); }
+.grade-daif  { color: var(--grade-daif);  background: rgba(168,105,50,.1); border: 0.5px solid rgba(168,105,50,.25); }
+
+.arabic { font-family: var(--font-arabic); direction: rtl; text-align: right; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-body); font-size: 14px; font-weight: 600;
+  padding: 12px 24px; border-radius: 12px;
+  border: none; cursor: pointer; transition: all .3s var(--ease-premium);
+  text-decoration: none;
+}
+.btn-pill { border-radius: 28px; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--teal-700), var(--teal-500));
+  color: white; box-shadow: 0 4px 16px rgba(0,105,110,.28);
+}
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 28px rgba(0,105,110,.42), 0 0 0 1px rgba(0,105,110,.3);
+}
+.btn-glass {
+  background: rgba(255,255,255,.7); backdrop-filter: blur(14px);
+  color: var(--ink-primary); border: 0.5px solid rgba(0,105,110,.2);
+  box-shadow: var(--elev-1), var(--inner-light);
+}
+.btn-glass:hover {
+  background: rgba(255,255,255,.9); transform: translateY(-2px) scale(1.04);
+  box-shadow: var(--elev-2), 0 0 20px rgba(0,105,110,.12);
+}
+[data-theme="dark"] .btn-glass { background: rgba(21,37,39,.7); color: var(--ink-primary); border-color: rgba(0,105,110,.3); }
+[data-theme="dark"] .btn-glass:hover { box-shadow: var(--elev-2), 0 0 20px rgba(88,193,199,.15); }
+
+/* Habit Tracker button — teal gradient matching Start Learning */
+.btn-habit {
+  background: linear-gradient(135deg, var(--teal-600), var(--teal-500), #008080);
+  color: white; box-shadow: 0 4px 18px rgba(44,164,171,.35);
+}
+.btn-habit:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 32px rgba(44,164,171,.48), 0 0 0 1px rgba(44,164,171,.3);
+}
+
+/* ── Chip / scope ── */
+.chip {
+  font-size: 12px; font-weight: 500;
+  padding: 6px 15px; border-radius: 20px;
+  border: 0.5px solid rgba(0,105,110,.18);
+  color: var(--ink-muted); background: rgba(0,105,110,.05);
+  cursor: pointer; transition: all .25s var(--ease-premium);
+}
+.chip:hover, .chip.active {
+  background: var(--teal-700); color: white; border-color: transparent;
+  box-shadow: 0 4px 12px rgba(0,105,110,.25);
+  transform: scale(1.05);
+}
+
+/* ── Stats row ── */
+.stats-row {
+  display: flex; gap: 0; justify-content: center; flex-wrap: wrap;
+  margin-top: 40px; padding-top: 36px;
+  border-top: 0.5px solid rgba(0,105,110,.12);
+}
+.stat { flex: 1; min-width: 90px; text-align: center; padding: 0 20px; }
+.stat + .stat { border-left: 0.5px solid rgba(0,105,110,.12); }
+.stat-num { font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--teal-700); line-height: 1; }
+.stat-label { font-size: 11px; color: var(--ink-subtle); margin-top: 4px; letter-spacing: .04em; }
+
+/* ── Divider ornate ── */
+.divider-ornate { display: flex; align-items: center; justify-content: center; color: rgba(197,160,89,.4); margin: 24px 0; }
+
+/* ── Hero background animated gradient (from Quran page) ── */
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 18% 28%, rgba(0,105,110,.10), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 82% 20%, rgba(197,160,89,.08), transparent 55%),
+    radial-gradient(ellipse 55% 65% at 55% 88%, rgba(0,105,110,.07), transparent 55%);
+  animation: bgDrift 18s ease-in-out infinite alternate;
+}
+@keyframes bgDrift {
+  0%   { opacity: .8; transform: scale(1); }
+  100% { opacity: 1;  transform: scale(1.04); }
+}
+[data-theme="dark"] .hero-bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 18% 28%, rgba(0,105,110,.18), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 82% 20%, rgba(197,160,89,.12), transparent 55%),
+    radial-gradient(ellipse 55% 65% at 55% 88%, rgba(0,105,110,.12), transparent 55%);
+}
+
+/* ── Animations ── */
+@keyframes word-reveal { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float-slow {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-15px) rotate(90deg); }
+}
+@keyframes geoRotate {
+  0%   { transform: translateY(0) rotate(0deg); }
+  50%  { transform: translateY(-15px) rotate(90deg); }
+  100% { transform: translateY(0) rotate(180deg); }
+}
+@keyframes breath {
+  0%,100% { box-shadow: var(--elev-2), 0 0 0 0 rgba(197,160,89,.1); }
+  50%     { box-shadow: var(--elev-3), 0 0 24px 4px rgba(197,160,89,.12); }
+}
+.fade-up { opacity: 0; animation: word-reveal .8s var(--ease-reverent) forwards; }
+.delay-500  { animation-delay: .5s; }
+.delay-700  { animation-delay: .7s; }
+.delay-1000 { animation-delay: 1s; }
+
+.font-mono { font-family: var(--font-mono); }
+
+/* ── Mobile ── */
+@media (max-width: 820px) {
+  .nav { display: none; }
+  .header-tools .icon-btn:not(.theme-toggle):not(.search-trigger) { display: none; }
+}
+@media (max-width: 600px) {
+  .stats-row .stat + .stat { border-left: none; }
+  .stat { min-width: 80px; }
+}
+
+/* CTA Section */
+.cta-section {
+  background: linear-gradient(135deg, #0A3A3D, #00696E, #062628);
+  padding: clamp(64px,10vw,112px) clamp(20px,5vw,56px);
+  text-align: center; position: relative; overflow: hidden;
+}
+.cta-section::before { content:''; position:absolute; left:-60px; top:-60px; width:280px; height:280px; background:radial-gradient(circle,rgba(197,160,89,.15),transparent 70%); pointer-events:none; }
+.cta-section::after  { content:''; position:absolute; right:-40px; bottom:-40px; width:240px; height:240px; background:radial-gradient(circle,rgba(0,105,110,.22),transparent 70%); pointer-events:none; }
+.cta-badge { display:inline-flex; align-items:center; gap:8px; font-size:9.5px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:#E2C896; background:rgba(197,160,89,.12); border:0.5px solid rgba(197,160,89,.25); padding:7px 16px; border-radius:20px; margin-bottom:22px; position:relative; z-index:1; }
+.cta-title { font-family:'Cormorant Garamond',serif; font-size:clamp(32px,6vw,60px); font-weight:500; color:white; letter-spacing:-.025em; line-height:1.06; margin-bottom:16px; position:relative; z-index:1; }
+.gold-it { font-style:italic; background:linear-gradient(90deg,#E2C896,#C5A059); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.cta-sub { font-size:16px; color:rgba(255,255,255,.58); line-height:1.72; max-width:480px; margin:0 auto 36px; position:relative; z-index:1; }
+.cta-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+.btn-gold { background:#C5A059; color:white; border:none; border-radius:28px; padding:14px 30px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 20px rgba(197,160,89,.38); text-decoration:none; transition:all .25s var(--ease-premium); }
+.btn-gold:hover { background:#b8953f; transform:translateY(-2px) scale(1.04); box-shadow:0 8px 32px rgba(197,160,89,.5); }
+.btn-white-ghost { background:rgba(255,255,255,.10); color:rgba(255,255,255,.85); border:0.5px solid rgba(255,255,255,.24); border-radius:28px; padding:14px 30px; font-size:14px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; display:inline-flex; align-items:center; gap:8px; text-decoration:none; transition:all .25s var(--ease-premium); }
+.btn-white-ghost:hover { background:rgba(255,255,255,.18); border-color:rgba(255,255,255,.45); transform:translateY(-2px) scale(1.04); }
+
+/* ============ ABOUT SECTION ============ */
+.about-section {
+  background: var(--surface);
+  padding: clamp(64px,8vw,96px) clamp(20px,5vw,56px);
+}
+.about-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  background: var(--surface-card);
+  border: 0.5px solid rgba(0,42,44,.08);
+  border-radius: var(--r-2xl);
+  padding: clamp(36px,5vw,56px) clamp(28px,5vw,56px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--elev-2);
+  transition: box-shadow .3s var(--ease-premium), border-color .3s;
+}
+.about-inner:hover {
+  box-shadow: var(--elev-3), 0 0 0 1px rgba(0,105,110,.12);
+  border-color: rgba(0,105,110,.16);
+}
+/* Gradient accent bar — top edge */
+.about-inner::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--teal-700), var(--teal-500) 50%, var(--gold-500));
+  border-radius: var(--r-2xl) var(--r-2xl) 0 0;
+}
+/* Soft radial glow — bottom right decoration */
+.about-inner::after {
+  content: '';
+  position: absolute; bottom: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(197,160,89,.07), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+[data-theme="dark"] .about-inner {
+  background: var(--surface-card);
+  border-color: rgba(0,105,110,.22);
+  box-shadow: var(--elev-2), 0 0 32px rgba(0,105,110,.06);
+}
+[data-theme="dark"] .about-inner:hover {
+  box-shadow: var(--elev-3), 0 0 32px rgba(88,193,199,.10), 0 0 0 1px rgba(0,105,110,.28);
+  border-color: rgba(88,193,199,.22);
+}
+
+/* Icon circle above heading — matching the screenshot */
+.about-icon-wrap {
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.about-icon-circle {
+  width: 56px; height: 56px;
+  background: rgba(0,105,110,.07);
+  border: 0.5px solid rgba(0,105,110,.16);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--teal-700);
+  transition: all .3s var(--ease-premium);
+}
+[data-theme="dark"] .about-icon-circle {
+  background: rgba(0,105,110,.18);
+  border-color: rgba(0,105,110,.35);
+  color: var(--teal-300);
+}
+.about-inner:hover .about-icon-circle {
+  background: rgba(0,105,110,.12);
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(0,105,110,.18);
+}
+
+.about-heading {
+  font-family: var(--font-display);
+  font-size: clamp(26px,4vw,38px);
+  font-weight: 600;
+  color: var(--ink-primary);
+  text-align: center;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.about-body {
+  font-size: 16px;
+  line-height: 1.72;
+  color: var(--ink-muted);
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 36px;
+}
+
+/* Stats row — same visual language as hero stats */
+.about-stats {
+  display: flex;
+  gap: 0;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 28px;
+  border-top: 0.5px solid rgba(0,105,110,.10);
+  margin-bottom: 28px;
+}
+[data-theme="dark"] .about-stats { border-top-color: rgba(0,105,110,.22); }
+.about-stat { flex: 1; min-width: 100px; text-align: center; padding: 0 20px; }
+.about-stat + .about-stat { border-left: 0.5px solid rgba(0,105,110,.10); }
+[data-theme="dark"] .about-stat + .about-stat { border-left-color: rgba(0,105,110,.22); }
+.about-stat-num {
+  font-family: var(--font-display);
+  font-size: 17px; font-weight: 600;
+  color: var(--teal-700); line-height: 1.25;
+}
+.about-stat-lbl {
+  font-size: 10px; color: var(--ink-subtle); margin-top: 4px;
+  letter-spacing: .08em; text-transform: uppercase;
+}
+
+/* Read methodology link — centred */
+.about-link-wrap { display: flex; justify-content: center; }
+.about-cta-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 500;
+  color: var(--teal-700);
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  transition: gap .25s var(--ease-premium), border-color .25s, color .25s;
+}
+.about-cta-link:hover {
+  gap: 10px;
+  color: var(--teal-600);
+  border-bottom-color: var(--teal-400);
+}
+[data-theme="dark"] .about-cta-link { color: var(--teal-300); }
+[data-theme="dark"] .about-cta-link:hover { color: var(--teal-200); border-bottom-color: var(--teal-300); }
+
+@media (max-width: 600px) {
+  .about-stats .about-stat + .about-stat { border-left: none; }
+  .about-stat { min-width: 80px; }
+}
+
+
+
+/* ══════════════════════════════════════════════
+   ISLAMICINFO GLOBAL FOOTER v1.0
+   ══════════════════════════════════════════════ */
+#ii-footer {
+  background: #062628;
+  color: rgba(255,255,255,.62);
+  font-family: 'Inter', sans-serif;
+}
+.ii-footer-top {
+  padding: clamp(52px,7vw,80px) clamp(20px,5vw,64px) clamp(32px,4vw,48px);
+  display: grid;
+  grid-template-columns: 1.9fr 1fr 1fr 0.7fr 0.7fr;
+  gap: clamp(24px,3vw,52px);
+  border-bottom: 0.5px solid rgba(255,255,255,.07);
+}
+@media(max-width:1100px){ .ii-footer-top{ grid-template-columns:1.4fr 1fr 1fr; } .ii-footer-col:nth-child(4),.ii-footer-col:nth-child(5){ grid-column:auto; } }
+@media(max-width:700px) { .ii-footer-top{ grid-template-columns:1fr 1fr; } .ii-footer-brand-col{ grid-column:1/-1; } }
+@media(max-width:440px) { .ii-footer-top{ grid-template-columns:1fr; } }
+
+/* Brand column */
+.ii-footer-brand-col {}
+.ii-footer-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; margin-bottom: 16px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 22px; font-weight: 600; letter-spacing: -.02em;
+}
+.ii-footer-logo-text-islamic { color: #5BC1C7; }
+.ii-footer-logo-text-info    { color: #C5A059; }
+.ii-footer-tagline {
+  font-size: 13px; line-height: 1.72;
+  color: rgba(255,255,255,.38); max-width: 240px; margin-bottom: 20px;
+}
+.ii-footer-verse {
+  font-size: 11px; color: rgba(255,255,255,.22);
+  font-style: italic; font-family: 'Cormorant Garamond', serif;
+  margin-bottom: 24px;
+}
+.ii-footer-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, #00696E, #2CA4AB);
+  color: white; border: none; border-radius: 28px;
+  padding: 12px 26px; font-size: 13.5px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; text-decoration: none;
+  transition: all .3s cubic-bezier(0.25,0.46,0.45,0.94);
+  box-shadow: 0 4px 18px rgba(0,105,110,.35);
+}
+.ii-footer-cta:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 28px rgba(0,105,110,.5), 0 0 0 3px rgba(0,105,110,.18);
+}
+
+/* Nav columns */
+.ii-footer-col {}
+.ii-footer-col-heading {
+  font-size: 10px; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: rgba(255,255,255,.28);
+  margin-bottom: 16px;
+}
+.ii-footer-link {
+  display: block; font-size: 13px;
+  color: rgba(255,255,255,.5); text-decoration: none;
+  padding: 4px 0; margin-bottom: 2px;
+  transition: color .18s, transform .18s;
+  border-left: 2px solid transparent;
+  padding-left: 0;
+}
+.ii-footer-link:hover {
+  color: #88E0E5;
+  transform: translateX(4px);
+  border-left-color: rgba(88,193,199,.4);
+  padding-left: 6px;
+}
+.ii-footer-link-ext::after {
+  content: ' ↗'; font-size: 10px; opacity: .5;
+}
+
+/* Bottom bar */
+.ii-footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  padding: 20px clamp(20px,5vw,64px);
+}
+.ii-footer-copy {
+  font-size: 12px; color: rgba(255,255,255,.24);
+}
+.ii-footer-copy a { color: #C5A059; text-decoration: none; }
+.ii-footer-copy a:hover { color: #D7B675; }
+.ii-footer-note {
+  font-size: 11.5px; color: rgba(255,255,255,.18);
+  font-style: italic; font-family: 'Cormorant Garamond', serif;
+}
+
+</style>
+<style>
+/* ============ VERIFY ENHANCEMENTS ============ */
+.verify-trust-row {
+  display: flex; flex-direction: column; gap: 10px; margin-top: 28px;
+}
+.vt-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; color: var(--ink-muted);
+}
+.vt-icon {
+  width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+  background: rgba(0,105,110,.08); border: 0.5px solid rgba(0,105,110,.15);
+  color: var(--teal-700); display: flex; align-items: center; justify-content: center;
+}
+[data-theme="dark"] .vt-icon { background: rgba(0,105,110,.18); border-color: rgba(0,105,110,.3); color: var(--teal-300); }
+
+/* Narration chain inside confidence card */
+.chain-row {
+  margin-top: 16px; padding-top: 14px;
+  border-top: 0.5px solid rgba(0,105,110,.10);
+}
+.chain-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-subtle); margin-bottom: 8px;
+}
+.chain-nodes {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.chain-node {
+  font-size: 11px; font-weight: 500; color: var(--ink-muted);
+  background: rgba(0,105,110,.06); border: 0.5px solid rgba(0,105,110,.14);
+  padding: 3px 9px; border-radius: 20px;
+}
+.chain-node.active { background: rgba(0,105,110,.12); color: var(--teal-700); border-color: rgba(0,105,110,.25); font-weight: 600; }
+.chain-arrow { font-size: 11px; color: var(--ink-faint); }
+[data-theme="dark"] .chain-node { background: rgba(0,105,110,.15); border-color: rgba(0,105,110,.28); }
+[data-theme="dark"] .chain-node.active { color: var(--teal-300); }
+
+/* ============ SOURCES PILLARS SECTION ============ */
+.sources-section { background: var(--surface); }
+.sources-pillars {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  margin-bottom: 32px;
+}
+@media (max-width: 900px) { .sources-pillars { grid-template-columns: 1fr; } }
+
+.source-pillar {
+  background: var(--surface-card);
+  border: 0.5px solid rgba(0,42,44,.08);
+  border-radius: var(--r-lg);
+  padding: 28px 24px;
+  box-shadow: var(--elev-1);
+  transition: transform .38s cubic-bezier(0.22,1,0.36,1), box-shadow .38s cubic-bezier(0.22,1,0.36,1), border-color .38s cubic-bezier(0.22,1,0.36,1);
+  will-change: transform, box-shadow;
+}
+.source-pillar:hover {
+  transform: translateY(-5px) scale(1.012);
+  box-shadow: 0 16px 40px rgba(0,105,110,.13), 0 4px 12px rgba(0,105,110,.08), 0 0 0 1px rgba(0,105,110,.07);
+  border-color: rgba(0,105,110,.2);
+}
+[data-theme="dark"] .source-pillar { background: #152527; border-color: rgba(0,105,110,.18); }
+[data-theme="dark"] .source-pillar:hover {
+  box-shadow: 0 16px 48px rgba(88,193,199,.18), 0 4px 16px rgba(88,193,199,.1), 0 0 0 1px rgba(88,193,199,.14);
+  border-color: rgba(88,193,199,.25);
+}
+
+.sp-icon-lg {
+  width: 48px; height: 48px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+}
+.sp-icon-lg.teal {
+  background: linear-gradient(135deg, rgba(0,105,110,.12), rgba(44,164,171,.06));
+  color: var(--teal-700);
+}
+.sp-icon-lg.gold {
+  background: linear-gradient(135deg, rgba(197,160,89,.15), rgba(197,160,89,.06));
+  color: var(--gold-700);
+}
+[data-theme="dark"] .sp-icon-lg.teal { background: linear-gradient(135deg, rgba(0,105,110,.25), rgba(44,164,171,.15)); color: var(--teal-300); }
+[data-theme="dark"] .sp-icon-lg.gold { background: linear-gradient(135deg, rgba(197,160,89,.2), rgba(197,160,89,.08)); }
+
+.sp-num {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 38px); font-weight: 600;
+  color: var(--teal-700); letter-spacing: -.02em; line-height: 1;
+  margin-bottom: 4px;
+}
+.sp-name {
+  font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-subtle); margin-bottom: 12px;
+}
+.sp-desc {
+  font-size: 14px; color: var(--ink-muted); line-height: 1.65; margin-bottom: 16px;
+}
+.sp-sources { display: flex; flex-wrap: wrap; gap: 6px; }
+.sp-tag {
+  font-size: 10.5px; font-weight: 600; padding: 3px 9px;
+  border-radius: 20px; background: rgba(0,105,110,.07);
+  border: 0.5px solid rgba(0,105,110,.14); color: var(--teal-700);
+}
+[data-theme="dark"] .sp-tag { background: rgba(0,105,110,.18); border-color: rgba(0,105,110,.28); color: var(--teal-300); }
+
+/* Methodology promise bar */
+.methodology-bar {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 0;
+  background: var(--surface-card);
+  border: 0.5px solid rgba(0,105,110,.10);
+  border-radius: var(--r-lg);
+  padding: 20px 28px;
+  box-shadow: var(--elev-1);
+}
+[data-theme="dark"] .methodology-bar { background: #152527; border-color: rgba(0,105,110,.2); }
+.mb-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13.5px; font-weight: 500; color: var(--ink-muted);
+  padding: 4px 24px;
+}
+.mb-item svg { color: var(--teal-700); flex-shrink: 0; }
+[data-theme="dark"] .mb-item svg { color: var(--teal-300); }
+.mb-sep {
+  width: 0.5px; height: 28px;
+  background: rgba(0,105,110,.15);
+  flex-shrink: 0;
+}
+@media (max-width: 760px) {
+  .mb-item { padding: 8px 16px; }
+  .mb-sep { display: none; }
+  .methodology-bar { gap: 4px; }
+}
+
+/* ============ HOMEPAGE-LOCAL (continued) ============ */
+.hero { position: relative; padding: 36px 0 80px; overflow: hidden; }
+.hero-inner { max-width: 880px; margin: 0 auto; text-align: center; position: relative; z-index: 2; }
+.hero h1 { margin: 16px 0 24px; }
+.hero-mission { max-width: 640px; margin: 0 auto 36px; font-size: 17px; line-height: 1.7; color: var(--ink-muted); }
+
+/* Floating sacred geometry */
+.geo-1, .geo-2, .geo-3 { position: absolute; pointer-events: none; opacity: .055; }
+.geo-1 { top: 7%; left: 4%; width: 180px; height: 180px; animation: geoRotate 28s linear infinite; }
+.geo-2 { top: 10%; right: 5%; width: 130px; height: 130px; animation: geoRotate 32s linear infinite; animation-delay: -14s; opacity: .045; }
+.geo-3 { bottom: 14%; left: 10%; width: 100px; height: 100px; animation: geoRotate 20s linear infinite; animation-delay: -5s; opacity: .04; }
+[data-theme="dark"] .geo-1, [data-theme="dark"] .geo-2, [data-theme="dark"] .geo-3 { opacity: .10; }
+
+/* Search bar (hero inline) */
+.searchbar {
+  position: relative; display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.7); backdrop-filter: blur(14px);
+  border: 1px solid rgba(188,201,201,.35); border-radius: 999px;
+  padding: 8px 8px 8px 22px;
+  box-shadow: var(--elev-2), inset 0 1px 0 rgba(255,255,255,.6);
+  max-width: 640px; margin: 0 auto;
+  transition: box-shadow .3s, border-color .3s;
+}
+.searchbar:focus-within { border-color: var(--gold-400); box-shadow: 0 0 0 6px rgba(197,160,89,.12), var(--elev-3); }
+.searchbar input { flex: 1; border: none; outline: none; background: transparent; font: inherit; font-size: 15px; color: var(--ink-primary); padding: 8px 0; }
+.searchbar input::placeholder { color: var(--ink-subtle); }
+.search-go {
+  width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--teal-600), var(--teal-700)); color: white;
+  border-radius: 999px; border: none; box-shadow: var(--elev-2);
+  transition: transform .25s var(--ease-reverent);
+}
+.search-go:hover { transform: scale(1.06) rotate(8deg); background: linear-gradient(135deg, var(--teal-500), var(--gold-500)); }
+.scope-chips { display: flex; gap: 8px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+.cta-row { display: flex; gap: 14px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
+
+/* Word reveal */
+.reveal-word { display: inline-block; opacity: 0; animation: word-reveal .9s var(--ease-reverent) forwards; }
+
+/* ============ DAILY TRIO ============ */
+.section { padding: 80px 0; position: relative; }
+.section-head { text-align: center; margin-bottom: 48px; }
+.section-head .eyebrow { margin-bottom: 16px; }
+.section-head h2 { margin: 0 0 12px; }
+.section-head p { color: var(--ink-muted); max-width: 560px; margin: 0 auto; font-size: 16px; }
+.trio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 900px) { .trio-grid { grid-template-columns: 1fr; } }
+.trio-card { padding: 28px; min-height: 260px; display: flex; flex-direction: column; }
+.trio-card .head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+.trio-card .body { font-family: var(--font-serif); font-size: 18px; font-style: italic; line-height: 1.65; color: var(--ink-primary); flex: 1; }
+.trio-card .arabic { font-size: 22px; line-height: 1.9; margin-bottom: 14px; color: var(--ink-primary); }
+.trio-card .foot { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--ink-faint); display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--ink-muted); }
+.trio-card .read-more { color: var(--teal-700); font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+.trio-card .read-more:hover { gap: 8px; }
+
+/* ============ PRAYER STRIP ============ */
+.prayer-strip-bismillah { text-align: center; margin-bottom: 6px; }
+
+.prayer-strip {
+  position: relative; padding: 28px 32px;
+  background: linear-gradient(135deg, rgba(0,105,110,.06), rgba(197,160,89,.04));
+  border: 1px solid rgba(0,105,110,.12); border-radius: 24px; overflow: hidden;
+}
+.prayer-strip-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.prayer-strip-head .loc { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-muted); font-weight: 500; }
+.prayers { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+@media (max-width: 768px) { .prayers { grid-template-columns: repeat(3, 1fr); } }
+
+.prayer {
+  position: relative; text-align: center; padding: 16px 8px; border-radius: 14px;
+  background: rgba(255,255,255,.5); border: 1px solid transparent;
+  transition: all .3s var(--ease-premium);
+  cursor: pointer;
+  transform-style: preserve-3d;
+  perspective: 600px;
+}
+.prayer:hover {
+  background: rgba(255,255,255,.9);
+  transform: translateY(-8px) rotateX(5deg);
+  border-color: var(--teal-300);
+  box-shadow: 0 8px 28px rgba(0,105,110,.18), 0 0 0 1px rgba(106,215,222,.35);
+  animation: prayer-pulse-border 1.5s ease-in-out 1;
+}
+@keyframes prayer-pulse-border {
+  0%   { box-shadow: 0 8px 28px rgba(0,105,110,.18), 0 0 0 1px rgba(106,215,222,.35); }
+  50%  { box-shadow: 0 8px 32px rgba(0,105,110,.28), 0 0 14px rgba(106,215,222,.4); }
+  100% { box-shadow: 0 8px 28px rgba(0,105,110,.18), 0 0 0 1px rgba(106,215,222,.35); }
+}
+.prayer.next {
+  background: linear-gradient(180deg, var(--gold-50), rgba(255,255,255,.9));
+  border-color: var(--gold-400); box-shadow: var(--gold-aura);
+  animation: breath 4s ease-in-out infinite;
+}
+.prayer.past { opacity: .55; }
+.prayer .name { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px; }
+.prayer.next .name { color: var(--gold-700); }
+.prayer .time { font-family: var(--font-display); font-size: 22px; font-weight: 500; color: var(--ink-primary); }
+.prayer .check { position: absolute; top: 8px; right: 10px; width: 14px; height: 14px; color: var(--teal-600); }
+
+[data-theme="dark"] .prayer-strip { background: linear-gradient(135deg, rgba(0,105,110,.22), rgba(0,78,85,.18)); border-color: rgba(0,105,110,.38); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); }
+[data-theme="dark"] .prayer-strip-head .loc { color: #D4DCDD; font-weight: 500; }
+[data-theme="dark"] .prayer-strip-head a { color: #88E0E5 !important; }
+[data-theme="dark"] .prayer { background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.10); border-radius: 14px; }
+[data-theme="dark"] .prayer:hover { background: rgba(255,255,255,.15); border-color: var(--teal-300); box-shadow: 0 8px 28px rgba(88,193,199,.2), 0 0 14px rgba(88,193,199,.25); }
+[data-theme="dark"] .prayer.past { opacity: 1; background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.06); }
+[data-theme="dark"] .prayer.past .name { color: #6E8A8B; }
+[data-theme="dark"] .prayer.past .time { color: #7AABAE; }
+[data-theme="dark"] .prayer .name { color: #A8C8CA; font-weight: 700; }
+[data-theme="dark"] .prayer .time { color: #E8F4F5; font-weight: 600; }
+[data-theme="dark"] .prayer.next { background: linear-gradient(160deg, rgba(197,160,89,.25), rgba(197,160,89,.12)); border-color: rgba(197,160,89,.55); box-shadow: 0 0 0 1px rgba(197,160,89,.3), 0 8px 24px rgba(197,160,89,.2); }
+[data-theme="dark"] .prayer.next .name { color: #E2C896; font-weight: 700; }
+[data-theme="dark"] .prayer.next .time { color: #FAF0D4; font-weight: 600; }
+[data-theme="dark"] .prayer .check { color: #5BC1C7; opacity: 0.9; }
+
+/* ============ FEATURE GRID ============ */
+.feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+@media (max-width: 1100px) { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px)  { .feature-grid { grid-template-columns: 1fr; } }
+
+.feat {
+  position: relative; padding: 28px 24px 24px; display: flex; flex-direction: column;
+  min-height: 240px; cursor: pointer;
+  transition: transform .3s var(--ease-premium), box-shadow .3s, border-color .3s;
+}
+.feat:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(0,105,110,.14), 0 0 0 1.5px rgba(0,105,110,.18);
+}
+[data-theme="dark"] .feat:hover {
+  box-shadow: 0 16px 40px rgba(88,193,199,.14), 0 0 20px rgba(88,193,199,.1), 0 0 0 1.5px rgba(88,193,199,.22);
+}
+
+.feat-icon {
+  width: 52px; height: 52px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--teal-50), var(--teal-100));
+  color: var(--teal-700); margin-bottom: 18px;
+  transition: transform .3s var(--ease-reverent), color .3s, background .3s;
+  font-size: 22px;
+}
+.feat:hover .feat-icon {
+  transform: scale(1.12) rotate(-6deg);
+  color: var(--teal-600);
+  background: linear-gradient(135deg, var(--teal-100), var(--teal-200));
+}
+[data-theme="dark"] .feat-icon { background: linear-gradient(135deg, rgba(0,105,110,.2), rgba(0,105,110,.35)); color: var(--teal-300); }
+[data-theme="dark"] .feat:hover .feat-icon { background: linear-gradient(135deg, rgba(0,105,110,.35), rgba(0,105,110,.5)); color: var(--teal-200); }
+
+.feat h3 { font-family: var(--font-display); font-size: 24px; font-weight: 500; color: var(--ink-primary); margin: 0 0 8px; letter-spacing: -.015em; }
+.feat p { font-size: 13.5px; line-height: 1.55; color: var(--ink-muted); margin: 0 0 16px; flex: 1; }
+.feat-cta { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--teal-700); transition: gap .25s; }
+.feat:hover .feat-cta { gap: 10px; }
+
+.feat.flagship {
+  background:
+    linear-gradient(rgba(255,255,255,.92), rgba(255,255,255,.88)) padding-box,
+    linear-gradient(135deg, var(--teal-700) 0%, var(--teal-400) 50%, var(--gold-500) 100%) border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 0 8px 32px rgba(197,160,89,.14), var(--inner-light);
+  animation: breath 6s ease-in-out infinite;
+}
+.feat.flagship::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 85% 15%, rgba(197,160,89,.10), transparent 55%); pointer-events: none; border-radius: inherit; }
+.feat.flagship .feat-icon { background: linear-gradient(135deg, var(--gold-200), var(--gold-400)); color: var(--gold-900); box-shadow: 0 6px 18px rgba(197,160,89,.3); }
+.feat.flagship h3 { color: var(--ink-primary); }
+.feat-badge { position: absolute; top: 16px; right: 16px; font-size: 10px; font-weight: 700; letter-spacing: .12em; padding: 4px 10px; background: linear-gradient(135deg, var(--gold-500), var(--gold-400)); color: white; border-radius: 999px; box-shadow: 0 4px 12px rgba(197,160,89,.4); }
+[data-theme="dark"] .feat.flagship { background: linear-gradient(rgba(21,37,39,.92), rgba(21,37,39,.88)) padding-box, linear-gradient(135deg, var(--teal-700) 0%, var(--teal-400) 50%, var(--gold-500) 100%) border-box; }
+
+.flagship-preview { display: flex; gap: 16px; margin-top: 12px; font-size: 12px; color: var(--ink-muted); opacity: 0; max-height: 0; overflow: hidden; transition: opacity .35s, max-height .35s; }
+.feat.flagship:hover .flagship-preview { opacity: 1; max-height: 40px; }
+.flagship-preview span { display: inline-flex; align-items: center; gap: 4px; }
+
+/* ============ REFLECTION ============ */
+.reflection { text-align: center; padding: 100px 0; background: linear-gradient(180deg, transparent, rgba(0,105,110,.03), transparent); }
+.reflection-quote { font-family: var(--font-display); font-size: clamp(26px, 3.6vw, 40px); font-style: italic; line-height: 1.4; color: var(--ink-primary); max-width: 720px; margin: 32px auto 24px; letter-spacing: -.015em; }
+.reflection-cite { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-700); font-weight: 600; }
+
+/* ============ VERIFY PREVIEW ============ */
+.verify-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+@media (max-width: 900px) { .verify-preview { grid-template-columns: 1fr; gap: 32px; } }
+.confidence-card { padding: 28px; }
+.confidence-head { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--ink-faint); }
+.confidence-dial { width: 96px; height: 96px; flex-shrink: 0; position: relative; }
+.confidence-dial svg { transform: rotate(-90deg); }
+.confidence-dial .num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 28px; font-weight: 500; color: var(--ink-primary); }
+.confidence-info h4 { margin: 0 0 4px; font-family: var(--font-display); font-size: 22px; font-weight: 500; color: var(--grade-sahih); }
+.confidence-info p { margin: 0; font-size: 13px; color: var(--ink-muted); }
+.evidence { padding: 16px 18px; border-radius: 14px; background: rgba(0,105,110,.04); border-left: 3px solid var(--teal-500); margin-bottom: 12px; }
+.evidence .ref { font-family: var(--font-mono); font-size: 11px; color: var(--teal-700); margin-bottom: 6px; letter-spacing: .04em; }
+.evidence .text { font-family: var(--font-serif); font-size: 14px; font-style: italic; color: var(--ink-body); line-height: 1.5; }
+
+/* ============ SOURCES ============ */
+.sources-row { display: flex; gap: 36px; flex-wrap: wrap; justify-content: center; align-items: center; opacity: .7; filter: grayscale(.3); }
+.source-pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--ink-faint); background: rgba(255,255,255,.5); font-family: var(--font-display); font-size: 16px; color: var(--ink-muted); transition: all .25s; }
+.source-pill:hover { color: var(--teal-700); border-color: var(--teal-300); background: white; transform: translateY(-2px); opacity: 1; filter: none; }
+
+/* ============ RESPONSIVE NAV ============ */
+
+/* Graceful font scaling to keep one line at all widths */
+@media (max-width: 1280px) {
+  .nav-link { font-size: 11.5px; padding: 5px 5px; }
+  .brand { font-size: 18px; }
+}
+@media (max-width: 1100px) {
+  .nav-link { font-size: 10.5px; padding: 5px 3px; }
+  .brand { font-size: 16px; gap: 6px; }
+  .brand-mark { width: 28px; height: 28px; }
+}
+
+/* Mobile: hide nav entirely below 768px (mobile is out of scope per spec) */
+@media (max-width: 768px) {
+  .nav { display: none; }
+  .brand { width: auto; }
+}
+
+@media (max-width: 700px) { .footer-top-grid { grid-template-columns: 1fr 1fr !important; } }
+@media (max-width: 440px) { .footer-top-grid { grid-template-columns: 1fr !important; } }
+</style>
+<style>
+/* ================================================================
+   ISLAMICINFO — GLOBAL POLISH v2.0
+   Bismillah colour fix + Premium hover system
+   Inject before </head> on every page
+   ================================================================ */
+
+/* ── 1. BISMILLAH — Gold in dark, Teal in light ── */
+
+/* All bismillah variants share this rule */
+.bismillah-hero,
+.bismillah-hero-top,
+.bismillah-bar,
+.bismillah-section {
+  background: linear-gradient(90deg, var(--teal-700, #00696E) 0%, #5a8a3f 45%, var(--teal-700, #00696E) 100%);
+  /* Override: teal-only gradient in light mode */
+  background: linear-gradient(100deg, #00696E 0%, #2CA4AB 50%, #00696E 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: none;
+  opacity: .92;
+}
+
+/* Islamic Studies page — flat colour variant */
+.bismillah-text {
+  -webkit-text-fill-color: unset;
+  color: #00696E;
+  background: none;
+  transition: color .4s ease;
+}
+
+/* Dark mode: Gold gradient with warm glow */
+[data-theme="dark"] .bismillah-hero,
+[data-theme="dark"] .bismillah-hero-top,
+[data-theme="dark"] .bismillah-bar,
+[data-theme="dark"] .bismillah-section {
+  background: linear-gradient(100deg, #D9B358 0%, #F0D080 50%, #D9B358 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  opacity: 1;
+  filter: drop-shadow(0 0 14px rgba(217,179,88,.55));
+}
+
+[data-theme="dark"] .bismillah-text {
+  -webkit-text-fill-color: unset;
+  background: none;
+  color: #D9B358;
+  filter: drop-shadow(0 0 12px rgba(217,179,88,.45));
+}
+
+/* ── 2. PREMIUM HOVER SYSTEM — Global easing upgrade ── */
+
+/* Base easing tokens */
+:root {
+  --ease-premium:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-reverent:  cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce:    cubic-bezier(0.34, 1.56, 0.64, 1);
+  --hover-lift:     translateY(-4px);
+  --hover-lift-sm:  translateY(-2px);
+  --hover-scale:    scale(1.025);
+  --transition-fast:  all .22s cubic-bezier(0.22,1,0.36,1);
+  --transition-med:   all .35s cubic-bezier(0.22,1,0.36,1);
+  --transition-slow:  all .5s  cubic-bezier(0.22,1,0.36,1);
+}
+
+/* Cards — universal lift + teal glow */
+.card,
+.feat,
+.prayer,
+.source-pill,
+.about-inner,
+.featured-card,
+.course-card,
+.lesson-card,
+.trio-card {
+  transition:
+    transform .38s cubic-bezier(0.22,1,0.36,1),
+    box-shadow .38s cubic-bezier(0.22,1,0.36,1),
+    border-color .38s cubic-bezier(0.22,1,0.36,1),
+    background .38s ease !important;
+  will-change: transform, box-shadow;
+}
+
+.card:hover,
+.feat:hover,
+.course-card:hover,
+.lesson-card:hover,
+.trio-card:hover {
+  transform: translateY(-5px) scale(1.012) !important;
+  box-shadow:
+    0 16px 40px rgba(0,105,110,.13),
+    0 4px 12px rgba(0,105,110,.08),
+    0 0 0 1px rgba(0,105,110,.07) !important;
+}
+
+[data-theme="dark"] .card:hover,
+[data-theme="dark"] .feat:hover,
+[data-theme="dark"] .course-card:hover,
+[data-theme="dark"] .lesson-card:hover,
+[data-theme="dark"] .trio-card:hover {
+  transform: translateY(-5px) scale(1.012) !important;
+  box-shadow:
+    0 16px 48px rgba(88,193,199,.18),
+    0 4px 16px rgba(88,193,199,.1),
+    0 0 0 1px rgba(88,193,199,.14) !important;
+}
+
+/* Prayer cards */
+.prayer:hover {
+  transform: translateY(-6px) !important;
+  box-shadow:
+    0 18px 44px rgba(0,105,110,.15),
+    0 0 0 1px rgba(0,105,110,.10) !important;
+}
+
+[data-theme="dark"] .prayer:hover {
+  transform: translateY(-6px) !important;
+  box-shadow:
+    0 18px 44px rgba(88,193,199,.22),
+    0 0 18px rgba(88,193,199,.18),
+    0 0 0 1px rgba(88,193,199,.18) !important;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-gold,
+.btn-glass,
+.btn-habit,
+.ii-footer-cta,
+.search-popup-btn,
+[class*="btn-"] {
+  transition:
+    transform .28s cubic-bezier(0.22,1,0.36,1),
+    box-shadow .28s cubic-bezier(0.22,1,0.36,1),
+    background .28s ease,
+    border-color .28s ease,
+    color .28s ease !important;
+  will-change: transform;
+}
+
+.btn-primary:hover,
+.btn-habit:hover {
+  transform: translateY(-3px) scale(1.03) !important;
+  box-shadow: 0 10px 32px rgba(0,105,110,.38) !important;
+}
+
+.btn-gold:hover {
+  transform: translateY(-3px) scale(1.04) !important;
+  box-shadow: 0 10px 36px rgba(197,160,89,.52) !important;
+  background: #b8953f !important;
+}
+
+.btn-glass:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow:
+    0 8px 28px rgba(0,105,110,.2),
+    0 0 0 1px rgba(0,105,110,.12) !important;
+}
+
+/* Nav links */
+.nav-link {
+  transition:
+    color .25s cubic-bezier(0.22,1,0.36,1),
+    background .25s cubic-bezier(0.22,1,0.36,1),
+    box-shadow .25s cubic-bezier(0.22,1,0.36,1) !important;
+}
+
+/* Icon buttons */
+.icon-btn {
+  transition:
+    background .25s cubic-bezier(0.22,1,0.36,1),
+    color .25s cubic-bezier(0.22,1,0.36,1),
+    box-shadow .25s cubic-bezier(0.22,1,0.36,1),
+    transform .25s cubic-bezier(0.22,1,0.36,1) !important;
+}
+.icon-btn:hover {
+  transform: scale(1.08) !important;
+}
+
+/* Footer links */
+.ii-footer-link {
+  transition:
+    color .25s cubic-bezier(0.22,1,0.36,1),
+    transform .25s cubic-bezier(0.22,1,0.36,1) !important;
+}
+.ii-footer-link:hover {
+  transform: translateX(4px) !important;
+  color: #88E0E5 !important;
+}
+
+/* Source pills */
+.source-pill:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 0 8px 24px rgba(0,105,110,.15) !important;
+}
+
+/* About inner panel */
+.about-inner {
+  transition:
+    transform .4s cubic-bezier(0.22,1,0.36,1),
+    box-shadow .4s cubic-bezier(0.22,1,0.36,1),
+    border-color .4s ease !important;
+}
+.about-inner:hover {
+  transform: translateY(-5px) !important;
+}
+
+/* Chips / filters */
+.chip {
+  transition:
+    background .22s cubic-bezier(0.22,1,0.36,1),
+    border-color .22s cubic-bezier(0.22,1,0.36,1),
+    color .22s cubic-bezier(0.22,1,0.36,1),
+    transform .22s cubic-bezier(0.22,1,0.36,1) !important;
+}
+.chip:hover {
+  transform: translateY(-1px) !important;
+}
+
+/* Read-more / CTA arrows — smooth gap grow */
+.feat-cta,
+.about-cta-link,
+[class*="read-more"],
+[class*="cta-link"] {
+  transition:
+    gap .25s cubic-bezier(0.22,1,0.36,1),
+    color .25s cubic-bezier(0.22,1,0.36,1),
+    border-color .25s cubic-bezier(0.22,1,0.36,1) !important;
+}
+
+/* Search go button */
+.search-go {
+  transition:
+    transform .28s cubic-bezier(0.34,1.56,0.64,1),
+    background .28s ease !important;
+}
+
+/* Footer CTA */
+.ii-footer-cta {
+  transition:
+    background .28s cubic-bezier(0.22,1,0.36,1),
+    transform .28s cubic-bezier(0.22,1,0.36,1),
+    box-shadow .28s cubic-bezier(0.22,1,0.36,1) !important;
+}
+.ii-footer-cta:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+/* Brand logo */
+.brand-mark, .nav-logo {
+  transition: transform .5s cubic-bezier(0.22,1,0.36,1) !important;
+}
+.brand:hover .brand-mark,
+.nav-logo:hover {
+  transform: scale(1.07) rotate(-3deg) !important;
+}
+
+/* ── 3. SMOOTH THEME TRANSITION ── */
+*, *::before, *::after {
+  /* Only transition visual props, not layout (avoids jank) */
+}
+html {
+  transition: background .4s ease, color .4s ease !important;
+}
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true"></div>
+
+<div class="shell">
+
+  <!-- Header -->
+  <header class="site-header" id="siteHeader" data-screen-label="Header">
+    <div class="container">
+      <div class="header-inner">
+        <!-- Logo (Left) -->
+        <a href="index.html" class="brand" aria-label="IslamicInfo home">
+          <svg class="brand-mark" viewBox="0 0 72 72" fill="none">
+            <defs>
+              <linearGradient id="lp" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#00696e"/><stop offset="100%" stop-color="#1A8A91"/></linearGradient>
+              <linearGradient id="rp" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#1A8A91"/><stop offset="100%" stop-color="#00696e"/></linearGradient>
+              <linearGradient id="gl" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#E5C893" stop-opacity=".6"/><stop offset="100%" stop-color="#C5A059" stop-opacity="0"/></linearGradient>
+            </defs>
+            <path d="M36 18 Q36 18, 22 22 Q14 24, 12 28 L12 50 Q14 46, 22 44 Q30 42, 36 44 Z" fill="url(#lp)"/>
+            <path d="M36 18 Q36 18, 50 22 Q58 24, 60 28 L60 50 Q58 46, 50 44 Q42 42, 36 44 Z" fill="url(#rp)"/>
+            <path d="M36 18 L36 44" stroke="#C5A059" stroke-width=".8" stroke-linecap="round"/>
+            <path d="M22 28 L30 28 M20 32 L32 32 M22 36 L30 36" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
+            <path d="M42 28 L50 28 M40 32 L52 32 M42 36 L50 36" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
+            <path d="M30 18 Q33 8, 36 4 Q39 8, 42 18 Z" fill="url(#gl)" opacity=".7"/>
+            <g class="star" transform="translate(36 14)">
+              <path d="M0 -6 L1.5 -1.5 L6 0 L1.5 1.5 L0 6 L-1.5 1.5 L-6 0 L-1.5 -1.5 Z" fill="#C5A059"/>
+              <circle cx="0" cy="0" r="1.5" fill="white"/>
+            </g>
+            <circle class="halo" cx="36" cy="14" r="11" stroke="rgba(197,160,89,.25)" stroke-width=".5" fill="none"/>
+            <circle class="halo" cx="36" cy="14" r="14" stroke="rgba(197,160,89,.12)" stroke-width=".5" fill="none"/>
+          </svg>
+          <span class="brand-text"><span>Islamic</span><span class="info">Info</span></span>
+        </a>
+
+        <!-- Menu (Center) -->
+        <nav class="nav" aria-label="Primary navigation">
+          <a class="nav-link active" href="index.html">Home</a>
+          <a class="nav-link" href="quran.html">Quran Explorer</a>
+          <a class="nav-link" href="hadith.html">Hadith Library</a>
+          <a class="nav-link" href="islamic-studies.html">Islamic Studies</a>
+          <a class="nav-link" href="knowledge-hub.html">Knowledge Hub</a>
+          <a class="nav-link" href="dua.html">Daily Duas</a>
+          <a class="nav-link" href="tools.html">Tools</a>
+          <a class="nav-link" href="habits.html">Habit Tracker</a>
+          <a class="nav-link" href="verify.html">Verify</a>
+          <a class="nav-link" href="about.html">About</a>
+        </nav>
+
+        <!-- Icons (Right: Search / Lang / Dark Toggle) -->
+        <div class="header-tools">
+          <!-- Search popup -->
+          <div class="search-popup-wrapper">
+            <button class="icon-btn search-trigger" aria-label="Search" id="searchTrigger">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            </button>
+            <div class="search-popup" id="searchPopup" role="search">
+              <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput" />
+              <button class="search-popup-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                Search
+              </button>
+            </div>
+          </div>
+          <!-- Language -->
+          <button class="icon-btn" aria-label="Language">
+            <span style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
+          </button>
+          <!-- Dark mode -->
+          <button class="icon-btn theme-toggle" aria-label="Toggle theme" id="themeBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          </button>
+          <!-- Admin (placeholder) -->
+          <button class="icon-btn" aria-label="Admin">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" data-screen-label="Hero">
+      <div class="hero-bg"></div>
+      <svg class="geo-1" viewBox="0 0 120 120"><g fill="none" stroke="#00696E" stroke-width=".5" opacity=".5"><polygon points="60,5 70,30 95,30 74,46 82,70 60,55 38,70 46,46 25,30 50,30"/><circle cx="60" cy="60" r="52"/></g></svg>
+      <svg class="geo-2" viewBox="0 0 120 120"><polygon points="60,5 70,30 95,30 74,46 82,70 60,55 38,70 46,46 25,30 50,30" fill="none" stroke="#C5A059" stroke-width=".5" opacity=".5"/></svg>
+      <svg class="geo-3" viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#00696E" stroke-width=".4" opacity=".5"/></svg>
+
+      <div class="container">
+        <div class="hero-inner">
+          <!-- Bismillah above hero title -->
+          <div class="bismillah-hero fade-up" style="animation-delay:.02s">
+            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+          </div>
+
+          <div class="fade-up">
+            <span class="hijri-pill">
+              <span class="dot"></span>
+              <span>15 SHAWWAL · 1447 AH</span>
+              <span class="sep"></span>
+              <span style="color:var(--gold-700);font-weight:600;letter-spacing:.08em;">APR 3, 2026</span>
+            </span>
+          </div>
+
+          <h1 class="t-display-2xl">
+            <span class="reveal-word" style="animation-delay:.1s">Authentic</span>
+            <span class="reveal-word" style="animation-delay:.18s">Islamic</span>
+            <span class="reveal-word" style="animation-delay:.26s">knowledge</span><br>
+            <span class="reveal-word gradient-italic" style="animation-delay:.42s">from Qur'an</span>
+            <span class="reveal-word gradient-italic" style="animation-delay:.5s">&amp; Sunnah</span>
+          </h1>
+
+          <p class="hero-mission fade-up delay-500">A digital sanctuary for verified scripture, scholarly tafsir, and graded hadith — built for students, families, and seekers who require sources, not opinions.</p>
+
+          <div class="fade-up delay-700">
+            <form class="searchbar" onsubmit="event.preventDefault();">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="color:var(--ink-muted)"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input type="text" placeholder="Search verses, hadiths, topics, or paste a claim to verify…" aria-label="Search" />
+              <button type="button" class="icon-btn" aria-label="Voice search" style="width:38px;height:38px;border:none;background:transparent;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3"/></svg>
+              </button>
+              <button type="submit" class="search-go" aria-label="Search">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </button>
+            </form>
+            <div class="scope-chips">
+              <button class="chip active">All</button>
+              <button class="chip">Qur'an</button>
+              <button class="chip">Hadith</button>
+              <button class="chip">Dua</button>
+              <button class="chip">Verify</button>
+            </div>
+          </div>
+
+          <div class="cta-row fade-up delay-1000">
+            <a href="islamic-studies.html" class="btn btn-primary btn-pill">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
+              Start Learning
+            </a>
+            <a href="knowledge-hub.html" class="btn btn-habit btn-pill">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Browse Knowledge Hub
+            </a>
+          </div>
+
+          <div class="stats-row fade-up delay-1000">
+            <div class="stat"><div class="stat-num">6,236</div><div class="stat-label">Verses</div></div>
+            <div class="stat"><div class="stat-num">52K+</div><div class="stat-label">Hadiths</div></div>
+            <div class="stat"><div class="stat-num">1,240+</div><div class="stat-label">Duas</div></div>
+            <div class="stat"><div class="stat-num">42</div><div class="stat-label">Languages</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAILY TRIO -->
+    <section class="section" data-screen-label="Daily Trio">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Today's Sustenance</span>
+          <h2 class="t-display-lg">A daily portion of <span class="gradient-italic">light</span></h2>
+        </div>
+        <div class="trio-grid">
+          <article class="card trio-card">
+            <div class="head">
+              <span class="eyebrow">Verse of the Day</span>
+              <button class="icon-btn" style="width:32px;height:32px;border:none;background:transparent;color:var(--ink-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
+            </div>
+            <div class="arabic">وَمَن يَتَوَكَّلْ عَلَى ٱللَّهِ فَهُوَ حَسْبُهُۥ</div>
+            <div class="body">"And whosoever places his trust in Allah — sufficient is He for him."</div>
+            <div class="foot"><span class="font-mono" style="font-size:12px;">Surah At-Talaq · 65:3</span><a class="read-more" href="#">Read →</a></div>
+          </article>
+
+          <article class="card trio-card">
+            <div class="head">
+              <span class="eyebrow">Hadith of the Day</span>
+              <span class="grade grade-sahih">✓ Sahih</span>
+            </div>
+            <div class="body">"The most beloved deeds to Allah are those that are most consistent, even if they are small."</div>
+            <div class="foot"><span class="font-mono" style="font-size:12px;">Sahih al-Bukhari · 6464</span><a class="read-more" href="#">Read →</a></div>
+          </article>
+
+          <article class="card trio-card">
+            <div class="head">
+              <span class="eyebrow">Dua of the Day</span>
+              <button class="icon-btn" style="width:32px;height:32px;border:none;background:transparent;color:var(--ink-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 4 L12 8 L19 4 V20 L12 16 L5 20 Z"/></svg></button>
+            </div>
+            <div class="arabic" style="font-size:20px">رَبِّ ٱشْرَحْ لِى صَدْرِى وَيَسِّرْ لِىٓ أَمْرِى</div>
+            <div class="body">"My Lord, expand for me my chest, and ease my task for me."</div>
+            <div class="foot"><span class="font-mono" style="font-size:12px;">Surah Ta-Ha · 20:25–26</span><a class="read-more" href="#">Listen →</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRAYER STRIP -->
+    <section class="section" style="padding-top:0;" data-screen-label="Prayer Times">
+      <div class="container">
+        <div class="prayer-strip">
+          <div class="prayer-strip-head">
+            <div class="loc">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s-8-7-8-13a8 8 0 1 1 16 0c0 6-8 13-8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              London, UK · MWL Method
+            </div>
+            <a href="#" style="font-size:13px;font-weight:500;color:var(--teal-700);display:inline-flex;align-items:center;gap:4px;">Adjust settings →</a>
+          </div>
+          <!-- London MWL prayer times for 15 Shawwal 1447 / May 9, 2026 (approx) -->
+          <div class="prayers">
+            <div class="prayer past">
+              <div class="name">Fajr</div><div class="time">04:33</div>
+              <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div class="prayer past"><div class="name">Sunrise</div><div class="time">06:10</div></div>
+            <div class="prayer past">
+              <div class="name">Dhuhr</div><div class="time">13:02</div>
+              <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div class="prayer next"><div class="name">Asr</div><div class="time">17:05</div></div>
+            <div class="prayer"><div class="name">Maghrib</div><div class="time">20:52</div></div>
+            <div class="prayer"><div class="name">Isha</div><div class="time">22:34</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURE GRID 8 CARDS -->
+    <section class="section" data-screen-label="Feature Grid">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Eight Gateways</span>
+          <h2 class="t-display-lg">Everything you need for your <span class="gradient-italic">Islamic journey</span></h2>
+          <p>Eight curated portals to verified knowledge, daily worship, and meaningful growth.</p>
+        </div>
+
+        <div class="feature-grid">
+          <!-- 1. Quran — open book icon -->
+          <a href="quran.html" class="feat card">
+            <div class="feat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <h3>Qur'an Learning</h3>
+            <p>Structured recitation, tajweed, memorization, and topic-indexed reading with multi-translator translations.</p>
+            <span class="feat-cta">Explore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </a>
+
+          <!-- 2. Hadith — scroll icon -->
+          <a href="hadith.html" class="feat card">
+            <div class="feat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <line x1="10" y1="9" x2="8" y2="9"/>
+              </svg>
+            </div>
+            <h3>Hadith Library</h3>
+            <p>Searchable, authenticated collections — Bukhari, Muslim, Tirmidhi — with grading by classical scholars.</p>
+            <span class="feat-cta">Browse <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </a>
+
+          <!-- 3. Duas — praying hands icon -->
+          <a href="dua.html" class="feat card">
+            <div class="feat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <path d="M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/>
+                <path d="M14 10V4a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2"/>
+                <path d="M10 10.5V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8"/>
+                <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+              </svg>
+            </div>
+            <h3>Dua Collection</h3>
+            <p>Categorized supplications for every occasion — sourced from Hisn al-Muslim and authentic hadith.</p>
+            <span class="feat-cta">View <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </a>
+
+          <!-- 4. Habit Tracker — calendar-check icon (flagship) -->
+          <a href="habits.html" class="feat card flagship">
+            <span class="feat-badge">NEW</span>
+            <div class="feat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+                <path d="M9 16l2 2 4-4"/>
+              </svg>
+            </div>
+            <h3>Islamic Habit Tracker</h3>
+            <p>Track prayers, Quran progress, and daily worship streaks with intelligent insights.</p>
+            <div class="flagship-preview">
+              <span>🔥 14-day Fajr</span>
+              <span>📖 Juz 12</span>
+            </div>
+            <span class="feat-cta" style="color:var(--gold-700);font-weight:600;">Start Tracking <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </a>
+
+          <!-- 5. Tools — gear/compass icon -->
+          <a href="tools.html" class="feat card">
+            <div class="feat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+                <line x1="12" y1="2" x2="12" y2="5"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+              </svg>
+            </div>
+            <h3>Prayer &amp; Qibla Tools</h3>
+            <p>Qibla direction compass, accurate prayer times for any city, adhan reminders, and Islamic calendar with hijri dates.</p>
+            <span class="feat-cta">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </a>
+
+          <!-- 6. Learn with AI — brain/sparkle icon -->
+          <a href="#" class="feat card">
+            <div class="feat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24A2.5 2.5 0 0 1 9.5 2Z"/>
+                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2Z"/>
+              </svg>
+            </div>
+            <h3>Learn with AI Tutor</h3>
+            <p>QuranlyAI — our AI tutor trained on classical Islamic scholarship. Available on the QuranlyAI mobile app. Ask questions, get cited answers, build knowledge systematically.</p>
+            <span class="feat-cta">Try QuranlyAI ↗ <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </a>
+
+          <!-- 7. Islamic Studies — graduation/book icon -->
+          <a href="islamic-studies.html" class="feat card">
+            <div class="feat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+            </div>
+            <h3>Islamic Studies</h3>
+            <p>Scholar-reviewed guides on aqeedah, fiqh, seerah, and more. Beginner to advanced paths — every article carries author credentials and review date.</p>
+            <span class="feat-cta">Study <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </a>
+
+          <!-- 8. Verify — shield/check icon -->
+          <a href="verify.html" class="feat card">
+            <div class="feat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+            <h3>Verify Islamic Claims</h3>
+            <p>Heard a hadith you're unsure about? Our AI-powered verification engine cross-references primary sources — never fabricates, only cites.</p>
+            <span class="feat-cta">Verify <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- REFLECTION -->
+    <section class="reflection" data-screen-label="Reflection">
+      <div class="container">
+        <div class="divider-ornate">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 9 L21 10 L16 15 L17 22 L12 18 L7 22 L8 15 L3 10 L10 9 Z"/></svg>
+        </div>
+        <p class="reflection-quote">"And He found you lost and guided you. And He found you in need and made you self-sufficient."</p>
+        <p class="reflection-cite">Surah Ad-Duhaa · 93:7–8</p>
+        <div class="divider-ornate">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 9 L21 10 L16 15 L17 22 L12 18 L7 22 L8 15 L3 10 L10 9 Z"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- VERIFY PREVIEW -->
+    <section class="section" data-screen-label="Verify Preview">
+      <div class="container">
+        <div class="verify-preview">
+          <div>
+            <span class="eyebrow" style="margin-bottom:18px;display:inline-flex;">Trust · Verify · Understand</span>
+            <h2 class="t-display-lg" style="margin:18px 0 24px">Found a quote attributed <br><span class="gradient-italic">to the Prophet ﷺ?</span></h2>
+            <p style="font-size:17px;color:var(--ink-muted);line-height:1.7;max-width:480px;">Paste it into our verification engine to cross-reference authenticated sources, see the chain of narration, and receive a confidence score — never a ruling.</p>
+
+            <!-- Trust indicators -->
+            <div class="verify-trust-row">
+              <div class="vt-item">
+                <div class="vt-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                </div>
+                <span>Primary sources only</span>
+              </div>
+              <div class="vt-item">
+                <div class="vt-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                </div>
+                <span>Classical scholar grading</span>
+              </div>
+              <div class="vt-item">
+                <div class="vt-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <span>Confidence score + chain</span>
+              </div>
+            </div>
+
+            <a href="verify.html" class="btn btn-primary" style="margin-top:32px">
+              Verify Information
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+
+          <div class="card confidence-card card-featured" style="animation:none;">
+            <span class="eyebrow" style="margin-bottom:14px;display:inline-flex;">Analysis Complete</span>
+            <div class="confidence-head">
+              <div class="confidence-dial">
+                <svg width="96" height="96" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="42" stroke="var(--ink-faint)" stroke-width="6" fill="none"/>
+                  <circle cx="50" cy="50" r="42" stroke="url(#dialGrad)" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="34.3"/>
+                  <defs><linearGradient id="dialGrad" x1="0" x2="1"><stop offset="0%" stop-color="#00696e"/><stop offset="100%" stop-color="#C5A059"/></linearGradient></defs>
+                </svg>
+                <div class="num">87%</div>
+              </div>
+              <div class="confidence-info">
+                <h4>Authentic (Sahih)</h4>
+                <p>Confidence · 3 primary citations</p>
+              </div>
+            </div>
+            <div class="evidence">
+              <div class="ref">📖 Sunan Ibn Majah · 224</div>
+              <div class="text">"Seeking knowledge is a duty upon every Muslim."</div>
+            </div>
+            <div class="evidence" style="border-left-color:var(--gold-500);background:rgba(197,160,89,.05);">
+              <div class="ref" style="color:var(--gold-700)">📖 Surah Ta-Ha · 20:114</div>
+              <div class="text">"...My Lord, increase me in knowledge."</div>
+            </div>
+            <!-- Narration chain mini -->
+            <div class="chain-row">
+              <div class="chain-label">Narration chain</div>
+              <div class="chain-nodes">
+                <div class="chain-node active">Prophet ﷺ</div>
+                <div class="chain-arrow">→</div>
+                <div class="chain-node">Anas ibn Mālik</div>
+                <div class="chain-arrow">→</div>
+                <div class="chain-node">Ibn Majah</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUSTED SOURCES -->
+    <section class="section sources-section" data-screen-label="Trusted Sources">
+      <div class="container">
+        <div class="section-head" style="margin-bottom:32px;">
+          <span class="eyebrow">Our Foundation</span>
+          <h2 class="t-display-lg">Built on <span class="gradient-italic">authentic scholarship</span></h2>
+          <p style="color:var(--ink-muted);font-size:16px;max-width:520px;margin:12px auto 0;">Every piece of content traces back to a named primary source — no anonymous quotes, no unverified attributions.</p>
+        </div>
+
+        <div class="sources-pillars">
+          <div class="source-pillar">
+            <div class="sp-icon-lg teal">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div class="sp-num">6,236</div>
+            <div class="sp-name">Qur'anic Verses</div>
+            <div class="sp-desc">Complete Qur'an with 12+ translations, word-by-word analysis, and classical tafsir from Ibn Kathir, Al-Tabari, and Al-Qurtubi.</div>
+            <div class="sp-sources">
+              <span class="sp-tag">Sahih International</span>
+              <span class="sp-tag">Yusuf Ali</span>
+              <span class="sp-tag">Pickthall</span>
+            </div>
+          </div>
+
+          <div class="source-pillar">
+            <div class="sp-icon-lg gold">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="sp-num">52,000+</div>
+            <div class="sp-name">Verified Hadith</div>
+            <div class="sp-desc">Six canonical books graded by classical scholars. Every hadith displays its isnad and the scholar's verdict — Sahih, Hasan, or Da'if.</div>
+            <div class="sp-sources">
+              <span class="sp-tag">Bukhari</span>
+              <span class="sp-tag">Muslim</span>
+              <span class="sp-tag">Tirmidhi</span>
+              <span class="sp-tag">+ 3 more</span>
+            </div>
+          </div>
+
+          <div class="source-pillar">
+            <div class="sp-icon-lg teal">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+            </div>
+            <div class="sp-num">1,240+</div>
+            <div class="sp-name">Authenticated Duas</div>
+            <div class="sp-desc">Supplications sourced exclusively from Hisn al-Muslim and authenticated hadith — every dua carries its reference and occasion.</div>
+            <div class="sp-sources">
+              <span class="sp-tag">Hisn al-Muslim</span>
+              <span class="sp-tag">Bukhari</span>
+              <span class="sp-tag">Muslim</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Methodology promise bar -->
+        <div class="methodology-bar">
+          <div class="mb-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>No ads. No sponsored content.</span>
+          </div>
+          <div class="mb-sep"></div>
+          <div class="mb-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+            <span>Every claim source-cited.</span>
+          </div>
+          <div class="mb-sep"></div>
+          <div class="mb-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>Built by Muslims, for Muslims.</span>
+          </div>
+          <div class="mb-sep"></div>
+          <div class="mb-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Privacy-first. Always free.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</div>
+
+<!-- ABOUT SECTION -->
+<section class="about-section" data-screen-label="About">
+  <div class="about-inner">
+
+    <!-- Icon circle -->
+    <div class="about-icon-wrap">
+      <div class="about-icon-circle">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Heading -->
+    <h2 class="about-heading">About IslamicInfo.org</h2>
+
+    <!-- Body text -->
+    <p class="about-body">
+      IslamicInfo.org is a premium Islamic knowledge platform created to help Muslims learn, explore, and stay connected to authentic guidance from the Qur'an, Hadith, duas, and essential daily-life tools. Designed as a trustworthy digital sanctuary, the platform combines reliable Islamic sources with a clean, modern experience that supports both meaningful learning and practical everyday use.
+    </p>
+
+    <!-- Stats -->
+    <div class="about-stats">
+      <div class="about-stat">
+        <div class="about-stat-num">Qur'an, Hadith &amp; Duas</div>
+        <div class="about-stat-lbl">Verified Sacred Sources</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">Daily Islamic Tools</div>
+        <div class="about-stat-lbl">Prayer, Qibla &amp; Habits</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">AI-Powered Learning</div>
+        <div class="about-stat-lbl">Guided by Scholarship</div>
+      </div>
+    </div>
+
+    <!-- CTA link -->
+    <div class="about-link-wrap">
+      <a class="about-cta-link" href="about.html">
+        Read Our Methodology
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="cta-badge">✦ Begin Your Journey</div>
+  <h2 class="cta-title">Start Learning Islam<br>the <span class="gold-it">Right Way</span></h2>
+  <p class="cta-sub">Join thousands of Muslims using IslamicInfo.org to deepen their knowledge through verified sources and guided learning.</p>
+  <div class="cta-actions">
+    <a class="btn-gold" href="quran.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Explore Qur'an
+    </a>
+    <a class="btn-white-ghost" href="verify.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      Verify a Hadith
+    </a>
+    <a class="btn-white-ghost" href="knowledge-hub.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Browse Knowledge Hub
+    </a>
+  </div>
+
+  <!-- QuranlyAI soft promo — keeps it visible without competing with primary CTAs -->
+  <div style="margin-top:28px;display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.07);border:0.5px solid rgba(255,255,255,.15);border-radius:20px;padding:8px 18px 8px 12px;">
+    <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--teal-700),var(--teal-500));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2Z"/></svg>
+    </div>
+    <span style="font-size:13px;color:rgba(255,255,255,.65);">Want AI-powered tutoring?</span>
+    <a href="https://quranlyai.com" target="_blank" rel="noopener" style="font-size:13px;font-weight:600;color:var(--gold-300,#E5C570);text-decoration:none;display:flex;align-items:center;gap:4px;">Try QuranlyAI ↗</a>
+  </div>
+</section>
+
+
+
+<script>
+  // ── Header scroll state
+  const header = document.getElementById('siteHeader');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 16);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ── Theme toggle (robust: initialise from localStorage or default light)
+  const themeBtn = document.getElementById('themeBtn');
+  const root = document.documentElement;
+
+  function applyTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    localStorage.setItem('islamicinfo-theme', theme);
+    // swap icon: sun in dark mode, moon in light mode
+    themeBtn.innerHTML = theme === 'dark'
+      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`
+      : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+  }
+
+  // Initialise — respect saved preference, default to light
+  const saved = localStorage.getItem('islamicinfo-theme') || 'light';
+  applyTheme(saved);
+
+  themeBtn.addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme');
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  });
+
+  // ── Scope chips
+  document.querySelectorAll('.scope-chips .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('.scope-chips .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+    });
+  });
+
+  // ── Search popup (icon only → smooth popup)
+  const searchTrigger = document.getElementById('searchTrigger');
+  const searchPopup   = document.getElementById('searchPopup');
+  const searchInput   = document.getElementById('searchPopupInput');
+
+  searchTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = searchPopup.classList.toggle('open');
+    if (isOpen) setTimeout(() => searchInput.focus(), 50);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!searchPopup.contains(e.target) && e.target !== searchTrigger) {
+      searchPopup.classList.remove('open');
+    }
+  });
+
+  searchPopup.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') searchPopup.classList.remove('open');
+  });
+
+  searchPopup.querySelector('.search-popup-btn').addEventListener('click', () => {
+    const q = searchInput.value.trim();
+    if (q) console.log('Search:', q); // hook your search logic here
+    searchPopup.classList.remove('open');
+  });
+</script>
+
+<!-- ============================================================
+  GLOBAL CSS SNIPPET (for other pages — paste into shared stylesheet)
+  Covers: Bismillah bar, dark mode fixes, nav hover glows, prayer card 3D effects
+  ============================================================
+
+<style id="global-islamicinfo-overrides">
+.bismillah-bar { text-align:center; font-family:'Amiri',serif; font-size:20px; direction:rtl;
+  background:linear-gradient(90deg,var(--teal-700),var(--gold-500),var(--teal-700));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+[data-theme="dark"] .bismillah-bar { background:linear-gradient(90deg,var(--teal-300),var(--gold-400),var(--teal-300));
+  -webkit-background-clip:text; background-clip:text; filter:drop-shadow(0 0 12px rgba(217,179,88,.6)); }
+.bismillah-subbar { text-align:center; padding:6px 0 4px; background:rgba(0,105,110,.04);
+  border-bottom:0.5px solid rgba(0,105,110,.10); }
+[data-theme="dark"] .bismillah-subbar { background:rgba(0,105,110,.10); border-bottom-color:rgba(0,105,110,.20); }
+.nav-link:hover { color:var(--teal-700); background:linear-gradient(135deg,rgba(0,105,110,.08),rgba(0,105,110,.04));
+  transform:scale(1.05); box-shadow:0 0 0 1px rgba(0,105,110,.12),0 4px 12px rgba(0,105,110,.1); }
+[data-theme="dark"] .nav-link:hover { color:var(--teal-300); box-shadow:0 0 12px rgba(88,193,199,.2),0 0 0 1px rgba(0,105,110,.25); }
+.prayer:hover { transform:translateY(-8px) rotateX(5deg); border-color:var(--teal-300);
+  box-shadow:0 8px 28px rgba(0,105,110,.18),0 0 0 1px rgba(106,215,222,.35); }
+</style>
+
+QUICK TEST CHECKLIST:
+□ Light mode: Bismillah visible in teal-gold gradient
+□ Dark mode: Bismillah glows gold (filter: drop-shadow)
+□ Nav: "System" item removed; 9 correct items present
+□ Hero: Cmd+K shortcut removed; Bismillah centered above title
+□ Habit Tracker button: teal gradient matches "Start Learning"
+□ Prayer cards: hover lifts 8px + rotateX(5deg) + teal glow border
+□ Feature cards: meaningful icons; hover scale(1.02) + translateY(-6px)
+□ Search: icon only in nav; click shows smooth popup with blur backdrop
+□ Footer: Bismillah centered with gold glow
+□ Mobile: no overflow; prayer grid stacks 3-col at 768px
+============================================================ -->
+
+<footer id="ii-footer">
+  <div class="ii-footer-top">
+
+    <!-- ── Brand + CTA ── -->
+    <div class="ii-footer-brand-col">
+      <a class="ii-footer-logo" href="index.html">
+        <svg width="36" height="36" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="iif-lp" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#00696E"/><stop offset="100%" stop-color="#1A8A91"/></linearGradient>
+            <linearGradient id="iif-rp" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#1A8A91"/><stop offset="100%" stop-color="#00696E"/></linearGradient>
+            <linearGradient id="iif-gl" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#E5C893" stop-opacity=".65"/><stop offset="100%" stop-color="#C5A059" stop-opacity="0"/></linearGradient>
+          </defs>
+          <path d="M36 18 Q36 18, 22 22 Q14 24, 12 28 L12 50 Q14 46, 22 44 Q30 42, 36 44 Z" fill="url(#iif-lp)"/>
+          <path d="M36 18 Q36 18, 50 22 Q58 24, 60 28 L60 50 Q58 46, 50 44 Q42 42, 36 44 Z" fill="url(#iif-rp)"/>
+          <path d="M36 18 L36 44" stroke="#C5A059" stroke-width=".9" stroke-linecap="round"/>
+          <path d="M22 28 L30 28 M20 32 L32 32 M22 36 L30 36" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
+          <path d="M42 28 L50 28 M40 32 L52 32 M42 36 L50 36" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
+          <path d="M30 18 Q33 8, 36 4 Q39 8, 42 18 Z" fill="url(#iif-gl)" opacity=".75"/>
+          <g transform="translate(36 14)">
+            <path d="M0 -6 L1.5 -1.5 L6 0 L1.5 1.5 L0 6 L-1.5 1.5 L-6 0 L-1.5 -1.5 Z" fill="#C5A059"/>
+            <circle cx="0" cy="0" r="1.5" fill="white" opacity=".9"/>
+          </g>
+          <circle cx="36" cy="14" r="11" stroke="rgba(197,160,89,.28)" stroke-width=".5" fill="none"/>
+          <circle cx="36" cy="14" r="14" stroke="rgba(197,160,89,.12)" stroke-width=".5" fill="none"/>
+        </svg>
+        <span>
+          <span class="ii-footer-logo-text-islamic">Islamic</span><span class="ii-footer-logo-text-info">Info</span>
+        </span>
+      </a>
+      <p class="ii-footer-tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
+      <p class="ii-footer-verse">وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ &nbsp;— Hud · 11:88</p>
+    </div>
+
+    <!-- ── Quick Access ── -->
+    <div class="ii-footer-col">
+      <div class="ii-footer-col-heading">Quick Access</div>
+      <a class="ii-footer-link" href="quran.html">Quran Explorer</a>
+      <a class="ii-footer-link" href="hadith.html">Hadith Library</a>
+      <a class="ii-footer-link" href="islamic-studies.html">Islamic Studies</a>
+      <a class="ii-footer-link" href="knowledge-hub.html">Knowledge Hub</a>
+      <a class="ii-footer-link" href="dua.html">Daily Duas</a>
+      <a class="ii-footer-link" href="tools.html">Islamic Tools</a>
+      <a class="ii-footer-link" href="habits.html">Habit Tracker</a>
+      <a class="ii-footer-link" href="verify.html">Verify a Claim</a>
+    </div>
+
+    <!-- ── Our Ecosystem ── -->
+    <div class="ii-footer-col">
+      <div class="ii-footer-col-heading">Our Ecosystem</div>
+      <a class="ii-footer-link ii-footer-link-ext" href="https://quranlyai.com" target="_blank" rel="noopener">QuranlyAI ↗</a>
+      <a class="ii-footer-link ii-footer-link-ext" href="https://mosquefinder.net" target="_blank" rel="noopener">MosqueFinder ↗</a>
+      <a class="ii-footer-link ii-footer-link-ext" href="https://travellyai.com" target="_blank" rel="noopener">TravellyAI ↗</a>
+      <a class="ii-footer-link ii-footer-link-ext" href="https://learnspeakai.com" target="_blank" rel="noopener">LearnSpeakAI ↗</a>
+    </div>
+
+    <!-- ── Company ── -->
+    <div class="ii-footer-col">
+      <div class="ii-footer-col-heading">Company</div>
+      <a class="ii-footer-link" href="about.html">About</a>
+      <a class="ii-footer-link" href="contact.html">Contact</a>
+    </div>
+
+    <!-- ── Legal ── -->
+    <div class="ii-footer-col">
+      <div class="ii-footer-col-heading">Legal</div>
+      <a class="ii-footer-link" href="privacy.html">Privacy Policy</a>
+      <a class="ii-footer-link" href="terms.html">Terms of Use</a>
+    </div>
+
+  </div>
+
+  <!-- ── Bottom bar ── -->
+  <div class="ii-footer-bottom">
+    <div class="ii-footer-copy">
+      © 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.
+    </div>
+    <div class="ii-footer-note">All content source-verified · Privacy-first · Built with sincerity</div>
+  </div>
+</footer>
+</body>
+</html>
