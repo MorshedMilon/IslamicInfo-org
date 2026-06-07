@@ -2019,13 +2019,13 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
       <div class="trio-head"><div class="trio-icon gold">📜</div><span class="trio-label">Hadith of the Day</span><span class="trio-tag" style="background:rgba(197,160,89,.12);color:var(--gold-700);">SAHIH</span></div>
       <div class="trio-arabic">إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ</div>
       <div class="trio-text">"The reward of deeds depends upon the intentions."</div>
-      <div class="trio-foot"><span>Sahih al-Bukhari · 1</span><span class="trio-read" onclick="showToast('Opening Hadith…')">View →</span></div>
+      <div class="trio-foot"><span>Sahih al-Bukhari · 1</span><a class="trio-read" href="hadith.html">View →</a></div>
     </div>
     <div class="trio-card">
       <div class="trio-head"><div class="trio-icon">🤲</div><span class="trio-label">Dua of the Day</span><span class="trio-tag">DAILY</span></div>
       <div class="trio-arabic">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً</div>
       <div class="trio-text">"Our Lord, give us good in this world and good in the hereafter."</div>
-      <div class="trio-foot"><span>Al-Baqarah 2:201</span><span class="trio-read" onclick="showToast('Opening Duas…')">View →</span></div>
+      <div class="trio-foot"><span>Al-Baqarah 2:201</span><a class="trio-read" href="dua.html">View →</a></div>
     </div>
   </div>
 </section>
@@ -3344,5 +3344,9 @@ function mushafChangePage(dir) {
 }
 
 </script>
+
+<script src="src/js/global.js"></script>
+<script src="src/js/api.js"></script>
+<script src="src/js/quran.js"></script>
 </body>
 </html>

@@ -1251,6 +1251,10 @@ function shareResult() {
     .catch(()=>alert('Please copy the URL manually from your browser.'));
 }
 
+/* ── Namespace ── */
+window.II = window.II || {};
+window.II.inheritance = window.II.inheritance || {};
+
 /* ── Restore from URL ── */
 (function restoreFromURL() {
   try {
@@ -1282,6 +1286,10 @@ function shareResult() {
   } catch(e){ console.warn('URL restore failed:',e); }
 })();
 </script>
+
+<script src="src/js/global.js"></script>
+<script src="src/js/api.js"></script>
+<script src="src/js/inheritance.js"></script>
 
 <!-- Print styles -->
 <style>

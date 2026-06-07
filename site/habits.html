@@ -884,6 +884,11 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 
       <!-- TAB: PRAYERS -->
       <div id="tab-prayers">
+        <!-- Live prayer countdown -->
+        <div id="nextPrayerBanner" style="display:flex;align-items:center;gap:8px;background:rgba(0,105,110,.06);border:0.5px solid rgba(0,105,110,.12);border-radius:10px;padding:8px 12px;margin-bottom:14px;font-size:12.5px;color:var(--ink-muted);">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal-600)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Next prayer: <strong id="nextPrayerName" style="color:var(--teal-700);margin:0 2px;">—</strong> in <strong id="nextPrayerCountdown" style="color:var(--teal-700);margin-left:2px;font-variant-numeric:tabular-nums;">—</strong>
+        </div>
         <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:12px;">5 Daily Prayers</div>
         <div class="prayers-row" id="prayersRow">
           <div class="prayer-check">
@@ -1055,9 +1060,9 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
           </div>
           <div style="text-align:right;">
             <div style="font-size:11px;color:var(--ink-muted);margin-bottom:4px;">Today's Suhoor</div>
-            <div style="font-size:15px;font-weight:600;color:var(--ink-primary);">4:28 AM</div>
+            <div style="font-size:15px;font-weight:600;color:var(--ink-primary);" id="habitSuhoorTime">4:28 AM</div>
             <div style="font-size:11px;color:var(--ink-muted);margin-top:4px;">Iftar (Maghrib)</div>
-            <div style="font-size:15px;font-weight:600;color:var(--ink-primary);">8:42 PM</div>
+            <div style="font-size:15px;font-weight:600;color:var(--ink-primary);" id="habitIftarTime">8:42 PM</div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px;" id="fastGrid30"></div>
@@ -1822,6 +1827,52 @@ function gotoTab(tab) {
   if (tracker) tracker.scrollIntoView({ behavior: 'smooth' });
 }
 
+/* ══ Prayer countdown — fallback using approximate local times.
+      habits.js overrides window.II.habits.prayerTimes with real API data. ══ */
+window.II = window.II || {};
+window.II.habits = window.II.habits || {};
+(function startPrayerCountdown() {
+  var NAMES = ['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+  var FALLBACK = [5.0, 13.0, 16.25, 20.0, 21.5]; // decimal hours, approximate
+  function getTimes() {
+    var t = window.II.habits.prayerTimes;
+    if (t && t.length === 5) return t;
+    return FALLBACK;
+  }
+  function fmt(secs) {
+    var h = Math.floor(secs / 3600);
+    var m = Math.floor((secs % 3600) / 60);
+    var s = secs % 60;
+    return (h ? h + 'h ' : '') + m + 'm ' + (s < 10 ? '0' : '') + s + 's';
+  }
+  function tick() {
+    var times = getTimes();
+    var now = new Date();
+    var nowH = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+    var idx = -1;
+    for (var i = 0; i < times.length; i++) {
+      if (times[i] > nowH) { idx = i; break; }
+    }
+    var nextH, nextName;
+    if (idx === -1) { nextH = times[0] + 24; nextName = NAMES[0]; }
+    else { nextH = times[idx]; nextName = NAMES[idx]; }
+    var target = new Date(now);
+    var th = Math.floor(nextH % 24), tm = Math.round(((nextH % 24) % 1) * 60);
+    target.setHours(th, tm, 0, 0);
+    if (target <= now) target.setDate(target.getDate() + 1);
+    var diff = Math.max(0, Math.floor((target - now) / 1000));
+    var nameEl = document.getElementById('nextPrayerName');
+    var cntEl = document.getElementById('nextPrayerCountdown');
+    if (nameEl) nameEl.textContent = nextName;
+    if (cntEl) cntEl.textContent = fmt(diff);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
 </script>
+<script src="src/js/global.js"></script>
+<script src="src/js/api.js"></script>
+<script src="src/js/habits.js"></script>
 </body>
 </html>

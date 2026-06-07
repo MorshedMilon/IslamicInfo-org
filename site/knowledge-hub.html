@@ -613,7 +613,7 @@ a{text-decoration:none;color:inherit;}
     <div class="hero-search">
       <div class="hs-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-subtle)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" placeholder="What does Islam say about… what is… how many…">
+        <input type="text" id="khSearchInput" placeholder="What does Islam say about… what is… how many…">
         <button class="hs-btn">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           Search Hub
@@ -1253,8 +1253,8 @@ a{text-decoration:none;color:inherit;}
         <h2 class="entry-title">New to Islam? Start Here.</h2>
         <p class="entry-sub">We built a guided reading path specifically for those encountering Islam for the first time — whether you're a convert, a curious neighbor, a student, or someone who's always wondered.</p>
         <div class="entry-form">
-          <input class="entry-input" type="email" placeholder="Your email address">
-          <button class="entry-submit">Get the Guide</button>
+          <input class="entry-input" type="email" id="khEmailInput" placeholder="Your email address">
+          <button class="entry-submit" id="khEmailSubmit">Get the Guide</button>
         </div>
         <div class="entry-note">Free. No spam. Unsubscribe anytime. Your first email arrives in under a minute.</div>
       </div>
@@ -1374,9 +1374,10 @@ sPopup.querySelector('.search-popup-btn').addEventListener('click', () => {
   const q = sInput.value.trim();
   sPopup.classList.remove('open');
   if (q) {
-    const hi = document.querySelector('.hs-wrap input');
+    const hi = document.getElementById('khSearchInput');
     if (hi) { hi.value = q; hi.focus(); }
     document.querySelector('.hero-search').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    doHeroSearch();
   }
 });
 
@@ -1399,6 +1400,26 @@ function toggleFAQ(btn) {
   if (!isOpen) item.classList.add('open');
 }
 
+/* ── window.II.hub namespace — knowledge-hub.js fills in real handlers ── */
+window.II = window.II || {};
+window.II.hub = window.II.hub || {};
+
+/* ── Hero search — delegates to knowledge-hub.js if available, else FAQ scroll ── */
+function doHeroSearch() {
+  const inp = document.getElementById('khSearchInput');
+  const q = inp && inp.value.trim();
+  if (!q) return;
+  if (typeof window.II.hub.search === 'function') {
+    window.II.hub.search(q);
+    return;
+  }
+  document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth' });
+}
+document.querySelector('.hs-btn').addEventListener('click', doHeroSearch);
+document.getElementById('khSearchInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doHeroSearch();
+});
+
 /* ── Cluster click ── */
 const clusterNames = {
   pillars: 'The Five Pillars', quran: "Qur'an & Revelation",
@@ -1407,27 +1428,15 @@ const clusterNames = {
   spirituality: 'Spirituality & Character', modern: 'Islam in Modern Life'
 };
 function filterCluster(id) {
-  const inp = document.querySelector('.hs-wrap input');
-  if (inp) inp.value = clusterNames[id] || id;
-  document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const inp = document.getElementById('khSearchInput');
+  if (inp) { inp.value = clusterNames[id] || id; }
+  doHeroSearch();
 }
-
-/* ── Hero search button + Enter ── */
-function doHeroSearch() {
-  const inp = document.querySelector('.hs-wrap input');
-  if (inp && inp.value.trim()) {
-    document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth' });
-  }
-}
-document.querySelector('.hs-btn').addEventListener('click', doHeroSearch);
-document.querySelector('.hs-wrap input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') doHeroSearch();
-});
 
 /* ── Hero tag clicks ── */
 document.querySelectorAll('.hero-tag').forEach(tag => {
   tag.addEventListener('click', function() {
-    const inp = document.querySelector('.hs-wrap input');
+    const inp = document.getElementById('khSearchInput');
     if (inp) { inp.value = this.textContent; doHeroSearch(); }
   });
 });
@@ -1455,16 +1464,24 @@ document.querySelectorAll('.portal-card').forEach(card => {
   });
 });
 
-/* ── Entry form ── */
-document.querySelector('.entry-submit').addEventListener('click', function() {
-  const inp = this.previousElementSibling;
-  if (inp.value.trim()) {
-    this.textContent = 'Guide sent! ✦';
-    this.style.background = 'linear-gradient(135deg,var(--gold-700),var(--gold-500))';
-    inp.value = '';
-    setTimeout(() => { this.textContent = 'Get the Guide'; this.style.background = ''; }, 3000);
+/* ── Entry form — delegates to knowledge-hub.js POST /api/subscribe if wired ── */
+document.getElementById('khEmailSubmit').addEventListener('click', function() {
+  const inp = document.getElementById('khEmailInput');
+  const btn = this;
+  const email = inp.value.trim();
+  if (!email) return;
+  if (typeof window.II.hub.subscribe === 'function') {
+    window.II.hub.subscribe(email, btn, inp);
+    return;
   }
+  btn.textContent = 'Guide sent! ✦';
+  btn.style.background = 'linear-gradient(135deg,var(--gold-700),var(--gold-500))';
+  inp.value = '';
+  setTimeout(() => { btn.textContent = 'Get the Guide'; btn.style.background = ''; }, 3000);
 });
 </script>
+<script src="src/js/global.js"></script>
+<script src="src/js/api.js"></script>
+<script src="src/js/knowledge-hub.js"></script>
 </body>
 </html>

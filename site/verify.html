@@ -888,7 +888,7 @@ function clearInput(){ta.value='';updateCounter();ta.focus();}
 function pasteClipboard(){if(navigator.clipboard){navigator.clipboard.readText().then(t=>{ta.value=t;updateCounter();}).catch(()=>alert('Clipboard access denied'));}}
 function useChip(el){ta.value=el.textContent.replace(/^"|"$/g,'').trim();updateCounter();ta.focus();window.scrollTo({top:ta.closest('.verify-box').offsetTop-80,behavior:'smooth'});}
 
-// Verify animation (simulated)
+// Verify animation — delegates to verify.js if loaded, else runs demo
 function runVerify(){
   const btn=document.getElementById('verifyBtn');
   const results=document.getElementById('resultsSection');
@@ -897,14 +897,17 @@ function runVerify(){
   btn.classList.add('loading');btn.textContent='Verifying…';
   results.style.opacity='0';results.style.transition='opacity .3s';
   loading.style.display='block';
+  // Delegate to verify.js (real POST /api/verify) if available
+  if(window.II&&window.II.verify&&typeof window.II.verify.submit==='function'){
+    window.II.verify.submit(ta.value.trim());return;
+  }
+  // Fallback: demo simulation
   setTimeout(()=>{
     loading.style.display='none';
     results.style.opacity='1';
     btn.classList.remove('loading');
     btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg> Verify Claim';
-    // Animate dial
     animateDial(80);
-    // Animate consensus bars
     document.querySelectorAll('.cs-bar').forEach(b=>{const w=b.style.width;b.style.width='0';setTimeout(()=>b.style.width=w,100);});
     results.scrollIntoView({behavior:'smooth',block:'start'});
   },2200);
@@ -944,8 +947,35 @@ document.querySelectorAll('.how-card').forEach(card=>{
   });
 });
 
+// window.II namespace — populateResults is called by verify.js after POST /api/verify
+window.II=window.II||{};
+window.II.verify=window.II.verify||{};
+window.II.verify.populateResults=function(data){
+  const results=document.getElementById('resultsSection');
+  const loading=document.getElementById('loadingState');
+  const btn=document.getElementById('verifyBtn');
+  loading.style.display='none';
+  results.style.opacity='1';
+  btn.classList.remove('loading');
+  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg> Verify Claim';
+  if(data.confidence)animateDial(data.confidence);
+  if(data.grade){
+    const vb=results.querySelector('.verdict-banner');
+    if(vb)vb.className='verdict-banner '+data.grade.toLowerCase()+' reveal in';
+  }
+  if(data.summary){
+    const sumEl=results.querySelector('.summary');
+    if(sumEl)sumEl.textContent=data.summary;
+  }
+  document.querySelectorAll('.cs-bar').forEach(b=>{const w=b.style.width;b.style.width='0';setTimeout(()=>b.style.width=w,100);});
+  results.scrollIntoView({behavior:'smooth',block:'start'});
+};
+
 // Init dial on load
 setTimeout(()=>animateDial(80),600);
 </script>
+<script src="src/js/global.js"></script>
+<script src="src/js/api.js"></script>
+<script src="src/js/verify.js"></script>
 </body>
 </html>

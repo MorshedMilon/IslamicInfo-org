@@ -1089,6 +1089,32 @@ document.querySelectorAll('.pathway-card').forEach(card=>{
     this.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';
   });
 });
+
+/* Namespace */
+window.II = window.II || {};
+window.II.islamicStudies = window.II.islamicStudies || {};
+
+/* localStorage progress */
+var _activeTrack = 'foundations';
+var _origSetTrack = setTrack;
+setTrack = function(btn, track) { _activeTrack = track; _origSetTrack(btn, track); };
+
+(function(){
+  var saved = localStorage.getItem('ii-is-done');
+  if(saved){try{var p=JSON.parse(saved);Object.keys(p).forEach(function(k){if(k in DONE)DONE[k]=p[k];});}catch(e){}}
+  setTrack(document.querySelector('.lts-btn.active'), 'foundations');
+  document.getElementById('lessonList').addEventListener('click', function(e){
+    if(e.target.closest('.lesson-kh-cta')) return;
+    var item = e.target.closest('.lesson-item.current');
+    if(!item) return;
+    DONE[_activeTrack] = (DONE[_activeTrack]||0) + 1;
+    localStorage.setItem('ii-is-done', JSON.stringify(DONE));
+    setTrack(document.querySelector('.lts-btn.active'), _activeTrack);
+  });
+})();
 </script>
+<script src="src/js/global.js"></script>
+<script src="src/js/api.js"></script>
+<script src="src/js/islamic-studies.js"></script>
 </body>
 </html>
