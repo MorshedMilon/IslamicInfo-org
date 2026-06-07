@@ -520,7 +520,7 @@ a{text-decoration:none;color:inherit;}
 </section>
 
 <!-- ══ LEARNING PATHWAYS ══ -->
-<section class="section" style="background:var(--surface-card);">
+<section id="pathways" class="section" style="background:var(--surface-card);">
   <div class="container">
     <div class="section-hdr reveal">
       <div class="section-eyebrow">Choose Your Level</div>
@@ -966,7 +966,7 @@ a{text-decoration:none;color:inherit;}
     <div>
       <div class="ft-col-h">Company</div>
       <a class="ft-link" href="about.html">About</a>
-      <a class="ft-link" href="contact.html">Contact</a>
+      <a class="ft-link" href="about.html#contact">Contact</a>
       <div class="ft-col-h" style="margin-top:16px;">Legal</div>
       <a class="ft-link" href="privacy.html">Privacy Policy</a>
       <a class="ft-link" href="terms.html">Terms of Use</a>
@@ -1008,6 +1008,7 @@ window.addEventListener('scroll',()=>hdr.classList.toggle('scrolled',window.scro
 /* Mobile menu */
 function openMM(){document.getElementById('mobileMenu').classList.add('open');}
 function closeMM(){document.getElementById('mobileMenu').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMM();});
 
 /* Reveal */
 const ro=new IntersectionObserver(entries=>{

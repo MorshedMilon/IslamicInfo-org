@@ -601,7 +601,7 @@ img{max-width:100%;}
       </section>
 
       <!-- SCHOLARS -->
-      <section class="section" style="background:var(--surface-card);">
+      <section class="section" id="scholars" style="background:var(--surface-card);">
         <div class="container">
           <div class="section-head reveal">
             <div class="section-eyebrow">Scholarly Foundation</div>
@@ -639,7 +639,7 @@ img{max-width:100%;}
       </section>
 
       <!-- FAQ -->
-      <section class="section" style="background:var(--surface-card);">
+      <section class="section" id="faq" style="background:var(--surface-card);">
         <div class="container">
           <div class="section-head reveal">
             <div class="section-eyebrow">Questions</div>
@@ -656,7 +656,7 @@ img{max-width:100%;}
       </section>
 
       <!-- CONTACT / CTA -->
-      <section class="contact-section">
+      <section class="contact-section" id="contact">
         <div class="cs-badge">✦ We'd Love to Hear From You</div>
         <h2 class="cs-title">Get in <em>Touch</em></h2>
         <p class="cs-sub">Questions, corrections, collaboration ideas — reach out. We read everything.</p>
@@ -703,9 +703,9 @@ img{max-width:100%;}
     <div class="ii-footer-col">
       <div class="ii-footer-col-heading">About</div>
       <a class="ii-footer-link" href="about.html">Our Mission</a>
-      <a class="ii-footer-link" href="about.html">Meet the Team</a>
-      <a class="ii-footer-link" href="contact.html">Contact Us</a>
-      <a class="ii-footer-link" href="about.html">Methodology</a>
+      <a class="ii-footer-link" href="about.html#scholars">Meet the Team</a>
+      <a class="ii-footer-link" href="about.html#contact">Contact Us</a>
+      <a class="ii-footer-link" href="about.html#methodology">Methodology</a>
     </div>
 
     <div class="ii-footer-col">
@@ -731,7 +731,7 @@ img{max-width:100%;}
     <div class="ii-footer-col">
       <div class="ii-footer-col-heading">Company</div>
       <a class="ii-footer-link" href="about.html">About</a>
-      <a class="ii-footer-link" href="contact.html">Contact</a>
+      <a class="ii-footer-link" href="about.html#contact">Contact</a>
       <div class="ii-footer-col-heading" style="margin-top:16px;">Legal</div>
       <a class="ii-footer-link" href="privacy.html">Privacy Policy</a>
       <a class="ii-footer-link" href="terms.html">Terms of Use</a>
@@ -771,7 +771,11 @@ img{max-width:100%;}
   sTrigger.addEventListener('click',e=>{e.stopPropagation();const o=sPopup.classList.toggle('open');if(o)setTimeout(()=>sInput.focus(),50);});
   document.addEventListener('click',e=>{if(!sPopup.contains(e.target)&&e.target!==sTrigger)sPopup.classList.remove('open');});
   sPopup.addEventListener('keydown',e=>{if(e.key==='Escape')sPopup.classList.remove('open');});
-  sPopup.querySelector('.search-popup-btn').addEventListener('click',()=>{const q=sInput.value.trim();if(q)console.log('Search:',q);sPopup.classList.remove('open');});
+  sPopup.querySelector('.search-popup-btn').addEventListener('click',()=>{
+    sPopup.classList.remove('open');
+    const q=sInput.value.trim();
+    if(q) document.getElementById('faq').scrollIntoView({behavior:'smooth',block:'start'});
+  });
 
   // ── General reveal on scroll
   const _ro=new IntersectionObserver(entries=>{

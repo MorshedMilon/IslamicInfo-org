@@ -681,7 +681,7 @@ a{text-decoration:none;color:inherit;}
 </div>
 
 <!-- HOW IT WORKS -->
-<section class="section" style="background:var(--surface-card);">
+<section id="methodology" class="section" style="background:var(--surface-card);">
   <div class="container">
     <div class="section-head reveal">
       <div class="section-eyebrow">Our Methodology</div>
@@ -843,7 +843,11 @@ const sPopup=document.getElementById('searchPopup');
 const sInput=document.getElementById('searchPopupInput');
 sTrigger.addEventListener('click',e=>{e.stopPropagation();const o=sPopup.classList.toggle('open');if(o)setTimeout(()=>sInput.focus(),50);});
 document.addEventListener('click',e=>{if(!sPopup.contains(e.target)&&e.target!==sTrigger)sPopup.classList.remove('open');});
-sPopup.querySelector('.search-popup-btn').addEventListener('click',()=>sPopup.classList.remove('open'));
+sPopup.querySelector('.search-popup-btn').addEventListener('click',()=>{
+  const q=sInput.value.trim();
+  sPopup.classList.remove('open');
+  if(q){ta.value=q;updateCounter();ta.scrollIntoView({behavior:'smooth',block:'center'});ta.focus();}
+});
 
 // Mobile menu — CLAUDE.md §8
 function openMM(){document.getElementById('mobileMenu').classList.add('open');}

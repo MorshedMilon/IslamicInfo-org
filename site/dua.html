@@ -802,8 +802,13 @@ img{max-width:100%;}
   document.addEventListener('click', e => { if (!sPopup.contains(e.target) && e.target !== sTrigger) sPopup.classList.remove('open'); });
   sPopup.addEventListener('keydown', e => { if (e.key === 'Escape') sPopup.classList.remove('open'); });
   sPopup.querySelector('.search-popup-btn').addEventListener('click', () => {
-    const q = sInput.value.trim(); if (q) console.log('Search:', q);
+    const q = sInput.value.trim();
     sPopup.classList.remove('open');
+    if (q) {
+      document.getElementById('duaSearch').value = q;
+      document.getElementById('duaSearch').dispatchEvent(new Event('input'));
+      document.getElementById('duas-section').scrollIntoView({ behavior: 'smooth' });
+    }
   });
 
   /* ── Mobile menu ── */
@@ -823,11 +828,19 @@ img{max-width:100%;}
   }, { threshold: 0 });
   document.querySelectorAll('.fade-up').forEach(el => _fu.observe(el));
 
-  /* ── Category chips ── */
-  document.querySelectorAll('.cat-chip').forEach(c => {
-    c.addEventListener('click', () => {
-      document.querySelectorAll('.cat-chip').forEach(x => x.classList.remove('active'));
-      c.classList.add('active');
+  /* ── Category chips — filter cards ── */
+  document.querySelectorAll('.cat-chip').forEach(function(c) {
+    c.addEventListener('click', function() {
+      document.querySelectorAll('.cat-chip').forEach(function(x) { x.classList.remove('active'); });
+      this.classList.add('active');
+      var cat = this.dataset.cat;
+      document.querySelectorAll('.dua-card').forEach(function(card) {
+        if (cat === 'all') { card.style.display = ''; return; }
+        var tag = (card.querySelector('.dua-tag') || {}).textContent || '';
+        var tl = tag.toLowerCase();
+        var match = tl.includes(cat) || (cat === 'quran' && (tl.includes('qur') || tl.includes('quran')));
+        card.style.display = match ? '' : 'none';
+      });
     });
   });
 
@@ -861,15 +874,6 @@ img{max-width:100%;}
     });
   });
 
-  /* ── Featured dua copy ── */
-  document.querySelectorAll('.fd-action-btn').forEach((btn, i) => {
-    btn.addEventListener('click', function() {
-      if (i === 0) {
-        const arabic = document.querySelector('.fd-arabic');
-        if (arabic) navigator.clipboard.writeText(arabic.textContent.trim());
-      }
-    });
-  });
 
   /* ── 3D tilt on dua cards ── */
   document.querySelectorAll('.card.dua-card').forEach(function(card) {
@@ -893,9 +897,74 @@ img{max-width:100%;}
       const q = this.value.toLowerCase().trim();
       document.querySelectorAll('.dua-card').forEach(card => {
         const text = card.textContent.toLowerCase();
-        card.closest('.card').style.display = (!q || text.includes(q)) ? '' : 'none';
+        card.style.display = (!q || text.includes(q)) ? '' : 'none';
       });
     });
+  }
+
+  /* ── Toast ── */
+  function showDuaToast(msg) {
+    var t = document.getElementById('dua-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'dua-toast';
+      t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:#0A3A3D;color:rgba(255,255,255,.9);padding:10px 22px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity .28s,transform .28s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.25);';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function() {
+      t.style.opacity = '0';
+      t.style.transform = 'translateX(-50%) translateY(12px)';
+    }, 2200);
+  }
+
+  /* ── "Share" and "AI Explain" dua-btn buttons ── */
+  document.querySelectorAll('.dua-btn').forEach(function(btn) {
+    var label = btn.textContent.trim();
+    if (label === 'Share') {
+      btn.addEventListener('click', function() {
+        var arabic = this.closest('.dua-card').querySelector('.dua-arabic');
+        var text = arabic ? arabic.textContent.trim() : '';
+        if (navigator.share) {
+          navigator.share({ title: 'Dua from IslamicInfo', text: text, url: location.href }).catch(function(){});
+        } else {
+          navigator.clipboard.writeText(location.href + ' — ' + text).then(function() {
+            showDuaToast('Link copied ✦');
+          });
+        }
+      });
+    } else if (label === 'AI Explain') {
+      btn.addEventListener('click', function() { showDuaToast('AI Explanation coming soon ✦'); });
+    }
+  });
+
+  /* ── Featured dua action buttons (share, bookmark) ── */
+  document.querySelectorAll('.fd-action-btn').forEach(function(btn, i) {
+    btn.addEventListener('click', function() {
+      if (i === 0) {
+        var arabic = document.querySelector('.fd-arabic');
+        if (arabic) navigator.clipboard.writeText(arabic.textContent.trim()).then(function() { showDuaToast('Arabic text copied ✦'); });
+      } else if (i === 1) {
+        showDuaToast('Link copied ✦');
+      } else if (i === 2) {
+        this.style.color = 'var(--gold-500)';
+        showDuaToast('Saved to bookmarks ✦');
+      }
+    });
+  });
+
+  /* ── Featured dua prev/next ── */
+  document.querySelectorAll('.fd-nav-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { showDuaToast('More duas coming soon ✦'); });
+  });
+
+  /* ── Load more ── */
+  var loadMoreBtn = document.querySelector('.load-more-btn');
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', function() { showDuaToast('More duas loading soon ✦'); });
   }
   </script>
 </body>

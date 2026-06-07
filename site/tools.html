@@ -582,7 +582,7 @@ a{text-decoration:none;color:inherit;}
       <div class="stat-item"><div class="stat-num-lg">100%</div><div class="stat-label-sm">Free Forever</div></div>
     </div>
     <!-- Prayer Widget -->
-    <div class="prayer-widget reveal" style="max-width:740px;margin:24px auto 0;">
+    <div class="prayer-widget reveal" id="prayer-widget" style="max-width:740px;margin:24px auto 0;">
       <div class="pw-inner">
         <div class="pw-header">
           <div>
@@ -610,8 +610,8 @@ a{text-decoration:none;color:inherit;}
             <div class="pw-sun-item">Daylight <span class="pw-sun-val">14h 30m</span></div>
           </div>
           <div class="pw-extra">
-            <button class="pw-extra-btn">🔔 Adhan</button>
-            <button class="pw-extra-btn">⚙️ Method</button>
+            <button class="pw-extra-btn" onclick="showToolsToast('Adhan alerts coming soon ✦')">🔔 Adhan</button>
+            <button class="pw-extra-btn" onclick="showToolsToast('Calculation method settings coming soon ✦')">⚙️ Method</button>
             <button class="pw-extra-btn" onclick="getPrayerLocation()">📍 My Location</button>
           </div>
         </div>
@@ -685,7 +685,7 @@ a{text-decoration:none;color:inherit;}
         <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
-      <a href="#" class="card tool-card reveal" data-cat="finance">
+      <a href="inheritance.html" class="card tool-card reveal" data-cat="finance">
         <div class="tool-card-top"><div class="tool-icon ti-emerald"><svg class="svg-emerald" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><span class="ts-live">● Live</span></div>
         <div class="tool-title">Inheritance Calculator</div>
         <p class="tool-desc">Divide an estate according to Islamic farāʾiḍ law. Supports all 8 heir types — spouse, children, parents, siblings — with detailed breakdown.</p>
@@ -776,7 +776,7 @@ a{text-decoration:none;color:inherit;}
       <div class="card hijri-card reveal reveal-d1">
         <div class="hc-header">
           <div><div class="hc-month">Shawwāl</div><div class="hc-month-ar">شَوَّال ١٤٤٧</div></div>
-          <div class="hc-nav"><button class="hc-nav-btn">‹</button><button class="hc-nav-btn">›</button></div>
+          <div class="hc-nav"><button class="hc-nav-btn" onclick="navHijriMonth(-1)">‹</button><button class="hc-nav-btn" onclick="navHijriMonth(1)">›</button></div>
         </div>
         <div class="hc-grid">
           <div class="hc-day-name">Sun</div><div class="hc-day-name">Mon</div><div class="hc-day-name">Tue</div><div class="hc-day-name">Wed</div><div class="hc-day-name">Thu</div><div class="hc-day-name">Fri</div><div class="hc-day-name">Sat</div>
@@ -1269,6 +1269,26 @@ function calcAge(){
   const hY=Math.floor((d1.getFullYear()-622)*1.0307)+1;
   document.getElementById('aHijriAr').textContent='';
   document.getElementById('aHijriEn').textContent=months[d1.getMonth()]+' '+hY+' AH (approximate)';
+}
+
+// Toast
+function showToolsToast(msg){
+  var t=document.getElementById('tools-toast');
+  if(!t){t=document.createElement('div');t.id='tools-toast';t.style.cssText='position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:#0A3A3D;color:rgba(255,255,255,.9);padding:10px 22px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity .28s,transform .28s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.25);';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);t._timer=setTimeout(function(){t.style.opacity='0';t.style.transform='translateX(-50%) translateY(12px)';},2200);
+}
+
+// Hijri month navigation
+var HIJRI_MONTHS=['Muḥarram','Ṣafar','Rabīʿ al-Awwal','Rabīʿ al-Thānī','Jumādā al-Ūlā','Jumādā al-Ākhirah','Rajab','Shaʿbān','Ramaḍān','Shawwāl','Dhū al-Qaʿdah','Dhū al-Ḥijjah'];
+var HIJRI_MONTHS_AR=['مُحَرَّم','صَفَر','رَبِيعُ الأَوَّل','رَبِيعُ الثَّانِي','جُمَادَى الأُولَى','جُمَادَى الآخِرَة','رَجَب','شَعْبَان','رَمَضَان','شَوَّال','ذُو الْقَعْدَة','ذُو الْحِجَّة'];
+var hcMonth=9, hcYear=1447; // 0-indexed; Shawwal=9
+function navHijriMonth(dir){
+  hcMonth+=dir;
+  if(hcMonth<0){hcMonth=11;hcYear--;}
+  if(hcMonth>11){hcMonth=0;hcYear++;}
+  document.querySelector('.hc-month').textContent=HIJRI_MONTHS[hcMonth];
+  document.querySelector('.hc-month-ar').textContent=HIJRI_MONTHS_AR[hcMonth]+' '+hcYear;
 }
 
 // 3D tilt on tool cards

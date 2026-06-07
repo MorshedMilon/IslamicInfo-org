@@ -293,22 +293,37 @@ a{text-decoration:none;color:inherit;}
 .article-rt{font-size:11px;color:var(--ink-subtle);display:flex;align-items:center;gap:4px;}
 
 /* ═══ SCHOLAR SPOTLIGHT ═══ */
-.scholars-section{background:linear-gradient(135deg,var(--teal-900),#062628);padding:clamp(56px,8vw,88px) 0;position:relative;overflow:hidden;}
-.scholars-section::before{content:'';position:absolute;left:-60px;top:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(197,160,89,.12),transparent 70%);pointer-events:none;}
-.scholars-section::after{content:'';position:absolute;right:-60px;bottom:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(0,105,110,.25),transparent 70%);pointer-events:none;}
-.scholars-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-300);background:rgba(197,160,89,.12);border:.5px solid rgba(197,160,89,.25);padding:6px 14px;border-radius:20px;margin-bottom:18px;}
-.scholars-title{font-family:var(--font-display);font-size:clamp(28px,4vw,44px);font-weight:500;color:white;line-height:1.1;letter-spacing:-.02em;margin-bottom:12px;}
-.scholars-sub{font-size:15px;color:rgba(255,255,255,.5);max-width:480px;margin:0 auto 44px;line-height:1.68;}
+.scholars-section{background:linear-gradient(135deg,rgba(0,105,110,.04),rgba(197,160,89,.03));border-top:.5px solid rgba(0,105,110,.07);border-bottom:.5px solid rgba(0,105,110,.07);padding:clamp(56px,8vw,88px) 0;position:relative;overflow:hidden;}
+.scholars-section::before{content:'';position:absolute;left:-60px;top:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(0,105,110,.07),transparent 70%);pointer-events:none;}
+.scholars-section::after{content:'';position:absolute;right:-60px;bottom:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(197,160,89,.06),transparent 70%);pointer-events:none;}
+.scholars-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--teal-700);background:rgba(0,105,110,.08);border:.5px solid rgba(0,105,110,.18);padding:6px 14px;border-radius:20px;margin-bottom:18px;}
+.scholars-title{font-family:var(--font-display);font-size:clamp(28px,4vw,44px);font-weight:500;color:var(--ink-primary);line-height:1.1;letter-spacing:-.02em;margin-bottom:12px;}
+.scholars-sub{font-size:15px;color:var(--ink-muted);max-width:480px;margin:0 auto 44px;line-height:1.68;}
 .scholars-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;position:relative;z-index:1;}
 @media(max-width:900px){.scholars-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:480px){.scholars-grid{grid-template-columns:1fr;}}
-.scholar-card{background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.08);border-radius:var(--r-lg);padding:24px 20px;text-align:center;cursor:pointer;transition:all .38s var(--ease);}
-.scholar-card:hover{background:rgba(255,255,255,.09);border-color:rgba(197,160,89,.3);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.25),0 0 0 1px rgba(197,160,89,.15);}
-.scholar-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,rgba(0,105,110,.4),rgba(197,160,89,.2));border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-family:var(--font-arabic);font-size:22px;color:rgba(255,255,255,.7);}
-.scholar-name{font-family:var(--font-display);font-size:17px;font-weight:500;color:white;margin-bottom:3px;}
-.scholar-era{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-400);margin-bottom:8px;}
-.scholar-works{font-size:12px;color:rgba(255,255,255,.4);line-height:1.55;}
-.scholar-badge{display:inline-flex;padding:3px 10px;border-radius:999px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(0,105,110,.2);color:var(--teal-300);border:.5px solid rgba(0,105,110,.3);margin-top:10px;}
+.scholar-card{background:var(--surface-card);border:.5px solid rgba(0,105,110,.10);border-radius:var(--r-lg);padding:24px 20px;text-align:center;cursor:pointer;transition:all .38s var(--ease);box-shadow:var(--elev-1);}
+.scholar-card:hover{background:var(--surface-card);border-color:rgba(0,105,110,.22);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,105,110,.12),0 0 0 1px rgba(0,105,110,.08);}
+.scholar-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,rgba(0,105,110,.15),rgba(197,160,89,.10));border:1px solid rgba(0,105,110,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-family:var(--font-arabic);font-size:22px;color:var(--teal-700);}
+.scholar-name{font-family:var(--font-display);font-size:17px;font-weight:500;color:var(--ink-primary);margin-bottom:3px;}
+.scholar-era{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-700);margin-bottom:8px;}
+.scholar-works{font-size:12px;color:var(--ink-muted);line-height:1.55;}
+.scholar-badge{display:inline-flex;padding:3px 10px;border-radius:999px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(0,105,110,.08);color:var(--teal-700);border:.5px solid rgba(0,105,110,.18);margin-top:10px;}
+
+/* Dark mode: restore original dark treatment */
+[data-theme="dark"] .scholars-section{background:linear-gradient(135deg,var(--teal-900),#062628);border-color:transparent;}
+[data-theme="dark"] .scholars-section::before{background:radial-gradient(circle,rgba(197,160,89,.12),transparent 70%);}
+[data-theme="dark"] .scholars-section::after{background:radial-gradient(circle,rgba(0,105,110,.25),transparent 70%);}
+[data-theme="dark"] .scholars-eyebrow{color:var(--gold-300);background:rgba(197,160,89,.12);border-color:rgba(197,160,89,.25);}
+[data-theme="dark"] .scholars-title{color:white;}
+[data-theme="dark"] .scholars-sub{color:rgba(255,255,255,.5);}
+[data-theme="dark"] .scholar-card{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08);box-shadow:none;}
+[data-theme="dark"] .scholar-card:hover{background:rgba(255,255,255,.09);border-color:rgba(197,160,89,.3);box-shadow:0 16px 40px rgba(0,0,0,.25),0 0 0 1px rgba(197,160,89,.15);}
+[data-theme="dark"] .scholar-avatar{background:linear-gradient(135deg,rgba(0,105,110,.4),rgba(197,160,89,.2));border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.7);}
+[data-theme="dark"] .scholar-name{color:white;}
+[data-theme="dark"] .scholar-era{color:var(--gold-400);}
+[data-theme="dark"] .scholar-works{color:rgba(255,255,255,.4);}
+[data-theme="dark"] .scholar-badge{background:rgba(0,105,110,.2);color:var(--teal-300);border-color:rgba(0,105,110,.3);}
 
 /* ═══ BY THE NUMBERS ═══ */
 .numbers-section{background:var(--surface-card);border-top:.5px solid rgba(0,105,110,.07);border-bottom:.5px solid rgba(0,105,110,.07);}
@@ -330,21 +345,99 @@ a{text-decoration:none;color:inherit;}
 .portals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
 @media(max-width:820px){.portals-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:480px){.portals-grid{grid-template-columns:1fr;}}
-.portal-card{border-radius:var(--r-xl);padding:28px 26px;cursor:pointer;transition:transform .38s var(--ease),box-shadow .38s var(--ease);position:relative;overflow:hidden;display:flex;flex-direction:column;}
-.portal-card:hover{transform:translateY(-5px) scale(1.012);}
-.portal-card::after{content:'';position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.08) 50%,transparent 70%);transform:skewX(-18deg);transition:left .55s ease;pointer-events:none;}
-.portal-card:hover::after{left:150%;}
+
+.portal-card{
+  border-radius:var(--r-xl);padding:28px 26px;cursor:pointer;
+  transition:transform .42s var(--ease),box-shadow .42s var(--ease),border-color .3s;
+  position:relative;overflow:hidden;display:flex;flex-direction:column;
+  border:1px solid transparent;
+  will-change:transform;
+}
+
+/* Mouse-tracking radial light via --mx/--my JS custom props */
+.portal-card::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:radial-gradient(360px circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.11) 0%,transparent 62%);
+  opacity:0;transition:opacity .35s var(--ease);
+}
+.portal-card:hover::before{opacity:1;}
+
+/* Floating orb A — top-left ambient */
+.portal-card .porb-a{
+  position:absolute;width:160px;height:160px;border-radius:50%;pointer-events:none;z-index:0;
+  top:-40px;left:-40px;filter:blur(52px);opacity:.18;
+  transition:transform .7s var(--ease),opacity .5s var(--ease);
+}
+.portal-card:hover .porb-a{transform:translate(14px,14px) scale(1.18);opacity:.32;}
+
+/* Floating orb B — bottom-right ambient */
+.portal-card .porb-b{
+  position:absolute;width:120px;height:120px;border-radius:50%;pointer-events:none;z-index:0;
+  bottom:-30px;right:-30px;filter:blur(44px);opacity:.14;
+  transition:transform .9s var(--ease),opacity .5s var(--ease);
+}
+.portal-card:hover .porb-b{transform:translate(-10px,-10px) scale(1.22);opacity:.28;}
+
+/* All direct children sit above orbs */
+.portal-card > *:not(.porb-a):not(.porb-b){position:relative;z-index:1;}
+
+/* Lift + scale */
+.portal-card:hover{transform:translateY(-8px) scale(1.016);}
+
+/* Icon bounce */
+.portal-icon{
+  font-size:32px;margin-bottom:16px;display:inline-block;
+  transition:transform .4s var(--ease);
+}
+.portal-card:hover .portal-icon{transform:translateY(-5px) scale(1.18);}
+
+.portal-name{
+  font-family:var(--font-display);font-size:22px;font-weight:500;color:white;margin-bottom:8px;
+  transition:letter-spacing .3s var(--ease);
+}
+.portal-card:hover .portal-name{letter-spacing:.012em;}
+
+.portal-desc{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:20px;flex:1;transition:color .3s;}
+.portal-card:hover .portal-desc{color:rgba(255,255,255,.78);}
+
+/* Arrow link slides right */
+.portal-link{
+  display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.65);
+  transition:color .25s,gap .3s var(--ease),transform .3s var(--ease);width:fit-content;
+}
+.portal-card:hover .portal-link{color:white;gap:11px;transform:translateX(4px);}
+.portal-link svg{transition:transform .3s var(--ease);}
+.portal-card:hover .portal-link svg{transform:translateX(3px);}
+
+/* Bottom accent bar grows from center */
+.portal-card::after{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:0;height:2px;border-radius:2px;
+  transition:width .45s var(--ease);pointer-events:none;z-index:2;
+}
+.portal-card:hover::after{width:62%;}
+
+/* Teal card */
 .portal-teal{background:linear-gradient(135deg,#0A3A3D,#00696E);box-shadow:0 8px 32px rgba(0,105,110,.3);}
-.portal-teal:hover{box-shadow:0 16px 48px rgba(0,105,110,.4);}
+.portal-teal:hover{box-shadow:0 22px 56px rgba(0,105,110,.48),0 0 0 1px rgba(0,200,210,.18);border-color:rgba(0,200,210,.2);}
+.portal-teal .porb-a{background:#00B5BD;}
+.portal-teal .porb-b{background:#005A5F;}
+.portal-teal::after{background:linear-gradient(90deg,rgba(0,200,210,.6),rgba(88,193,199,.4));}
+
+/* Gold card */
 .portal-gold{background:linear-gradient(135deg,#5A4420,#9A7C3F);box-shadow:var(--gold-aura);}
-.portal-gold:hover{box-shadow:0 16px 48px rgba(197,160,89,.35);}
+.portal-gold:hover{box-shadow:0 22px 56px rgba(197,160,89,.4),0 0 0 1px rgba(229,197,112,.25);border-color:rgba(229,197,112,.22);}
+.portal-gold .porb-a{background:#C5A059;}
+.portal-gold .porb-b{background:#5A4420;}
+.portal-gold::after{background:linear-gradient(90deg,rgba(229,197,112,.65),rgba(197,160,89,.4));}
+
+/* Dark card */
 .portal-dark{background:linear-gradient(135deg,#0F2A2C,#062628);box-shadow:0 8px 32px rgba(0,0,0,.3);}
-.portal-dark:hover{box-shadow:0 16px 48px rgba(0,0,0,.4);}
-.portal-icon{font-size:32px;margin-bottom:16px;}
-.portal-name{font-family:var(--font-display);font-size:22px;font-weight:500;color:white;margin-bottom:8px;}
-.portal-desc{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:20px;flex:1;}
-.portal-link{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);transition:color .2s,gap .2s;}
-.portal-link:hover{color:white;gap:10px;}
+.portal-dark:hover{box-shadow:0 22px 56px rgba(0,0,0,.5),0 0 0 1px rgba(88,193,199,.15);border-color:rgba(88,193,199,.14);}
+.portal-dark .porb-a{background:#1A8A91;}
+.portal-dark .porb-b{background:#0A3A3D;}
+.portal-dark::after{background:linear-gradient(90deg,rgba(88,193,199,.5),rgba(0,105,110,.35));}
 
 /* ═══ REGION SECTION ═══ */
 .regions-section{background:var(--surface);}
@@ -443,7 +536,7 @@ a{text-decoration:none;color:inherit;}
   <a class="mm-link" href="index.html">Home</a>
   <a class="mm-link" href="quran.html">Quran Explorer</a>
   <a class="mm-link" href="hadith.html">Hadith Library</a>
-  <a class="mm-link" href="learn.html">Islamic Studies</a>
+  <a class="mm-link" href="islamic-studies.html">Islamic Studies</a>
   <a class="mm-link active" href="knowledge-hub.html">Knowledge Hub</a>
   <a class="mm-link" href="dua.html">Daily Duas</a>
   <a class="mm-link" href="tools.html">Tools</a>
@@ -474,7 +567,7 @@ a{text-decoration:none;color:inherit;}
       <a class="nav-link" href="index.html">Home</a>
       <a class="nav-link" href="quran.html">Quran Explorer</a>
       <a class="nav-link" href="hadith.html">Hadith Library</a>
-      <a class="nav-link" href="learn.html">Islamic Studies</a>
+      <a class="nav-link" href="islamic-studies.html">Islamic Studies</a>
       <a class="nav-link active" href="knowledge-hub.html">Knowledge Hub</a>
       <a class="nav-link" href="dua.html">Daily Duas</a>
       <a class="nav-link" href="tools.html">Tools</a>
@@ -506,7 +599,7 @@ a{text-decoration:none;color:inherit;}
 </header>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="hero">
   <div class="hero-bg"></div>
   <div class="geo g1"><svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#00696E" stroke-width=".5"><polygon points="36,3 44,22 63,22 48,33 53,53 36,41 19,53 24,33 9,22 28,22"/><circle cx="36" cy="36" r="31"/></svg></div>
   <div class="geo g2"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#C5A059" stroke-width=".5"><rect x="4" y="4" width="36" height="36" rx="3" transform="rotate(15 22 22)"/></svg></div>
@@ -1108,18 +1201,21 @@ a{text-decoration:none;color:inherit;}
     </div>
     <div class="portals-grid">
       <div class="portal-card portal-teal reveal" onclick="location.href='quran.html'">
+        <div class="porb-a"></div><div class="porb-b"></div>
         <div class="portal-icon">📖</div>
         <div class="portal-name">Quran Explorer</div>
         <div class="portal-desc">Read all 114 surahs with classical Tafsir, word-by-word analysis, 50+ reciters, and AI-powered explanations.</div>
         <div class="portal-link">Open Quran Explorer <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
       <div class="portal-card portal-gold reveal reveal-d1" onclick="location.href='hadith.html'">
+        <div class="porb-a"></div><div class="porb-b"></div>
         <div class="portal-icon">📜</div>
         <div class="portal-name">Hadith Library</div>
         <div class="portal-desc">Search 12,000+ hadiths across 9 major collections — with isnad chains, grade badges, and narrator profiles.</div>
         <div class="portal-link">Browse Hadith Library <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
       <div class="portal-card portal-dark reveal reveal-d2" onclick="location.href='verify.html'">
+        <div class="porb-a"></div><div class="porb-b"></div>
         <div class="portal-icon">✓</div>
         <div class="portal-name">Verify a Source</div>
         <div class="portal-desc">Paste any Islamic claim, hadith, or quote and get an instant authenticity rating from our verification engine.</div>
@@ -1188,7 +1284,7 @@ a{text-decoration:none;color:inherit;}
     <p class="cta-sub reveal">"Say: Are those who know equal to those who do not know?" — Al-Zumar 39:9</p>
     <div class="cta-actions reveal">
       <a class="btn-primary" href="#hero">Explore the Hub</a>
-      <a class="btn-white-ghost" href="learn.html">Islamic Studies →</a>
+      <a class="btn-white-ghost" href="islamic-studies.html">Islamic Studies →</a>
     </div>
   </div>
 </section>
@@ -1218,10 +1314,10 @@ a{text-decoration:none;color:inherit;}
       <div class="ii-footer-col-heading">Quick Access</div>
       <a class="ii-footer-link" href="quran.html">Quran Explorer</a>
       <a class="ii-footer-link" href="hadith.html">Hadith Library</a>
-      <a class="ii-footer-link" href="learn.html">Islamic Studies</a>
+      <a class="ii-footer-link" href="islamic-studies.html">Islamic Studies</a>
       <a class="ii-footer-link" href="knowledge-hub.html">Knowledge Hub</a>
       <a class="ii-footer-link" href="dua.html">Daily Duas</a>
-      <a class="ii-footer-link" href="tools.html">Inheritance Calculator</a>
+      <a class="ii-footer-link" href="inheritance.html">Inheritance Calculator</a>
     </div>
     <div class="ii-footer-col">
       <div class="ii-footer-col-heading">Ecosystem</div>
@@ -1233,7 +1329,7 @@ a{text-decoration:none;color:inherit;}
     <div class="ii-footer-col">
       <div class="ii-footer-col-heading">Company</div>
       <a class="ii-footer-link" href="about.html">About</a>
-      <a class="ii-footer-link" href="contact.html">Contact</a>
+      <a class="ii-footer-link" href="about.html#contact">Contact</a>
     </div>
     <div class="ii-footer-col">
       <div class="ii-footer-col-heading">Legal</div>
@@ -1274,7 +1370,15 @@ const sInput = document.getElementById('searchPopupInput');
 sTrigger.addEventListener('click', e => { e.stopPropagation(); const o = sPopup.classList.toggle('open'); if (o) setTimeout(() => sInput.focus(), 50); });
 document.addEventListener('click', e => { if (!sPopup.contains(e.target) && e.target !== sTrigger) sPopup.classList.remove('open'); });
 sPopup.addEventListener('keydown', e => { if (e.key === 'Escape') sPopup.classList.remove('open'); });
-sPopup.querySelector('.search-popup-btn').addEventListener('click', () => sPopup.classList.remove('open'));
+sPopup.querySelector('.search-popup-btn').addEventListener('click', () => {
+  const q = sInput.value.trim();
+  sPopup.classList.remove('open');
+  if (q) {
+    const hi = document.querySelector('.hs-wrap input');
+    if (hi) { hi.value = q; hi.focus(); }
+    document.querySelector('.hero-search').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+});
 
 /* ── Mobile menu ── */
 function openMM() { document.getElementById('mobileMenu').classList.add('open'); }
@@ -1296,22 +1400,35 @@ function toggleFAQ(btn) {
 }
 
 /* ── Cluster click ── */
+const clusterNames = {
+  pillars: 'The Five Pillars', quran: "Qur'an & Revelation",
+  prophets: 'Prophets & Companions', fiqh: 'Islamic Law · Fiqh',
+  aqidah: 'Faith & Theology', history: 'Islamic History',
+  spirituality: 'Spirituality & Character', modern: 'Islam in Modern Life'
+};
 function filterCluster(id) {
-  // In production: navigate to /knowledge/[cluster]
-  const names = {
-    pillars: 'The Five Pillars', quran: "Qur'an & Revelation",
-    prophets: 'Prophets & Companions', fiqh: 'Islamic Law · Fiqh',
-    aqidah: 'Faith & Theology', history: 'Islamic History',
-    spirituality: 'Spirituality & Character', modern: 'Islam in Modern Life'
-  };
-  console.log('Navigate to cluster:', names[id]);
+  const inp = document.querySelector('.hs-wrap input');
+  if (inp) inp.value = clusterNames[id] || id;
+  document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+/* ── Hero search button + Enter ── */
+function doHeroSearch() {
+  const inp = document.querySelector('.hs-wrap input');
+  if (inp && inp.value.trim()) {
+    document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+document.querySelector('.hs-btn').addEventListener('click', doHeroSearch);
+document.querySelector('.hs-wrap input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doHeroSearch();
+});
 
 /* ── Hero tag clicks ── */
 document.querySelectorAll('.hero-tag').forEach(tag => {
   tag.addEventListener('click', function() {
     const inp = document.querySelector('.hs-wrap input');
-    if (inp) inp.value = this.textContent;
+    if (inp) { inp.value = this.textContent; doHeroSearch(); }
   });
 });
 
@@ -1320,6 +1437,21 @@ document.querySelectorAll('.nav-link').forEach(a => {
   a.addEventListener('click', function() {
     document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
     this.classList.add('active');
+  });
+});
+
+/* ── Portal card mouse-tracking radial light ── */
+document.querySelectorAll('.portal-card').forEach(card => {
+  card.addEventListener('mousemove', function(e) {
+    const r = this.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width  * 100).toFixed(1);
+    const y = ((e.clientY - r.top)  / r.height * 100).toFixed(1);
+    this.style.setProperty('--mx', x + '%');
+    this.style.setProperty('--my', y + '%');
+  });
+  card.addEventListener('mouseleave', function() {
+    this.style.setProperty('--mx', '50%');
+    this.style.setProperty('--my', '30%');
   });
 });
 

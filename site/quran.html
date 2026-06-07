@@ -1456,32 +1456,32 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
         <div class="surah-info"><div class="surah-en">Al-An'am</div><div class="surah-meta-row"><span class="surah-chip chip-makki">Makki</span><span class="surah-ayahs">· 165 ayahs</span></div></div>
         <div class="surah-ar">الأنعام</div>
       </div>
-      <div class="surah-row" data-type="makki">
+      <div class="surah-row" data-type="makki" onclick="selectSurah(this,'Al-Araf','الأعراف','206 Ayahs','Makki','أ')">
         <div class="surah-num">7</div>
         <div class="surah-info"><div class="surah-en">Al-A'raf</div><div class="surah-meta-row"><span class="surah-chip chip-makki">Makki</span><span class="surah-ayahs">· 206 ayahs</span></div></div>
         <div class="surah-ar">الأعراف</div>
       </div>
-      <div class="surah-row" data-type="madinah">
+      <div class="surah-row" data-type="madinah" onclick="selectSurah(this,'Al-Anfal','الأنفال','75 Ayahs','Madani','أ')">
         <div class="surah-num">8</div>
         <div class="surah-info"><div class="surah-en">Al-Anfal</div><div class="surah-meta-row"><span class="surah-chip chip-madani">Madani</span><span class="surah-ayahs">· 75 ayahs</span></div></div>
         <div class="surah-ar">الأنفال</div>
       </div>
-      <div class="surah-row" data-type="madinah">
+      <div class="surah-row" data-type="madinah" onclick="selectSurah(this,'At-Tawbah','التوبة','129 Ayahs','Madani','ت')">
         <div class="surah-num">9</div>
         <div class="surah-info"><div class="surah-en">At-Tawbah</div><div class="surah-meta-row"><span class="surah-chip chip-madani">Madani</span><span class="surah-ayahs">· 129 ayahs</span></div></div>
         <div class="surah-ar">التوبة</div>
       </div>
-      <div class="surah-row" data-type="makki">
+      <div class="surah-row" data-type="makki" onclick="selectSurah(this,'Yunus','يونس','109 Ayahs','Makki','ي')">
         <div class="surah-num">10</div>
         <div class="surah-info"><div class="surah-en">Yunus</div><div class="surah-meta-row"><span class="surah-chip chip-makki">Makki</span><span class="surah-ayahs">· 109 ayahs</span></div></div>
         <div class="surah-ar">يونس</div>
       </div>
-      <div class="surah-row" data-type="makki">
+      <div class="surah-row" data-type="makki" onclick="selectSurah(this,'Hud','هود','123 Ayahs','Makki','ه')">
         <div class="surah-num">11</div>
         <div class="surah-info"><div class="surah-en">Hud</div><div class="surah-meta-row"><span class="surah-chip chip-makki">Makki</span><span class="surah-ayahs">· 123 ayahs</span></div></div>
         <div class="surah-ar">هود</div>
       </div>
-      <div class="surah-row" data-type="makki">
+      <div class="surah-row" data-type="makki" onclick="selectSurah(this,'Yusuf','يوسف','111 Ayahs','Makki','ي')">
         <div class="surah-num">12</div>
         <div class="surah-info"><div class="surah-en">Yusuf</div><div class="surah-meta-row"><span class="surah-chip chip-makki">Makki</span><span class="surah-ayahs">· 111 ayahs</span></div></div>
         <div class="surah-ar">يوسف</div>
@@ -2007,7 +2007,7 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 <button class="reading-mode-exit" onclick="toggleReadingMode()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Exit Reading Mode</button>
 <!-- ════ TODAY'S REFLECTION ════ -->
 <section class="trio-section">
-  <div class="trio-hdr"><div class="trio-title">Today's Reflection</div><a class="trio-see-all" href="#">View all →</a></div>
+  <div class="trio-hdr"><div class="trio-title">Today's Reflection</div><a class="trio-see-all" href="quran.html">View all →</a></div>
   <div class="trio-grid">
     <div class="trio-card">
       <div class="trio-head"><div class="trio-icon">📖</div><span class="trio-label">Verse of the Day</span><span class="trio-tag">LIVE</span></div>
@@ -2200,11 +2200,11 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
     <!-- Quran page col -->
     <div>
       <div class="ft-col-h">Quran</div>
-      <a class="ft-link" href="#">Surah Index</a>
-      <a class="ft-link" href="#">Word-by-Word</a>
-      <a class="ft-link" href="#">Tafsir</a>
-      <a class="ft-link" href="#">Audio Recitation</a>
-      <a class="ft-link" href="#">Mushaf Mode</a>
+      <a class="ft-link" href="quran.html">Surah Index</a>
+      <a class="ft-link" href="quran.html">Word-by-Word</a>
+      <a class="ft-link" href="quran.html">Tafsir</a>
+      <a class="ft-link" href="quran.html">Audio Recitation</a>
+      <a class="ft-link" href="quran.html">Mushaf Mode</a>
     </div>
     <div>
       <div class="ft-col-h">Quick Access</div>
@@ -2344,7 +2344,7 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
       <input type="text" class="so-input" id="soInput" placeholder="Search verses, Arabic text, topics…"/>
       <button class="so-close" onclick="closeSearch()">✕</button>
     </div>
-    <div class="so-filters"><button class="so-filter on">All</button><button class="so-filter">Arabic</button><button class="so-filter">Translation</button><button class="so-filter">Topic</button></div>
+    <div class="so-filters"><button class="so-filter on" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')">All</button><button class="so-filter" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')">Arabic</button><button class="so-filter" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')">Translation</button><button class="so-filter" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')">Topic</button></div>
     <div class="so-results">
       <div class="so-result"><div class="so-r-ref">Al-Fatihah 1:6</div><div class="so-r-ar">ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ</div><div class="so-r-en">"<mark>Guide</mark> us to the straight path."</div></div>
       <div class="so-result"><div class="so-r-ref">Al-Baqarah 2:2</div><div class="so-r-ar">ذَٰلِكَ ٱلۡكِتَٰبُ لَا رَيۡبَ فِيهِ</div><div class="so-r-en">"This is the Book about which there is no doubt, a <mark>guidance</mark> for those conscious of Allah."</div></div>

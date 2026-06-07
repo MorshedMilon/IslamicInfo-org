@@ -778,10 +778,10 @@ a { text-decoration: none; color: inherit; }
   <div style="display:flex;gap:10px;max-width:640px;margin:0 auto 20px;align-items:center;">
     <div class="search-pill">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" placeholder="Search hadiths, narrators, topics, or paste a claim…"/>
+      <input id="hadith-search-input" type="text" placeholder="Search hadiths, narrators, topics, or paste a claim…" oninput="filterHadiths(this.value)"/>
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
     </div>
-    <button class="search-submit">Search</button>
+    <button class="search-submit" onclick="filterHadiths(document.getElementById('hadith-search-input').value);document.getElementById('hadith-feed').scrollIntoView({behavior:'smooth'})">Search</button>
   </div>
   <div class="scope-chips" style="margin-bottom:48px;">
     <span class="scope-chip">All</span>
@@ -798,26 +798,26 @@ a { text-decoration: none; color: inherit; }
   <!-- ── SIDEBAR ── -->
   <aside class="sidebar">
     <div class="sidebar-section-label">Hadith Collections</div>
-    <a class="sidebar-item active" href="#">
+    <a class="sidebar-item active" href="#collections">
       <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       All Collections
     </a>
-    <a class="sidebar-item" href="#">
+    <a class="sidebar-item" href="#hadith-feed">
       <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
       Sahih al-Bukhari
       <span class="count-badge">7,563</span>
     </a>
-    <a class="sidebar-item" href="#">
+    <a class="sidebar-item" href="#hadith-feed">
       <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Sahih Muslim <span class="count-badge">5,362</span>
     </a>
-    <a class="sidebar-item" href="#">Sunan Abu Dawud <span class="count-badge">5,274</span></a>
-    <a class="sidebar-item" href="#">Jami' at-Tirmidhi <span class="count-badge">3,956</span></a>
-    <a class="sidebar-item" href="#">Sunan an-Nasa'i <span class="count-badge">5,748</span></a>
-    <a class="sidebar-item" href="#">Sunan Ibn Majah <span class="count-badge">4,341</span></a>
-    <a class="sidebar-item" href="#">Musnad Ahmad <span class="count-badge">27,647</span></a>
-    <a class="sidebar-item" href="#">Riyad as-Saliheen <span class="count-badge">1,906</span></a>
-    <a class="sidebar-item" href="#">40 Nawawi <span class="count-badge">42</span></a>
+    <a class="sidebar-item" href="#hadith-feed">Sunan Abu Dawud <span class="count-badge">5,274</span></a>
+    <a class="sidebar-item" href="#hadith-feed">Jami' at-Tirmidhi <span class="count-badge">3,956</span></a>
+    <a class="sidebar-item" href="#hadith-feed">Sunan an-Nasa'i <span class="count-badge">5,748</span></a>
+    <a class="sidebar-item" href="#hadith-feed">Sunan Ibn Majah <span class="count-badge">4,341</span></a>
+    <a class="sidebar-item" href="#hadith-feed">Musnad Ahmad <span class="count-badge">27,647</span></a>
+    <a class="sidebar-item" href="#hadith-feed">Riyad as-Saliheen <span class="count-badge">1,906</span></a>
+    <a class="sidebar-item" href="#hadith-feed">40 Nawawi <span class="count-badge">42</span></a>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label">Classical Scholars</div>
     <a class="sidebar-item" href="#">Ibn Kathir (Tafsir)</a>
@@ -868,18 +868,18 @@ a { text-decoration: none; color: inherit; }
     </div>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label">Browse</div>
-    <a class="sidebar-item" href="#">
+    <a class="sidebar-item" href="#topic-index">
       <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
       Topic Index
     </a>
-    <div class="sidebar-cta">
+    <div class="sidebar-cta" onclick="location.href='verify.html'">
       <div class="sidebar-cta-icon">✦</div>
       <div>
         <div style="font-size:13px;font-weight:600;color:var(--teal-700);">Verify a Source</div>
         <div style="font-size:11.5px;color:var(--ink-subtle);font-weight:400;margin-top:1px;">Paste text to check authenticity</div>
       </div>
     </div>
-    <div class="sidebar-cta" style="margin-top:10px;">
+    <div class="sidebar-cta" style="margin-top:10px;" onclick="location.href='verify.html'">
       <div class="sidebar-cta-icon" style="background:var(--gold-500);">?</div>
       <div>
         <div style="font-size:13px;font-weight:600;color:var(--teal-700);">Ask a Question</div>
@@ -911,9 +911,9 @@ a { text-decoration: none; color: inherit; }
       <div class="daily-strip-text">"The reward of deeds depends upon the intentions, and every person will get the reward according to what he has intended."</div>
       <div class="daily-strip-ref">📖 Sahih al-Bukhari · Hadith #1 · Narrated by 'Umar ibn al-Khattab (RA) · Graded Sahih</div>
       <div class="daily-strip-actions">
-        <button class="daily-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg> Bookmark</button>
-        <button class="daily-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
-        <button class="daily-btn gold"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> View Full Isnad</button>
+        <button class="daily-btn" onclick="showHadithToast('Bookmarked ✦')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg> Bookmark</button>
+        <button class="daily-btn" onclick="showHadithToast('Link copied ✦')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
+        <button class="daily-btn gold" onclick="document.getElementById('isnad-1').classList.add('open');document.getElementById('hadith-feed').scrollIntoView({behavior:'smooth'})"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> View Full Isnad</button>
       </div>
     </div>
 
@@ -928,7 +928,7 @@ a { text-decoration: none; color: inherit; }
       </div>
     </div>
 
-    <div class="collections-grid fade-up fade-up-delay-3">
+    <div class="collections-grid fade-up fade-up-delay-3" id="collections">
       <!-- Bukhari — Featured -->
       <div class="collection-card featured">
         <div class="featured-seal">✦ Most Authentic</div>
@@ -944,7 +944,7 @@ a { text-decoration: none; color: inherit; }
         </div>
         <div class="card-footer">
           <div class="authenticity-badge"><div class="authenticity-dot"></div>Sahih — Highest Standard</div>
-          <a class="browse-btn" href="#">Browse →</a>
+          <a class="browse-btn" href="#hadith-feed">Browse →</a>
         </div>
       </div>
       <!-- Muslim -->
@@ -960,7 +960,7 @@ a { text-decoration: none; color: inherit; }
         </div>
         <div class="card-footer">
           <div class="authenticity-badge"><div class="authenticity-dot"></div>Sahih</div>
-          <a class="browse-btn" href="#">Browse →</a>
+          <a class="browse-btn" href="#hadith-feed">Browse →</a>
         </div>
       </div>
       <!-- Abu Dawud -->
@@ -976,7 +976,7 @@ a { text-decoration: none; color: inherit; }
         </div>
         <div class="card-footer">
           <div class="authenticity-badge" style="color:var(--grade-hasan);"><div class="authenticity-dot" style="background:var(--grade-hasan);"></div>Mixed Grades</div>
-          <a class="browse-btn" href="#">Browse →</a>
+          <a class="browse-btn" href="#hadith-feed">Browse →</a>
         </div>
       </div>
       <!-- Tirmidhi -->
@@ -992,7 +992,7 @@ a { text-decoration: none; color: inherit; }
         </div>
         <div class="card-footer">
           <div class="authenticity-badge" style="color:var(--grade-hasan);"><div class="authenticity-dot" style="background:var(--grade-hasan);"></div>Mixed Grades</div>
-          <a class="browse-btn" href="#">Browse →</a>
+          <a class="browse-btn" href="#hadith-feed">Browse →</a>
         </div>
       </div>
       <!-- 40 Nawawi -->
@@ -1008,7 +1008,7 @@ a { text-decoration: none; color: inherit; }
         </div>
         <div class="card-footer">
           <div class="authenticity-badge"><div class="authenticity-dot"></div>Sahih / Hasan</div>
-          <a class="browse-btn" href="#">Browse →</a>
+          <a class="browse-btn" href="#hadith-feed">Browse →</a>
         </div>
       </div>
       <!-- Riyad as-Saliheen -->
@@ -1029,7 +1029,7 @@ a { text-decoration: none; color: inherit; }
         </div>
         <div class="card-footer">
           <div class="authenticity-badge" style="color:var(--grade-sahih);"><div class="authenticity-dot" style="background:var(--grade-sahih);"></div>Sahih / Hasan</div>
-          <a class="browse-btn" href="#">Browse →</a>
+          <a class="browse-btn" href="#hadith-feed">Browse →</a>
         </div>
       </div>
     </div>
@@ -1039,7 +1039,7 @@ a { text-decoration: none; color: inherit; }
       <h2 class="section-title">Browse by Topic</h2>
       <a class="section-action" href="#">View all topics →</a>
     </div>
-    <div class="topics-grid fade-up">
+    <div class="topics-grid fade-up" id="topic-index">
       <span class="topic-chip featured-topic">Faith & Belief</span>
       <span class="topic-chip">Prayer (Salah)</span>
       <span class="topic-chip">Charity (Zakat)</span>
@@ -1072,7 +1072,7 @@ a { text-decoration: none; color: inherit; }
       <span class="grade-filter-pill daif"><span style="width:7px;height:7px;border-radius:50%;background:var(--grade-daif);display:inline-block;"></span> Da'if</span>
     </div>
 
-    <div class="hadith-list fade-up">
+    <div class="hadith-list fade-up" id="hadith-feed">
 
       <!-- HADITH CARD 1 — with Isnad (Stage 1 §12.3.5, §12.3.7) -->
       <div class="hadith-card">
@@ -1084,9 +1084,9 @@ a { text-decoration: none; color: inherit; }
               <div class="grade-badge grade-sahih"><span class="grade-dot"></span>Sahih<span class="grader-label"> · Darussalam</span></div>
             </div>
             <div class="hadith-actions">
-              <button class="hadith-action-btn" title="Bookmark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
-              <button class="hadith-action-btn" title="Share"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
-              <button class="hadith-action-btn" title="Copy"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+              <button class="hadith-action-btn" title="Bookmark" onclick="showHadithToast('Bookmarked ✦')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
+              <button class="hadith-action-btn" title="Share" onclick="showHadithToast('Link copied ✦')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+              <button class="hadith-action-btn" title="Copy" onclick="showHadithToast('Copied with attribution ✦')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
             </div>
           </div>
           <div class="hadith-arabic">حَدَّثَنَا الْحُمَيْدِيُّ عَبْدُ اللَّهِ بْنُ الزُّبَيْرِ قَالَ حَدَّثَنَا سُفْيَانُ قَالَ حَدَّثَنَا يَحْيَى بْنُ سَعِيدٍ</div>
@@ -1101,8 +1101,8 @@ a { text-decoration: none; color: inherit; }
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 View Isnad
               </button>
-              <button class="footer-action-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg> Listen</button>
-              <button class="footer-action-btn primary">Open Full View</button>
+              <button class="footer-action-btn" onclick="showHadithToast('Audio coming soon ✦')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg> Listen</button>
+              <button class="footer-action-btn primary" onclick="showHadithToast('Full view coming soon ✦')">Open Full View</button>
             </div>
           </div>
           <!-- Isnad Chain (§12.3.7) -->
@@ -1159,8 +1159,8 @@ a { text-decoration: none; color: inherit; }
               <div class="grade-badge grade-sahih"><span class="grade-dot"></span>Sahih<span class="grader-label"> · Darussalam</span></div>
             </div>
             <div class="hadith-actions">
-              <button class="hadith-action-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
-              <button class="hadith-action-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+              <button class="hadith-action-btn" onclick="showHadithToast('Bookmarked ✦')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
+              <button class="hadith-action-btn" onclick="showHadithToast('Link copied ✦')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
             </div>
           </div>
           <div class="hadith-arabic">وَعَنْ أَبِي هُرَيْرَةَ رَضِيَ اللهُ عَنْهُ قَالَ قَالَ رَسُولُ اللهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ</div>
@@ -1172,8 +1172,8 @@ a { text-decoration: none; color: inherit; }
             <div class="hadith-ref"><span class="hadith-ref-icon">📖</span>Sahih al-Bukhari · Book 2 · Hadith 8</div>
             <div class="hadith-footer-actions">
               <button class="footer-action-btn" onclick="toggleIsnad(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> View Isnad</button>
-              <button class="footer-action-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg> Listen</button>
-              <button class="footer-action-btn primary">Open Full View</button>
+              <button class="footer-action-btn" onclick="showHadithToast('Audio coming soon ✦')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg> Listen</button>
+              <button class="footer-action-btn primary" onclick="showHadithToast('Full view coming soon ✦')">Open Full View</button>
             </div>
           </div>
         </div>
@@ -1189,7 +1189,7 @@ a { text-decoration: none; color: inherit; }
               <div class="grade-badge grade-hasan"><span class="grade-dot"></span>Hasan<span class="grader-label"> · Al-Albani</span></div>
             </div>
             <div class="hadith-actions">
-              <button class="hadith-action-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
+              <button class="hadith-action-btn" onclick="showHadithToast('Bookmarked ✦')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
             </div>
           </div>
           <div class="hadith-arabic">عَنْ أَبِي ذَرٍّ جُنْدَبِ بْنِ جُنَادَةَ وَأَبِي عَبْدِ الرَّحْمَنِ مُعَاذِ بْنِ جَبَلٍ رَضِيَ اللهُ عَنْهُمَا</div>
@@ -1201,8 +1201,8 @@ a { text-decoration: none; color: inherit; }
             <div class="hadith-ref"><span class="hadith-ref-icon">📖</span>Jami' at-Tirmidhi · Hadith 1987</div>
             <div class="hadith-footer-actions">
               <button class="footer-action-btn" onclick="toggleIsnad(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> View Isnad</button>
-              <button class="footer-action-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg> Listen</button>
-              <button class="footer-action-btn primary">Open Full View</button>
+              <button class="footer-action-btn" onclick="showHadithToast('Audio coming soon ✦')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg> Listen</button>
+              <button class="footer-action-btn primary" onclick="showHadithToast('Full view coming soon ✦')">Open Full View</button>
             </div>
           </div>
         </div>
@@ -1210,7 +1210,7 @@ a { text-decoration: none; color: inherit; }
     </div>
 
     <div style="text-align:center;margin-top:4px;margin-bottom:20px;">
-      <button class="load-more-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7 7 7-7"/></svg> Load more hadiths</button>
+      <button class="load-more-btn" onclick="showHadithToast('Loading more hadiths… ✦')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7 7 7-7"/></svg> Load more hadiths</button>
     </div>
 
     <!-- ──────── STAGE 2 — LIBRARY NAVIGATION ──────── -->
@@ -1218,9 +1218,9 @@ a { text-decoration: none; color: inherit; }
 
     <!-- Breadcrumb (Tier 2 / Tier 3 navigation) -->
     <div class="breadcrumb fade-up">
-      <a href="#">All Collections</a>
+      <a href="#collections">All Collections</a>
       <span class="breadcrumb-sep">›</span>
-      <a href="#">Sahih al-Bukhari</a>
+      <a href="#hadith-feed">Sahih al-Bukhari</a>
       <span class="breadcrumb-sep">›</span>
       <span style="color:var(--ink-primary);font-weight:500;">Book 1 · Revelation</span>
     </div>
@@ -1233,7 +1233,7 @@ a { text-decoration: none; color: inherit; }
           <div style="font-family:var(--font-arabic);font-size:18px;color:var(--gold-700);direction:rtl;margin-top:4px;">صحيح البخاري</div>
           <div style="font-size:12.5px;color:var(--ink-muted);margin-top:6px;">Compiled by Imam Muhammad ibn Ismail al-Bukhari · 810–870 CE · 7,563 hadiths across 97 books</div>
         </div>
-        <a href="#" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--teal-700);font-weight:500;border:0.5px solid rgba(0,105,110,.2);border-radius:20px;padding:7px 14px;background:rgba(0,105,110,.05);transition:all .2s;">↩ All Collections</a>
+        <a href="#collections" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--teal-700);font-weight:500;border:0.5px solid rgba(0,105,110,.2);border-radius:20px;padding:7px 14px;background:rgba(0,105,110,.05);transition:all .2s;">↩ All Collections</a>
       </div>
     </div>
 
@@ -1346,8 +1346,8 @@ a { text-decoration: none; color: inherit; }
           <div style="font-size:12px;color:var(--ink-muted);">Copies hadith text + full scholarly reference for citation</div>
         </div>
         <div style="display:flex;gap:8px;">
-          <button class="footer-action-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Text + Ref</button>
-          <button class="footer-action-btn primary"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF</button>
+          <button class="footer-action-btn" onclick="showHadithToast('Copied with attribution ✦')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Text + Ref</button>
+          <button class="footer-action-btn primary" onclick="showHadithToast('PDF download coming soon ✦')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF</button>
         </div>
       </div>
       <div style="margin-top:14px;padding:12px 14px;background:var(--surface-canvas);border-radius:var(--r-sm);border:0.5px solid rgba(0,105,110,.1);font-size:12.5px;color:var(--ink-muted);font-family:var(--font-mono);line-height:1.6;">
@@ -1481,7 +1481,7 @@ a { text-decoration: none; color: inherit; }
   <h2 class="cta-band-title">Explore the <span class="gold-it">Prophet's Teachings</span></h2>
   <p class="cta-band-sub">Join thousands of Muslims using IslamicInfo.org to study authentic hadith with verified sources, full isnad chains, and scholarly grading.</p>
   <div class="cta-band-acts">
-    <a class="btn-cta-gold" href="#">
+    <a class="btn-cta-gold" href="#collections">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       Browse All Collections
     </a>
@@ -1519,10 +1519,10 @@ a { text-decoration: none; color: inherit; }
     <!-- Col 1: Hadith Library (page-specific per CLAUDE.md §7.3) -->
     <div>
       <div class="ft-col-h">Hadith Library</div>
-      <a class="ft-link" href="#">Six Books (Kutub al-Sittah)</a>
-      <a class="ft-link" href="#">Browse by Scholar</a>
-      <a class="ft-link" href="#">Hadith Grading</a>
-      <a class="ft-link" href="#">40 Nawawi</a>
+      <a class="ft-link" href="#collections">Six Books (Kutub al-Sittah)</a>
+      <a class="ft-link" href="#collections">Browse by Scholar</a>
+      <a class="ft-link" href="#hadith-feed">Hadith Grading</a>
+      <a class="ft-link" href="#hadith-feed">40 Nawawi</a>
       <a class="ft-link" href="verify.html">Verify a Hadith</a>
     </div>
     <!-- Col 2: Quick Access (identical on every page per §7.3) -->
@@ -1658,6 +1658,38 @@ document.querySelectorAll('.sidebar-item').forEach(function(item){
     this.classList.add('active');
   });
 });
+
+/* ── Toast notification ── */
+function showHadithToast(msg) {
+  var t = document.getElementById('hadith-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'hadith-toast';
+    t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:#0A3A3D;color:rgba(255,255,255,.9);padding:10px 22px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity .28s,transform .28s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.25);';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function() {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(12px)';
+  }, 2200);
+}
+
+/* ── Hadith search filter ── */
+function filterHadiths(q) {
+  var lq = (q || '').toLowerCase().trim();
+  var cards = document.querySelectorAll('#hadith-feed .hadith-card');
+  var shown = 0;
+  cards.forEach(function(card) {
+    var match = !lq || card.textContent.toLowerCase().includes(lq);
+    card.style.display = match ? '' : 'none';
+    if (match) shown++;
+  });
+  if (lq && shown === 0) showHadithToast('No results for "' + q + '"');
+}
 </script>
 </body>
 </html>

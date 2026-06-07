@@ -927,7 +927,11 @@ const sInput = document.getElementById('searchPopupInput');
 sTrigger.addEventListener('click', e => { e.stopPropagation(); const o = sPopup.classList.toggle('open'); if(o) setTimeout(()=>sInput.focus(),50); });
 document.addEventListener('click', e => { if(!sPopup.contains(e.target) && e.target !== sTrigger) sPopup.classList.remove('open'); });
 sPopup.addEventListener('keydown', e => { if(e.key==='Escape') sPopup.classList.remove('open'); });
-sPopup.querySelector('.search-popup-btn').addEventListener('click', () => { sPopup.classList.remove('open'); });
+sPopup.querySelector('.search-popup-btn').addEventListener('click', () => {
+  sPopup.classList.remove('open');
+  document.getElementById('calc-section').scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('estateValue').focus();
+});
 
 /* ── Mobile menu ── */
 function openMM()  { document.getElementById('mobileMenu').classList.add('open'); }

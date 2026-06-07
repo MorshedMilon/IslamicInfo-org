@@ -832,7 +832,7 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         Start Tracking Today
       </button>
-      <button class="btn-ghost">
+      <button class="btn-ghost" onclick="showToast('Family Challenge coming soon ✦')">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Family Challenge
       </button>
@@ -1041,6 +1041,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
             <div class="prog-bar"><div class="prog-fill gold" id="duaProgressBar" style="width:67%;"></div></div>
           </div>
         </div>
+        <div style="text-align:right;margin-top:10px;"><a href="dua.html" style="font-size:12px;color:var(--teal-700);font-weight:500;">View all Duas →</a></div>
+      </div>
 
       <!-- TAB: FASTING -->
       <div id="tab-fasting" style="display:none;">
@@ -1445,11 +1447,11 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
     <!-- Col 1: Habit Tracker page-specific (§7.3) -->
     <div>
       <div class="ft-col-h">Habit Tracker</div>
-      <a class="ft-link" href="habits.html">Prayer Tracker</a>
-      <a class="ft-link" href="habits.html">Fasting Log</a>
-      <a class="ft-link" href="habits.html">Sunnah Routines</a>
-      <a class="ft-link" href="habits.html">Streak Board</a>
-      <a class="ft-link" href="habits.html">Sunnah Score</a>
+      <a class="ft-link" href="#tracker-app" onclick="gotoTab('prayers')">Prayer Tracker</a>
+      <a class="ft-link" href="#tracker-app" onclick="gotoTab('fasting')">Fasting Log</a>
+      <a class="ft-link" href="#tracker-app" onclick="gotoTab('sunnah')">Sunnah Routines</a>
+      <a class="ft-link" href="#tracker-app">Streak Board</a>
+      <a class="ft-link" href="#tracker-app" onclick="gotoTab('prayers')">Sunnah Score</a>
     </div>
 
     <!-- Col 2: Quick Access (identical on every page, §7.3) -->
@@ -1564,18 +1566,18 @@ function togglePrayer(i) {
   el.classList.toggle('done', prayers[i]);
   updateScore();
   showToast(prayers[i] ? `${PRAYER_NAMES[i]} marked ✓ Alhamdulillah!` : `${PRAYER_NAMES[i]} unmarked`);
+  saveHabits();
 }
 function updateScore() {
-  const pct = Math.round((prayers.filter(Boolean).length/5)*72 + 28);
-  const clamped = Math.min(pct,100);
+  const done = prayers.filter(Boolean).length;
+  const clamped = Math.min(Math.round(done/5*72 + 28), 100);
   document.getElementById('score-pct').textContent = clamped+'%';
   document.getElementById('score-bar').style.width = clamped+'%';
   document.getElementById('scoreRingNum').textContent = clamped+'%';
-  // Update SVG ring (circumference ≈ 144.5)
   const offset = 144.5 - (144.5 * clamped/100);
   document.getElementById('scoreRing').setAttribute('stroke-dashoffset', offset);
-  // Orb score — element removed (score shown in tracker ring instead)
-  // document.getElementById('orbScore').textContent = clamped;
+  const tPct = document.getElementById('todayPct');
+  if (tPct) tPct.textContent = Math.round(done/5*100)+'%';
 }
 
 /* ══════════════════════════════════════════════════
@@ -1624,6 +1626,7 @@ function updateQuranSlider(v) {
   const juzPct = Math.min(Math.round(v/goal*18+2),100);
   document.getElementById('juzPct').textContent = juzPct+'%';
   document.getElementById('juzBar').style.width = juzPct+'%';
+  saveHabits();
 }
 function updateQuranGoal() {
   const goal = parseInt(document.getElementById('quranGoal').value)||5;
@@ -1647,6 +1650,7 @@ function toggleDua(item) {
   document.getElementById('dua-bar').style.width = pct+'%';
   document.getElementById('duaProgress').textContent = checked+' / '+total;
   document.getElementById('duaProgressBar').style.width = pct+'%';
+  saveHabits();
 }
 
 /* ══════════════════════════════════════════════════
@@ -1716,6 +1720,7 @@ function toggleRoutineItem(item){
   const sp=document.getElementById('sunnahProgress');
   if(pb)pb.style.width=pct+'%';
   if(sp)sp.textContent=done+' / '+total;
+  saveHabits();
 }
 
 /* Sunnah pills */
@@ -1747,13 +1752,74 @@ function switchTab(btn,tab){
   });
 }
 
-/* Update today pct when prayers change */
-const origUpdateScore2=updateScore;
-function updateScore(){
-  origUpdateScore2();
-  const pct=Math.round((prayers.filter(Boolean).length/5)*100);
-  const el=document.getElementById('todayPct');
-  if(el)el.textContent=pct+'%';
+/* ══ localStorage persistence (keyed by date, auto-resets each day) ══ */
+const HABITS_KEY = (function(){
+  var d = new Date();
+  return 'ii-habits-' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+})();
+
+function saveHabits() {
+  try {
+    var sl = document.getElementById('quranSlider');
+    var state = {
+      prayers: prayers.slice(),
+      quranPages: sl ? (parseInt(sl.value)||0) : 0,
+      duaChecked: Array.from(document.querySelectorAll('.dua-item')).map(function(el){ return el.classList.contains('checked'); }),
+      sunnahChecked: Array.from(document.querySelectorAll('.sunnah-routine-item')).map(function(el){ return el.classList.contains('checked'); })
+    };
+    localStorage.setItem(HABITS_KEY, JSON.stringify(state));
+  } catch(e) {}
+}
+
+function loadHabits() {
+  try {
+    var raw = localStorage.getItem(HABITS_KEY);
+    if (!raw) return;
+    var state = JSON.parse(raw);
+    if (state.prayers && state.prayers.length === 5) {
+      state.prayers.forEach(function(on, i) {
+        prayers[i] = on;
+        var el = document.getElementById('p'+i);
+        if (el) el.classList.toggle('done', on);
+      });
+      updateScore();
+    }
+    if (state.quranPages != null) {
+      var sl = document.getElementById('quranSlider');
+      if (sl) { sl.value = state.quranPages; updateQuranSlider(state.quranPages); }
+    }
+    if (state.duaChecked) {
+      var duaItems = document.querySelectorAll('.dua-item');
+      state.duaChecked.forEach(function(on, i) { if (duaItems[i]) duaItems[i].classList.toggle('checked', on); });
+      var ch = document.querySelectorAll('.dua-item.checked').length;
+      var tot = document.querySelectorAll('.dua-item').length;
+      var pct = tot ? Math.round(ch/tot*100) : 0;
+      var lbl=document.getElementById('dua-lbl'), bar=document.getElementById('dua-bar');
+      var dp=document.getElementById('duaProgress'), dpb=document.getElementById('duaProgressBar');
+      if(lbl)lbl.textContent=ch+' / '+tot+' duas';
+      if(bar)bar.style.width=pct+'%';
+      if(dp)dp.textContent=ch+' / '+tot;
+      if(dpb)dpb.style.width=pct+'%';
+    }
+    if (state.sunnahChecked) {
+      var sItems = document.querySelectorAll('.sunnah-routine-item');
+      state.sunnahChecked.forEach(function(on, i) { if (sItems[i]) sItems[i].classList.toggle('checked', on); });
+      var sd=document.querySelectorAll('.sunnah-routine-item.checked').length;
+      var st=document.querySelectorAll('.sunnah-routine-item').length;
+      var pb=document.getElementById('sunnahProgressBar'), sp=document.getElementById('sunnahProgress');
+      if(pb)pb.style.width=(st?Math.round(sd/st*100):0)+'%';
+      if(sp)sp.textContent=sd+' / '+st;
+    }
+  } catch(e) {}
+}
+loadHabits();
+
+function gotoTab(tab) {
+  var btn = document.querySelector('.tab[onclick*="\''+tab+'\'"]');
+  if (!btn) btn = document.querySelector('.tab[onclick*="\\"'+tab+'\\""]');
+  if (btn) switchTab(btn, tab);
+  var tracker = document.getElementById('tracker-app');
+  if (tracker) tracker.scrollIntoView({ behavior: 'smooth' });
 }
 
 </script>
