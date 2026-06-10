@@ -26,10 +26,19 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Build deployment artifact (public files only)
+        run: |
+          mkdir -p _site/src
+          cp *.html _site/
+          cp -r src/* _site/src/
+          cp CNAME .nojekyll _site/
+          echo "Published contents:"
+          find _site -type f | sort
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'          # ← serve from root, not site/
+          path: '_site'
 
       - name: Deploy to GitHub Pages
         id: deployment
