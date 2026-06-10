@@ -179,6 +179,7 @@ a { text-decoration: none; color: inherit; }
   background: linear-gradient(90deg, var(--teal-700), var(--gold-500), var(--teal-700));
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   margin-top: 8px; margin-bottom: 16px; letter-spacing: .06em; line-height: 1.6; opacity: .9;
+  animation: fadeUp .7s var(--ease-reverent) both;
 }
 [data-theme="dark"] .bismillah-hero-top {
   background: linear-gradient(90deg, #88E0E5, #D7B675, #88E0E5);
@@ -191,6 +192,7 @@ a { text-decoration: none; color: inherit; }
   font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
   color: var(--teal-600); margin-bottom: 16px;
   display: inline-flex; align-items: center; gap: 8px; justify-content: center;
+  animation: fadeUp .7s var(--ease-reverent) .08s both;
 }
 .page-eyebrow::before { content: ''; width: 20px; height: 1.5px; background: var(--teal-500); border-radius: 1px; }
 [data-theme="dark"] .page-eyebrow { color: #5BC1C7; }
@@ -202,7 +204,7 @@ a { text-decoration: none; color: inherit; }
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 [data-theme="dark"] .page-title { color: #F5F8F8; }
 .page-title em { font-style: italic; background: linear-gradient(90deg, var(--teal-700), var(--teal-500) 55%, var(--gold-500) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.page-subtitle { font-size: 15.5px; color: var(--ink-muted); line-height: 1.72; max-width: 600px; margin: 0 auto 28px; }
+.page-subtitle { font-size: 15.5px; color: var(--ink-muted); line-height: 1.72; max-width: 600px; margin: 0 auto 28px; animation: fadeUp .7s var(--ease-reverent) .2s both; }
 [data-theme="dark"] .page-subtitle { color: #9AAAAB; }
 
 /* ─── SEARCH BAR ─── */
@@ -605,7 +607,7 @@ a { text-decoration: none; color: inherit; }
 .related-ref { font-size: 11px; color: var(--ink-subtle); }
 
 /* ─── HIJRI PILL (used in hero) ─── */
-.hijri-pill { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--teal-700); background: rgba(0,105,110,.08); border: 0.5px solid rgba(0,105,110,.18); padding: 7px 16px; border-radius: 20px; margin-bottom: 16px; }
+.hijri-pill { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--teal-700); background: rgba(0,105,110,.08); border: 0.5px solid rgba(0,105,110,.18); padding: 7px 16px; border-radius: 20px; margin-bottom: 16px; animation: fadeUp .7s var(--ease-reverent) .05s both; }
 .hijri-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal-500); animation: pulse-dot 2.5s ease infinite; }
 .hijri-pill .sep { width: 1px; height: 12px; background: rgba(0,105,110,.25); }
 
@@ -777,7 +779,7 @@ a { text-decoration: none; color: inherit; }
   <div class="page-eyebrow">Prophetic Traditions</div>
   <h1 class="page-title">Guidance from the <em>Sunnah,</em><br>Verified for Your Heart</h1>
   <p class="page-subtitle">Connect deeply with the teachings of Prophet Muhammad (ﷺ). Our platform provides a sanctuary of authentic knowledge, helping you implement the beauty of the Sunnah into your daily life with confidence.</p>
-  <div style="display:flex;gap:10px;max-width:640px;margin:0 auto 20px;align-items:center;">
+  <div style="display:flex;gap:10px;max-width:640px;margin:0 auto 20px;align-items:center;animation:fadeUp .7s var(--ease-reverent) .3s both;">
     <div class="search-pill">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input id="hadith-search-input" type="text" placeholder="Search hadiths, narrators, topics, or paste a claim…" oninput="filterHadiths(this.value)"/>
@@ -785,7 +787,7 @@ a { text-decoration: none; color: inherit; }
     </div>
     <button class="search-submit" onclick="filterHadiths(document.getElementById('hadith-search-input').value);document.getElementById('hadith-feed').scrollIntoView({behavior:'smooth'})">Search</button>
   </div>
-  <div class="scope-chips" style="margin-bottom:48px;">
+  <div class="scope-chips" style="margin-bottom:48px;animation:fadeUp .7s var(--ease-reverent) .4s both;">
     <span class="scope-chip">All</span>
     <span class="scope-chip active">Hadith</span>
     <span class="scope-chip">Qur'an</span>
