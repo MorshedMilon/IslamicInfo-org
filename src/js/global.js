@@ -14,38 +14,12 @@
 
    localStorage key: 'islamicinfo-theme'  |  Default: 'light'
    data-theme lives on <html>, never on <body>.
+
+   NOTE: theme-toggle (#themeBtn/applyTheme) and the header search
+   popup (#searchTrigger/#searchPopup) are wired per-page in each
+   page's own inline script. Do not re-add that wiring here — it
+   double-binds the click handlers and cancels itself out.
    ═══════════════════════════════════════════════════════════════════ */
-
-
-/* ─────────────────────────────────────────────────────────────────
-   Theme icons (SVG strings)
-   ───────────────────────────────────────────────────────────────── */
-
-const _ICON_SUN = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-  <circle cx="12" cy="12" r="4"/>
-  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-</svg>`;
-
-const _ICON_MOON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-</svg>`;
-
-
-/* ─────────────────────────────────────────────────────────────────
-   applyTheme(t)
-   Sets data-theme on <html>, persists to localStorage, updates
-   the theme button icon. Exposed on window for page scripts.
-   ───────────────────────────────────────────────────────────────── */
-
-function applyTheme(t) {
-  document.documentElement.setAttribute('data-theme', t);
-  localStorage.setItem('islamicinfo-theme', t);
-
-  const btn = document.getElementById('themeBtn');
-  if (btn) btn.innerHTML = t === 'dark' ? _ICON_SUN : _ICON_MOON;
-}
-
-window.applyTheme = applyTheme;
 
 
 /* ─────────────────────────────────────────────────────────────────
@@ -81,42 +55,6 @@ function closeMM() {
 
 window.openMM = openMM;
 window.closeMM = closeMM;
-
-
-/* ─────────────────────────────────────────────────────────────────
-   initSearchPopup()
-   Manages the header search popup: toggle, focus, outside-click
-   dismiss, and the search button action stub.
-   ───────────────────────────────────────────────────────────────── */
-
-function initSearchPopup() {
-  const trigger = document.getElementById('searchTrigger');
-  const popup   = document.getElementById('searchPopup');
-  const input   = document.getElementById('searchPopupInput');
-  if (!trigger || !popup) return;
-
-  const submitBtn = popup.querySelector('.search-popup-btn');
-
-  trigger.addEventListener('click', e => {
-    e.stopPropagation();
-    const opening = popup.classList.toggle('open');
-    if (opening && input) setTimeout(() => input.focus(), 50);
-  });
-
-  document.addEventListener('click', e => {
-    if (!popup.contains(e.target) && e.target !== trigger) {
-      popup.classList.remove('open');
-    }
-  });
-
-  if (submitBtn) {
-    submitBtn.addEventListener('click', () => {
-      const q = input ? input.value.trim() : '';
-      if (q) console.log('Search:', q); // TODO: wire to search backend
-      popup.classList.remove('open');
-    });
-  }
-}
 
 
 /* ─────────────────────────────────────────────────────────────────
@@ -188,20 +126,6 @@ window.showToast = showToast;
    ───────────────────────────────────────────────────────────────── */
 
 (function boot() {
-  /* Apply saved theme (head snippet handles the pre-paint case;
-     this covers the fallback when the snippet is absent). */
-  applyTheme(localStorage.getItem('islamicinfo-theme') || 'light');
-
-  /* Wire theme button */
-  const themeBtn = document.getElementById('themeBtn');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      applyTheme(current === 'dark' ? 'light' : 'dark');
-    });
-  }
-
   initHeaderScroll();
-  initSearchPopup();
   initReveal();
 })();
