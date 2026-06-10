@@ -195,9 +195,11 @@ a { text-decoration: none; color: inherit; }
 .page-eyebrow::before { content: ''; width: 20px; height: 1.5px; background: var(--teal-500); border-radius: 1px; }
 [data-theme="dark"] .page-eyebrow { color: #5BC1C7; }
 .page-title {
-  font-family: var(--font-display); font-size: clamp(32px,5vw,58px); font-weight: 500;
-  line-height: 1.08; letter-spacing: -.025em; color: var(--ink-primary); margin-bottom: 16px;
+  font-family: var(--font-display); font-size: clamp(44px,8vw,78px); font-weight: 600;
+  line-height: 1.04; letter-spacing: -.025em; color: var(--ink-primary); margin-bottom: 16px;
+  animation: fadeUp .9s var(--ease-reverent) .1s both;
 }
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 [data-theme="dark"] .page-title { color: #F5F8F8; }
 .page-title em { font-style: italic; background: linear-gradient(90deg, var(--teal-700), var(--teal-500) 55%, var(--gold-500) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .page-subtitle { font-size: 15.5px; color: var(--ink-muted); line-height: 1.72; max-width: 600px; margin: 0 auto 28px; }

@@ -953,6 +953,11 @@ img { max-width: 100%; }
 /* Word reveal */
 .reveal-word { display: inline-block; opacity: 0; animation: word-reveal .9s var(--ease-reverent) forwards; }
 
+/* Scroll reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s var(--ease-reverent),transform .65s var(--ease-reverent);}
+.reveal.in{opacity:1;transform:none;}
+.reveal-d1{transition-delay:.10s;}.reveal-d2{transition-delay:.20s;}.reveal-d3{transition-delay:.30s;}.reveal-d4{transition-delay:.40s;}.reveal-d5{transition-delay:.50s;}
+
 /* ============ DAILY TRIO ============ */
 .section { padding: 80px 0; position: relative; }
 .section-head { text-align: center; margin-bottom: 48px; }
@@ -1560,12 +1565,12 @@ html {
     <!-- DAILY TRIO -->
     <section class="section" data-screen-label="Daily Trio">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <span class="eyebrow">Today's Sustenance</span>
           <h2 class="t-display-lg">A daily portion of <span class="gradient-italic">light</span></h2>
         </div>
         <div class="trio-grid">
-          <article class="card trio-card">
+          <article class="card trio-card reveal reveal-d1">
             <div class="head">
               <span class="eyebrow">Verse of the Day</span>
               <button class="icon-btn" style="width:32px;height:32px;border:none;background:transparent;color:var(--ink-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
@@ -1575,7 +1580,7 @@ html {
             <div class="foot"><span class="font-mono" style="font-size:12px;">Surah At-Talaq · 65:3</span><a class="read-more" href="quran.html">Read →</a></div>
           </article>
 
-          <article class="card trio-card">
+          <article class="card trio-card reveal reveal-d2">
             <div class="head">
               <span class="eyebrow">Hadith of the Day</span>
               <span class="grade grade-sahih">✓ Sahih</span>
@@ -1584,7 +1589,7 @@ html {
             <div class="foot"><span class="font-mono" style="font-size:12px;">Sahih al-Bukhari · 6464</span><a class="read-more" href="hadith.html">Read →</a></div>
           </article>
 
-          <article class="card trio-card">
+          <article class="card trio-card reveal reveal-d3">
             <div class="head">
               <span class="eyebrow">Dua of the Day</span>
               <button class="icon-btn" style="width:32px;height:32px;border:none;background:transparent;color:var(--ink-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 4 L12 8 L19 4 V20 L12 16 L5 20 Z"/></svg></button>
@@ -1600,7 +1605,7 @@ html {
     <!-- PRAYER STRIP -->
     <section class="section" style="padding-top:0;" data-screen-label="Prayer Times">
       <div class="container">
-        <div class="prayer-strip">
+        <div class="prayer-strip reveal">
           <div class="prayer-strip-head">
             <div class="loc">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s-8-7-8-13a8 8 0 1 1 16 0c0 6-8 13-8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
@@ -1630,7 +1635,7 @@ html {
     <!-- FEATURE GRID 8 CARDS -->
     <section class="section" data-screen-label="Feature Grid">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <span class="eyebrow">Eight Gateways</span>
           <h2 class="t-display-lg">Everything you need for your <span class="gradient-italic">Islamic journey</span></h2>
           <p>Eight curated portals to verified knowledge, daily worship, and meaningful growth.</p>
@@ -1638,7 +1643,7 @@ html {
 
         <div class="feature-grid">
           <!-- 1. Quran — open book icon -->
-          <a href="quran.html" class="feat card">
+          <a href="quran.html" class="feat card reveal reveal-d1">
             <div class="feat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
                 <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
@@ -1651,7 +1656,7 @@ html {
           </a>
 
           <!-- 2. Hadith — scroll icon -->
-          <a href="hadith.html" class="feat card">
+          <a href="hadith.html" class="feat card reveal reveal-d2">
             <div class="feat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -1667,7 +1672,7 @@ html {
           </a>
 
           <!-- 3. Duas — praying hands icon -->
-          <a href="dua.html" class="feat card">
+          <a href="dua.html" class="feat card reveal reveal-d3">
             <div class="feat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
                 <path d="M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/>
@@ -1682,7 +1687,7 @@ html {
           </a>
 
           <!-- 4. Habit Tracker — calendar-check icon (flagship) -->
-          <a href="habits.html" class="feat card flagship">
+          <a href="habits.html" class="feat card flagship reveal reveal-d4">
             <span class="feat-badge">NEW</span>
             <div class="feat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
@@ -1703,7 +1708,7 @@ html {
           </a>
 
           <!-- 5. Tools — gear/compass icon -->
-          <a href="tools.html" class="feat card">
+          <a href="tools.html" class="feat card reveal reveal-d1">
             <div class="feat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
                 <circle cx="12" cy="12" r="3"/>
@@ -1718,7 +1723,7 @@ html {
           </a>
 
           <!-- 6. Learn with AI — brain/sparkle icon -->
-          <a href="#" class="feat card">
+          <a href="#" class="feat card reveal reveal-d2">
             <div class="feat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
                 <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24A2.5 2.5 0 0 1 9.5 2Z"/>
@@ -1731,7 +1736,7 @@ html {
           </a>
 
           <!-- 7. Islamic Studies — graduation/book icon -->
-          <a href="islamic-studies.html" class="feat card">
+          <a href="islamic-studies.html" class="feat card reveal reveal-d3">
             <div class="feat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
@@ -1744,7 +1749,7 @@ html {
           </a>
 
           <!-- 8. Verify — shield/check icon -->
-          <a href="verify.html" class="feat card">
+          <a href="verify.html" class="feat card reveal reveal-d4">
             <div class="feat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -1765,7 +1770,7 @@ html {
         <div class="divider-ornate">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 9 L21 10 L16 15 L17 22 L12 18 L7 22 L8 15 L3 10 L10 9 Z"/></svg>
         </div>
-        <p class="reflection-quote">"And He found you lost and guided you. And He found you in need and made you self-sufficient."</p>
+        <p class="reflection-quote reveal">"And He found you lost and guided you. And He found you in need and made you self-sufficient."</p>
         <p class="reflection-cite">Surah Ad-Duhaa · 93:7–8</p>
         <div class="divider-ornate">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 9 L21 10 L16 15 L17 22 L12 18 L7 22 L8 15 L3 10 L10 9 Z"/></svg>
@@ -1777,7 +1782,7 @@ html {
     <section class="section" data-screen-label="Verify Preview">
       <div class="container">
         <div class="verify-preview">
-          <div>
+          <div class="reveal">
             <span class="eyebrow" style="margin-bottom:18px;display:inline-flex;">Trust · Verify · Understand</span>
             <h2 class="t-display-lg" style="margin:18px 0 24px">Found a quote attributed <br><span class="gradient-italic">to the Prophet ﷺ?</span></h2>
             <p style="font-size:17px;color:var(--ink-muted);line-height:1.7;max-width:480px;">Paste it into our verification engine to cross-reference authenticated sources, see the chain of narration, and receive a confidence score — never a ruling.</p>
@@ -1810,7 +1815,7 @@ html {
             </a>
           </div>
 
-          <div class="card confidence-card card-featured" style="animation:none;">
+          <div class="card confidence-card card-featured reveal reveal-d2" style="animation:none;">
             <span class="eyebrow" style="margin-bottom:14px;display:inline-flex;">Analysis Complete</span>
             <div class="confidence-head">
               <div class="confidence-dial">
@@ -1853,14 +1858,14 @@ html {
     <!-- TRUSTED SOURCES -->
     <section class="section sources-section" data-screen-label="Trusted Sources">
       <div class="container">
-        <div class="section-head" style="margin-bottom:32px;">
+        <div class="section-head reveal" style="margin-bottom:32px;">
           <span class="eyebrow">Our Foundation</span>
           <h2 class="t-display-lg">Built on <span class="gradient-italic">authentic scholarship</span></h2>
           <p style="color:var(--ink-muted);font-size:16px;max-width:520px;margin:12px auto 0;">Every piece of content traces back to a named primary source — no anonymous quotes, no unverified attributions.</p>
         </div>
 
         <div class="sources-pillars">
-          <div class="source-pillar">
+          <div class="source-pillar reveal reveal-d1">
             <div class="sp-icon-lg teal">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
             </div>
@@ -1874,7 +1879,7 @@ html {
             </div>
           </div>
 
-          <div class="source-pillar">
+          <div class="source-pillar reveal reveal-d2">
             <div class="sp-icon-lg gold">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             </div>
@@ -1889,7 +1894,7 @@ html {
             </div>
           </div>
 
-          <div class="source-pillar">
+          <div class="source-pillar reveal reveal-d3">
             <div class="sp-icon-lg teal">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
             </div>
@@ -1905,7 +1910,7 @@ html {
         </div>
 
         <!-- Methodology promise bar -->
-        <div class="methodology-bar">
+        <div class="methodology-bar reveal">
           <div class="mb-item">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <span>No ads. No sponsored content.</span>
@@ -1935,7 +1940,7 @@ html {
 
 <!-- ABOUT SECTION -->
 <section class="about-section" data-screen-label="About">
-  <div class="about-inner">
+  <div class="about-inner reveal">
 
     <!-- Icon circle -->
     <div class="about-icon-wrap">
@@ -1985,10 +1990,10 @@ html {
 
 <!-- CTA Section -->
 <section class="cta-section">
-  <div class="cta-badge">✦ Begin Your Journey</div>
-  <h2 class="cta-title">Start Learning Islam<br>the <span class="gold-it">Right Way</span></h2>
-  <p class="cta-sub">Join thousands of Muslims using IslamicInfo.org to deepen their knowledge through verified sources and guided learning.</p>
-  <div class="cta-actions">
+  <div class="cta-badge reveal">✦ Begin Your Journey</div>
+  <h2 class="cta-title reveal reveal-d1">Start Learning Islam<br>the <span class="gold-it">Right Way</span></h2>
+  <p class="cta-sub reveal reveal-d2">Join thousands of Muslims using IslamicInfo.org to deepen their knowledge through verified sources and guided learning.</p>
+  <div class="cta-actions reveal reveal-d3">
     <a class="btn-gold" href="quran.html">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       Explore Qur'an
