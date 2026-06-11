@@ -388,7 +388,13 @@
       }
       const wasOpen = menu.classList.contains('open');
       closeMenus();
-      if (!wasOpen) menu.classList.add('open');
+      if (!wasOpen) {
+        /* Open upward by default; flip below when the viewport room above
+           the button is less than the menu's max height */
+        const room = btn.getBoundingClientRect().top;
+        menu.classList.toggle('down', room < 340);
+        menu.classList.add('open');
+      }
     });
     menu.addEventListener('click', e => e.stopPropagation());
   }

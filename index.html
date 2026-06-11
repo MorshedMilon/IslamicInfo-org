@@ -1036,9 +1036,11 @@ img { max-width: 100%; }
 [data-theme="dark"] .prayer .check { color: #5BC1C7; opacity: 0.9; }
 
 /* ============ PRAYER WIDGET (tools-style · light teal-glass default) ============ */
-.prayer-widget{position:relative;border-radius:24px;padding:clamp(22px,3.5vw,38px);overflow:hidden;background:linear-gradient(135deg,rgba(0,105,110,.06),rgba(197,160,89,.04));border:1px solid rgba(0,105,110,.12);box-shadow:var(--elev-2);}
-.prayer-widget::before{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(197,160,89,.10),transparent 65%);pointer-events:none;}
-.prayer-widget::after{content:'';position:absolute;left:-30px;bottom:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(0,105,110,.08),transparent 65%);pointer-events:none;}
+.prayer-widget{position:relative;border-radius:24px;padding:clamp(22px,3.5vw,38px);background:linear-gradient(135deg,rgba(0,105,110,.06),rgba(197,160,89,.04));border:1px solid rgba(0,105,110,.12);box-shadow:var(--elev-2);}
+/* Glows live in a clipped inner layer so dropdown menus can overflow the card */
+.pw-bg{position:absolute;inset:0;overflow:hidden;border-radius:inherit;pointer-events:none;}
+.pw-bg::before{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(197,160,89,.10),transparent 65%);}
+.pw-bg::after{content:'';position:absolute;left:-30px;bottom:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(0,105,110,.08),transparent 65%);}
 .pw-inner{position:relative;z-index:1;}
 .pw-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px;}
 .pw-loc-row{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--ink-primary);flex-wrap:wrap;}
@@ -1073,8 +1075,8 @@ img { max-width: 100%; }
 
 /* ── Prayer widget · dark mode: identical to tools.html dark widget ── */
 [data-theme="dark"] .prayer-widget{background:linear-gradient(135deg,#0A3A3D,#004E55,#062628);border-color:transparent;box-shadow:var(--elev-4);}
-[data-theme="dark"] .prayer-widget::before{background:radial-gradient(circle,rgba(197,160,89,.15),transparent 65%);}
-[data-theme="dark"] .prayer-widget::after{background:radial-gradient(circle,rgba(0,105,110,.25),transparent 65%);}
+[data-theme="dark"] .pw-bg::before{background:radial-gradient(circle,rgba(197,160,89,.15),transparent 65%);}
+[data-theme="dark"] .pw-bg::after{background:radial-gradient(circle,rgba(0,105,110,.25),transparent 65%);}
 [data-theme="dark"] .pw-loc-row{color:rgba(255,255,255,.85);}
 [data-theme="dark"] .pw-loc-btn{color:rgba(255,255,255,.45);background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);}
 [data-theme="dark"] .pw-loc-btn:hover{background:rgba(255,255,255,.15);color:white;}
@@ -1097,8 +1099,11 @@ img { max-width: 100%; }
 
 /* ── Prayer widget · dropdown menus + countdown ── */
 .pw-extra-wrap{position:relative;}
-.pw-menu{position:absolute;bottom:calc(100% + 8px);right:0;width:min(260px,86vw);z-index:60;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:14px;box-shadow:var(--elev-4);padding:8px;opacity:0;pointer-events:none;transform:translateY(6px) scale(.97);transition:opacity .25s var(--ease-premium),transform .25s var(--ease-premium);}
+.pw-menu{position:absolute;bottom:calc(100% + 8px);right:0;width:min(260px,86vw);max-height:min(320px,58vh);overflow-y:auto;overscroll-behavior:contain;z-index:60;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:14px;box-shadow:var(--elev-4);padding:8px;opacity:0;pointer-events:none;transform:translateY(6px) scale(.97);transition:opacity .25s var(--ease-premium),transform .25s var(--ease-premium);}
 .pw-menu.open{opacity:1;pointer-events:all;transform:none;}
+/* Flip below the button when there's no viewport room above */
+.pw-menu.down{bottom:auto;top:calc(100% + 8px);transform:translateY(-6px) scale(.97);}
+.pw-menu.down.open{transform:none;}
 .pw-menu-head{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-subtle);padding:6px 10px 8px;}
 .pw-menu-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;font-size:12.5px;font-weight:500;color:var(--ink-body);background:transparent;border:none;border-radius:9px;padding:8px 10px;cursor:pointer;font-family:var(--font-body);transition:background .18s;}
 .pw-menu-item:hover{background:rgba(0,105,110,.07);}
@@ -1118,6 +1123,12 @@ img { max-width: 100%; }
 [data-theme="dark"] .pw-play-mini:hover{background:rgba(255,255,255,.16);}
 [data-theme="dark"] .pw-menu-foot{border-top-color:rgba(255,255,255,.1);}
 [data-theme="dark"] .pw-countdown{color:rgba(255,255,255,.45);}
+
+/* ── Toast (used by showToast in global.js — was unstyled on this page) ── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);display:flex;align-items:center;gap:8px;background:#0A3A3D;color:rgba(255,255,255,.92);padding:10px 22px;border-radius:22px;font-size:13px;font-weight:500;font-family:var(--font-body);z-index:9999;opacity:0;transition:opacity .28s,transform .28s;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:86vw;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-400);flex-shrink:0;}
+[data-theme="dark"] .toast{background:#0F1B1D;border:0.5px solid rgba(0,105,110,.4);}
 
 /* ============ FEATURE GRID ============ */
 .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
@@ -1692,6 +1703,7 @@ html {
     <section class="section" style="padding-top:0;" data-screen-label="Prayer Times">
       <div class="container">
         <div class="prayer-widget reveal" id="prayer-widget">
+          <div class="pw-bg" aria-hidden="true"></div>
           <div class="pw-inner">
             <div class="pw-header">
               <div>
