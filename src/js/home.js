@@ -103,6 +103,11 @@
     _setText('prayerIsha',    t.Isha    || '—');
     _setText('prayerLocationLabel', data.city || '');
 
+    /* Sun strip: sunrise / sunset (Maghrib) / daylight duration */
+    _setText('pwSunrise',  _to12h(t.Sunrise));
+    _setText('pwSunset',   _to12h(t.Maghrib));
+    _setText('pwDaylight', _daylight(t.Sunrise, t.Maghrib));
+
     /* Highlight next prayer */
     _highlightNextPrayer(t);
   }
@@ -121,17 +126,33 @@
     }
     if (!nextName) nextName = 'Fajr'; // past Isha → next is Fajr
 
+    /* Next-prayer badge (e.g. "Next: Asr · 5:28 PM") */
+    _setText('prayerNextBadge', `Next: ${nextName} · ${_to12h(timings[nextName])}`);
+
     order.forEach(name => {
       const el = document.getElementById(`prayer${name}`);
       if (!el) return;
       const card = el.closest('[data-prayer]') || el.parentElement;
       if (card) card.classList.toggle('next-prayer', name === nextName);
     });
+
+    /* Fade prayers that have already passed (incl. Sunrise) */
+    ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'].forEach(name => {
+      const el = document.getElementById(`prayer${name}`);
+      if (!el) return;
+      const card = el.closest('[data-prayer]') || el.parentElement;
+      if (!card) return;
+      const raw = timings[name];
+      const [h, m] = raw ? raw.split(':').map(Number) : [0, 0];
+      card.classList.toggle('past', !!raw && (h * 60 + m) <= nowMins && name !== nextName);
+    });
   }
 
   async function loadPrayer(city) {
     const data = await api.fetchPrayer(city) || { ...FALLBACK_PRAYER, city };
     _renderPrayer(data);
+    /* Persist city for next visit (read back in initPrayerControls) */
+    localStorage.setItem('ii-prayer-city', data.city || city);
   }
 
   async function detectAndLoadPrayer() {
@@ -161,6 +182,25 @@
   function _setText(id, text) {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
+  }
+
+  /* "17:05" → "5:05 PM" */
+  function _to12h(raw) {
+    if (!raw) return '—';
+    let [h, m] = raw.split(':').map(Number);
+    const ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return `${h}:${String(m).padStart(2, '0')} ${ap}`;
+  }
+
+  /* Daylight duration between sunrise and sunset, e.g. "14h 30m" */
+  function _daylight(rise, set) {
+    if (!rise || !set) return '—';
+    const [rh, rm] = rise.split(':').map(Number);
+    const [sh, sm] = set.split(':').map(Number);
+    const mins = (sh * 60 + sm) - (rh * 60 + rm);
+    if (mins <= 0) return '—';
+    return `${Math.floor(mins / 60)}h ${mins % 60}m`;
   }
 
 
