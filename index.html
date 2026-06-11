@@ -1095,6 +1095,30 @@ img { max-width: 100%; }
 [data-theme="dark"] .pw-extra-btn{color:rgba(255,255,255,.45);background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);}
 [data-theme="dark"] .pw-extra-btn:hover{background:rgba(255,255,255,.13);color:white;}
 
+/* ── Prayer widget · dropdown menus + countdown ── */
+.pw-extra-wrap{position:relative;}
+.pw-menu{position:absolute;bottom:calc(100% + 8px);right:0;width:min(260px,86vw);z-index:60;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:14px;box-shadow:var(--elev-4);padding:8px;opacity:0;pointer-events:none;transform:translateY(6px) scale(.97);transition:opacity .25s var(--ease-premium),transform .25s var(--ease-premium);}
+.pw-menu.open{opacity:1;pointer-events:all;transform:none;}
+.pw-menu-head{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-subtle);padding:6px 10px 8px;}
+.pw-menu-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;font-size:12.5px;font-weight:500;color:var(--ink-body);background:transparent;border:none;border-radius:9px;padding:8px 10px;cursor:pointer;font-family:var(--font-body);transition:background .18s;}
+.pw-menu-item:hover{background:rgba(0,105,110,.07);}
+.pw-menu-item.on{color:var(--teal-700);background:rgba(0,105,110,.08);font-weight:600;}
+.pw-menu-item .tick{color:var(--teal-600);}
+.pw-menu-item span:first-child{flex:1;min-width:0;}
+.pw-play-mini{width:24px;height:24px;border-radius:50%;border:0.5px solid rgba(0,105,110,.2);background:rgba(0,105,110,.06);color:var(--teal-700);cursor:pointer;font-size:10px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;padding:0;}
+.pw-play-mini:hover{background:rgba(0,105,110,.14);}
+.pw-menu-foot{border-top:0.5px solid rgba(0,105,110,.1);margin-top:6px;padding-top:8px;}
+.pw-countdown{font-size:10.5px;font-weight:600;color:var(--ink-muted);text-align:right;margin-top:5px;letter-spacing:.04em;min-height:14px;}
+[data-theme="dark"] .pw-menu{background:#0F1B1D;border-color:rgba(0,105,110,.3);}
+[data-theme="dark"] .pw-menu-item{color:#D4DCDD;}
+[data-theme="dark"] .pw-menu-item:hover{background:rgba(255,255,255,.07);}
+[data-theme="dark"] .pw-menu-item.on{color:var(--teal-300);background:rgba(0,105,110,.2);}
+[data-theme="dark"] .pw-menu-item .tick{color:var(--teal-300);}
+[data-theme="dark"] .pw-play-mini{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:var(--teal-300);}
+[data-theme="dark"] .pw-play-mini:hover{background:rgba(255,255,255,.16);}
+[data-theme="dark"] .pw-menu-foot{border-top-color:rgba(255,255,255,.1);}
+[data-theme="dark"] .pw-countdown{color:rgba(255,255,255,.45);}
+
 /* ============ FEATURE GRID ============ */
 .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 @media (max-width: 1100px) { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -1679,7 +1703,10 @@ html {
                 </div>
                 <div class="pw-date" id="pwDate">Loading…</div>
               </div>
-              <div class="pw-next-badge"><span class="pw-next-dot"></span> <span id="prayerNextBadge">Next: —</span></div>
+              <div>
+                <div class="pw-next-badge"><span class="pw-next-dot"></span> <span id="prayerNextBadge">Next: —</span></div>
+                <div class="pw-countdown" id="pwCountdown"></div>
+              </div>
             </div>
             <div class="pw-prayers">
               <div class="pw-prayer" data-prayer="Fajr"><div class="pw-name">Fajr</div><div class="pw-time" id="prayerFajr">04:33</div><div class="pw-adhan-dot"></div></div>
@@ -1696,8 +1723,14 @@ html {
                 <div class="pw-sun-item">Daylight <span class="pw-sun-val" id="pwDaylight">—</span></div>
               </div>
               <div class="pw-extra">
-                <button class="pw-extra-btn" onclick="showToast('Adhan alerts coming soon ✦')">🔔 Adhan</button>
-                <button class="pw-extra-btn" onclick="showToast('Calculation method settings coming soon ✦')">⚙️ Method</button>
+                <div class="pw-extra-wrap">
+                  <button class="pw-extra-btn" id="adhanBtn">🔔 Adhan</button>
+                  <div class="pw-menu" id="adhanMenu" aria-label="Adhan reciter menu"></div>
+                </div>
+                <div class="pw-extra-wrap">
+                  <button class="pw-extra-btn" id="methodBtn">⚙️ Method</button>
+                  <div class="pw-menu" id="methodMenu" aria-label="Calculation method menu"></div>
+                </div>
                 <button class="pw-extra-btn" id="prayerDetectBtn">📍 My Location</button>
               </div>
             </div>
@@ -2158,15 +2191,6 @@ html {
     searchPopup.classList.remove('open');
   });
 
-  // ── Prayer widget: date + Change-city toggle (times/location handled by home.js)
-  document.getElementById('pwDate').textContent =
-    new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  const pwChangeBtn = document.getElementById('prayerChangeBtn');
-  const pwCityInput = document.getElementById('prayerCityInput');
-  pwChangeBtn.addEventListener('click', () => {
-    const open = pwCityInput.classList.toggle('open');
-    if (open) pwCityInput.focus();
-  });
 </script>
 
 <!-- ============================================================
@@ -2288,5 +2312,6 @@ QUICK TEST CHECKLIST:
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
 <script src="src/js/home.js"></script>
+<script src="src/js/prayer-widget.js"></script>
 </body>
 </html>
