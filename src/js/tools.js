@@ -30,6 +30,13 @@
 (function () {
   'use strict';
 
+  function tr(key, fallback, params) {
+    if (window.II && window.II.t) return window.II.t(key, fallback, params);
+    let s = fallback !== undefined ? fallback : key;
+    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
+    return s;
+  }
+
   const api = window.II && window.II.api;
   if (!api) { console.error('[tools.js] api.js not loaded'); return; }
 
@@ -64,7 +71,7 @@
     _setText('ptLocationLabel', data.city || '');
 
     const now = new Date();
-    _setText('ptLastUpdated', `Updated ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+    _setText('ptLastUpdated', tr('js.tools.ptUpdated', 'Updated {time}', { time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }));
 
     /* Highlight next prayer */
     const order   = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
@@ -95,18 +102,18 @@
     if (!navigator.geolocation) { return loadPrayerTimes('London'); }
 
     const btn = document.getElementById('ptDetectBtn');
-    if (btn) { btn.textContent = 'Detecting…'; btn.disabled = true; }
+    if (btn) { btn.textContent = tr('js.tools.ptDetecting', 'Detecting…'); btn.disabled = true; }
 
     navigator.geolocation.getCurrentPosition(
       async pos => {
         const geo  = await api.fetchGeocode(pos.coords.latitude, pos.coords.longitude);
         const city = geo ? geo.city : 'London';
         await loadPrayerTimes(city);
-        if (btn) { btn.textContent = '📍 My Location'; btn.disabled = false; }
+        if (btn) { btn.textContent = tr('js.tools.ptMyLocation', '📍 My Location'); btn.disabled = false; }
       },
       async () => {
         await loadPrayerTimes('London');
-        if (btn) { btn.textContent = '📍 My Location'; btn.disabled = false; }
+        if (btn) { btn.textContent = tr('js.tools.ptMyLocation', '📍 My Location'); btn.disabled = false; }
       }
     );
   }
@@ -163,11 +170,11 @@
     if (data && data.nisabValue) {
       nisabValue = data.nisabValue;
       if (nisabEl)  nisabEl.textContent  = `${data.currency} ${data.nisabValue.toLocaleString()}`;
-      if (sourceEl) sourceEl.textContent = data.source ? `Source: ${data.source} · As of: ${data.asOf || 'today'}` : '';
+      if (sourceEl) sourceEl.textContent = data.source ? tr('js.tools.nisabSource', 'Source: {s} · As of: {d}', { s: data.source, d: data.asOf || tr('js.tools.today', 'today') }) : '';
     } else {
       nisabValue = FALLBACK_NISAB_USD;
-      if (nisabEl)  nisabEl.textContent  = `USD ${FALLBACK_NISAB_USD.toLocaleString()} (fallback estimate)`;
-      if (sourceEl) sourceEl.textContent = 'Live price unavailable — using conservative fallback.';
+      if (nisabEl)  nisabEl.textContent  = tr('js.tools.nisabFallback', '{n} (fallback estimate)', { n: 'USD ' + FALLBACK_NISAB_USD.toLocaleString() });
+      if (sourceEl) sourceEl.textContent = tr('js.tools.nisabUnavailable', 'Live price unavailable — using conservative fallback.');
     }
   }
 
@@ -178,20 +185,22 @@
 
     const assets = parseFloat(assetInput.value);
     if (isNaN(assets) || assets < 0) {
-      if (window.showToast) window.showToast('Please enter a valid asset value.');
+      if (window.showToast) window.showToast(tr('js.tools.zakatError', 'Please enter a valid asset value.'));
       return;
     }
 
     if (assets < nisabValue) {
+      const boldA = `<strong>${assets.toLocaleString()}</strong>`;
+      const boldN = `<strong>${nisabValue.toLocaleString()}</strong>`;
       resultEl.innerHTML =
-        `<p>Your assets (<strong>${assets.toLocaleString()}</strong>) are below the nisab threshold ` +
-        `(<strong>${nisabValue.toLocaleString()}</strong>). Zakat is not obligatory.</p>` +
-        `<p class="disclaimer-note">This is a calculation tool only — not a fatwa. Consult a qualified scholar.</p>`;
+        `<p>${tr('js.tools.zakatBelow', 'Your assets ({a}) are below the nisab threshold ({n}). Zakat is not obligatory.', { a: boldA, n: boldN })}</p>` +
+        `<p class="disclaimer-note">${tr('js.tools.zakatDisclaimer', 'This is a calculation tool only — not a fatwa. Consult a qualified scholar.')}</p>`;
     } else {
       const zakat = (assets * 0.025).toFixed(2);
+      const boldZ = `<strong>${parseFloat(zakat).toLocaleString()}</strong>`;
       resultEl.innerHTML =
-        `<p>Estimated Zakat (2.5%): <strong>${parseFloat(zakat).toLocaleString()}</strong></p>` +
-        `<p class="disclaimer-note">This is a calculation tool only — not a fatwa. Consult a qualified scholar for your specific situation.</p>`;
+        `<p>${tr('js.tools.zakatEstimate', 'Estimated Zakat (2.5%): {z}', { z: boldZ })}</p>` +
+        `<p class="disclaimer-note">${tr('js.tools.zakatDisclaimerFull', 'This is a calculation tool only — not a fatwa. Consult a qualified scholar for your specific situation.')}</p>`;
     }
   }
 
@@ -225,26 +234,26 @@
     const degrees = document.getElementById('qiblaDegrees');
 
     if (compass) compass.style.transform = `rotate(${bearing}deg)`;
-    if (degrees) degrees.textContent = `${Math.round(bearing)}° from North`;
+    if (degrees) degrees.textContent = tr('js.tools.qiblaDeg', '{deg}° from North', { deg: Math.round(bearing) });
   }
 
   function detectQibla() {
     const btn = document.getElementById('qiblaDetectBtn');
     if (!navigator.geolocation) {
-      if (window.showToast) window.showToast('Geolocation not supported by your browser.');
+      if (window.showToast) window.showToast(tr('js.tools.qiblaNoGeo', 'Geolocation not supported by your browser.'));
       return;
     }
-    if (btn) { btn.textContent = 'Detecting…'; btn.disabled = true; }
+    if (btn) { btn.textContent = tr('js.tools.qiblaDetecting', 'Detecting…'); btn.disabled = true; }
 
     navigator.geolocation.getCurrentPosition(
       pos => {
         const bearing = _calcQibla(pos.coords.latitude, pos.coords.longitude);
         _renderQibla(bearing);
-        if (btn) { btn.textContent = '📍 Find Qibla'; btn.disabled = false; }
+        if (btn) { btn.textContent = tr('js.tools.qiblaBtn', '📍 Find Qibla'); btn.disabled = false; }
       },
       () => {
-        if (window.showToast) window.showToast('Location access denied. Please enable location services.');
-        if (btn) { btn.textContent = '📍 Find Qibla'; btn.disabled = false; }
+        if (window.showToast) window.showToast(tr('js.tools.qiblaLocDenied', 'Location access denied. Please enable location services.'));
+        if (btn) { btn.textContent = tr('js.tools.qiblaBtn', '📍 Find Qibla'); btn.disabled = false; }
       }
     );
   }
@@ -259,19 +268,22 @@
      4. HIJRI DATE  (client-side, no API in v1)
      ════════════════════════════════════════════════════════════════ */
 
-  function initHijriDate() {
+  function renderHijriDate() {
     const el = document.getElementById('hijriDate');
     if (!el) return;
-
+    const lang = (window.II && window.II.i18n && window.II.i18n.lang) || 'en';
     try {
-      const hijri = new Intl.DateTimeFormat('en-u-ca-islamic', {
+      const hijri = new Intl.DateTimeFormat(lang + '-u-ca-islamic', {
         day: 'numeric', month: 'long', year: 'numeric'
       }).format(new Date());
       el.textContent = hijri;
     } catch (_) {
-      /* Intl Islamic calendar not supported in all environments */
-      el.textContent = 'Hijri date unavailable';
+      el.textContent = tr('js.tools.hijriUnavailable', 'Hijri date unavailable');
     }
+  }
+
+  function initHijriDate() {
+    renderHijriDate();
   }
 
 
@@ -290,6 +302,13 @@
     initZakatWidget();
     initQiblaWidget();
     initHijriDate();
+
+    document.addEventListener('ii:langchange', () => {
+      const lastCity = localStorage.getItem('ii-prayer-city') || 'London';
+      loadPrayerTimes(lastCity);
+      loadNisab();
+      renderHijriDate();
+    });
   });
 
 }());

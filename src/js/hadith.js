@@ -27,6 +27,13 @@
 (function () {
   'use strict';
 
+  function tr(key, fallback, params) {
+    if (window.II && window.II.t) return window.II.t(key, fallback, params);
+    let s = fallback !== undefined ? fallback : key;
+    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
+    return s;
+  }
+
   const api = window.II && window.II.api;
   if (!api) { console.error('[hadith.js] api.js not loaded'); return; }
 
@@ -47,8 +54,8 @@
         ? 'grade-hasan'
         : 'grade-other';
 
-    return `<span class="hadith-grade ${cls}" title="Graded by ${gradedBy || 'unknown'}">${grade || 'Grade unknown'}</span>
-            <span class="hadith-grader">— ${gradedBy || 'Grader unknown'}</span>`;
+    return `<span class="hadith-grade ${cls}" title="${tr('js.hadith.gradedByTitle','Graded by {g}',{g: gradedBy || tr('js.hadith.unknownGrader','unknown')})}">${grade || tr('js.hadith.gradeUnknown','Grade unknown')}</span>
+            <span class="hadith-grader">— ${gradedBy || tr('js.hadith.graderUnknown','Grader unknown')}</span>`;
   }
 
 
@@ -60,7 +67,7 @@
     <article class="hadith-card reveal" id="${cardId}" role="article">
 
       <header class="hadith-card-header">
-        <span class="hadith-ref">${h.collection} · Book ${h.book} · Hadith ${h.number}</span>
+        <span class="hadith-ref">${h.collection} · ${tr('js.hadith.book','Book')} ${h.book} · ${tr('js.hadith.hadithNo','Hadith')} ${h.number}</span>
         <div class="hadith-grade-block">${_gradeBadge(h.grade, h.gradedBy)}</div>
       </header>
 
@@ -68,28 +75,28 @@
 
       <blockquote class="hadith-translation">${h.translation}</blockquote>
 
-      ${h.narrator ? `<p class="hadith-narrator">Narrated by: <em>${h.narrator}</em></p>` : ''}
+      ${h.narrator ? `<p class="hadith-narrator">${tr('js.narrated','Narrated by: {n}',{n:'<em>'+h.narrator+'</em>'})}</p>` : ''}
 
       <footer class="hadith-card-footer">
-        ${h.sourceUrl ? `<a class="hadith-source-link" href="${h.sourceUrl}" target="_blank" rel="noopener">View on Sunnah.com</a>` : ''}
+        ${h.sourceUrl ? `<a class="hadith-source-link" href="${h.sourceUrl}" target="_blank" rel="noopener">${tr('js.viewSunnah','View on Sunnah.com')}</a>` : ''}
 
-        <div class="hadith-actions" role="toolbar" aria-label="Hadith actions">
+        <div class="hadith-actions" role="toolbar" aria-label="${tr('js.hadith.actionsAria','Hadith actions')}">
 
           <button class="btn-icon btn-copy"
                   data-text="${encodeURIComponent((h.arabic || '') + '\n' + h.translation + '\n(' + h.collection + ' ' + h.book + ':' + h.number + ')')}"
-                  title="Copy hadith" aria-label="Copy hadith">⎘</button>
+                  title="${tr('js.hadith.copyTitle','Copy hadith')}" aria-label="${tr('js.hadith.copyTitle','Copy hadith')}">⎘</button>
 
           <button class="btn-icon btn-bookmark"
                   data-id="hadith-${h.collection}-${h.book}-${h.number}"
-                  title="Bookmark" aria-label="Bookmark hadith">☆</button>
+                  title="${tr('js.hadith.bookmarkTitle','Bookmark')}" aria-label="${tr('js.hadith.bookmarkAria','Bookmark hadith')}">☆</button>
 
           <button class="btn-icon btn-ai-explain"
                   data-collection="${encodeURIComponent(h.collection)}"
                   data-book="${h.book}"
                   data-number="${h.number}"
                   data-text="${encodeURIComponent(h.translation)}"
-                  title="AI Explanation (Stage 3)"
-                  aria-label="AI explanation for this hadith">✦</button>
+                  title="${tr('js.hadith.aiTitle','AI Explanation (Stage 3)')}"
+                  aria-label="${tr('js.hadith.aiAria','AI explanation for this hadith')}">✦</button>
 
         </div>
       </footer>
@@ -105,7 +112,7 @@
 
     const h = await api.fetchHadith();
     if (!h) {
-      container.innerHTML = '<p class="error-msg" role="alert">Could not load Hadith of the Day.</p>';
+      container.innerHTML = '<p class="error-msg" role="alert">' + tr('js.hadith.loadError','Could not load Hadith of the Day.') + '</p>';
       return;
     }
     container.innerHTML = _buildCard(h, 'hod');
@@ -119,13 +126,13 @@
     const feed = document.getElementById('hadithFeed');
     if (!feed) return;
 
-    feed.innerHTML = '<p class="loading-msg" aria-live="polite">Loading hadiths…</p>';
+    feed.innerHTML = '<p class="loading-msg" aria-live="polite">' + tr('js.hadith.loading','Loading hadiths…') + '</p>';
 
     const h = await api.fetchHadith(collection, book);
 
     if (!h) {
       feed.innerHTML =
-        '<p class="error-msg" role="alert">Could not load hadiths. Check your connection and try again.</p>';
+        '<p class="error-msg" role="alert">' + tr('js.hadith.feedError','Could not load hadiths. Check your connection and try again.') + '</p>';
       return;
     }
 
@@ -147,11 +154,11 @@
 
     if (!modal || !content) return;
 
-    if (disclaimer) disclaimer.textContent = AI_DISCLAIMER;
+    if (disclaimer) disclaimer.textContent = tr('js.hadith.disclaimer', AI_DISCLAIMER);
 
     modal.hidden = false;
     modal.setAttribute('aria-modal', 'true');
-    content.innerHTML = '<p class="loading-msg" aria-live="polite">Generating explanation…</p>';
+    content.innerHTML = '<p class="loading-msg" aria-live="polite">' + tr('js.hadith.explaining','Generating explanation…') + '</p>';
 
     const cacheKey = `${AI_CACHE_PREFIX}${collection}-${book}-${number}`;
     const cached   = sessionStorage.getItem(cacheKey);
@@ -168,8 +175,7 @@
 
     if (!result) {
       content.innerHTML =
-        '<p class="info-msg">AI explanations are coming soon. ' +
-        'Refer to a trusted hadith commentary in the meantime.</p>';
+        '<p class="info-msg">' + tr('js.hadith.aiSoon','AI explanations are coming soon. Refer to a trusted hadith commentary in the meantime.') + '</p>';
       return;
     }
 
@@ -183,12 +189,12 @@
   function _copyText(encoded) {
     const text = decodeURIComponent(encoded);
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('Hadith copied!');
+      if (window.showToast) window.showToast(tr('js.hadith.copied','Hadith copied!'));
     }).catch(() => {
       const ta = document.createElement('textarea');
       ta.value = text; document.body.appendChild(ta); ta.select();
       document.execCommand('copy'); document.body.removeChild(ta);
-      if (window.showToast) window.showToast('Hadith copied!');
+      if (window.showToast) window.showToast(tr('js.hadith.copied','Hadith copied!'));
     });
   }
 
@@ -198,11 +204,11 @@
     if (bm[id]) {
       delete bm[id];
       if (btn) btn.textContent = '☆';
-      if (window.showToast) window.showToast('Bookmark removed.');
+      if (window.showToast) window.showToast(tr('js.hadith.bookmarkRemoved','Bookmark removed.'));
     } else {
       bm[id] = { ts: Date.now() };
       if (btn) btn.textContent = '★';
-      if (window.showToast) window.showToast('Bookmarked!');
+      if (window.showToast) window.showToast(tr('js.hadith.bookmarked','Bookmarked!'));
     }
     localStorage.setItem('ii-bookmarks', JSON.stringify(bm));
   }
@@ -274,6 +280,12 @@
     loadHadithOfDay();
     initSelectors();
     initAIModal();
+    document.addEventListener('ii:langchange', () => {
+      loadHadithOfDay();
+      const colSel  = document.getElementById('collectionSelect');
+      const bookSel = document.getElementById('bookSelect');
+      loadFeed(colSel ? colSel.value : '', bookSel ? bookSel.value : '');
+    });
   });
 
 }());

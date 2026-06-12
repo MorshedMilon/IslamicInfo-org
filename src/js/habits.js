@@ -19,6 +19,14 @@
 (function () {
   'use strict';
 
+  /* i18n helper (i18n.js loads first; safe fallback if it didn't) */
+  function tr(key, fallback, params) {
+    if (window.II && window.II.t) return window.II.t(key, fallback, params);
+    let s = fallback !== undefined ? fallback : key;
+    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
+    return s;
+  }
+
   const api = window.II && window.II.api;
   if (!api) { console.error('[habits.js] api.js not loaded'); return; }
 
@@ -87,7 +95,7 @@
       const m    = Math.floor((diff % 3600000) / 60000);
       const s    = Math.floor((diff % 60000)   / 1000);
 
-      _setText('nextPrayerName', next.name);
+      _setText('nextPrayerName', tr('pw.prayer.' + next.name.toLowerCase(), next.name));
       _setText('prayerCountdown',
         `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
       );
@@ -122,7 +130,7 @@
 
   async function detectAndLoad() {
     const btn = document.getElementById('habitsDetectBtn');
-    if (btn) { btn.textContent = 'Detecting…'; btn.disabled = true; }
+    if (btn) { btn.textContent = tr('js.habits.detecting','Detecting…'); btn.disabled = true; }
 
     if (!navigator.geolocation) {
       await loadPrayerData('London');
@@ -137,11 +145,11 @@
         const inp  = document.getElementById('habitsPrayerCity');
         if (inp) inp.value = city;
         await loadPrayerData(city);
-        if (btn) { btn.textContent = '📍 Detect'; btn.disabled = false; }
+        if (btn) { btn.textContent = tr('js.habits.detectBtn','📍 Detect'); btn.disabled = false; }
       },
       async () => {
         await loadPrayerData('London');
-        if (btn) { btn.textContent = '📍 Detect'; btn.disabled = false; }
+        if (btn) { btn.textContent = tr('js.habits.detectBtn','📍 Detect'); btn.disabled = false; }
       }
     );
   }
@@ -185,6 +193,10 @@
   /* ─── Boot ────────────────────────────────────────────────────── */
 
   document.addEventListener('DOMContentLoaded', initLocationControls);
+
+  document.addEventListener('ii:langchange', () => {
+    if (prayerTimings) _startCountdown(prayerTimings);
+  });
 
   /* Cleanup on tab close */
   window.addEventListener('beforeunload', () => {

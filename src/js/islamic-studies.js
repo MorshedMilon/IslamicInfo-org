@@ -29,6 +29,12 @@
 
 (function () {
   'use strict';
+  function tr(key, fallback, params) {
+    if (window.II && window.II.t) return window.II.t(key, fallback, params);
+    let s = fallback !== undefined ? fallback : key;
+    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
+    return s;
+  }
 
   const STORAGE_KEY = 'islamicinfo-is-progress';
 
@@ -48,7 +54,7 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (_) {
-      if (window.showToast) window.showToast('Progress could not be saved (storage full).');
+      if (window.showToast) window.showToast(tr('js.studies.saveFull','Progress could not be saved (storage full).'));
     }
   }
 
@@ -95,8 +101,8 @@
       const btn = item.querySelector('.lesson-check');
       if (btn) {
         btn.textContent   = done ? '✓' : '○';
-        btn.title         = done ? 'Mark incomplete' : 'Mark complete';
-        btn.setAttribute('aria-label', done ? `Unmark ${id} as complete` : `Mark ${id} as complete`);
+        btn.title         = done ? tr('js.studies.markIncomplete','Mark incomplete') : tr('js.studies.markComplete','Mark complete');
+        btn.setAttribute('aria-label', done ? tr('js.studies.ariaUnmark','Unmark {id} as complete',{id}) : tr('js.studies.ariaMark','Mark {id} as complete',{id}));
       }
     });
 
@@ -109,17 +115,17 @@
 
       bar.style.width           = `${pct}%`;
       bar.setAttribute('aria-valuenow', pct);
-      bar.setAttribute('aria-valuetext', `${pct}% of ${module} complete`);
+      bar.setAttribute('aria-valuetext', tr('js.studies.ariaProgress','{pct}% of {module} complete',{pct,module}));
 
       const label = bar.closest('[data-module]')?.querySelector('.module-progress-label');
-      if (label) label.textContent = `${done} / ${total} lessons`;
+      if (label) label.textContent = tr('js.studies.lessonsCount','{done} / {total} lessons',{done,total});
     });
 
     /* Overall progress */
     const totalAll = document.querySelectorAll('.lesson-item[data-lesson-id]').length;
     const doneAll  = completed.size;
     const pctAll   = totalAll > 0 ? Math.round((doneAll / totalAll) * 100) : 0;
-    _setText('isOverallProgress', `${pctAll}% complete (${doneAll} / ${totalAll} lessons)`);
+    _setText('isOverallProgress', tr('js.studies.overallProgress','{pct}% complete ({done} / {total} lessons)',{pct:pctAll,done:doneAll,total:totalAll}));
 
     /* Resume link */
     const resumeLink = document.getElementById('isLastLesson');
@@ -128,7 +134,7 @@
       const href   = lastEl ? `#${state.lastVisited}` : null;
       if (href) {
         resumeLink.href        = href;
-        resumeLink.textContent = `Continue: ${state.lastVisited}`;
+        resumeLink.textContent = tr('js.studies.continue','Continue: {id}',{id:state.lastVisited});
         resumeLink.hidden      = false;
       }
     }
@@ -166,10 +172,10 @@
     if (!btn) return;
 
     btn.addEventListener('click', () => {
-      if (!confirm('Reset all lesson progress? This cannot be undone.')) return;
+      if (!confirm(tr('js.studies.resetConfirm','Reset all lesson progress? This cannot be undone.'))) return;
       localStorage.removeItem(STORAGE_KEY);
       _applyState({ completedLessons: [], lastVisited: null });
-      if (window.showToast) window.showToast('Progress reset.');
+      if (window.showToast) window.showToast(tr('js.studies.reset','Progress reset.'));
     });
   }
 
@@ -189,6 +195,7 @@
     _applyState(state);
     initLessonEvents();
     initReset();
+    document.addEventListener('ii:langchange', () => _applyState(_loadProgress()));
   });
 
 }());

@@ -28,6 +28,12 @@
 
 (function () {
   'use strict';
+  function tr(key, fallback, params) {
+    if (window.II && window.II.t) return window.II.t(key, fallback, params);
+    let s = fallback !== undefined ? fallback : key;
+    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
+    return s;
+  }
 
   const api = window.II && window.II.api;
   if (!api) { console.error('[dua.js] api.js not loaded'); return; }
@@ -47,7 +53,7 @@
 
   function playDua(duaId, audioSrc, btnEl) {
     if (!audioSrc) {
-      if (window.showToast) window.showToast('Audio not available for this dua.');
+      if (window.showToast) window.showToast(tr('js.dua.noAudio','Audio not available for this dua.'));
       return;
     }
 
@@ -69,7 +75,7 @@
     if (btnEl) btnEl.textContent = '⏸';
 
     currentAudio.play().catch(() => {
-      if (window.showToast) window.showToast('Could not play audio.');
+      if (window.showToast) window.showToast(tr('js.dua.audioError','Could not play audio.'));
       if (btnEl) btnEl.textContent = '▶';
       currentAudioId = null;
     });
@@ -97,12 +103,12 @@
     ].filter(Boolean).join('\n');
 
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('Dua copied!');
+      if (window.showToast) window.showToast(tr('js.dua.copied','Dua copied!'));
     }).catch(() => {
       const ta = document.createElement('textarea');
       ta.value = text; document.body.appendChild(ta); ta.select();
       document.execCommand('copy'); document.body.removeChild(ta);
-      if (window.showToast) window.showToast('Dua copied!');
+      if (window.showToast) window.showToast(tr('js.dua.copied','Dua copied!'));
     });
   }
 
@@ -116,11 +122,11 @@
     if (bm[duaId]) {
       delete bm[duaId];
       if (btnEl) btnEl.textContent = '☆';
-      if (window.showToast) window.showToast('Bookmark removed.');
+      if (window.showToast) window.showToast(tr('js.dua.bookmarkRemoved','Bookmark removed.'));
     } else {
       bm[duaId] = { ts: Date.now() };
       if (btnEl) btnEl.textContent = '★';
-      if (window.showToast) window.showToast('Bookmarked!');
+      if (window.showToast) window.showToast(tr('js.dua.bookmarked','Bookmarked!'));
     }
     localStorage.setItem('ii-bookmarks', JSON.stringify(bm));
   }
@@ -147,11 +153,11 @@
 
     if (!modal || !content) return;
 
-    if (disclaimer) disclaimer.textContent = AI_DISCLAIMER;
+    if (disclaimer) disclaimer.textContent = tr('js.dua.disclaimer', AI_DISCLAIMER);
 
     modal.hidden = false;
     modal.setAttribute('aria-modal', 'true');
-    content.innerHTML = '<p class="loading-msg" aria-live="polite">Generating explanation…</p>';
+    content.innerHTML = '<p class="loading-msg" aria-live="polite">' + tr('js.dua.loading','Generating explanation…') + '</p>';
 
     const duaId = card.dataset.id;
     const cacheKey = `${AI_CACHE_PREFIX}${duaId}`;
@@ -172,9 +178,7 @@
     );
 
     if (!result) {
-      content.innerHTML =
-        '<p class="info-msg">AI explanations are coming soon. ' +
-        'Please refer to the source text for this dua.</p>';
+      content.innerHTML = '<p class="info-msg">' + tr('js.dua.aiSoon','AI explanations are coming soon. Please refer to the source text for this dua.') + '</p>';
       return;
     }
 

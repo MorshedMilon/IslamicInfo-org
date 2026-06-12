@@ -26,6 +26,14 @@
 (function () {
   'use strict';
 
+  /* i18n helper (i18n.js loads first; safe fallback if it didn't) */
+  function tr(key, fallback, params) {
+    if (window.II && window.II.t) return window.II.t(key, fallback, params);
+    let s = fallback !== undefined ? fallback : key;
+    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
+    return s;
+  }
+
   const api = window.II && window.II.api;
   if (!api) { console.error('[verify.js] api.js not loaded'); return; }
 
@@ -45,7 +53,7 @@
     const btn = document.getElementById('verifyBtn');
     if (btn) {
       btn.disabled     = loading;
-      btn.textContent  = loading ? 'Verifying…' : 'Verify Claim';
+      btn.textContent  = loading ? tr('js.verify.verifying','Verifying…') : tr('js.verify.btnText','Verify Claim');
       btn.setAttribute('aria-busy', String(loading));
     }
     loading ? _show('verifyLoading') : _hide('verifyLoading');
@@ -67,15 +75,15 @@
     return `
     <article class="verify-result-card reveal" role="article">
       <header class="verify-result-header">
-        <span class="verify-verdict ${verdictCls}">${item.verdict || 'Unverified'}</span>
-        <h3 class="verify-result-title">${_escapeHtml(item.title || 'Result')}</h3>
+        <span class="verify-verdict ${verdictCls}">${item.verdict || tr('js.verify.unverified','Unverified')}</span>
+        <h3 class="verify-result-title">${_escapeHtml(item.title || tr('js.verify.resultTitle','Result'))}</h3>
       </header>
 
       <p class="verify-result-explanation">${_escapeHtml(item.explanation || '')}</p>
 
       ${item.source ? `
         <footer class="verify-result-source">
-          Source:
+          ${tr('js.verify.source','Source:')}
           ${item.sourceUrl
             ? `<a href="${item.sourceUrl}" target="_blank" rel="noopener">${_escapeHtml(item.source)}</a>`
             : _escapeHtml(item.source)}
@@ -100,12 +108,14 @@
     const results = data && Array.isArray(data.results) ? data.results : [];
 
     if (results.length === 0) {
+      const hadithLink = tr('chrome.nav.hadith','Hadith Library');
+      const quranLink  = tr('chrome.nav.quran','Quran Explorer');
       container.innerHTML = `
         <div class="verify-empty" role="status">
-          <p>No results found for this claim.</p>
-          <p class="verify-empty-hint">Try rephrasing, or check our
-          <a href="hadith.html">Hadith Library</a> and
-          <a href="quran.html">Quran Explorer</a>.</p>
+          <p>${tr('js.verify.noResults','No results found for this claim.')}</p>
+          <p class="verify-empty-hint">${tr('js.verify.tryRephrase','Try rephrasing, or check our')}
+          <a href="hadith.html">${hadithLink}</a> ${tr('js.verify.and','and')}
+          <a href="quran.html">${quranLink}</a>.</p>
         </div>`;
       return;
     }
@@ -125,7 +135,7 @@
     const query  = input ? input.value.trim() : '';
 
     if (!query) {
-      if (window.showToast) window.showToast('Please enter a claim to verify.');
+      if (window.showToast) window.showToast(tr('js.verify.noQuery','Please enter a claim to verify.'));
       if (input) input.focus();
       return;
     }
@@ -145,7 +155,7 @@
 
     if (!data) {
       _show('verifyError');
-      _text('verifyError', 'Verification service is currently unavailable. Please try again later.');
+      _text('verifyError', tr('js.verify.serviceError','Verification service is currently unavailable. Please try again later.'));
       return;
     }
 
@@ -169,6 +179,11 @@
       /* Clear error on new input */
       input.addEventListener('input', () => _hide('verifyError'));
     }
+
+    document.addEventListener('ii:langchange', () => {
+      const btn = document.getElementById('verifyBtn');
+      if (btn && !isVerifying) btn.textContent = tr('js.verify.btnText','Verify Claim');
+    });
   }
 
 

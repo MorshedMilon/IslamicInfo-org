@@ -27,6 +27,13 @@
 (function () {
   'use strict';
 
+  function tr(key, fallback, params) {
+    if (window.II && window.II.t) return window.II.t(key, fallback, params);
+    let s = fallback !== undefined ? fallback : key;
+    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
+    return s;
+  }
+
   const api = window.II && window.II.api;
   if (!api) { console.error('[quran.js] api.js not loaded'); return; }
 
@@ -83,7 +90,7 @@
                data-surah="${surahData.surahNumber}"
                data-ayah="${v.ayah}"
                role="article"
-               aria-label="Verse ${v.ayah}">
+               aria-label="${tr('js.quran.verseAria','Verse {ayah}',{ayah:v.ayah})}">
 
         <div class="verse-number" aria-hidden="true">${v.ayah}</div>
 
@@ -97,27 +104,27 @@
             ${transObj.translator ? '— ' + transObj.translator : ''}
           </span>
 
-          <div class="verse-actions" role="toolbar" aria-label="Verse actions">
+          <div class="verse-actions" role="toolbar" aria-label="${tr('js.quran.actionsAria','Verse actions')}">
 
             <button class="btn-icon btn-audio"
                     data-surah="${surahData.surahNumber}"
                     data-ayah="${v.ayah}"
-                    title="Play recitation"
-                    aria-label="Play recitation for verse ${v.ayah}">
+                    title="${tr('js.quran.playTitle','Play recitation')}"
+                    aria-label="${tr('js.quran.playAria','Play recitation for verse {ayah}',{ayah:v.ayah})}">
               ▶
             </button>
 
             <button class="btn-icon btn-copy"
                     data-text="${encodeURIComponent(v.arabic + '\n' + transObj.text + '\n(Quran ' + surahData.surahNumber + ':' + v.ayah + ')')}"
-                    title="Copy verse"
-                    aria-label="Copy verse ${v.ayah}">
+                    title="${tr('js.quran.copyTitle','Copy verse')}"
+                    aria-label="${tr('js.quran.copyAria','Copy verse {ayah}',{ayah:v.ayah})}">
               ⎘
             </button>
 
             <button class="btn-icon btn-bookmark"
                     data-id="quran-${surahData.surahNumber}-${v.ayah}"
-                    title="Bookmark"
-                    aria-label="Bookmark verse ${v.ayah}">
+                    title="${tr('js.quran.bookmarkTitle','Bookmark')}"
+                    aria-label="${tr('js.quran.bookmarkAria','Bookmark verse {ayah}',{ayah:v.ayah})}">
               ☆
             </button>
 
@@ -126,8 +133,8 @@
                     data-ayah="${v.ayah}"
                     data-arabic="${encodeURIComponent(v.arabic)}"
                     data-translation="${encodeURIComponent(transObj.text)}"
-                    title="AI Explanation (Stage 3)"
-                    aria-label="AI explanation for verse ${v.ayah}">
+                    title="${tr('js.quran.aiTitle','AI Explanation (Stage 3)')}"
+                    aria-label="${tr('js.quran.aiAria','AI explanation for verse {ayah}',{ayah:v.ayah})}">
               ✦
             </button>
 
@@ -151,21 +158,21 @@
     localStorage.setItem('ii-quran-last-surah', surahNumber);
 
     const container = document.getElementById('verseList');
-    if (container) container.innerHTML = '<p class="loading-msg" aria-live="polite">Loading verses…</p>';
+    if (container) container.innerHTML = '<p class="loading-msg" aria-live="polite">' + tr('js.quran.loading','Loading verses…') + '</p>';
 
     const data = await api.fetchQuranSurah(surahNumber);
 
     if (!data) {
       if (container) {
         container.innerHTML =
-          '<p class="error-msg" role="alert">Could not load surah. Please check your connection and try again.</p>';
+          '<p class="error-msg" role="alert">' + tr('js.quran.loadError','Could not load surah. Please check your connection and try again.') + '</p>';
       }
       return;
     }
 
     /* Update surah heading */
     const heading = document.getElementById('surahHeading');
-    if (heading) heading.textContent = data.surahName || `Surah ${surahNumber}`;
+    if (heading) heading.textContent = data.surahName || `${tr('js.quran.surah','Surah')} ${surahNumber}`;
 
     renderVerses(data);
 
@@ -199,7 +206,7 @@
     if (btnEl) btnEl.textContent = '⏸';
 
     audioPlayer.play().catch(() => {
-      if (window.showToast) window.showToast('Audio unavailable for this verse.');
+      if (window.showToast) window.showToast(tr('js.quran.audioUnavailable','Audio unavailable for this verse.'));
       if (btnEl) btnEl.textContent = '▶';
       playingAyah = null;
     });
@@ -221,11 +228,11 @@
     if (!modal || !content) return;
 
     /* Always show hard-coded disclaimer */
-    if (disclaimer) disclaimer.textContent = AI_DISCLAIMER;
+    if (disclaimer) disclaimer.textContent = tr('js.quran.disclaimer', AI_DISCLAIMER);
 
     modal.hidden  = false;
     modal.setAttribute('aria-modal', 'true');
-    content.innerHTML = '<p class="loading-msg" aria-live="polite">Generating explanation…</p>';
+    content.innerHTML = '<p class="loading-msg" aria-live="polite">' + tr('js.quran.explaining','Generating explanation…') + '</p>';
 
     /* Check session cache first */
     const cacheKey = `${AI_CACHE_KEY_PREFIX}${surah}-${ayah}`;
@@ -245,8 +252,7 @@
 
     if (!result) {
       content.innerHTML =
-        '<p class="info-msg">AI explanations are coming soon. ' +
-        'In the meantime, please refer to a trusted tafsir.</p>';
+        '<p class="info-msg">' + tr('js.quran.aiSoon','AI explanations are coming soon. In the meantime, please refer to a trusted tafsir.') + '</p>';
       return;
     }
 
@@ -263,7 +269,7 @@
   function copyVerse(encodedText) {
     const text = decodeURIComponent(encodedText);
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('Verse copied!');
+      if (window.showToast) window.showToast(tr('js.quran.copied','Verse copied!'));
     }).catch(() => {
       /* Fallback for older browsers */
       const ta = document.createElement('textarea');
@@ -272,7 +278,7 @@
       ta.select();
       document.execCommand('copy');
       document.body.removeChild(ta);
-      if (window.showToast) window.showToast('Verse copied!');
+      if (window.showToast) window.showToast(tr('js.quran.copied','Verse copied!'));
     });
   }
 
@@ -287,11 +293,11 @@
     if (bookmarks[id]) {
       delete bookmarks[id];
       if (btnEl) btnEl.textContent = '☆';
-      if (window.showToast) window.showToast('Bookmark removed.');
+      if (window.showToast) window.showToast(tr('js.quran.bookmarkRemoved','Bookmark removed.'));
     } else {
       bookmarks[id] = { ts: Date.now() };
       if (btnEl) btnEl.textContent = '★';
-      if (window.showToast) window.showToast('Bookmarked!');
+      if (window.showToast) window.showToast(tr('js.quran.bookmarked','Bookmarked!'));
     }
     localStorage.setItem(key, JSON.stringify(bookmarks));
   }
@@ -401,6 +407,7 @@
     initReciterSelector();
     initTranslationSelector();
     initAIModal();
+    document.addEventListener('ii:langchange', () => loadSurah(currentSurah));
 
     /* Restore last surah or default to Al-Fatiha (1) */
     const hashMatch = location.hash.match(/surah-(\d+)/);

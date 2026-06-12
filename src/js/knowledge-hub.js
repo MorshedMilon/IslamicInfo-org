@@ -29,6 +29,14 @@
 (function () {
   'use strict';
 
+  /* i18n helper (i18n.js loads first; safe fallback if it didn't) */
+  function tr(key, fallback, params) {
+    if (window.II && window.II.t) return window.II.t(key, fallback, params);
+    let s = fallback !== undefined ? fallback : key;
+    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
+    return s;
+  }
+
   const api = window.II && window.II.api;
   if (!api) { console.error('[knowledge-hub.js] api.js not loaded'); return; }
 
@@ -57,24 +65,24 @@
 
     if (!email || !_isValidEmail(email)) {
       _show('subscribeError');
-      _text('subscribeError', 'Please enter a valid email address.');
+      _text('subscribeError', tr('js.hub.emailInvalid','Please enter a valid email address.'));
       if (input) input.focus();
       return;
     }
 
-    if (btn) { btn.disabled = true; btn.textContent = 'Subscribing…'; }
+    if (btn) { btn.disabled = true; btn.textContent = tr('js.hub.subscribing','Subscribing…'); }
 
     const result = await api.postSubscribe(email, 'knowledge-hub');
 
-    if (btn) { btn.disabled = false; btn.textContent = 'Subscribe'; }
+    if (btn) { btn.disabled = false; btn.textContent = tr('js.hub.subscribeCta','Subscribe'); }
 
     if (result && result.ok) {
       _show('subscribeSuccess');
-      _text('subscribeSuccess', 'You\'re subscribed! Jazakallah Khayran.');
+      _text('subscribeSuccess', tr('js.hub.subscribeSuccess',"You're subscribed! Jazakallah Khayran."));
       if (input) input.value = '';
     } else {
       _show('subscribeError');
-      _text('subscribeError', 'Subscription failed. Please try again later.');
+      _text('subscribeError', tr('js.hub.subscribeError','Subscription failed. Please try again later.'));
     }
   }
 
