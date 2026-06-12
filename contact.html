@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Contact Us — IslamicInfo</title>
+  <title data-i18n="contact.title">Contact Us — IslamicInfo</title>
+  <script>
+    /* i18n FOUC guard: set lang/dir before first paint */
+    (function(){
+      var l = localStorage.getItem('islamicinfo-lang') || 'en';
+      document.documentElement.setAttribute('lang', l);
+      if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
+    })();
+  </script>
   <meta name="description" content="Contact the IslamicInfo team — questions, corrections, and collaboration ideas."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,7 +116,7 @@ img{max-width:100%;}
 .search-popup-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,105,110,.35);}
 @media(max-width:1100px){.nav-link{font-size:11.5px;padding:5px 5px;}}
 @media(max-width:900px){.nav-link{font-size:10.5px;padding:5px 3px;}.brand{font-size:16px;gap:6px;}.brand-mark{width:28px;height:28px;}}
-@media(max-width:760px){.nav{display:none;}.header-tools .icon-btn:not(.theme-toggle):not(.search-trigger){display:none;}}
+@media(max-width:760px){.nav{display:none;}.header-tools .icon-btn:not(.theme-toggle):not(.search-trigger):not(.lang-trigger){display:none;}}
 
 /* ═══ BISMILLAH — CLAUDE.md §5 ═══ */
 .bismillah-hero,.bismillah-hero-top,.bismillah-bar,.bismillah-section{
@@ -450,6 +458,25 @@ img{max-width:100%;}
 .faq-item.in-view:nth-child(3) { transition-delay: .20s; }
 .faq-item.in-view:nth-child(4) { transition-delay: .30s; }
 .faq-item.in-view:nth-child(5) { transition-delay: .40s; }
+
+/* ── Language dropdown ── */
+.lang-wrapper{position:relative;}
+.lang-menu{position:absolute;top:44px;right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.lang-menu.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .lang-menu{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.lang-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;background:transparent;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;color:var(--ink-body);text-align:left;transition:background .2s,color .2s;}
+.lang-item:hover{background:rgba(0,105,110,.08);}
+[data-theme="dark"] .lang-item:hover{background:rgba(0,105,110,.15);}
+.lang-item.on{color:var(--teal-700);font-weight:600;background:rgba(0,105,110,.06);}
+[data-theme="dark"] .lang-item.on{color:var(--teal-300);}
+.lang-code{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ink-subtle);width:24px;flex-shrink:0;}
+
+/* ── RTL patches ── */
+[dir="rtl"] .lang-menu{right:auto;left:0;}
+[dir="rtl"] .lang-item{text-align:right;}
+[dir="rtl"] .search-popup{right:auto;left:0;}
+[dir="rtl"] .header-tools{margin-left:0;margin-right:auto;}
+[dir="rtl"] .ii-footer-link:hover{transform:translateX(-4px);}
   </style>
   <style>
     /* ── Legal page layout — design-system tokens only ── */
@@ -497,16 +524,16 @@ img{max-width:100%;}
         <span class="brand-text"><span>Islamic</span><span class="info">Info</span></span>
       </a>
       <nav class="nav" aria-label="Primary navigation">
-      <a class="nav-link" href="index.html">Home</a>
-      <a class="nav-link" href="quran.html">Quran Explorer</a>
-      <a class="nav-link" href="hadith.html">Hadith Library</a>
-      <a class="nav-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="nav-link" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="nav-link" href="dua.html">Daily Duas</a>
-      <a class="nav-link" href="tools.html">Tools</a>
-      <a class="nav-link" href="habits.html">Habit Tracker</a>
-      <a class="nav-link" href="verify.html">Verify</a>
-      <a class="nav-link active" href="about.html">About</a>
+      <a class="nav-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+      <a class="nav-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="nav-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="nav-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="nav-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="nav-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="nav-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+      <a class="nav-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="nav-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+      <a class="nav-link active" href="about.html" data-i18n="chrome.nav.about">About</a>
     </nav>
       <div class="header-tools">
         <div class="search-popup-wrapper">
@@ -514,13 +541,18 @@ img{max-width:100%;}
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           </button>
           <div class="search-popup" id="searchPopup" role="search">
-            <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput"/>
+            <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput" data-i18n-attr="placeholder:chrome.search.placeholder;aria-label:chrome.search.inputAria"/>
             <button class="search-popup-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span data-i18n="chrome.search.button">Search</span>
             </button>
           </div>
         </div>
-        <button class="icon-btn" aria-label="Language"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span></button>
+        <div class="lang-wrapper">
+          <button class="icon-btn lang-trigger" id="langBtn" aria-label="Language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
+            <span id="langBtnCode" style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
+          </button>
+          <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
+        </div>
         <button class="icon-btn theme-toggle" aria-label="Toggle theme" id="themeBtn"></button>
         <button class="icon-btn" aria-label="Admin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg></button>
       </div>
@@ -530,26 +562,26 @@ img{max-width:100%;}
     <main>
 
       <section class="legal-hero">
-        <div class="legal-eyebrow">✦ We'd Love to Hear From You</div>
-        <h1 class="legal-title">Get in <em class="gradient-italic">Touch</em></h1>
-        <p class="legal-updated">Questions, corrections, collaboration ideas — we read everything.</p>
+        <div class="legal-eyebrow" data-i18n="contact.hero.badge">✦ We'd Love to Hear From You</div>
+        <h1 class="legal-title" data-i18n="contact.hero.title" data-i18n-html>Get in <em class="gradient-italic">Touch</em></h1>
+        <p class="legal-updated" data-i18n="contact.hero.sub">Questions, corrections, collaboration ideas — we read everything.</p>
       </section>
 
       <div class="legal-wrap">
-        <h2>Email Us</h2>
-        <p>The fastest way to reach the IslamicInfo team is by email. Whether you've spotted an error in a citation, have an idea for the platform, or want to collaborate — write to us:</p>
+        <h2 data-i18n="contact.email.heading">Email Us</h2>
+        <p data-i18n="contact.email.body">The fastest way to reach the IslamicInfo team is by email. Whether you've spotted an error in a citation, have an idea for the platform, or want to collaborate — write to us:</p>
         <p style="margin:24px 0;"><a class="btn-primary" href="mailto:hello@islamicinfo.org" style="text-decoration:none;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           hello@islamicinfo.org
         </a></p>
 
-        <h2>Corrections</h2>
-        <p>Accuracy is the heart of this platform. If you believe a verse, translation, hadith grading, or citation is incorrect, please include the page URL and the source you are checking against — corrections are reviewed against the original references and fixed promptly.</p>
+        <h2 data-i18n="contact.corrections.heading">Corrections</h2>
+        <p data-i18n="contact.corrections.body">Accuracy is the heart of this platform. If you believe a verse, translation, hadith grading, or citation is incorrect, please include the page URL and the source you are checking against — corrections are reviewed against the original references and fixed promptly.</p>
 
-        <h2>Scholars and Reviewers</h2>
-        <p>If you are a student of knowledge or scholar interested in reviewing content or methodology, we would be honoured to hear from you.</p>
+        <h2 data-i18n="contact.scholars.heading">Scholars and Reviewers</h2>
+        <p data-i18n="contact.scholars.body">If you are a student of knowledge or scholar interested in reviewing content or methodology, we would be honoured to hear from you.</p>
 
-        <div class="legal-note"><strong>A note on questions:</strong> IslamicInfo does not issue fatwas or religious rulings, so we are unable to answer personal fiqh questions by email. For rulings on your circumstances, please consult a qualified scholar in your community.</div>
+        <div class="legal-note" data-i18n="contact.note" data-i18n-html><strong>A note on questions:</strong> IslamicInfo does not issue fatwas or religious rulings, so we are unable to answer personal fiqh questions by email. For rulings on your circumstances, please consult a qualified scholar in your community.</div>
       </div>
     </main>
     <footer id="ii-footer">
@@ -580,32 +612,32 @@ img{max-width:100%;}
           <span class="ii-footer-logo-text-islamic">Islamic</span><span class="ii-footer-logo-text-info">Info</span>
         </span>
       </a>
-      <p class="ii-footer-tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
+      <p class="ii-footer-tagline" data-i18n="chrome.footer.tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
       <p class="ii-footer-verse">وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ &nbsp;— Hud · 11:88</p>
     </div>
 
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">About</div>
-      <a class="ii-footer-link" href="about.html">Our Mission</a>
-      <a class="ii-footer-link" href="about.html#scholars">Meet the Team</a>
-      <a class="ii-footer-link" href="about.html#contact">Contact Us</a>
-      <a class="ii-footer-link" href="about.html#methodology">Methodology</a>
+      <div class="ii-footer-col-heading" data-i18n="chrome.nav.about">About</div>
+      <a class="ii-footer-link" href="about.html" data-i18n="chrome.footer.aboutMission">Our Mission</a>
+      <a class="ii-footer-link" href="about.html#scholars" data-i18n="chrome.footer.aboutTeam">Meet the Team</a>
+      <a class="ii-footer-link" href="about.html#contact" data-i18n="chrome.footer.aboutContactUs">Contact Us</a>
+      <a class="ii-footer-link" href="about.html#methodology" data-i18n="chrome.footer.aboutMethodology">Methodology</a>
     </div>
 
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Quick Access</div>
-      <a class="ii-footer-link" href="quran.html">Quran Explorer</a>
-      <a class="ii-footer-link" href="hadith.html">Hadith Library</a>
-      <a class="ii-footer-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="ii-footer-link" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="ii-footer-link" href="dua.html">Daily Duas</a>
-      <a class="ii-footer-link" href="tools.html">Islamic Tools</a>
-      <a class="ii-footer-link" href="habits.html">Habit Tracker</a>
-      <a class="ii-footer-link" href="verify.html">Verify a Claim</a>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.quickAccess">Quick Access</div>
+      <a class="ii-footer-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="ii-footer-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="ii-footer-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="ii-footer-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="ii-footer-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="ii-footer-link" href="tools.html" data-i18n="chrome.footer.linkTools">Islamic Tools</a>
+      <a class="ii-footer-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="ii-footer-link" href="verify.html" data-i18n="chrome.footer.linkVerify">Verify a Claim</a>
     </div>
 
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Our Ecosystem</div>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.ecosystem">Our Ecosystem</div>
       <a class="ii-footer-link ii-footer-link-ext" href="https://islamickids.org" target="_blank" rel="noopener">IslamicKids.org ↗</a>
       <a class="ii-footer-link ii-footer-link-ext" href="https://quranlyai.com" target="_blank" rel="noopener">QuranlyAI ↗</a>
       <a class="ii-footer-link ii-footer-link-ext" href="https://hadithiq.com" target="_blank" rel="noopener">HadithIQ ↗</a>
@@ -615,19 +647,19 @@ img{max-width:100%;}
     </div>
 
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Company</div>
-      <a class="ii-footer-link" href="about.html">About</a>
-      <a class="ii-footer-link" href="about.html#contact">Contact</a>
-      <div class="ii-footer-col-heading" style="margin-top:16px;">Legal</div>
-      <a class="ii-footer-link" href="privacy.html">Privacy Policy</a>
-      <a class="ii-footer-link" href="terms.html">Terms of Use</a>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.company">Company</div>
+      <a class="ii-footer-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+      <a class="ii-footer-link" href="about.html#contact" data-i18n="chrome.footer.contact">Contact</a>
+      <div class="ii-footer-col-heading" style="margin-top:16px;" data-i18n="chrome.footer.legal">Legal</div>
+      <a class="ii-footer-link" href="privacy.html" data-i18n="chrome.footer.privacy">Privacy Policy</a>
+      <a class="ii-footer-link" href="terms.html" data-i18n="chrome.footer.terms">Terms of Use</a>
     </div>
 
   </div>
 
   <div class="ii-footer-bottom">
-    <div class="ii-footer-copy">© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
-    <div class="ii-footer-note">All content source-verified · Privacy-first · Built with sincerity</div>
+    <div class="ii-footer-copy" data-i18n="chrome.footer.copy" data-i18n-html>© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
+    <div class="ii-footer-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
   </div>
 </footer>
   <script>
@@ -822,6 +854,7 @@ img{max-width:100%;}
   });
 
   </script>
+<script src="src/js/i18n.js"></script>
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
 </body>

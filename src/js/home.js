@@ -26,6 +26,14 @@
   const api = window.II && window.II.api;
   if (!api) { console.error('[home.js] api.js not loaded'); return; }
 
+  /* i18n helper (i18n.js loads first; safe fallback if it didn't) */
+  function tr(key, fallback, params) {
+    if (window.II && window.II.t) return window.II.t(key, fallback, params);
+    let s = fallback !== undefined ? fallback : key;
+    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
+    return s;
+  }
+
 
   /* ─── Fallback seeds ──────────────────────────────────────────── */
 
@@ -69,16 +77,16 @@
     const h = await api.fetchHadith() || FALLBACK_HADITH;
 
     _setText('hadithText',     h.translation);
-    _setText('hadithNarrator', h.narrator  ? `Narrated by: ${h.narrator}` : '');
-    _setText('hadithGrade',    h.grade     ? `Grade: ${h.grade}`           : '');
-    _setText('hadithGradedBy', h.gradedBy  ? `Graded by: ${h.gradedBy}`   : '');
+    _setText('hadithNarrator', h.narrator  ? tr('js.narrated', 'Narrated by: {n}', { n: h.narrator }) : '');
+    _setText('hadithGrade',    h.grade     ? tr('js.grade', 'Grade: {g}', { g: h.grade })             : '');
+    _setText('hadithGradedBy', h.gradedBy  ? tr('js.gradedBy', 'Graded by: {g}', { g: h.gradedBy })   : '');
     _setText('hadithRef',      `${h.collection}, Book ${h.book}, Hadith ${h.number}`);
 
     /* Source link */
     const link = document.getElementById('hadithSourceLink');
     if (link && h.sourceUrl) {
       link.href        = h.sourceUrl;
-      link.textContent = 'View on Sunnah.com';
+      link.textContent = tr('js.viewSunnah', 'View on Sunnah.com');
     }
   }
 
@@ -96,6 +104,8 @@
   document.addEventListener('DOMContentLoaded', () => {
     loadVerse();
     loadHadith();
+    /* Re-render translated labels when the site language changes */
+    document.addEventListener('ii:langchange', () => { loadVerse(); loadHadith(); });
   });
 
 }());

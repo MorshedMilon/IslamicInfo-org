@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>IslamicInfo — A Digital Sanctuary</title>
+<title data-i18n="home.title">IslamicInfo — A Digital Sanctuary</title>
+<script>
+  /* i18n FOUC guard: set lang/dir before first paint */
+  (function(){
+    var l = localStorage.getItem('islamicinfo-lang') || 'en';
+    document.documentElement.setAttribute('lang', l);
+    if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -525,7 +533,7 @@ img { max-width: 100%; }
 /* ── Mobile ── */
 @media (max-width: 820px) {
   .nav { display: none; }
-  .header-tools .icon-btn:not(.theme-toggle):not(.search-trigger) { display: none; }
+  .header-tools .icon-btn:not(.theme-toggle):not(.search-trigger):not(.lang-trigger) { display: none; }
 }
 @media (max-width: 600px) {
   .stats-row .stat + .stat { border-left: none; }
@@ -1130,6 +1138,31 @@ img { max-width: 100%; }
 .toast-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-400);flex-shrink:0;}
 [data-theme="dark"] .toast{background:#0F1B1D;border:0.5px solid rgba(0,105,110,.4);}
 
+/* ── Language menu (i18n) ── */
+.lang-wrapper{position:relative;}
+.lang-menu{position:absolute;top:44px;right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.lang-menu.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .lang-menu{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.lang-item{display:flex;align-items:center;gap:10px;width:100%;border:none;background:transparent;padding:8px 10px;border-radius:10px;cursor:pointer;font-family:var(--font-body);font-size:13px;color:var(--ink-body);text-align:left;transition:background .18s;}
+.lang-item:hover{background:rgba(0,105,110,.07);}
+.lang-item.on{color:var(--teal-700);background:rgba(0,105,110,.08);font-weight:600;}
+.lang-item .lang-code{width:24px;flex-shrink:0;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--ink-muted);}
+[data-theme="dark"] .lang-item{color:#D4DCDD;}
+[data-theme="dark"] .lang-item:hover{background:rgba(255,255,255,.07);}
+[data-theme="dark"] .lang-item.on{color:var(--teal-300);background:rgba(0,105,110,.2);}
+
+/* ── RTL patches (i18n) ── */
+[dir="rtl"] .lang-menu{right:auto;left:0;}
+[dir="rtl"] .lang-item{text-align:right;}
+[dir="rtl"] .search-popup{right:auto;left:0;}
+[dir="rtl"] .header-tools{margin-left:0;margin-right:auto;}
+[dir="rtl"] .ii-footer-link:hover{transform:translateX(-4px);}
+[dir="rtl"] .pw-menu{right:auto;left:0;}
+[dir="rtl"] .pw-menu-item{text-align:right;}
+[dir="rtl"] .pw-loc-btn{margin-left:0;margin-right:6px;}
+[dir="rtl"] .pw-city-input{margin-left:0;margin-right:6px;}
+[dir="rtl"] .pw-countdown{text-align:left;}
+
 /* ============ FEATURE GRID ============ */
 .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 @media (max-width: 1100px) { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -1539,16 +1572,16 @@ html {
 
         <!-- Menu (Center) -->
         <nav class="nav" aria-label="Primary navigation">
-          <a class="nav-link active" href="index.html">Home</a>
-          <a class="nav-link" href="quran.html">Quran Explorer</a>
-          <a class="nav-link" href="hadith.html">Hadith Library</a>
-          <a class="nav-link" href="islamic-studies.html">Islamic Studies</a>
-          <a class="nav-link" href="knowledge-hub.html">Knowledge Hub</a>
-          <a class="nav-link" href="dua.html">Daily Duas</a>
-          <a class="nav-link" href="tools.html">Tools</a>
-          <a class="nav-link" href="habits.html">Habit Tracker</a>
-          <a class="nav-link" href="verify.html">Verify</a>
-          <a class="nav-link" href="about.html">About</a>
+          <a class="nav-link active" href="index.html" data-i18n="chrome.nav.home">Home</a>
+          <a class="nav-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+          <a class="nav-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+          <a class="nav-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+          <a class="nav-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+          <a class="nav-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+          <a class="nav-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+          <a class="nav-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+          <a class="nav-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+          <a class="nav-link" href="about.html" data-i18n="chrome.nav.about">About</a>
         </nav>
 
         <!-- Icons (Right: Search / Lang / Dark Toggle) -->
@@ -1559,17 +1592,20 @@ html {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
             </button>
             <div class="search-popup" id="searchPopup" role="search">
-              <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput" />
+              <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput" data-i18n-attr="placeholder:chrome.search.placeholder;aria-label:chrome.search.inputAria" />
               <button class="search-popup-btn">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-                Search
+                <span data-i18n="chrome.search.button">Search</span>
               </button>
             </div>
           </div>
           <!-- Language -->
-          <button class="icon-btn" aria-label="Language">
-            <span style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
-          </button>
+          <div class="lang-wrapper">
+            <button class="icon-btn lang-trigger" id="langBtn" aria-label="Language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
+              <span id="langBtnCode" style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
+            </button>
+            <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
+          </div>
           <!-- Dark mode -->
           <button class="icon-btn theme-toggle" aria-label="Toggle theme" id="themeBtn">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -1608,7 +1644,7 @@ html {
             </span>
           </div>
 
-          <h1 class="t-display-2xl">
+          <h1 class="t-display-2xl" data-i18n="home.hero.h1" data-i18n-html>
             <span class="reveal-word" style="animation-delay:.1s">Authentic</span>
             <span class="reveal-word" style="animation-delay:.18s">Islamic</span>
             <span class="reveal-word" style="animation-delay:.26s">knowledge</span><br>
@@ -1616,13 +1652,13 @@ html {
             <span class="reveal-word gradient-italic" style="animation-delay:.5s">&amp; Sunnah</span>
           </h1>
 
-          <p class="hero-mission fade-up delay-500">A digital sanctuary for verified scripture, scholarly tafsir, and graded hadith — built for students, families, and seekers who require sources, not opinions.</p>
+          <p class="hero-mission fade-up delay-500" data-i18n="home.hero.mission">A digital sanctuary for verified scripture, scholarly tafsir, and graded hadith — built for students, families, and seekers who require sources, not opinions.</p>
 
           <div class="fade-up delay-700">
             <form class="searchbar" onsubmit="event.preventDefault();">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="color:var(--ink-muted)"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-              <input type="text" placeholder="Search verses, hadiths, topics, or paste a claim to verify…" aria-label="Search" />
-              <button type="button" class="icon-btn" aria-label="Voice search" style="width:38px;height:38px;border:none;background:transparent;">
+              <input type="text" placeholder="Search verses, hadiths, topics, or paste a claim to verify…" aria-label="Search" data-i18n-attr="placeholder:home.hero.searchPh;aria-label:chrome.search.aria" />
+              <button type="button" class="icon-btn" aria-label="Voice search" data-i18n-attr="aria-label:home.hero.voiceAria" style="width:38px;height:38px;border:none;background:transparent;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3"/></svg>
               </button>
               <button type="submit" class="search-go" aria-label="Search">
@@ -1630,30 +1666,30 @@ html {
               </button>
             </form>
             <div class="scope-chips">
-              <button class="chip active">All</button>
-              <button class="chip">Qur'an</button>
-              <button class="chip">Hadith</button>
-              <button class="chip">Dua</button>
-              <button class="chip">Verify</button>
+              <button class="chip active" data-i18n="home.chip.all">All</button>
+              <button class="chip" data-i18n="home.chip.quran">Qur'an</button>
+              <button class="chip" data-i18n="home.chip.hadith">Hadith</button>
+              <button class="chip" data-i18n="home.chip.dua">Dua</button>
+              <button class="chip" data-i18n="home.chip.verify">Verify</button>
             </div>
           </div>
 
           <div class="cta-row fade-up delay-1000">
             <a href="islamic-studies.html" class="btn btn-primary btn-pill">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
-              Start Learning
+              <span data-i18n="home.cta.start">Start Learning</span>
             </a>
             <a href="knowledge-hub.html" class="btn btn-habit btn-pill">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-              Browse Knowledge Hub
+              <span data-i18n="home.cta.hub">Browse Knowledge Hub</span>
             </a>
           </div>
 
           <div class="stats-row fade-up delay-1000">
-            <div class="stat"><div class="stat-num">6,236</div><div class="stat-label">Verses</div></div>
-            <div class="stat"><div class="stat-num">52K+</div><div class="stat-label">Hadiths</div></div>
-            <div class="stat"><div class="stat-num">1,240+</div><div class="stat-label">Duas</div></div>
-            <div class="stat"><div class="stat-num">42</div><div class="stat-label">Languages</div></div>
+            <div class="stat"><div class="stat-num">6,236</div><div class="stat-label" data-i18n="home.stat.verses">Verses</div></div>
+            <div class="stat"><div class="stat-num">52K+</div><div class="stat-label" data-i18n="home.stat.hadiths">Hadiths</div></div>
+            <div class="stat"><div class="stat-num">1,240+</div><div class="stat-label" data-i18n="home.stat.duas">Duas</div></div>
+            <div class="stat"><div class="stat-num">42</div><div class="stat-label" data-i18n="home.stat.langs">Languages</div></div>
           </div>
         </div>
       </div>
@@ -1663,37 +1699,37 @@ html {
     <section class="section" data-screen-label="Daily Trio">
       <div class="container">
         <div class="section-head reveal">
-          <span class="eyebrow">Today's Sustenance</span>
-          <h2 class="t-display-lg">A daily portion of <span class="gradient-italic">light</span></h2>
+          <span class="eyebrow" data-i18n="home.trio.eyebrow">Today's Sustenance</span>
+          <h2 class="t-display-lg" data-i18n="home.trio.h2" data-i18n-html>A daily portion of <span class="gradient-italic">light</span></h2>
         </div>
         <div class="trio-grid">
           <article class="card trio-card reveal reveal-d1">
             <div class="head">
-              <span class="eyebrow">Verse of the Day</span>
+              <span class="eyebrow" data-i18n="home.trio.verseEyebrow">Verse of the Day</span>
               <button class="icon-btn" style="width:32px;height:32px;border:none;background:transparent;color:var(--ink-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
             </div>
             <div class="arabic">وَمَن يَتَوَكَّلْ عَلَى ٱللَّهِ فَهُوَ حَسْبُهُۥ</div>
-            <div class="body">"And whosoever places his trust in Allah — sufficient is He for him."</div>
-            <div class="foot"><span class="font-mono" style="font-size:12px;">Surah At-Talaq · 65:3</span><a class="read-more" href="quran.html">Read →</a></div>
+            <div class="body" data-i18n="home.trio.verseBody">"And whosoever places his trust in Allah — sufficient is He for him."</div>
+            <div class="foot"><span class="font-mono" style="font-size:12px;">Surah At-Talaq · 65:3</span><a class="read-more" href="quran.html" data-i18n="home.trio.read">Read →</a></div>
           </article>
 
           <article class="card trio-card reveal reveal-d2">
             <div class="head">
-              <span class="eyebrow">Hadith of the Day</span>
-              <span class="grade grade-sahih">✓ Sahih</span>
+              <span class="eyebrow" data-i18n="home.trio.hadithEyebrow">Hadith of the Day</span>
+              <span class="grade grade-sahih" data-i18n="home.trio.sahih">✓ Sahih</span>
             </div>
-            <div class="body">"The most beloved deeds to Allah are those that are most consistent, even if they are small."</div>
-            <div class="foot"><span class="font-mono" style="font-size:12px;">Sahih al-Bukhari · 6464</span><a class="read-more" href="hadith.html">Read →</a></div>
+            <div class="body" data-i18n="home.trio.hadithBody">"The most beloved deeds to Allah are those that are most consistent, even if they are small."</div>
+            <div class="foot"><span class="font-mono" style="font-size:12px;">Sahih al-Bukhari · 6464</span><a class="read-more" href="hadith.html" data-i18n="home.trio.read">Read →</a></div>
           </article>
 
           <article class="card trio-card reveal reveal-d3">
             <div class="head">
-              <span class="eyebrow">Dua of the Day</span>
+              <span class="eyebrow" data-i18n="home.trio.duaEyebrow">Dua of the Day</span>
               <button class="icon-btn" style="width:32px;height:32px;border:none;background:transparent;color:var(--ink-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 4 L12 8 L19 4 V20 L12 16 L5 20 Z"/></svg></button>
             </div>
             <div class="arabic" style="font-size:20px">رَبِّ ٱشْرَحْ لِى صَدْرِى وَيَسِّرْ لِىٓ أَمْرِى</div>
-            <div class="body">"My Lord, expand for me my chest, and ease my task for me."</div>
-            <div class="foot"><span class="font-mono" style="font-size:12px;">Surah Ta-Ha · 20:25–26</span><a class="read-more" href="dua.html">Listen →</a></div>
+            <div class="body" data-i18n="home.trio.duaBody">"My Lord, expand for me my chest, and ease my task for me."</div>
+            <div class="foot"><span class="font-mono" style="font-size:12px;">Surah Ta-Ha · 20:25–26</span><a class="read-more" href="dua.html" data-i18n="home.trio.listen">Listen →</a></div>
           </article>
         </div>
       </div>
@@ -1710,8 +1746,8 @@ html {
                 <div class="pw-loc-row">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                   <span id="prayerLocationLabel">London, UK</span>
-                  <button class="pw-loc-btn" id="prayerChangeBtn">Change</button>
-                  <input class="pw-city-input" id="prayerCityInput" type="text" placeholder="City name… ⏎" aria-label="Change city"/>
+                  <button class="pw-loc-btn" id="prayerChangeBtn" data-i18n="pw.change">Change</button>
+                  <input class="pw-city-input" id="prayerCityInput" type="text" placeholder="City name… ⏎" aria-label="Change city" data-i18n-attr="placeholder:pw.cityPh;aria-label:pw.cityAria"/>
                 </div>
                 <div class="pw-date" id="pwDate">Loading…</div>
               </div>
@@ -1721,18 +1757,18 @@ html {
               </div>
             </div>
             <div class="pw-prayers">
-              <div class="pw-prayer" data-prayer="Fajr"><div class="pw-name">Fajr</div><div class="pw-time" id="prayerFajr">04:33</div><div class="pw-adhan-dot"></div></div>
-              <div class="pw-prayer" data-prayer="Sunrise"><div class="pw-name">Sunrise</div><div class="pw-time" id="prayerSunrise">06:10</div><div class="pw-adhan-dot"></div></div>
-              <div class="pw-prayer" data-prayer="Dhuhr"><div class="pw-name">Dhuhr</div><div class="pw-time" id="prayerDhuhr">13:02</div><div class="pw-adhan-dot"></div></div>
-              <div class="pw-prayer" data-prayer="Asr"><div class="pw-name">Asr</div><div class="pw-time" id="prayerAsr">17:05</div><div class="pw-adhan-dot"></div></div>
-              <div class="pw-prayer" data-prayer="Maghrib"><div class="pw-name">Maghrib</div><div class="pw-time" id="prayerMaghrib">20:52</div><div class="pw-adhan-dot"></div></div>
-              <div class="pw-prayer" data-prayer="Isha"><div class="pw-name">Isha</div><div class="pw-time" id="prayerIsha">22:34</div><div class="pw-adhan-dot"></div></div>
+              <div class="pw-prayer" data-prayer="Fajr"><div class="pw-name" data-i18n="pw.prayer.fajr">Fajr</div><div class="pw-time" id="prayerFajr">04:33</div><div class="pw-adhan-dot"></div></div>
+              <div class="pw-prayer" data-prayer="Sunrise"><div class="pw-name" data-i18n="pw.prayer.sunrise">Sunrise</div><div class="pw-time" id="prayerSunrise">06:10</div><div class="pw-adhan-dot"></div></div>
+              <div class="pw-prayer" data-prayer="Dhuhr"><div class="pw-name" data-i18n="pw.prayer.dhuhr">Dhuhr</div><div class="pw-time" id="prayerDhuhr">13:02</div><div class="pw-adhan-dot"></div></div>
+              <div class="pw-prayer" data-prayer="Asr"><div class="pw-name" data-i18n="pw.prayer.asr">Asr</div><div class="pw-time" id="prayerAsr">17:05</div><div class="pw-adhan-dot"></div></div>
+              <div class="pw-prayer" data-prayer="Maghrib"><div class="pw-name" data-i18n="pw.prayer.maghrib">Maghrib</div><div class="pw-time" id="prayerMaghrib">20:52</div><div class="pw-adhan-dot"></div></div>
+              <div class="pw-prayer" data-prayer="Isha"><div class="pw-name" data-i18n="pw.prayer.isha">Isha</div><div class="pw-time" id="prayerIsha">22:34</div><div class="pw-adhan-dot"></div></div>
             </div>
             <div class="pw-footer">
               <div class="pw-sun-strip">
-                <div class="pw-sun-item">🌅 Sunrise <span class="pw-sun-val" id="pwSunrise">—</span></div>
-                <div class="pw-sun-item">🌇 Sunset <span class="pw-sun-val" id="pwSunset">—</span></div>
-                <div class="pw-sun-item">Daylight <span class="pw-sun-val" id="pwDaylight">—</span></div>
+                <div class="pw-sun-item"><span data-i18n="pw.sunrise">🌅 Sunrise</span> <span class="pw-sun-val" id="pwSunrise">—</span></div>
+                <div class="pw-sun-item"><span data-i18n="pw.sunset">🌇 Sunset</span> <span class="pw-sun-val" id="pwSunset">—</span></div>
+                <div class="pw-sun-item"><span data-i18n="pw.daylight">Daylight</span> <span class="pw-sun-val" id="pwDaylight">—</span></div>
               </div>
               <div class="pw-extra">
                 <div class="pw-extra-wrap">
@@ -1740,10 +1776,10 @@ html {
                   <div class="pw-menu" id="adhanMenu" aria-label="Adhan reciter menu"></div>
                 </div>
                 <div class="pw-extra-wrap">
-                  <button class="pw-extra-btn" id="methodBtn">⚙️ Method</button>
+                  <button class="pw-extra-btn" id="methodBtn" data-i18n="pw.methodBtn">⚙️ Method</button>
                   <div class="pw-menu" id="methodMenu" aria-label="Calculation method menu"></div>
                 </div>
-                <button class="pw-extra-btn" id="prayerDetectBtn">📍 My Location</button>
+                <button class="pw-extra-btn" id="prayerDetectBtn" data-i18n="pw.myLocation">📍 My Location</button>
               </div>
             </div>
           </div>
@@ -1755,9 +1791,9 @@ html {
     <section class="section" data-screen-label="Feature Grid">
       <div class="container">
         <div class="section-head reveal">
-          <span class="eyebrow">Eight Gateways</span>
-          <h2 class="t-display-lg">Everything you need for your <span class="gradient-italic">Islamic journey</span></h2>
-          <p>Eight curated portals to verified knowledge, daily worship, and meaningful growth.</p>
+          <span class="eyebrow" data-i18n="home.gw.eyebrow">Eight Gateways</span>
+          <h2 class="t-display-lg" data-i18n="home.gw.h2" data-i18n-html>Everything you need for your <span class="gradient-italic">Islamic journey</span></h2>
+          <p data-i18n="home.gw.sub">Eight curated portals to verified knowledge, daily worship, and meaningful growth.</p>
         </div>
 
         <div class="feature-grid">
@@ -1769,9 +1805,9 @@ html {
                 <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
               </svg>
             </div>
-            <h3>Qur'an Learning</h3>
-            <p>Structured recitation, tajweed, memorization, and topic-indexed reading with multi-translator translations.</p>
-            <span class="feat-cta">Explore <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            <h3 data-i18n="home.gw.quran.title">Qur'an Learning</h3>
+            <p data-i18n="home.gw.quran.desc">Structured recitation, tajweed, memorization, and topic-indexed reading with multi-translator translations.</p>
+            <span class="feat-cta"><span data-i18n="home.gw.explore">Explore</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
           </a>
 
           <!-- 2. Hadith — scroll icon -->
@@ -1785,9 +1821,9 @@ html {
                 <line x1="10" y1="9" x2="8" y2="9"/>
               </svg>
             </div>
-            <h3>Hadith Library</h3>
-            <p>Searchable, authenticated collections — Bukhari, Muslim, Tirmidhi — with grading by classical scholars.</p>
-            <span class="feat-cta">Browse <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            <h3 data-i18n="home.gw.hadith.title">Hadith Library</h3>
+            <p data-i18n="home.gw.hadith.desc">Searchable, authenticated collections — Bukhari, Muslim, Tirmidhi — with grading by classical scholars.</p>
+            <span class="feat-cta"><span data-i18n="home.gw.browse">Browse</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
           </a>
 
           <!-- 3. Duas — praying hands icon -->
@@ -1800,14 +1836,14 @@ html {
                 <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
               </svg>
             </div>
-            <h3>Dua Collection</h3>
-            <p>Categorized supplications for every occasion — sourced from Hisn al-Muslim and authentic hadith.</p>
-            <span class="feat-cta">View <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            <h3 data-i18n="home.gw.dua.title">Dua Collection</h3>
+            <p data-i18n="home.gw.dua.desc">Categorized supplications for every occasion — sourced from Hisn al-Muslim and authentic hadith.</p>
+            <span class="feat-cta"><span data-i18n="home.gw.view">View</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
           </a>
 
           <!-- 4. Habit Tracker — calendar-check icon (flagship) -->
           <a href="habits.html" class="feat card flagship reveal reveal-d4">
-            <span class="feat-badge">NEW</span>
+            <span class="feat-badge" data-i18n="home.gw.new">NEW</span>
             <div class="feat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
                 <rect x="3" y="4" width="18" height="18" rx="2"/>
@@ -1817,13 +1853,13 @@ html {
                 <path d="M9 16l2 2 4-4"/>
               </svg>
             </div>
-            <h3>Islamic Habit Tracker</h3>
-            <p>Track prayers, Quran progress, and daily worship streaks with intelligent insights.</p>
+            <h3 data-i18n="home.gw.habits.title">Islamic Habit Tracker</h3>
+            <p data-i18n="home.gw.habits.desc">Track prayers, Quran progress, and daily worship streaks with intelligent insights.</p>
             <div class="flagship-preview">
-              <span>🔥 14-day Fajr</span>
-              <span>📖 Juz 12</span>
+              <span data-i18n="home.gw.habits.preview1">🔥 14-day Fajr</span>
+              <span data-i18n="home.gw.habits.preview2">📖 Juz 12</span>
             </div>
-            <span class="feat-cta" style="color:var(--gold-700);font-weight:600;">Start Tracking <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            <span class="feat-cta" style="color:var(--gold-700);font-weight:600;"><span data-i18n="home.gw.habits.cta">Start Tracking</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
           </a>
 
           <!-- 5. Tools — gear/compass icon -->
@@ -1836,9 +1872,9 @@ html {
                 <line x1="12" y1="19" x2="12" y2="22"/>
               </svg>
             </div>
-            <h3>Prayer &amp; Qibla Tools</h3>
-            <p>Qibla direction compass, accurate prayer times for any city, adhan reminders, and Islamic calendar with hijri dates.</p>
-            <span class="feat-cta">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            <h3 data-i18n="home.gw.tools.title">Prayer &amp; Qibla Tools</h3>
+            <p data-i18n="home.gw.tools.desc">Qibla direction compass, accurate prayer times for any city, adhan reminders, and Islamic calendar with hijri dates.</p>
+            <span class="feat-cta"><span data-i18n="home.gw.open">Open</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
           </a>
 
           <!-- 6. Learn with AI — brain/sparkle icon -->
@@ -1849,9 +1885,9 @@ html {
                 <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2Z"/>
               </svg>
             </div>
-            <h3>Learn with AI Tutor</h3>
-            <p>QuranlyAI — our AI tutor trained on classical Islamic scholarship. Available on the QuranlyAI mobile app. Ask questions, get cited answers, build knowledge systematically.</p>
-            <span class="feat-cta">Try QuranlyAI ↗ <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            <h3 data-i18n="home.gw.ai.title">Learn with AI Tutor</h3>
+            <p data-i18n="home.gw.ai.desc">QuranlyAI — our AI tutor trained on classical Islamic scholarship. Available on the QuranlyAI mobile app. Ask questions, get cited answers, build knowledge systematically.</p>
+            <span class="feat-cta"><span data-i18n="home.gw.ai.cta">Try QuranlyAI ↗</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
           </a>
 
           <!-- 7. Islamic Studies — graduation/book icon -->
@@ -1862,9 +1898,9 @@ html {
                 <path d="M6 12v5c3 3 9 3 12 0v-5"/>
               </svg>
             </div>
-            <h3>Islamic Studies</h3>
-            <p>Scholar-reviewed guides on aqeedah, fiqh, seerah, and more. Beginner to advanced paths — every article carries author credentials and review date.</p>
-            <span class="feat-cta">Study <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            <h3 data-i18n="home.gw.studies.title">Islamic Studies</h3>
+            <p data-i18n="home.gw.studies.desc">Scholar-reviewed guides on aqeedah, fiqh, seerah, and more. Beginner to advanced paths — every article carries author credentials and review date.</p>
+            <span class="feat-cta"><span data-i18n="home.gw.study">Study</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
           </a>
 
           <!-- 8. Verify — shield/check icon -->
@@ -1875,9 +1911,9 @@ html {
                 <path d="M9 12l2 2 4-4"/>
               </svg>
             </div>
-            <h3>Verify Islamic Claims</h3>
-            <p>Heard a hadith you're unsure about? Our AI-powered verification engine cross-references primary sources — never fabricates, only cites.</p>
-            <span class="feat-cta">Verify <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+            <h3 data-i18n="home.gw.verify.title">Verify Islamic Claims</h3>
+            <p data-i18n="home.gw.verify.desc">Heard a hadith you're unsure about? Our AI-powered verification engine cross-references primary sources — never fabricates, only cites.</p>
+            <span class="feat-cta"><span data-i18n="home.gw.verifyCta">Verify</span> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
           </a>
         </div>
       </div>
@@ -1889,7 +1925,7 @@ html {
         <div class="divider-ornate">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 9 L21 10 L16 15 L17 22 L12 18 L7 22 L8 15 L3 10 L10 9 Z"/></svg>
         </div>
-        <p class="reflection-quote reveal">"And He found you lost and guided you. And He found you in need and made you self-sufficient."</p>
+        <p class="reflection-quote reveal" data-i18n="home.refl.quote">"And He found you lost and guided you. And He found you in need and made you self-sufficient."</p>
         <p class="reflection-cite">Surah Ad-Duhaa · 93:7–8</p>
         <div class="divider-ornate">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 9 L21 10 L16 15 L17 22 L12 18 L7 22 L8 15 L3 10 L10 9 Z"/></svg>
@@ -1902,9 +1938,9 @@ html {
       <div class="container">
         <div class="verify-preview">
           <div class="reveal">
-            <span class="eyebrow" style="margin-bottom:18px;display:inline-flex;">Trust · Verify · Understand</span>
-            <h2 class="t-display-lg" style="margin:18px 0 24px">Found a quote attributed <br><span class="gradient-italic">to the Prophet ﷺ?</span></h2>
-            <p style="font-size:17px;color:var(--ink-muted);line-height:1.7;max-width:480px;">Paste it into our verification engine to cross-reference authenticated sources, see the chain of narration, and receive a confidence score — never a ruling.</p>
+            <span class="eyebrow" style="margin-bottom:18px;display:inline-flex;" data-i18n="home.vp.eyebrow">Trust · Verify · Understand</span>
+            <h2 class="t-display-lg" style="margin:18px 0 24px" data-i18n="home.vp.h2" data-i18n-html>Found a quote attributed <br><span class="gradient-italic">to the Prophet ﷺ?</span></h2>
+            <p style="font-size:17px;color:var(--ink-muted);line-height:1.7;max-width:480px;" data-i18n="home.vp.sub">Paste it into our verification engine to cross-reference authenticated sources, see the chain of narration, and receive a confidence score — never a ruling.</p>
 
             <!-- Trust indicators -->
             <div class="verify-trust-row">
@@ -1912,30 +1948,30 @@ html {
                 <div class="vt-icon">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
                 </div>
-                <span>Primary sources only</span>
+                <span data-i18n="home.vp.t1">Primary sources only</span>
               </div>
               <div class="vt-item">
                 <div class="vt-icon">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 </div>
-                <span>Classical scholar grading</span>
+                <span data-i18n="home.vp.t2">Classical scholar grading</span>
               </div>
               <div class="vt-item">
                 <div class="vt-icon">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                 </div>
-                <span>Confidence score + chain</span>
+                <span data-i18n="home.vp.t3">Confidence score + chain</span>
               </div>
             </div>
 
             <a href="verify.html" class="btn btn-primary" style="margin-top:32px">
-              Verify Information
+              <span data-i18n="home.vp.cta">Verify Information</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </a>
           </div>
 
           <div class="card confidence-card card-featured reveal reveal-d2" style="animation:none;">
-            <span class="eyebrow" style="margin-bottom:14px;display:inline-flex;">Analysis Complete</span>
+            <span class="eyebrow" style="margin-bottom:14px;display:inline-flex;" data-i18n="home.vp.done">Analysis Complete</span>
             <div class="confidence-head">
               <div class="confidence-dial">
                 <svg width="96" height="96" viewBox="0 0 100 100">
@@ -1946,23 +1982,23 @@ html {
                 <div class="num">87%</div>
               </div>
               <div class="confidence-info">
-                <h4>Authentic (Sahih)</h4>
-                <p>Confidence · 3 primary citations</p>
+                <h4 data-i18n="home.vp.grade">Authentic (Sahih)</h4>
+                <p data-i18n="home.vp.conf">Confidence · 3 primary citations</p>
               </div>
             </div>
             <div class="evidence">
               <div class="ref">📖 Sunan Ibn Majah · 224</div>
-              <div class="text">"Seeking knowledge is a duty upon every Muslim."</div>
+              <div class="text" data-i18n="home.vp.ev1">"Seeking knowledge is a duty upon every Muslim."</div>
             </div>
             <div class="evidence" style="border-left-color:var(--gold-500);background:rgba(197,160,89,.05);">
               <div class="ref" style="color:var(--gold-700)">📖 Surah Ta-Ha · 20:114</div>
-              <div class="text">"...My Lord, increase me in knowledge."</div>
+              <div class="text" data-i18n="home.vp.ev2">"...My Lord, increase me in knowledge."</div>
             </div>
             <!-- Narration chain mini -->
             <div class="chain-row">
-              <div class="chain-label">Narration chain</div>
+              <div class="chain-label" data-i18n="home.vp.chainLabel">Narration chain</div>
               <div class="chain-nodes">
-                <div class="chain-node active">Prophet ﷺ</div>
+                <div class="chain-node active" data-i18n="home.vp.prophet">Prophet ﷺ</div>
                 <div class="chain-arrow">→</div>
                 <div class="chain-node">Anas ibn Mālik</div>
                 <div class="chain-arrow">→</div>
@@ -1978,9 +2014,9 @@ html {
     <section class="section sources-section" data-screen-label="Trusted Sources">
       <div class="container">
         <div class="section-head reveal" style="margin-bottom:32px;">
-          <span class="eyebrow">Our Foundation</span>
-          <h2 class="t-display-lg">Built on <span class="gradient-italic">authentic scholarship</span></h2>
-          <p style="color:var(--ink-muted);font-size:16px;max-width:520px;margin:12px auto 0;">Every piece of content traces back to a named primary source — no anonymous quotes, no unverified attributions.</p>
+          <span class="eyebrow" data-i18n="home.ts.eyebrow">Our Foundation</span>
+          <h2 class="t-display-lg" data-i18n="home.ts.h2" data-i18n-html>Built on <span class="gradient-italic">authentic scholarship</span></h2>
+          <p style="color:var(--ink-muted);font-size:16px;max-width:520px;margin:12px auto 0;" data-i18n="home.ts.sub">Every piece of content traces back to a named primary source — no anonymous quotes, no unverified attributions.</p>
         </div>
 
         <div class="sources-pillars">
@@ -1989,8 +2025,8 @@ html {
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
             </div>
             <div class="sp-num">6,236</div>
-            <div class="sp-name">Qur'anic Verses</div>
-            <div class="sp-desc">Complete Qur'an with 12+ translations, word-by-word analysis, and classical tafsir from Ibn Kathir, Al-Tabari, and Al-Qurtubi.</div>
+            <div class="sp-name" data-i18n="home.ts.p1.name">Qur'anic Verses</div>
+            <div class="sp-desc" data-i18n="home.ts.p1.desc">Complete Qur'an with 12+ translations, word-by-word analysis, and classical tafsir from Ibn Kathir, Al-Tabari, and Al-Qurtubi.</div>
             <div class="sp-sources">
               <span class="sp-tag">Sahih International</span>
               <span class="sp-tag">Yusuf Ali</span>
@@ -2003,13 +2039,13 @@ html {
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             </div>
             <div class="sp-num">52,000+</div>
-            <div class="sp-name">Verified Hadith</div>
-            <div class="sp-desc">Six canonical books graded by classical scholars. Every hadith displays its isnad and the scholar's verdict — Sahih, Hasan, or Da'if.</div>
+            <div class="sp-name" data-i18n="home.ts.p2.name">Verified Hadith</div>
+            <div class="sp-desc" data-i18n="home.ts.p2.desc">Six canonical books graded by classical scholars. Every hadith displays its isnad and the scholar's verdict — Sahih, Hasan, or Da'if.</div>
             <div class="sp-sources">
               <span class="sp-tag">Bukhari</span>
               <span class="sp-tag">Muslim</span>
               <span class="sp-tag">Tirmidhi</span>
-              <span class="sp-tag">+ 3 more</span>
+              <span class="sp-tag" data-i18n="home.ts.p2.more">+ 3 more</span>
             </div>
           </div>
 
@@ -2018,8 +2054,8 @@ html {
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
             </div>
             <div class="sp-num">1,240+</div>
-            <div class="sp-name">Authenticated Duas</div>
-            <div class="sp-desc">Supplications sourced exclusively from Hisn al-Muslim and authenticated hadith — every dua carries its reference and occasion.</div>
+            <div class="sp-name" data-i18n="home.ts.p3.name">Authenticated Duas</div>
+            <div class="sp-desc" data-i18n="home.ts.p3.desc">Supplications sourced exclusively from Hisn al-Muslim and authenticated hadith — every dua carries its reference and occasion.</div>
             <div class="sp-sources">
               <span class="sp-tag">Hisn al-Muslim</span>
               <span class="sp-tag">Bukhari</span>
@@ -2032,22 +2068,22 @@ html {
         <div class="methodology-bar reveal">
           <div class="mb-item">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span>No ads. No sponsored content.</span>
+            <span data-i18n="home.ts.mb1">No ads. No sponsored content.</span>
           </div>
           <div class="mb-sep"></div>
           <div class="mb-item">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-            <span>Every claim source-cited.</span>
+            <span data-i18n="home.ts.mb2">Every claim source-cited.</span>
           </div>
           <div class="mb-sep"></div>
           <div class="mb-item">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <span>Built by Muslims, for Muslims.</span>
+            <span data-i18n="home.ts.mb3">Built by Muslims, for Muslims.</span>
           </div>
           <div class="mb-sep"></div>
           <div class="mb-item">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <span>Privacy-first. Always free.</span>
+            <span data-i18n="home.ts.mb4">Privacy-first. Always free.</span>
           </div>
         </div>
       </div>
@@ -2073,33 +2109,33 @@ html {
     </div>
 
     <!-- Heading -->
-    <h2 class="about-heading">About IslamicInfo.org</h2>
+    <h2 class="about-heading" data-i18n="home.about.heading">About IslamicInfo.org</h2>
 
     <!-- Body text -->
-    <p class="about-body">
+    <p class="about-body" data-i18n="home.about.body">
       IslamicInfo.org is a premium Islamic knowledge platform created to help Muslims learn, explore, and stay connected to authentic guidance from the Qur'an, Hadith, duas, and essential daily-life tools. Designed as a trustworthy digital sanctuary, the platform combines reliable Islamic sources with a clean, modern experience that supports both meaningful learning and practical everyday use.
     </p>
 
     <!-- Stats -->
     <div class="about-stats">
       <div class="about-stat">
-        <div class="about-stat-num">Qur'an, Hadith &amp; Duas</div>
-        <div class="about-stat-lbl">Verified Sacred Sources</div>
+        <div class="about-stat-num" data-i18n="home.about.s1n">Qur'an, Hadith &amp; Duas</div>
+        <div class="about-stat-lbl" data-i18n="home.about.s1l">Verified Sacred Sources</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">Daily Islamic Tools</div>
-        <div class="about-stat-lbl">Prayer, Qibla &amp; Habits</div>
+        <div class="about-stat-num" data-i18n="home.about.s2n">Daily Islamic Tools</div>
+        <div class="about-stat-lbl" data-i18n="home.about.s2l">Prayer, Qibla &amp; Habits</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">AI-Powered Learning</div>
-        <div class="about-stat-lbl">Guided by Scholarship</div>
+        <div class="about-stat-num" data-i18n="home.about.s3n">AI-Powered Learning</div>
+        <div class="about-stat-lbl" data-i18n="home.about.s3l">Guided by Scholarship</div>
       </div>
     </div>
 
     <!-- CTA link -->
     <div class="about-link-wrap">
       <a class="about-cta-link" href="about.html">
-        Read Our Methodology
+        <span data-i18n="home.about.cta">Read Our Methodology</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
     </div>
@@ -2109,21 +2145,21 @@ html {
 
 <!-- CTA Section -->
 <section class="cta-section">
-  <div class="cta-badge reveal">✦ Begin Your Journey</div>
-  <h2 class="cta-title reveal reveal-d1">Start Learning Islam<br>the <span class="gold-it">Right Way</span></h2>
-  <p class="cta-sub reveal reveal-d2">Join thousands of Muslims using IslamicInfo.org to deepen their knowledge through verified sources and guided learning.</p>
+  <div class="cta-badge reveal" data-i18n="home.cta2.badge">✦ Begin Your Journey</div>
+  <h2 class="cta-title reveal reveal-d1" data-i18n="home.cta2.title" data-i18n-html>Start Learning Islam<br>the <span class="gold-it">Right Way</span></h2>
+  <p class="cta-sub reveal reveal-d2" data-i18n="home.cta2.sub">Join thousands of Muslims using IslamicInfo.org to deepen their knowledge through verified sources and guided learning.</p>
   <div class="cta-actions reveal reveal-d3">
     <a class="btn-gold" href="quran.html">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-      Explore Qur'an
+      <span data-i18n="home.cta2.explore">Explore Qur'an</span>
     </a>
     <a class="btn-white-ghost" href="verify.html">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-      Verify a Hadith
+      <span data-i18n="home.cta2.verify">Verify a Hadith</span>
     </a>
     <a class="btn-white-ghost" href="knowledge-hub.html">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      Browse Knowledge Hub
+      <span data-i18n="home.cta2.hub">Browse Knowledge Hub</span>
     </a>
   </div>
 
@@ -2132,8 +2168,8 @@ html {
     <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--teal-700),var(--teal-500));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2Z"/></svg>
     </div>
-    <span style="font-size:13px;color:rgba(255,255,255,.65);">Want AI-powered tutoring?</span>
-    <a href="https://quranlyai.com" target="_blank" rel="noopener" style="font-size:13px;font-weight:600;color:var(--gold-300,#E5C570);text-decoration:none;display:flex;align-items:center;gap:4px;">Try QuranlyAI ↗</a>
+    <span style="font-size:13px;color:rgba(255,255,255,.65);" data-i18n="home.cta2.promo">Want AI-powered tutoring?</span>
+    <a href="https://quranlyai.com" target="_blank" rel="noopener" style="font-size:13px;font-weight:600;color:var(--gold-300,#E5C570);text-decoration:none;display:flex;align-items:center;gap:4px;" data-i18n="home.cta2.promoCta">Try QuranlyAI ↗</a>
   </div>
 </section>
 
@@ -2268,26 +2304,26 @@ QUICK TEST CHECKLIST:
           <span class="ii-footer-logo-text-islamic">Islamic</span><span class="ii-footer-logo-text-info">Info</span>
         </span>
       </a>
-      <p class="ii-footer-tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
+      <p class="ii-footer-tagline" data-i18n="chrome.footer.tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
       <p class="ii-footer-verse">وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ &nbsp;— Hud · 11:88</p>
     </div>
 
     <!-- ── Quick Access ── -->
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Quick Access</div>
-      <a class="ii-footer-link" href="quran.html">Quran Explorer</a>
-      <a class="ii-footer-link" href="hadith.html">Hadith Library</a>
-      <a class="ii-footer-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="ii-footer-link" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="ii-footer-link" href="dua.html">Daily Duas</a>
-      <a class="ii-footer-link" href="tools.html">Islamic Tools</a>
-      <a class="ii-footer-link" href="habits.html">Habit Tracker</a>
-      <a class="ii-footer-link" href="verify.html">Verify a Claim</a>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.quickAccess">Quick Access</div>
+      <a class="ii-footer-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="ii-footer-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="ii-footer-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="ii-footer-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="ii-footer-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="ii-footer-link" href="tools.html" data-i18n="chrome.footer.linkTools">Islamic Tools</a>
+      <a class="ii-footer-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="ii-footer-link" href="verify.html" data-i18n="chrome.footer.linkVerify">Verify a Claim</a>
     </div>
 
     <!-- ── Our Ecosystem ── -->
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Our Ecosystem</div>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.ecosystem">Our Ecosystem</div>
       <a class="ii-footer-link ii-footer-link-ext" href="https://islamickids.org" target="_blank" rel="noopener">IslamicKids.org ↗</a>
       <a class="ii-footer-link ii-footer-link-ext" href="https://quranlyai.com" target="_blank" rel="noopener">QuranlyAI ↗</a>
       <a class="ii-footer-link ii-footer-link-ext" href="https://hadithiq.com" target="_blank" rel="noopener">HadithIQ ↗</a>
@@ -2298,29 +2334,30 @@ QUICK TEST CHECKLIST:
 
     <!-- ── Company ── -->
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Company</div>
-      <a class="ii-footer-link" href="about.html">About</a>
-      <a class="ii-footer-link" href="contact.html">Contact</a>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.company">Company</div>
+      <a class="ii-footer-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+      <a class="ii-footer-link" href="contact.html" data-i18n="chrome.footer.contact">Contact</a>
     </div>
 
     <!-- ── Legal ── -->
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Legal</div>
-      <a class="ii-footer-link" href="privacy.html">Privacy Policy</a>
-      <a class="ii-footer-link" href="terms.html">Terms of Use</a>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.legal">Legal</div>
+      <a class="ii-footer-link" href="privacy.html" data-i18n="chrome.footer.privacy">Privacy Policy</a>
+      <a class="ii-footer-link" href="terms.html" data-i18n="chrome.footer.terms">Terms of Use</a>
     </div>
 
   </div>
 
   <!-- ── Bottom bar ── -->
   <div class="ii-footer-bottom">
-    <div class="ii-footer-copy">
+    <div class="ii-footer-copy" data-i18n="chrome.footer.copy" data-i18n-html>
       © 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.
     </div>
-    <div class="ii-footer-note">All content source-verified · Privacy-first · Built with sincerity</div>
+    <div class="ii-footer-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
   </div>
 </footer>
 
+<script src="src/js/i18n.js"></script>
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
 <script src="src/js/home.js"></script>

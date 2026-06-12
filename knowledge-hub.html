@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Knowledge Hub — IslamicInfo.org</title>
+<title data-i18n="hub.title">Knowledge Hub — IslamicInfo.org</title>
+<script>
+  /* i18n FOUC guard: set lang/dir before first paint */
+  (function(){
+    var l = localStorage.getItem('islamicinfo-lang') || 'en';
+    document.documentElement.setAttribute('lang', l);
+    if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
+  })();
+</script>
 <meta name="description" content="The world's most comprehensive Islamic knowledge hub. Explore articles on the Quran, Hadith, Islamic law, history, prophets, and modern Muslim life — all source-verified.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,7 +101,7 @@ a{text-decoration:none;color:inherit;}
 .hamburger span{width:16px;height:1.5px;background:var(--ink-muted);border-radius:2px;display:block;}
 @media(max-width:1100px){.nav-link{font-size:11.5px;padding:5px 5px;}}
 @media(max-width:900px){.nav-link{font-size:10.5px;padding:5px 3px;}.brand{font-size:16px;}.brand-mark{width:28px;height:28px;}}
-@media(max-width:760px){.nav{display:none;}.header-tools .icon-btn:not(.theme-toggle):not(.search-trigger):not(.hamburger){display:none;}.hamburger{display:flex;}}
+@media(max-width:760px){.nav{display:none;}.header-tools .icon-btn:not(.theme-toggle):not(.search-trigger):not(.hamburger):not(.lang-trigger){display:none;}.hamburger{display:flex;}}
 
 /* MOBILE MENU */
 .mobile-menu{display:none;position:fixed;inset:0;z-index:300;background:rgba(6,38,40,.97);backdrop-filter:blur(20px);flex-direction:column;padding:24px 28px;gap:4px;}
@@ -519,6 +527,27 @@ a{text-decoration:none;color:inherit;}
 .ii-footer-copy{font-size:12px;color:rgba(255,255,255,.24);}
 .ii-footer-copy a{color:#C5A059;text-decoration:none;}
 .ii-footer-note{font-size:11.5px;color:rgba(255,255,255,.18);font-style:italic;font-family:'Cormorant Garamond',serif;}
+
+/* ── Language dropdown ── */
+.lang-wrapper{position:relative;}
+.lang-menu{position:absolute;top:44px;right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.lang-menu.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .lang-menu{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.lang-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;background:transparent;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;color:var(--ink-body);text-align:left;transition:background .2s,color .2s;}
+.lang-item:hover{background:rgba(0,105,110,.08);}
+[data-theme="dark"] .lang-item:hover{background:rgba(0,105,110,.15);}
+.lang-item.on{color:var(--teal-700);font-weight:600;background:rgba(0,105,110,.06);}
+[data-theme="dark"] .lang-item.on{color:var(--teal-300);}
+.lang-code{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ink-subtle);width:24px;flex-shrink:0;}
+
+/* ── RTL patches ── */
+[dir="rtl"] .lang-menu{right:auto;left:0;}
+[dir="rtl"] .lang-item{text-align:right;}
+[dir="rtl"] .search-popup{right:auto;left:0;}
+[dir="rtl"] .header-tools{margin-left:0;margin-right:auto;}
+[dir="rtl"] .ii-footer-link:hover{transform:translateX(-4px);}
+[dir="rtl"] .mobile-menu{direction:rtl;}
+[dir="rtl"] .mm-link:hover{padding-left:0;padding-right:8px;}
 </style>
 </head>
 <body>
@@ -533,16 +562,16 @@ a{text-decoration:none;color:inherit;}
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
   </div>
-  <a class="mm-link" href="index.html">Home</a>
-  <a class="mm-link" href="quran.html">Quran Explorer</a>
-  <a class="mm-link" href="hadith.html">Hadith Library</a>
-  <a class="mm-link" href="islamic-studies.html">Islamic Studies</a>
-  <a class="mm-link active" href="knowledge-hub.html">Knowledge Hub</a>
-  <a class="mm-link" href="dua.html">Daily Duas</a>
-  <a class="mm-link" href="tools.html">Tools</a>
-  <a class="mm-link" href="habits.html">Habit Tracker</a>
-  <a class="mm-link" href="verify.html">Verify</a>
-  <a class="mm-link" href="about.html">About</a>
+  <a class="mm-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+  <a class="mm-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+  <a class="mm-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+  <a class="mm-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+  <a class="mm-link active" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+  <a class="mm-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+  <a class="mm-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+  <a class="mm-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+  <a class="mm-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+  <a class="mm-link" href="about.html" data-i18n="chrome.nav.about">About</a>
 </div>
 
 <!-- NAV -->
@@ -564,16 +593,16 @@ a{text-decoration:none;color:inherit;}
       <span class="brand-text"><span>Islamic</span><span class="info">Info</span></span>
     </a>
     <nav class="nav">
-      <a class="nav-link" href="index.html">Home</a>
-      <a class="nav-link" href="quran.html">Quran Explorer</a>
-      <a class="nav-link" href="hadith.html">Hadith Library</a>
-      <a class="nav-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="nav-link active" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="nav-link" href="dua.html">Daily Duas</a>
-      <a class="nav-link" href="tools.html">Tools</a>
-      <a class="nav-link" href="habits.html">Habit Tracker</a>
-      <a class="nav-link" href="verify.html">Verify</a>
-      <a class="nav-link" href="about.html">About</a>
+      <a class="nav-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+      <a class="nav-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="nav-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="nav-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="nav-link active" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="nav-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="nav-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+      <a class="nav-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="nav-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+      <a class="nav-link" href="about.html" data-i18n="chrome.nav.about">About</a>
     </nav>
     <div class="header-tools">
       <div class="search-popup-wrapper">
@@ -581,14 +610,19 @@ a{text-decoration:none;color:inherit;}
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         </button>
         <div class="search-popup" id="searchPopup">
-          <input type="text" placeholder="Search articles, topics, questions…" id="searchPopupInput"/>
+          <input type="text" placeholder="Search articles, topics, questions…" id="searchPopupInput" data-i18n-attr="placeholder:chrome.search.placeholder;aria-label:chrome.search.inputAria"/>
           <button class="search-popup-btn">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-            Search
+            <span data-i18n="chrome.search.button">Search</span>
           </button>
         </div>
       </div>
-      <button class="icon-btn"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span></button>
+      <div class="lang-wrapper">
+        <button class="icon-btn lang-trigger" id="langBtn" aria-label="Language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
+          <span id="langBtnCode" style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
+        </button>
+        <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
+      </div>
       <button class="icon-btn theme-toggle" id="themeBtn"></button>
       <button class="icon-btn" style="display:none">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
@@ -607,27 +641,27 @@ a{text-decoration:none;color:inherit;}
   <div class="geo g4"><svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="#8A7036" stroke-width=".5"><polygon points="19,2 22,12 32,12 24,18 27,28 19,22 11,28 14,18 6,12 16,12" transform="rotate(22 19 19)"/></svg></div>
   <div class="hero-inner">
     <div class="bismillah-hero-top">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-    <div class="hero-badge"><div class="badge-dot"></div>Islamic Knowledge Hub · Est. 2026</div>
-    <h1 class="hero-title">Every Question.<br><span class="gradient-italic">Every Answer. Verified.</span></h1>
-    <p class="hero-sub">The world's most comprehensive source-verified Islamic knowledge base. Explore thousands of articles across Qur'an, Hadith, Fiqh, History, and modern Muslim life — all referenced, ranked by scholars, free forever.</p>
+    <div class="hero-badge"><div class="badge-dot"></div><span data-i18n="hub.hero.badge">Islamic Knowledge Hub · Est. 2026</span></div>
+    <h1 class="hero-title" data-i18n="hub.hero.title" data-i18n-html>Every Question.<br><span class="gradient-italic">Every Answer. Verified.</span></h1>
+    <p class="hero-sub" data-i18n="hub.hero.sub">The world's most comprehensive source-verified Islamic knowledge base. Explore thousands of articles across Qur'an, Hadith, Fiqh, History, and modern Muslim life — all referenced, ranked by scholars, free forever.</p>
     <div class="hero-search">
       <div class="hs-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-subtle)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="khSearchInput" placeholder="What does Islam say about… what is… how many…">
+        <input type="text" id="khSearchInput" placeholder="What does Islam say about… what is… how many…" data-i18n-attr="placeholder:hub.hero.searchPlaceholder">
         <button class="hs-btn">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          Search Hub
+          <span data-i18n="hub.hero.searchBtn">Search Hub</span>
         </button>
       </div>
     </div>
     <div class="hero-tags">
-      <span class="hero-tag">What is Zakat?</span>
-      <span class="hero-tag">99 Names of Allah</span>
-      <span class="hero-tag">Pillars of Islam</span>
-      <span class="hero-tag">Is music haram?</span>
-      <span class="hero-tag">Prophet Muhammad ﷺ</span>
-      <span class="hero-tag">Day of Judgment</span>
-      <span class="hero-tag">Ramadan guide</span>
+      <span class="hero-tag" data-i18n="hub.hero.tag1">What is Zakat?</span>
+      <span class="hero-tag" data-i18n="hub.hero.tag2">99 Names of Allah</span>
+      <span class="hero-tag" data-i18n="hub.hero.tag3">Pillars of Islam</span>
+      <span class="hero-tag" data-i18n="hub.hero.tag4">Is music haram?</span>
+      <span class="hero-tag" data-i18n="hub.hero.tag5">Prophet Muhammad ﷺ</span>
+      <span class="hero-tag" data-i18n="hub.hero.tag6">Day of Judgment</span>
+      <span class="hero-tag" data-i18n="hub.hero.tag7">Ramadan guide</span>
     </div>
   </div>
 </section>
@@ -635,42 +669,42 @@ a{text-decoration:none;color:inherit;}
 <!-- LIVE TICKER -->
 <div class="ticker">
   <div class="ticker-inner" id="ticker">
-    <div class="ticker-item"><span class="ticker-label">Trending</span><span class="ticker-dot"></span>What are the 99 Names of Allah?</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>How many times is prayer mentioned in the Quran?</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>The Four Schools of Islamic Law — Compared</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>What did Ibn Khaldun say about civilization?</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Zakat al-Fitr vs Zakat al-Mal — Key Differences</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>The Night of Qadr: What Scholars Agree On</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Understanding Tawakkul: Complete Guide</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Islamic Finance — Halal Investment Principles</div>
+    <div class="ticker-item"><span class="ticker-label" data-i18n="hub.ticker.label">Trending</span><span class="ticker-dot"></span><span data-i18n="hub.ticker.item1">What are the 99 Names of Allah?</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item2">How many times is prayer mentioned in the Quran?</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item3">The Four Schools of Islamic Law — Compared</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item4">What did Ibn Khaldun say about civilization?</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item5">Zakat al-Fitr vs Zakat al-Mal — Key Differences</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item6">The Night of Qadr: What Scholars Agree On</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item7">Understanding Tawakkul: Complete Guide</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item8">Islamic Finance — Halal Investment Principles</span></div>
     <!-- duplicate for seamless loop -->
-    <div class="ticker-item"><span class="ticker-label">Trending</span><span class="ticker-dot"></span>What are the 99 Names of Allah?</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>How many times is prayer mentioned in the Quran?</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>The Four Schools of Islamic Law — Compared</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>What did Ibn Khaldun say about civilization?</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Zakat al-Fitr vs Zakat al-Mal — Key Differences</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>The Night of Qadr: What Scholars Agree On</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Understanding Tawakkul: Complete Guide</div>
-    <div class="ticker-item"><span class="ticker-dot"></span>Islamic Finance — Halal Investment Principles</div>
+    <div class="ticker-item"><span class="ticker-label" data-i18n="hub.ticker.label">Trending</span><span class="ticker-dot"></span><span data-i18n="hub.ticker.item1">What are the 99 Names of Allah?</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item2">How many times is prayer mentioned in the Quran?</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item3">The Four Schools of Islamic Law — Compared</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item4">What did Ibn Khaldun say about civilization?</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item5">Zakat al-Fitr vs Zakat al-Mal — Key Differences</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item6">The Night of Qadr: What Scholars Agree On</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item7">Understanding Tawakkul: Complete Guide</span></div>
+    <div class="ticker-item"><span class="ticker-dot"></span><span data-i18n="hub.ticker.item8">Islamic Finance — Halal Investment Principles</span></div>
   </div>
 </div>
 
 <!-- STATS STRIP -->
 <div class="stats-strip">
-  <div class="stat-cell reveal"><div class="stat-num">2,400<em>+</em></div><div class="stat-label">Articles</div></div>
-  <div class="stat-cell reveal reveal-d1"><div class="stat-num">8<em></em></div><div class="stat-label">Topic Clusters</div></div>
-  <div class="stat-cell reveal reveal-d2"><div class="stat-num">47<em>+</em></div><div class="stat-label">Scholar Sources</div></div>
-  <div class="stat-cell reveal reveal-d3"><div class="stat-num">180<em>+</em></div><div class="stat-label">Countries Reached</div></div>
-  <div class="stat-cell reveal reveal-d4"><div class="stat-num">0</div><div class="stat-label">Ads. Fatwas. Bias.</div></div>
+  <div class="stat-cell reveal"><div class="stat-num">2,400<em>+</em></div><div class="stat-label" data-i18n="hub.stats.label1">Articles</div></div>
+  <div class="stat-cell reveal reveal-d1"><div class="stat-num">8<em></em></div><div class="stat-label" data-i18n="hub.stats.label2">Topic Clusters</div></div>
+  <div class="stat-cell reveal reveal-d2"><div class="stat-num">47<em>+</em></div><div class="stat-label" data-i18n="hub.stats.label3">Scholar Sources</div></div>
+  <div class="stat-cell reveal reveal-d3"><div class="stat-num">180<em>+</em></div><div class="stat-label" data-i18n="hub.stats.label4">Countries Reached</div></div>
+  <div class="stat-cell reveal reveal-d4"><div class="stat-num">0</div><div class="stat-label" data-i18n="hub.stats.label5">Ads. Fatwas. Bias.</div></div>
 </div>
 
 <!-- FEATURED ARTICLES -->
 <section class="section" style="padding-bottom:clamp(48px,6vw,72px);">
   <div class="container">
     <div class="section-hdr reveal">
-      <div class="section-eyebrow">✦ Editor's Picks</div>
-      <h2 class="section-title">Featured This Week</h2>
-      <p class="section-sub">Our most thoroughly researched and widely read articles, selected by the editorial team.</p>
+      <div class="section-eyebrow" data-i18n="hub.featured.eyebrow">✦ Editor's Picks</div>
+      <h2 class="section-title" data-i18n="hub.featured.title">Featured This Week</h2>
+      <p class="section-sub" data-i18n="hub.featured.sub">Our most thoroughly researched and widely read articles, selected by the editorial team.</p>
     </div>
     <div class="featured-grid reveal">
       <!-- MAIN FEATURE -->
@@ -682,19 +716,19 @@ a{text-decoration:none;color:inherit;}
           </div>
           <div class="feat-reading-time">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            12 min read
+            <span data-i18n="hub.featured.readTime">12 min read</span>
           </div>
-          <div class="feat-cat-badge" style="background:rgba(197,160,89,.25);color:#E5C570;border:.5px solid rgba(197,160,89,.4);">Faith &amp; Theology</div>
+          <div class="feat-cat-badge" style="background:rgba(197,160,89,.25);color:#E5C570;border:.5px solid rgba(197,160,89,.4);" data-i18n="hub.featured.mainCat">Faith &amp; Theology</div>
         </div>
         <div class="feat-body">
           <div class="feat-meta">
-            <span class="feat-cat">Faith &amp; Theology</span><span class="feat-sep"></span><span class="feat-date">May 12, 2026</span>
+            <span class="feat-cat" data-i18n="hub.featured.mainCat">Faith &amp; Theology</span><span class="feat-sep"></span><span class="feat-date" data-i18n="hub.featured.date">May 12, 2026</span>
           </div>
-          <div class="feat-title">The 99 Names of Allah: A Complete Guide with Arabic, Meaning &amp; Scholarly Commentary</div>
-          <div class="feat-excerpt">A comprehensive exploration of Asma' ul-Husna — the 99 beautiful names of Allah — with original Arabic, transliteration, precise meaning, and commentary from Ibn Kathir, al-Nawawi, and contemporary scholars.</div>
+          <div class="feat-title" data-i18n="hub.featured.mainTitle">The 99 Names of Allah: A Complete Guide with Arabic, Meaning &amp; Scholarly Commentary</div>
+          <div class="feat-excerpt" data-i18n="hub.featured.mainExcerpt">A comprehensive exploration of Asma' ul-Husna — the 99 beautiful names of Allah — with original Arabic, transliteration, precise meaning, and commentary from Ibn Kathir, al-Nawawi, and contemporary scholars.</div>
           <div class="feat-footer">
-            <div class="feat-author"><div class="feat-avatar">✦</div>IslamicInfo Editorial · 3 sources cited</div>
-            <div class="feat-read-link">Read full article <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+            <div class="feat-author"><div class="feat-avatar">✦</div><span data-i18n="hub.featured.author">IslamicInfo Editorial · 3 sources cited</span></div>
+            <div class="feat-read-link"><span data-i18n="hub.featured.readLink">Read full article</span> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
           </div>
         </div>
       </div>
@@ -703,33 +737,33 @@ a{text-decoration:none;color:inherit;}
         <div class="side-card">
           <div class="side-icon" style="background:linear-gradient(135deg,rgba(0,105,110,.12),rgba(44,164,171,.06));">🕌</div>
           <div class="side-info">
-            <div class="side-cat">Islamic History</div>
-            <div class="side-title">The Golden Age of Islam: A Chronological Overview</div>
-            <div class="side-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>9 min · 5 sources</div>
+            <div class="side-cat" data-i18n="hub.featured.side1Cat">Islamic History</div>
+            <div class="side-title" data-i18n="hub.featured.side1Title">The Golden Age of Islam: A Chronological Overview</div>
+            <div class="side-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="hub.featured.side1Meta">9 min · 5 sources</span></div>
           </div>
         </div>
         <div class="side-card">
           <div class="side-icon" style="background:linear-gradient(135deg,rgba(197,160,89,.15),rgba(215,182,117,.06));">⚖️</div>
           <div class="side-info">
-            <div class="side-cat">Islamic Law · Fiqh</div>
-            <div class="side-title">Halal &amp; Haram: The Complete Framework Explained</div>
-            <div class="side-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>14 min · 7 sources</div>
+            <div class="side-cat" data-i18n="hub.featured.side2Cat">Islamic Law · Fiqh</div>
+            <div class="side-title" data-i18n="hub.featured.side2Title">Halal &amp; Haram: The Complete Framework Explained</div>
+            <div class="side-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="hub.featured.side2Meta">14 min · 7 sources</span></div>
           </div>
         </div>
         <div class="side-card">
           <div class="side-icon" style="background:linear-gradient(135deg,rgba(88,193,199,.1),rgba(44,164,171,.05));">📿</div>
           <div class="side-info">
-            <div class="side-cat">Spirituality</div>
-            <div class="side-title">Tawakkul: The Art of Trusting Allah Completely</div>
-            <div class="side-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 min · 4 sources</div>
+            <div class="side-cat" data-i18n="hub.featured.side3Cat">Spirituality</div>
+            <div class="side-title" data-i18n="hub.featured.side3Title">Tawakkul: The Art of Trusting Allah Completely</div>
+            <div class="side-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="hub.featured.side3Meta">7 min · 4 sources</span></div>
           </div>
         </div>
         <div class="side-card">
           <div class="side-icon" style="background:linear-gradient(135deg,rgba(138,112,54,.12),rgba(197,160,89,.06));">🌙</div>
           <div class="side-info">
-            <div class="side-cat">Worship &amp; Practice</div>
-            <div class="side-title">The Complete Ramadan Guide: Fasting, Prayer &amp; Purpose</div>
-            <div class="side-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>18 min · 8 sources</div>
+            <div class="side-cat" data-i18n="hub.featured.side4Cat">Worship &amp; Practice</div>
+            <div class="side-title" data-i18n="hub.featured.side4Title">The Complete Ramadan Guide: Fasting, Prayer &amp; Purpose</div>
+            <div class="side-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="hub.featured.side4Meta">18 min · 8 sources</span></div>
           </div>
         </div>
       </div>
@@ -741,80 +775,80 @@ a{text-decoration:none;color:inherit;}
 <section class="section" style="padding-top:0;">
   <div class="container">
     <div class="section-hdr reveal">
-      <div class="section-eyebrow">Browse by Topic</div>
-      <h2 class="section-title">8 Knowledge Clusters</h2>
-      <p class="section-sub">Every article on IslamicInfo belongs to one of these eight pillars of Islamic knowledge.</p>
+      <div class="section-eyebrow" data-i18n="hub.clusters.eyebrow">Browse by Topic</div>
+      <h2 class="section-title" data-i18n="hub.clusters.title">8 Knowledge Clusters</h2>
+      <p class="section-sub" data-i18n="hub.clusters.sub">Every article on IslamicInfo belongs to one of these eight pillars of Islamic knowledge.</p>
     </div>
     <div class="cluster-grid">
       <div class="cluster-card reveal" onclick="filterCluster('pillars')">
         <div class="cluster-icon" style="background:linear-gradient(135deg,rgba(0,105,110,.12),rgba(44,164,171,.06));">🕋</div>
-        <div class="cluster-name">The Five Pillars</div>
-        <div class="cluster-desc">Deep explainers on Shahada, Salah, Zakat, Sawm, and Hajj — the foundations of Islamic practice.</div>
+        <div class="cluster-name" data-i18n="hub.clusters.card1Name">The Five Pillars</div>
+        <div class="cluster-desc" data-i18n="hub.clusters.card1Desc">Deep explainers on Shahada, Salah, Zakat, Sawm, and Hajj — the foundations of Islamic practice.</div>
         <div class="cluster-footer">
-          <div class="cluster-count"><span>342 articles</span></div>
+          <div class="cluster-count"><span data-i18n="hub.clusters.card1Count">342 articles</span></div>
           <svg class="cluster-arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
       <div class="cluster-card reveal reveal-d1" onclick="filterCluster('quran')">
         <div class="cluster-icon" style="background:linear-gradient(135deg,rgba(0,105,110,.10),rgba(88,193,199,.05));">📖</div>
-        <div class="cluster-name">Qur'an &amp; Revelation</div>
-        <div class="cluster-desc">How the Quran was compiled, its structure, names, linguistic miracles, and science of Tafsir.</div>
+        <div class="cluster-name" data-i18n="hub.clusters.card2Name">Qur'an &amp; Revelation</div>
+        <div class="cluster-desc" data-i18n="hub.clusters.card2Desc">How the Quran was compiled, its structure, names, linguistic miracles, and science of Tafsir.</div>
         <div class="cluster-footer">
-          <div class="cluster-count"><span>287 articles</span></div>
+          <div class="cluster-count"><span data-i18n="hub.clusters.card2Count">287 articles</span></div>
           <svg class="cluster-arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
       <div class="cluster-card reveal reveal-d2" onclick="filterCluster('prophets')">
         <div class="cluster-icon" style="background:linear-gradient(135deg,rgba(197,160,89,.14),rgba(215,182,117,.06));">🌟</div>
-        <div class="cluster-name">Prophets &amp; Companions</div>
-        <div class="cluster-desc">Biographical accounts, character studies, and scholarly-sourced stories of the prophets and sahabah.</div>
+        <div class="cluster-name" data-i18n="hub.clusters.card3Name">Prophets &amp; Companions</div>
+        <div class="cluster-desc" data-i18n="hub.clusters.card3Desc">Biographical accounts, character studies, and scholarly-sourced stories of the prophets and sahabah.</div>
         <div class="cluster-footer">
-          <div class="cluster-count"><span>214 articles</span></div>
+          <div class="cluster-count"><span data-i18n="hub.clusters.card3Count">214 articles</span></div>
           <svg class="cluster-arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
       <div class="cluster-card reveal reveal-d3" onclick="filterCluster('fiqh')">
         <div class="cluster-icon" style="background:linear-gradient(135deg,rgba(138,112,54,.12),rgba(197,160,89,.06));">⚖️</div>
-        <div class="cluster-name">Islamic Law · Fiqh</div>
-        <div class="cluster-desc">Halal &amp; haram, financial ethics, marriage, the four madhabs, and practical rulings explained clearly.</div>
+        <div class="cluster-name" data-i18n="hub.clusters.card4Name">Islamic Law · Fiqh</div>
+        <div class="cluster-desc" data-i18n="hub.clusters.card4Desc">Halal &amp; haram, financial ethics, marriage, the four madhabs, and practical rulings explained clearly.</div>
         <div class="cluster-footer">
-          <div class="cluster-count"><span>398 articles</span></div>
+          <div class="cluster-count"><span data-i18n="hub.clusters.card4Count">398 articles</span></div>
           <svg class="cluster-arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
       <div class="cluster-card reveal" onclick="filterCluster('aqidah')">
         <div class="cluster-icon" style="background:linear-gradient(135deg,rgba(0,105,110,.12),rgba(0,105,110,.06));">✦</div>
-        <div class="cluster-name">Faith &amp; Theology</div>
-        <div class="cluster-desc">What Muslims believe about Allah, angels, revelation, the prophets, the afterlife, and divine decree.</div>
+        <div class="cluster-name" data-i18n="hub.clusters.card5Name">Faith &amp; Theology</div>
+        <div class="cluster-desc" data-i18n="hub.clusters.card5Desc">What Muslims believe about Allah, angels, revelation, the prophets, the afterlife, and divine decree.</div>
         <div class="cluster-footer">
-          <div class="cluster-count"><span>265 articles</span></div>
+          <div class="cluster-count"><span data-i18n="hub.clusters.card5Count">265 articles</span></div>
           <svg class="cluster-arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
       <div class="cluster-card reveal reveal-d1" onclick="filterCluster('history')">
         <div class="cluster-icon" style="background:linear-gradient(135deg,rgba(88,193,199,.10),rgba(44,164,171,.05));">🏛️</div>
-        <div class="cluster-name">Islamic History</div>
-        <div class="cluster-desc">Early Islam, the caliphates, the golden age of scholarship, and the civilizations Islam built.</div>
+        <div class="cluster-name" data-i18n="hub.clusters.card6Name">Islamic History</div>
+        <div class="cluster-desc" data-i18n="hub.clusters.card6Desc">Early Islam, the caliphates, the golden age of scholarship, and the civilizations Islam built.</div>
         <div class="cluster-footer">
-          <div class="cluster-count"><span>311 articles</span></div>
+          <div class="cluster-count"><span data-i18n="hub.clusters.card6Count">311 articles</span></div>
           <svg class="cluster-arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
       <div class="cluster-card reveal reveal-d2" onclick="filterCluster('spirituality')">
         <div class="cluster-icon" style="background:linear-gradient(135deg,rgba(197,160,89,.12),rgba(215,182,117,.05));">📿</div>
-        <div class="cluster-name">Spirituality &amp; Character</div>
-        <div class="cluster-desc">Akhlaq, ihsan, zuhd, and the inner dimensions of worship — how Islam shapes character.</div>
+        <div class="cluster-name" data-i18n="hub.clusters.card7Name">Spirituality &amp; Character</div>
+        <div class="cluster-desc" data-i18n="hub.clusters.card7Desc">Akhlaq, ihsan, zuhd, and the inner dimensions of worship — how Islam shapes character.</div>
         <div class="cluster-footer">
-          <div class="cluster-count"><span>189 articles</span></div>
+          <div class="cluster-count"><span data-i18n="hub.clusters.card7Count">189 articles</span></div>
           <svg class="cluster-arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
       <div class="cluster-card reveal reveal-d3" onclick="filterCluster('modern')">
         <div class="cluster-icon" style="background:linear-gradient(135deg,rgba(0,105,110,.10),rgba(44,164,171,.04));">🌍</div>
-        <div class="cluster-name">Islam in Modern Life</div>
-        <div class="cluster-desc">Converts, science and Islam, ethical AI, interfaith dialogue, Muslim communities, and contemporary issues.</div>
+        <div class="cluster-name" data-i18n="hub.clusters.card8Name">Islam in Modern Life</div>
+        <div class="cluster-desc" data-i18n="hub.clusters.card8Desc">Converts, science and Islam, ethical AI, interfaith dialogue, Muslim communities, and contemporary issues.</div>
         <div class="cluster-footer">
-          <div class="cluster-count"><span>247 articles</span></div>
+          <div class="cluster-count"><span data-i18n="hub.clusters.card8Count">247 articles</span></div>
           <svg class="cluster-arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
@@ -826,72 +860,72 @@ a{text-decoration:none;color:inherit;}
 <section class="trending-section section">
   <div class="container">
     <div class="trending-header reveal">
-      <div class="trending-label"><div class="trending-dot"></div>Trending Now · Global Search Data</div>
-      <a href="#" style="font-size:12.5px;font-weight:600;color:var(--teal-700);display:flex;align-items:center;gap:4px;">See all trending <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <div class="trending-label"><div class="trending-dot"></div><span data-i18n="hub.trending.label">Trending Now · Global Search Data</span></div>
+      <a href="#" style="font-size:12.5px;font-weight:600;color:var(--teal-700);display:flex;align-items:center;gap:4px;"><span data-i18n="hub.trending.seeAll">See all trending</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
     </div>
     <div class="trending-grid">
       <div class="trend-card reveal">
         <div class="trend-num">01</div>
         <div class="trend-info">
-          <div class="trend-cat">Theology</div>
-          <div class="trend-title">What are the 99 Names of Allah and what do they mean?</div>
-          <div class="trend-meta">142K searches/month globally</div>
+          <div class="trend-cat" data-i18n="hub.trending.card1Cat">Theology</div>
+          <div class="trend-title" data-i18n="hub.trending.card1Title">What are the 99 Names of Allah and what do they mean?</div>
+          <div class="trend-meta" data-i18n="hub.trending.card1Meta">142K searches/month globally</div>
         </div>
       </div>
       <div class="trend-card reveal reveal-d1">
         <div class="trend-num">02</div>
         <div class="trend-info">
-          <div class="trend-cat">Fiqh</div>
-          <div class="trend-title">Is music haram in Islam? What do the four schools say?</div>
-          <div class="trend-meta">88K searches/month globally</div>
+          <div class="trend-cat" data-i18n="hub.trending.card2Cat">Fiqh</div>
+          <div class="trend-title" data-i18n="hub.trending.card2Title">Is music haram in Islam? What do the four schools say?</div>
+          <div class="trend-meta" data-i18n="hub.trending.card2Meta">88K searches/month globally</div>
         </div>
       </div>
       <div class="trend-card reveal reveal-d2">
         <div class="trend-num">03</div>
         <div class="trend-info">
-          <div class="trend-cat">Five Pillars</div>
-          <div class="trend-title">How to calculate Zakat on savings, gold, and investments</div>
-          <div class="trend-meta">74K searches/month globally</div>
+          <div class="trend-cat" data-i18n="hub.trending.card3Cat">Five Pillars</div>
+          <div class="trend-title" data-i18n="hub.trending.card3Title">How to calculate Zakat on savings, gold, and investments</div>
+          <div class="trend-meta" data-i18n="hub.trending.card3Meta">74K searches/month globally</div>
         </div>
       </div>
       <div class="trend-card reveal reveal-d3">
         <div class="trend-num">04</div>
         <div class="trend-info">
-          <div class="trend-cat">Quran</div>
-          <div class="trend-title">How many surahs and verses are in the Quran?</div>
-          <div class="trend-meta">61K searches/month globally</div>
+          <div class="trend-cat" data-i18n="hub.trending.card4Cat">Quran</div>
+          <div class="trend-title" data-i18n="hub.trending.card4Title">How many surahs and verses are in the Quran?</div>
+          <div class="trend-meta" data-i18n="hub.trending.card4Meta">61K searches/month globally</div>
         </div>
       </div>
       <div class="trend-card reveal">
         <div class="trend-num">05</div>
         <div class="trend-info">
-          <div class="trend-cat">Comparisons</div>
-          <div class="trend-title">Sunni vs Shia: key theological differences explained neutrally</div>
-          <div class="trend-meta">58K searches/month globally</div>
+          <div class="trend-cat" data-i18n="hub.trending.card5Cat">Comparisons</div>
+          <div class="trend-title" data-i18n="hub.trending.card5Title">Sunni vs Shia: key theological differences explained neutrally</div>
+          <div class="trend-meta" data-i18n="hub.trending.card5Meta">58K searches/month globally</div>
         </div>
       </div>
       <div class="trend-card reveal reveal-d1">
         <div class="trend-num">06</div>
         <div class="trend-info">
-          <div class="trend-cat">Worship</div>
-          <div class="trend-title">How to perform Salah step by step — complete guide</div>
-          <div class="trend-meta">52K searches/month globally</div>
+          <div class="trend-cat" data-i18n="hub.trending.card6Cat">Worship</div>
+          <div class="trend-title" data-i18n="hub.trending.card6Title">How to perform Salah step by step — complete guide</div>
+          <div class="trend-meta" data-i18n="hub.trending.card6Meta">52K searches/month globally</div>
         </div>
       </div>
       <div class="trend-card reveal reveal-d2">
         <div class="trend-num">07</div>
         <div class="trend-info">
-          <div class="trend-cat">Modern Life</div>
-          <div class="trend-title">Islamic mortgage — is it truly halal? Scholars compared</div>
-          <div class="trend-meta">47K searches/month globally</div>
+          <div class="trend-cat" data-i18n="hub.trending.card7Cat">Modern Life</div>
+          <div class="trend-title" data-i18n="hub.trending.card7Title">Islamic mortgage — is it truly halal? Scholars compared</div>
+          <div class="trend-meta" data-i18n="hub.trending.card7Meta">47K searches/month globally</div>
         </div>
       </div>
       <div class="trend-card reveal reveal-d3">
         <div class="trend-num">08</div>
         <div class="trend-info">
-          <div class="trend-cat">History</div>
-          <div class="trend-title">Who was Ibn Battuta and why does his journey still matter?</div>
-          <div class="trend-meta">39K searches/month globally</div>
+          <div class="trend-cat" data-i18n="hub.trending.card8Cat">History</div>
+          <div class="trend-title" data-i18n="hub.trending.card8Title">Who was Ibn Battuta and why does his journey still matter?</div>
+          <div class="trend-meta" data-i18n="hub.trending.card8Meta">39K searches/month globally</div>
         </div>
       </div>
     </div>
@@ -902,99 +936,99 @@ a{text-decoration:none;color:inherit;}
 <section class="section faq-section">
   <div class="container">
     <div class="section-hdr reveal">
-      <div class="section-eyebrow">People Ask</div>
-      <h2 class="section-title">Most Searched Questions</h2>
-      <p class="section-sub">Authoritative answers to the questions asked most frequently by Muslims and seekers worldwide — fully source-cited.</p>
+      <div class="section-eyebrow" data-i18n="hub.faq.eyebrow">People Ask</div>
+      <h2 class="section-title" data-i18n="hub.faq.title">Most Searched Questions</h2>
+      <p class="section-sub" data-i18n="hub.faq.sub">Authoritative answers to the questions asked most frequently by Muslims and seekers worldwide — fully source-cited.</p>
     </div>
     <div class="faq-schema-note reveal">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal-700)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-      Schema markup enabled · Eligible for Google Featured Snippets &amp; People Also Ask boxes
+      <span data-i18n="hub.faq.schemaNote">Schema markup enabled · Eligible for Google Featured Snippets &amp; People Also Ask boxes</span>
     </div>
     <div class="faq-grid">
       <div class="faq-item reveal">
         <div class="faq-q" onclick="toggleFAQ(this)">
-          What are the Five Pillars of Islam?
+          <span data-i18n="hub.faq.q1">What are the Five Pillars of Islam?</span>
           <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
         <div class="faq-a">
-          <div class="faq-a-inner">The Five Pillars of Islam are: (1) <strong>Shahada</strong> — the declaration of faith ("There is no god but Allah, and Muhammad is His messenger"); (2) <strong>Salah</strong> — the five daily prayers; (3) <strong>Zakat</strong> — obligatory almsgiving (2.5% of qualifying wealth above the nisab threshold); (4) <strong>Sawm</strong> — fasting throughout the month of Ramadan; and (5) <strong>Hajj</strong> — pilgrimage to Makkah at least once in a lifetime for those financially and physically able. These are not merely rituals but form the structural backbone of a Muslim's relationship with Allah.
+          <div class="faq-a-inner"><span data-i18n="hub.faq.a1" data-i18n-html>The Five Pillars of Islam are: (1) <strong>Shahada</strong> — the declaration of faith ("There is no god but Allah, and Muhammad is His messenger"); (2) <strong>Salah</strong> — the five daily prayers; (3) <strong>Zakat</strong> — obligatory almsgiving (2.5% of qualifying wealth above the nisab threshold); (4) <strong>Sawm</strong> — fasting throughout the month of Ramadan; and (5) <strong>Hajj</strong> — pilgrimage to Makkah at least once in a lifetime for those financially and physically able. These are not merely rituals but form the structural backbone of a Muslim's relationship with Allah.</span>
           <br><br><span class="faq-source">📚 Source: Sahih al-Bukhari #8 · Hadith of Jibril · Graded Sahih</span>
           </div>
         </div>
       </div>
       <div class="faq-item reveal reveal-d1">
         <div class="faq-q" onclick="toggleFAQ(this)">
-          How many surahs and verses are in the Quran?
+          <span data-i18n="hub.faq.q2">How many surahs and verses are in the Quran?</span>
           <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
         <div class="faq-a">
-          <div class="faq-a-inner">The Quran contains <strong>114 surahs</strong> (chapters) and <strong>6,236 verses</strong> (ayahs) according to the most widely used Medinan counting method. 86 surahs were revealed in Makkah (Makki) and 28 in Madinah (Madani). The shortest surah is Al-Kawthar (3 verses); the longest is Al-Baqarah (286 verses). The Quran is divided into 30 parts (juz') for ease of recitation during Ramadan.
+          <div class="faq-a-inner"><span data-i18n="hub.faq.a2" data-i18n-html>The Quran contains <strong>114 surahs</strong> (chapters) and <strong>6,236 verses</strong> (ayahs) according to the most widely used Medinan counting method. 86 surahs were revealed in Makkah (Makki) and 28 in Madinah (Madani). The shortest surah is Al-Kawthar (3 verses); the longest is Al-Baqarah (286 verses). The Quran is divided into 30 parts (juz') for ease of recitation during Ramadan.</span>
           <br><br><span class="faq-source">📚 Source: Al-Itqan fi 'Ulum al-Quran · Imam al-Suyuti · Vol. 1</span>
           </div>
         </div>
       </div>
       <div class="faq-item reveal reveal-d2">
         <div class="faq-q" onclick="toggleFAQ(this)">
-          What is the difference between Sunni and Shia Islam?
+          <span data-i18n="hub.faq.q3">What is the difference between Sunni and Shia Islam?</span>
           <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
         <div class="faq-a">
-          <div class="faq-a-inner">Both Sunni and Shia Muslims share the same core beliefs: the Quran, the prophethood of Muhammad ﷺ, the Five Pillars, and the Day of Judgment. The primary historical difference concerns <strong>political succession</strong> after the Prophet's death. Sunni Muslims recognize Abu Bakr al-Siddiq (رضي الله عنه) as the first legitimate caliph, chosen through consultation (shura). Shia Muslims believe leadership should have passed directly to Ali ibn Abi Talib (رضي الله عنه), the Prophet's cousin and son-in-law. Secondary differences exist in some areas of jurisprudence, hadith collections, and certain practices.
+          <div class="faq-a-inner"><span data-i18n="hub.faq.a3" data-i18n-html>Both Sunni and Shia Muslims share the same core beliefs: the Quran, the prophethood of Muhammad ﷺ, the Five Pillars, and the Day of Judgment. The primary historical difference concerns <strong>political succession</strong> after the Prophet's death. Sunni Muslims recognize Abu Bakr al-Siddiq (رضي الله عنه) as the first legitimate caliph, chosen through consultation (shura). Shia Muslims believe leadership should have passed directly to Ali ibn Abi Talib (رضي الله عنه), the Prophet's cousin and son-in-law. Secondary differences exist in some areas of jurisprudence, hadith collections, and certain practices.</span>
           <br><br><span class="faq-source">📚 Source: Al-Farq Bayn al-Firaq · Abd al-Qahir al-Baghdadi · Scholarly overview</span>
           </div>
         </div>
       </div>
       <div class="faq-item reveal">
         <div class="faq-q" onclick="toggleFAQ(this)">
-          What does Bismillah mean?
+          <span data-i18n="hub.faq.q4">What does Bismillah mean?</span>
           <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
         <div class="faq-a">
-          <div class="faq-a-inner"><strong>Bismillah</strong> is short for بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ — <em>"In the name of Allah, the Most Gracious, the Most Merciful."</em> It opens 113 of the 114 surahs of the Quran (all except Surah At-Tawbah) and is recommended before beginning any righteous act. The two divine names paired — <em>ar-Rahman</em> (whose mercy encompasses all creation) and <em>ar-Rahim</em> (whose special mercy is for believers in the hereafter) — together establish mercy as the entry point to all of Allah's attributes.
+          <div class="faq-a-inner"><span data-i18n="hub.faq.a4" data-i18n-html><strong>Bismillah</strong> is short for بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ — <em>"In the name of Allah, the Most Gracious, the Most Merciful."</em> It opens 113 of the 114 surahs of the Quran (all except Surah At-Tawbah) and is recommended before beginning any righteous act. The two divine names paired — <em>ar-Rahman</em> (whose mercy encompasses all creation) and <em>ar-Rahim</em> (whose special mercy is for believers in the hereafter) — together establish mercy as the entry point to all of Allah's attributes.</span>
           <br><br><span class="faq-source">📚 Source: Tafsir Ibn Kathir · Al-Fatihah commentary · Verified</span>
           </div>
         </div>
       </div>
       <div class="faq-item reveal reveal-d1">
         <div class="faq-q" onclick="toggleFAQ(this)">
-          How is Zakat calculated? What is the nisab?
+          <span data-i18n="hub.faq.q5">How is Zakat calculated? What is the nisab?</span>
           <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
         <div class="faq-a">
-          <div class="faq-a-inner">Zakat is 2.5% of qualifying wealth that has been held for one full lunar year (hawl) and exceeds the <strong>nisab</strong> threshold — the minimum amount. The nisab is the value of either 85 grams of gold or 595 grams of silver; scholars recommend using whichever better serves the poor, typically the silver standard today. Qualifying wealth includes savings, gold, silver, business inventory, and investment income. Zakat is not owed on one's home, personal vehicle, or work tools.
+          <div class="faq-a-inner"><span data-i18n="hub.faq.a5" data-i18n-html>Zakat is 2.5% of qualifying wealth that has been held for one full lunar year (hawl) and exceeds the <strong>nisab</strong> threshold — the minimum amount. The nisab is the value of either 85 grams of gold or 595 grams of silver; scholars recommend using whichever better serves the poor, typically the silver standard today. Qualifying wealth includes savings, gold, silver, business inventory, and investment income. Zakat is not owed on one's home, personal vehicle, or work tools.</span>
           <br><br><span class="faq-source">📚 Source: Fiqh al-Zakat · Dr. Yusuf al-Qaradawi · Al-Maktaba al-Wahba</span>
           </div>
         </div>
       </div>
       <div class="faq-item reveal reveal-d2">
         <div class="faq-q" onclick="toggleFAQ(this)">
-          What are the four schools of Islamic law?
+          <span data-i18n="hub.faq.q6">What are the four schools of Islamic law?</span>
           <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
         <div class="faq-a">
-          <div class="faq-a-inner">The four main Sunni schools of jurisprudence (madhabs) are: <strong>Hanafi</strong> (founded by Imam Abu Hanifah, d. 767 CE) — prevalent in South Asia, Turkey, and Central Asia; <strong>Maliki</strong> (Imam Malik ibn Anas, d. 795 CE) — prevalent in North and West Africa; <strong>Shafi'i</strong> (Imam al-Shafi'i, d. 820 CE) — prevalent in Southeast Asia, Egypt, and East Africa; and <strong>Hanbali</strong> (Imam Ahmad ibn Hanbal, d. 855 CE) — prevalent in the Arabian Peninsula. All four are recognized as valid interpretations within Sunni Islam, differing primarily in methodology and secondary rulings.
+          <div class="faq-a-inner"><span data-i18n="hub.faq.a6" data-i18n-html>The four main Sunni schools of jurisprudence (madhabs) are: <strong>Hanafi</strong> (founded by Imam Abu Hanifah, d. 767 CE) — prevalent in South Asia, Turkey, and Central Asia; <strong>Maliki</strong> (Imam Malik ibn Anas, d. 795 CE) — prevalent in North and West Africa; <strong>Shafi'i</strong> (Imam al-Shafi'i, d. 820 CE) — prevalent in Southeast Asia, Egypt, and East Africa; and <strong>Hanbali</strong> (Imam Ahmad ibn Hanbal, d. 855 CE) — prevalent in the Arabian Peninsula. All four are recognized as valid interpretations within Sunni Islam, differing primarily in methodology and secondary rulings.</span>
           <br><br><span class="faq-source">📚 Source: Al-Fiqh 'ala al-Madhahib al-Arba'ah · Abd al-Rahman al-Jaziri</span>
           </div>
         </div>
       </div>
       <div class="faq-item reveal">
         <div class="faq-q" onclick="toggleFAQ(this)">
-          Who was Prophet Muhammad ﷺ and when did he live?
+          <span data-i18n="hub.faq.q7">Who was Prophet Muhammad ﷺ and when did he live?</span>
           <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
         <div class="faq-a">
-          <div class="faq-a-inner">Prophet Muhammad ﷺ was born in Makkah in 570 CE and passed away in Madinah in 632 CE. He received the first revelation at age 40 in the Cave of Hira during the month of Ramadan. His mission spanned 23 years — 13 in Makkah and 10 in Madinah after the Hijra (migration). Muslims believe him to be the final prophet and messenger of Allah, completing a line of prophets from Adam through Ibrahim, Musa, and 'Isa (عليهم السلام). His teachings are preserved in the Quran (revealed to him) and the Hadith (his sayings, actions, and approvals).
+          <div class="faq-a-inner"><span data-i18n="hub.faq.a7" data-i18n-html>Prophet Muhammad ﷺ was born in Makkah in 570 CE and passed away in Madinah in 632 CE. He received the first revelation at age 40 in the Cave of Hira during the month of Ramadan. His mission spanned 23 years — 13 in Makkah and 10 in Madinah after the Hijra (migration). Muslims believe him to be the final prophet and messenger of Allah, completing a line of prophets from Adam through Ibrahim, Musa, and 'Isa (عليهم السلام). His teachings are preserved in the Quran (revealed to him) and the Hadith (his sayings, actions, and approvals).</span>
           <br><br><span class="faq-source">📚 Source: Al-Rahiq al-Makhtum (The Sealed Nectar) · Safiyy al-Rahman al-Mubarakpuri</span>
           </div>
         </div>
       </div>
       <div class="faq-item reveal reveal-d1">
         <div class="faq-q" onclick="toggleFAQ(this)">
-          Is music haram in Islam?
+          <span data-i18n="hub.faq.q8">Is music haram in Islam?</span>
           <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
         <div class="faq-a">
-          <div class="faq-a-inner">This is a topic of genuine scholarly disagreement (<em>ikhtilaf</em>). The majority classical position, held by scholars like Ibn al-Qayyim and many Hanbali and Shafi'i scholars, restricts musical instruments and considers most contemporary music impermissible. A second position, held by scholars including Dr. Yusuf al-Qaradawi and some Maliki scholars, permits music that is free of immoral content, reasoning that the prohibition is specific to instruments used in conjunction with intoxicants and lewdness. A third position permits percussion instruments (duff) for certain occasions. The unani consensus is that lyrics promoting immorality are impermissible regardless of school.
+          <div class="faq-a-inner"><span data-i18n="hub.faq.a8" data-i18n-html>This is a topic of genuine scholarly disagreement (<em>ikhtilaf</em>). The majority classical position, held by scholars like Ibn al-Qayyim and many Hanbali and Shafi'i scholars, restricts musical instruments and considers most contemporary music impermissible. A second position, held by scholars including Dr. Yusuf al-Qaradawi and some Maliki scholars, permits music that is free of immoral content, reasoning that the prohibition is specific to instruments used in conjunction with intoxicants and lewdness. A third position permits percussion instruments (duff) for certain occasions. The unani consensus is that lyrics promoting immorality are impermissible regardless of school.</span>
           <br><br><span class="faq-source">📚 Sources: Al-Ghina' wa al-Musiqa · Ibn al-Qayyim · Al-Halal wa al-Haram · al-Qaradawi</span>
           </div>
         </div>
@@ -1007,9 +1041,9 @@ a{text-decoration:none;color:inherit;}
 <section class="section">
   <div class="container">
     <div class="section-hdr reveal">
-      <div class="section-eyebrow">Fresh Knowledge</div>
-      <h2 class="section-title">Latest Articles</h2>
-      <p class="section-sub">New additions to the Knowledge Hub — published weekly, source-verified before publication.</p>
+      <div class="section-eyebrow" data-i18n="hub.articles.eyebrow">Fresh Knowledge</div>
+      <h2 class="section-title" data-i18n="hub.articles.title">Latest Articles</h2>
+      <p class="section-sub" data-i18n="hub.articles.sub">New additions to the Knowledge Hub — published weekly, source-verified before publication.</p>
     </div>
     <div class="articles-grid">
       <!-- Card 1 -->
@@ -1020,12 +1054,12 @@ a{text-decoration:none;color:inherit;}
           </div>
         </div>
         <div class="article-body">
-          <div class="article-cat-row"><span class="article-cat">Islamic History</span><span class="article-dot"></span><span class="article-date">May 10, 2026</span></div>
-          <div class="article-title">The Rightly-Guided Caliphs: Abu Bakr to Ali</div>
-          <div class="article-excerpt">A scholarly overview of the Khulafa' al-Rashidun — their leadership, contributions, and legacy in Islamic governance.</div>
+          <div class="article-cat-row"><span class="article-cat" data-i18n="hub.articles.card1Cat">Islamic History</span><span class="article-dot"></span><span class="article-date" data-i18n="hub.articles.card1Date">May 10, 2026</span></div>
+          <div class="article-title" data-i18n="hub.articles.card1Title">The Rightly-Guided Caliphs: Abu Bakr to Ali</div>
+          <div class="article-excerpt" data-i18n="hub.articles.card1Excerpt">A scholarly overview of the Khulafa' al-Rashidun — their leadership, contributions, and legacy in Islamic governance.</div>
           <div class="article-footer">
-            <div class="article-read">Read article <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
-            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>11 min</div>
+            <div class="article-read"><span data-i18n="hub.articles.readLink">Read article</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="hub.articles.card1ReadTime">11 min</span></div>
           </div>
         </div>
       </div>
@@ -1037,12 +1071,12 @@ a{text-decoration:none;color:inherit;}
           </div>
         </div>
         <div class="article-body">
-          <div class="article-cat-row"><span class="article-cat">Spirituality</span><span class="article-dot"></span><span class="article-date">May 8, 2026</span></div>
-          <div class="article-title">Sabr: The Quran's Most Repeated Instruction</div>
-          <div class="article-excerpt">Patience is mentioned over 90 times in the Quran. Why does Allah emphasize it so relentlessly — and what does true sabr actually require?</div>
+          <div class="article-cat-row"><span class="article-cat" data-i18n="hub.articles.card2Cat">Spirituality</span><span class="article-dot"></span><span class="article-date" data-i18n="hub.articles.card2Date">May 8, 2026</span></div>
+          <div class="article-title" data-i18n="hub.articles.card2Title">Sabr: The Quran's Most Repeated Instruction</div>
+          <div class="article-excerpt" data-i18n="hub.articles.card2Excerpt">Patience is mentioned over 90 times in the Quran. Why does Allah emphasize it so relentlessly — and what does true sabr actually require?</div>
           <div class="article-footer">
-            <div class="article-read">Read article <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
-            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8 min</div>
+            <div class="article-read"><span data-i18n="hub.articles.readLink">Read article</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="hub.articles.card2ReadTime">8 min</span></div>
           </div>
         </div>
       </div>
@@ -1054,12 +1088,12 @@ a{text-decoration:none;color:inherit;}
           </div>
         </div>
         <div class="article-body">
-          <div class="article-cat-row"><span class="article-cat">Fiqh</span><span class="article-dot"></span><span class="article-date">May 6, 2026</span></div>
-          <div class="article-title">Islamic Finance: What Makes a Transaction Halal?</div>
-          <div class="article-excerpt">Riba, gharar, and maysir — the three prohibited elements in Islamic finance — explained with contemporary examples and scholar citations.</div>
+          <div class="article-cat-row"><span class="article-cat" data-i18n="hub.articles.card3Cat">Fiqh</span><span class="article-dot"></span><span class="article-date" data-i18n="hub.articles.card3Date">May 6, 2026</span></div>
+          <div class="article-title" data-i18n="hub.articles.card3Title">Islamic Finance: What Makes a Transaction Halal?</div>
+          <div class="article-excerpt" data-i18n="hub.articles.card3Excerpt">Riba, gharar, and maysir — the three prohibited elements in Islamic finance — explained with contemporary examples and scholar citations.</div>
           <div class="article-footer">
-            <div class="article-read">Read article <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
-            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 min</div>
+            <div class="article-read"><span data-i18n="hub.articles.readLink">Read article</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="hub.articles.card3ReadTime">13 min</span></div>
           </div>
         </div>
       </div>
@@ -1071,12 +1105,12 @@ a{text-decoration:none;color:inherit;}
           </div>
         </div>
         <div class="article-body">
-          <div class="article-cat-row"><span class="article-cat">Modern Life</span><span class="article-dot"></span><span class="article-date">May 4, 2026</span></div>
-          <div class="article-title">How to Take Shahada: A Guide for New Muslims</div>
-          <div class="article-excerpt">Everything a person converting to Islam needs to know — the declaration, what changes, what stays the same, and how to begin.</div>
+          <div class="article-cat-row"><span class="article-cat" data-i18n="hub.articles.card4Cat">Modern Life</span><span class="article-dot"></span><span class="article-date" data-i18n="hub.articles.card4Date">May 4, 2026</span></div>
+          <div class="article-title" data-i18n="hub.articles.card4Title">How to Take Shahada: A Guide for New Muslims</div>
+          <div class="article-excerpt" data-i18n="hub.articles.card4Excerpt">Everything a person converting to Islam needs to know — the declaration, what changes, what stays the same, and how to begin.</div>
           <div class="article-footer">
-            <div class="article-read">Read article <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
-            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>9 min</div>
+            <div class="article-read"><span data-i18n="hub.articles.readLink">Read article</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="hub.articles.card4ReadTime">9 min</span></div>
           </div>
         </div>
       </div>
@@ -1088,12 +1122,12 @@ a{text-decoration:none;color:inherit;}
           </div>
         </div>
         <div class="article-body">
-          <div class="article-cat-row"><span class="article-cat">Prophets</span><span class="article-dot"></span><span class="article-date">May 2, 2026</span></div>
-          <div class="article-title">Sunnah in Practice: Which Practices Are Obligatory vs Recommended?</div>
-          <div class="article-excerpt">Scholars distinguish between fard, sunnah mu'akkadah, sunnah ghayr mu'akkadah, and mustahabb. Here's how to tell the difference.</div>
+          <div class="article-cat-row"><span class="article-cat" data-i18n="hub.articles.card5Cat">Prophets</span><span class="article-dot"></span><span class="article-date" data-i18n="hub.articles.card5Date">May 2, 2026</span></div>
+          <div class="article-title" data-i18n="hub.articles.card5Title">Sunnah in Practice: Which Practices Are Obligatory vs Recommended?</div>
+          <div class="article-excerpt" data-i18n="hub.articles.card5Excerpt">Scholars distinguish between fard, sunnah mu'akkadah, sunnah ghayr mu'akkadah, and mustahabb. Here's how to tell the difference.</div>
           <div class="article-footer">
-            <div class="article-read">Read article <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
-            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</div>
+            <div class="article-read"><span data-i18n="hub.articles.readLink">Read article</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="hub.articles.card5ReadTime">10 min</span></div>
           </div>
         </div>
       </div>
@@ -1105,19 +1139,19 @@ a{text-decoration:none;color:inherit;}
           </div>
         </div>
         <div class="article-body">
-          <div class="article-cat-row"><span class="article-cat">Faith &amp; Theology</span><span class="article-dot"></span><span class="article-date">Apr 30, 2026</span></div>
-          <div class="article-title">The Day of Judgment: What the Quran and Hadith Describe</div>
-          <div class="article-excerpt">A comprehensive, scholar-sourced account of Yawm al-Qiyamah — the resurrection, the scales, the bridge, and what comes after.</div>
+          <div class="article-cat-row"><span class="article-cat" data-i18n="hub.articles.card6Cat">Faith &amp; Theology</span><span class="article-dot"></span><span class="article-date" data-i18n="hub.articles.card6Date">Apr 30, 2026</span></div>
+          <div class="article-title" data-i18n="hub.articles.card6Title">The Day of Judgment: What the Quran and Hadith Describe</div>
+          <div class="article-excerpt" data-i18n="hub.articles.card6Excerpt">A comprehensive, scholar-sourced account of Yawm al-Qiyamah — the resurrection, the scales, the bridge, and what comes after.</div>
           <div class="article-footer">
-            <div class="article-read">Read article <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
-            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>16 min</div>
+            <div class="article-read"><span data-i18n="hub.articles.readLink">Read article</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+            <div class="article-rt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="hub.articles.card6ReadTime">16 min</span></div>
           </div>
         </div>
       </div>
     </div>
     <div style="text-align:center;margin-top:36px;">
       <a href="#" class="btn-primary" style="background:transparent;color:var(--teal-700);border:.5px solid rgba(0,105,110,.22);box-shadow:none;font-size:13.5px;padding:11px 26px;border-radius:28px;display:inline-flex;align-items:center;gap:8px;transition:all .28s var(--ease-premium);" onmouseover="this.style.background='rgba(0,105,110,.07)'" onmouseout="this.style.background='transparent'">
-        Browse all 2,400+ articles
+        <span data-i18n="hub.articles.browseAll">Browse all 2,400+ articles</span>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
       </a>
     </div>
@@ -1129,23 +1163,23 @@ a{text-decoration:none;color:inherit;}
   <div class="numbers-grid">
     <div class="number-cell reveal">
       <div class="number-big">6,236<span></span></div>
-      <div class="number-label">Verses in the Quran</div>
-      <div class="number-desc">114 surahs · 86 Makki · 28 Madani</div>
+      <div class="number-label" data-i18n="hub.numbers.label1">Verses in the Quran</div>
+      <div class="number-desc" data-i18n="hub.numbers.desc1">114 surahs · 86 Makki · 28 Madani</div>
     </div>
     <div class="number-cell reveal reveal-d1">
       <div class="number-big">1.8<span>B</span></div>
-      <div class="number-label">Muslims Worldwide</div>
-      <div class="number-desc">24% of the global population</div>
+      <div class="number-label" data-i18n="hub.numbers.label2">Muslims Worldwide</div>
+      <div class="number-desc" data-i18n="hub.numbers.desc2">24% of the global population</div>
     </div>
     <div class="number-cell reveal reveal-d2">
       <div class="number-big">99<span></span></div>
-      <div class="number-label">Names of Allah</div>
-      <div class="number-desc">Asma' ul-Husna — the Beautiful Names</div>
+      <div class="number-label" data-i18n="hub.numbers.label3">Names of Allah</div>
+      <div class="number-desc" data-i18n="hub.numbers.desc3">Asma' ul-Husna — the Beautiful Names</div>
     </div>
     <div class="number-cell reveal reveal-d3">
       <div class="number-big">1,400<span>+</span></div>
-      <div class="number-label">Years of Scholarship</div>
-      <div class="number-desc">Continuous tradition of Islamic learning</div>
+      <div class="number-label" data-i18n="hub.numbers.label4">Years of Scholarship</div>
+      <div class="number-desc" data-i18n="hub.numbers.desc4">Continuous tradition of Islamic learning</div>
     </div>
   </div>
 </section>
@@ -1154,38 +1188,38 @@ a{text-decoration:none;color:inherit;}
 <section class="scholars-section">
   <div class="container" style="position:relative;z-index:1;">
     <div class="section-hdr" style="text-align:center;">
-      <div class="scholars-eyebrow reveal">Classical Authorities</div>
-      <h2 class="scholars-title reveal">Scholars Referenced</h2>
-      <p class="scholars-sub reveal">Every article on the Knowledge Hub cites recognized classical scholarship. No anonymous opinions. No fabricated sources.</p>
+      <div class="scholars-eyebrow reveal" data-i18n="hub.scholars.eyebrow">Classical Authorities</div>
+      <h2 class="scholars-title reveal" data-i18n="hub.scholars.title">Scholars Referenced</h2>
+      <p class="scholars-sub reveal" data-i18n="hub.scholars.sub">Every article on the Knowledge Hub cites recognized classical scholarship. No anonymous opinions. No fabricated sources.</p>
     </div>
     <div class="scholars-grid">
       <div class="scholar-card reveal">
         <div class="scholar-avatar">ابن</div>
-        <div class="scholar-name">Ibn Kathir</div>
-        <div class="scholar-era">1301 – 1373 CE · Damascus</div>
-        <div class="scholar-works">Tafsir al-Quran al-'Azim · Al-Bidaya wa al-Nihaya</div>
-        <div class="scholar-badge">Tafsir Authority</div>
+        <div class="scholar-name" data-i18n="hub.scholars.card1Name">Ibn Kathir</div>
+        <div class="scholar-era" data-i18n="hub.scholars.card1Era">1301 – 1373 CE · Damascus</div>
+        <div class="scholar-works" data-i18n="hub.scholars.card1Works">Tafsir al-Quran al-'Azim · Al-Bidaya wa al-Nihaya</div>
+        <div class="scholar-badge" data-i18n="hub.scholars.card1Badge">Tafsir Authority</div>
       </div>
       <div class="scholar-card reveal reveal-d1">
         <div class="scholar-avatar">البخ</div>
-        <div class="scholar-name">Imam al-Bukhari</div>
-        <div class="scholar-era">810 – 870 CE · Bukhara</div>
-        <div class="scholar-works">Sahih al-Bukhari — most authenticated hadith collection</div>
-        <div class="scholar-badge">Hadith Master</div>
+        <div class="scholar-name" data-i18n="hub.scholars.card2Name">Imam al-Bukhari</div>
+        <div class="scholar-era" data-i18n="hub.scholars.card2Era">810 – 870 CE · Bukhara</div>
+        <div class="scholar-works" data-i18n="hub.scholars.card2Works">Sahih al-Bukhari — most authenticated hadith collection</div>
+        <div class="scholar-badge" data-i18n="hub.scholars.card2Badge">Hadith Master</div>
       </div>
       <div class="scholar-card reveal reveal-d2">
         <div class="scholar-avatar">ابن</div>
-        <div class="scholar-name">Ibn Khaldun</div>
-        <div class="scholar-era">1332 – 1406 CE · Tunisia</div>
-        <div class="scholar-works">Muqaddimah — foundational work of social science and history</div>
-        <div class="scholar-badge">Historian</div>
+        <div class="scholar-name" data-i18n="hub.scholars.card3Name">Ibn Khaldun</div>
+        <div class="scholar-era" data-i18n="hub.scholars.card3Era">1332 – 1406 CE · Tunisia</div>
+        <div class="scholar-works" data-i18n="hub.scholars.card3Works">Muqaddimah — foundational work of social science and history</div>
+        <div class="scholar-badge" data-i18n="hub.scholars.card3Badge">Historian</div>
       </div>
       <div class="scholar-card reveal reveal-d3">
         <div class="scholar-avatar">غزا</div>
-        <div class="scholar-name">Imam al-Ghazali</div>
-        <div class="scholar-era">1058 – 1111 CE · Tus</div>
-        <div class="scholar-works">Ihya' 'Ulum al-Din — Revival of the Religious Sciences</div>
-        <div class="scholar-badge">Spirituality</div>
+        <div class="scholar-name" data-i18n="hub.scholars.card4Name">Imam al-Ghazali</div>
+        <div class="scholar-era" data-i18n="hub.scholars.card4Era">1058 – 1111 CE · Tus</div>
+        <div class="scholar-works" data-i18n="hub.scholars.card4Works">Ihya' 'Ulum al-Din — Revival of the Religious Sciences</div>
+        <div class="scholar-badge" data-i18n="hub.scholars.card4Badge">Spirituality</div>
       </div>
     </div>
   </div>
@@ -1195,31 +1229,31 @@ a{text-decoration:none;color:inherit;}
 <section class="section">
   <div class="container">
     <div class="section-hdr reveal">
-      <div class="section-eyebrow">Go Deeper</div>
-      <h2 class="section-title">Explore the Full Platform</h2>
-      <p class="section-sub">The Knowledge Hub links to every tool on IslamicInfo. Read an article on Zakat — then calculate yours instantly.</p>
+      <div class="section-eyebrow" data-i18n="hub.portals.eyebrow">Go Deeper</div>
+      <h2 class="section-title" data-i18n="hub.portals.title">Explore the Full Platform</h2>
+      <p class="section-sub" data-i18n="hub.portals.sub">The Knowledge Hub links to every tool on IslamicInfo. Read an article on Zakat — then calculate yours instantly.</p>
     </div>
     <div class="portals-grid">
       <div class="portal-card portal-teal reveal" onclick="location.href='quran.html'">
         <div class="porb-a"></div><div class="porb-b"></div>
         <div class="portal-icon">📖</div>
-        <div class="portal-name">Quran Explorer</div>
-        <div class="portal-desc">Read all 114 surahs with classical Tafsir, word-by-word analysis, 50+ reciters, and AI-powered explanations.</div>
-        <div class="portal-link">Open Quran Explorer <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+        <div class="portal-name" data-i18n="chrome.nav.quran">Quran Explorer</div>
+        <div class="portal-desc" data-i18n="hub.portals.card1Desc">Read all 114 surahs with classical Tafsir, word-by-word analysis, 50+ reciters, and AI-powered explanations.</div>
+        <div class="portal-link"><span data-i18n="hub.portals.card1Link">Open Quran Explorer</span> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
       <div class="portal-card portal-gold reveal reveal-d1" onclick="location.href='hadith.html'">
         <div class="porb-a"></div><div class="porb-b"></div>
         <div class="portal-icon">📜</div>
-        <div class="portal-name">Hadith Library</div>
-        <div class="portal-desc">Search 12,000+ hadiths across 9 major collections — with isnad chains, grade badges, and narrator profiles.</div>
-        <div class="portal-link">Browse Hadith Library <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+        <div class="portal-name" data-i18n="chrome.nav.hadith">Hadith Library</div>
+        <div class="portal-desc" data-i18n="hub.portals.card2Desc">Search 12,000+ hadiths across 9 major collections — with isnad chains, grade badges, and narrator profiles.</div>
+        <div class="portal-link"><span data-i18n="hub.portals.card2Link">Browse Hadith Library</span> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
       <div class="portal-card portal-dark reveal reveal-d2" onclick="location.href='verify.html'">
         <div class="porb-a"></div><div class="porb-b"></div>
         <div class="portal-icon">✓</div>
-        <div class="portal-name">Verify a Source</div>
-        <div class="portal-desc">Paste any Islamic claim, hadith, or quote and get an instant authenticity rating from our verification engine.</div>
-        <div class="portal-link">Open Verify Tool <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+        <div class="portal-name" data-i18n="hub.portals.card3Name">Verify a Source</div>
+        <div class="portal-desc" data-i18n="hub.portals.card3Desc">Paste any Islamic claim, hadith, or quote and get an instant authenticity rating from our verification engine.</div>
+        <div class="portal-link"><span data-i18n="hub.portals.card3Link">Open Verify Tool</span> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
     </div>
   </div>
@@ -1229,17 +1263,17 @@ a{text-decoration:none;color:inherit;}
 <section class="section regions-section" style="padding-top:0;">
   <div class="container">
     <div class="section-hdr reveal">
-      <div class="section-eyebrow">Worldwide Audience</div>
-      <h2 class="section-title">Knowledge for Every Region</h2>
-      <p class="section-sub">IslamicInfo.org serves Muslims and curious readers across every continent. Our content is calibrated for global search intent — not just one community.</p>
+      <div class="section-eyebrow" data-i18n="hub.regions.eyebrow">Worldwide Audience</div>
+      <h2 class="section-title" data-i18n="hub.regions.title">Knowledge for Every Region</h2>
+      <p class="section-sub" data-i18n="hub.regions.sub">IslamicInfo.org serves Muslims and curious readers across every continent. Our content is calibrated for global search intent — not just one community.</p>
     </div>
     <div class="regions-grid">
-      <div class="region-card reveal"><div class="region-flag">🇸🇦</div><div class="region-info"><div class="region-name">Arabian Peninsula</div><div class="region-meta">Fiqh, Hadith, Aqidah</div></div><div class="region-count">380K readers</div></div>
-      <div class="region-card reveal reveal-d1"><div class="region-flag">🇵🇰</div><div class="region-info"><div class="region-name">South Asia</div><div class="region-meta">Hanafi Fiqh, Sunnah, Urdu content</div></div><div class="region-count">510K readers</div></div>
-      <div class="region-card reveal reveal-d2"><div class="region-flag">🇮🇩</div><div class="region-info"><div class="region-name">Southeast Asia</div><div class="region-meta">Shafi'i Fiqh, Ramadan, Hajj</div></div><div class="region-count">440K readers</div></div>
-      <div class="region-card reveal"><div class="region-flag">🇺🇸</div><div class="region-info"><div class="region-name">North America</div><div class="region-meta">Converts, modern life, interfaith</div></div><div class="region-count">290K readers</div></div>
-      <div class="region-card reveal reveal-d1"><div class="region-flag">🇬🇧</div><div class="region-info"><div class="region-name">United Kingdom</div><div class="region-meta">Islamic finance, ethics, community</div></div><div class="region-count">195K readers</div></div>
-      <div class="region-card reveal reveal-d2"><div class="region-flag">🌍</div><div class="region-info"><div class="region-name">Sub-Saharan Africa</div><div class="region-meta">Basics of faith, pillars, history</div></div><div class="region-count">267K readers</div></div>
+      <div class="region-card reveal"><div class="region-flag">🇸🇦</div><div class="region-info"><div class="region-name" data-i18n="hub.regions.card1Name">Arabian Peninsula</div><div class="region-meta" data-i18n="hub.regions.card1Meta">Fiqh, Hadith, Aqidah</div></div><div class="region-count" data-i18n="hub.regions.card1Count">380K readers</div></div>
+      <div class="region-card reveal reveal-d1"><div class="region-flag">🇵🇰</div><div class="region-info"><div class="region-name" data-i18n="hub.regions.card2Name">South Asia</div><div class="region-meta" data-i18n="hub.regions.card2Meta">Hanafi Fiqh, Sunnah, Urdu content</div></div><div class="region-count" data-i18n="hub.regions.card2Count">510K readers</div></div>
+      <div class="region-card reveal reveal-d2"><div class="region-flag">🇮🇩</div><div class="region-info"><div class="region-name" data-i18n="hub.regions.card3Name">Southeast Asia</div><div class="region-meta" data-i18n="hub.regions.card3Meta">Shafi'i Fiqh, Ramadan, Hajj</div></div><div class="region-count" data-i18n="hub.regions.card3Count">440K readers</div></div>
+      <div class="region-card reveal"><div class="region-flag">🇺🇸</div><div class="region-info"><div class="region-name" data-i18n="hub.regions.card4Name">North America</div><div class="region-meta" data-i18n="hub.regions.card4Meta">Converts, modern life, interfaith</div></div><div class="region-count" data-i18n="hub.regions.card4Count">290K readers</div></div>
+      <div class="region-card reveal reveal-d1"><div class="region-flag">🇬🇧</div><div class="region-info"><div class="region-name" data-i18n="hub.regions.card5Name">United Kingdom</div><div class="region-meta" data-i18n="hub.regions.card5Meta">Islamic finance, ethics, community</div></div><div class="region-count" data-i18n="hub.regions.card5Count">195K readers</div></div>
+      <div class="region-card reveal reveal-d2"><div class="region-flag">🌍</div><div class="region-info"><div class="region-name" data-i18n="hub.regions.card6Name">Sub-Saharan Africa</div><div class="region-meta" data-i18n="hub.regions.card6Meta">Basics of faith, pillars, history</div></div><div class="region-count" data-i18n="hub.regions.card6Count">267K readers</div></div>
     </div>
   </div>
 </section>
@@ -1249,27 +1283,27 @@ a{text-decoration:none;color:inherit;}
   <div class="container">
     <div class="entry-grid">
       <div class="reveal">
-        <div class="entry-eyebrow"><span>✦</span> For New Readers &amp; Converts</div>
-        <h2 class="entry-title">New to Islam? Start Here.</h2>
-        <p class="entry-sub">We built a guided reading path specifically for those encountering Islam for the first time — whether you're a convert, a curious neighbor, a student, or someone who's always wondered.</p>
+        <div class="entry-eyebrow"><span>✦</span> <span data-i18n="hub.entry.eyebrow">For New Readers &amp; Converts</span></div>
+        <h2 class="entry-title" data-i18n="hub.entry.title">New to Islam? Start Here.</h2>
+        <p class="entry-sub" data-i18n="hub.entry.sub">We built a guided reading path specifically for those encountering Islam for the first time — whether you're a convert, a curious neighbor, a student, or someone who's always wondered.</p>
         <div class="entry-form">
-          <input class="entry-input" type="email" id="khEmailInput" placeholder="Your email address">
-          <button class="entry-submit" id="khEmailSubmit">Get the Guide</button>
+          <input class="entry-input" type="email" id="khEmailInput" placeholder="Your email address" data-i18n-attr="placeholder:hub.entry.emailPlaceholder">
+          <button class="entry-submit" id="khEmailSubmit" data-i18n="hub.entry.submitBtn">Get the Guide</button>
         </div>
-        <div class="entry-note">Free. No spam. Unsubscribe anytime. Your first email arrives in under a minute.</div>
+        <div class="entry-note" data-i18n="hub.entry.note">Free. No spam. Unsubscribe anytime. Your first email arrives in under a minute.</div>
       </div>
       <div class="entry-features reveal reveal-d1">
         <div class="entry-feat">
           <div class="ef-icon" style="background:rgba(0,105,110,.10);">🕋</div>
-          <div><div class="ef-name">Start with the Foundations</div><div class="ef-desc">5 curated beginner articles — who Allah is, what Islam teaches, what life as a Muslim looks like.</div></div>
+          <div><div class="ef-name" data-i18n="hub.entry.feat1Name">Start with the Foundations</div><div class="ef-desc" data-i18n="hub.entry.feat1Desc">5 curated beginner articles — who Allah is, what Islam teaches, what life as a Muslim looks like.</div></div>
         </div>
         <div class="entry-feat">
           <div class="ef-icon" style="background:rgba(197,160,89,.12);">📿</div>
-          <div><div class="ef-name">Common Questions Answered</div><div class="ef-desc">The 20 questions people most commonly ask — answered clearly, without assumption or jargon.</div></div>
+          <div><div class="ef-name" data-i18n="hub.entry.feat2Name">Common Questions Answered</div><div class="ef-desc" data-i18n="hub.entry.feat2Desc">The 20 questions people most commonly ask — answered clearly, without assumption or jargon.</div></div>
         </div>
         <div class="entry-feat">
           <div class="ef-icon" style="background:rgba(88,193,199,.10);">✓</div>
-          <div><div class="ef-name">Source-Verified from Day One</div><div class="ef-desc">Every claim is traceable to a recognized classical scholar or the Quran itself. Nothing fabricated.</div></div>
+          <div><div class="ef-name" data-i18n="hub.entry.feat3Name">Source-Verified from Day One</div><div class="ef-desc" data-i18n="hub.entry.feat3Desc">Every claim is traceable to a recognized classical scholar or the Quran itself. Nothing fabricated.</div></div>
         </div>
       </div>
     </div>
@@ -1279,12 +1313,12 @@ a{text-decoration:none;color:inherit;}
 <!-- CTA SECTION -->
 <section class="cta-section">
   <div class="container" style="position:relative;z-index:1;">
-    <div class="cta-badge reveal"><span style="color:#D9B358;">✦</span> The World's Islamic Knowledge Hub</div>
-    <h2 class="cta-title reveal">Every answer you seek.<br><em style="font-style:italic;">Source-verified. Forever free.</em></h2>
-    <p class="cta-sub reveal">"Say: Are those who know equal to those who do not know?" — Al-Zumar 39:9</p>
+    <div class="cta-badge reveal"><span style="color:#D9B358;">✦</span> <span data-i18n="hub.cta.badge">The World's Islamic Knowledge Hub</span></div>
+    <h2 class="cta-title reveal" data-i18n="hub.cta.title" data-i18n-html>Every answer you seek.<br><em style="font-style:italic;">Source-verified. Forever free.</em></h2>
+    <p class="cta-sub reveal" data-i18n="hub.cta.sub">"Say: Are those who know equal to those who do not know?" — Al-Zumar 39:9</p>
     <div class="cta-actions reveal">
-      <a class="btn-primary" href="#hero">Explore the Hub</a>
-      <a class="btn-white-ghost" href="islamic-studies.html">Islamic Studies →</a>
+      <a class="btn-primary" href="#hero" data-i18n="hub.cta.btn1">Explore the Hub</a>
+      <a class="btn-white-ghost" href="islamic-studies.html" data-i18n="hub.cta.btn2">Islamic Studies →</a>
     </div>
   </div>
 </section>
@@ -1307,20 +1341,20 @@ a{text-decoration:none;color:inherit;}
         </svg>
         <span><span class="ii-footer-logo-text-islamic">Islamic</span><span class="ii-footer-logo-text-info">Info</span></span>
       </a>
-      <p class="ii-footer-tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
+      <p class="ii-footer-tagline" data-i18n="chrome.footer.tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
       <p class="ii-footer-verse">وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ &nbsp;— Hud · 11:88</p>
     </div>
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Quick Access</div>
-      <a class="ii-footer-link" href="quran.html">Quran Explorer</a>
-      <a class="ii-footer-link" href="hadith.html">Hadith Library</a>
-      <a class="ii-footer-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="ii-footer-link" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="ii-footer-link" href="dua.html">Daily Duas</a>
-      <a class="ii-footer-link" href="inheritance.html">Inheritance Calculator</a>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.quickAccess">Quick Access</div>
+      <a class="ii-footer-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="ii-footer-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="ii-footer-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="ii-footer-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="ii-footer-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="ii-footer-link" href="inheritance.html" data-i18n="chrome.footer.linkInheritance">Inheritance Calculator</a>
     </div>
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Ecosystem</div>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.ecosystemShort">Ecosystem</div>
       <a class="ii-footer-link ii-footer-link-ext" href="https://islamickids.org" target="_blank" rel="noopener">IslamicKids.org</a>
       <a class="ii-footer-link ii-footer-link-ext" href="https://quranlyai.com" target="_blank" rel="noopener">QuranlyAI.com</a>
       <a class="ii-footer-link ii-footer-link-ext" href="https://hadithiq.com" target="_blank" rel="noopener">HadithIQ.com</a>
@@ -1329,19 +1363,19 @@ a{text-decoration:none;color:inherit;}
       <a class="ii-footer-link ii-footer-link-ext" href="https://travellyai.com" target="_blank" rel="noopener">TravellyAi.com</a>
     </div>
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Company</div>
-      <a class="ii-footer-link" href="about.html">About</a>
-      <a class="ii-footer-link" href="about.html#contact">Contact</a>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.company">Company</div>
+      <a class="ii-footer-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+      <a class="ii-footer-link" href="about.html#contact" data-i18n="chrome.footer.contact">Contact</a>
     </div>
     <div class="ii-footer-col">
-      <div class="ii-footer-col-heading">Legal</div>
-      <a class="ii-footer-link" href="privacy.html">Privacy Policy</a>
-      <a class="ii-footer-link" href="terms.html">Terms of Use</a>
+      <div class="ii-footer-col-heading" data-i18n="chrome.footer.legal">Legal</div>
+      <a class="ii-footer-link" href="privacy.html" data-i18n="chrome.footer.privacy">Privacy Policy</a>
+      <a class="ii-footer-link" href="terms.html" data-i18n="chrome.footer.terms">Terms of Use</a>
     </div>
   </div>
   <div class="ii-footer-bottom">
-    <div class="ii-footer-copy">© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
-    <div class="ii-footer-note">All content source-verified · Privacy-first · Built with sincerity</div>
+    <div class="ii-footer-copy" data-i18n="chrome.footer.copy" data-i18n-html>© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
+    <div class="ii-footer-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
   </div>
 </footer>
 
@@ -1482,6 +1516,7 @@ document.getElementById('khEmailSubmit').addEventListener('click', function() {
   setTimeout(() => { btn.textContent = 'Get the Guide'; btn.style.background = ''; }, 3000);
 });
 </script>
+<script src="src/js/i18n.js"></script>
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
 <script src="src/js/knowledge-hub.js"></script>

@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hadith Library — IslamicInfo</title>
+<title data-i18n="hadith.title">Hadith Library — IslamicInfo</title>
+<script>
+  /* i18n FOUC guard: set lang/dir before first paint */
+  (function(){
+    var l = localStorage.getItem('islamicinfo-lang') || 'en';
+    document.documentElement.setAttribute('lang', l);
+    if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -122,7 +130,7 @@ a { text-decoration: none; color: inherit; }
 @media(max-width:1100px){.ii-nav-link{font-size:10.5px;padding:5px 3px;}}
 @media(max-width:1100px){.ii-nav-link{font-size:11.5px;padding:5px 5px;}}
 @media(max-width:900px){.ii-nav-link{font-size:10.5px;padding:5px 3px;}.ii-logo{font-size:16px;gap:6px;}.ii-logo-svg{width:28px;height:28px;}}
-@media(max-width:760px){.ii-nav-links{display:none;}.ii-nav-icons .ii-icon-btn:not(#ii-theme-btn):not(#ii-search-btn):not(.hamburger){display:none;}.hamburger{display:flex!important;}}
+@media(max-width:760px){.ii-nav-links{display:none;}.ii-nav-icons .ii-icon-btn:not(#ii-theme-btn):not(#ii-search-btn):not(.hamburger):not(#langBtn){display:none;}.hamburger{display:flex!important;}}
 
 /* Hamburger button */
 .hamburger{display:none;flex-direction:column;gap:5px;width:34px;height:34px;border-radius:8px;border:0.5px solid var(--ink-faint);background:transparent;cursor:pointer;align-items:center;justify-content:center;}
@@ -678,6 +686,27 @@ a { text-decoration: none; color: inherit; }
 .fade-up-delay-1 { transition-delay: .1s; }
 .fade-up-delay-2 { transition-delay: .2s; }
 .fade-up-delay-3 { transition-delay: .3s; }
+
+/* ── Language dropdown ── */
+.lang-wrapper{position:relative;}
+.lang-menu{position:absolute;top:44px;right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.lang-menu.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .lang-menu{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.lang-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;background:transparent;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;color:var(--ink-body);text-align:left;transition:background .2s,color .2s;}
+.lang-item:hover{background:rgba(0,105,110,.08);}
+[data-theme="dark"] .lang-item:hover{background:rgba(0,105,110,.15);}
+.lang-item.on{color:var(--teal-700);font-weight:600;background:rgba(0,105,110,.06);}
+[data-theme="dark"] .lang-item.on{color:var(--teal-300);}
+.lang-code{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ink-subtle);width:24px;flex-shrink:0;}
+
+/* ── RTL patches ── */
+[dir="rtl"] .lang-menu{right:auto;left:0;}
+[dir="rtl"] .lang-item{text-align:right;}
+[dir="rtl"] .ii-search-popup{right:auto;left:0;}
+[dir="rtl"] .ii-nav-icons{margin-left:0;margin-right:auto;}
+[dir="rtl"] .ft-link:hover{transform:translateX(-4px);}
+[dir="rtl"] .mobile-menu{direction:rtl;}
+[dir="rtl"] .mm-link:hover{padding-left:0;padding-right:8px;}
 </style>
 </head>
 <body>
@@ -709,16 +738,16 @@ a { text-decoration: none; color: inherit; }
       <span>Islamic<span class="ii-logo-gold">Info</span></span>
     </a>
     <nav class="ii-nav-links" aria-label="Primary navigation">
-      <a class="ii-nav-link" href="index.html">Home</a>
-      <a class="ii-nav-link" href="quran.html">Quran Explorer</a>
-      <a class="ii-nav-link ii-active" href="hadith.html">Hadith Library</a>
-      <a class="ii-nav-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="ii-nav-link" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="ii-nav-link" href="dua.html">Daily Duas</a>
-      <a class="ii-nav-link" href="tools.html">Tools</a>
-      <a class="ii-nav-link" href="habits.html">Habit Tracker</a>
-      <a class="ii-nav-link" href="verify.html">Verify</a>
-      <a class="ii-nav-link" href="about.html">About</a>
+      <a class="ii-nav-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+      <a class="ii-nav-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="ii-nav-link ii-active" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="ii-nav-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="ii-nav-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="ii-nav-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="ii-nav-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+      <a class="ii-nav-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="ii-nav-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+      <a class="ii-nav-link" href="about.html" data-i18n="chrome.nav.about">About</a>
     </nav>
     <div class="ii-nav-icons">
       <div class="ii-search-wrap">
@@ -726,14 +755,19 @@ a { text-decoration: none; color: inherit; }
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         </button>
         <div class="ii-search-popup" id="ii-search-popup" role="search">
-          <input type="text" id="ii-search-input" placeholder="Search hadiths, narrators, topics…" aria-label="Search"/>
+          <input type="text" id="ii-search-input" placeholder="Search hadiths, narrators, topics…" aria-label="Search" data-i18n-attr="placeholder:chrome.search.placeholder;aria-label:chrome.search.inputAria"/>
           <button class="ii-search-go" id="ii-search-go">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-            Search
+            <span data-i18n="chrome.search.button">Search</span>
           </button>
         </div>
       </div>
-      <button class="ii-icon-btn" aria-label="Language"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span></button>
+      <div class="lang-wrapper">
+        <button class="ii-icon-btn lang-trigger" id="langBtn" aria-label="Language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
+          <span id="langBtnCode" style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
+        </button>
+        <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
+      </div>
       <button class="ii-icon-btn" id="ii-theme-btn" aria-label="Toggle theme">
         <svg id="ii-theme-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
           <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
@@ -758,16 +792,16 @@ a { text-decoration: none; color: inherit; }
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
   </div>
-  <a class="mm-link" href="index.html">Home</a>
-  <a class="mm-link" href="quran.html">Quran Explorer</a>
-  <a class="mm-link" href="hadith.html">Hadith Library</a>
-  <a class="mm-link" href="islamic-studies.html">Islamic Studies</a>
-  <a class="mm-link" href="knowledge-hub.html">Knowledge Hub</a>
-  <a class="mm-link" href="dua.html">Daily Duas</a>
-  <a class="mm-link" href="tools.html">Tools</a>
-  <a class="mm-link" href="habits.html">Habit Tracker</a>
-  <a class="mm-link" href="verify.html">Verify</a>
-  <a class="mm-link" href="about.html">About</a>
+  <a class="mm-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+  <a class="mm-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+  <a class="mm-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+  <a class="mm-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+  <a class="mm-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+  <a class="mm-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+  <a class="mm-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+  <a class="mm-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+  <a class="mm-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+  <a class="mm-link" href="about.html" data-i18n="chrome.nav.about">About</a>
 </div>
 
 <div class="page-shell">
@@ -1517,7 +1551,7 @@ a { text-decoration: none; color: inherit; }
         </svg>
         <span><span class="ti">Islamic</span><span class="fo">Info</span></span>
       </a>
-      <p class="ft-tag">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
+      <p class="ft-tag" data-i18n="chrome.footer.tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
       <p class="ft-verse">وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ — Hud · 11:88</p>
     </div>
     <!-- Col 1: Hadith Library (page-specific per CLAUDE.md §7.3) -->
@@ -1531,19 +1565,19 @@ a { text-decoration: none; color: inherit; }
     </div>
     <!-- Col 2: Quick Access (identical on every page per §7.3) -->
     <div>
-      <div class="ft-col-h">Quick Access</div>
-      <a class="ft-link" href="quran.html">Quran Explorer</a>
-      <a class="ft-link" href="hadith.html">Hadith Library</a>
-      <a class="ft-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="ft-link" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="ft-link" href="dua.html">Daily Duas</a>
-      <a class="ft-link" href="tools.html">Islamic Tools</a>
-      <a class="ft-link" href="habits.html">Habit Tracker</a>
-      <a class="ft-link" href="verify.html">Verify a Claim</a>
+      <div class="ft-col-h" data-i18n="chrome.footer.quickAccess">Quick Access</div>
+      <a class="ft-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="ft-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="ft-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="ft-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="ft-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="ft-link" href="tools.html" data-i18n="chrome.footer.linkTools">Islamic Tools</a>
+      <a class="ft-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="ft-link" href="verify.html" data-i18n="chrome.footer.linkVerify">Verify a Claim</a>
     </div>
     <!-- Col 3: Our Ecosystem (verbatim per §7.4) -->
     <div>
-      <div class="ft-col-h">Our Ecosystem</div>
+      <div class="ft-col-h" data-i18n="chrome.footer.ecosystem">Our Ecosystem</div>
       <a class="ft-link" href="https://islamickids.org" target="_blank" rel="noopener">IslamicKids.org ↗</a>
       <a class="ft-link" href="https://quranlyai.com" target="_blank" rel="noopener">QuranlyAI ↗</a>
       <a class="ft-link" href="https://hadithiq.com" target="_blank" rel="noopener">HadithIQ ↗</a>
@@ -1553,17 +1587,17 @@ a { text-decoration: none; color: inherit; }
     </div>
     <!-- Col 4: Company + Legal -->
     <div>
-      <div class="ft-col-h">Company</div>
-      <a class="ft-link" href="about.html">About</a>
-      <a class="ft-link" href="contact.html">Contact</a>
-      <div class="ft-col-h" style="margin-top:16px;">Legal</div>
-      <a class="ft-link" href="privacy.html">Privacy Policy</a>
-      <a class="ft-link" href="terms.html">Terms of Use</a>
+      <div class="ft-col-h" data-i18n="chrome.footer.company">Company</div>
+      <a class="ft-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+      <a class="ft-link" href="contact.html" data-i18n="chrome.footer.contact">Contact</a>
+      <div class="ft-col-h" style="margin-top:16px;" data-i18n="chrome.footer.legal">Legal</div>
+      <a class="ft-link" href="privacy.html" data-i18n="chrome.footer.privacy">Privacy Policy</a>
+      <a class="ft-link" href="terms.html" data-i18n="chrome.footer.terms">Terms of Use</a>
     </div>
   </div>
   <div class="ft-bot">
-    <div class="ft-copy">© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
-    <div class="ft-note">All content source-verified · Privacy-first · Built with sincerity</div>
+    <div class="ft-copy" data-i18n="chrome.footer.copy" data-i18n-html>© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
+    <div class="ft-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
   </div>
 </footer>
 
@@ -1697,6 +1731,7 @@ function filterHadiths(q) {
   if (lq && shown === 0) showHadithToast('No results for "' + q + '"');
 }
 </script>
+<script src="src/js/i18n.js"></script>
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
 <script src="src/js/hadith.js"></script>

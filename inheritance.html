@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Islamic Inheritance Calculator — IslamicInfo</title>
+<title data-i18n="inheritance.title">Islamic Inheritance Calculator — IslamicInfo</title>
+<script>
+  /* i18n FOUC guard: set lang/dir before first paint */
+  (function(){
+    var l = localStorage.getItem('islamicinfo-lang') || 'en';
+    document.documentElement.setAttribute('lang', l);
+    if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=Amiri&display=swap" rel="stylesheet">
@@ -95,7 +103,7 @@ a{text-decoration:none;color:inherit;}
 .hamburger span{width:16px;height:1.5px;background:var(--ink-muted);border-radius:2px;display:block;}
 @media(max-width:1100px){.nav-link{font-size:11.5px;padding:5px 5px;}}
 @media(max-width:900px){.nav-link{font-size:10.5px;padding:5px 3px;}.brand{font-size:16px;gap:6px;}.brand-mark{width:28px;height:28px;}}
-@media(max-width:760px){.nav{display:none;}.header-tools .icon-btn:not(.theme-toggle):not(.search-trigger):not(.hamburger){display:none;}.hamburger{display:flex;}}
+@media(max-width:760px){.nav{display:none;}.header-tools .icon-btn:not(.theme-toggle):not(.search-trigger):not(.hamburger):not(.lang-trigger){display:none;}.hamburger{display:flex;}}
 
 /* ══ MOBILE MENU ══ */
 .mobile-menu{display:none;position:fixed;inset:0;z-index:300;background:rgba(6,38,40,.97);backdrop-filter:blur(20px);flex-direction:column;padding:24px 28px;gap:4px;}
@@ -313,6 +321,27 @@ a{text-decoration:none;color:inherit;}
 .ft-copy{font-size:12px;color:rgba(255,255,255,.24);}
 .ft-copy a{color:#C5A059;text-decoration:none;}
 .ft-note{font-size:11.5px;color:rgba(255,255,255,.18);font-style:italic;font-family:'Cormorant Garamond',serif;}
+
+/* ── Language dropdown ── */
+.lang-wrapper{position:relative;}
+.lang-menu{position:absolute;top:44px;right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.lang-menu.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .lang-menu{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.lang-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;background:transparent;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;color:var(--ink-body);text-align:left;transition:background .2s,color .2s;}
+.lang-item:hover{background:rgba(0,105,110,.08);}
+[data-theme="dark"] .lang-item:hover{background:rgba(0,105,110,.15);}
+.lang-item.on{color:var(--teal-700);font-weight:600;background:rgba(0,105,110,.06);}
+[data-theme="dark"] .lang-item.on{color:var(--teal-300);}
+.lang-code{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ink-subtle);width:24px;flex-shrink:0;}
+
+/* ── RTL patches ── */
+[dir="rtl"] .lang-menu{right:auto;left:0;}
+[dir="rtl"] .lang-item{text-align:right;}
+[dir="rtl"] .search-popup{right:auto;left:0;}
+[dir="rtl"] .header-tools{margin-left:0;margin-right:auto;}
+[dir="rtl"] .ft-link:hover{transform:translateX(-4px);}
+[dir="rtl"] .mobile-menu{direction:rtl;}
+[dir="rtl"] .mm-link:hover,[dir="rtl"] .mm-link.active{padding-left:0;padding-right:8px;}
 </style>
 </head>
 <body>
@@ -343,16 +372,16 @@ a{text-decoration:none;color:inherit;}
         <span class="brand-text"><span>Islamic</span><span class="info">Info</span></span>
       </a>
       <nav class="nav" aria-label="Primary navigation">
-        <a class="nav-link" href="index.html">Home</a>
-        <a class="nav-link" href="quran.html">Quran Explorer</a>
-        <a class="nav-link" href="hadith.html">Hadith Library</a>
-        <a class="nav-link" href="islamic-studies.html">Islamic Studies</a>
-        <a class="nav-link" href="knowledge-hub.html">Knowledge Hub</a>
-        <a class="nav-link" href="dua.html">Daily Duas</a>
-        <a class="nav-link active" href="tools.html">Tools</a>
-        <a class="nav-link" href="habits.html">Habit Tracker</a>
-        <a class="nav-link" href="verify.html">Verify</a>
-        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+        <a class="nav-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+        <a class="nav-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+        <a class="nav-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+        <a class="nav-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+        <a class="nav-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+        <a class="nav-link active" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+        <a class="nav-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+        <a class="nav-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+        <a class="nav-link" href="about.html" data-i18n="chrome.nav.about">About</a>
       </nav>
       <div class="header-tools">
         <div class="search-popup-wrapper">
@@ -360,11 +389,16 @@ a{text-decoration:none;color:inherit;}
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           </button>
           <div class="search-popup" id="searchPopup" role="search">
-            <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput"/>
-            <button class="search-popup-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search</button>
+            <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput" data-i18n-attr="placeholder:chrome.search.placeholder;aria-label:chrome.search.inputAria"/>
+            <button class="search-popup-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span data-i18n="chrome.search.button">Search</span></button>
           </div>
         </div>
-        <button class="icon-btn" aria-label="Language"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span></button>
+        <div class="lang-wrapper">
+          <button class="icon-btn lang-trigger" id="langBtn" aria-label="Language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
+            <span id="langBtnCode" style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
+          </button>
+          <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
+        </div>
         <button class="icon-btn theme-toggle" aria-label="Toggle theme" id="themeBtn"></button>
         <button class="icon-btn" aria-label="Admin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg></button>
         <button class="hamburger icon-btn" aria-label="Open menu" onclick="openMM()"><span></span><span></span><span></span></button>
@@ -379,16 +413,16 @@ a{text-decoration:none;color:inherit;}
     <span style="font-family:var(--font-display);font-size:18px;color:#5BC1C7;">Islamic<span style="color:#C5A059;">Info</span></span>
     <button class="icon-btn mm-close" onclick="closeMM()" style="color:rgba(255,255,255,.6);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   </div>
-  <a class="mm-link" href="index.html">Home</a>
-  <a class="mm-link" href="quran.html">Quran Explorer</a>
-  <a class="mm-link" href="hadith.html">Hadith Library</a>
-  <a class="mm-link" href="islamic-studies.html">Islamic Studies</a>
-  <a class="mm-link" href="knowledge-hub.html">Knowledge Hub</a>
-  <a class="mm-link" href="dua.html">Daily Duas</a>
-  <a class="mm-link active" href="tools.html">Tools</a>
-  <a class="mm-link" href="habits.html">Habit Tracker</a>
-  <a class="mm-link" href="verify.html">Verify</a>
-  <a class="mm-link" href="about.html">About</a>
+  <a class="mm-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+  <a class="mm-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+  <a class="mm-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+  <a class="mm-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+  <a class="mm-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+  <a class="mm-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+  <a class="mm-link active" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+  <a class="mm-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+  <a class="mm-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+  <a class="mm-link" href="about.html" data-i18n="chrome.nav.about">About</a>
 </div>
 
 <main>
@@ -402,17 +436,17 @@ a{text-decoration:none;color:inherit;}
   <div class="geo g4"><svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="#8A7036" stroke-width=".5"><polygon points="19,2 22,12 32,12 24,18 27,28 19,22 11,28 14,18 6,12 16,12" transform="rotate(22 19 19)"/></svg></div>
   <div class="hero-inner">
     <div class="bismillah-hero-top">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-    <div class="hero-badge"><div class="badge-dot"></div>Faraid Calculator · Qur'an 4:11–12, 4:176 · Sahih Bukhari &amp; Muslim</div>
-    <h1 class="hero-title">Islamic <span class="grad-it">Inheritance</span> Calculator</h1>
-    <p class="hero-sub">Calculate estate shares directly from the Qur'an (An-Nisa 4:11–12, 4:176) and Sahih hadith. Every share cites its exact primary source. No madhab interpretation — these are Qur'anic shares.</p>
+    <div class="hero-badge"><div class="badge-dot"></div><span data-i18n="inheritance.hero.badge">Faraid Calculator · Qur'an 4:11–12, 4:176 · Sahih Bukhari &amp; Muslim</span></div>
+    <h1 class="hero-title" data-i18n="inheritance.hero.title" data-i18n-html>Islamic <span class="grad-it">Inheritance</span> Calculator</h1>
+    <p class="hero-sub" data-i18n="inheritance.hero.sub">Calculate estate shares directly from the Qur'an (An-Nisa 4:11–12, 4:176) and Sahih hadith. Every share cites its exact primary source. No madhab interpretation — these are Qur'anic shares.</p>
     <div class="hero-btns">
       <a class="btn-primary" href="#calc-section">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/></svg>
-        Calculate Shares
+        <span data-i18n="inheritance.hero.cta1">Calculate Shares</span>
       </a>
-      <a class="btn-ghost" href="#methodology-section">View Sources</a>
+      <a class="btn-ghost" href="#methodology-section" data-i18n="inheritance.hero.cta2">View Sources</a>
     </div>
-    <div class="hero-arabic">وَلِكُلٍّ جَعَلْنَا مَوَٰلِىَ مِمَّا تَرَكَ ٱلْوَٰلِدَانِ وَٱلْأَقْرَبُونَ<small>An-Nisa · 4:33</small></div>
+    <div class="hero-arabic">وَلِكُلٍّ جَعَلْنَا مَوَٰلِىَ مِمَّا تَرَكَ ٱلْوَٰلِدَانِ وَٱلْأَقْرَبُونَ<small data-i18n="inheritance.hero.arabicCaption">An-Nisa · 4:33</small></div>
   </div>
 </section>
 
@@ -420,9 +454,9 @@ a{text-decoration:none;color:inherit;}
 <section class="section" id="calc-section" style="padding-top:clamp(40px,6vw,64px);">
   <div class="container">
     <div class="section-head">
-      <div class="section-eyebrow"><span style="color:var(--gold-500);">⚖</span> Enter Estate Details</div>
-      <h2 class="section-title">Calculate Inheritance Shares</h2>
-      <p class="section-sub">Fill in the estate details and select surviving heirs. Shares are calculated from the Qur'an and Sahih hadith instantly.</p>
+      <div class="section-eyebrow"><span style="color:var(--gold-500);">⚖</span> <span data-i18n="inheritance.calc.eyebrow">Enter Estate Details</span></div>
+      <h2 class="section-title" data-i18n="inheritance.calc.title">Calculate Inheritance Shares</h2>
+      <p class="section-sub" data-i18n="inheritance.calc.sub">Fill in the estate details and select surviving heirs. Shares are calculated from the Qur'an and Sahih hadith instantly.</p>
     </div>
 
     <div class="calc-wrap">
@@ -431,36 +465,36 @@ a{text-decoration:none;color:inherit;}
       <div class="calc-card reveal">
         <div class="calc-card-title">
           <div class="calc-card-title-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg></div>
-          Estate Details
+          <span data-i18n="inheritance.calc.estateDetailsTitle">Estate Details</span>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="estateValue">Total Estate Value</label>
-            <input class="form-input" type="number" id="estateValue" min="1" step="1" placeholder="e.g. 100000"/>
+            <label class="form-label" for="estateValue" data-i18n="inheritance.calc.estateValueLabel">Total Estate Value</label>
+            <input class="form-input" type="number" id="estateValue" min="1" step="1" placeholder="e.g. 100000" data-i18n-attr="placeholder:inheritance.calc.estateValuePlaceholder"/>
           </div>
           <div class="form-group">
-            <label class="form-label" for="currencySelect">Currency</label>
+            <label class="form-label" for="currencySelect" data-i18n="inheritance.calc.currencyLabel">Currency</label>
             <select class="form-select" id="currencySelect">
-              <option value="USD">USD — US Dollar</option>
-              <option value="GBP">GBP — British Pound</option>
-              <option value="EUR">EUR — Euro</option>
-              <option value="SAR">SAR — Saudi Riyal</option>
-              <option value="PKR">PKR — Pakistani Rupee</option>
-              <option value="BDT">BDT — Bangladeshi Taka</option>
-              <option value="Other">Other</option>
+              <option value="USD" data-i18n="inheritance.calc.currencyUsd">USD — US Dollar</option>
+              <option value="GBP" data-i18n="inheritance.calc.currencyGbp">GBP — British Pound</option>
+              <option value="EUR" data-i18n="inheritance.calc.currencyEur">EUR — Euro</option>
+              <option value="SAR" data-i18n="inheritance.calc.currencySar">SAR — Saudi Riyal</option>
+              <option value="PKR" data-i18n="inheritance.calc.currencyPkr">PKR — Pakistani Rupee</option>
+              <option value="BDT" data-i18n="inheritance.calc.currencyBdt">BDT — Bangladeshi Taka</option>
+              <option value="Other" data-i18n="inheritance.calc.currencyOther">Other</option>
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label" for="debtAmount">Outstanding Debts</label>
+            <label class="form-label" for="debtAmount" data-i18n="inheritance.calc.debtLabel">Outstanding Debts</label>
             <input class="form-input" type="number" id="debtAmount" min="0" step="1" placeholder="0"/>
           </div>
           <div class="form-group">
-            <label class="form-label" for="funeralAmount">Funeral Expenses</label>
+            <label class="form-label" for="funeralAmount" data-i18n="inheritance.calc.funeralLabel">Funeral Expenses</label>
             <input class="form-input" type="number" id="funeralAmount" min="0" step="1" placeholder="0"/>
           </div>
         </div>
         <div class="distributable-display">
-          <span class="distributable-label">Net Distributable Estate</span>
+          <span class="distributable-label" data-i18n="inheritance.calc.netDistributableLabel">Net Distributable Estate</span>
           <span class="distributable-value" id="distributableDisplay">$0.00</span>
         </div>
       </div>
@@ -469,19 +503,19 @@ a{text-decoration:none;color:inherit;}
       <div class="calc-card reveal reveal-d1">
         <div class="calc-card-title">
           <div class="calc-card-title-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg></div>
-          About the Deceased
+          <span data-i18n="inheritance.calc.deceasedTitle">About the Deceased</span>
         </div>
-        <p style="font-size:13px;color:var(--ink-subtle);margin-bottom:14px;">Gender affects spouse share calculations (husband vs. wife shares differ per An-Nisa 4:12)</p>
+        <p style="font-size:13px;color:var(--ink-subtle);margin-bottom:14px;" data-i18n="inheritance.calc.deceasedNote">Gender affects spouse share calculations (husband vs. wife shares differ per An-Nisa 4:12)</p>
         <div class="gender-row">
           <label class="gender-option">
             <input type="radio" name="deceasedGender" value="male" checked/>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="5"/><path d="M12 13v8M9 18h6"/></svg>
-            <span class="gender-option-label">Male (الذكر)</span>
+            <span class="gender-option-label" data-i18n="inheritance.calc.male">Male (الذكر)</span>
           </label>
           <label class="gender-option">
             <input type="radio" name="deceasedGender" value="female"/>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="5"/><path d="M12 13v5M9 15h6"/></svg>
-            <span class="gender-option-label">Female (الأنثى)</span>
+            <span class="gender-option-label" data-i18n="inheritance.calc.female">Female (الأنثى)</span>
           </label>
         </div>
       </div>
@@ -490,48 +524,48 @@ a{text-decoration:none;color:inherit;}
       <div class="calc-card reveal reveal-d2">
         <div class="calc-card-title">
           <div class="calc-card-title-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-          Surviving Heirs
+          <span data-i18n="inheritance.calc.heirsTitle">Surviving Heirs</span>
         </div>
-        <p style="font-size:13px;color:var(--ink-subtle);margin-bottom:20px;">Select all heirs who are alive at the time of death. Enter counts where multiple heirs exist.</p>
+        <p style="font-size:13px;color:var(--ink-subtle);margin-bottom:20px;" data-i18n="inheritance.calc.heirsNote">Select all heirs who are alive at the time of death. Enter counts where multiple heirs exist.</p>
 
         <!-- Spouse -->
         <div class="heirs-group">
-          <div class="heirs-group-title">Spouse</div>
+          <div class="heirs-group-title" data-i18n="inheritance.calc.spouseGroup">Spouse</div>
           <div class="heir-rows">
             <div class="heir-row" id="rowHusband" style="display:none;">
               <input class="heir-checkbox" type="checkbox" id="heirHusband"/>
-              <label class="heir-label" for="heirHusband">Husband (الزوج)</label>
+              <label class="heir-label" for="heirHusband" data-i18n="inheritance.calc.husband">Husband (الزوج)</label>
             </div>
             <div class="heir-row" id="rowWife">
               <input class="heir-checkbox" type="checkbox" id="heirWife"/>
-              <label class="heir-label" for="heirWife">Wife / Wives (الزوجة)</label>
-              <input class="heir-count" type="number" id="wifeCount" min="1" max="4" value="1" title="Number of wives (max 4)"/>
+              <label class="heir-label" for="heirWife" data-i18n="inheritance.calc.wifeWives">Wife / Wives (الزوجة)</label>
+              <input class="heir-count" type="number" id="wifeCount" min="1" max="4" value="1" title="Number of wives (max 4)" data-i18n-attr="title:inheritance.calc.wifeCountTitle"/>
             </div>
           </div>
         </div>
 
         <!-- Children -->
         <div class="heirs-group">
-          <div class="heirs-group-title">Children</div>
+          <div class="heirs-group-title" data-i18n="inheritance.calc.childrenGroup">Children</div>
           <div class="heir-rows">
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirSon"/>
-              <label class="heir-label" for="heirSon">Son(s) — الابن</label>
+              <label class="heir-label" for="heirSon" data-i18n="inheritance.calc.son">Son(s) — الابن</label>
               <input class="heir-count" type="number" id="sonCount" min="1" max="20" value="1"/>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirDaughter"/>
-              <label class="heir-label" for="heirDaughter">Daughter(s) — البنت</label>
+              <label class="heir-label" for="heirDaughter" data-i18n="inheritance.calc.daughter">Daughter(s) — البنت</label>
               <input class="heir-count" type="number" id="daughterCount" min="1" max="20" value="1"/>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirGrandson"/>
-              <label class="heir-label" for="heirGrandson">Son's Son(s) — ابن الابن <span style="font-size:11px;color:var(--ink-subtle);">(when no sons)</span></label>
+              <label class="heir-label" for="heirGrandson"><span data-i18n="inheritance.calc.grandson">Son's Son(s) — ابن الابن</span> <span style="font-size:11px;color:var(--ink-subtle);" data-i18n="inheritance.calc.whenNoSons">(when no sons)</span></label>
               <input class="heir-count" type="number" id="grandsonCount" min="1" max="20" value="1"/>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirGranddaughter"/>
-              <label class="heir-label" for="heirGranddaughter">Son's Daughter(s) — بنت الابن <span style="font-size:11px;color:var(--ink-subtle);">(when no sons)</span></label>
+              <label class="heir-label" for="heirGranddaughter"><span data-i18n="inheritance.calc.granddaughter">Son's Daughter(s) — بنت الابن</span> <span style="font-size:11px;color:var(--ink-subtle);" data-i18n="inheritance.calc.whenNoSons">(when no sons)</span></label>
               <input class="heir-count" type="number" id="granddaughterCount" min="1" max="20" value="1"/>
             </div>
           </div>
@@ -539,63 +573,63 @@ a{text-decoration:none;color:inherit;}
 
         <!-- Parents -->
         <div class="heirs-group">
-          <div class="heirs-group-title">Parents &amp; Grandparents</div>
+          <div class="heirs-group-title" data-i18n="inheritance.calc.parentsGroup">Parents &amp; Grandparents</div>
           <div class="heir-rows">
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirFather"/>
-              <label class="heir-label" for="heirFather">Father — الأب</label>
+              <label class="heir-label" for="heirFather" data-i18n="inheritance.calc.father">Father — الأب</label>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirMother"/>
-              <label class="heir-label" for="heirMother">Mother — الأم</label>
+              <label class="heir-label" for="heirMother" data-i18n="inheritance.calc.mother">Mother — الأم</label>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirPatGrandfather"/>
-              <label class="heir-label" for="heirPatGrandfather">Paternal Grandfather — الجد <span style="font-size:11px;color:var(--ink-subtle);">(when father absent)</span></label>
+              <label class="heir-label" for="heirPatGrandfather"><span data-i18n="inheritance.calc.patGrandfather">Paternal Grandfather — الجد</span> <span style="font-size:11px;color:var(--ink-subtle);" data-i18n="inheritance.calc.whenFatherAbsent">(when father absent)</span></label>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirPatGrandmother"/>
-              <label class="heir-label" for="heirPatGrandmother">Paternal Grandmother — الجدة</label>
+              <label class="heir-label" for="heirPatGrandmother" data-i18n="inheritance.calc.patGrandmother">Paternal Grandmother — الجدة</label>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirMatGrandmother"/>
-              <label class="heir-label" for="heirMatGrandmother">Maternal Grandmother — الجدة من جهة الأم</label>
+              <label class="heir-label" for="heirMatGrandmother" data-i18n="inheritance.calc.matGrandmother">Maternal Grandmother — الجدة من جهة الأم</label>
             </div>
           </div>
         </div>
 
         <!-- Siblings -->
         <div class="heirs-group">
-          <div class="heirs-group-title">Siblings</div>
+          <div class="heirs-group-title" data-i18n="inheritance.calc.siblingsGroup">Siblings</div>
           <div class="heir-rows">
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirFullBrother"/>
-              <label class="heir-label" for="heirFullBrother">Full Brother(s) — الأخ الشقيق</label>
+              <label class="heir-label" for="heirFullBrother" data-i18n="inheritance.calc.fullBrother">Full Brother(s) — الأخ الشقيق</label>
               <input class="heir-count" type="number" id="fullBrotherCount" min="1" max="20" value="1"/>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirFullSister"/>
-              <label class="heir-label" for="heirFullSister">Full Sister(s) — الأخت الشقيقة</label>
+              <label class="heir-label" for="heirFullSister" data-i18n="inheritance.calc.fullSister">Full Sister(s) — الأخت الشقيقة</label>
               <input class="heir-count" type="number" id="fullSisterCount" min="1" max="20" value="1"/>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirPatHalfBrother"/>
-              <label class="heir-label" for="heirPatHalfBrother">Paternal Half-Brother(s) — أخ لأب</label>
+              <label class="heir-label" for="heirPatHalfBrother" data-i18n="inheritance.calc.patHalfBrother">Paternal Half-Brother(s) — أخ لأب</label>
               <input class="heir-count" type="number" id="patHalfBrotherCount" min="1" max="20" value="1"/>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirPatHalfSister"/>
-              <label class="heir-label" for="heirPatHalfSister">Paternal Half-Sister(s) — أخت لأب</label>
+              <label class="heir-label" for="heirPatHalfSister" data-i18n="inheritance.calc.patHalfSister">Paternal Half-Sister(s) — أخت لأب</label>
               <input class="heir-count" type="number" id="patHalfSisterCount" min="1" max="20" value="1"/>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirMatHalfBrother"/>
-              <label class="heir-label" for="heirMatHalfBrother">Maternal Half-Brother(s) — أخ لأم</label>
+              <label class="heir-label" for="heirMatHalfBrother" data-i18n="inheritance.calc.matHalfBrother">Maternal Half-Brother(s) — أخ لأم</label>
               <input class="heir-count" type="number" id="matHalfBrotherCount" min="1" max="20" value="1"/>
             </div>
             <div class="heir-row">
               <input class="heir-checkbox" type="checkbox" id="heirMatHalfSister"/>
-              <label class="heir-label" for="heirMatHalfSister">Maternal Half-Sister(s) — أخت لأم</label>
+              <label class="heir-label" for="heirMatHalfSister" data-i18n="inheritance.calc.matHalfSister">Maternal Half-Sister(s) — أخت لأم</label>
               <input class="heir-count" type="number" id="matHalfSisterCount" min="1" max="20" value="1"/>
             </div>
           </div>
@@ -605,11 +639,11 @@ a{text-decoration:none;color:inherit;}
         <div class="calc-actions">
           <button class="btn-primary" onclick="runCalculation()">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l9-3 9 3M6 10l-3 8h6l-3-8zM18 10l-3 8h6l-3-8z"/></svg>
-            Calculate Shares
+            <span data-i18n="inheritance.hero.cta1">Calculate Shares</span>
           </button>
           <button class="btn-ghost" onclick="resetForm()" style="padding:13px 20px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-            Reset
+            <span data-i18n="inheritance.calc.resetBtn">Reset</span>
           </button>
         </div>
       </div>
@@ -623,22 +657,22 @@ a{text-decoration:none;color:inherit;}
 
     <div class="results-divider reveal">
       <div class="results-divider-line"></div>
-      <span class="results-divider-label">✦ Inheritance Shares Calculated</span>
+      <span class="results-divider-label" data-i18n="inheritance.results.dividerLabel">✦ Inheritance Shares Calculated</span>
       <div class="results-divider-line r"></div>
     </div>
 
     <!-- Estate Summary Strip -->
     <div class="estate-strip reveal">
       <div class="estate-strip-cell">
-        <div class="es-label">Total Estate</div>
+        <div class="es-label" data-i18n="inheritance.results.totalEstateLabel">Total Estate</div>
         <div class="es-value" id="rsTotalEstate">—</div>
       </div>
       <div class="estate-strip-cell">
-        <div class="es-label">Debts &amp; Expenses</div>
+        <div class="es-label" data-i18n="inheritance.results.debtsExpensesLabel">Debts &amp; Expenses</div>
         <div class="es-value deduct" id="rsDeductions">—</div>
       </div>
       <div class="estate-strip-cell">
-        <div class="es-label">Net Distributable</div>
+        <div class="es-label" data-i18n="inheritance.results.netDistributableLabel">Net Distributable</div>
         <div class="es-value teal" id="rsDistributable">—</div>
       </div>
     </div>
@@ -648,11 +682,11 @@ a{text-decoration:none;color:inherit;}
       <table class="heirs-table">
         <thead>
           <tr>
-            <th>Heir</th>
-            <th>Share (Qur'anic)</th>
-            <th>Amount</th>
-            <th>Source</th>
-            <th>Note</th>
+            <th data-i18n="inheritance.results.thHeir">Heir</th>
+            <th data-i18n="inheritance.results.thShare">Share (Qur'anic)</th>
+            <th data-i18n="inheritance.results.thAmount">Amount</th>
+            <th data-i18n="inheritance.results.thSource">Source</th>
+            <th data-i18n="inheritance.results.thNote">Note</th>
           </tr>
         </thead>
         <tbody id="heirsTableBody">
@@ -663,13 +697,13 @@ a{text-decoration:none;color:inherit;}
 
     <!-- Distribution Chart -->
     <div class="chart-wrap reveal reveal-d2">
-      <div class="chart-label">Visual Distribution</div>
+      <div class="chart-label" data-i18n="inheritance.results.chartLabel">Visual Distribution</div>
       <div class="distribution-chart" id="distribution-chart"></div>
       <div class="chart-legend" id="chart-legend"></div>
     </div>
 
     <!-- Disclaimer — HARD-CODED, never modified by JS -->
-    <div class="disclaimer reveal reveal-d3">
+    <div class="disclaimer reveal reveal-d3" data-i18n="inheritance.results.disclaimer" data-i18n-html>
       <strong>⚠️ Source Transparency:</strong> Shares are calculated directly from the Qur'an (An-Nisa 4:11, 4:12, 4:176) and Sahih hadith (Sahih al-Bukhari 6732, Sahih Muslim 1615). <strong>The fixed shares (Fard) are stated explicitly in the Qur'an — they are not scholarly opinion or madhab interpretation.</strong> Blocking rules (Ḥijb) are from authenticated Sunnah, not from any school of thought. Madhab differences apply only to rare edge cases not covered by this calculator. IslamicInfo does not issue fatwas or legal rulings. For complex situations — bequests (Waṣiyyah), non-Muslim relatives, missing heirs, or multi-generation chains — consult a qualified scholar or certified Faraid specialist.
     </div>
 
@@ -677,15 +711,15 @@ a{text-decoration:none;color:inherit;}
     <div class="result-actions reveal reveal-d4">
       <button class="btn-action" onclick="window.print()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        Print / Save PDF
+        <span data-i18n="inheritance.results.printBtn">Print / Save PDF</span>
       </button>
       <button class="btn-action" onclick="shareResult()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        Share Link
+        <span data-i18n="inheritance.results.shareBtn">Share Link</span>
       </button>
       <button class="btn-action" onclick="scrollToCalc()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-        Recalculate
+        <span data-i18n="inheritance.results.recalcBtn">Recalculate</span>
       </button>
     </div>
 
@@ -696,83 +730,83 @@ a{text-decoration:none;color:inherit;}
 <section class="section" id="methodology-section" style="background:var(--surface-card);">
   <div class="container">
     <div class="section-head">
-      <div class="section-eyebrow">📖 Primary Sources</div>
-      <h2 class="section-title reveal">Every Share Has a Source</h2>
-      <p class="section-sub reveal reveal-d1">This calculator derives every share from one of three authenticated sources. No school-of-thought interpretation is applied to the Qur'anic shares.</p>
+      <div class="section-eyebrow" data-i18n="inheritance.sources.eyebrow">📖 Primary Sources</div>
+      <h2 class="section-title reveal" data-i18n="inheritance.sources.title">Every Share Has a Source</h2>
+      <p class="section-sub reveal reveal-d1" data-i18n="inheritance.sources.sub">This calculator derives every share from one of three authenticated sources. No school-of-thought interpretation is applied to the Qur'anic shares.</p>
     </div>
 
     <div class="sources-tiers">
       <div class="source-tier-card reveal">
         <div class="source-tier-icon">📖</div>
-        <div class="source-tier-title">Qur'an</div>
-        <div class="source-tier-ref">Fixed Shares — Fard (الفرض)</div>
-        <div class="source-tier-desc">An-Nisa 4:11 · An-Nisa 4:12 · An-Nisa 4:176<br><br>The Qur'an specifies exact fractional shares for each heir category. These are direct divine instruction — not scholarly interpretation.</div>
+        <div class="source-tier-title" data-i18n="inheritance.sources.tier1Title">Qur'an</div>
+        <div class="source-tier-ref" data-i18n="inheritance.sources.tier1Ref">Fixed Shares — Fard (الفرض)</div>
+        <div class="source-tier-desc" data-i18n="inheritance.sources.tier1Desc" data-i18n-html>An-Nisa 4:11 · An-Nisa 4:12 · An-Nisa 4:176<br><br>The Qur'an specifies exact fractional shares for each heir category. These are direct divine instruction — not scholarly interpretation.</div>
       </div>
       <div class="source-tier-card reveal reveal-d1">
         <div class="source-tier-icon">📚</div>
-        <div class="source-tier-title">Sahih al-Bukhari</div>
-        <div class="source-tier-ref">Ḥijb Blocking Rules · Hadith 6732</div>
+        <div class="source-tier-title" data-i18n="inheritance.sources.tier2Title">Sahih al-Bukhari</div>
+        <div class="source-tier-ref" data-i18n="inheritance.sources.tier2Ref">Ḥijb Blocking Rules · Hadith 6732</div>
         <div class="source-tier-desc" style="font-family:var(--font-arabic);direction:rtl;font-size:15px;line-height:1.9;margin-bottom:8px;">أَلْحِقُوا الْفَرَائِضَ بِأَهْلِهَا، فَمَا بَقِيَ فَهُوَ لأَوْلَى رَجُلٍ ذَكَرٍ</div>
-        <div class="source-tier-desc">"Give the fixed shares to those entitled. What remains goes to the nearest male." — Ibn Abbas (رضي الله عنه)</div>
+        <div class="source-tier-desc" data-i18n="inheritance.sources.tier2Desc">"Give the fixed shares to those entitled. What remains goes to the nearest male." — Ibn Abbas (رضي الله عنه)</div>
       </div>
       <div class="source-tier-card reveal reveal-d2">
         <div class="source-tier-icon">📚</div>
-        <div class="source-tier-title">Sahih Muslim</div>
-        <div class="source-tier-ref">Parallel Narration · Hadith 1615</div>
-        <div class="source-tier-desc">Parallel narration of the same hadith, confirming the Aṣabah (residue) principle and the blocking rules (Ḥijb). Grade: <strong style="color:var(--grade-sahih);">Sahih — Agreed upon</strong></div>
+        <div class="source-tier-title" data-i18n="inheritance.sources.tier3Title">Sahih Muslim</div>
+        <div class="source-tier-ref" data-i18n="inheritance.sources.tier3Ref">Parallel Narration · Hadith 1615</div>
+        <div class="source-tier-desc" data-i18n="inheritance.sources.tier3Desc" data-i18n-html>Parallel narration of the same hadith, confirming the Aṣabah (residue) principle and the blocking rules (Ḥijb). Grade: <strong style="color:var(--grade-sahih);">Sahih — Agreed upon</strong></div>
       </div>
     </div>
 
     <!-- Shares Reference Grid -->
-    <h3 class="section-title reveal" style="font-size:clamp(22px,3vw,32px);text-align:center;margin-bottom:28px;">The Six Qur'anic Shares</h3>
+    <h3 class="section-title reveal" style="font-size:clamp(22px,3vw,32px);text-align:center;margin-bottom:28px;" data-i18n="inheritance.sources.sixSharesTitle">The Six Qur'anic Shares</h3>
     <div class="shares-grid">
       <div class="share-card reveal">
         <div class="share-fraction">½</div>
         <div class="share-term-ar">نِصْف</div>
         <div class="share-term-en">Niṣf</div>
-        <div class="share-who">Sole daughter; sole full sister; husband when wife has no children</div>
+        <div class="share-who" data-i18n="inheritance.sources.share1Who">Sole daughter; sole full sister; husband when wife has no children</div>
         <div class="share-source">An-Nisa 4:11–12</div>
       </div>
       <div class="share-card reveal reveal-d1">
         <div class="share-fraction">¼</div>
         <div class="share-term-ar">رُبْع</div>
         <div class="share-term-en">Rubʿ</div>
-        <div class="share-who">Husband when children exist; wife when no children</div>
+        <div class="share-who" data-i18n="inheritance.sources.share2Who">Husband when children exist; wife when no children</div>
         <div class="share-source">An-Nisa 4:12</div>
       </div>
       <div class="share-card reveal reveal-d2">
         <div class="share-fraction">⅛</div>
         <div class="share-term-ar">ثُمُن</div>
         <div class="share-term-en">Thumun</div>
-        <div class="share-who">Wife / wives when children exist</div>
+        <div class="share-who" data-i18n="inheritance.sources.share3Who">Wife / wives when children exist</div>
         <div class="share-source">An-Nisa 4:12</div>
       </div>
       <div class="share-card reveal">
         <div class="share-fraction">⅓</div>
         <div class="share-term-ar">ثُلُث</div>
         <div class="share-term-en">Thulth</div>
-        <div class="share-who">Mother when no children and fewer than 2 siblings; 2+ maternal half-siblings</div>
+        <div class="share-who" data-i18n="inheritance.sources.share4Who">Mother when no children and fewer than 2 siblings; 2+ maternal half-siblings</div>
         <div class="share-source">An-Nisa 4:11</div>
       </div>
       <div class="share-card reveal reveal-d1">
         <div class="share-fraction">⅔</div>
         <div class="share-term-ar">ثُلُثَان</div>
         <div class="share-term-en">Thulthān</div>
-        <div class="share-who">Two or more daughters; two or more full sisters (when no sons)</div>
+        <div class="share-who" data-i18n="inheritance.sources.share5Who">Two or more daughters; two or more full sisters (when no sons)</div>
         <div class="share-source">An-Nisa 4:11</div>
       </div>
       <div class="share-card reveal reveal-d2">
         <div class="share-fraction">⅙</div>
         <div class="share-term-ar">سُدُس</div>
         <div class="share-term-en">Sudus</div>
-        <div class="share-who">Father or mother when children exist; one maternal half-sibling</div>
+        <div class="share-who" data-i18n="inheritance.sources.share6Who">Father or mother when children exist; one maternal half-sibling</div>
         <div class="share-source">An-Nisa 4:11</div>
       </div>
       <div class="share-card reveal">
-        <div class="share-fraction" style="font-size:22px;line-height:1.3;">Residue</div>
+        <div class="share-fraction" style="font-size:22px;line-height:1.3;" data-i18n="inheritance.sources.share7Title">Residue</div>
         <div class="share-term-ar">عَصَبَة</div>
         <div class="share-term-en">Aṣabah</div>
-        <div class="share-who">Sons; father (when no children); brothers — after all fixed Fard shares are paid</div>
+        <div class="share-who" data-i18n="inheritance.sources.share7Who">Sons; father (when no children); brothers — after all fixed Fard shares are paid</div>
         <div class="share-source" style="background:rgba(197,160,89,.08);color:var(--gold-700);border-color:rgba(197,160,89,.2);">Bukhari 6732 · Muslim 1615</div>
       </div>
     </div>
@@ -783,49 +817,49 @@ a{text-decoration:none;color:inherit;}
 <section class="section" id="faq-section">
   <div class="container">
     <div class="section-head">
-      <div class="section-eyebrow">Common Questions</div>
-      <h2 class="section-title reveal">Frequently Asked</h2>
+      <div class="section-eyebrow" data-i18n="inheritance.faq.eyebrow">Common Questions</div>
+      <h2 class="section-title reveal" data-i18n="inheritance.faq.title">Frequently Asked</h2>
     </div>
     <div class="faq-list">
 
       <div class="faq-item reveal">
         <div class="faq-q" onclick="toggleFaq(this)">
-          <span class="faq-q-text">What is Faraid (علم الفرائض)?</span>
+          <span class="faq-q-text" data-i18n="inheritance.faq.q1">What is Faraid (علم الفرائض)?</span>
           <span class="faq-icon">+</span>
         </div>
-        <div class="faq-a"><div class="faq-a-inner">The Qur'an dedicates more verses to inheritance than to any other single legal topic. An-Nisa 4:11–12 and 4:176 specify exact fractional shares for each heir category. These are direct divine instruction — not interpretations by scholars or jurists. The word Faraid (الفرائض) means "obligatory shares" — the amounts are fixed by Allah in His Book.</div></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="inheritance.faq.a1">The Qur'an dedicates more verses to inheritance than to any other single legal topic. An-Nisa 4:11–12 and 4:176 specify exact fractional shares for each heir category. These are direct divine instruction — not interpretations by scholars or jurists. The word Faraid (الفرائض) means "obligatory shares" — the amounts are fixed by Allah in His Book.</div></div>
       </div>
 
       <div class="faq-item reveal reveal-d1">
         <div class="faq-q" onclick="toggleFaq(this)">
-          <span class="faq-q-text">Does this calculator cover all heirs?</span>
+          <span class="faq-q-text" data-i18n="inheritance.faq.q2">Does this calculator cover all heirs?</span>
           <span class="faq-icon">+</span>
         </div>
-        <div class="faq-a"><div class="faq-a-inner">It covers the primary heirs specified in An-Nisa 4:11–12 and 4:176, plus blocking rules (Ḥijb) from Sahih Bukhari 6732 and Muslim 1615. Complex scenarios — multiple grandmothers, great-grandchildren chains, Radd distribution, Waṣiyyah (bequests) — require a qualified scholar, as these involve edge cases not explicitly stated in the Qur'an.</div></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="inheritance.faq.a2">It covers the primary heirs specified in An-Nisa 4:11–12 and 4:176, plus blocking rules (Ḥijb) from Sahih Bukhari 6732 and Muslim 1615. Complex scenarios — multiple grandmothers, great-grandchildren chains, Radd distribution, Waṣiyyah (bequests) — require a qualified scholar, as these involve edge cases not explicitly stated in the Qur'an.</div></div>
       </div>
 
       <div class="faq-item reveal reveal-d2">
         <div class="faq-q" onclick="toggleFaq(this)">
-          <span class="faq-q-text">What is Aṣabah (العصبة) — the residue?</span>
+          <span class="faq-q-text" data-i18n="inheritance.faq.q3">What is Aṣabah (العصبة) — the residue?</span>
           <span class="faq-icon">+</span>
         </div>
-        <div class="faq-a"><div class="faq-a-inner">After all Qur'anically specified fixed shares (Fard) are distributed, the remainder goes to the nearest male relative (Aṣabah). The Prophet ﷺ said: <em>"Give the fixed shares to those entitled. What remains goes to the nearest male."</em> (Bukhari 6732, Muslim 1615). This is authenticated Sunnah — not madhab opinion — and is agreed upon by all classical scholars.</div></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="inheritance.faq.a3" data-i18n-html>After all Qur'anically specified fixed shares (Fard) are distributed, the remainder goes to the nearest male relative (Aṣabah). The Prophet ﷺ said: <em>"Give the fixed shares to those entitled. What remains goes to the nearest male."</em> (Bukhari 6732, Muslim 1615). This is authenticated Sunnah — not madhab opinion — and is agreed upon by all classical scholars.</div></div>
       </div>
 
       <div class="faq-item reveal reveal-d3">
         <div class="faq-q" onclick="toggleFaq(this)">
-          <span class="faq-q-text">Why is there no madhab selector?</span>
+          <span class="faq-q-text" data-i18n="inheritance.faq.q4">Why is there no madhab selector?</span>
           <span class="faq-icon">+</span>
         </div>
-        <div class="faq-a"><div class="faq-a-inner">Because the shares this calculator computes are from the Qur'an directly. An-Nisa 4:11 states the shares of children. An-Nisa 4:12 states the shares of spouses. These are not scholarly interpretations — they are Qur'anic text. All four madhabs agree on these shares. Madhab differences apply only to rare edge cases (e.g. the Mushtarakah problem, Radd distribution methods) — none of which are within the scope of this calculator.</div></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="inheritance.faq.a4">Because the shares this calculator computes are from the Qur'an directly. An-Nisa 4:11 states the shares of children. An-Nisa 4:12 states the shares of spouses. These are not scholarly interpretations — they are Qur'anic text. All four madhabs agree on these shares. Madhab differences apply only to rare edge cases (e.g. the Mushtarakah problem, Radd distribution methods) — none of which are within the scope of this calculator.</div></div>
       </div>
 
       <div class="faq-item reveal reveal-d4">
         <div class="faq-q" onclick="toggleFaq(this)">
-          <span class="faq-q-text">My situation is complex — what should I do?</span>
+          <span class="faq-q-text" data-i18n="inheritance.faq.q5">My situation is complex — what should I do?</span>
           <span class="faq-icon">+</span>
         </div>
-        <div class="faq-a"><div class="faq-a-inner">For situations involving bequests (Waṣiyyah — max 1/3 to non-heirs), non-Muslim relatives, missing heirs, simultaneous deaths, or multiple generations of grandparents — consult a qualified Islamic scholar or a certified Faraid specialist. This calculator handles clear-cut cases directly stated in the Qur'an and authenticated Sunnah.</div></div>
+        <div class="faq-a"><div class="faq-a-inner" data-i18n="inheritance.faq.a5">For situations involving bequests (Waṣiyyah — max 1/3 to non-heirs), non-Muslim relatives, missing heirs, simultaneous deaths, or multiple generations of grandparents — consult a qualified Islamic scholar or a certified Faraid specialist. This calculator handles clear-cut cases directly stated in the Qur'an and authenticated Sunnah.</div></div>
       </div>
 
     </div>
@@ -835,13 +869,13 @@ a{text-decoration:none;color:inherit;}
 <!-- ══ CTA SECTION ══ -->
 <section class="cta-section">
   <div class="container" style="position:relative;z-index:1;">
-    <div class="cta-badge reveal"><span style="color:#D9B358;">✦</span> Islamic Financial Tools</div>
-    <h2 class="cta-title reveal">Knowledge is the foundation<br><em style="font-style:italic;">of just distribution.</em></h2>
+    <div class="cta-badge reveal"><span style="color:#D9B358;">✦</span> <span data-i18n="inheritance.cta.badge">Islamic Financial Tools</span></div>
+    <h2 class="cta-title reveal" data-i18n="inheritance.cta.title" data-i18n-html>Knowledge is the foundation<br><em style="font-style:italic;">of just distribution.</em></h2>
     <p class="cta-sub reveal">إِنَّ اللَّهَ يَأْمُرُكُمْ أَن تُؤَدُّوا الْأَمَانَاتِ إِلَىٰ أَهْلِهَا — An-Nisa 4:58</p>
     <div class="cta-actions reveal">
-      <a class="btn-gold" href="tools.html">← Back to All Tools</a>
-      <a class="btn-white-ghost" href="verify.html">Verify a Claim</a>
-      <a class="btn-white-ghost" href="hadith.html">Hadith Library</a>
+      <a class="btn-gold" href="tools.html" data-i18n="inheritance.cta.btn1">← Back to All Tools</a>
+      <a class="btn-white-ghost" href="verify.html" data-i18n="chrome.footer.linkVerify">Verify a Claim</a>
+      <a class="btn-white-ghost" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
     </div>
   </div>
 </section>
@@ -854,48 +888,48 @@ a{text-decoration:none;color:inherit;}
         <svg width="28" height="28" viewBox="0 0 72 72" fill="none"><defs><linearGradient id="ft-gl2" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#004E55"/><stop offset="100%" stop-color="#2CA4AB"/></linearGradient></defs><path d="M36 20 Q22 24 12 30 L12 52 Q22 46 36 46 Z" fill="url(#ft-gl2)"/><path d="M36 20 Q50 24 60 30 L60 52 Q50 46 36 46 Z" fill="url(#ft-gl2)" opacity=".8"/><path d="M36 20 L36 46" stroke="#C5A059" stroke-width="1" stroke-linecap="round"/><g transform="translate(36 16)"><path d="M0 -7 L1.8 -1.8 L7 0 L1.8 1.8 L0 7 L-1.8 1.8 L-7 0 L-1.8 -1.8 Z" fill="#C5A059"/><circle r="2" fill="white" opacity=".9"/></g></svg>
         <span><span class="ti">Islamic</span><span class="fo">Info</span></span>
       </a>
-      <p class="ft-tag">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
+      <p class="ft-tag" data-i18n="chrome.footer.tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
       <p class="ft-verse">وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ — Hud · 11:88</p>
     </div>
     <div>
-      <div class="ft-col-h">Tools</div>
-      <a class="ft-link" href="tools.html#prayer-widget">Prayer Times</a>
-      <a class="ft-link" href="tools.html#qibla-section">Qibla Compass</a>
-      <a class="ft-link" href="tools.html#zakat-section">Zakat Calculator</a>
-      <a class="ft-link" href="inheritance.html">Inheritance Calculator</a>
-      <a class="ft-link" href="tools.html#tasbeeh-section">Tasbeeh Counter</a>
+      <div class="ft-col-h" data-i18n="inheritance.footer.colHeading">Tools</div>
+      <a class="ft-link" href="tools.html#prayer-widget" data-i18n="inheritance.footer.prayerTimes">Prayer Times</a>
+      <a class="ft-link" href="tools.html#qibla-section" data-i18n="inheritance.footer.qiblaCompass">Qibla Compass</a>
+      <a class="ft-link" href="tools.html#zakat-section" data-i18n="inheritance.footer.zakatCalculator">Zakat Calculator</a>
+      <a class="ft-link" href="inheritance.html" data-i18n="inheritance.footer.inheritanceCalculator">Inheritance Calculator</a>
+      <a class="ft-link" href="tools.html#tasbeeh-section" data-i18n="inheritance.footer.tasbeehCounter">Tasbeeh Counter</a>
     </div>
     <div>
-      <div class="ft-col-h">Quick Access</div>
-      <a class="ft-link" href="quran.html">Quran Explorer</a>
-      <a class="ft-link" href="hadith.html">Hadith Library</a>
-      <a class="ft-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="ft-link" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="ft-link" href="dua.html">Daily Duas</a>
-      <a class="ft-link" href="tools.html">Islamic Tools</a>
-      <a class="ft-link" href="habits.html">Habit Tracker</a>
-      <a class="ft-link" href="verify.html">Verify a Claim</a>
+      <div class="ft-col-h" data-i18n="chrome.footer.quickAccess">Quick Access</div>
+      <a class="ft-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="ft-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="ft-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="ft-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="ft-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="ft-link" href="tools.html" data-i18n="chrome.footer.linkTools">Islamic Tools</a>
+      <a class="ft-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="ft-link" href="verify.html" data-i18n="chrome.footer.linkVerify">Verify a Claim</a>
     </div>
     <div>
-      <div class="ft-col-h">Our Ecosystem</div>
+      <div class="ft-col-h" data-i18n="chrome.footer.ecosystem">Our Ecosystem</div>
       <a class="ft-link" href="https://quranlyai.com" target="_blank" rel="noopener">QuranlyAI ↗</a>
       <a class="ft-link" href="https://mosquefinder.net" target="_blank" rel="noopener">MosqueFinder ↗</a>
       <a class="ft-link" href="https://travellyai.com" target="_blank" rel="noopener">TravellyAI ↗</a>
       <a class="ft-link" href="https://learnspeakai.com" target="_blank" rel="noopener">LearnSpeakAI ↗</a>
     </div>
     <div>
-      <div class="ft-col-h">Company</div>
-      <a class="ft-link" href="about.html">About</a>
-      <a class="ft-link" href="about.html#methodology">Our Methodology</a>
-      <a class="ft-link" href="mailto:hello@islamicinfo.org">Contact</a>
-      <div class="ft-col-h" style="margin-top:16px;">Legal</div>
-      <a class="ft-link" href="privacy.html">Privacy Policy</a>
-      <a class="ft-link" href="terms.html">Terms of Use</a>
+      <div class="ft-col-h" data-i18n="chrome.footer.company">Company</div>
+      <a class="ft-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+      <a class="ft-link" href="about.html#methodology" data-i18n="chrome.footer.ourMethodology">Our Methodology</a>
+      <a class="ft-link" href="mailto:hello@islamicinfo.org" data-i18n="chrome.footer.contact">Contact</a>
+      <div class="ft-col-h" style="margin-top:16px;" data-i18n="chrome.footer.legal">Legal</div>
+      <a class="ft-link" href="privacy.html" data-i18n="chrome.footer.privacy">Privacy Policy</a>
+      <a class="ft-link" href="terms.html" data-i18n="chrome.footer.terms">Terms of Use</a>
     </div>
   </div>
   <div class="ft-bot">
-    <div class="ft-copy">© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
-    <div class="ft-note">All content source-verified · Privacy-first · Built with sincerity</div>
+    <div class="ft-copy" data-i18n="chrome.footer.copy" data-i18n-html>© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
+    <div class="ft-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
   </div>
 </footer>
 
@@ -1287,6 +1321,7 @@ window.II.inheritance = window.II.inheritance || {};
 })();
 </script>
 
+<script src="src/js/i18n.js"></script>
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
 <script src="src/js/inheritance.js"></script>

@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Islamic Tools — IslamicInfo</title>
+  <title data-i18n="tools.title">Islamic Tools — IslamicInfo</title>
+  <script>
+    /* i18n FOUC guard: set lang/dir before first paint */
+    (function(){
+      var l = localStorage.getItem('islamicinfo-lang') || 'en';
+      document.documentElement.setAttribute('lang', l);
+      if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=Amiri&display=swap" rel="stylesheet">
@@ -466,6 +474,27 @@ a{text-decoration:none;color:inherit;}
 
 /* ── Nav active dark mode ── */
 [data-theme="dark"] .nav-link.active{color:var(--teal-300);}
+
+/* ── Language dropdown ── */
+.lang-wrapper{position:relative;}
+.lang-menu{position:absolute;top:44px;right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.lang-menu.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .lang-menu{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.lang-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;background:transparent;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;color:var(--ink-body);text-align:left;transition:background .2s,color .2s;}
+.lang-item:hover{background:rgba(0,105,110,.08);}
+[data-theme="dark"] .lang-item:hover{background:rgba(0,105,110,.15);}
+.lang-item.on{color:var(--teal-700);font-weight:600;background:rgba(0,105,110,.06);}
+[data-theme="dark"] .lang-item.on{color:var(--teal-300);}
+.lang-code{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ink-subtle);width:24px;flex-shrink:0;}
+
+/* ── RTL patches ── */
+[dir="rtl"] .lang-menu{right:auto;left:0;}
+[dir="rtl"] .lang-item{text-align:right;}
+[dir="rtl"] .search-popup{right:auto;left:0;}
+[dir="rtl"] .header-tools{margin-left:0;margin-right:auto;}
+[dir="rtl"] .ft-link:hover{transform:translateX(-4px);}
+[dir="rtl"] .mobile-menu{direction:rtl;}
+[dir="rtl"] .mm-link:hover,[dir="rtl"] .mm-link.active{padding-left:0;padding-right:8px;}
 </style>
 <body>
 <div class="ambient"></div>
@@ -497,16 +526,16 @@ a{text-decoration:none;color:inherit;}
 
       <!-- Nav (Center) — all 10 items, Tools active — CLAUDE.md §4.1 -->
       <nav class="nav" aria-label="Primary navigation">
-        <a class="nav-link" href="index.html">Home</a>
-        <a class="nav-link" href="quran.html">Quran Explorer</a>
-        <a class="nav-link" href="hadith.html">Hadith Library</a>
-        <a class="nav-link" href="islamic-studies.html">Islamic Studies</a>
-        <a class="nav-link" href="knowledge-hub.html">Knowledge Hub</a>
-        <a class="nav-link" href="dua.html">Daily Duas</a>
-        <a class="nav-link active" href="tools.html">Tools</a>
-        <a class="nav-link" href="habits.html">Habit Tracker</a>
-        <a class="nav-link" href="verify.html">Verify</a>
-        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+        <a class="nav-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+        <a class="nav-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+        <a class="nav-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+        <a class="nav-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+        <a class="nav-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+        <a class="nav-link active" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+        <a class="nav-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+        <a class="nav-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+        <a class="nav-link" href="about.html" data-i18n="chrome.nav.about">About</a>
       </nav>
 
       <!-- Tools (Right) — CLAUDE.md §4.2 -->
@@ -516,14 +545,19 @@ a{text-decoration:none;color:inherit;}
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           </button>
           <div class="search-popup" id="searchPopup" role="search">
-            <input type="text" placeholder="Search tools, duas, verses…" aria-label="Site search" id="searchPopupInput"/>
+            <input type="text" placeholder="Search tools, duas, verses…" aria-label="Site search" id="searchPopupInput" data-i18n-attr="placeholder:chrome.search.placeholder;aria-label:chrome.search.inputAria"/>
             <button class="search-popup-btn">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-              Search
+              <span data-i18n="chrome.search.button">Search</span>
             </button>
           </div>
         </div>
-        <button class="icon-btn" aria-label="Language"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span></button>
+        <div class="lang-wrapper">
+          <button class="icon-btn lang-trigger" id="langBtn" aria-label="Language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
+            <span id="langBtnCode" style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
+          </button>
+          <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
+        </div>
         <button class="icon-btn theme-toggle" aria-label="Toggle theme" id="themeBtn"></button>
         <button class="icon-btn" aria-label="Admin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg></button>
         <!-- Hamburger — visible only ≤ 760px -->
@@ -543,16 +577,16 @@ a{text-decoration:none;color:inherit;}
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
   </div>
-  <a class="mm-link" href="index.html">Home</a>
-  <a class="mm-link" href="quran.html">Quran Explorer</a>
-  <a class="mm-link" href="hadith.html">Hadith Library</a>
-  <a class="mm-link" href="islamic-studies.html">Islamic Studies</a>
-  <a class="mm-link" href="knowledge-hub.html">Knowledge Hub</a>
-  <a class="mm-link" href="dua.html">Daily Duas</a>
-  <a class="mm-link active" href="tools.html">Tools</a>
-  <a class="mm-link" href="habits.html">Habit Tracker</a>
-  <a class="mm-link" href="verify.html">Verify</a>
-  <a class="mm-link" href="about.html">About</a>
+  <a class="mm-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+  <a class="mm-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+  <a class="mm-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+  <a class="mm-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+  <a class="mm-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+  <a class="mm-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+  <a class="mm-link active" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+  <a class="mm-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+  <a class="mm-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+  <a class="mm-link" href="about.html" data-i18n="chrome.nav.about">About</a>
 </div>
 
 <!-- ══ HERO ══ -->
@@ -563,23 +597,23 @@ a{text-decoration:none;color:inherit;}
   <svg class="geo g4" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="52" fill="none" stroke="#00696E" stroke-width="1"/></svg>
   <div class="hero-inner">
     <div class="bismillah-hero-top">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-    <div class="hero-badge"><span class="badge-dot"></span>Islamic Tools Suite</div>
-    <h1 class="hero-title">Every Tool a Muslim<br><span class="grad-it">Needs Daily</span></h1>
+    <div class="hero-badge"><span class="badge-dot"></span><span data-i18n="tools.hero.badge">Islamic Tools Suite</span></div>
+    <h1 class="hero-title" data-i18n="tools.hero.title" data-i18n-html>Every Tool a Muslim<br><span class="grad-it">Needs Daily</span></h1>
     <div class="hero-arabic">حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ</div>
-    <p class="hero-sub">Prayer times, Qibla, Zakat, Inheritance, Hijri Calendar, Tasbeeh, Name Finder, Age Calculator and more — all free, verified, and beautifully designed.</p>
+    <p class="hero-sub" data-i18n="tools.hero.sub">Prayer times, Qibla, Zakat, Inheritance, Hijri Calendar, Tasbeeh, Name Finder, Age Calculator and more — all free, verified, and beautifully designed.</p>
     <div class="hero-btns">
       <button class="btn-primary" onclick="document.getElementById('tools-section').scrollIntoView({behavior:'smooth'})">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-        Prayer Times
+        <span data-i18n="tools.hero.btn1">Prayer Times</span>
       </button>
-      <a class="btn-ghost" href="#tools-section">All Tools ↓</a>
+      <a class="btn-ghost" href="#tools-section"><span data-i18n="tools.hero.btn2">All Tools ↓</span></a>
     </div>
     <!-- Stats Strip -->
     <div class="stats-strip reveal">
-      <div class="stat-item"><div class="stat-num-lg" id="sc1">12+</div><div class="stat-label-sm">Tools</div></div>
-      <div class="stat-item"><div class="stat-num-lg">5</div><div class="stat-label-sm">Prayers Daily</div></div>
-      <div class="stat-item"><div class="stat-num-lg" id="sc2">195+</div><div class="stat-label-sm">Countries</div></div>
-      <div class="stat-item"><div class="stat-num-lg">100%</div><div class="stat-label-sm">Free Forever</div></div>
+      <div class="stat-item"><div class="stat-num-lg" id="sc1">12+</div><div class="stat-label-sm" data-i18n="tools.hero.statTools">Tools</div></div>
+      <div class="stat-item"><div class="stat-num-lg">5</div><div class="stat-label-sm" data-i18n="tools.hero.statPrayers">Prayers Daily</div></div>
+      <div class="stat-item"><div class="stat-num-lg" id="sc2">195+</div><div class="stat-label-sm" data-i18n="tools.hero.statCountries">Countries</div></div>
+      <div class="stat-item"><div class="stat-num-lg">100%</div><div class="stat-label-sm" data-i18n="tools.hero.statFree">Free Forever</div></div>
     </div>
     <!-- Prayer Widget -->
     <div class="prayer-widget reveal" id="prayer-widget" style="max-width:740px;margin:24px auto 0;">
@@ -589,30 +623,30 @@ a{text-decoration:none;color:inherit;}
             <div class="pw-loc-row">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               Toronto, Canada
-              <button class="pw-loc-btn" onclick="getPrayerLocation()">Change</button>
+              <button class="pw-loc-btn" onclick="getPrayerLocation()" data-i18n="tools.prayerWidget.change">Change</button>
             </div>
             <div class="pw-date" id="pwDate">Loading…</div>
           </div>
           <div class="pw-next-badge"><span class="pw-next-dot"></span> Next: Asr · 5:28 PM</div>
         </div>
         <div class="pw-prayers">
-          <div class="pw-prayer past"><div class="pw-name">Fajr</div><div class="pw-time">4:47</div><div class="pw-adhan-dot"></div></div>
-          <div class="pw-prayer past"><div class="pw-name">Sunrise</div><div class="pw-time">6:12</div><div class="pw-adhan-dot"></div></div>
-          <div class="pw-prayer past"><div class="pw-name">Dhuhr</div><div class="pw-time">1:14</div><div class="pw-adhan-dot"></div></div>
-          <div class="pw-prayer next"><div class="pw-name">Asr</div><div class="pw-time">5:28</div><div class="pw-adhan-dot"></div></div>
-          <div class="pw-prayer"><div class="pw-name">Maghrib</div><div class="pw-time">8:42</div><div class="pw-adhan-dot"></div></div>
-          <div class="pw-prayer"><div class="pw-name">Isha</div><div class="pw-time">10:18</div><div class="pw-adhan-dot"></div></div>
+          <div class="pw-prayer past"><div class="pw-name" data-i18n="tools.prayerWidget.fajr">Fajr</div><div class="pw-time">4:47</div><div class="pw-adhan-dot"></div></div>
+          <div class="pw-prayer past"><div class="pw-name" data-i18n="tools.prayerWidget.sunrise">Sunrise</div><div class="pw-time">6:12</div><div class="pw-adhan-dot"></div></div>
+          <div class="pw-prayer past"><div class="pw-name" data-i18n="tools.prayerWidget.dhuhr">Dhuhr</div><div class="pw-time">1:14</div><div class="pw-adhan-dot"></div></div>
+          <div class="pw-prayer next"><div class="pw-name" data-i18n="tools.prayerWidget.asr">Asr</div><div class="pw-time">5:28</div><div class="pw-adhan-dot"></div></div>
+          <div class="pw-prayer"><div class="pw-name" data-i18n="tools.prayerWidget.maghrib">Maghrib</div><div class="pw-time">8:42</div><div class="pw-adhan-dot"></div></div>
+          <div class="pw-prayer"><div class="pw-name" data-i18n="tools.prayerWidget.isha">Isha</div><div class="pw-time">10:18</div><div class="pw-adhan-dot"></div></div>
         </div>
         <div class="pw-footer">
           <div class="pw-sun-strip">
-            <div class="pw-sun-item">🌅 Sunrise <span class="pw-sun-val">6:12 AM</span></div>
-            <div class="pw-sun-item">🌇 Sunset <span class="pw-sun-val">8:42 PM</span></div>
-            <div class="pw-sun-item">Daylight <span class="pw-sun-val">14h 30m</span></div>
+            <div class="pw-sun-item"><span data-i18n="tools.prayerWidget.sunriseLabel">🌅 Sunrise</span> <span class="pw-sun-val">6:12 AM</span></div>
+            <div class="pw-sun-item"><span data-i18n="tools.prayerWidget.sunsetLabel">🌇 Sunset</span> <span class="pw-sun-val">8:42 PM</span></div>
+            <div class="pw-sun-item"><span data-i18n="tools.prayerWidget.daylightLabel">Daylight</span> <span class="pw-sun-val">14h 30m</span></div>
           </div>
           <div class="pw-extra">
-            <button class="pw-extra-btn" onclick="showToolsToast('Adhan alerts coming soon ✦')">🔔 Adhan</button>
-            <button class="pw-extra-btn" onclick="showToolsToast('Calculation method settings coming soon ✦')">⚙️ Method</button>
-            <button class="pw-extra-btn" onclick="getPrayerLocation()">📍 My Location</button>
+            <button class="pw-extra-btn" onclick="showToolsToast('Adhan alerts coming soon ✦')" data-i18n="tools.prayerWidget.adhanBtn">🔔 Adhan</button>
+            <button class="pw-extra-btn" onclick="showToolsToast('Calculation method settings coming soon ✦')" data-i18n="tools.prayerWidget.methodBtn">⚙️ Method</button>
+            <button class="pw-extra-btn" onclick="getPrayerLocation()" data-i18n="tools.prayerWidget.myLocationBtn">📍 My Location</button>
           </div>
         </div>
       </div>
@@ -624,113 +658,113 @@ a{text-decoration:none;color:inherit;}
 <section class="section" id="tools-section">
   <div class="container">
     <div class="section-head reveal">
-      <div class="section-eyebrow">✦ Complete Suite</div>
-      <h2 class="section-title">All Islamic <span class="gold-it">Tools</span></h2>
-      <p class="section-sub">Everything from daily worship to financial fiqh — free forever, no account needed.</p>
+      <div class="section-eyebrow" data-i18n="tools.allTools.eyebrow">✦ Complete Suite</div>
+      <h2 class="section-title" data-i18n="tools.allTools.title" data-i18n-html>All Islamic <span class="gold-it">Tools</span></h2>
+      <p class="section-sub" data-i18n="tools.allTools.sub">Everything from daily worship to financial fiqh — free forever, no account needed.</p>
     </div>
     <div class="tool-tabs reveal">
-      <button class="tool-tab active" onclick="filterTools('all',this)">All Tools</button>
-      <button class="tool-tab" onclick="filterTools('prayer',this)">Prayer & Worship</button>
-      <button class="tool-tab" onclick="filterTools('finance',this)">Finance & Fiqh</button>
-      <button class="tool-tab" onclick="filterTools('tracker',this)">Trackers</button>
-      <button class="tool-tab" onclick="filterTools('discovery',this)">Discovery</button>
+      <button class="tool-tab active" onclick="filterTools('all',this)" data-i18n="tools.allTools.tabAll">All Tools</button>
+      <button class="tool-tab" onclick="filterTools('prayer',this)" data-i18n="tools.allTools.tabPrayer">Prayer &amp; Worship</button>
+      <button class="tool-tab" onclick="filterTools('finance',this)" data-i18n="tools.allTools.tabFinance">Finance &amp; Fiqh</button>
+      <button class="tool-tab" onclick="filterTools('tracker',this)" data-i18n="tools.allTools.tabTrackers">Trackers</button>
+      <button class="tool-tab" onclick="filterTools('discovery',this)" data-i18n="tools.allTools.tabDiscovery">Discovery</button>
     </div>
     <div class="tools-grid" id="toolsGrid">
 
       <a href="#prayer-widget" class="card tool-card reveal" data-cat="prayer">
-        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="ts-live">● Live</span></div>
-        <div class="tool-title">Prayer Times</div>
-        <p class="tool-desc">Accurate salah times for any city worldwide. Auto-detect your location or search manually. All 5 prayers + Sunrise with adhan alerts.</p>
-        <div class="tool-tags"><span class="tool-tag">Auto-detect</span><span class="tool-tag">195+ Cities</span><span class="tool-tag">All Methods</span></div>
-        <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="ts-live" data-i18n="tools.cards.badgeLive">● Live</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card1Title">Prayer Times</div>
+        <p class="tool-desc" data-i18n="tools.cards.card1Desc">Accurate salah times for any city worldwide. Auto-detect your location or search manually. All 5 prayers + Sunrise with adhan alerts.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card1Tag1">Auto-detect</span><span class="tool-tag" data-i18n="tools.cards.card1Tag2">195+ Cities</span><span class="tool-tag" data-i18n="tools.cards.card1Tag3">All Methods</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openTool">Open Tool</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <a href="#qibla-section" class="card tool-card reveal reveal-d1" data-cat="prayer">
-        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div><span class="ts-live">● Live</span></div>
-        <div class="tool-title">Qibla Compass</div>
-        <p class="tool-desc">Precise Qibla direction from any point on Earth. GPS detection or manual city search with animated compass and distance to Mecca.</p>
-        <div class="tool-tags"><span class="tool-tag">GPS</span><span class="tool-tag">Distance</span><span class="tool-tag">Animated</span></div>
-        <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div><span class="ts-live" data-i18n="tools.cards.badgeLive">● Live</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card2Title">Qibla Compass</div>
+        <p class="tool-desc" data-i18n="tools.cards.card2Desc">Precise Qibla direction from any point on Earth. GPS detection or manual city search with animated compass and distance to Mecca.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card2Tag1">GPS</span><span class="tool-tag" data-i18n="tools.cards.card2Tag2">Distance</span><span class="tool-tag" data-i18n="tools.cards.card2Tag3">Animated</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openTool">Open Tool</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <a href="#qibla-section" class="card tool-card reveal reveal-d2" data-cat="prayer">
-        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><span class="ts-live">● Live</span></div>
-        <div class="tool-title">Hijri Calendar</div>
-        <p class="tool-desc">Full Islamic calendar with Gregorian conversion. Highlights Ramadan, Eid, Ashura, and all major Islamic dates with event countdowns.</p>
-        <div class="tool-tags"><span class="tool-tag">1447 AH</span><span class="tool-tag">Auto-sync</span><span class="tool-tag">Events</span></div>
-        <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><span class="ts-live" data-i18n="tools.cards.badgeLive">● Live</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card3Title">Hijri Calendar</div>
+        <p class="tool-desc" data-i18n="tools.cards.card3Desc">Full Islamic calendar with Gregorian conversion. Highlights Ramadan, Eid, Ashura, and all major Islamic dates with event countdowns.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card3Tag1">1447 AH</span><span class="tool-tag" data-i18n="tools.cards.card3Tag2">Auto-sync</span><span class="tool-tag" data-i18n="tools.cards.card3Tag3">Events</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openTool">Open Tool</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <a href="#tasbeeh-section" class="card tool-card reveal" data-cat="prayer tracker">
-        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="2"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M12 7a5 5 0 0 1 0 10"/></svg></div><span class="ts-new">✦ NEW</span></div>
-        <div class="tool-title">Tasbeeh Counter</div>
-        <p class="tool-desc">Digital dhikr counter with SubhanAllah, Alhamdulillah, Allahu Akbar, and custom dhikr. Tracks daily & weekly totals with vibration.</p>
-        <div class="tool-tags"><span class="tool-tag">Dhikr</span><span class="tool-tag">Sessions</span><span class="tool-tag">Vibrate</span></div>
-        <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="2"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M12 7a5 5 0 0 1 0 10"/></svg></div><span class="ts-new" data-i18n="tools.cards.badgeNew">✦ NEW</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card4Title">Tasbeeh Counter</div>
+        <p class="tool-desc" data-i18n="tools.cards.card4Desc">Digital dhikr counter with SubhanAllah, Alhamdulillah, Allahu Akbar, and custom dhikr. Tracks daily &amp; weekly totals with vibration.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card4Tag1">Dhikr</span><span class="tool-tag" data-i18n="tools.cards.card4Tag2">Sessions</span><span class="tool-tag" data-i18n="tools.cards.card4Tag3">Vibrate</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openTool">Open Tool</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <a href="#tasbeeh-section" class="card tool-card reveal reveal-d1" data-cat="tracker">
-        <div class="tool-card-top"><div class="tool-icon ti-gold"><svg class="svg-gold" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 0 18A9 9 0 0 0 12 3z"/><path d="M12 8v4l2.5 2.5"/><path d="M19.5 3.5L21 2M3 21l1.5-1.5"/></svg></div><span class="ts-new">✦ NEW</span></div>
-        <div class="tool-title">Fasting Tracker</div>
-        <p class="tool-desc">Track Ramadan, voluntary Mondays & Thursdays, and Shawwal fasts. Visual calendar with suhoor/iftar times and streak counter.</p>
-        <div class="tool-tags"><span class="tool-tag">Ramadan</span><span class="tool-tag">Voluntary</span><span class="tool-tag">Streaks</span></div>
-        <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-gold"><svg class="svg-gold" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 0 18A9 9 0 0 0 12 3z"/><path d="M12 8v4l2.5 2.5"/><path d="M19.5 3.5L21 2M3 21l1.5-1.5"/></svg></div><span class="ts-new" data-i18n="tools.cards.badgeNew">✦ NEW</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card5Title">Fasting Tracker</div>
+        <p class="tool-desc" data-i18n="tools.cards.card5Desc">Track Ramadan, voluntary Mondays &amp; Thursdays, and Shawwal fasts. Visual calendar with suhoor/iftar times and streak counter.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card5Tag1">Ramadan</span><span class="tool-tag" data-i18n="tools.cards.card5Tag2">Voluntary</span><span class="tool-tag" data-i18n="tools.cards.card5Tag3">Streaks</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openTool">Open Tool</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <a href="#zakat-section" class="card tool-card reveal reveal-d2" data-cat="finance">
-        <div class="tool-card-top"><div class="tool-icon ti-emerald"><svg class="svg-emerald" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22V8M5 12H2a10 10 0 0 0 20 0h-3"/><path d="M8 5.2A8 8 0 0 1 20 12"/></svg></div><span class="ts-live">● Live</span></div>
-        <div class="tool-title">Zakat Calculator</div>
-        <p class="tool-desc">Calculate annual Zakat on savings, gold, silver, investments, and business assets. Live nisab from current gold price. Fiqh-verified.</p>
-        <div class="tool-tags"><span class="tool-tag">Live Nisab</span><span class="tool-tag">Gold & Silver</span><span class="tool-tag">Fiqh-verified</span></div>
-        <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-emerald"><svg class="svg-emerald" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22V8M5 12H2a10 10 0 0 0 20 0h-3"/><path d="M8 5.2A8 8 0 0 1 20 12"/></svg></div><span class="ts-live" data-i18n="tools.cards.badgeLive">● Live</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card6Title">Zakat Calculator</div>
+        <p class="tool-desc" data-i18n="tools.cards.card6Desc">Calculate annual Zakat on savings, gold, silver, investments, and business assets. Live nisab from current gold price. Fiqh-verified.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card6Tag1">Live Nisab</span><span class="tool-tag" data-i18n="tools.cards.card6Tag2">Gold &amp; Silver</span><span class="tool-tag" data-i18n="tools.cards.card6Tag3">Fiqh-verified</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openTool">Open Tool</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <a href="inheritance.html" class="card tool-card reveal" data-cat="finance">
-        <div class="tool-card-top"><div class="tool-icon ti-emerald"><svg class="svg-emerald" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><span class="ts-live">● Live</span></div>
-        <div class="tool-title">Inheritance Calculator</div>
-        <p class="tool-desc">Divide an estate according to Islamic farāʾiḍ law. Supports all 8 heir types — spouse, children, parents, siblings — with detailed breakdown.</p>
-        <div class="tool-tags"><span class="tool-tag">Farā'iḍ</span><span class="tool-tag">All Heirs</span><span class="tool-tag">PDF Report</span></div>
-        <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-emerald"><svg class="svg-emerald" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><span class="ts-live" data-i18n="tools.cards.badgeLive">● Live</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card7Title">Inheritance Calculator</div>
+        <p class="tool-desc" data-i18n="tools.cards.card7Desc">Divide an estate according to Islamic farāʾiḍ law. Supports all 8 heir types — spouse, children, parents, siblings — with detailed breakdown.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card7Tag1">Farā'iḍ</span><span class="tool-tag" data-i18n="tools.cards.card7Tag2">All Heirs</span><span class="tool-tag" data-i18n="tools.cards.card7Tag3">PDF Report</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openTool">Open Tool</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <a href="#name-section" class="card tool-card reveal reveal-d1" data-cat="tracker finance">
-        <div class="tool-card-top"><div class="tool-icon ti-gold"><svg class="svg-gold" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><span class="ts-new">✦ NEW</span></div>
-        <div class="tool-title">Sadaqah Tracker</div>
-        <p class="tool-desc">Log voluntary charity, set monthly goals, and see your annual impact. Ramadan-specific prompts and progress rings to keep you motivated.</p>
-        <div class="tool-tags"><span class="tool-tag">Goals</span><span class="tool-tag">Monthly</span><span class="tool-tag">Ramadan</span></div>
-        <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-gold"><svg class="svg-gold" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><span class="ts-new" data-i18n="tools.cards.badgeNew">✦ NEW</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card8Title">Sadaqah Tracker</div>
+        <p class="tool-desc" data-i18n="tools.cards.card8Desc">Log voluntary charity, set monthly goals, and see your annual impact. Ramadan-specific prompts and progress rings to keep you motivated.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card8Tag1">Goals</span><span class="tool-tag" data-i18n="tools.cards.card8Tag2">Monthly</span><span class="tool-tag" data-i18n="tools.cards.card8Tag3">Ramadan</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openTool">Open Tool</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <a href="#name-section" class="card tool-card reveal reveal-d2" data-cat="discovery">
-        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><span class="ts-beta">Beta</span></div>
-        <div class="tool-title">Islamic Name Finder</div>
-        <p class="tool-desc">Search 2,000+ Islamic names with Arabic script, meaning, gender, origin, and Qur'anic reference. Filter by letter, origin, or gender.</p>
-        <div class="tool-tags"><span class="tool-tag">2,000+ Names</span><span class="tool-tag">Arabic</span><span class="tool-tag">Qur'anic</span></div>
-        <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><span class="ts-beta" data-i18n="tools.cards.badgeBeta">Beta</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card9Title">Islamic Name Finder</div>
+        <p class="tool-desc" data-i18n="tools.cards.card9Desc">Search 2,000+ Islamic names with Arabic script, meaning, gender, origin, and Qur'anic reference. Filter by letter, origin, or gender.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card9Tag1">2,000+ Names</span><span class="tool-tag" data-i18n="tools.cards.card9Tag2">Arabic</span><span class="tool-tag" data-i18n="tools.cards.card9Tag3">Qur'anic</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openTool">Open Tool</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <a href="#age-section" class="card tool-card reveal" data-cat="discovery">
-        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="12" cy="16" r="2"/></svg></div><span class="ts-beta">Beta</span></div>
-        <div class="tool-title">Islamic Age Calculator</div>
-        <p class="tool-desc">Convert your Gregorian birthdate to Hijri. Know your exact age in Islamic calendar years, months, and days — instantly.</p>
-        <div class="tool-tags"><span class="tool-tag">Gregorian→Hijri</span><span class="tool-tag">Exact Days</span><span class="tool-tag">Birthday</span></div>
-        <div class="tool-link">Open Tool <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="12" cy="16" r="2"/></svg></div><span class="ts-beta" data-i18n="tools.cards.badgeBeta">Beta</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card10Title">Islamic Age Calculator</div>
+        <p class="tool-desc" data-i18n="tools.cards.card10Desc">Convert your Gregorian birthdate to Hijri. Know your exact age in Islamic calendar years, months, and days — instantly.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card10Tag1">Gregorian→Hijri</span><span class="tool-tag" data-i18n="tools.cards.card10Tag2">Exact Days</span><span class="tool-tag" data-i18n="tools.cards.card10Tag3">Birthday</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openTool">Open Tool</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <a href="https://mosquefinder.net" target="_blank" class="card tool-card reveal reveal-d1" data-cat="discovery">
-        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><span class="ts-live">● Live</span></div>
-        <div class="tool-title">Mosque Finder</div>
-        <p class="tool-desc">Find the nearest masjid, prayer room, or Islamic center globally. Powered by MosqueFinder.net with ratings and Jumu'ah times.</p>
-        <div class="tool-tags"><span class="tool-tag">GPS</span><span class="tool-tag">Maps</span><span class="tool-tag">Jumu'ah</span></div>
-        <div class="tool-link">Open MosqueFinder ↗ <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-teal"><svg class="svg-teal" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><span class="ts-live" data-i18n="tools.cards.badgeLive">● Live</span></div>
+        <div class="tool-title" data-i18n="tools.cards.card11Title">Mosque Finder</div>
+        <p class="tool-desc" data-i18n="tools.cards.card11Desc">Find the nearest masjid, prayer room, or Islamic center globally. Powered by MosqueFinder.net with ratings and Jumu'ah times.</p>
+        <div class="tool-tags"><span class="tool-tag" data-i18n="tools.cards.card11Tag1">GPS</span><span class="tool-tag" data-i18n="tools.cards.card11Tag2">Maps</span><span class="tool-tag" data-i18n="tools.cards.card11Tag3">Jumu'ah</span></div>
+        <div class="tool-link"><span data-i18n="tools.cards.openMosqueFinder">Open MosqueFinder ↗</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
 
       <div class="card tool-card reveal reveal-d2" data-cat="discovery" style="cursor:default;opacity:.75;">
-        <div class="tool-card-top"><div class="tool-icon ti-gold"><svg class="svg-gold" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46A2.5 2.5 0 0 1 4 15.96 3 3 0 0 1 3.66 10.38 2.5 2.5 0 0 1 5 6.14A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2Z"/></svg></div><span class="ts-soon">Coming Soon</span></div>
-        <div class="tool-title" style="color:var(--ink-muted);">AI Claim Verifier</div>
-        <p class="tool-desc" style="opacity:.7;">Paste any Islamic quote or hadith. AI cross-references 61,000+ hadith and Qur'an to verify authenticity with scholar grading.</p>
-        <div class="tool-tags"><span class="tool-tag" style="opacity:.5;">AI-Powered</span><span class="tool-tag" style="opacity:.5;">61K+ Hadith</span></div>
-        <div class="tool-link" style="opacity:.45;cursor:default;">Launching 2026 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="tool-card-top"><div class="tool-icon ti-gold"><svg class="svg-gold" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46A2.5 2.5 0 0 1 4 15.96 3 3 0 0 1 3.66 10.38 2.5 2.5 0 0 1 5 6.14A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2Z"/></svg></div><span class="ts-soon" data-i18n="tools.cards.badgeComingSoon">Coming Soon</span></div>
+        <div class="tool-title" style="color:var(--ink-muted);" data-i18n="tools.cards.card12Title">AI Claim Verifier</div>
+        <p class="tool-desc" style="opacity:.7;" data-i18n="tools.cards.card12Desc">Paste any Islamic quote or hadith. AI cross-references 61,000+ hadith and Qur'an to verify authenticity with scholar grading.</p>
+        <div class="tool-tags"><span class="tool-tag" style="opacity:.5;" data-i18n="tools.cards.card12Tag1">AI-Powered</span><span class="tool-tag" style="opacity:.5;" data-i18n="tools.cards.card12Tag2">61K+ Hadith</span></div>
+        <div class="tool-link" style="opacity:.45;cursor:default;"><span data-i18n="tools.cards.launching2026">Launching 2026</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </div>
 
     </div>
@@ -741,12 +775,12 @@ a{text-decoration:none;color:inherit;}
 <section class="section" id="qibla-section" style="background:var(--surface-card);">
   <div class="container">
     <div class="section-head reveal">
-      <div class="section-eyebrow">Live Tools</div>
-      <h2 class="section-title">Qibla &amp; <span class="gold-it">Hijri Calendar</span></h2>
+      <div class="section-eyebrow" data-i18n="tools.qibla.eyebrow">Live Tools</div>
+      <h2 class="section-title" data-i18n="tools.qibla.title" data-i18n-html>Qibla &amp; <span class="gold-it">Hijri Calendar</span></h2>
     </div>
     <div class="two-col">
       <div class="card qibla-card reveal">
-        <div class="section-eyebrow" style="font-size:9.5px;margin-bottom:6px;">Qibla Direction</div>
+        <div class="section-eyebrow" style="font-size:9.5px;margin-bottom:6px;" data-i18n="tools.qibla.cardEyebrow">Qibla Direction</div>
         <div class="qibla-city" id="qCity">Toronto, Ontario</div>
         <div class="qibla-deg" id="qDeg">54°</div>
         <div class="compass-wrap">
@@ -762,14 +796,14 @@ a{text-decoration:none;color:inherit;}
             </div>
           </div>
         </div>
-        <div class="compass-ka">🕋 Kaʿbah · Mecca</div>
+        <div class="compass-ka" data-i18n="tools.qibla.kaabaLabel">🕋 Kaʿbah · Mecca</div>
         <div style="display:flex;gap:20px;justify-content:center;margin:10px 0;font-size:12px;color:var(--ink-muted);">
-          <span>Distance: <strong id="qDist" style="color:var(--ink-primary);">7,234 km</strong></span>
-          <span>Bearing: <strong id="qBearing" style="color:var(--ink-primary);">54° NE</strong></span>
+          <span><span data-i18n="tools.qibla.distanceLabel">Distance:</span> <strong id="qDist" style="color:var(--ink-primary);">7,234 km</strong></span>
+          <span><span data-i18n="tools.qibla.bearingLabel">Bearing:</span> <strong id="qBearing" style="color:var(--ink-primary);">54° NE</strong></span>
         </div>
         <button class="btn-ghost" style="width:100%;justify-content:center;font-size:13px;padding:10px 22px;" onclick="getQibla()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Detect My Location
+          <span data-i18n="tools.qibla.detectBtn">Detect My Location</span>
         </button>
       </div>
 
@@ -779,7 +813,7 @@ a{text-decoration:none;color:inherit;}
           <div class="hc-nav"><button class="hc-nav-btn" onclick="navHijriMonth(-1)">‹</button><button class="hc-nav-btn" onclick="navHijriMonth(1)">›</button></div>
         </div>
         <div class="hc-grid">
-          <div class="hc-day-name">Sun</div><div class="hc-day-name">Mon</div><div class="hc-day-name">Tue</div><div class="hc-day-name">Wed</div><div class="hc-day-name">Thu</div><div class="hc-day-name">Fri</div><div class="hc-day-name">Sat</div>
+          <div class="hc-day-name" data-i18n="tools.qibla.daySun">Sun</div><div class="hc-day-name" data-i18n="tools.qibla.dayMon">Mon</div><div class="hc-day-name" data-i18n="tools.qibla.dayTue">Tue</div><div class="hc-day-name" data-i18n="tools.qibla.dayWed">Wed</div><div class="hc-day-name" data-i18n="tools.qibla.dayThu">Thu</div><div class="hc-day-name" data-i18n="tools.qibla.dayFri">Fri</div><div class="hc-day-name" data-i18n="tools.qibla.daySat">Sat</div>
           <div class="hc-day faded">27</div><div class="hc-day faded">28</div><div class="hc-day faded">29</div><div class="hc-day">1</div><div class="hc-day">2</div><div class="hc-day">3</div><div class="hc-day">4</div>
           <div class="hc-day">5</div><div class="hc-day">6</div><div class="hc-day">7</div><div class="hc-day">8</div><div class="hc-day">9</div><div class="hc-day">10</div><div class="hc-day">11</div>
           <div class="hc-day">12</div><div class="hc-day">13</div><div class="hc-day">14</div><div class="hc-day today">15</div><div class="hc-day">16</div><div class="hc-day">17</div><div class="hc-day">18</div>
@@ -800,39 +834,39 @@ a{text-decoration:none;color:inherit;}
 <section class="section" id="zakat-section">
   <div class="container">
     <div class="section-head reveal">
-      <div class="section-eyebrow">Financial Fiqh</div>
-      <h2 class="section-title">Zakat <span class="gold-it">Calculator</span></h2>
-      <p class="section-sub">Calculate your annual Zakat obligation with live nisab values. Fiqh-verified 2.5% formula.</p>
+      <div class="section-eyebrow" data-i18n="tools.zakat.eyebrow">Financial Fiqh</div>
+      <h2 class="section-title" data-i18n="tools.zakat.title" data-i18n-html>Zakat <span class="gold-it">Calculator</span></h2>
+      <p class="section-sub" data-i18n="tools.zakat.sub">Calculate your annual Zakat obligation with live nisab values. Fiqh-verified 2.5% formula.</p>
     </div>
     <div class="zakat-grid">
       <div class="card zakat-form-card reveal">
-        <label class="zk-label" style="margin-top:0;">Cash &amp; Bank Savings</label>
+        <label class="zk-label" style="margin-top:0;" data-i18n="tools.zakat.labelCash">Cash &amp; Bank Savings</label>
         <div class="zk-wrap"><span class="zk-sym">$</span><input class="zk-input" type="number" placeholder="0.00" id="zkCash" oninput="calcZakat()"/></div>
-        <label class="zk-label">Gold &amp; Silver Value</label>
+        <label class="zk-label" data-i18n="tools.zakat.labelGold">Gold &amp; Silver Value</label>
         <div class="zk-wrap"><span class="zk-sym">$</span><input class="zk-input" type="number" placeholder="0.00" id="zkGold" oninput="calcZakat()"/></div>
-        <label class="zk-label">Business Assets / Inventory</label>
+        <label class="zk-label" data-i18n="tools.zakat.labelBiz">Business Assets / Inventory</label>
         <div class="zk-wrap"><span class="zk-sym">$</span><input class="zk-input" type="number" placeholder="0.00" id="zkBiz" oninput="calcZakat()"/></div>
-        <label class="zk-label">Investments (Stocks, Funds)</label>
+        <label class="zk-label" data-i18n="tools.zakat.labelInv">Investments (Stocks, Funds)</label>
         <div class="zk-wrap"><span class="zk-sym">$</span><input class="zk-input" type="number" placeholder="0.00" id="zkInv" oninput="calcZakat()"/></div>
-        <label class="zk-label">Outstanding Debts (Deduct)</label>
+        <label class="zk-label" data-i18n="tools.zakat.labelDebt">Outstanding Debts (Deduct)</label>
         <div class="zk-wrap"><span class="zk-sym">$</span><input class="zk-input" type="number" placeholder="0.00" id="zkDebt" oninput="calcZakat()"/></div>
-        <div class="zk-nisab">ℹ Current Nisab (85g gold): <span class="zk-nisab-val">$6,180 USD</span></div>
+        <div class="zk-nisab"><span data-i18n="tools.zakat.nisabLabel">ℹ Current Nisab (85g gold):</span> <span class="zk-nisab-val">$6,180 USD</span></div>
         <button class="zk-btn" onclick="calcZakat()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 7h6M9 12h6M9 17h4"/></svg>
-          Calculate My Zakat
+          <span data-i18n="tools.zakat.calcBtn">Calculate My Zakat</span>
         </button>
       </div>
       <div class="card zakat-result-card reveal reveal-d1">
-        <div class="zk-result-eyebrow">Your Zakat Due</div>
+        <div class="zk-result-eyebrow" data-i18n="tools.zakat.resultEyebrow">Your Zakat Due</div>
         <div class="zk-amount" id="zkResult">$0.00</div>
         <div class="zk-amount-label" id="zkResultLabel">Enter your assets above to calculate</div>
         <div class="zk-breakdown">
-          <div class="zkr"><span class="zkr-label">Total Zakatable Wealth</span><span class="zkr-val" id="zkTotal">$0.00</span></div>
-          <div class="zkr"><span class="zkr-label">Nisab Threshold</span><span class="zkr-val">$6,180</span></div>
-          <div class="zkr"><span class="zkr-label">Zakat Rate</span><span class="zkr-val">2.5%</span></div>
-          <div class="zkr total"><span class="zkr-label">Zakat Payable</span><span class="zkr-val" id="zkPayable">$0.00</span></div>
+          <div class="zkr"><span class="zkr-label" data-i18n="tools.zakat.breakdownTotal">Total Zakatable Wealth</span><span class="zkr-val" id="zkTotal">$0.00</span></div>
+          <div class="zkr"><span class="zkr-label" data-i18n="tools.zakat.breakdownNisab">Nisab Threshold</span><span class="zkr-val">$6,180</span></div>
+          <div class="zkr"><span class="zkr-label" data-i18n="tools.zakat.breakdownRate">Zakat Rate</span><span class="zkr-val">2.5%</span></div>
+          <div class="zkr total"><span class="zkr-label" data-i18n="tools.zakat.breakdownPayable">Zakat Payable</span><span class="zkr-val" id="zkPayable">$0.00</span></div>
         </div>
-        <div class="zk-note">⚠️ This provides an estimate. Zakat is a personal obligation — consult a qualified scholar for your situation. Calculations follow Hanafi methodology.</div>
+        <div class="zk-note" data-i18n="tools.zakat.note">⚠️ This provides an estimate. Zakat is a personal obligation — consult a qualified scholar for your situation. Calculations follow Hanafi methodology.</div>
       </div>
     </div>
   </div>
@@ -842,18 +876,18 @@ a{text-decoration:none;color:inherit;}
 <section class="section" id="tasbeeh-section" style="background:var(--surface-card);">
   <div class="container">
     <div class="section-head reveal">
-      <div class="section-eyebrow">Worship Trackers</div>
-      <h2 class="section-title">Tasbeeh &amp; <span class="gold-it">Fasting</span></h2>
+      <div class="section-eyebrow" data-i18n="tools.tasbeeh.eyebrow">Worship Trackers</div>
+      <h2 class="section-title" data-i18n="tools.tasbeeh.title" data-i18n-html>Tasbeeh &amp; <span class="gold-it">Fasting</span></h2>
     </div>
     <div class="two-col">
       <!-- Tasbeeh -->
       <div class="card tasbeeh-card reveal">
-        <div class="tasbeeh-title">Digital Tasbeeh</div>
+        <div class="tasbeeh-title" data-i18n="tools.tasbeeh.cardTitle">Digital Tasbeeh</div>
         <div class="dhikr-chips">
-          <button class="dhikr-chip on" onclick="setDhikr(this,'سُبْحَانَ اللَّهِ','Glory be to Allah',33)">SubhanAllah</button>
-          <button class="dhikr-chip" onclick="setDhikr(this,'الْحَمْدُ لِلَّهِ','All praise is to Allah',33)">Alhamdulillah</button>
-          <button class="dhikr-chip" onclick="setDhikr(this,'اللَّهُ أَكْبَرُ','Allah is the Greatest',34)">Allahu Akbar</button>
-          <button class="dhikr-chip" onclick="setDhikr(this,'لَا إِلَٰهَ إِلَّا اللَّهُ','There is no god but Allah',100)">La Ilaha Illallah</button>
+          <button class="dhikr-chip on" onclick="setDhikr(this,'سُبْحَانَ اللَّهِ','Glory be to Allah',33)" data-i18n="tools.tasbeeh.chip1">SubhanAllah</button>
+          <button class="dhikr-chip" onclick="setDhikr(this,'الْحَمْدُ لِلَّهِ','All praise is to Allah',33)" data-i18n="tools.tasbeeh.chip2">Alhamdulillah</button>
+          <button class="dhikr-chip" onclick="setDhikr(this,'اللَّهُ أَكْبَرُ','Allah is the Greatest',34)" data-i18n="tools.tasbeeh.chip3">Allahu Akbar</button>
+          <button class="dhikr-chip" onclick="setDhikr(this,'لَا إِلَٰهَ إِلَّا اللَّهُ','There is no god but Allah',100)" data-i18n="tools.tasbeeh.chip4">La Ilaha Illallah</button>
         </div>
         <div class="dhikr-ar" id="dhikrAr">سُبْحَانَ اللَّهِ</div>
         <div class="dhikr-en" id="dhikrEn">Glory be to Allah</div>
@@ -861,32 +895,32 @@ a{text-decoration:none;color:inherit;}
           <span><span class="tb-count" id="tbCount">0</span><span class="tb-goal" id="tbGoal">of 33</span></span>
         </button>
         <div class="tasbeeh-ctrls">
-          <button class="tb-ctrl" onclick="resetTasbeeh()">↺ Reset</button>
-          <button class="tb-ctrl" onclick="undoTasbeeh()">← Undo</button>
+          <button class="tb-ctrl" onclick="resetTasbeeh()" data-i18n="tools.tasbeeh.reset">↺ Reset</button>
+          <button class="tb-ctrl" onclick="undoTasbeeh()" data-i18n="tools.tasbeeh.undo">← Undo</button>
           <button class="tb-ctrl" id="vibBtn" onclick="toggleVibrate()">📳 Vibrate ON</button>
         </div>
         <div class="tasbeeh-session">
-          <div class="tsess-item"><div class="tsess-num" id="tsRounds">0</div><div class="tsess-label">Rounds</div></div>
-          <div class="tsess-item"><div class="tsess-num" id="tsTotal">0</div><div class="tsess-label">Today</div></div>
-          <div class="tsess-item"><div class="tsess-num" id="tsWeek">0</div><div class="tsess-label">This Week</div></div>
+          <div class="tsess-item"><div class="tsess-num" id="tsRounds">0</div><div class="tsess-label" data-i18n="tools.tasbeeh.rounds">Rounds</div></div>
+          <div class="tsess-item"><div class="tsess-num" id="tsTotal">0</div><div class="tsess-label" data-i18n="tools.tasbeeh.today">Today</div></div>
+          <div class="tsess-item"><div class="tsess-num" id="tsWeek">0</div><div class="tsess-label" data-i18n="tools.tasbeeh.thisWeek">This Week</div></div>
         </div>
       </div>
 
       <!-- Fasting Tracker -->
       <div class="card fast-card reveal reveal-d1">
         <div class="fast-header">
-          <div><div class="fast-title">Fasting Tracker</div><div class="fast-sub">Shawwāl 1447 — Voluntary Fasts</div></div>
-          <div style="text-align:right;"><div class="fast-count-big" id="fastCountBig">3</div><div class="fast-count-label">of 6 Shawwāl</div></div>
+          <div><div class="fast-title" data-i18n="tools.fasting.cardTitle">Fasting Tracker</div><div class="fast-sub" data-i18n="tools.fasting.sub">Shawwāl 1447 — Voluntary Fasts</div></div>
+          <div style="text-align:right;"><div class="fast-count-big" id="fastCountBig">3</div><div class="fast-count-label" data-i18n="tools.fasting.ofShawwal">of 6 Shawwāl</div></div>
         </div>
         <div class="fast-grid" id="fastGrid"></div>
         <div class="fast-stats">
-          <div class="fs-stat"><div class="fs-num" id="fsFasted">3</div><div class="fs-label">Fasted</div></div>
-          <div class="fs-stat"><div class="fs-num" id="fsLeft">3</div><div class="fs-label">Remaining</div></div>
-          <div class="fs-stat"><div class="fs-num" id="fsStreak">2</div><div class="fs-label">Streak</div></div>
+          <div class="fs-stat"><div class="fs-num" id="fsFasted">3</div><div class="fs-label" data-i18n="tools.fasting.fasted">Fasted</div></div>
+          <div class="fs-stat"><div class="fs-num" id="fsLeft">3</div><div class="fs-label" data-i18n="tools.fasting.remaining">Remaining</div></div>
+          <div class="fs-stat"><div class="fs-num" id="fsStreak">2</div><div class="fs-label" data-i18n="tools.fasting.streak">Streak</div></div>
         </div>
         <div class="fast-times">
-          <div class="ft-row"><span class="ft-label">Today's Suhoor</span><span class="ft-val">4:28 AM</span></div>
-          <div class="ft-row"><span class="ft-label">Iftar (Maghrib)</span><span class="ft-val">8:42 PM</span></div>
+          <div class="ft-row"><span class="ft-label" data-i18n="tools.fasting.suhoorLabel">Today's Suhoor</span><span class="ft-val">4:28 AM</span></div>
+          <div class="ft-row"><span class="ft-label" data-i18n="tools.fasting.iftarLabel">Iftar (Maghrib)</span><span class="ft-val">8:42 PM</span></div>
         </div>
         <button class="btn-primary" style="width:100%;justify-content:center;font-size:13px;padding:10px;" id="fastTodayBtn" onclick="toggleFastToday()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
@@ -901,17 +935,17 @@ a{text-decoration:none;color:inherit;}
 <section class="section" id="name-section">
   <div class="container">
     <div class="section-head reveal">
-      <div class="section-eyebrow">Discovery Tools</div>
-      <h2 class="section-title">Name Finder &amp; <span class="gold-it">Age Calculator</span></h2>
+      <div class="section-eyebrow" data-i18n="tools.nameFinder.eyebrow">Discovery Tools</div>
+      <h2 class="section-title" data-i18n="tools.nameFinder.title" data-i18n-html>Name Finder &amp; <span class="gold-it">Age Calculator</span></h2>
     </div>
     <div class="two-col">
       <!-- Name Finder -->
       <div class="card name-card reveal">
-        <div style="font-family:var(--font-serif);font-size:20px;font-weight:500;color:var(--ink-primary);margin-bottom:4px;">Islamic Name Finder</div>
-        <div class="name-sub">Search 2,000+ names with Arabic script, meaning, and origin</div>
+        <div style="font-family:var(--font-serif);font-size:20px;font-weight:500;color:var(--ink-primary);margin-bottom:4px;" data-i18n="tools.nameFinder.cardTitle">Islamic Name Finder</div>
+        <div class="name-sub" data-i18n="tools.nameFinder.sub">Search 2,000+ names with Arabic script, meaning, and origin</div>
         <div class="name-input-row">
-          <input class="name-input" type="text" placeholder="e.g. Maryam, Ibrahim, Aisha…" id="nameSearch"/>
-          <button class="name-btn" onclick="searchName()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search</button>
+          <input class="name-input" type="text" placeholder="e.g. Maryam, Ibrahim, Aisha…" id="nameSearch" data-i18n-attr="placeholder:tools.nameFinder.placeholder"/>
+          <button class="name-btn" onclick="searchName()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span data-i18n="tools.nameFinder.searchBtn">Search</span></button>
         </div>
         <div class="name-result" id="nameResult">
           <div class="nr-ar" id="nrAr">مَرْيَم</div>
@@ -924,7 +958,7 @@ a{text-decoration:none;color:inherit;}
           </div>
         </div>
         <div class="name-sugg">
-          <div class="name-sugg-label">Popular Names</div>
+          <div class="name-sugg-label" data-i18n="tools.nameFinder.popularNames">Popular Names</div>
           <div class="name-sugg-row">
             <span class="name-sug" onclick="quickName('maryam')">مريم</span>
             <span class="name-sug" onclick="quickName('ibrahim')">إبراهيم</span>
@@ -941,20 +975,20 @@ a{text-decoration:none;color:inherit;}
       <!-- Age Calc + Sadaqah -->
       <div style="display:flex;flex-direction:column;gap:20px;">
         <div class="card age-card reveal reveal-d1" id="age-section">
-          <div style="font-family:var(--font-serif);font-size:20px;font-weight:500;color:var(--ink-primary);margin-bottom:4px;">Islamic Age Calculator</div>
-          <div class="age-sub">Convert your birthday to the Hijri calendar</div>
+          <div style="font-family:var(--font-serif);font-size:20px;font-weight:500;color:var(--ink-primary);margin-bottom:4px;" data-i18n="tools.ageCalc.cardTitle">Islamic Age Calculator</div>
+          <div class="age-sub" data-i18n="tools.ageCalc.sub">Convert your birthday to the Hijri calendar</div>
           <div class="age-inputs">
-            <div><label class="age-label">Date of Birth</label><input class="age-input" type="date" id="ageDob" onchange="calcAge()"/></div>
-            <div><label class="age-label">Today</label><input class="age-input" type="date" id="ageToday" onchange="calcAge()"/></div>
+            <div><label class="age-label" data-i18n="tools.ageCalc.dobLabel">Date of Birth</label><input class="age-input" type="date" id="ageDob" onchange="calcAge()"/></div>
+            <div><label class="age-label" data-i18n="tools.ageCalc.todayLabel">Today</label><input class="age-input" type="date" id="ageToday" onchange="calcAge()"/></div>
           </div>
           <div class="age-result">
-            <div class="ar-item"><div class="ar-num" id="aHijriY">—</div><div class="ar-label">Hijri Years</div></div>
-            <div class="ar-item"><div class="ar-num" id="aHijriM">—</div><div class="ar-label">Hijri Months</div></div>
-            <div class="ar-item"><div class="ar-num" id="aGregY">—</div><div class="ar-label">Gregorian Years</div></div>
-            <div class="ar-item"><div class="ar-num" id="aDays">—</div><div class="ar-label">Total Days</div></div>
+            <div class="ar-item"><div class="ar-num" id="aHijriY">—</div><div class="ar-label" data-i18n="tools.ageCalc.hijriYears">Hijri Years</div></div>
+            <div class="ar-item"><div class="ar-num" id="aHijriM">—</div><div class="ar-label" data-i18n="tools.ageCalc.hijriMonths">Hijri Months</div></div>
+            <div class="ar-item"><div class="ar-num" id="aGregY">—</div><div class="ar-label" data-i18n="tools.ageCalc.gregorianYears">Gregorian Years</div></div>
+            <div class="ar-item"><div class="ar-num" id="aDays">—</div><div class="ar-label" data-i18n="tools.ageCalc.totalDays">Total Days</div></div>
           </div>
           <div class="age-hijri-box">
-            <div class="ahb-label">Your Hijri Birthday</div>
+            <div class="ahb-label" data-i18n="tools.ageCalc.hijriBirthdayLabel">Your Hijri Birthday</div>
             <div class="ahb-arabic" id="aHijriAr">أَدْخِلْ تَارِيخَ مِيلَادِكَ</div>
             <div class="ahb-en" id="aHijriEn">Enter your date of birth above</div>
           </div>
@@ -962,7 +996,7 @@ a{text-decoration:none;color:inherit;}
 
         <!-- Sadaqah Tracker mini -->
         <div class="card reveal reveal-d2" style="padding:22px;">
-          <div class="sadaqah-title">Sadaqah Tracker</div>
+          <div class="sadaqah-title" data-i18n="tools.sadaqah.cardTitle">Sadaqah Tracker</div>
           <div class="sadaqah-inner">
             <div class="sad-ring">
               <svg width="90" height="90" viewBox="0 0 90 90">
@@ -970,12 +1004,12 @@ a{text-decoration:none;color:inherit;}
                 <circle cx="45" cy="45" r="36" stroke="url(#sg)" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="141" transform="rotate(-90 45 45)"/>
                 <defs><linearGradient id="sg" x1="0" x2="1"><stop offset="0%" stop-color="#00696E"/><stop offset="100%" stop-color="#C5A059"/></linearGradient></defs>
               </svg>
-              <div class="sad-ring-txt"><div class="sad-pct">38%</div><div class="sad-of">of goal</div></div>
+              <div class="sad-ring-txt"><div class="sad-pct">38%</div><div class="sad-of" data-i18n="tools.sadaqah.ofGoal">of goal</div></div>
             </div>
             <div class="sad-stats">
-              <div class="sad-row"><span>This Month</span><span class="sad-val">$76</span></div>
-              <div class="sad-row"><span>Monthly Goal</span><span class="sad-val">$200</span></div>
-              <div class="sad-row"><span>This Year</span><span class="sad-val">$440</span></div>
+              <div class="sad-row"><span data-i18n="tools.sadaqah.thisMonth">This Month</span><span class="sad-val">$76</span></div>
+              <div class="sad-row"><span data-i18n="tools.sadaqah.monthlyGoal">Monthly Goal</span><span class="sad-val">$200</span></div>
+              <div class="sad-row"><span data-i18n="tools.sadaqah.thisYear">This Year</span><span class="sad-val">$440</span></div>
             </div>
           </div>
           <button class="sad-add" onclick="this.innerHTML='✓ Logged! JazakAllahu Khayran';setTimeout(()=>this.innerHTML='<svg width=14 height=14 viewBox=\'0 0 24 24\' fill=none stroke=currentColor stroke-width=2><path d=\'M12 5v14M5 12h14\'/></svg> Log Sadaqah',2000)">
@@ -990,13 +1024,13 @@ a{text-decoration:none;color:inherit;}
 
 <!-- ══ CTA ══ -->
 <section class="cta-section">
-  <div class="cta-badge">✦ Free · No Account · No Ads · Always</div>
-  <h2 class="cta-title">All the Tools.<br><em style="font-style:italic;background:linear-gradient(90deg,#E2C896,#C5A059);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Always Free.</em></h2>
-  <p class="cta-sub">Prayer times, Qibla, Zakat, Tasbeeh, Fasting Tracker, Name Finder — everything a Muslim needs, built with sincerity and verified accuracy.</p>
+  <div class="cta-badge" data-i18n="tools.cta.badge">✦ Free · No Account · No Ads · Always</div>
+  <h2 class="cta-title" data-i18n="tools.cta.title" data-i18n-html>All the Tools.<br><em style="font-style:italic;background:linear-gradient(90deg,#E2C896,#C5A059);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Always Free.</em></h2>
+  <p class="cta-sub" data-i18n="tools.cta.sub">Prayer times, Qibla, Zakat, Tasbeeh, Fasting Tracker, Name Finder — everything a Muslim needs, built with sincerity and verified accuracy.</p>
   <div class="cta-actions">
-    <a class="btn-gold" href="habits.html">Track Your Ibadah</a>
-    <a class="btn-white-ghost" href="dua.html">Dua Library</a>
-    <a class="btn-white-ghost" href="verify.html">Verify a Hadith</a>
+    <a class="btn-gold" href="habits.html" data-i18n="tools.cta.btn1">Track Your Ibadah</a>
+    <a class="btn-white-ghost" href="dua.html" data-i18n="tools.cta.btn2">Dua Library</a>
+    <a class="btn-white-ghost" href="verify.html" data-i18n="tools.cta.btn3">Verify a Hadith</a>
   </div>
 </section>
 
@@ -1018,36 +1052,36 @@ a{text-decoration:none;color:inherit;}
         </svg>
         <span><span class="ti">Islamic</span><span class="fo">Info</span></span>
       </a>
-      <p class="ft-tag">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
+      <p class="ft-tag" data-i18n="chrome.footer.tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
       <p class="ft-verse">وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ — Hud · 11:88</p>
     </div>
 
     <!-- Col 1 — page-specific: Tools -->
     <div>
-      <div class="ft-col-h">Tools</div>
-      <a class="ft-link" href="tools.html#prayer-widget">Prayer Times</a>
-      <a class="ft-link" href="tools.html#qibla-section">Qibla Compass</a>
-      <a class="ft-link" href="tools.html#zakat-section">Zakat Calculator</a>
-      <a class="ft-link" href="tools.html#qibla-section">Hijri Calendar</a>
-      <a class="ft-link" href="inheritance.html">Inheritance Calculator</a>
+      <div class="ft-col-h" data-i18n="tools.footer.heading">Tools</div>
+      <a class="ft-link" href="tools.html#prayer-widget" data-i18n="tools.footer.linkPrayerTimes">Prayer Times</a>
+      <a class="ft-link" href="tools.html#qibla-section" data-i18n="tools.footer.linkQibla">Qibla Compass</a>
+      <a class="ft-link" href="tools.html#zakat-section" data-i18n="tools.footer.linkZakat">Zakat Calculator</a>
+      <a class="ft-link" href="tools.html#qibla-section" data-i18n="tools.footer.linkHijri">Hijri Calendar</a>
+      <a class="ft-link" href="inheritance.html" data-i18n="tools.footer.linkInheritance">Inheritance Calculator</a>
     </div>
 
     <!-- Col 2 — Quick Access (identical every page, all 8 including Knowledge Hub) -->
     <div>
-      <div class="ft-col-h">Quick Access</div>
-      <a class="ft-link" href="quran.html">Quran Explorer</a>
-      <a class="ft-link" href="hadith.html">Hadith Library</a>
-      <a class="ft-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="ft-link" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="ft-link" href="dua.html">Daily Duas</a>
-      <a class="ft-link" href="tools.html">Islamic Tools</a>
-      <a class="ft-link" href="habits.html">Habit Tracker</a>
-      <a class="ft-link" href="verify.html">Verify a Claim</a>
+      <div class="ft-col-h" data-i18n="chrome.footer.quickAccess">Quick Access</div>
+      <a class="ft-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="ft-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="ft-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="ft-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="ft-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="ft-link" href="tools.html" data-i18n="chrome.footer.linkTools">Islamic Tools</a>
+      <a class="ft-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="ft-link" href="verify.html" data-i18n="chrome.footer.linkVerify">Verify a Claim</a>
     </div>
 
     <!-- Col 3 — Our Ecosystem §7.4 verbatim — exact URLs -->
     <div>
-      <div class="ft-col-h">Our Ecosystem</div>
+      <div class="ft-col-h" data-i18n="chrome.footer.ecosystem">Our Ecosystem</div>
       <a class="ft-link" href="https://islamickids.org" target="_blank" rel="noopener">IslamicKids.org ↗</a>
       <a class="ft-link" href="https://quranlyai.com" target="_blank" rel="noopener">QuranlyAI ↗</a>
       <a class="ft-link" href="https://hadithiq.com" target="_blank" rel="noopener">HadithIQ ↗</a>
@@ -1058,18 +1092,18 @@ a{text-decoration:none;color:inherit;}
 
     <!-- Col 4 — Company + Legal -->
     <div>
-      <div class="ft-col-h">Company</div>
-      <a class="ft-link" href="about.html">About</a>
-      <a class="ft-link" href="contact.html">Contact</a>
-      <div class="ft-col-h" style="margin-top:16px;">Legal</div>
-      <a class="ft-link" href="privacy.html">Privacy Policy</a>
-      <a class="ft-link" href="terms.html">Terms of Use</a>
+      <div class="ft-col-h" data-i18n="chrome.footer.company">Company</div>
+      <a class="ft-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+      <a class="ft-link" href="contact.html" data-i18n="chrome.footer.contact">Contact</a>
+      <div class="ft-col-h" style="margin-top:16px;" data-i18n="chrome.footer.legal">Legal</div>
+      <a class="ft-link" href="privacy.html" data-i18n="chrome.footer.privacy">Privacy Policy</a>
+      <a class="ft-link" href="terms.html" data-i18n="chrome.footer.terms">Terms of Use</a>
     </div>
 
   </div>
   <div class="ft-bot">
-    <div class="ft-copy">© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
-    <div class="ft-note">All content source-verified · Privacy-first · Built with sincerity</div>
+    <div class="ft-copy" data-i18n="chrome.footer.copy" data-i18n-html>© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
+    <div class="ft-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
   </div>
 </footer>
 </div>
@@ -1308,6 +1342,7 @@ document.querySelectorAll('.tool-card').forEach(card=>{
   });
 });
 </script>
+<script src="src/js/i18n.js"></script>
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
 <script src="src/js/tools.js"></script>

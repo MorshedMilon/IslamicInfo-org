@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Qur'an Explorer — IslamicInfo</title>
+<title data-i18n="quran.title">Qur'an Explorer — IslamicInfo</title>
+<script>
+  /* i18n FOUC guard: set lang/dir before first paint */
+  (function(){
+    var l = localStorage.getItem('islamicinfo-lang') || 'en';
+    document.documentElement.setAttribute('lang', l);
+    if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -67,7 +75,7 @@ a{text-decoration:none;color:inherit;}
 [data-theme="dark"] .nav-link.active{color:#5BC1C7;}
 @media(max-width:1100px){.nav-link{font-size:11.5px;padding:5px 5px;}}
 @media(max-width:900px){.nav-link{font-size:10.5px;padding:5px 3px;}.brand{font-size:16px;gap:6px;}.brand-mark{width:28px;height:28px;}}
-@media(max-width:760px){.nav{display:none;}.header-tools .icon-btn:not(.theme-toggle):not(.search-trigger):not(.hamburger){display:none;}.hamburger{display:flex;}}
+@media(max-width:760px){.nav{display:none;}.header-tools .icon-btn:not(.theme-toggle):not(.search-trigger):not(.hamburger):not(.lang-trigger){display:none;}.hamburger{display:flex;}}
 .header-tools{display:flex;align-items:center;gap:4px;flex-shrink:0;margin-left:auto;}
 .icon-btn{width:34px;height:34px;border-radius:50%;border:none;background:transparent;cursor:pointer;color:var(--ink-muted);display:flex;align-items:center;justify-content:center;transition:all .25s var(--ease-premium);font-size:11px;font-weight:600;}
 .icon-btn:hover{background:rgba(0,105,110,.08);color:var(--teal-700);transform:scale(1.08);box-shadow:0 0 12px rgba(0,105,110,.2);}
@@ -1266,6 +1274,27 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 /* Repeat mode */
 .ap-btn.repeat-on{color:var(--gold-400)!important;background:rgba(197,160,89,.15)!important;}
 
+/* ── Language dropdown ── */
+.lang-wrapper{position:relative;}
+.lang-menu{position:absolute;top:44px;right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.lang-menu.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .lang-menu{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.lang-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;background:transparent;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;color:var(--ink-body);text-align:left;transition:background .2s,color .2s;}
+.lang-item:hover{background:rgba(0,105,110,.08);}
+[data-theme="dark"] .lang-item:hover{background:rgba(0,105,110,.15);}
+.lang-item.on{color:var(--teal-700);font-weight:600;background:rgba(0,105,110,.06);}
+[data-theme="dark"] .lang-item.on{color:var(--teal-300);}
+.lang-code{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ink-subtle);width:24px;flex-shrink:0;}
+
+/* ── RTL patches ── */
+[dir="rtl"] .lang-menu{right:auto;left:0;}
+[dir="rtl"] .lang-item{text-align:right;}
+[dir="rtl"] .search-popup{right:auto;left:0;}
+[dir="rtl"] .header-tools{margin-left:0;margin-right:auto;}
+[dir="rtl"] .ft-link:hover{transform:translateX(-4px);}
+[dir="rtl"] .mobile-menu{direction:rtl;}
+[dir="rtl"] .mm-link:hover,[dir="rtl"] .mm-link.active{padding-left:0;padding-right:8px;}
+
 </style>
 </head>
 <body>
@@ -1300,16 +1329,16 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 
       <!-- Menu (Center) -->
       <nav class="nav" aria-label="Primary navigation">
-        <a class="nav-link" href="index.html">Home</a>
-        <a class="nav-link active" href="quran.html">Quran Explorer</a>
-        <a class="nav-link" href="hadith.html">Hadith Library</a>
-        <a class="nav-link" href="islamic-studies.html">Islamic Studies</a>
-        <a class="nav-link" href="knowledge-hub.html">Knowledge Hub</a>
-        <a class="nav-link" href="dua.html">Daily Duas</a>
-        <a class="nav-link" href="tools.html">Tools</a>
-        <a class="nav-link" href="habits.html">Habit Tracker</a>
-        <a class="nav-link" href="verify.html">Verify</a>
-        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+        <a class="nav-link active" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+        <a class="nav-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+        <a class="nav-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+        <a class="nav-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+        <a class="nav-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+        <a class="nav-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+        <a class="nav-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+        <a class="nav-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+        <a class="nav-link" href="about.html" data-i18n="chrome.nav.about">About</a>
       </nav>
 
       <!-- Icons (Right) -->
@@ -1319,16 +1348,19 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           </button>
           <div class="search-popup" id="searchPopup" role="search">
-            <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput" />
+            <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput" data-i18n-attr="placeholder:chrome.search.placeholder;aria-label:chrome.search.inputAria" />
             <button class="search-popup-btn">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-              Search
+              <span data-i18n="chrome.search.button">Search</span>
             </button>
           </div>
         </div>
-        <button class="icon-btn" aria-label="Language">
-          <span style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
-        </button>
+        <div class="lang-wrapper">
+          <button class="icon-btn lang-trigger" id="langBtn" aria-label="Language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
+            <span id="langBtnCode" style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
+          </button>
+          <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
+        </div>
         <button class="icon-btn theme-toggle" aria-label="Toggle theme" id="themeBtn"></button>
         <button class="icon-btn" aria-label="Admin">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
@@ -1350,16 +1382,16 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
   </div>
-  <a class="mm-link" href="index.html">Home</a>
-  <a class="mm-link active" href="quran.html">Quran Explorer</a>
-  <a class="mm-link" href="hadith.html">Hadith Library</a>
-  <a class="mm-link" href="islamic-studies.html">Islamic Studies</a>
-  <a class="mm-link" href="knowledge-hub.html">Knowledge Hub</a>
-  <a class="mm-link" href="dua.html">Daily Duas</a>
-  <a class="mm-link" href="tools.html">Tools</a>
-  <a class="mm-link" href="habits.html">Habit Tracker</a>
-  <a class="mm-link" href="verify.html">Verify</a>
-  <a class="mm-link" href="about.html">About</a>
+  <a class="mm-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+  <a class="mm-link active" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+  <a class="mm-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+  <a class="mm-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+  <a class="mm-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+  <a class="mm-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+  <a class="mm-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+  <a class="mm-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+  <a class="mm-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+  <a class="mm-link" href="about.html" data-i18n="chrome.nav.about">About</a>
 </div>
 <div class="page-shell">
 <!-- ════ HERO ════ -->
@@ -1370,28 +1402,28 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   <div class="geo g4"><svg width="100" height="100" viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#00696E" stroke-width=".4" opacity=".5"/></svg></div>
   <div class="hero-inner">
     <div class="bismillah-hero">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-    <div class="hero-badge"><span class="badge-dot"></span>Sacred Scripture · 114 Surahs · 6,236 Ayahs</div>
-    <h1 class="hero-title">Read, Listen &amp; Understand<br>the <span class="grad-it">Holy Qur'an</span></h1>
-    <p class="hero-sub">Experience the Qur'an with authentic translations, word-by-word analysis, classical tafsir, Tajweed colour-coding, and AI-powered explanations — all source-verified.</p>
+    <div class="hero-badge"><span class="badge-dot"></span><span data-i18n="quran.hero.badge">Sacred Scripture · 114 Surahs · 6,236 Ayahs</span></div>
+    <h1 class="hero-title" data-i18n="quran.hero.title" data-i18n-html>Read, Listen &amp; Understand<br>the <span class="grad-it">Holy Qur'an</span></h1>
+    <p class="hero-sub" data-i18n="quran.hero.sub">Experience the Qur'an with authentic translations, word-by-word analysis, classical tafsir, Tajweed colour-coding, and AI-powered explanations — all source-verified.</p>
     <div class="hero-btns">
       <button class="btn-primary" onclick="document.getElementById('readerShell').scrollIntoView({behavior:'smooth'})">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        Start Reading
+        <span data-i18n="quran.hero.btn1">Start Reading</span>
       </button>
       <button class="btn-ghost" onclick="showToast('Resuming from Al-Fatihah 1:5 ✦')">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        Continue Reading
+        <span data-i18n="quran.hero.btn2">Continue Reading</span>
       </button>
       <button class="btn-ghost" onclick="openSearch()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        Search Qur'an
+        <span data-i18n="quran.hero.btn3">Search Qur'an</span>
       </button>
     </div>
     <div class="stats-row">
-      <div class="si"><div class="sn">114</div><div class="sl">Surahs</div></div>
-      <div class="si"><div class="sn">6,<em>236</em></div><div class="sl">Ayahs</div></div>
-      <div class="si"><div class="sn">12<em>+</em></div><div class="sl">Translations</div></div>
-      <div class="si"><div class="sn">50<em>+</em></div><div class="sl">Reciters</div></div>
+      <div class="si"><div class="sn">114</div><div class="sl" data-i18n="quran.hero.statSurahs">Surahs</div></div>
+      <div class="si"><div class="sn">6,<em>236</em></div><div class="sl" data-i18n="quran.hero.statAyahs">Ayahs</div></div>
+      <div class="si"><div class="sn">12<em>+</em></div><div class="sl" data-i18n="quran.hero.statTranslations">Translations</div></div>
+      <div class="si"><div class="sn">50<em>+</em></div><div class="sl" data-i18n="quran.hero.statReciters">Reciters</div></div>
     </div>
   </div>
 </section>
@@ -1400,7 +1432,7 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-streak">
-      <div class="sb-streak-label"><span>✦ 3-day streak</span><a href="habits.html?source=quran">Habit Tracker →</a></div>
+      <div class="sb-streak-label"><span data-i18n="quran.reader.streakLabel">✦ 3-day streak</span><a href="habits.html?source=quran" data-i18n="quran.reader.streakLink">Habit Tracker →</a></div>
       <div class="sb-streak-days">
         <div class="ssd read" style="font-size:8px;">✓</div>
         <div class="ssd read" style="font-size:8px;">✓</div>
@@ -1414,15 +1446,15 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
     <div class="sb-search">
       <div class="sb-input-wrap">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ink-subtle);flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" placeholder="Search surahs…" oninput="filterSurahs(this.value)"/>
+        <input type="text" placeholder="Search surahs…" data-i18n-attr="placeholder:quran.reader.searchPlaceholder" oninput="filterSurahs(this.value)"/>
       </div>
     </div>
     <div class="sb-filters">
-      <button class="sb-filter on" onclick="filterReveal('all',this)">All</button>
-      <button class="sb-filter" onclick="filterReveal('makki',this)">Makki</button>
-      <button class="sb-filter" onclick="filterReveal('madinah',this)">Madani</button>
+      <button class="sb-filter on" onclick="filterReveal('all',this)" data-i18n="quran.reader.filterAll">All</button>
+      <button class="sb-filter" onclick="filterReveal('makki',this)" data-i18n="quran.reader.filterMakki">Makki</button>
+      <button class="sb-filter" onclick="filterReveal('madinah',this)" data-i18n="quran.reader.filterMadani">Madani</button>
     </div>
-    <div class="sb-section-label">114 Surahs</div>
+    <div class="sb-section-label" data-i18n="quran.reader.surahCountLabel">114 Surahs</div>
     <div class="sb-list" id="sbList">
       <div class="surah-row active" data-type="makki" onclick="selectSurah(this,'Al-Fatihah','الفاتحة','7 Ayahs','Makki','ف')">
         <div class="surah-num">1</div>
@@ -1485,16 +1517,16 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
         <div class="surah-ar">يوسف</div>
       </div>
       <div class="sb-divider"></div>
-      <div class="sb-section-label" style="padding-top:4px;">Browse by Topic</div>
-      <div class="topic-item"><div class="topic-dot"></div>Faith &amp; Belief</div>
-      <div class="topic-item"><div class="topic-dot"></div>Prayer (Salah)</div>
-      <div class="topic-item"><div class="topic-dot"></div>Stories of the Prophets</div>
-      <div class="topic-item"><div class="topic-dot"></div>Day of Judgment</div>
-      <div class="topic-item"><div class="topic-dot"></div>Tawhid (Monotheism)</div>
-      <div class="topic-item"><div class="topic-dot"></div>Ethics &amp; Character</div>
+      <div class="sb-section-label" style="padding-top:4px;" data-i18n="quran.reader.browseByTopic">Browse by Topic</div>
+      <div class="topic-item"><div class="topic-dot"></div><span data-i18n="quran.reader.topic1">Faith &amp; Belief</span></div>
+      <div class="topic-item"><div class="topic-dot"></div><span data-i18n="quran.reader.topic2">Prayer (Salah)</span></div>
+      <div class="topic-item"><div class="topic-dot"></div><span data-i18n="quran.reader.topic3">Stories of the Prophets</span></div>
+      <div class="topic-item"><div class="topic-dot"></div><span data-i18n="quran.reader.topic4">Day of Judgment</span></div>
+      <div class="topic-item"><div class="topic-dot"></div><span data-i18n="quran.reader.topic5">Tawhid (Monotheism)</span></div>
+      <div class="topic-item"><div class="topic-dot"></div><span data-i18n="quran.reader.topic6">Ethics &amp; Character</span></div>
     </div>
     <div class="sb-progress-wrap">
-      <div class="sb-progress-label"><span>Overall Progress</span><span>18%</span></div>
+      <div class="sb-progress-label"><span data-i18n="quran.reader.progressLabel">Overall Progress</span><span>18%</span></div>
       <div class="sb-progress-bar"><div class="sb-progress-fill"></div></div>
     </div>
   </aside>
@@ -1534,28 +1566,28 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
         <div class="ctrl-sep"></div>
         <button class="ctrl-btn on" onclick="showToast('Translation: Sahih International')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg> Sahih Intl. <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
         <div class="ctrl-sep"></div>
-        <button class="ctrl-btn on" id="wbwBtn" onclick="toggleWBW(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h8M4 18h4"/></svg> Word-by-word</button>
+        <button class="ctrl-btn on" id="wbwBtn" onclick="toggleWBW(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h8M4 18h4"/></svg> <span data-i18n="quran.reader.wordByWord">Word-by-word</span></button>
         <div class="ctrl-sep"></div>
         <!-- Mode switcher: Study ↔ Mushaf — mutually exclusive -->
-        <button class="ctrl-btn on" id="studyModeBtn" onclick="switchToStudyMode(this)" title="Study Mode — verse cards with translation and tools"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="17" width="18" height="4" rx="1"/></svg> Study Mode</button>
-        <button class="ctrl-btn" id="mushafModeBtn" onclick="switchToMushafMode(this)" title="Mushaf Mode — traditional page layout"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg> Mushaf Mode</button>
+        <button class="ctrl-btn on" id="studyModeBtn" onclick="switchToStudyMode(this)" title="Study Mode — verse cards with translation and tools" data-i18n-attr="title:quran.reader.studyModeTitle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="17" width="18" height="4" rx="1"/></svg> <span data-i18n="quran.reader.studyMode">Study Mode</span></button>
+        <button class="ctrl-btn" id="mushafModeBtn" onclick="switchToMushafMode(this)" title="Mushaf Mode — traditional page layout" data-i18n-attr="title:quran.reader.mushafModeTitle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg> <span data-i18n="quran.reader.mushafMode">Mushaf Mode</span></button>
         <div class="ctrl-sep"></div>
-        <button class="ctrl-btn" id="tajweedBtn" onclick="toggleTajweed(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg> Tajweed</button>
-        <button class="ctrl-btn" id="compareBtn" onclick="toggleCompare(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18"/><rect x="14" y="3" width="7" height="18"/></svg> Compare</button>
-        <button class="ctrl-btn" id="tafsirCtrlBtn" onclick="openTafsir()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Tafsir</button>
-        <button class="ctrl-btn" id="readModeBtn" onclick="toggleReadingMode()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Reading Mode</button>
+        <button class="ctrl-btn" id="tajweedBtn" onclick="toggleTajweed(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg> <span data-i18n="quran.reader.tajweed">Tajweed</span></button>
+        <button class="ctrl-btn" id="compareBtn" onclick="toggleCompare(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18"/><rect x="14" y="3" width="7" height="18"/></svg> <span data-i18n="quran.reader.compare">Compare</span></button>
+        <button class="ctrl-btn" id="tafsirCtrlBtn" onclick="openTafsir()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span data-i18n="quran.reader.tafsir">Tafsir</span></button>
+        <button class="ctrl-btn" id="readModeBtn" onclick="toggleReadingMode()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> <span data-i18n="quran.reader.readingMode">Reading Mode</span></button>
         <div class="ctrl-sep"></div>
-        <button class="ctrl-btn" id="settingsBtn" onclick="toggleSettings()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button>
-        <button class="ctrl-btn" onclick="toggleBookmarks()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg> Bookmarks</button>
+        <button class="ctrl-btn" id="settingsBtn" onclick="toggleSettings()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> <span data-i18n="quran.reader.settings">Settings</span></button>
+        <button class="ctrl-btn" onclick="toggleBookmarks()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg> <span data-i18n="quran.reader.bookmarks">Bookmarks</span></button>
       </div>
       <!-- Tajweed Legend -->
       <div class="tj-legend" id="tjLegend">
-        <div class="tjli"><div class="tjdot" style="background:#2CA4AB;"></div>Madd</div>
-        <div class="tjli"><div class="tjdot" style="background:#2E7D32;"></div>Ghunna</div>
-        <div class="tjli"><div class="tjdot" style="background:#8A6500;"></div>Ikhfa</div>
-        <div class="tjli"><div class="tjdot" style="background:#1565C0;"></div>Idgham</div>
-        <div class="tjli"><div class="tjdot" style="background:#880E4F;"></div>Qalqalah</div>
-        <button onclick="document.getElementById('tjLegend').classList.remove('show')" style="margin-left:auto;border:none;background:transparent;cursor:pointer;color:var(--ink-subtle);font-size:11px;font-family:var(--font-body);">dismiss ✕</button>
+        <div class="tjli"><div class="tjdot" style="background:#2CA4AB;"></div><span data-i18n="quran.reader.tjMadd">Madd</span></div>
+        <div class="tjli"><div class="tjdot" style="background:#2E7D32;"></div><span data-i18n="quran.reader.tjGhunna">Ghunna</span></div>
+        <div class="tjli"><div class="tjdot" style="background:#8A6500;"></div><span data-i18n="quran.reader.tjIkhfa">Ikhfa</span></div>
+        <div class="tjli"><div class="tjdot" style="background:#1565C0;"></div><span data-i18n="quran.reader.tjIdgham">Idgham</span></div>
+        <div class="tjli"><div class="tjdot" style="background:#880E4F;"></div><span data-i18n="quran.reader.tjQalqalah">Qalqalah</span></div>
+        <button onclick="document.getElementById('tjLegend').classList.remove('show')" style="margin-left:auto;border:none;background:transparent;cursor:pointer;color:var(--ink-subtle);font-size:11px;font-family:var(--font-body);" data-i18n="quran.reader.tjDismiss">dismiss ✕</button>
       </div>
     </div>
     <!-- VERSES AREA -->
@@ -1719,11 +1751,11 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 
           <!-- Tajweed legend — only visible when tajweed is active -->
           <div class="mushaf-tj-legend" id="mushafTjLegend">
-            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#2CA4AB;"></div>Madd</div>
-            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#2E7D32;"></div>Ghunna</div>
-            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#8A6500;"></div>Ikhfa</div>
-            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#1565C0;"></div>Idgham</div>
-            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#880E4F;"></div>Qalqalah</div>
+            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#2CA4AB;"></div><span data-i18n="quran.reader.tjMadd">Madd</span></div>
+            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#2E7D32;"></div><span data-i18n="quran.reader.tjGhunna">Ghunna</span></div>
+            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#8A6500;"></div><span data-i18n="quran.reader.tjIkhfa">Ikhfa</span></div>
+            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#1565C0;"></div><span data-i18n="quran.reader.tjIdgham">Idgham</span></div>
+            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#880E4F;"></div><span data-i18n="quran.reader.tjQalqalah">Qalqalah</span></div>
           </div>
 
           <!-- ─── Ayah 1 ─── -->
@@ -2005,25 +2037,25 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 <button class="reading-mode-exit" onclick="toggleReadingMode()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Exit Reading Mode</button>
 <!-- ════ TODAY'S REFLECTION ════ -->
 <section class="trio-section">
-  <div class="trio-hdr"><div class="trio-title">Today's Reflection</div><a class="trio-see-all" href="quran.html">View all →</a></div>
+  <div class="trio-hdr"><div class="trio-title" data-i18n="quran.reflection.title">Today's Reflection</div><a class="trio-see-all" href="quran.html" data-i18n="quran.reflection.viewAllLink">View all →</a></div>
   <div class="trio-grid">
     <div class="trio-card">
-      <div class="trio-head"><div class="trio-icon">📖</div><span class="trio-label">Verse of the Day</span><span class="trio-tag">LIVE</span></div>
+      <div class="trio-head"><div class="trio-icon">📖</div><span class="trio-label" data-i18n="quran.reflection.card1Label">Verse of the Day</span><span class="trio-tag" data-i18n="quran.reflection.card1Tag">LIVE</span></div>
       <div class="trio-arabic">وَمَن يَتَوَكَّلۡ عَلَى ٱللَّهِ فَهُوَ حَسۡبُهُ</div>
-      <div class="trio-text">"And whoever relies upon Allah — then He is sufficient for him."</div>
-      <div class="trio-foot"><span>At-Talaq 65:3</span><span class="trio-read" onclick="showToast('Opening At-Talaq…')">Read in context →</span></div>
+      <div class="trio-text" data-i18n="quran.reflection.card1Text">"And whoever relies upon Allah — then He is sufficient for him."</div>
+      <div class="trio-foot"><span>At-Talaq 65:3</span><span class="trio-read" onclick="showToast('Opening At-Talaq…')" data-i18n="quran.reflection.card1ReadLink">Read in context →</span></div>
     </div>
     <div class="trio-card gold">
-      <div class="trio-head"><div class="trio-icon gold">📜</div><span class="trio-label">Hadith of the Day</span><span class="trio-tag" style="background:rgba(197,160,89,.12);color:var(--gold-700);">SAHIH</span></div>
+      <div class="trio-head"><div class="trio-icon gold">📜</div><span class="trio-label" data-i18n="quran.reflection.card2Label">Hadith of the Day</span><span class="trio-tag" style="background:rgba(197,160,89,.12);color:var(--gold-700);" data-i18n="quran.reflection.card2Tag">SAHIH</span></div>
       <div class="trio-arabic">إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ</div>
-      <div class="trio-text">"The reward of deeds depends upon the intentions."</div>
-      <div class="trio-foot"><span>Sahih al-Bukhari · 1</span><a class="trio-read" href="hadith.html">View →</a></div>
+      <div class="trio-text" data-i18n="quran.reflection.card2Text">"The reward of deeds depends upon the intentions."</div>
+      <div class="trio-foot"><span>Sahih al-Bukhari · 1</span><a class="trio-read" href="hadith.html" data-i18n="quran.reflection.viewLink">View →</a></div>
     </div>
     <div class="trio-card">
-      <div class="trio-head"><div class="trio-icon">🤲</div><span class="trio-label">Dua of the Day</span><span class="trio-tag">DAILY</span></div>
+      <div class="trio-head"><div class="trio-icon">🤲</div><span class="trio-label" data-i18n="quran.reflection.card3Label">Dua of the Day</span><span class="trio-tag" data-i18n="quran.reflection.card3Tag">DAILY</span></div>
       <div class="trio-arabic">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً</div>
-      <div class="trio-text">"Our Lord, give us good in this world and good in the hereafter."</div>
-      <div class="trio-foot"><span>Al-Baqarah 2:201</span><a class="trio-read" href="dua.html">View →</a></div>
+      <div class="trio-text" data-i18n="quran.reflection.card3Text">"Our Lord, give us good in this world and good in the hereafter."</div>
+      <div class="trio-foot"><span>Al-Baqarah 2:201</span><a class="trio-read" href="dua.html" data-i18n="quran.reflection.viewLink">View →</a></div>
     </div>
   </div>
 </section>
@@ -2031,18 +2063,18 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 <section class="feat-section">
   <!-- ── Free features ── -->
   <div class="feat-section-hdr">
-    <div class="feat-title">Everything a Serious Reader Needs</div>
-    <div class="feat-subtitle">All core features are free — forever. No account required.</div>
+    <div class="feat-title" data-i18n="quran.features.title">Everything a Serious Reader Needs</div>
+    <div class="feat-subtitle" data-i18n="quran.features.subtitle">All core features are free — forever. No account required.</div>
   </div>
   <div class="feat-grid">
-    <div class="feat-card"><div class="feat-icon">📖</div><div class="feat-card-title">114 Surahs Live</div><div class="feat-card-desc">All 6,236 verses from the authenticated Uthmani text, fetched in real-time.</div><div class="feat-badge stage-1">✓ Free</div></div>
-    <div class="feat-card"><div class="feat-icon">🎵</div><div class="feat-card-title">50+ Reciters</div><div class="feat-card-desc">Auto-advance audio with per-verse playback, speed control, and reciter selection.</div><div class="feat-badge stage-1">✓ Free</div></div>
-    <div class="feat-card"><div class="feat-icon">📝</div><div class="feat-card-title">Notes &amp; Bookmarks</div><div class="feat-card-desc">Inline note editor, gold bookmark icon, and 5 default bookmark categories.</div><div class="feat-badge stage-1">✓ Free</div></div>
-    <div class="feat-card"><div class="feat-icon">📐</div><div class="feat-card-title">Reading Mode</div><div class="feat-card-desc">Distraction-free mode with gold-tint background and ghost top bar on hover.</div><div class="feat-badge stage-1">✓ Free</div></div>
-    <div class="feat-card gold"><div class="feat-icon">🔤</div><div class="feat-card-title">Word-by-Word</div><div class="feat-card-desc">Arabic gloss + English + part-of-speech chips with root tooltip on hover.</div><div class="feat-badge stage-2">✓ Free</div></div>
-    <div class="feat-card gold"><div class="feat-icon">🎨</div><div class="feat-card-title">Tajweed Colors</div><div class="feat-card-desc">6-rule colour-coding with dismissable legend. Madd, Ghunna, Ikhfa, Idgham, Qalqalah.</div><div class="feat-badge stage-2">✓ Free</div></div>
-    <div class="feat-card"><div class="feat-icon">⚖️</div><div class="feat-card-title">Translation Compare</div><div class="feat-card-desc">3 translations side-by-side per verse — Sahih Intl., Pickthall, Yusuf Ali.</div><div class="feat-badge stage-2">✓ Free</div></div>
-    <div class="feat-card gold"><div class="feat-icon">✦</div><div class="feat-card-title">AI Explain</div><div class="feat-card-desc">QuranlyAI-powered contextual explanations. No fabrications. No fatwas. Ever.</div><div class="feat-badge stage-2">✓ Free</div></div>
+    <div class="feat-card"><div class="feat-icon">📖</div><div class="feat-card-title" data-i18n="quran.features.card1Title">114 Surahs Live</div><div class="feat-card-desc" data-i18n="quran.features.card1Desc">All 6,236 verses from the authenticated Uthmani text, fetched in real-time.</div><div class="feat-badge stage-1" data-i18n="quran.features.freeBadge">✓ Free</div></div>
+    <div class="feat-card"><div class="feat-icon">🎵</div><div class="feat-card-title" data-i18n="quran.features.card2Title">50+ Reciters</div><div class="feat-card-desc" data-i18n="quran.features.card2Desc">Auto-advance audio with per-verse playback, speed control, and reciter selection.</div><div class="feat-badge stage-1" data-i18n="quran.features.freeBadge">✓ Free</div></div>
+    <div class="feat-card"><div class="feat-icon">📝</div><div class="feat-card-title" data-i18n="quran.features.card3Title">Notes &amp; Bookmarks</div><div class="feat-card-desc" data-i18n="quran.features.card3Desc">Inline note editor, gold bookmark icon, and 5 default bookmark categories.</div><div class="feat-badge stage-1" data-i18n="quran.features.freeBadge">✓ Free</div></div>
+    <div class="feat-card"><div class="feat-icon">📐</div><div class="feat-card-title" data-i18n="quran.features.card4Title">Reading Mode</div><div class="feat-card-desc" data-i18n="quran.features.card4Desc">Distraction-free mode with gold-tint background and ghost top bar on hover.</div><div class="feat-badge stage-1" data-i18n="quran.features.freeBadge">✓ Free</div></div>
+    <div class="feat-card gold"><div class="feat-icon">🔤</div><div class="feat-card-title" data-i18n="quran.features.card5Title">Word-by-Word</div><div class="feat-card-desc" data-i18n="quran.features.card5Desc">Arabic gloss + English + part-of-speech chips with root tooltip on hover.</div><div class="feat-badge stage-2" data-i18n="quran.features.freeBadge">✓ Free</div></div>
+    <div class="feat-card gold"><div class="feat-icon">🎨</div><div class="feat-card-title" data-i18n="quran.features.card6Title">Tajweed Colors</div><div class="feat-card-desc" data-i18n="quran.features.card6Desc">6-rule colour-coding with dismissable legend. Madd, Ghunna, Ikhfa, Idgham, Qalqalah.</div><div class="feat-badge stage-2" data-i18n="quran.features.freeBadge">✓ Free</div></div>
+    <div class="feat-card"><div class="feat-icon">⚖️</div><div class="feat-card-title" data-i18n="quran.features.card7Title">Translation Compare</div><div class="feat-card-desc" data-i18n="quran.features.card7Desc">3 translations side-by-side per verse — Sahih Intl., Pickthall, Yusuf Ali.</div><div class="feat-badge stage-2" data-i18n="quran.features.freeBadge">✓ Free</div></div>
+    <div class="feat-card gold"><div class="feat-icon">✦</div><div class="feat-card-title" data-i18n="quran.features.card8Title">AI Explain</div><div class="feat-card-desc" data-i18n="quran.features.card8Desc">QuranlyAI-powered contextual explanations. No fabrications. No fatwas. Ever.</div><div class="feat-badge stage-2" data-i18n="quran.features.freeBadge">✓ Free</div></div>
   </div>
 
   <!-- ── Premium / Mobile divider ── -->
@@ -2050,131 +2082,131 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
     <div class="feat-divider-line"></div>
     <div class="feat-divider-label">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      Coming to Premium &amp; Mobile App
+      <span data-i18n="quran.features.dividerLabel">Coming to Premium &amp; Mobile App</span>
     </div>
     <div class="feat-divider-line"></div>
   </div>
-  <p class="feat-premium-sub">These features are in active development. Available on the IslamicInfo mobile app and web Premium tier.</p>
+  <p class="feat-premium-sub" data-i18n="quran.features.premiumSub">These features are in active development. Available on the IslamicInfo mobile app and web Premium tier.</p>
 
   <div class="feat-grid feat-grid-premium">
     <!-- Hifz Assistant — Mobile App -->
     <div class="feat-card feat-locked">
-      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> 📱 Mobile App</div>
+      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> <span data-i18n="quran.features.badgeMobileApp">📱 Mobile App</span></div>
       <div class="feat-icon">📿</div>
-      <div class="feat-card-title">Hifz Assistant</div>
-      <div class="feat-card-desc">Progressive word-hiding for memorization. Words disappear one by one — recall them to advance. Tracks your Hifz streak and sends daily reminders.</div>
-      <div class="feat-badge feat-badge-mobile">📱 Mobile App</div>
+      <div class="feat-card-title" data-i18n="quran.features.premium1Title">Hifz Assistant</div>
+      <div class="feat-card-desc" data-i18n="quran.features.premium1Desc">Progressive word-hiding for memorization. Words disappear one by one — recall them to advance. Tracks your Hifz streak and sends daily reminders.</div>
+      <div class="feat-badge feat-badge-mobile" data-i18n="quran.features.badgeMobileApp">📱 Mobile App</div>
     </div>
 
     <!-- Root Word Explorer — Premium -->
     <div class="feat-card feat-locked gold">
-      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Premium</div>
+      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> <span data-i18n="quran.features.badgePremiumShort">Premium</span></div>
       <div class="feat-icon">🌿</div>
-      <div class="feat-card-title">Root Word Explorer</div>
-      <div class="feat-card-desc">Tap any Arabic word to see its 3-letter root, root meaning, and every other verse in the Quran that shares that root. Passive Arabic learning while you read.</div>
-      <div class="feat-badge feat-badge-premium">✦ Premium</div>
+      <div class="feat-card-title" data-i18n="quran.features.premium2Title">Root Word Explorer</div>
+      <div class="feat-card-desc" data-i18n="quran.features.premium2Desc">Tap any Arabic word to see its 3-letter root, root meaning, and every other verse in the Quran that shares that root. Passive Arabic learning while you read.</div>
+      <div class="feat-badge feat-badge-premium" data-i18n="quran.features.badgePremium">✦ Premium</div>
     </div>
 
     <!-- Daily Verse Journey — Premium -->
     <div class="feat-card feat-locked">
-      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Premium</div>
+      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> <span data-i18n="quran.features.badgePremiumShort">Premium</span></div>
       <div class="feat-icon">🗓️</div>
-      <div class="feat-card-title">Daily Verse Journey</div>
-      <div class="feat-card-desc">Set a goal — complete the Quran, study a Juz per month, or explore by theme. Get a personalised reading path that adapts to your pace and progress.</div>
-      <div class="feat-badge feat-badge-premium">✦ Premium</div>
+      <div class="feat-card-title" data-i18n="quran.features.premium3Title">Daily Verse Journey</div>
+      <div class="feat-card-desc" data-i18n="quran.features.premium3Desc">Set a goal — complete the Quran, study a Juz per month, or explore by theme. Get a personalised reading path that adapts to your pace and progress.</div>
+      <div class="feat-badge feat-badge-premium" data-i18n="quran.features.badgePremium">✦ Premium</div>
     </div>
 
     <!-- Verse of the Moment — Premium -->
     <div class="feat-card feat-locked gold">
-      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Premium</div>
+      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> <span data-i18n="quran.features.badgePremiumShort">Premium</span></div>
       <div class="feat-icon">💛</div>
-      <div class="feat-card-title">Verse of the Moment</div>
-      <div class="feat-card-desc">Type how you feel — "I'm anxious", "I feel grateful", "I'm grieving" — and QuranlyAI surfaces the 2–3 verses most relevant to your state. No fatwas. Pure resonance.</div>
-      <div class="feat-badge feat-badge-premium">✦ Premium</div>
+      <div class="feat-card-title" data-i18n="quran.features.premium4Title">Verse of the Moment</div>
+      <div class="feat-card-desc" data-i18n="quran.features.premium4Desc">Type how you feel — "I'm anxious", "I feel grateful", "I'm grieving" — and QuranlyAI surfaces the 2–3 verses most relevant to your state. No fatwas. Pure resonance.</div>
+      <div class="feat-badge feat-badge-premium" data-i18n="quran.features.badgePremium">✦ Premium</div>
     </div>
 
     <!-- Surah Thematic Map — Coming Soon -->
     <div class="feat-card feat-locked">
-      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Coming Soon</div>
+      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span data-i18n="quran.features.badgeComingSoonShort">Coming Soon</span></div>
       <div class="feat-icon">🗺️</div>
-      <div class="feat-card-title">Surah Thematic Map</div>
-      <div class="feat-card-desc">A visual grid of all 114 Surahs, colour-coded by theme — Theology, Law, Stories, Prayer, Eschatology. Filter by Juz or Makki/Madani and jump straight to any Surah.</div>
-      <div class="feat-badge feat-badge-soon">⏳ Coming Soon</div>
+      <div class="feat-card-title" data-i18n="quran.features.premium5Title">Surah Thematic Map</div>
+      <div class="feat-card-desc" data-i18n="quran.features.premium5Desc">A visual grid of all 114 Surahs, colour-coded by theme — Theology, Law, Stories, Prayer, Eschatology. Filter by Juz or Makki/Madani and jump straight to any Surah.</div>
+      <div class="feat-badge feat-badge-soon" data-i18n="quran.features.badgeComingSoon">⏳ Coming Soon</div>
     </div>
 
     <!-- Side-by-Side Language — Coming Soon -->
     <div class="feat-card feat-locked gold">
-      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Coming Soon</div>
+      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span data-i18n="quran.features.badgeComingSoonShort">Coming Soon</span></div>
       <div class="feat-icon">🌐</div>
-      <div class="feat-card-title">Side-by-Side Language</div>
-      <div class="feat-card-desc">Arabic right, your language left — verse by verse in perfect sync. Supports 10 languages including Bangla, Urdu, Hindi, Turkish, and Indonesian.</div>
-      <div class="feat-badge feat-badge-soon">⏳ Coming Soon</div>
+      <div class="feat-card-title" data-i18n="quran.features.premium6Title">Side-by-Side Language</div>
+      <div class="feat-card-desc" data-i18n="quran.features.premium6Desc">Arabic right, your language left — verse by verse in perfect sync. Supports 10 languages including Bangla, Urdu, Hindi, Turkish, and Indonesian.</div>
+      <div class="feat-badge feat-badge-soon" data-i18n="quran.features.badgeComingSoon">⏳ Coming Soon</div>
     </div>
 
     <!-- Offline Reading — Mobile App -->
     <div class="feat-card feat-locked">
-      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> 📱 Mobile App</div>
+      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> <span data-i18n="quran.features.badgeMobileApp">📱 Mobile App</span></div>
       <div class="feat-icon">📥</div>
-      <div class="feat-card-title">Offline Reading</div>
-      <div class="feat-card-desc">Download any Surah or full Juz for offline reading. Your bookmarks, notes, and reading position sync automatically when you reconnect.</div>
-      <div class="feat-badge feat-badge-mobile">📱 Mobile App</div>
+      <div class="feat-card-title" data-i18n="quran.features.premium7Title">Offline Reading</div>
+      <div class="feat-card-desc" data-i18n="quran.features.premium7Desc">Download any Surah or full Juz for offline reading. Your bookmarks, notes, and reading position sync automatically when you reconnect.</div>
+      <div class="feat-badge feat-badge-mobile" data-i18n="quran.features.badgeMobileApp">📱 Mobile App</div>
     </div>
 
     <!-- Reading Analytics — Premium -->
     <div class="feat-card feat-locked gold">
-      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Premium</div>
+      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> <span data-i18n="quran.features.badgePremiumShort">Premium</span></div>
       <div class="feat-icon">📊</div>
-      <div class="feat-card-title">Reading Analytics</div>
-      <div class="feat-card-desc">See how much of the Quran you've engaged with — verses read, Surahs completed, your 7-day streak, and your most-visited Surah. Private and local by default.</div>
-      <div class="feat-badge feat-badge-premium">✦ Premium</div>
+      <div class="feat-card-title" data-i18n="quran.features.premium8Title">Reading Analytics</div>
+      <div class="feat-card-desc" data-i18n="quran.features.premium8Desc">See how much of the Quran you've engaged with — verses read, Surahs completed, your 7-day streak, and your most-visited Surah. Private and local by default.</div>
+      <div class="feat-badge feat-badge-premium" data-i18n="quran.features.badgePremium">✦ Premium</div>
     </div>
 
     <!-- Pace Timer — Coming Soon -->
     <div class="feat-card feat-locked">
-      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Coming Soon</div>
+      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span data-i18n="quran.features.badgeComingSoonShort">Coming Soon</span></div>
       <div class="feat-icon">⏱️</div>
-      <div class="feat-card-title">Deep Reading Timer</div>
-      <div class="feat-card-desc">Set a minimum reflection time per verse. A gold ring counts down before you can advance — turning speed-reading into genuine contemplation.</div>
-      <div class="feat-badge feat-badge-soon">⏳ Coming Soon</div>
+      <div class="feat-card-title" data-i18n="quran.features.premium9Title">Deep Reading Timer</div>
+      <div class="feat-card-desc" data-i18n="quran.features.premium9Desc">Set a minimum reflection time per verse. A gold ring counts down before you can advance — turning speed-reading into genuine contemplation.</div>
+      <div class="feat-badge feat-badge-soon" data-i18n="quran.features.badgeComingSoon">⏳ Coming Soon</div>
     </div>
 
     <!-- Verse Emotion Tags — Coming Soon -->
     <div class="feat-card feat-locked gold">
-      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Coming Soon</div>
+      <div class="feat-lock-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span data-i18n="quran.features.badgeComingSoonShort">Coming Soon</span></div>
       <div class="feat-icon">🤲</div>
-      <div class="feat-card-title">Verse Emotion Tags</div>
-      <div class="feat-card-desc">Tag a verse with how it moved you — Grateful, Comforting, Inspiring, Seeking. See which tags the global community used most for each verse. Fully anonymous.</div>
-      <div class="feat-badge feat-badge-soon">⏳ Coming Soon</div>
+      <div class="feat-card-title" data-i18n="quran.features.premium10Title">Verse Emotion Tags</div>
+      <div class="feat-card-desc" data-i18n="quran.features.premium10Desc">Tag a verse with how it moved you — Grateful, Comforting, Inspiring, Seeking. See which tags the global community used most for each verse. Fully anonymous.</div>
+      <div class="feat-badge feat-badge-soon" data-i18n="quran.features.badgeComingSoon">⏳ Coming Soon</div>
     </div>
   </div>
 
   <!-- ── App CTA strip ── -->
   <div class="feat-app-cta">
     <div class="feat-app-cta-left">
-      <div class="feat-app-cta-title">Get the IslamicInfo App</div>
-      <div class="feat-app-cta-sub">Hifz tracking, offline Surahs, push reminders, and cloud sync — coming to iOS &amp; Android.</div>
+      <div class="feat-app-cta-title" data-i18n="quran.features.appCtaTitle">Get the IslamicInfo App</div>
+      <div class="feat-app-cta-sub" data-i18n="quran.features.appCtaSub">Hifz tracking, offline Surahs, push reminders, and cloud sync — coming to iOS &amp; Android.</div>
     </div>
     <div class="feat-app-cta-right">
       <button class="feat-app-btn" onclick="showToast('Waitlist coming soon — JazakAllah Khair ✦')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        Join App Waitlist
+        <span data-i18n="quran.features.appCtaBtn1">Join App Waitlist</span>
       </button>
       <button class="feat-app-btn feat-app-btn-ghost" onclick="showToast('Premium early access coming soon ✦')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        Get Premium Early Access
+        <span data-i18n="quran.features.appCtaBtn2">Get Premium Early Access</span>
       </button>
     </div>
   </div>
 </section>
 <!-- ════ CTA ════ -->
 <section class="cta-band">
-  <div class="cta-badge">✦ Begin Your Journey</div>
-  <h2 class="cta-title">The Qur'an, <span class="gold-it">Illuminated</span></h2>
-  <p class="cta-sub">Join thousands of Muslims deepening their connection to the Qur'an — verse by verse, day by day.</p>
+  <div class="cta-badge" data-i18n="quran.cta.badge">✦ Begin Your Journey</div>
+  <h2 class="cta-title" data-i18n="quran.cta.title" data-i18n-html>The Qur'an, <span class="gold-it">Illuminated</span></h2>
+  <p class="cta-sub" data-i18n="quran.cta.sub">Join thousands of Muslims deepening their connection to the Qur'an — verse by verse, day by day.</p>
   <div class="cta-acts">
-    <button class="btn-cta-gold" onclick="document.getElementById('readerShell').scrollIntoView({behavior:'smooth'})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Start Reading Al-Fatihah</button>
-    <a class="btn-cta-ghost" href="hadith.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Hadith Library</a>
-    <a class="btn-cta-ghost" href="habits.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></svg>Track Your Streak</a>
+    <button class="btn-cta-gold" onclick="document.getElementById('readerShell').scrollIntoView({behavior:'smooth'})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span data-i18n="quran.cta.btn1">Start Reading Al-Fatihah</span></button>
+    <a class="btn-cta-ghost" href="hadith.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span data-i18n="quran.cta.btn2">Hadith Library</span></a>
+    <a class="btn-cta-ghost" href="habits.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></svg><span data-i18n="quran.cta.btn3">Track Your Streak</span></a>
   </div>
 </section>
 </div><!-- end page-shell -->
@@ -2192,31 +2224,31 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
         </svg>
         <span><span class="ti">Islamic</span><span class="fo">Info</span></span>
       </a>
-      <p class="ft-tag">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
+      <p class="ft-tag" data-i18n="chrome.footer.tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
       <p class="ft-verse">وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ — Hud · 11:88</p>
     </div>
     <!-- Quran page col -->
     <div>
-      <div class="ft-col-h">Quran</div>
-      <a class="ft-link" href="quran.html">Surah Index</a>
-      <a class="ft-link" href="quran.html">Word-by-Word</a>
-      <a class="ft-link" href="quran.html">Tafsir</a>
-      <a class="ft-link" href="quran.html">Audio Recitation</a>
-      <a class="ft-link" href="quran.html">Mushaf Mode</a>
+      <div class="ft-col-h" data-i18n="quran.footer.colTitle">Quran</div>
+      <a class="ft-link" href="quran.html" data-i18n="quran.footer.linkSurahIndex">Surah Index</a>
+      <a class="ft-link" href="quran.html" data-i18n="quran.footer.linkWordByWord">Word-by-Word</a>
+      <a class="ft-link" href="quran.html" data-i18n="quran.reader.tafsir">Tafsir</a>
+      <a class="ft-link" href="quran.html" data-i18n="quran.footer.linkAudioRecitation">Audio Recitation</a>
+      <a class="ft-link" href="quran.html" data-i18n="quran.reader.mushafMode">Mushaf Mode</a>
     </div>
     <div>
-      <div class="ft-col-h">Quick Access</div>
-      <a class="ft-link" href="quran.html">Quran Explorer</a>
-      <a class="ft-link" href="hadith.html">Hadith Library</a>
-      <a class="ft-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="ft-link" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="ft-link" href="dua.html">Daily Duas</a>
-      <a class="ft-link" href="tools.html">Islamic Tools</a>
-      <a class="ft-link" href="habits.html">Habit Tracker</a>
-      <a class="ft-link" href="verify.html">Verify a Claim</a>
+      <div class="ft-col-h" data-i18n="chrome.footer.quickAccess">Quick Access</div>
+      <a class="ft-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="ft-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="ft-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="ft-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="ft-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="ft-link" href="tools.html" data-i18n="chrome.footer.linkTools">Islamic Tools</a>
+      <a class="ft-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="ft-link" href="verify.html" data-i18n="chrome.footer.linkVerify">Verify a Claim</a>
     </div>
     <div>
-      <div class="ft-col-h">Our Ecosystem</div>
+      <div class="ft-col-h" data-i18n="chrome.footer.ecosystem">Our Ecosystem</div>
       <a class="ft-link" href="https://islamickids.org" target="_blank" rel="noopener">IslamicKids.org ↗</a>
       <a class="ft-link" href="https://quranlyai.com" target="_blank" rel="noopener">QuranlyAI ↗</a>
       <a class="ft-link" href="https://hadithiq.com" target="_blank" rel="noopener">HadithIQ ↗</a>
@@ -2225,42 +2257,42 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
       <a class="ft-link" href="https://travellyai.com" target="_blank" rel="noopener">TravellyAi ↗</a>
     </div>
     <div>
-      <div class="ft-col-h">Company</div>
-      <a class="ft-link" href="about.html">About</a>
-      <a class="ft-link" href="contact.html">Contact</a>
-      <div class="ft-col-h" style="margin-top:16px;">Legal</div>
-      <a class="ft-link" href="privacy.html">Privacy Policy</a>
-      <a class="ft-link" href="terms.html">Terms of Use</a>
+      <div class="ft-col-h" data-i18n="chrome.footer.company">Company</div>
+      <a class="ft-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+      <a class="ft-link" href="contact.html" data-i18n="chrome.footer.contact">Contact</a>
+      <div class="ft-col-h" style="margin-top:16px;" data-i18n="chrome.footer.legal">Legal</div>
+      <a class="ft-link" href="privacy.html" data-i18n="chrome.footer.privacy">Privacy Policy</a>
+      <a class="ft-link" href="terms.html" data-i18n="chrome.footer.terms">Terms of Use</a>
     </div>
   </div>
   <div class="ft-bot">
-    <div class="ft-copy">© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
-    <div class="ft-note">All content source-verified · Privacy-first · Built with sincerity</div>
+    <div class="ft-copy" data-i18n="chrome.footer.copy" data-i18n-html>© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
+    <div class="ft-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
   </div>
 </footer>
 <!-- ════ SETTINGS PANEL ════ -->
 <div class="settings-panel" id="settingsPanel">
-  <div class="sp-head"><div class="sp-title">Reader Settings</div><button class="sp-close-btn" onclick="toggleSettings()">✕</button></div>
+  <div class="sp-head"><div class="sp-title" data-i18n="quran.settings.title">Reader Settings</div><button class="sp-close-btn" onclick="toggleSettings()">✕</button></div>
   <div class="sp-body">
-    <div class="sp-label">Arabic Font Size</div>
+    <div class="sp-label" data-i18n="quran.settings.arabicFontSize">Arabic Font Size</div>
     <div class="font-slider"><button onclick="setArSz('22px',this)">S</button><button class="on" onclick="setArSz('28px',this)">M</button><button onclick="setArSz('36px',this)">L</button><button onclick="setArSz('46px',this)">XL</button></div>
-    <div class="sp-label">Translation Font Size</div>
+    <div class="sp-label" data-i18n="quran.settings.translationFontSize">Translation Font Size</div>
     <div class="font-slider"><button onclick="setTrSz('14px',this)">S</button><button class="on" onclick="setTrSz('17px',this)">M</button><button onclick="setTrSz('21px',this)">L</button></div>
     <div class="sp-div"></div>
-    <div class="sp-row"><span>Word-by-word</span><button class="sp-toggle on" onclick="this.classList.toggle('on');toggleWBW(document.getElementById('wbwBtn'))"></button></div>
-    <div class="sp-row"><span>Show grammar tags</span><button class="sp-toggle on" onclick="this.classList.toggle('on');toggleGrammarTags()"></button></div>
-    <div class="sp-row"><span>Auto-advance audio</span><button class="sp-toggle on" onclick="this.classList.toggle('on')"></button></div>
-    <div class="sp-row"><span>Show transliteration</span><button class="sp-toggle" onclick="this.classList.toggle('on')"></button></div>
-    <div class="sp-row"><span>Tajweed colors</span><button class="sp-toggle" onclick="this.classList.toggle('on');toggleTajweed(document.getElementById('tajweedBtn'))"></button></div>
+    <div class="sp-row"><span data-i18n="quran.reader.wordByWord">Word-by-word</span><button class="sp-toggle on" onclick="this.classList.toggle('on');toggleWBW(document.getElementById('wbwBtn'))"></button></div>
+    <div class="sp-row"><span data-i18n="quran.settings.showGrammarTags">Show grammar tags</span><button class="sp-toggle on" onclick="this.classList.toggle('on');toggleGrammarTags()"></button></div>
+    <div class="sp-row"><span data-i18n="quran.settings.autoAdvanceAudio">Auto-advance audio</span><button class="sp-toggle on" onclick="this.classList.toggle('on')"></button></div>
+    <div class="sp-row"><span data-i18n="quran.settings.showTransliteration">Show transliteration</span><button class="sp-toggle" onclick="this.classList.toggle('on')"></button></div>
+    <div class="sp-row"><span data-i18n="quran.settings.tajweedColors">Tajweed colors</span><button class="sp-toggle" onclick="this.classList.toggle('on');toggleTajweed(document.getElementById('tajweedBtn'))"></button></div>
     <div class="sp-div"></div>
-    <div class="sp-row"><span>Translation comparison</span><button class="sp-toggle" onclick="this.classList.toggle('on');toggleCompare(document.getElementById('compareBtn'))"></button></div>
-    <button class="sp-reset" onclick="showToast('Reset to defaults ✦')">Reset to defaults</button>
+    <div class="sp-row"><span data-i18n="quran.settings.translationComparison">Translation comparison</span><button class="sp-toggle" onclick="this.classList.toggle('on');toggleCompare(document.getElementById('compareBtn'))"></button></div>
+    <button class="sp-reset" onclick="showToast('Reset to defaults ✦')" data-i18n="quran.settings.resetToDefaults">Reset to defaults</button>
   </div>
 </div>
 <!-- ════ BOOKMARKS PANEL ════ -->
 <div class="bookmarks-panel" id="bookmarksPanel">
-  <div class="bp-head"><div class="bp-title">Bookmarks</div><button class="bp-close" onclick="toggleBookmarks()">✕</button></div>
-  <div class="bp-cats"><button class="bp-cat on">All</button><button class="bp-cat">General</button><button class="bp-cat">Memorization</button><button class="bp-cat">Reflection</button><button class="bp-cat">+ New</button></div>
+  <div class="bp-head"><div class="bp-title" data-i18n="quran.reader.bookmarks">Bookmarks</div><button class="bp-close" onclick="toggleBookmarks()">✕</button></div>
+  <div class="bp-cats"><button class="bp-cat on" data-i18n="quran.reader.filterAll">All</button><button class="bp-cat" data-i18n="quran.bookmarks.catGeneral">General</button><button class="bp-cat" data-i18n="quran.bookmarks.catMemorization">Memorization</button><button class="bp-cat" data-i18n="quran.bookmarks.catReflection">Reflection</button><button class="bp-cat" data-i18n="quran.bookmarks.catNew">+ New</button></div>
   <div class="bp-list">
     <div class="bp-item" onclick="jumpTo('a1')"><div class="bp-ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div><div class="bp-en">"In the name of Allah, the Entirely Merciful, the Especially Merciful."</div><div class="bp-meta"><span>Al-Fatihah 1:1</span><span class="bp-tag">General</span></div></div>
     <div class="bp-item" onclick="jumpTo('a2')"><div class="bp-ar">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ</div><div class="bp-en">"All praise is due to Allah, Lord of all the worlds."</div><div class="bp-meta"><span>Al-Fatihah 1:2</span><span class="bp-tag">Memorization</span></div></div>
@@ -2272,8 +2304,8 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 <div class="share-modal" id="shareModal">
   <div class="share-backdrop" onclick="closeShareModal()"></div>
   <div class="share-content">
-    <div class="share-title-row"><div class="share-title">Share this verse</div><button class="share-x" onclick="closeShareModal()">✕</button></div>
-    <div class="share-fmt"><button class="on" onclick="setShareFmt('square',this)">Square 1:1</button><button onclick="setShareFmt('story',this)">Story 9:16</button></div>
+    <div class="share-title-row"><div class="share-title" data-i18n="quran.share.title">Share this verse</div><button class="share-x" onclick="closeShareModal()">✕</button></div>
+    <div class="share-fmt"><button class="on" onclick="setShareFmt('square',this)" data-i18n="quran.share.fmtSquare">Square 1:1</button><button onclick="setShareFmt('story',this)" data-i18n="quran.share.fmtStory">Story 9:16</button></div>
     <div class="share-preview" id="sharePreview">
       <div class="sp-logo">ISLAMICINFO.ORG</div>
       <div class="sp-ar" id="shareAr">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
@@ -2282,8 +2314,8 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
       <div class="sp-ref" id="shareRef">Al-Fatihah 1:1 · Sahih International</div>
     </div>
     <div class="share-acts">
-      <button class="share-dl" onclick="showToast('Downloading image…')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PNG</button>
-      <button class="share-native" onclick="showToast('Sharing…')">Share ↗</button>
+      <button class="share-dl" onclick="showToast('Downloading image…')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span data-i18n="quran.share.downloadPng">Download PNG</span></button>
+      <button class="share-native" onclick="showToast('Sharing…')" data-i18n="quran.share.shareNative">Share ↗</button>
     </div>
   </div>
 </div>
@@ -2292,40 +2324,40 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   <div class="trace-top">
     <div class="trace-bc">Qur'an › Al-Fatihah › <strong id="traceRef">Verse 1:1</strong></div>
     <div class="trace-top-acts">
-      <button class="trace-act" onclick="showToast('Bookmarked ✦')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>Bookmark</button>
-      <button class="trace-act" onclick="showToast('Copied ✦')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy</button>
-      <button class="trace-exit" onclick="closeTrace()">Exit Trace View →</button>
+      <button class="trace-act" onclick="showToast('Bookmarked ✦')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg><span data-i18n="quran.trace.bookmark">Bookmark</span></button>
+      <button class="trace-act" onclick="showToast('Copied ✦')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span data-i18n="quran.trace.copy">Copy</span></button>
+      <button class="trace-exit" onclick="closeTrace()" data-i18n="quran.trace.exitView">Exit Trace View →</button>
     </div>
   </div>
   <div class="trace-body">
     <!-- Tafsir column -->
     <div class="trace-col">
-      <div class="trace-col-label">Tafsir</div>
+      <div class="trace-col-label" data-i18n="quran.reader.tafsir">Tafsir</div>
       <div class="tafsir-inline-tabs"><button class="ti-tab on" onclick="switchTafsirInline(this,'ik')">Ibn Kathir</button><button class="ti-tab" onclick="switchTafsirInline(this,'ta')">al-Tabari</button><button class="ti-tab" onclick="switchTafsirInline(this,'qu')">al-Qurtubi</button></div>
       <div id="traceTagsir" class="ti-text"><p><strong>Bismillah</strong> — Ibn Kathir explains that beginning any act with Allah's name is a declaration of seeking His blessing. The one who says Bismillah acknowledges that all power belongs to Allah.</p><p style="margin-top:10px;">The combination of <strong>ar-Rahman</strong> and <strong>ar-Rahim</strong> establishes that mercy is the primary attribute through which Allah relates to His creation.</p><div class="ti-attr">Tafsir Ibn Kathir · Vol. 1 · Verified</div></div>
     </div>
     <!-- Verse column -->
     <div class="trace-col">
-      <div class="trace-col-label">Verse</div>
+      <div class="trace-col-label" data-i18n="quran.trace.verseLabel">Verse</div>
       <div class="trace-ar" id="traceAr">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
       <div class="trace-trans" id="traceTr">"In the name of Allah, the Entirely Merciful, the Especially Merciful."</div>
-      <div class="trace-grade"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Verified · Qur'an</div>
+      <div class="trace-grade"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="quran.trace.verifiedQuran">Verified · Qur'an</span></div>
       <div class="trace-src">Al-Fatihah · 1:1 · Sahih International</div>
       <div style="margin-top:16px;">
-        <div class="trace-col-label">Arabic Font Size</div>
+        <div class="trace-col-label" data-i18n="quran.settings.arabicFontSize">Arabic Font Size</div>
         <div class="font-slider" style="max-width:200px;"><button onclick="setArSz('22px',this)">S</button><button class="on" onclick="setArSz('28px',this)">M</button><button onclick="setArSz('36px',this)">L</button><button onclick="setArSz('46px',this)">XL</button></div>
       </div>
     </div>
     <!-- Context column -->
     <div class="trace-col">
-      <div class="trace-col-label">Topics</div>
+      <div class="trace-col-label" data-i18n="quran.trace.topicsLabel">Topics</div>
       <div class="trace-topic-chips"><span class="ttchip">Opening (Fatiha)</span><span class="ttchip">Bismillah</span><span class="ttchip">Divine Mercy</span><span class="ttchip">Tawhid</span><span class="ttchip">Prayer</span></div>
-      <div class="trace-col-label" style="margin-top:12px;">Related Verses</div>
+      <div class="trace-col-label" style="margin-top:12px;" data-i18n="quran.trace.relatedVersesLabel">Related Verses</div>
       <div class="trace-related">
         <div class="tr-rel-item"><div class="tr-rel-ref">An-Naml 27:30</div><div class="tr-rel-text">"It is from Solomon, and it begins with the name of Allah, the Entirely Merciful, the Especially Merciful."</div></div>
         <div class="tr-rel-item"><div class="tr-rel-ref">Al-Isra 17:110</div><div class="tr-rel-text">"Call upon Allah or call upon the Most Merciful. Whichever you call upon — to Him belong the best names."</div></div>
       </div>
-      <div class="trace-col-label" style="margin-top:12px;">Word-by-Word</div>
+      <div class="trace-col-label" style="margin-top:12px;" data-i18n="quran.footer.linkWordByWord">Word-by-Word</div>
       <div class="trace-wbw-grid">
         <div class="trace-word"><div class="tw-ar">بِسْمِ</div><div class="tw-en">In the name</div><div class="tw-pos pos-noun">NOUN</div></div>
         <div class="trace-word"><div class="tw-ar">ٱللَّهِ</div><div class="tw-en">of Allah</div><div class="tw-pos pos-noun">NOUN</div></div>
@@ -2341,10 +2373,10 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   <div class="so-box">
     <div class="so-top">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal-700)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" class="so-input" id="soInput" placeholder="Search verses, Arabic text, topics…"/>
+      <input type="text" class="so-input" id="soInput" placeholder="Search verses, Arabic text, topics…" data-i18n-attr="placeholder:quran.search.placeholder"/>
       <button class="so-close" onclick="closeSearch()">✕</button>
     </div>
-    <div class="so-filters"><button class="so-filter on" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')">All</button><button class="so-filter" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')">Arabic</button><button class="so-filter" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')">Translation</button><button class="so-filter" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')">Topic</button></div>
+    <div class="so-filters"><button class="so-filter on" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')" data-i18n="quran.reader.filterAll">All</button><button class="so-filter" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')" data-i18n="quran.search.filterArabic">Arabic</button><button class="so-filter" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')" data-i18n="quran.search.filterTranslation">Translation</button><button class="so-filter" onclick="this.closest('.so-filters').querySelectorAll('.so-filter').forEach(function(b){b.classList.remove('on')});this.classList.add('on')" data-i18n="quran.search.filterTopic">Topic</button></div>
     <div class="so-results">
       <div class="so-result"><div class="so-r-ref">Al-Fatihah 1:6</div><div class="so-r-ar">ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ</div><div class="so-r-en">"<mark>Guide</mark> us to the straight path."</div></div>
       <div class="so-result"><div class="so-r-ref">Al-Baqarah 2:2</div><div class="so-r-ar">ذَٰلِكَ ٱلۡكِتَٰبُ لَا رَيۡبَ فِيهِ</div><div class="so-r-en">"This is the Book about which there is no doubt, a <mark>guidance</mark> for those conscious of Allah."</div></div>
@@ -3345,6 +3377,7 @@ function mushafChangePage(dir) {
 
 </script>
 
+<script src="src/js/i18n.js"></script>
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
 <script src="src/js/quran.js"></script>

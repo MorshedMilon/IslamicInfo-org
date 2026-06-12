@@ -24,6 +24,15 @@
 (function () {
   'use strict';
 
+  /* i18n helper (i18n.js loads first; safe fallback if it didn't) */
+  function tr(key, fallback, params) {
+    if (window.II && window.II.t) return window.II.t(key, fallback, params);
+    let s = fallback !== undefined ? fallback : key;
+    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
+    return s;
+  }
+  const dateLocale = () => (window.II && window.II.i18n && window.II.i18n.bcp47) || 'en-US';
+
   /* ─── Constants ───────────────────────────────────────────────── */
 
   const METHODS = [
@@ -157,7 +166,7 @@
       state.data = FALLBACK;
       render(FALLBACK);
       _setText('prayerLocationLabel', FALLBACK._fallbackCity);
-      toast('Live prayer times unavailable — showing approximate times');
+      toast(tr('pw.toast.unavailable', 'Live prayer times unavailable — showing approximate times'));
     }
   }
 
@@ -172,11 +181,12 @@
 
     /* Date line: Gregorian · Hijri · method */
     const method = METHODS.find(m => m.id === state.method);
-    const parts = [new Date().toLocaleDateString('en-US',
+    const parts = [new Date().toLocaleDateString(dateLocale(),
       { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })];
     const h = data.date && data.date.hijri;
-    if (h) parts.push(`${h.day} ${h.month.en} ${h.year} AH`);
-    if (method) parts.push(`${method.short} Method`);
+    if (h) parts.push(tr('pw.hijriAh', '{d} {m} {y} AH', { d: h.day, m: h.month.en, y: h.year }));
+    if (method) parts.push(tr('pw.methodSuffix', '{m} Method',
+      { m: tr('pw.methodShort.' + method.id, method.short) }));
     _setText('pwDate', parts.join(' · '));
 
     /* Sun strip */
@@ -213,8 +223,11 @@
     if (isTomorrow) nextName = 'Fajr';
 
     /* Badge + card classes */
-    _setText('prayerNextBadge',
-      `Next: ${nextName}${isTomorrow ? ' (tomorrow)' : ''} · ${_to12h(t[nextName])}`);
+    _setText('prayerNextBadge', tr('pw.next.badge', 'Next: {name}{tom} · {time}', {
+      name: tr('pw.prayer.' + nextName.toLowerCase(), nextName),
+      tom: isTomorrow ? tr('pw.tomorrow', ' (tomorrow)') : '',
+      time: _to12h(t[nextName]),
+    }));
 
     ALL_CARDS.forEach(name => {
       const el = document.getElementById(`prayer${name}`);
@@ -252,8 +265,10 @@
     const hh = Math.floor(s / 3600);
     const mm = Math.floor((s % 3600) / 60);
     const ss = s % 60;
-    _setText('pwCountdown',
-      `${state.nextName} in ${hh ? hh + 'h ' : ''}${mm}m ${String(ss).padStart(2, '0')}s`);
+    _setText('pwCountdown', tr('pw.countdown', '{name} in {time}', {
+      name: tr('pw.prayer.' + state.nextName.toLowerCase(), state.nextName),
+      time: `${hh ? hh + 'h ' : ''}${mm}m ${String(ss).padStart(2, '0')}s`,
+    }));
   }
 
 
@@ -278,7 +293,7 @@
     audio.play().then(syncAdhanUi).catch(() => {
       audioCtx = null;
       syncAdhanUi();
-      if (!silentFail) toast('Could not play audio — tap the page first, then retry');
+      if (!silentFail) toast(tr('pw.toast.audio', 'Could not play audio — tap the page first, then retry'));
     });
   }
 
@@ -288,14 +303,16 @@
 
   function syncAdhanUi() {
     const btn = document.getElementById('adhanBtn');
-    if (btn) btn.innerHTML = audioCtx === 'main' ? '⏹ Stop Adhan' : '🔔 Adhan';
+    if (btn) btn.innerHTML = audioCtx === 'main'
+      ? tr('pw.adhanStop', '⏹ Stop Adhan')
+      : tr('pw.adhanBtn', '🔔 Adhan');
     document.querySelectorAll('#adhanMenu .pw-play-mini').forEach(b => {
       b.textContent = audioCtx === b.dataset.adhan ? '⏸' : '▶';
     });
     const playAll = document.querySelector('#adhanMenu .pw-menu-foot .pw-menu-item');
     if (playAll) playAll.innerHTML = audioCtx === 'main'
-      ? '⏹&nbsp; Stop'
-      : '▶&nbsp; Play Selected Adhan';
+      ? tr('pw.stop', '⏹&nbsp; Stop')
+      : tr('pw.playSelected', '▶&nbsp; Play Selected Adhan');
   }
 
 
@@ -304,7 +321,7 @@
   function buildAdhanMenu() {
     const menu = document.getElementById('adhanMenu');
     if (!menu) return;
-    menu.innerHTML = '<div class="pw-menu-head">Adhan Reciter</div>';
+    menu.innerHTML = `<div class="pw-menu-head">${tr('pw.menu.reciter', 'Adhan Reciter')}</div>`;
 
     ADHANS.forEach(a => {
       /* div, not button: rows contain a nested preview <button> */
@@ -314,7 +331,7 @@
       row.className = 'pw-menu-item' + (a.id === state.adhan ? ' on' : '');
       row.innerHTML = `<span>${a.name}</span>` +
         (a.id === state.adhan ? '<span class="tick">✓</span>' : '') +
-        `<button type="button" class="pw-play-mini" data-adhan="${a.id}" aria-label="Preview">▶</button>`;
+        `<button type="button" class="pw-play-mini" data-adhan="${a.id}" aria-label="${tr('pw.previewAria', 'Preview')}">▶</button>`;
       row.addEventListener('click', e => {
         if (e.target.classList.contains('pw-play-mini')) {
           /* Preview toggle */
@@ -326,7 +343,7 @@
         state.adhan = a.id;
         saveAdhan();
         buildAdhanMenu();           // re-render ticks
-        toast(`Adhan set: ${a.name}`);
+        toast(tr('pw.toast.adhanSet', 'Adhan set: {name}', { name: a.name }));
       });
       menu.appendChild(row);
     });
@@ -336,7 +353,7 @@
     const play = document.createElement('button');
     play.type = 'button';
     play.className = 'pw-menu-item';
-    play.innerHTML = '▶&nbsp; Play Selected Adhan';
+    play.innerHTML = tr('pw.playSelected', '▶&nbsp; Play Selected Adhan');
     play.addEventListener('click', () => {
       if (audioCtx === 'main') stopAudio();
       else playAdhan(false);
@@ -349,13 +366,13 @@
   function buildMethodMenu() {
     const menu = document.getElementById('methodMenu');
     if (!menu) return;
-    menu.innerHTML = '<div class="pw-menu-head">Calculation Method</div>';
+    menu.innerHTML = `<div class="pw-menu-head">${tr('pw.menu.method', 'Calculation Method')}</div>`;
 
     METHODS.forEach(m => {
       const row = document.createElement('button');
       row.type = 'button';
       row.className = 'pw-menu-item' + (m.id === state.method ? ' on' : '');
-      row.innerHTML = `<span>${m.label}</span>` +
+      row.innerHTML = `<span>${tr('pw.method.' + m.id, m.label)}</span>` +
         (m.id === state.method ? '<span class="tick">✓</span>' : '');
       row.addEventListener('click', () => {
         if (state.method !== m.id) {
@@ -363,7 +380,7 @@
           saveMethod();
           buildMethodMenu();
           refresh();
-          toast(`Method: ${m.label}`);
+          toast(tr('pw.toast.methodSet', 'Method: {name}', { name: tr('pw.method.' + m.id, m.label) }));
         }
         closeMenus();
       });
@@ -432,13 +449,15 @@
 
     btn.addEventListener('click', () => {
       if (!navigator.geolocation) {
-        toast('Geolocation is not supported by this browser');
+        toast(tr('pw.toast.noGeo', 'Geolocation is not supported by this browser'));
         return;
       }
-      const original = btn.innerHTML;
-      btn.innerHTML = '📍 Detecting…';
+      btn.innerHTML = tr('pw.detecting', '📍 Detecting…');
       btn.disabled = true;
-      const done = () => { btn.innerHTML = original; btn.disabled = false; };
+      const done = () => {
+        btn.innerHTML = tr('pw.myLocation', '📍 My Location');
+        btn.disabled = false;
+      };
 
       navigator.geolocation.getCurrentPosition(
         async pos => {
@@ -462,11 +481,11 @@
         err => {
           done();
           if (err.code === err.PERMISSION_DENIED) {
-            toast('Location permission denied — use Change to search your city');
+            toast(tr('pw.toast.locDenied', 'Location permission denied — use Change to search your city'));
           } else if (err.code === err.TIMEOUT) {
-            toast('Location request timed out — try again');
+            toast(tr('pw.toast.locTimeout', 'Location request timed out — try again'));
           } else {
-            toast('Could not detect location — use Change to search your city');
+            toast(tr('pw.toast.locFail', 'Could not detect location — use Change to search your city'));
           }
         },
         { timeout: 10000, maximumAge: 300000 }
@@ -493,7 +512,7 @@
     const m = String(raw).match(/(\d{1,2}):(\d{2})/);
     if (!m) return '—';
     let h = parseInt(m[1], 10);
-    const ap = h >= 12 ? 'PM' : 'AM';
+    const ap = h >= 12 ? tr('pw.pm', 'PM') : tr('pw.am', 'AM');
     h = h % 12 || 12;
     return `${h}:${m[2]} ${ap}`;
   }
@@ -530,7 +549,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     /* Immediate paint before the API answers */
-    _setText('pwDate', new Date().toLocaleDateString('en-US',
+    _setText('pwDate', new Date().toLocaleDateString(dateLocale(),
       { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }));
     _setText('prayerLocationLabel', state.loc.label || '');
 
@@ -543,6 +562,14 @@
 
     document.addEventListener('click', closeMenus);
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenus(); });
+
+    /* Re-render translated strings when the site language changes */
+    document.addEventListener('ii:langchange', () => {
+      buildAdhanMenu();
+      buildMethodMenu();
+      if (state.data) render(state.data);
+      tick();
+    });
 
     refresh();
     setInterval(tick, 1000);

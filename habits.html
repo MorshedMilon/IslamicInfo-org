@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Islamic Habit Tracker — IslamicInfo.org</title>
+<title data-i18n="habits.title">Islamic Habit Tracker — IslamicInfo.org</title>
+<script>
+  /* i18n FOUC guard: set lang/dir before first paint */
+  (function(){
+    var l = localStorage.getItem('islamicinfo-lang') || 'en';
+    document.documentElement.setAttribute('lang', l);
+    if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
@@ -168,7 +176,7 @@ img{max-width:100%;}
 /* Responsive nav */
 @media(max-width:1100px){.nav-link{font-size:11.5px;padding:5px 5px;}}
 @media(max-width:900px){.nav-link{font-size:10.5px;padding:5px 3px;}.brand{font-size:16px;gap:6px;}.brand-mark{width:28px;height:28px;}}
-@media(max-width:760px){.nav{display:none;}.header-tools .icon-btn:not(.theme-toggle):not(.search-trigger){display:none;}.hamburger{display:flex;}}
+@media(max-width:760px){.nav{display:none;}.header-tools .icon-btn:not(.theme-toggle):not(.search-trigger):not(.lang-trigger){display:none;}.hamburger{display:flex;}}
 
 /* ═══════════════════════════════════════════════════
    §5 — BISMILLAH (CLAUDE.md exact — teal light, gold dark)
@@ -697,6 +705,27 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 .ft-copy{font-size:12px;color:rgba(255,255,255,.24);}
 .ft-copy a{color:#C5A059;text-decoration:none;}
 .ft-note{font-size:11.5px;color:rgba(255,255,255,.18);font-style:italic;font-family:'Cormorant Garamond',serif;}
+
+/* ── Language dropdown ── */
+.lang-wrapper{position:relative;}
+.lang-menu{position:absolute;top:44px;right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.lang-menu.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .lang-menu{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.lang-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;background:transparent;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;color:var(--ink-body);text-align:left;transition:background .2s,color .2s;}
+.lang-item:hover{background:rgba(0,105,110,.08);}
+[data-theme="dark"] .lang-item:hover{background:rgba(0,105,110,.15);}
+.lang-item.on{color:var(--teal-700);font-weight:600;background:rgba(0,105,110,.06);}
+[data-theme="dark"] .lang-item.on{color:var(--teal-300);}
+.lang-code{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ink-subtle);width:24px;flex-shrink:0;}
+
+/* ── RTL patches ── */
+[dir="rtl"] .lang-menu{right:auto;left:0;}
+[dir="rtl"] .lang-item{text-align:right;}
+[dir="rtl"] .search-popup{right:auto;left:0;}
+[dir="rtl"] .header-tools{margin-left:0;margin-right:auto;}
+[dir="rtl"] .ft-link:hover{transform:translateX(-4px);}
+[dir="rtl"] .mobile-menu{direction:rtl;}
+[dir="rtl"] .mm-link:hover,[dir="rtl"] .mm-link.active{padding-left:0;padding-right:10px;}
 </style>
 <body>
 
@@ -725,16 +754,16 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
   </div>
-  <a class="mm-link" href="index.html" onclick="closeMM()">Home</a>
-  <a class="mm-link" href="quran.html" onclick="closeMM()">Quran Explorer</a>
-  <a class="mm-link" href="hadith.html" onclick="closeMM()">Hadith Library</a>
-  <a class="mm-link" href="islamic-studies.html" onclick="closeMM()">Islamic Studies</a>
-  <a class="mm-link" href="knowledge-hub.html" onclick="closeMM()">Knowledge Hub</a>
-  <a class="mm-link" href="dua.html" onclick="closeMM()">Daily Duas</a>
-  <a class="mm-link" href="tools.html" onclick="closeMM()">Tools</a>
-  <a class="mm-link active" href="habits.html" onclick="closeMM()">Habit Tracker</a>
-  <a class="mm-link" href="verify.html" onclick="closeMM()">Verify</a>
-  <a class="mm-link" href="about.html" onclick="closeMM()">About</a>
+  <a class="mm-link" href="index.html" onclick="closeMM()" data-i18n="chrome.nav.home">Home</a>
+  <a class="mm-link" href="quran.html" onclick="closeMM()" data-i18n="chrome.nav.quran">Quran Explorer</a>
+  <a class="mm-link" href="hadith.html" onclick="closeMM()" data-i18n="chrome.nav.hadith">Hadith Library</a>
+  <a class="mm-link" href="islamic-studies.html" onclick="closeMM()" data-i18n="chrome.nav.studies">Islamic Studies</a>
+  <a class="mm-link" href="knowledge-hub.html" onclick="closeMM()" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+  <a class="mm-link" href="dua.html" onclick="closeMM()" data-i18n="chrome.nav.dua">Daily Duas</a>
+  <a class="mm-link" href="tools.html" onclick="closeMM()" data-i18n="chrome.nav.tools">Tools</a>
+  <a class="mm-link active" href="habits.html" onclick="closeMM()" data-i18n="chrome.nav.habits">Habit Tracker</a>
+  <a class="mm-link" href="verify.html" onclick="closeMM()" data-i18n="chrome.nav.verify">Verify</a>
+  <a class="mm-link" href="about.html" onclick="closeMM()" data-i18n="chrome.nav.about">About</a>
 </div>
 
 <!-- ═══ NAVBAR (CLAUDE.md §4.3 — all 10 nav items, Habit Tracker active) ═══ -->
@@ -767,16 +796,16 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 
       <!-- Nav (Center) — all 10 items, Habit Tracker active -->
       <nav class="nav" aria-label="Primary navigation">
-        <a class="nav-link" href="index.html">Home</a>
-        <a class="nav-link" href="quran.html">Quran Explorer</a>
-        <a class="nav-link" href="hadith.html">Hadith Library</a>
-        <a class="nav-link" href="islamic-studies.html">Islamic Studies</a>
-        <a class="nav-link" href="knowledge-hub.html">Knowledge Hub</a>
-        <a class="nav-link" href="dua.html">Daily Duas</a>
-        <a class="nav-link" href="tools.html">Tools</a>
-        <a class="nav-link active" href="habits.html">Habit Tracker</a>
-        <a class="nav-link" href="verify.html">Verify</a>
-        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+        <a class="nav-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+        <a class="nav-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+        <a class="nav-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+        <a class="nav-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+        <a class="nav-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+        <a class="nav-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+        <a class="nav-link active" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+        <a class="nav-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+        <a class="nav-link" href="about.html" data-i18n="chrome.nav.about">About</a>
       </nav>
 
       <!-- Icons (Right) -->
@@ -786,14 +815,19 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           </button>
           <div class="search-popup" id="searchPopup" role="search">
-            <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput"/>
+            <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput" data-i18n-attr="placeholder:chrome.search.placeholder;aria-label:chrome.search.inputAria"/>
             <button class="search-popup-btn">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-              Search
+              <span data-i18n="chrome.search.button">Search</span>
             </button>
           </div>
         </div>
-        <button class="icon-btn" aria-label="Language"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span></button>
+        <div class="lang-wrapper">
+          <button class="icon-btn lang-trigger" id="langBtn" aria-label="Language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
+            <span id="langBtnCode" style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
+          </button>
+          <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
+        </div>
         <button class="icon-btn theme-toggle" aria-label="Toggle theme" id="themeBtn"></button>
         <button class="icon-btn" aria-label="Admin">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
@@ -819,24 +853,24 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 
     <div class="eyebrow">
       <div class="eyebrow-dot"></div>
-      Build Lasting Worship Habits
+      <span data-i18n="habits.hero.eyebrow">Build Lasting Worship Habits</span>
     </div>
-    <h1 class="hero-title">
+    <h1 class="hero-title" data-i18n="habits.hero.title" data-i18n-html>
       Islamic Habit<br><span class="grad">Tracker & Streak Board</span>
     </h1>
     <div class="hero-arabic">
       أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ
-      <small>"The most beloved deeds to Allah are the most consistent, even if small." — Bukhari · Sahih</small>
+      <small data-i18n="habits.hero.arabicCaption">"The most beloved deeds to Allah are the most consistent, even if small." — Bukhari · Sahih</small>
     </div>
-    <p class="hero-sub">Track your 5 daily prayers, Qur'an reading, fasting, and sunnah routines. Build streaks, earn your Sunnah Score, and never lose momentum.</p>
+    <p class="hero-sub" data-i18n="habits.hero.sub">Track your 5 daily prayers, Qur'an reading, fasting, and sunnah routines. Build streaks, earn your Sunnah Score, and never lose momentum.</p>
     <div class="cta-row">
       <button class="btn-primary" onclick="document.getElementById('tracker-app').scrollIntoView({behavior:'smooth'})">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Start Tracking Today
+        <span data-i18n="habits.hero.cta1">Start Tracking Today</span>
       </button>
       <button class="btn-ghost" onclick="showToast('Family Challenge coming soon ✦')">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Family Challenge
+        <span data-i18n="habits.hero.cta2">Family Challenge</span>
       </button>
     </div>
 
@@ -847,38 +881,38 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
       <div style="display:flex;gap:0;align-items:stretch;background:rgba(0,105,110,.04);border:0.5px solid rgba(0,105,110,.10);border-radius:16px;overflow:hidden;margin-bottom:20px;">
         <div style="flex:1;padding:12px 10px;text-align:center;position:relative;">
           <div style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--teal-700);line-height:1;">14</div>
-          <div style="font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);">Day Streak 🔥</div>
+          <div style="font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);" data-i18n="habits.stats.dayStreak">Day Streak 🔥</div>
         </div>
         <div style="width:0.5px;background:rgba(0,105,110,.12);align-self:stretch;"></div>
         <div style="flex:1;padding:12px 10px;text-align:center;">
           <div style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--teal-700);line-height:1;" id="todayPct">40%</div>
-          <div style="font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);">Today</div>
+          <div style="font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);" data-i18n="habits.stats.today">Today</div>
         </div>
         <div style="width:0.5px;background:rgba(0,105,110,.12);align-self:stretch;"></div>
         <div style="flex:1;padding:12px 10px;text-align:center;">
           <div style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--gold-700);line-height:1;" id="weeklyPct">72%</div>
-          <div style="font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);">Weekly Score</div>
+          <div style="font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);" data-i18n="habits.stats.weeklyScore">Weekly Score</div>
         </div>
         <div style="width:0.5px;background:rgba(0,105,110,.12);align-self:stretch;"></div>
         <div style="flex:1;padding:12px 10px;text-align:center;">
           <div style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--teal-700);line-height:1;">21</div>
-          <div style="font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);">Best Streak</div>
+          <div style="font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);" data-i18n="habits.stats.bestStreak">Best Streak</div>
         </div>
       </div>
 
       <!-- Date + streak -->
       <div class="tracker-date">
-        <span style="font-weight:600;color:var(--ink-primary);">📅 Today — <span id="today-date"></span></span>
-        <div class="streak-badge">🔥 <span id="streak-count">14</span> day streak</div>
+        <span style="font-weight:600;color:var(--ink-primary);"><span data-i18n="habits.todayLabel">📅 Today — </span><span id="today-date"></span></span>
+        <div class="streak-badge"><span data-i18n="habits.streak.prefix">🔥 </span><span id="streak-count">14</span><span data-i18n="habits.streak.suffix"> day streak</span></div>
       </div>
 
       <!-- Tabs -->
       <div class="tabs">
-        <button class="tab active" onclick="switchTab(this,'prayers')">🕌 Prayers</button>
-        <button class="tab" onclick="switchTab(this,'quran')">📖 Qur'an</button>
-        <button class="tab" onclick="switchTab(this,'dua')">🙏 Adhkar</button>
-        <button class="tab" onclick="switchTab(this,'fasting')">🌙 Fasting</button>
-        <button class="tab" onclick="switchTab(this,'sunnah')">⭐ Sunnah</button>
+        <button class="tab active" onclick="switchTab(this,'prayers')" data-i18n="habits.tabs.prayers">🕌 Prayers</button>
+        <button class="tab" onclick="switchTab(this,'quran')" data-i18n="habits.tabs.quran">📖 Qur'an</button>
+        <button class="tab" onclick="switchTab(this,'dua')" data-i18n="habits.tabs.dua">🙏 Adhkar</button>
+        <button class="tab" onclick="switchTab(this,'fasting')" data-i18n="habits.tabs.fasting">🌙 Fasting</button>
+        <button class="tab" onclick="switchTab(this,'sunnah')" data-i18n="habits.tabs.sunnah">⭐ Sunnah</button>
       </div>
 
       <!-- Week strip -->
@@ -889,41 +923,41 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
         <!-- Live prayer countdown -->
         <div id="nextPrayerBanner" style="display:flex;align-items:center;gap:8px;background:rgba(0,105,110,.06);border:0.5px solid rgba(0,105,110,.12);border-radius:10px;padding:8px 12px;margin-bottom:14px;font-size:12.5px;color:var(--ink-muted);">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal-600)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Next prayer: <strong id="nextPrayerName" style="color:var(--teal-700);margin:0 2px;">—</strong> in <strong id="nextPrayerCountdown" style="color:var(--teal-700);margin-left:2px;font-variant-numeric:tabular-nums;">—</strong>
+          <span data-i18n="habits.prayers.nextPrayerLabel">Next prayer:</span> <strong id="nextPrayerName" style="color:var(--teal-700);margin:0 2px;">—</strong> <span data-i18n="habits.prayers.inLabel">in</span> <strong id="nextPrayerCountdown" style="color:var(--teal-700);margin-left:2px;font-variant-numeric:tabular-nums;">—</strong>
         </div>
-        <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:12px;">5 Daily Prayers</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:12px;" data-i18n="habits.prayers.dailyPrayersLabel">5 Daily Prayers</div>
         <div class="prayers-row" id="prayersRow">
           <div class="prayer-check">
-            <div class="p-name">Fajr</div>
+            <div class="p-name" data-i18n="pw.prayer.fajr">Fajr</div>
             <div class="p-circle done" id="p0" onclick="togglePrayer(0)">
               <span class="p-check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
               <span class="p-empty-icon">○</span>
             </div>
-            <div class="fajr-streak" id="fajrBadge">⭐ 7d Fajr</div>
+            <div class="fajr-streak" id="fajrBadge" data-i18n="habits.prayers.fajrBadge">⭐ 7d Fajr</div>
           </div>
           <div class="prayer-check">
-            <div class="p-name">Dhuhr</div>
+            <div class="p-name" data-i18n="pw.prayer.dhuhr">Dhuhr</div>
             <div class="p-circle done" id="p1" onclick="togglePrayer(1)">
               <span class="p-check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
               <span class="p-empty-icon">○</span>
             </div>
           </div>
           <div class="prayer-check">
-            <div class="p-name">Asr</div>
+            <div class="p-name" data-i18n="pw.prayer.asr">Asr</div>
             <div class="p-circle" id="p2" onclick="togglePrayer(2)">
               <span class="p-check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
               <span class="p-empty-icon">○</span>
             </div>
           </div>
           <div class="prayer-check">
-            <div class="p-name">Maghrib</div>
+            <div class="p-name" data-i18n="pw.prayer.maghrib">Maghrib</div>
             <div class="p-circle" id="p3" onclick="togglePrayer(3)">
               <span class="p-check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
               <span class="p-empty-icon">○</span>
             </div>
           </div>
           <div class="prayer-check">
-            <div class="p-name">Isha</div>
+            <div class="p-name" data-i18n="pw.prayer.isha">Isha</div>
             <div class="p-circle" id="p4" onclick="togglePrayer(4)">
               <span class="p-check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
               <span class="p-empty-icon">○</span>
@@ -933,26 +967,26 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 
         <!-- Sunnah prayers row (new) -->
         <div style="margin-bottom:18px;">
-          <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:10px;">Sunnah Prayers</div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:10px;" data-i18n="habits.prayers.sunnahPrayersLabel">Sunnah Prayers</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <div class="sunnah-pill" onclick="toggleSunnah(this,'Qiyam')" data-done="false">🌙 Qiyam</div>
-            <div class="sunnah-pill on" onclick="toggleSunnah(this,'Duha')" data-done="true">☀️ Duha</div>
-            <div class="sunnah-pill on" onclick="toggleSunnah(this,'Witr')" data-done="true">🌟 Witr</div>
-            <div class="sunnah-pill" onclick="toggleSunnah(this,'Tahajjud')" data-done="false">🌃 Tahajjud</div>
+            <div class="sunnah-pill" onclick="toggleSunnah(this,'Qiyam')" data-done="false" data-i18n="habits.prayers.qiyam">🌙 Qiyam</div>
+            <div class="sunnah-pill on" onclick="toggleSunnah(this,'Duha')" data-done="true" data-i18n="habits.prayers.duha">☀️ Duha</div>
+            <div class="sunnah-pill on" onclick="toggleSunnah(this,'Witr')" data-done="true" data-i18n="habits.prayers.witr">🌟 Witr</div>
+            <div class="sunnah-pill" onclick="toggleSunnah(this,'Tahajjud')" data-done="false" data-i18n="habits.prayers.tahajjud">🌃 Tahajjud</div>
           </div>
         </div>
 
         <!-- Progress -->
         <div class="progress-section">
-          <div class="prog-label"><span>📖 Qur'an Pages Today</span><span id="quran-lbl">3 / 5 pages</span></div>
+          <div class="prog-label"><span data-i18n="habits.prayers.quranPagesToday">📖 Qur'an Pages Today</span><span id="quran-lbl">3 / 5 pages</span></div>
           <div class="prog-bar"><div class="prog-fill" id="quran-bar" style="width:60%;"></div></div>
         </div>
         <div class="progress-section">
-          <div class="prog-label"><span>🙏 Dua Checklist</span><span id="dua-lbl">4 / 6 duas</span></div>
+          <div class="prog-label"><span data-i18n="habits.prayers.duaChecklist">🙏 Dua Checklist</span><span id="dua-lbl">4 / 6 duas</span></div>
           <div class="prog-bar"><div class="prog-fill gold" id="dua-bar" style="width:67%;"></div></div>
         </div>
         <div class="progress-section" style="margin-bottom:0;">
-          <div class="prog-label"><span>⭐ Weekly Sunnah Score</span><span id="score-pct">72%</span></div>
+          <div class="prog-label"><span data-i18n="habits.prayers.weeklySunnahScore">⭐ Weekly Sunnah Score</span><span id="score-pct">72%</span></div>
           <div class="prog-bar"><div class="prog-fill rainbow" id="score-bar" style="width:72%;"></div></div>
         </div>
 
@@ -969,32 +1003,32 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
           </svg>
           <div>
             <div class="score-ring-num" id="scoreRingNum">72%</div>
-            <div class="score-ring-text">Weekly Sunnah Score<br>Keep your streak going!</div>
+            <div class="score-ring-text" data-i18n="habits.prayers.scoreRingText" data-i18n-html>Weekly Sunnah Score<br>Keep your streak going!</div>
           </div>
         </div>
 
         <!-- Heatmap -->
         <div style="margin-top:20px;">
-          <div class="heatmap-label">Past 28 days prayer completion</div>
+          <div class="heatmap-label" data-i18n="habits.prayers.heatmapLabel">Past 28 days prayer completion</div>
           <div class="heatmap" id="heatmap"></div>
         </div>
 
         <!-- Tracker footer settings -->
         <div class="tracker-footer">
           <div class="goal-input">
-            <span>Daily Qur'an goal:</span>
+            <span data-i18n="habits.prayers.dailyQuranGoal">Daily Qur'an goal:</span>
             <input type="number" id="quranGoal" value="5" min="1" max="50" onchange="updateQuranGoal()"/>
-            <span>pages</span>
+            <span data-i18n="habits.prayers.pages">pages</span>
           </div>
-          <button onclick="resetDay()" style="font-size:11.5px;color:var(--ink-muted);background:transparent;border:none;cursor:pointer;text-decoration:underline;">Reset day</button>
+          <button onclick="resetDay()" style="font-size:11.5px;color:var(--ink-muted);background:transparent;border:none;cursor:pointer;text-decoration:underline;" data-i18n="habits.prayers.resetDay">Reset day</button>
         </div>
       </div>
 
       <!-- TAB: QURAN -->
       <div id="tab-quran" style="display:none;">
-        <div style="font-size:13px;font-weight:500;color:var(--ink-primary);margin-bottom:16px;">Today's Qur'an Reading</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink-primary);margin-bottom:16px;" data-i18n="habits.quran.todayReading">Today's Qur'an Reading</div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <span style="font-size:12px;color:var(--ink-muted);">Pages read today</span>
+          <span style="font-size:12px;color:var(--ink-muted);" data-i18n="habits.quran.pagesReadToday">Pages read today</span>
           <span style="font-size:14px;font-weight:600;color:var(--teal-700);" id="quranPagesDisplay">3 / 5</span>
         </div>
         <input type="range" class="quran-slider" id="quranSlider" min="0" max="5" value="3" oninput="updateQuranSlider(this.value)"/>
@@ -1003,140 +1037,140 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
         </div>
         <div style="margin-top:24px;">
           <div class="progress-section">
-            <div class="prog-label"><span>Juz Progress (Current Khatm)</span><span id="juzPct">18%</span></div>
+            <div class="prog-label"><span data-i18n="habits.quran.juzProgress">Juz Progress (Current Khatm)</span><span id="juzPct">18%</span></div>
             <div class="prog-bar"><div class="prog-fill" id="juzBar" style="width:18%;"></div></div>
           </div>
         </div>
         <div style="margin-top:20px;">
-          <div class="heatmap-label">30-day Qur'an reading streak</div>
+          <div class="heatmap-label" data-i18n="habits.quran.heatmapLabel">30-day Qur'an reading streak</div>
           <div class="heatmap" id="quranHeatmap"></div>
         </div>
       </div>
 
       <!-- TAB: ADHKAR (DUA CHECKLIST) -->
       <div id="tab-dua" style="display:none;">
-        <div style="font-size:13px;font-weight:500;color:var(--ink-primary);margin-bottom:16px;">Morning &amp; Evening Adhkar</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink-primary);margin-bottom:16px;" data-i18n="habits.dua.heading">Morning &amp; Evening Adhkar</div>
         <div class="dua-list" id="duaList">
           <div class="dua-item checked" onclick="toggleDua(this)">
             <div class="dua-cb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <span class="dua-label">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ — Morning remembrance</span>
+            <span class="dua-label" data-i18n="habits.dua.item1">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ — Morning remembrance</span>
           </div>
           <div class="dua-item checked" onclick="toggleDua(this)">
             <div class="dua-cb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <span class="dua-label">Ayat al-Kursi (morning)</span>
+            <span class="dua-label" data-i18n="habits.dua.item2">Ayat al-Kursi (morning)</span>
           </div>
           <div class="dua-item checked" onclick="toggleDua(this)">
             <div class="dua-cb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <span class="dua-label">سُبْحَانَ اللَّهِ × 33 (SubhanAllah)</span>
+            <span class="dua-label" data-i18n="habits.dua.item3">سُبْحَانَ اللَّهِ × 33 (SubhanAllah)</span>
           </div>
           <div class="dua-item checked" onclick="toggleDua(this)">
             <div class="dua-cb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-            <span class="dua-label">الْحَمْدُ لِلَّهِ × 33 (Alhamdulillah)</span>
+            <span class="dua-label" data-i18n="habits.dua.item4">الْحَمْدُ لِلَّهِ × 33 (Alhamdulillah)</span>
           </div>
           <div class="dua-item" onclick="toggleDua(this)">
             <div class="dua-cb"></div>
-            <span class="dua-label">اللَّهُ أَكْبَرُ × 34 (Allahu Akbar)</span>
+            <span class="dua-label" data-i18n="habits.dua.item5">اللَّهُ أَكْبَرُ × 34 (Allahu Akbar)</span>
           </div>
           <div class="dua-item" onclick="toggleDua(this)">
             <div class="dua-cb"></div>
-            <span class="dua-label">Dua before sleep (Ayat al-Kursi + last 2 verses Al-Baqarah)</span>
+            <span class="dua-label" data-i18n="habits.dua.item6">Dua before sleep (Ayat al-Kursi + last 2 verses Al-Baqarah)</span>
           </div>
         </div>
         <div style="margin-top:14px;">
           <div class="progress-section" style="margin-bottom:0;">
-            <div class="prog-label"><span>Adhkar completed</span><span id="duaProgress">4 / 6</span></div>
+            <div class="prog-label"><span data-i18n="habits.dua.completedLabel">Adhkar completed</span><span id="duaProgress">4 / 6</span></div>
             <div class="prog-bar"><div class="prog-fill gold" id="duaProgressBar" style="width:67%;"></div></div>
           </div>
         </div>
-        <div style="text-align:right;margin-top:10px;"><a href="dua.html" style="font-size:12px;color:var(--teal-700);font-weight:500;">View all Duas →</a></div>
+        <div style="text-align:right;margin-top:10px;"><a href="dua.html" style="font-size:12px;color:var(--teal-700);font-weight:500;" data-i18n="habits.dua.viewAll">View all Duas →</a></div>
       </div>
 
       <!-- TAB: FASTING -->
       <div id="tab-fasting" style="display:none;">
-        <div style="font-size:13px;font-weight:500;color:var(--ink-primary);margin-bottom:16px;">Fasting Tracker</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink-primary);margin-bottom:16px;" data-i18n="habits.fasting.heading">Fasting Tracker</div>
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
           <div>
-            <div style="font-size:11px;color:var(--ink-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;">This Month (Shawwāl)</div>
-            <div style="font-family:var(--font-display);font-size:32px;font-weight:600;color:var(--teal-700);">3 <span style="font-size:16px;color:var(--ink-muted);">of 6</span></div>
-            <div style="font-size:12px;color:var(--ink-muted);">Shawwāl voluntary fasts</div>
+            <div style="font-size:11px;color:var(--ink-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;" data-i18n="habits.fasting.thisMonth">This Month (Shawwāl)</div>
+            <div style="font-family:var(--font-display);font-size:32px;font-weight:600;color:var(--teal-700);">3 <span style="font-size:16px;color:var(--ink-muted);" data-i18n="habits.fasting.ofCount">of 6</span></div>
+            <div style="font-size:12px;color:var(--ink-muted);" data-i18n="habits.fasting.voluntaryFasts">Shawwāl voluntary fasts</div>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:11px;color:var(--ink-muted);margin-bottom:4px;">Today's Suhoor</div>
+            <div style="font-size:11px;color:var(--ink-muted);margin-bottom:4px;" data-i18n="habits.fasting.suhoorLabel">Today's Suhoor</div>
             <div style="font-size:15px;font-weight:600;color:var(--ink-primary);" id="habitSuhoorTime">4:28 AM</div>
-            <div style="font-size:11px;color:var(--ink-muted);margin-top:4px;">Iftar (Maghrib)</div>
+            <div style="font-size:11px;color:var(--ink-muted);margin-top:4px;" data-i18n="habits.fasting.iftarLabel">Iftar (Maghrib)</div>
             <div style="font-size:15px;font-weight:600;color:var(--ink-primary);" id="habitIftarTime">8:42 PM</div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px;" id="fastGrid30"></div>
         <div style="display:flex;gap:0;background:rgba(0,105,110,.04);border:0.5px solid rgba(0,105,110,.09);border-radius:12px;overflow:hidden;">
-          <div style="flex:1;text-align:center;padding:12px 6px;"><div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--teal-700);">3</div><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-subtle);">Fasted</div></div>
+          <div style="flex:1;text-align:center;padding:12px 6px;"><div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--teal-700);">3</div><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-subtle);" data-i18n="habits.fasting.fasted">Fasted</div></div>
           <div style="width:0.5px;background:rgba(0,105,110,.09);"></div>
-          <div style="flex:1;text-align:center;padding:12px 6px;"><div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--teal-700);">3</div><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-subtle);">Remaining</div></div>
+          <div style="flex:1;text-align:center;padding:12px 6px;"><div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--teal-700);">3</div><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-subtle);" data-i18n="habits.fasting.remaining">Remaining</div></div>
           <div style="width:0.5px;background:rgba(0,105,110,.09);"></div>
-          <div style="flex:1;text-align:center;padding:12px 6px;"><div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--teal-700);">2</div><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-subtle);">Streak</div></div>
+          <div style="flex:1;text-align:center;padding:12px 6px;"><div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--teal-700);">2</div><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-subtle);" data-i18n="habits.fasting.streak">Streak</div></div>
         </div>
         <button onclick="toggleFastToday(this)" style="width:100%;margin-top:12px;padding:11px;background:linear-gradient(135deg,var(--teal-700),var(--teal-500));color:white;border:none;border-radius:13px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:7px;transition:all .3s;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-          Mark Today as Fasted
+          <span data-i18n="habits.fasting.markFasted">Mark Today as Fasted</span>
         </button>
       </div>
 
       <!-- TAB: SUNNAH ROUTINES -->
       <div id="tab-sunnah" style="display:none;">
-        <div style="font-size:13px;font-weight:500;color:var(--ink-primary);margin-bottom:14px;">Daily Sunnah Routine</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink-primary);margin-bottom:14px;" data-i18n="habits.sunnah.heading">Daily Sunnah Routine</div>
         <div style="display:flex;flex-direction:column;gap:0;" id="sunnahList">
           <div class="sunnah-routine-item checked" onclick="toggleRoutineItem(this)">
             <div class="sri-cb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
             <div class="sri-content">
-              <div class="sri-name">🌅 Fajr Sunnah (2 rakʿah) before Fajr</div>
-              <div class="sri-time">Before Fajr adhan</div>
+              <div class="sri-name" data-i18n="habits.sunnah.r1.name">🌅 Fajr Sunnah (2 rakʿah) before Fajr</div>
+              <div class="sri-time" data-i18n="habits.sunnah.r1.time">Before Fajr adhan</div>
             </div>
-            <div class="sri-reward">Light in this world &amp; the next</div>
+            <div class="sri-reward" data-i18n="habits.sunnah.r1.reward">Light in this world &amp; the next</div>
           </div>
           <div class="sunnah-routine-item checked" onclick="toggleRoutineItem(this)">
             <div class="sri-cb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
             <div class="sri-content">
-              <div class="sri-name">☀️ Duha Prayer (2–8 rakʿah)</div>
-              <div class="sri-time">After sunrise, before Dhuhr</div>
+              <div class="sri-name" data-i18n="habits.sunnah.r2.name">☀️ Duha Prayer (2–8 rakʿah)</div>
+              <div class="sri-time" data-i18n="habits.sunnah.r2.time">After sunrise, before Dhuhr</div>
             </div>
-            <div class="sri-reward">Equivalent to full body charity</div>
+            <div class="sri-reward" data-i18n="habits.sunnah.r2.reward">Equivalent to full body charity</div>
           </div>
           <div class="sunnah-routine-item" onclick="toggleRoutineItem(this)">
             <div class="sri-cb"></div>
             <div class="sri-content">
-              <div class="sri-name">📖 Read Surah Al-Kahf</div>
-              <div class="sri-time">Every Friday</div>
+              <div class="sri-name" data-i18n="habits.sunnah.r3.name">📖 Read Surah Al-Kahf</div>
+              <div class="sri-time" data-i18n="habits.sunnah.r3.time">Every Friday</div>
             </div>
-            <div class="sri-reward">Light between two Fridays</div>
+            <div class="sri-reward" data-i18n="habits.sunnah.r3.reward">Light between two Fridays</div>
           </div>
           <div class="sunnah-routine-item checked" onclick="toggleRoutineItem(this)">
             <div class="sri-cb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
             <div class="sri-content">
-              <div class="sri-name">🌟 Witr prayer (minimum 1)</div>
-              <div class="sri-time">After Isha</div>
+              <div class="sri-name" data-i18n="habits.sunnah.r4.name">🌟 Witr prayer (minimum 1)</div>
+              <div class="sri-time" data-i18n="habits.sunnah.r4.time">After Isha</div>
             </div>
-            <div class="sri-reward">Allah is Witr and loves Witr</div>
+            <div class="sri-reward" data-i18n="habits.sunnah.r4.reward">Allah is Witr and loves Witr</div>
           </div>
           <div class="sunnah-routine-item" onclick="toggleRoutineItem(this)">
             <div class="sri-cb"></div>
             <div class="sri-content">
-              <div class="sri-name">🌙 Qiyam al-Layl (optional)</div>
-              <div class="sri-time">Last third of the night</div>
+              <div class="sri-name" data-i18n="habits.sunnah.r5.name">🌙 Qiyam al-Layl (optional)</div>
+              <div class="sri-time" data-i18n="habits.sunnah.r5.time">Last third of the night</div>
             </div>
-            <div class="sri-reward">Allah descends &amp; responds</div>
+            <div class="sri-reward" data-i18n="habits.sunnah.r5.reward">Allah descends &amp; responds</div>
           </div>
           <div class="sunnah-routine-item" onclick="toggleRoutineItem(this)">
             <div class="sri-cb"></div>
             <div class="sri-content">
-              <div class="sri-name">💊 Voluntary fast (Mon/Thu)</div>
-              <div class="sri-time">All day</div>
+              <div class="sri-name" data-i18n="habits.sunnah.r6.name">💊 Voluntary fast (Mon/Thu)</div>
+              <div class="sri-time" data-i18n="habits.sunnah.r6.time">All day</div>
             </div>
-            <div class="sri-reward">Prophet's ﷺ weekly practice</div>
+            <div class="sri-reward" data-i18n="habits.sunnah.r6.reward">Prophet's ﷺ weekly practice</div>
           </div>
         </div>
         <div style="margin-top:14px;">
           <div class="progress-section" style="margin-bottom:0;">
-            <div class="prog-label"><span>Sunnah completed today</span><span id="sunnahProgress" style="color:var(--teal-700);">3 / 6</span></div>
+            <div class="prog-label"><span data-i18n="habits.sunnah.completedToday">Sunnah completed today</span><span id="sunnahProgress" style="color:var(--teal-700);">3 / 6</span></div>
             <div class="prog-bar"><div class="prog-fill rainbow" id="sunnahProgressBar" style="width:50%;"></div></div>
           </div>
         </div>
@@ -1152,8 +1186,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 <section class="section">
   <div class="container">
     <div class="section-head reveal">
-      <div class="section-eyebrow">Why Muslims Struggle</div>
-      <h2 class="section-title">The Problems We <span class="grad">Solve Together</span></h2>
+      <div class="section-eyebrow" data-i18n="habits.pain.eyebrow">Why Muslims Struggle</div>
+      <h2 class="section-title" data-i18n="habits.pain.title" data-i18n-html>The Problems We <span class="grad">Solve Together</span></h2>
     </div>
     <div class="pain-grid">
 
@@ -1161,8 +1195,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
       <div class="pain-card reveal">
         <div class="pain-emoji">⏰</div>
         <div class="pain-text">
-          <div class="pain-title">Fajr Snooze Culture</div>
-          <div class="pain-desc">Missing Fajr is the first domino. Our gentle alarm system and Fajr streak makes waking up feel like a victory.</div>
+          <div class="pain-title" data-i18n="habits.pain.p1.title">Fajr Snooze Culture</div>
+          <div class="pain-desc" data-i18n="habits.pain.p1.desc">Missing Fajr is the first domino. Our gentle alarm system and Fajr streak makes waking up feel like a victory.</div>
         </div>
       </div>
 
@@ -1170,8 +1204,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
       <div class="pain-card reveal reveal-d1">
         <div class="pain-emoji">👨‍👩‍👧</div>
         <div class="pain-text">
-          <div class="pain-title">No Family Accountability</div>
-          <div class="pain-desc">Doing ibadah in isolation is hard. Share progress with family and build collective momentum together.</div>
+          <div class="pain-title" data-i18n="habits.pain.p2.title">No Family Accountability</div>
+          <div class="pain-desc" data-i18n="habits.pain.p2.desc">Doing ibadah in isolation is hard. Share progress with family and build collective momentum together.</div>
         </div>
       </div>
 
@@ -1179,8 +1213,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
       <div class="pain-card reveal reveal-d2 gold-glow">
         <div class="pain-emoji">🌙</div>
         <div class="pain-text">
-          <div class="pain-title">Ramadan Goals Abandoned</div>
-          <div class="pain-desc">Pre-made Ramadan, 30-day Hifz, and weekly Sunnah templates give you structure from day one.</div>
+          <div class="pain-title" data-i18n="habits.pain.p3.title">Ramadan Goals Abandoned</div>
+          <div class="pain-desc" data-i18n="habits.pain.p3.desc">Pre-made Ramadan, 30-day Hifz, and weekly Sunnah templates give you structure from day one.</div>
         </div>
       </div>
 
@@ -1188,8 +1222,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
       <div class="pain-card reveal">
         <div class="pain-emoji">💔</div>
         <div class="pain-text">
-          <div class="pain-title">Prayer Guilt Spiral</div>
-          <div class="pain-desc">Missing one prayer leads to missing them all. Our "restart without shame" system lets you recover from any day without judgment.</div>
+          <div class="pain-title" data-i18n="habits.pain.p4.title">Prayer Guilt Spiral</div>
+          <div class="pain-desc" data-i18n="habits.pain.p4.desc">Missing one prayer leads to missing them all. Our "restart without shame" system lets you recover from any day without judgment.</div>
         </div>
       </div>
 
@@ -1197,8 +1231,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
       <div class="pain-card reveal reveal-d1">
         <div class="pain-emoji">🌌</div>
         <div class="pain-text">
-          <div class="pain-title">Nighttime Ibadah Stays Aspirational</div>
-          <div class="pain-desc">Tahajjud and late-night Quran reading remain wishes. We give you pre-set night routines, reminders, and a first step — so it finally happens.</div>
+          <div class="pain-title" data-i18n="habits.pain.p5.title">Nighttime Ibadah Stays Aspirational</div>
+          <div class="pain-desc" data-i18n="habits.pain.p5.desc">Tahajjud and late-night Quran reading remain wishes. We give you pre-set night routines, reminders, and a first step — so it finally happens.</div>
         </div>
       </div>
 
@@ -1206,8 +1240,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
       <div class="pain-card reveal reveal-d2 gold-glow">
         <div class="pain-emoji">🏆</div>
         <div class="pain-text">
-          <div class="pain-title">Long Goals Feel Endless</div>
-          <div class="pain-desc">Hifz and full Quran completion feel infinite. Visible 10%, 25%, 50% milestones and streak celebrations keep motivation alive all the way.</div>
+          <div class="pain-title" data-i18n="habits.pain.p6.title">Long Goals Feel Endless</div>
+          <div class="pain-desc" data-i18n="habits.pain.p6.desc">Hifz and full Quran completion feel infinite. Visible 10%, 25%, 50% milestones and streak celebrations keep motivation alive all the way.</div>
         </div>
       </div>
 
@@ -1215,8 +1249,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
       <div class="pain-card reveal">
         <div class="pain-emoji">🗺️</div>
         <div class="pain-text">
-          <div class="pain-title">No Clear Learning Path</div>
-          <div class="pain-desc">Too many surahs, duas, and lessons — no sequence. Our AI-suggested progression tells you exactly what to memorize next, based on where you are.</div>
+          <div class="pain-title" data-i18n="habits.pain.p7.title">No Clear Learning Path</div>
+          <div class="pain-desc" data-i18n="habits.pain.p7.desc">Too many surahs, duas, and lessons — no sequence. Our AI-suggested progression tells you exactly what to memorize next, based on where you are.</div>
         </div>
       </div>
 
@@ -1224,8 +1258,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
       <div class="pain-card reveal reveal-d1">
         <div class="pain-emoji">🕌</div>
         <div class="pain-text">
-          <div class="pain-title">Adhan ≠ Prayer Deadline</div>
-          <div class="pain-desc">Most users don't know how long the prayer window actually is. We show you the full window, countdown, and a gentle nudge before time runs out.</div>
+          <div class="pain-title" data-i18n="habits.pain.p8.title">Adhan ≠ Prayer Deadline</div>
+          <div class="pain-desc" data-i18n="habits.pain.p8.desc">Most users don't know how long the prayer window actually is. We show you the full window, countdown, and a gentle nudge before time runs out.</div>
         </div>
       </div>
 
@@ -1239,40 +1273,40 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 <section class="section" style="background:var(--surface-card);">
   <div class="container">
     <div class="section-head reveal">
-      <div class="section-eyebrow">Core Features · Free</div>
-      <h2 class="section-title">Everything You Need to <span class="grad">Build Consistency</span></h2>
-      <p class="section-sub">No account required for basic tracking. All core features are and will remain free.</p>
+      <div class="section-eyebrow" data-i18n="habits.free.eyebrow">Core Features · Free</div>
+      <h2 class="section-title" data-i18n="habits.free.title" data-i18n-html>Everything You Need to <span class="grad">Build Consistency</span></h2>
+      <p class="section-sub" data-i18n="habits.free.sub">No account required for basic tracking. All core features are and will remain free.</p>
     </div>
     <div class="feat-grid">
       <div class="feat-card reveal">
         <div class="feat-icon teal">🕌</div>
-        <div class="feat-title">Prayer Streak Counter</div>
-        <p class="feat-desc">Track all 5 daily prayers with a tap. See your current streak, longest streak, and weekly completion rate in one glance.</p>
+        <div class="feat-title" data-i18n="habits.free.f1.title">Prayer Streak Counter</div>
+        <p class="feat-desc" data-i18n="habits.free.f1.desc">Track all 5 daily prayers with a tap. See your current streak, longest streak, and weekly completion rate in one glance.</p>
       </div>
       <div class="feat-card reveal reveal-d1">
         <div class="feat-icon teal">📖</div>
-        <div class="feat-title">Qur'an Page Tracker</div>
-        <p class="feat-desc">Set a daily page goal and mark progress. Visualize your way through the Mushaf with a completion bar that fills as you read.</p>
+        <div class="feat-title" data-i18n="habits.free.f2.title">Qur'an Page Tracker</div>
+        <p class="feat-desc" data-i18n="habits.free.f2.desc">Set a daily page goal and mark progress. Visualize your way through the Mushaf with a completion bar that fills as you read.</p>
       </div>
       <div class="feat-card reveal reveal-d2">
         <div class="feat-icon gold">🙏</div>
-        <div class="feat-title">Daily Dua Checklist</div>
-        <p class="feat-desc">Morning and evening adhkar checklist with Arabic, transliteration, and meaning. Check off each dua and build the habit of remembrance.</p>
+        <div class="feat-title" data-i18n="habits.free.f3.title">Daily Dua Checklist</div>
+        <p class="feat-desc" data-i18n="habits.free.f3.desc">Morning and evening adhkar checklist with Arabic, transliteration, and meaning. Check off each dua and build the habit of remembrance.</p>
       </div>
       <div class="feat-card reveal">
         <div class="feat-icon gold">☀️</div>
-        <div class="feat-title">Fajr Wake-Up Challenge</div>
-        <p class="feat-desc">Special Fajr streak — the hardest prayer to pray on time. A dedicated streak counter builds the most important morning habit.</p>
+        <div class="feat-title" data-i18n="habits.free.f4.title">Fajr Wake-Up Challenge</div>
+        <p class="feat-desc" data-i18n="habits.free.f4.desc">Special Fajr streak — the hardest prayer to pray on time. A dedicated streak counter builds the most important morning habit.</p>
       </div>
       <div class="feat-card reveal reveal-d1">
         <div class="feat-icon teal">📈</div>
-        <div class="feat-title">Progress Heatmap</div>
-        <p class="feat-desc">28-day visual heatmap shows your prayer consistency by day and prayer. Instantly see which prayers and days need attention.</p>
+        <div class="feat-title" data-i18n="habits.free.f5.title">Progress Heatmap</div>
+        <p class="feat-desc" data-i18n="habits.free.f5.desc">28-day visual heatmap shows your prayer consistency by day and prayer. Instantly see which prayers and days need attention.</p>
       </div>
       <div class="feat-card reveal reveal-d2">
         <div class="feat-icon gold">⭐</div>
-        <div class="feat-title">Sunnah Score</div>
-        <p class="feat-desc">A weekly score (0–100) combining prayer completion, Qur'an reading, dua checklist, and fasting days. Your holistic ibadah metric.</p>
+        <div class="feat-title" data-i18n="habits.free.f6.title">Sunnah Score</div>
+        <p class="feat-desc" data-i18n="habits.free.f6.desc">A weekly score (0–100) combining prayer completion, Qur'an reading, dua checklist, and fasting days. Your holistic ibadah metric.</p>
       </div>
     </div>
   </div>
@@ -1284,124 +1318,124 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 <section class="section">
   <div class="container">
     <div class="section-head reveal">
-      <div class="section-eyebrow">Premium & Futuristic</div>
-      <h2 class="section-title">The Future of <span class="grad">Spiritual Growth</span></h2>
-      <p class="section-sub">Premium features for serious seekers. Futuristic tools that make worship data-driven and community-powered.</p>
+      <div class="section-eyebrow" data-i18n="habits.prem.eyebrow">Premium & Futuristic</div>
+      <h2 class="section-title" data-i18n="habits.prem.title" data-i18n-html>The Future of <span class="grad">Spiritual Growth</span></h2>
+      <p class="section-sub" data-i18n="habits.prem.sub">Premium features for serious seekers. Futuristic tools that make worship data-driven and community-powered.</p>
     </div>
     <div class="prem-grid">
 
       <!-- Row 1: Premium cards -->
       <div class="feat-card reveal">
-        <span class="feat-badge badge-premium">✦ Premium</span>
+        <span class="feat-badge badge-premium" data-i18n="habits.prem.badgePremium">✦ Premium</span>
         <div class="feat-icon gold">📋</div>
-        <div class="feat-title">Ramadan & Hifz Templates</div>
-        <p class="feat-desc">Pre-built 30-day Ramadan challenge, 30-day Hifz program, and family Sunnah templates. Start structured worship journeys instantly.</p>
+        <div class="feat-title" data-i18n="habits.prem.p1.title">Ramadan & Hifz Templates</div>
+        <p class="feat-desc" data-i18n="habits.prem.p1.desc">Pre-built 30-day Ramadan challenge, 30-day Hifz program, and family Sunnah templates. Start structured worship journeys instantly.</p>
       </div>
       <div class="feat-card reveal reveal-d1">
-        <span class="feat-badge badge-premium">✦ Premium</span>
+        <span class="feat-badge badge-premium" data-i18n="habits.prem.badgePremium">✦ Premium</span>
         <div class="feat-icon teal">👨‍👩‍👧</div>
-        <div class="feat-title">Family & Group Challenges</div>
-        <p class="feat-desc">Invite family members, see collective prayer rates, and run household ibadah challenges. Make worship a team effort.</p>
+        <div class="feat-title" data-i18n="habits.prem.p2.title">Family & Group Challenges</div>
+        <p class="feat-desc" data-i18n="habits.prem.p2.desc">Invite family members, see collective prayer rates, and run household ibadah challenges. Make worship a team effort.</p>
       </div>
       <div class="feat-card reveal reveal-d2">
-        <span class="feat-badge badge-premium">✦ Premium</span>
+        <span class="feat-badge badge-premium" data-i18n="habits.prem.badgePremium">✦ Premium</span>
         <div class="feat-icon gold">📤</div>
-        <div class="feat-title">PDF & WhatsApp Export</div>
-        <p class="feat-desc">Export your weekly or monthly report as a beautiful PDF or share directly to WhatsApp. Perfect for journaling and accountability.</p>
+        <div class="feat-title" data-i18n="habits.prem.p3.title">PDF & WhatsApp Export</div>
+        <p class="feat-desc" data-i18n="habits.prem.p3.desc">Export your weekly or monthly report as a beautiful PDF or share directly to WhatsApp. Perfect for journaling and accountability.</p>
       </div>
 
       <!-- Row 2: Futuristic cards -->
       <div class="feat-card reveal">
-        <span class="feat-badge badge-future">🔮 Futuristic</span>
+        <span class="feat-badge badge-future" data-i18n="habits.prem.badgeFuturistic">🔮 Futuristic</span>
         <div class="orb-container-sm">
           <div class="orb-sm" id="sunnahOrb"></div>
-          <div class="orb-label-sm">Sunnah Score Orb</div>
-          <div class="orb-sub-sm">Tap to feel your spiritual energy</div>
+          <div class="orb-label-sm" data-i18n="habits.prem.orbLabel">Sunnah Score Orb</div>
+          <div class="orb-sub-sm" data-i18n="habits.prem.orbSub">Tap to feel your spiritual energy</div>
         </div>
-        <div class="feat-title">3D Habit Orb</div>
-        <p class="feat-desc">A living, breathing 3D orb that pulses and glows brighter as your weekly Sunnah Score rises. Watch your spiritual energy grow visually.</p>
+        <div class="feat-title" data-i18n="habits.prem.p4.title">3D Habit Orb</div>
+        <p class="feat-desc" data-i18n="habits.prem.p4.desc">A living, breathing 3D orb that pulses and glows brighter as your weekly Sunnah Score rises. Watch your spiritual energy grow visually.</p>
       </div>
       <div class="feat-card reveal reveal-d1">
-        <span class="feat-badge badge-future">🔮 Futuristic</span>
+        <span class="feat-badge badge-future" data-i18n="habits.prem.badgeFuturistic">🔮 Futuristic</span>
         <div class="feat-icon teal">🤖</div>
-        <div class="feat-title">AI Habit Prediction</div>
-        <p class="feat-desc">AI analyzes your prayer patterns and predicts when you're likely to miss — then sends a gentle nudge 10 minutes before the window closes. Proactive, not reactive.</p>
+        <div class="feat-title" data-i18n="habits.prem.p5.title">AI Habit Prediction</div>
+        <p class="feat-desc" data-i18n="habits.prem.p5.desc">AI analyzes your prayer patterns and predicts when you're likely to miss — then sends a gentle nudge 10 minutes before the window closes. Proactive, not reactive.</p>
         <div style="margin-top:14px;padding:12px 14px;background:rgba(0,105,110,.05);border:0.5px solid rgba(0,105,110,.12);border-radius:12px;font-size:12.5px;color:var(--ink-muted);">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-700);margin-bottom:6px;">AI Insight · Today</div>
-          "You typically miss Asr on Thursdays. Asr window closes in <strong style="color:var(--ink-primary);">42 min</strong>."
+          <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-700);margin-bottom:6px;" data-i18n="habits.prem.aiInsightLabel">AI Insight · Today</div>
+          <span data-i18n="habits.prem.aiQuote" data-i18n-html>"You typically miss Asr on Thursdays. Asr window closes in <strong style="color:var(--ink-primary);">42 min</strong>."</span>
         </div>
       </div>
       <div class="feat-card reveal reveal-d2">
-        <span class="feat-badge badge-future">🔮 Futuristic</span>
+        <span class="feat-badge badge-future" data-i18n="habits.prem.badgeFuturistic">🔮 Futuristic</span>
         <div class="feat-icon gold">🎙️</div>
-        <div class="feat-title">Voice Check-In</div>
-        <p class="feat-desc">"Hey, I just prayed Fajr" — voice-activated habit logging. Log prayers hands-free without even picking up your phone.</p>
+        <div class="feat-title" data-i18n="habits.prem.p6.title">Voice Check-In</div>
+        <p class="feat-desc" data-i18n="habits.prem.p6.desc">"Hey, I just prayed Fajr" — voice-activated habit logging. Log prayers hands-free without even picking up your phone.</p>
       </div>
 
       <!-- Row 3: More futuristic -->
       <div class="feat-card reveal">
-        <span class="feat-badge badge-future">🔮 Futuristic</span>
+        <span class="feat-badge badge-future" data-i18n="habits.prem.badgeFuturistic">🔮 Futuristic</span>
         <div class="feat-icon gold">📜</div>
-        <div class="feat-title">Prophet's ﷺ Daily Schedule</div>
-        <p class="feat-desc">See what the Prophet ﷺ did at each hour — from Fajr to Tahajjud. Overlay your own routine and find where to add sunnah acts throughout your day.</p>
+        <div class="feat-title" data-i18n="habits.prem.p7.title">Prophet's ﷺ Daily Schedule</div>
+        <p class="feat-desc" data-i18n="habits.prem.p7.desc">See what the Prophet ﷺ did at each hour — from Fajr to Tahajjud. Overlay your own routine and find where to add sunnah acts throughout your day.</p>
         <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">
           <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-muted);">
             <span style="font-size:10px;font-weight:600;color:var(--teal-700);min-width:44px;">4:30 AM</span>
             <div style="flex:1;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--teal-700),var(--teal-500));"></div>
-            <span>Tahajjud · Fajr</span>
+            <span data-i18n="habits.prem.sched1">Tahajjud · Fajr</span>
           </div>
           <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-muted);">
             <span style="font-size:10px;font-weight:600;color:var(--gold-700);min-width:44px;">9:00 AM</span>
             <div style="flex:1;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--gold-700),var(--gold-500));"></div>
-            <span>Duha prayer</span>
+            <span data-i18n="habits.prem.sched2">Duha prayer</span>
           </div>
           <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-muted);">
             <span style="font-size:10px;font-weight:600;color:var(--teal-700);min-width:44px;">1:30 PM</span>
             <div style="flex:1;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--teal-700),var(--teal-400));opacity:.6;"></div>
-            <span>Qaylūlah nap</span>
+            <span data-i18n="habits.prem.sched3">Qaylūlah nap</span>
           </div>
         </div>
       </div>
       <div class="feat-card reveal reveal-d1">
-        <span class="feat-badge badge-future">🔮 Futuristic</span>
+        <span class="feat-badge badge-future" data-i18n="habits.prem.badgeFuturistic">🔮 Futuristic</span>
         <div class="feat-icon teal">🌍</div>
-        <div class="feat-title">Community Leaderboard</div>
-        <p class="feat-desc">Anonymous global leaderboard showing top Sunnah Scores in your city and worldwide. See how your consistency ranks — and get inspired by the ummah.</p>
+        <div class="feat-title" data-i18n="habits.prem.p8.title">Community Leaderboard</div>
+        <p class="feat-desc" data-i18n="habits.prem.p8.desc">Anonymous global leaderboard showing top Sunnah Scores in your city and worldwide. See how your consistency ranks — and get inspired by the ummah.</p>
         <div style="margin-top:14px;display:flex;flex-direction:column;gap:7px;">
           <div style="display:flex;align-items:center;gap:10px;font-size:12.5px;">
             <span style="font-size:13px;font-weight:700;color:var(--gold-500);">🥇</span>
             <div style="flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--gold-500),var(--gold-300));"></div>
-            <span style="font-size:11px;color:var(--ink-muted);">98% · Sister M.</span>
+            <span style="font-size:11px;color:var(--ink-muted);" data-i18n="habits.prem.leader1">98% · Sister M.</span>
           </div>
           <div style="display:flex;align-items:center;gap:10px;font-size:12.5px;">
             <span style="font-size:13px;">🥈</span>
             <div style="flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--teal-700),var(--teal-400));width:94%;"></div>
-            <span style="font-size:11px;color:var(--ink-muted);">94% · Br. K.</span>
+            <span style="font-size:11px;color:var(--ink-muted);" data-i18n="habits.prem.leader2">94% · Br. K.</span>
           </div>
           <div style="display:flex;align-items:center;gap:10px;font-size:12.5px;">
             <span style="font-size:13px;">⭐</span>
             <div style="flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--teal-600),var(--teal-400));width:72%;opacity:.7;"></div>
-            <span style="font-size:11px;font-weight:600;color:var(--teal-700);">72% · You</span>
+            <span style="font-size:11px;font-weight:600;color:var(--teal-700);" data-i18n="habits.prem.leader3">72% · You</span>
           </div>
         </div>
       </div>
       <div class="feat-card reveal reveal-d2">
-        <span class="feat-badge badge-future">🔮 Futuristic</span>
+        <span class="feat-badge badge-future" data-i18n="habits.prem.badgeFuturistic">🔮 Futuristic</span>
         <div class="feat-icon gold">🔔</div>
-        <div class="feat-title">Smart Habit Stacking</div>
-        <p class="feat-desc">Auto-chain habits together: after Fajr → 5 min dhikr → 2 pages Qur'an → done. Build sacred routines by stacking micro-habits, inspired by the Prophet's ﷺ morning routine.</p>
+        <div class="feat-title" data-i18n="habits.prem.p9.title">Smart Habit Stacking</div>
+        <p class="feat-desc" data-i18n="habits.prem.p9.desc">Auto-chain habits together: after Fajr → 5 min dhikr → 2 pages Qur'an → done. Build sacred routines by stacking micro-habits, inspired by the Prophet's ﷺ morning routine.</p>
         <div style="margin-top:14px;display:flex;flex-direction:column;gap:5px;">
           <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-muted);">
             <div style="width:6px;height:6px;border-radius:50%;background:var(--teal-500);flex-shrink:0;"></div>
-            Fajr ✓ → Morning adhkar (5 min)
+            <span data-i18n="habits.prem.stack1">Fajr ✓ → Morning adhkar (5 min)</span>
           </div>
           <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-muted);">
             <div style="width:6px;height:6px;border-radius:50%;background:var(--teal-500);flex-shrink:0;"></div>
-            Morning adhkar ✓ → Qur'an (2 pages)
+            <span data-i18n="habits.prem.stack2">Morning adhkar ✓ → Qur'an (2 pages)</span>
           </div>
           <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(0,105,110,.4);">
             <div style="width:6px;height:6px;border-radius:50%;background:rgba(0,105,110,.2);flex-shrink:0;"></div>
-            Qur'an ✓ → Review yesterday's hifz
+            <span data-i18n="habits.prem.stack3">Qur'an ✓ → Review yesterday's hifz</span>
           </div>
         </div>
       </div>
@@ -1411,21 +1445,21 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 
 <!-- ═══ CTA ═══ -->
 <section class="cta-section">
-  <div class="cta-badge">✦ Start Your Streak Today</div>
-  <h2 class="cta-title">Build Habits That<br><span class="gold-it">Allah Loves Most</span></h2>
-  <p class="cta-sub">The most beloved deeds are the consistent ones. Start tracking today and build a worship routine that lasts a lifetime.</p>
+  <div class="cta-badge" data-i18n="habits.cta.badge">✦ Start Your Streak Today</div>
+  <h2 class="cta-title" data-i18n="habits.cta.title" data-i18n-html>Build Habits That<br><span class="gold-it">Allah Loves Most</span></h2>
+  <p class="cta-sub" data-i18n="habits.cta.sub">The most beloved deeds are the consistent ones. Start tracking today and build a worship routine that lasts a lifetime.</p>
   <div class="cta-actions">
     <a class="btn-gold" href="#tracker-app">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      Start Tracking Free
+      <span data-i18n="habits.cta.btn1">Start Tracking Free</span>
     </a>
     <a class="btn-white-ghost" href="quran.html">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-      Explore Qur'an
+      <span data-i18n="habits.cta.btn2">Explore Qur'an</span>
     </a>
     <a class="btn-white-ghost" href="https://quranlyai.com" target="_blank">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      AI Tutor
+      <span data-i18n="habits.cta.btn3">AI Tutor</span>
     </a>
   </div>
 </section>
@@ -1447,36 +1481,36 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
         </svg>
         <span><span class="ti">Islamic</span><span class="fo">Info</span></span>
       </a>
-      <p class="ft-tag">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
+      <p class="ft-tag" data-i18n="chrome.footer.tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
       <p class="ft-verse">وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ — Hud · 11:88</p>
     </div>
 
     <!-- Col 1: Habit Tracker page-specific (§7.3) -->
     <div>
-      <div class="ft-col-h">Habit Tracker</div>
-      <a class="ft-link" href="#tracker-app" onclick="gotoTab('prayers')">Prayer Tracker</a>
-      <a class="ft-link" href="#tracker-app" onclick="gotoTab('fasting')">Fasting Log</a>
-      <a class="ft-link" href="#tracker-app" onclick="gotoTab('sunnah')">Sunnah Routines</a>
-      <a class="ft-link" href="#tracker-app">Streak Board</a>
-      <a class="ft-link" href="#tracker-app" onclick="gotoTab('prayers')">Sunnah Score</a>
+      <div class="ft-col-h" data-i18n="habits.footer.colHeading">Habit Tracker</div>
+      <a class="ft-link" href="#tracker-app" onclick="gotoTab('prayers')" data-i18n="habits.footer.prayerTracker">Prayer Tracker</a>
+      <a class="ft-link" href="#tracker-app" onclick="gotoTab('fasting')" data-i18n="habits.footer.fastingLog">Fasting Log</a>
+      <a class="ft-link" href="#tracker-app" onclick="gotoTab('sunnah')" data-i18n="habits.footer.sunnahRoutines">Sunnah Routines</a>
+      <a class="ft-link" href="#tracker-app" data-i18n="habits.footer.streakBoard">Streak Board</a>
+      <a class="ft-link" href="#tracker-app" onclick="gotoTab('prayers')" data-i18n="habits.footer.sunnahScore">Sunnah Score</a>
     </div>
 
     <!-- Col 2: Quick Access (identical on every page, §7.3) -->
     <div>
-      <div class="ft-col-h">Quick Access</div>
-      <a class="ft-link" href="quran.html">Quran Explorer</a>
-      <a class="ft-link" href="hadith.html">Hadith Library</a>
-      <a class="ft-link" href="islamic-studies.html">Islamic Studies</a>
-      <a class="ft-link" href="knowledge-hub.html">Knowledge Hub</a>
-      <a class="ft-link" href="dua.html">Daily Duas</a>
-      <a class="ft-link" href="tools.html">Islamic Tools</a>
-      <a class="ft-link" href="habits.html">Habit Tracker</a>
-      <a class="ft-link" href="verify.html">Verify a Claim</a>
+      <div class="ft-col-h" data-i18n="chrome.footer.quickAccess">Quick Access</div>
+      <a class="ft-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="ft-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="ft-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="ft-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="ft-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="ft-link" href="tools.html" data-i18n="chrome.footer.linkTools">Islamic Tools</a>
+      <a class="ft-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="ft-link" href="verify.html" data-i18n="chrome.footer.linkVerify">Verify a Claim</a>
     </div>
 
     <!-- Col 3: Our Ecosystem (§7.4 verbatim) -->
     <div>
-      <div class="ft-col-h">Our Ecosystem</div>
+      <div class="ft-col-h" data-i18n="chrome.footer.ecosystem">Our Ecosystem</div>
       <a class="ft-link" href="https://islamickids.org" target="_blank" rel="noopener">IslamicKids.org ↗</a>
       <a class="ft-link" href="https://quranlyai.com" target="_blank" rel="noopener">QuranlyAI ↗</a>
       <a class="ft-link" href="https://hadithiq.com" target="_blank" rel="noopener">HadithIQ ↗</a>
@@ -1487,17 +1521,17 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 
     <!-- Col 4: Company + Legal -->
     <div>
-      <div class="ft-col-h">Company</div>
-      <a class="ft-link" href="about.html">About</a>
-      <a class="ft-link" href="contact.html">Contact</a>
-      <div class="ft-col-h" style="margin-top:16px;">Legal</div>
-      <a class="ft-link" href="privacy.html">Privacy Policy</a>
-      <a class="ft-link" href="terms.html">Terms of Use</a>
+      <div class="ft-col-h" data-i18n="chrome.footer.company">Company</div>
+      <a class="ft-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+      <a class="ft-link" href="contact.html" data-i18n="chrome.footer.contact">Contact</a>
+      <div class="ft-col-h" style="margin-top:16px;" data-i18n="chrome.footer.legal">Legal</div>
+      <a class="ft-link" href="privacy.html" data-i18n="chrome.footer.privacy">Privacy Policy</a>
+      <a class="ft-link" href="terms.html" data-i18n="chrome.footer.terms">Terms of Use</a>
     </div>
   </div>
   <div class="ft-bot">
-    <div class="ft-copy">© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
-    <div class="ft-note">All content source-verified · Privacy-first · Built with sincerity</div>
+    <div class="ft-copy" data-i18n="chrome.footer.copy" data-i18n-html>© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
+    <div class="ft-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
   </div>
 </footer>
 
@@ -1875,6 +1909,7 @@ window.II.habits = window.II.habits || {};
 })();
 
 </script>
+<script src="src/js/i18n.js"></script>
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
 <script src="src/js/habits.js"></script>
