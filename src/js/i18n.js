@@ -153,8 +153,11 @@
   /* ─── Header dropdown (#langBtn + #langMenu) ──────────────────── */
 
   function renderLangUi() {
-    var codeEl = document.getElementById('langBtnCode');
-    if (codeEl) codeEl.textContent = lang.toUpperCase();
+    var labelEl = document.getElementById('langBtnLabel');
+    if (labelEl) {
+      var meta = LANGS.filter(function (l) { return l.code === lang; })[0];
+      labelEl.textContent = meta ? meta.name : lang.toUpperCase();
+    }
     var menu = document.getElementById('langMenu');
     if (!menu) return;
     var items = menu.querySelectorAll('.lang-item');

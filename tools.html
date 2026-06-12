@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8"/>
@@ -477,7 +477,13 @@ a{text-decoration:none;color:inherit;}
 
 /* ── Language dropdown ── */
 .lang-wrapper{position:relative;}
-.lang-menu{position:absolute;top:44px;right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.lang-trigger{display:flex;align-items:center;gap:5px;padding:5px 10px 5px 8px;border:1.5px solid rgba(0,105,110,.4);border-radius:20px;background:transparent;cursor:pointer;font-family:var(--font-body);font-size:12.5px;font-weight:600;color:var(--teal-700);transition:background .18s,border-color .18s;white-space:nowrap;}
+.lang-trigger:hover{background:rgba(0,105,110,.07);}
+.lang-trigger .lang-chevron{transition:transform .25s;}
+.lang-trigger[aria-expanded="true"] .lang-chevron{transform:rotate(180deg);}
+[data-theme="dark"] .lang-trigger{color:var(--teal-300);border-color:rgba(0,105,110,.45);}
+[data-theme="dark"] .lang-trigger:hover{background:rgba(0,105,110,.15);}
+.lang-menu{position:absolute;top:calc(100% + 6px);right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
 .lang-menu.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
 [data-theme="dark"] .lang-menu{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
 .lang-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;background:transparent;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;color:var(--ink-body);text-align:left;transition:background .2s,color .2s;}
@@ -553,8 +559,10 @@ a{text-decoration:none;color:inherit;}
           </div>
         </div>
         <div class="lang-wrapper">
-          <button class="icon-btn lang-trigger" id="langBtn" aria-label="Language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
-            <span id="langBtnCode" style="font-size:11px;font-weight:600;letter-spacing:.06em;">EN</span>
+          <button class="lang-trigger" id="langBtn" aria-label="Select language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span id="langBtnLabel">EN</span>
+            <svg class="lang-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
           </button>
           <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
         </div>
