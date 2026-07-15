@@ -28,10 +28,12 @@
     if (!card || !card.dataset.key) return;
     var vk = card.dataset.key, parts = vk.split(':');
     var wasBm = core.isBookmarked(bookmarks, vk);
+    var attr = (card.querySelector('.ayah-trans-attr') || {}).textContent || '';
     var bm = {
       verseKey: vk, surahName: surahNameFromDom(), surahId: Number(parts[0]), ayahNo: Number(parts[1]),
       arabic: (card.querySelector('.ayah-arabic') || {}).textContent || '',
       translation: (card.querySelector('.ayah-translation') || {}).textContent || '',
+      edition: attr.split('·')[0].trim(),
       category: 'General', addedAt: Date.now()
     };
     bookmarks = core.toggleBookmark(bookmarks, bm);
@@ -65,7 +67,7 @@
       var ar = document.createElement('div'); ar.className = 'bp-ar'; ar.textContent = bm.arabic;
       var en = document.createElement('div'); en.className = 'bp-en'; en.textContent = bm.translation;
       var meta = document.createElement('div'); meta.className = 'bp-meta';
-      var ref = document.createElement('span'); ref.textContent = bm.surahName + ' ' + bm.verseKey;
+      var ref = document.createElement('span'); ref.textContent = bm.surahName + ' ' + bm.verseKey + (bm.edition ? ' · ' + bm.edition : '');
       var tag = document.createElement('span'); tag.className = 'bp-tag'; tag.textContent = bm.category;
       meta.appendChild(ref); meta.appendChild(tag);
       it.appendChild(ar); it.appendChild(en); it.appendChild(meta);

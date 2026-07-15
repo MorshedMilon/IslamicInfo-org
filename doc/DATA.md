@@ -66,7 +66,7 @@ Chapter        = { id: number; name_simple: string; name_arabic: string; revelat
 Verse          = { verse_key: string; verse_number: number; text_uthmani: string; translation: string; words: { ar: string; en: string }[] }
 Reciter        = { id: number; name: string; style: string }
 AyahAudio      = { verse_key: string; url: string; segments: { word: number; start: number; end: number }[] }
-Bookmark       = { verseKey: string; surahName: string; surahId: number; ayahNo: number; arabic: string; translation: string; category: string; addedAt: number }
+Bookmark       = { verseKey: string; surahName: string; surahId: number; ayahNo: number; arabic: string; translation: string; edition: string; category: string; addedAt: number }
 Note           = { verseKey: string; text: string; updatedAt: number }
 ```
 
