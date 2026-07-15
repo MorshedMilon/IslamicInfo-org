@@ -34,6 +34,9 @@
 | `ii-quran-reading-mode` | boolean | Quran Explorer | Until user changes |
 | `ii-quran-chapters` | `{ fetchedAt:number, data:Chapter[] }` (JSON) | Quran Explorer | 1 day (24h revalidate) |
 | `ii-verses-{surah}-{edition}` | `{ fetchedAt:number, verses:Verse[] }` (JSON) | Quran Explorer | 1 day (24h revalidate) |
+| `ii-quran-reciter` | string (reciter id) | Quran Explorer | Until user changes |
+| `ii-reciters` | `{ fetchedAt:number, data:Reciter[] }` (JSON) | Quran Explorer | 7 days |
+| `ii-audio-{surah}-{reciter}` | `{ fetchedAt:number, ayahs:AyahAudio[] }` (JSON) | Quran Explorer | 7 days |
 | `islamicinfo-verse-{date}` | `/api/verse` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-hadith-daily-{date}` | `/api/hadith` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-dua-{date}` | `/api/dua` response (JSON) | Home | 1 day (UTC midnight bust) |
@@ -59,6 +62,8 @@ HadithBookmark = { collectionSlug: string; bookNum: number; hadithNum: number; s
 HadithNote     = { collectionSlug: string; bookNum: number; hadithNum: number; text: string; updatedAt: string }
 Chapter        = { id: number; name_simple: string; name_arabic: string; revelation_place: 'makkah' | 'madinah'; verses_count: number; slug: string }
 Verse          = { verse_key: string; verse_number: number; text_uthmani: string; translation: string; words: { ar: string; en: string }[] }
+Reciter        = { id: number; name: string; style: string }
+AyahAudio      = { verse_key: string; url: string; segments: { word: number; start: number; end: number }[] }
 ```
 
 ## 3. Islamic Studies Progress Schema (`islamicinfo-is-progress`)
