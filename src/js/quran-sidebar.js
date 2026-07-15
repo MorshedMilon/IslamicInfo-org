@@ -12,6 +12,7 @@
   var chapters = [];        // normalized Chapter[]
   var currentQuery = '';
   var currentFilter = 'all';
+  var activeId = null;       // id of selected surah — re-applied on every re-render
 
   function $(sel, ctx) { return (ctx || document).querySelector(sel); }
   function sbList() { return document.getElementById('sbList'); }
@@ -41,11 +42,11 @@
     return fetch(API_URL, { signal: ctrl.signal })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function (j) {
-        clearTimeout(t);
         var list = (j.chapters || []).map(core.normalizeChapter).filter(Boolean);
         if (list.length < 1) throw new Error('empty chapters');
         return list;
-      });
+      })
+      .finally(function () { clearTimeout(t); });
   }
   function fetchSeed() {
     return fetch(SEED_URL).then(function (r) {
@@ -57,7 +58,7 @@
   // ---- render ---------------------------------------------------------------
   function clearRows() {
     var list = sbList(); if (!list) return;
-    Array.prototype.slice.call(list.querySelectorAll('.surah-row, .sb-skeleton, .sb-empty'))
+    Array.prototype.slice.call(list.querySelectorAll('.surah-row, .sb-skeleton, .sb-empty, .sb-nomatch'))
       .forEach(function (n) { n.parentNode.removeChild(n); });
   }
   function insertPoint() {
@@ -68,6 +69,7 @@
     var type = core.revelationToType(ch.revelation_place);
     var row = document.createElement('div');
     row.className = 'surah-row';
+    if (activeId != null && ch.id === activeId) row.classList.add('active');
     row.setAttribute('role', 'button');
     row.setAttribute('tabindex', '0');
     row.setAttribute('aria-label', ch.name_simple + ', ' + ch.verses_count + ' ayahs, ' + core.typeToLabel(type));
@@ -180,10 +182,13 @@
     var cached = readCache();
     if (cached && core.isFresh(cached.fetchedAt, Date.now())) {
       var norm = cached.data.map(core.normalizeChapter).filter(Boolean);
-      useData(norm);
-      fetchChapters().then(function (fresh) { writeCache(fresh); chapters = fresh; renderRows(fresh); })
-        .catch(function () { /* keep cached */ });
-      return;
+      if (norm.length) {
+        useData(norm);
+        fetchChapters().then(function (fresh) { writeCache(fresh); chapters = fresh; renderRows(fresh); })
+          .catch(function () { /* keep cached */ });
+        return;
+      }
+      /* cache present but unusable — fall through to fetch path */
     }
     renderSkeleton();
     fetchChapters()
@@ -198,9 +203,79 @@
       });
   }
 
-  // placeholder hooks — defined fully in Task 6
-  window.selectSurah = window.selectSurah || function () {};
-  function applyUrlSurah() {}   // replaced in Task 6
+  // ---- global overrides (reassign the locked page's inline demo fns) --------
+  window.filterSurahs = function (value) {
+    currentQuery = value || '';
+    applyVisibility();
+  };
+
+  window.filterReveal = function (type, btn) {
+    currentFilter = type || 'all';
+    Array.prototype.forEach.call(document.querySelectorAll('.sb-filter'),
+      function (b) { b.classList.remove('on'); });
+    if (btn) btn.classList.add('on');
+    applyVisibility();
+  };
+
+  // Minimal Module-1 hook; Module 2 replaces the body with real verse fetch.
+  window.loadSurah = window.loadSurah || function (id) {
+    /* Module 2: fetch + render verses for `id` here. */
+  };
+
+  window.selectSurah = function (row, name, ar, meta, type, letter) {
+    if (!row) return;
+    name   = name   || row.dataset.name;
+    ar     = ar     || row.dataset.ar;
+    meta   = meta   || row.dataset.meta;
+    type   = type   || (row.dataset.type === 'makki' ? 'Makki' : 'Madani');
+    letter = letter || row.dataset.letter || '';
+    var id   = Number(row.dataset.id) || null;
+    var slug = row.dataset.slug || (name ? core.slugify(name) : '');
+
+    activeId = id;
+    Array.prototype.forEach.call(document.querySelectorAll('.surah-row'),
+      function (r) { r.classList.remove('active'); });
+    row.classList.add('active');
+
+    var set = function (sel, txt) { var el = $(sel); if (el) el.textContent = txt; };
+    set('#bcTitle', name + ' · ' + ar);
+    set('#bcType', type);
+    set('#bcMeta', meta + ' · Juz 1');
+    set('#apSurah', name + ' · ' + ar);
+    set('#apArt', letter);
+    var mName = $('.mushaf-surah-name'); if (mName) mName.textContent = 'سورة ' + ar;
+    var mPage = $('.mushaf-page-num'); if (mPage) mPage.textContent = 'Page 1 · Juz 1 · ' + name;
+
+    if (typeof window.masterStop === 'function') window.masterStop();
+
+    if (slug) {
+      try { history.pushState({ surah: id, slug: slug }, '', '?surah=' + slug); } catch (e) {}
+    }
+    if (typeof window.showToast === 'function') window.showToast('Loading ' + name + '…');
+    window.loadSurah(id);
+  };
+
+  function selectSurahBySlug(slug) {
+    if (!slug) return false;
+    var row = document.querySelector('.surah-row[data-slug="' + slug + '"]');
+    if (row) { window.selectSurah(row); return true; }
+    return false;
+  }
+
+  function applyUrlSurah() {
+    var params = new URLSearchParams(window.location.search);
+    var slug = params.get('surah');
+    if (slug && selectSurahBySlug(slug)) return;
+    // default: Al-Fatihah (id 1) — set active only, no URL push, no toast spam
+    var first = document.querySelector('.surah-row[data-id="1"]');
+    if (first) { activeId = 1; first.classList.add('active'); }
+  }
+
+  window.addEventListener('popstate', function () {
+    var params = new URLSearchParams(window.location.search);
+    var slug = params.get('surah');
+    if (slug) selectSurahBySlug(slug);
+  });
 
   // expose for Task 6 to extend + for tests/manual
   window.II = window.II || {};
