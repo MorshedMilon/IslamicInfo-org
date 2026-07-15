@@ -68,6 +68,7 @@
   var audio = null, reciters = [], reciterId = 7;
   var loadedSurah = null, loadedReciter = null, ayahs = [], idx = 0;
   var repeat = false, autoplay = true, speedIdx = 0;
+  var gen = 0;               // request generation — guards stale reciter/surah switches
 
   function $(s) { return document.querySelector(s); }
   function setText(sel, txt) { var el = $(sel); if (el) el.textContent = txt; }
@@ -92,10 +93,11 @@
     return audio;
   }
 
-  function ensure(surahId) {
-    if (loadedSurah === surahId && loadedReciter === reciterId && ayahs.length) return Promise.resolve(ayahs);
-    return source.getSurahAudio(reciterId, surahId).then(function (a) { ayahs = a; loadedSurah = surahId; loadedReciter = reciterId; return a; });
+  function fetchSurah(surahId, ed) {
+    if (loadedSurah === surahId && loadedReciter === ed && ayahs.length) return Promise.resolve(ayahs);
+    return source.getSurahAudio(ed, surahId);
   }
+  function applyFetched(surahId, ed, a) { ayahs = a; loadedSurah = surahId; loadedReciter = ed; }
   function playAt(i) {
     if (i < 0 || i >= ayahs.length) return;
     idx = i; var a = getAudio();
@@ -106,8 +108,12 @@
   function playFromDom(start) {
     var s = currentSurahFromDom();
     if (!s) { toast('Loading surah…'); return; }
-    ensure(s).then(function () { if (ayahs.length) playAt(start || 0); })
-      .catch(function (e) { console.warn('[quran] audio fetch failed:', e && e.message); toast('Audio unavailable — try again'); });
+    var myGen = ++gen, ed = reciterId;
+    fetchSurah(s, ed).then(function (a) {
+      if (myGen !== gen) return;
+      applyFetched(s, ed, a);
+      if (ayahs.length) playAt(start || 0);
+    }).catch(function (e) { if (myGen !== gen) return; console.warn('[quran] audio fetch failed:', e && e.message); toast('Audio unavailable — try again'); });
   }
 
   function clearHighlights() {
@@ -167,18 +173,25 @@
   };
   window.masterPlay = window.masterPlayPause;
   window.masterPause = function () { if (audio) audio.pause(); };
-  window.masterStop = function () { loadedSurah = null; ayahs = []; idx = 0; stop(); };
+  window.masterStop = function () { gen++; loadedSurah = null; ayahs = []; idx = 0; stop(); };
   window.toggleAyahPlay = function (btn, e) {
     if (e && e.stopPropagation) e.stopPropagation();
     var card = btn && btn.closest ? btn.closest('.ayah-card') : null;
     if (!card || !card.dataset.key) { playFromDom(0); return; }
-    var s = Number(card.dataset.key.split(':')[0]);
-    ensure(s).then(function () {
-      var i = ayahs.map(function (x) { return x.verse_key; }).indexOf(card.dataset.key);
+    var vk = card.dataset.key, s = Number(vk.split(':')[0]);
+    // same ayah already loaded → resume/pause in place (no src reset, no refetch)
+    if (audio && audio.src && loadedSurah === s && ayahs[idx] && ayahs[idx].verse_key === vk) {
+      if (audio.paused) { var p = audio.play(); if (p && p.catch) p.catch(function () {}); } else { audio.pause(); }
+      return;
+    }
+    var myGen = ++gen, ed = reciterId;
+    fetchSurah(s, ed).then(function (a) {
+      if (myGen !== gen) return;
+      applyFetched(s, ed, a);
+      var i = ayahs.map(function (x) { return x.verse_key; }).indexOf(vk);
       if (i < 0) return;
-      if (audio && !audio.paused && idx === i) { audio.pause(); return; }
       playAt(i);
-    }).catch(function () { toast('Audio unavailable — try again'); });
+    }).catch(function () { if (myGen !== gen) return; toast('Audio unavailable — try again'); });
   };
   window.skipAyah = function (dir) {
     if (!ayahs.length) { playFromDom(0); return; }
@@ -198,16 +211,23 @@
     toast(repeat ? 'Repeat ayah on' : 'Repeat off');
   };
   window.selectReciter = function (id, el) {
-    reciterId = Number(id);
+    var rid = Number(id);
+    if (!(rid > 0)) return;                       // ignore stale/invalid callers (e.g. old inline onclick)
+    reciterId = rid;
     try { localStorage.setItem('ii-quran-reciter', String(reciterId)); } catch (e) {}
     Array.prototype.forEach.call(document.querySelectorAll('#reciterPicker .reciter-opt'), function (o) { o.classList.remove('on'); });
-    if (el) el.classList.add('on');
+    if (el && el.classList) el.classList.add('on');
     setText('#reciterLabel', shortLabel(reciterId));
     setText('#apReciterName', reciterStyled(reciterId));
     var picker = document.getElementById('reciterPicker'); if (picker) picker.classList.remove('open');
     var wasPlaying = audio && !audio.paused, resumeIdx = idx, s = loadedSurah || currentSurahFromDom();
+    var myGen = ++gen, ed = reciterId;
     loadedSurah = null; ayahs = [];
-    if (s) ensure(s).then(function () { if (wasPlaying && ayahs.length) playAt(Math.min(resumeIdx, ayahs.length - 1)); }).catch(function () {});
+    if (s) fetchSurah(s, ed).then(function (a) {
+      if (myGen !== gen) return;
+      applyFetched(s, ed, a);
+      if (wasPlaying && ayahs.length) playAt(Math.min(resumeIdx, ayahs.length - 1));
+    }).catch(function () {});
     toast('Reciter: ' + shortLabel(reciterId));
   };
   if (typeof window.toggleReciterPicker !== 'function') {
