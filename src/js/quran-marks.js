@@ -77,7 +77,11 @@
     Array.prototype.forEach.call(document.querySelectorAll('#bookmarksPanel .bp-cat'), function (chip) {
       chip.addEventListener('click', function () {
         var label = chip.textContent.trim();
-        if (label.indexOf('New') !== -1) return; // "+ New" deferred
+        if (label.indexOf('New') !== -1) {
+          // "+ New" deferred — undo any stray active-state and keep the current filter
+          Array.prototype.forEach.call(document.querySelectorAll('#bookmarksPanel .bp-cat'), function (c) { c.classList.toggle('on', c.textContent.trim() === activeCat); });
+          return;
+        }
         activeCat = label;
         Array.prototype.forEach.call(document.querySelectorAll('#bookmarksPanel .bp-cat'), function (c) { c.classList.remove('on'); });
         chip.classList.add('on');
@@ -93,13 +97,20 @@
     card.classList.add('pulse-hl'); setTimeout(function () { card.classList.remove('pulse-hl'); }, 3800);
     return true;
   }
+  function renderAllVerses() {
+    if (window.II && window.II.quranVerses && window.II.quranVerses.renderAll) window.II.quranVerses.renderAll();
+  }
   function jumpToVerse(bm) {
     var panel = document.getElementById('bookmarksPanel'); if (panel) panel.classList.remove('open');
-    if (currentSurahFromDom() === bm.surahId) { scrollToCard(bm.verseKey); return; }
+    if (currentSurahFromDom() === bm.surahId) { renderAllVerses(); scrollToCard(bm.verseKey); return; }
     var row = document.querySelector('.surah-row[data-id="' + bm.surahId + '"]');
     if (row && window.selectSurah) { window.selectSurah(row); }
     else if (window.loadSurah) { window.loadSurah(bm.surahId); }
-    var tries = 0, iv = setInterval(function () { tries++; if (scrollToCard(bm.verseKey) || tries > 40) clearInterval(iv); }, 50);
+    var tries = 0, iv = setInterval(function () {
+      tries++;
+      if (currentSurahFromDom() === bm.surahId) { clearInterval(iv); renderAllVerses(); scrollToCard(bm.verseKey); }
+      else if (tries > 60) { clearInterval(iv); }
+    }, 50);
   }
   window.jumpTo = function (id) {
     var el = document.getElementById(id);
@@ -132,12 +143,12 @@
     var k = editorId.slice(2), vk = k.replace('-', ':');
     var input = ed.querySelector('.note-input');
     var text = core.capText(input ? input.value : '', 2000);
-    if (text) notes = core.upsertNote(notes, { verseKey: vk, text: text, updatedAt: Date.now() });
-    else notes = core.removeNote(notes, vk);
-    var ok = saveArr(NOTE_KEY, notes);
+    var next = text ? core.upsertNote(notes, { verseKey: vk, text: text, updatedAt: Date.now() }) : core.removeNote(notes, vk);
+    if (!saveArr(NOTE_KEY, next)) { toast('Storage full — couldn’t save'); return; } // keep editor open; no false success
+    notes = next;
     ed.classList.remove('show');
     applyNoteState(vk, !!text);
-    toast(ok ? (text ? 'Note saved' : 'Note removed') : 'Storage full — couldn’t save');
+    toast(text ? 'Note saved' : 'Note removed');
   };
   function applyNoteState(vk, hasNote) {
     var card = cardFor(vk); if (!card) return;
