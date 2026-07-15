@@ -43,6 +43,23 @@
     return typeof fetchedAt === 'number' && (now - fetchedAt) < maxAgeMs;
   }
 
+  function parseHighlightMode(search) {
+    var m = /[?&]highlight=(block|fill|both)\b/.exec(String(search || ''));
+    return m ? m[1] : 'both';
+  }
+  function modeFlags(mode) {
+    return { block: mode === 'block' || mode === 'both', fill: mode === 'fill' || mode === 'both' };
+  }
+  function wordFillStates(w, count) {
+    var out = [];
+    for (var i = 0; i < count; i++) out.push({ active: i === (w - 1), filled: w > 0 && i <= (w - 1) });
+    return out;
+  }
+  function nextHighlightMode(mode) {
+    return mode === 'both' ? 'block' : (mode === 'block' ? 'fill' : 'both');
+  }
+
   return { normalizeAudioUrl, normalizeSegments, activeWordAt, formatTime,
-           recitersCacheKey, audioCacheKey, isFresh };
+           recitersCacheKey, audioCacheKey, isFresh,
+           parseHighlightMode, modeFlags, wordFillStates, nextHighlightMode };
 });

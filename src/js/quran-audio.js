@@ -109,6 +109,9 @@
   var loadedSurah = null, loadedReciter = null, ayahs = [], idx = 0;
   var repeat = false, autoplay = true, speedIdx = 0;
   var gen = 0;               // request generation — guards stale reciter/surah switches
+  var DEFAULT_RECITER_ID = 7;
+  var DEFAULT_RECITER = { id: DEFAULT_RECITER_ID, name: 'Mishary Rashid Alafasy', style: '' };
+  var highlightMode = 'both';
 
   function $(s) { return document.querySelector(s); }
   function setText(sel, txt) { var el = $(sel); if (el) el.textContent = txt; }
@@ -159,6 +162,7 @@
   function clearHighlights() {
     Array.prototype.forEach.call(document.querySelectorAll('.ayah-card.ayah-playing'), function (c) { c.classList.remove('ayah-playing'); });
     Array.prototype.forEach.call(document.querySelectorAll('.wbw-word.word-active'), function (w) { w.classList.remove('word-active'); });
+    Array.prototype.forEach.call(document.querySelectorAll('.wbw-word.word-filled'), function (w) { w.classList.remove('word-filled'); });
   }
   function markPlaying() {
     clearHighlights();
@@ -182,7 +186,12 @@
     var w = core.activeWordAt(ay.segments, audio.currentTime * 1000);
     var card = cardFor(ay.verse_key); if (!card) return;
     var words = card.querySelectorAll('.wbw-row .wbw-word');
-    Array.prototype.forEach.call(words, function (el, i) { el.classList.toggle('word-active', i === (w - 1)); });
+    Array.prototype.forEach.call(words, function (el, i) {
+      el.classList.toggle('word-active', i === (w - 1));
+      // Monotonic fill: only ever ADD within an ayah (so it doesn't collapse during inter-word gaps
+      // when w === -1); clearHighlights() resets it on ayah change / stop.
+      if (w > 0 && i <= (w - 1)) el.classList.add('word-filled');
+    });
   }
   function onMeta() { setText('#apDuration', core.formatTime(audio.duration)); }
   function onEnded() {
@@ -274,6 +283,29 @@
     window.toggleReciterPicker = function () { var p = document.getElementById('reciterPicker'); if (p) p.classList.toggle('open'); };
   }
 
+  function injectHighlightStyles() {
+    if (document.getElementById('vhl-styles')) return;
+    var css =
+      '#versesCardList.vhl-block .ayah-card.ayah-playing{' +
+      'background:linear-gradient(135deg,rgba(197,160,89,.15),rgba(197,160,89,.05))!important;' +
+      'border-left:4px solid var(--gold-500)!important;}' +
+      '[data-theme="dark"] #versesCardList.vhl-block .ayah-card.ayah-playing{' +
+      'background:linear-gradient(135deg,rgba(197,160,89,.22),rgba(197,160,89,.08))!important;}' +
+      '#versesCardList.vhl-fill .wbw-word.word-filled{background:rgba(197,160,89,.10);border-radius:8px;}' +
+      '#versesCardList.vhl-fill .wbw-word.word-filled .wbw-ar{color:var(--gold-700);}' +
+      '[data-theme="dark"] #versesCardList.vhl-fill .wbw-word.word-filled .wbw-ar{color:#C9AE72;}';
+    var st = document.createElement('style'); st.id = 'vhl-styles'; st.textContent = css;
+    (document.head || document.documentElement).appendChild(st);
+  }
+  function applyHighlightMode(mode) {
+    highlightMode = mode;
+    injectHighlightStyles();
+    var el = document.getElementById('versesCardList') || document.body;
+    var f = core.modeFlags(mode);
+    el.classList.toggle('vhl-block', f.block);
+    el.classList.toggle('vhl-fill', f.fill);
+  }
+
   // ---- reciter picker ----
   function populatePicker() {
     var picker = document.getElementById('reciterPicker'); if (!picker) return;
@@ -291,20 +323,39 @@
 
   function init() {
     if (!core) return;
-    try { var saved = Number(localStorage.getItem('ii-quran-reciter')); if (saved) reciterId = saved; } catch (e) {}
+    reciterId = DEFAULT_RECITER_ID;
+    try { var saved = Number(localStorage.getItem('ii-quran-reciter')); if (saved > 0) reciterId = saved; } catch (e) {}
+    // Immediately replace the locked Al-Hussary demo with at least the default reciter.
+    if (!reciters.length) reciters = [DEFAULT_RECITER];
+    populatePicker();
+    applyHighlightMode(core.parseHighlightMode(window.location.search));
     source.listReciters().then(function (list) {
-      reciters = list || [];
-      if (!reciters.some(function (r) { return r.id === reciterId; }) && reciters[0]) reciterId = reciters[0].id;
+      if (list && list.length) reciters = list;
+      if (!reciters.some(function (r) { return r.id === reciterId; })) {
+        reciterId = reciters.some(function (r) { return r.id === DEFAULT_RECITER_ID; })
+          ? DEFAULT_RECITER_ID : (reciters[0] ? reciters[0].id : DEFAULT_RECITER_ID);
+      }
       populatePicker();
     }).catch(function (e) { console.warn('[quran] reciters load failed:', e && e.message); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+
+  // Dev-only (temporary): Shift+H cycles highlight modes live for A/B — remove after the mode is chosen.
+  document.addEventListener('keydown', function (e) {
+    if (!core || !e.shiftKey || (e.key !== 'H' && e.key !== 'h')) return;
+    var t = e.target || {};
+    if (/^(input|textarea|select)$/i.test(t.tagName || '') || t.isContentEditable) return; // don't hijack typing
+    applyHighlightMode(core.nextHighlightMode(highlightMode));
+    toast('Highlight: ' + highlightMode);
+  });
 
   window.II = window.II || {};
   window.II.quranAudio = {
     init: init, source: source,
     _audio: function () { return audio; },
     _state: function () { return { reciterId: reciterId, idx: idx, ayahs: ayahs, repeat: repeat, loadedSurah: loadedSurah }; },
-    _setReciters: function (l) { reciters = l; populatePicker(); }
+    _setReciters: function (l) { reciters = l; populatePicker(); },
+    _setHighlightMode: function (m) { applyHighlightMode(m); },
+    _mode: function () { return highlightMode; }
   };
 })();
