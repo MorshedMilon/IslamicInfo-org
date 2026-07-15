@@ -273,8 +273,24 @@
     var target = (btn && btn.querySelector) ? btn.querySelector('.reciter-picker') : document.getElementById('reciterPicker');
     var wasOpen = target && target.classList.contains('open');
     Array.prototype.forEach.call(document.querySelectorAll('.reciter-picker.open'), function (p) { p.classList.remove('open'); });
-    if (target && !wasOpen) target.classList.add('open');
+    if (target && !wasOpen) {
+      // The toolbar row (.rtb-row2) clips overflow, so anchor its picker with position:fixed to escape the clip.
+      if (target.id === 'reciterPickerTop' && btn && btn.getBoundingClientRect) {
+        var r = btn.getBoundingClientRect();
+        target.style.position = 'fixed';
+        target.style.top = (r.bottom + 6) + 'px';
+        target.style.left = r.left + 'px';
+        target.style.bottom = 'auto';
+        target.style.right = 'auto';
+      }
+      target.classList.add('open');
+    }
   };
+  // Close any open reciter picker on an outside click (the inline closer only knows the player one).
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.closest && e.target.closest('#reciterBtn, #reciterBtnTop')) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.reciter-picker.open'), function (p) { p.classList.remove('open'); });
+  });
 
 
   // ---- reciter picker ----
