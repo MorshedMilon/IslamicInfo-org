@@ -40,6 +40,20 @@
     fontMono: "'JetBrains Mono', monospace"
   };
 
+  function buildShareText(m, url) {
+    m = m || {};
+    var lines = [];
+    if (m.ar) lines.push(String(m.ar));
+    if (m.en) lines.push('"' + String(m.en) + '"');
+    var attr = String(m.ref || '') + (m.edition ? ' (' + m.edition + ')' : '');
+    if (attr.trim()) lines.push('— ' + attr);
+    if (url) lines.push(String(url));
+    return lines.join('\n');
+  }
+  function waHref(text) { return 'https://wa.me/?text=' + encodeURIComponent(String(text || '')); }
+  function smsHref(text) { return 'sms:?&body=' + encodeURIComponent(String(text || '')); }
+
   return { dims: dims, slug: slug, slugFilename: slugFilename, stripQuotes: stripQuotes,
-           editionFromAttr: editionFromAttr, wrapText: wrapText, TOKENS: TOKENS };
+           editionFromAttr: editionFromAttr, wrapText: wrapText, TOKENS: TOKENS,
+           buildShareText: buildShareText, waHref: waHref, smsHref: smsHref };
 });

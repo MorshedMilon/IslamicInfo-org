@@ -31,3 +31,14 @@ test('wrapText greedily wraps with an injected measurer', () => {
   assert.deepEqual(core.wrapText('   ', 100, measure), ['']);
   assert.deepEqual(core.wrapText('', 100, measure), ['']);
 });
+test('buildShareText composes verse + translation + attribution + url', () => {
+  const m = { ar: 'ARB', en: 'the mercy', ref: 'Al-Fatihah 1:1', edition: 'Saheeh International' };
+  const t = core.buildShareText(m, 'https://x/?surah=al-fatihah');
+  assert.equal(t, 'ARB\n"the mercy"\n— Al-Fatihah 1:1 (Saheeh International)\nhttps://x/?surah=al-fatihah');
+  assert.equal(core.buildShareText({ ar:'A', en:'e', ref:'R', edition:'' }, ''), 'A\n"e"\n— R');
+  assert.equal(core.buildShareText({ en:'e', ref:'R', edition:'Ed' }, 'u'), '"e"\n— R (Ed)\nu'); // no ar line
+});
+test('waHref / smsHref encode the text', () => {
+  assert.equal(core.waHref('a b\nc'), 'https://wa.me/?text=a%20b%0Ac');
+  assert.equal(core.smsHref('a b\nc'), 'sms:?&body=a%20b%0Ac');
+});
