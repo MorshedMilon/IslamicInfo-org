@@ -10,7 +10,8 @@
   function toast(m) { if (typeof window.showToast === 'function') window.showToast(m); }
 
   function currentFmt() {
-    var btns = document.querySelectorAll('.share-fmt button');
+    // scope to the real format toggle only — the injected .share-quick row also has class .share-fmt
+    var btns = document.querySelectorAll('.share-fmt:not(.share-quick) button');
     for (var i = 0; i < btns.length; i++) { if (btns[i].classList.contains('on')) return i === 1 ? 'story' : 'square'; }
     return 'square';
   }
@@ -137,14 +138,69 @@
     });
   }
 
+  // ---- inline monochrome icons (currentColor; NOT WhatsApp brand green) ----
+  var SVG_WA = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.8.9.9-2.8-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.6-1.2.1-.2 0-.3 0-.5s-.5-1.3-.7-1.7-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-1 2.3 5.3 5.3 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4c2.3 1 2.3.7 2.7.6a2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.4z"/></svg>';
+  var SVG_SMS = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-.9L3 21l1-4.3A8.4 8.4 0 1 1 21 11.5z"/></svg>';
+  var SVG_COPY = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+
+  function shareUrl() {
+    try {
+      if (window.location.search && /[?&]surah=/.test(window.location.search)) return window.location.href;
+      var sl = current ? core.slug(current.surahName || '') : '';
+      return window.location.origin + window.location.pathname + (sl ? '?surah=' + sl : '');
+    } catch (_) { return 'https://islamicinfo.org/quran.html'; }
+  }
+
+  function shareText() { return core.buildShareText(current, shareUrl()); }
+
+  function openWA() { if (!current) { toast('Open a verse to share'); return; } window.open(core.waHref(shareText()), '_blank', 'noopener'); }
+  function openSMS() { if (!current) { toast('Open a verse to share'); return; } window.open(core.smsHref(shareText()), '_blank'); }
+  function fallbackCopy(text) {
+    var ta;
+    try {
+      ta = document.createElement('textarea'); ta.value = text;
+      ta.style.position = 'fixed'; ta.style.opacity = '0'; ta.style.left = '-9999px';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      document.execCommand('copy'); toast('Copied');
+    } catch (_) { toast('Could not copy'); }
+    finally { if (ta && ta.parentNode) ta.parentNode.removeChild(ta); }
+  }
+  function copyText() {
+    if (!current) { toast('Open a verse to share'); return; }
+    var text = shareText();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast('Copied'); }, function () { fallbackCopy(text); });
+    } else { fallbackCopy(text); }
+  }
+
+  function mkQuickBtn(label, svg, handler) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'sq-btn';
+    b.innerHTML = svg + '<span>' + label + '</span>';
+    b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); handler(); });
+    return b;
+  }
+  function injectQuickRow() {
+    var content = document.querySelector('.share-content');
+    if (!content || document.querySelector('.share-quick')) return;
+    var row = document.createElement('div'); row.className = 'share-fmt share-quick';
+    row.appendChild(mkQuickBtn('WhatsApp', SVG_WA, openWA));
+    row.appendChild(mkQuickBtn('SMS', SVG_SMS, openSMS));
+    row.appendChild(mkQuickBtn('Copy', SVG_COPY, copyText));
+    var acts = content.querySelector('.share-acts');
+    if (acts && acts.nextSibling) content.insertBefore(row, acts.nextSibling);
+    else content.appendChild(row);
+  }
+
   function init() {
     var dl = document.querySelector('.share-dl');
     var nat = document.querySelector('.share-native');
     if (dl) { dl.removeAttribute('onclick'); dl.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); downloadPNG(); }); }
     if (nat) { nat.removeAttribute('onclick'); nat.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); shareNative(); }); }
+    injectQuickRow();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 
   window.II = window.II || {};
-  window.II.quranShare = { _draw: drawShareCard, _model: function () { return current; }, downloadPNG: downloadPNG, shareNative: shareNative, _fmt: currentFmt };
+  window.II.quranShare = { _draw: drawShareCard, _model: function () { return current; }, downloadPNG: downloadPNG, shareNative: shareNative, _fmt: currentFmt,
+    openWA: openWA, openSMS: openSMS, copyText: copyText, _shareText: shareText };
 })();
