@@ -39,6 +39,7 @@
 | `ii-audio-{surah}-{reciter}` | `{ fetchedAt:number, ayahs:AyahAudio[] }` (JSON) | Quran Explorer | 7 days |
 | `ii-quran-bookmarks` | `Bookmark[]` (JSON) | Quran Explorer | Permanent |
 | `ii-quran-notes` | `Note[]` (JSON) | Quran Explorer | Permanent |
+| `ii-quran-ai-{verseKey}-{editionSlug}` | `{ answer:string, ts:number }` (JSON) | Quran Explorer | 30 days (per-verse AI explanation cache; `answer` is the post-filtered/displayed text; no PII) |
 | `islamicinfo-verse-{date}` | `/api/verse` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-hadith-daily-{date}` | `/api/hadith` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-dua-{date}` | `/api/dua` response (JSON) | Home | 1 day (UTC midnight bust) |

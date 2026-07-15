@@ -25,7 +25,7 @@
 | `/api/geocode` | GET | BigDataCloud reverse geocode | Session | 2 | `"Near your location"` |
 | `/api/quran/[surah]` | GET | api.quran.com `/v4/verses/by_chapter/{id}` | 7 days | 2 | Static seed data |
 | `/api/verify` | POST | IslamicInfo corpus search | None | 1→2 | 2200 ms simulation (v1) |
-| `/api/ask-claude` | POST | Anthropic API | None | 3 | "AI unavailable" inline state |
+| `/api/ask-claude` | POST | Anthropic API (Claude Haiku 4.5) | None (client caches 30d) | 3 | "AI unavailable" inline state |
 | `/api/subscribe` | POST | Email provider | None | 2 | Inline error state |
 
 `robots.txt` disallows `/api/` and `/data/`.
@@ -95,19 +95,21 @@ Claim verification against the IslamicInfo corpus (Verify page).
 - **Content note:** `disclaimer` is a **hard-coded** string (CONTENT-POLICY §3); results never assert a ruling — they report what sources say.
 - **Errors handled:** 503 → error banner "Verification service unavailable"; empty → empty state + "Try a different search" + Verify CTA
 
-## POST `/api/ask-claude`  *(Stage 3)*
-Proxied Anthropic call for AI explanation panels.
+## POST `/api/ask-claude`  *(Stage 3 — implemented Module 5B, 2026-07-15)*
+Proxied Anthropic call for the Quran verse AI-explanation panel (`.ai-card`).
 
 - **Body:** `{ context: string, question: string, sourceRef?: string }`
-- **Upstream:** model `claude-sonnet-4-20250514`, `max_tokens: 1000`
-- **Response:** `{ answer, attribution: "Powered by QuranlyAI", sourcesCited: [...] }`
-- **Cache:** none (conversational)
+- **Upstream:** model `claude-haiku-4-5`, `max_tokens: 500`. Key is a Worker secret (`env.ANTHROPIC_API_KEY`) — never in client/HTML/`wrangler.toml` (RULE 6).
+- **Guards (abuse/cost):** POST-only; **Origin must be in the Worker's `ALLOWED_ORIGINS`** → 403; **input caps** — `context` (trimmed) 3–1500 chars, `question` ≤200, `sourceRef` ≤40 → 400; missing key → 503.
+- **Response:** `{ answer, attribution, sourcesCited: [sourceRef?] }` where `attribution = "AI-generated to aid understanding — not a religious ruling."` *(supersedes the earlier placeholder "Powered by QuranlyAI").*
+- **Cache:** none server-side (POST). **Client** caches per verse in `localStorage['ii-quran-ai-{verseKey}-{editionSlug}']` (30-day freshness) — re-opening a verse never re-bills. Cross-user KV cache + in-Worker per-IP rate-limit are deferred (need a binding; v1 uses a Cloudflare **dashboard** rate-limit rule + input caps).
 - **Hard-coded, non-overridable system-prompt safety (see CONTENT-POLICY §4):**
-  - never issues a fatwa or ruling
-  - always cites collection + book + number and shows the grade
+  - never issues a fatwa or ruling (no halal/haram/obligatory/forbidden verdicts)
+  - explains **only** from the provided verse + translation — invents no hadith, Arabic, citations, names, dates, or numbers
   - ruling requests → "For personal religious guidance, consult a qualified scholar"
-- **Server post-filter:** fatwa-adjacent verdict language → strip response, return scholar-redirect line, keep attribution, log to Sentry
-- **Fallback:** "AI explanation unavailable — please try again" inline; attribution still shown
+- **Server post-filter:** verdict-language (framing-based detector — conservative v1 backstop; final term set owned by the 🕌 reviewer per §4/§6) → replace answer with the scholar-redirect line, keep attribution, log. The **client** re-runs the identical check on both the cache-read and fresh-fetch paths (defense-in-depth).
+- **Fallback:** "AI explanation unavailable — please try again" inline (retry, not cached); attribution still shown.
+- **Content gate:** AI output on scripture → ships **pending 🕌 human-review sign-off** (CONTENT-POLICY §5), like Modules 2 & 3.
 
 ## POST `/api/subscribe`
 Email capture (Knowledge Hub).
