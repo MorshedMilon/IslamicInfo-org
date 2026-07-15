@@ -40,6 +40,8 @@
 | `ii-quran-bookmarks` | `Bookmark[]` (JSON) | Quran Explorer | Permanent |
 | `ii-quran-notes` | `Note[]` (JSON) | Quran Explorer | Permanent |
 | `ii-quran-ai-{verseKey}-{editionSlug}` | `{ answer:string, ts:number }` (JSON) | Quran Explorer | 30 days (per-verse AI explanation cache; `answer` is the post-filtered/displayed text; no PII) |
+| `ii-qul-reciters` | `{ fetchedAt:number, data:Reciter[] }` (JSON) | Quran Explorer | 7 days (Module 6 — QUL reciter list, empty until an operator ingests reciters) |
+| `ii-qul-audio-{reciter}-{surah}` | `{ fetchedAt:number, ayahs:AyahAudio[] }` (JSON) | Quran Explorer | 7 days (Module 6 — QUL per-surah timing JSON) |
 | `islamicinfo-verse-{date}` | `/api/verse` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-hadith-daily-{date}` | `/api/hadith` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-dua-{date}` | `/api/dua` response (JSON) | Home | 1 day (UTC midnight bust) |
@@ -51,6 +53,15 @@
 > **Adding a key?** Add the row here first, then implement. A key not in this table
 > is a bug. Date-suffixed keys (`{date}`, `{YYYY-MM-DD}`, `{month-year}`) are how we
 > expire data without a TTL mechanism — old keys are swept lazily on next access.
+
+> **Module 6 — QUL static file layout.** In addition to the `ii-qul-*`
+> `localStorage` caches above, QUL reciter data itself is static JSON on Pages
+> (no binding): `src/data/qul/reciters.json` → `Reciter[]` (ships `[]`) and
+> `src/data/qul/{offsetId}/{surahId}.json` → `AyahAudio[]`. QUL reciter ids are
+> offset by **+1,000,000** (`offsetId = 1000000 + qulReciterId`) so they never
+> collide with Quran.com's numeric ids; `CompositeAudioSource` in
+> `quran-audio.js` routes `getSurahAudio` by `id >= 1,000,000`. See
+> `src/data/qul/README.md` for the operator ingest workflow.
 
 ## 2. Small Value Shapes
 

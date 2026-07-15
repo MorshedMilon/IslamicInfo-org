@@ -177,3 +177,19 @@ id 131 must use 20 instead (API-SPEC updated 2026-06-10).
 - The Worker (`islamicinfo-api-worker.zip`) is **extracted into the repo as `worker/`** (tracked source) so future edits are diffable; the stale root zip should be regenerated or removed.
 
 **Consequences:** The feature is functional once the operator provides an Anthropic key (with a spend limit), sets the secret, adds the dashboard rate-limit rule, and deploys. It ships behind the 🕌 gate (like Modules 2 & 3). Residual gaps accepted for v1: the post-filter catches verdict *framing* only (fabricated hadith/numbers rely on the system prompt); no cross-user cache (each user's first open of a verse bills once). Both are logged as follow-ups.
+
+## ADR-017: QUL reciter ingest = static-hosted timing JSON + offset ids
+
+**Status:** Accepted · 2026-07-15 · Module 6 (QUL Reciter Ingest)
+
+**Context:** QUL (qul.tarteel.ai) hosts word-segmented recitation timing data for many more reciters than Quran.com's ~12, but has **no live API** — only per-reciter bulk export downloads — and **per-resource licensing** (some reciters are restricted or require attribution). A live integration isn't possible, and blindly bundling exports would risk shipping unlicensed or fabricated data.
+
+**Decision:**
+- Build a **build-time ingest pipeline**, not a runtime integration: an operator-run CLI (`tools/qul-ingest.mjs`) transforms a cleared QUL export into static per-surah JSON under `src/data/qul/{offsetId}/{surahId}.json`, served by Pages like any other static asset.
+- QUL reciter ids are **offset by +1,000,000** in the manifest and file paths (`offsetId = 1000000 + qulReciterId`), guaranteeing no collision with Quran.com's numeric ids while keeping ids numeric — Module 3's `Number(localStorage['ii-quran-reciter'])` persistence logic is untouched.
+- A `CompositeAudioSource` (added to `quran-audio.js`, replacing the bare `QuranComAudioSource` as `source`) merges `listReciters()` across both sources and routes `getSurahAudio(id, surah)` by `qulCore.isQulId(id)`.
+- The module **ships with an empty manifest** (`src/data/qul/reciters.json = []`) — **zero fabricated or copyrighted data** is committed. The picker grows only as an operator ingests reciters after clearing licensing.
+- Audio itself is **hotlinked from the export's own URLs**; only the small timing JSON is hosted in this repo. No audio mirroring.
+- Static files on Pages, no Cloudflare binding — RULE 7 does not apply.
+
+**Consequences:** With an empty manifest, behavior is byte-identical to Module 3 (verified in the runtime harness). Populating the picker is a manual, license-gated, per-reciter operator task (documented in `src/data/qul/README.md`, including the pre-commit license/hotlink/🕌-review gate — parity with Modules 2 & 3's scripture-audio gate). If the ingested dataset grows large, a future ADR may migrate timing JSON from static files to KV/R2.
