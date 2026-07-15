@@ -127,11 +127,21 @@
     header.appendChild(actions);
     card.appendChild(header);
 
-    card.appendChild(el('div', 'ayah-arabic', v.text_uthmani));
+    var arabic = el('div', 'ayah-arabic');
+    v.words.forEach(function (w, i) {
+      if (i > 0) arabic.appendChild(document.createTextNode(' '));
+      var span = document.createElement('span');
+      span.className = 'al-word';
+      span.setAttribute('data-wi', String(i + 1));
+      span.textContent = w.ar;
+      arabic.appendChild(span);
+    });
+    card.appendChild(arabic);
 
     var wbw = el('div', 'wbw-row');
-    v.words.forEach(function (w) {
+    v.words.forEach(function (w, i) {
       var word = el('div', 'wbw-word');
+      word.setAttribute('data-wi', String(i + 1));
       word.appendChild(el('div', 'wbw-ar', w.ar));
       word.appendChild(el('div', 'wbw-en', w.en));
       wbw.appendChild(word);

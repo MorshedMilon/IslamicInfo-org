@@ -160,7 +160,7 @@
 
   function clearHighlights() {
     Array.prototype.forEach.call(document.querySelectorAll('.ayah-card.ayah-playing'), function (c) { c.classList.remove('ayah-playing'); });
-    Array.prototype.forEach.call(document.querySelectorAll('.wbw-word.word-active'), function (w) { w.classList.remove('word-active'); });
+    Array.prototype.forEach.call(document.querySelectorAll('.word-active'), function (w) { w.classList.remove('word-active'); });
   }
   function markPlaying() {
     clearHighlights();
@@ -183,8 +183,8 @@
     var ay = ayahs[idx]; if (!ay || !ay.segments || !ay.segments.length) return;
     var w = core.activeWordAt(ay.segments, audio.currentTime * 1000);
     var card = cardFor(ay.verse_key); if (!card) return;
-    var words = card.querySelectorAll('.wbw-row .wbw-word');
-    Array.prototype.forEach.call(words, function (el, i) { el.classList.toggle('word-active', i === (w - 1)); });
+    var marks = card.querySelectorAll('[data-wi]');
+    Array.prototype.forEach.call(marks, function (el) { el.classList.toggle('word-active', Number(el.getAttribute('data-wi')) === w); });
   }
   function onMeta() { setText('#apDuration', core.formatTime(audio.duration)); }
   function onEnded() {
@@ -254,14 +254,11 @@
   };
   window.selectReciter = function (id, el) {
     var rid = Number(id);
-    if (!(rid > 0)) return;                       // ignore stale/invalid callers (e.g. old inline onclick)
+    if (!(rid > 0)) return;
     reciterId = rid;
     try { localStorage.setItem('ii-quran-reciter', String(reciterId)); } catch (e) {}
-    Array.prototype.forEach.call(document.querySelectorAll('#reciterPicker .reciter-opt'), function (o) { o.classList.remove('on'); });
-    if (el && el.classList) el.classList.add('on');
-    setText('#reciterLabel', shortLabel(reciterId));
-    setText('#apReciterName', reciterStyled(reciterId));
-    var picker = document.getElementById('reciterPicker'); if (picker) picker.classList.remove('open');
+    populatePicker();
+    Array.prototype.forEach.call(document.querySelectorAll('.reciter-picker.open'), function (p) { p.classList.remove('open'); });
     var wasPlaying = audio && !audio.paused, resumeIdx = idx, s = loadedSurah || currentSurahFromDom();
     var myGen = ++gen, ed = reciterId;
     loadedSurah = null; ayahs = [];
@@ -272,23 +269,47 @@
     }).catch(function () {});
     toast('Reciter: ' + shortLabel(reciterId));
   };
-  if (typeof window.toggleReciterPicker !== 'function') {
-    window.toggleReciterPicker = function () { var p = document.getElementById('reciterPicker'); if (p) p.classList.toggle('open'); };
-  }
+  window.toggleReciterPicker = function (btn) {
+    var target = (btn && btn.querySelector) ? btn.querySelector('.reciter-picker') : document.getElementById('reciterPicker');
+    var wasOpen = target && target.classList.contains('open');
+    Array.prototype.forEach.call(document.querySelectorAll('.reciter-picker.open'), function (p) { p.classList.remove('open'); });
+    if (target && !wasOpen) {
+      // The toolbar row (.rtb-row2) clips overflow, so anchor its picker with position:fixed to escape the clip.
+      if (target.id === 'reciterPickerTop' && btn && btn.getBoundingClientRect) {
+        var r = btn.getBoundingClientRect();
+        target.style.position = 'fixed';
+        target.style.top = (r.bottom + 6) + 'px';
+        target.style.left = r.left + 'px';
+        target.style.bottom = 'auto';
+        target.style.right = 'auto';
+      }
+      target.classList.add('open');
+    }
+  };
+  // Close any open reciter picker on an outside click (the inline closer only knows the player one).
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.closest && e.target.closest('#reciterBtn, #reciterBtnTop')) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.reciter-picker.open'), function (p) { p.classList.remove('open'); });
+  });
 
 
   // ---- reciter picker ----
   function populatePicker() {
-    var picker = document.getElementById('reciterPicker'); if (!picker) return;
-    picker.innerHTML = '';
-    reciters.forEach(function (r) {
-      var opt = document.createElement('div'); opt.className = 'reciter-opt' + (r.id === reciterId ? ' on' : '');
-      var dot = document.createElement('div'); dot.className = 'reciter-opt-dot'; opt.appendChild(dot);
-      opt.appendChild(document.createTextNode(r.name + (r.style ? ' (' + r.style + ')' : '')));
-      opt.addEventListener('click', function () { window.selectReciter(r.id, opt); });
-      picker.appendChild(opt);
+    ['reciterPicker', 'reciterPickerTop'].forEach(function (pid) {
+      var picker = document.getElementById(pid);
+      if (!picker) return;
+      picker.innerHTML = '';
+      reciters.forEach(function (r) {
+        var opt = document.createElement('div');
+        opt.className = 'reciter-opt' + (r.id === reciterId ? ' on' : '');
+        var dot = document.createElement('div'); dot.className = 'reciter-opt-dot'; opt.appendChild(dot);
+        opt.appendChild(document.createTextNode(r.name + (r.style ? ' (' + r.style + ')' : '')));
+        opt.addEventListener('click', function (e) { if (e && e.stopPropagation) e.stopPropagation(); window.selectReciter(r.id, opt); });
+        picker.appendChild(opt);
+      });
     });
     setText('#reciterLabel', shortLabel(reciterId));
+    setText('#reciterLabelTop', shortLabel(reciterId));
     setText('#apReciterName', reciterStyled(reciterId));
   }
 
