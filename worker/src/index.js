@@ -165,7 +165,7 @@ const AI_SYSTEM_PROMPT = [
   "5. If you are unsure of the meaning, say so plainly instead of guessing."
 ].join('\n');
 
-const AI_ATTRIBUTION = 'AI-generated to aid understanding — not a religious ruling.';
+const AI_ATTRIBUTION = 'Powered by QuranlyAI';
 const SCHOLAR_REDIRECT = 'For personal religious guidance, consult a qualified scholar.';
 // Conservative v1 backstop — final ruling-term set is owned by the 🕌 human reviewer (CONTENT-POLICY §4/§6).
 const AI_VERDICT_FRAMING = /\b(?:is|are|it'?s|its|be|being|was|were|becomes?|remains?|considered|declared|deemed|ruled)\s+(?:(?:not|an?|clearly|strictly|definitely|therefore|thus|now|then)\s+)?(?:haram|haraam|halal|forbidden|impermissible|permissible|unlawful|lawful|obligatory|sinful|makruh|mustahabb|wajib|fard)\b/i;

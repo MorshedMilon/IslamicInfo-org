@@ -37,7 +37,15 @@
 
   function setFoot(aiEl, ref) {
     var foot = aiEl.querySelector('.ai-foot');
-    if (foot) foot.textContent = 'AI-generated to aid understanding — not a religious ruling.' + (ref ? ' · ' + ref : '');
+    if (!foot) return;
+    // Brand-mandated attribution (CONTENT-POLICY §3/§8) + no-ruling framing (§4).
+    foot.textContent = '';
+    foot.appendChild(document.createTextNode('✦ Powered by '));
+    var a = document.createElement('a');
+    a.href = 'https://quranlyai.com'; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = 'QuranlyAI ↗';
+    foot.appendChild(a);
+    foot.appendChild(document.createTextNode(' · Not a religious ruling' + (ref ? ' · ' + ref : '')));
   }
 
   function renderAnswer(aiEl, answer, ref) {
