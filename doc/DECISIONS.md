@@ -161,3 +161,19 @@ id 131 must use 20 instead (API-SPEC updated 2026-06-10).
 **Decision:** Surah selection uses `history.pushState('?surah=<slug>')`. Static-safe, crawlable, shareable. Path-based `/quran/<slug>` is deferred to a future Worker-rewrite ADR.
 
 **Consequences:** No server change needed now; URLs upgrade to clean paths later without breaking `?surah=` links (a redirect can be added).
+
+## ADR-016: Activate `/api/ask-claude` for the Quran verse AI-explanation panel (Module 5B)
+
+**Status:** Accepted · 2026-07-15 · Module 5B (AI Explain) — ships **pending 🕌 human-review sign-off**
+
+**Context:** The `.ai-card` "AI Explain" icon toggled an empty box after Module 2 made verses dynamic (the mockup's canned text was demo-only). A real, per-verse plain-language explanation requires a live model call. The route was stubbed (501) in the Worker; the spec's model (`claude-sonnet-4-20250514`) is retired. AI output on scripture is CONTENT-POLICY §4/§5-sensitive, and a public paid endpoint is a cost/abuse surface.
+
+**Decision:**
+- Implement `POST /api/ask-claude` in the `islamicinfo-api` Worker using **Claude Haiku 4.5** (`max_tokens: 500`) — a deliberate cost choice for short, simple explanations on a public endpoint.
+- Key is a **Worker secret** (`env.ANTHROPIC_API_KEY`) only — never in client/HTML/`wrangler.toml` (RULE 6).
+- **No new binding in v1.** Cost/abuse control = client-side per-verse `localStorage` cache (`ii-quran-ai-{verseKey}-{editionSlug}`, 30d) + hard Worker input caps + Origin allowlist + an operator-configured Cloudflare **dashboard** rate-limit rule. Cross-user KV cache and in-Worker per-IP rate-limiting are **deferred** to a binding-gated follow-up (RULE 7).
+- Safety = a hard-coded, **non-overridable** system prompt (no fatwa; scholar-redirect line; explain only from the provided verse) + a server-side verdict-language post-filter, with the identical check re-run client-side (defense-in-depth). The verdict detector is a **framing-based conservative v1 backstop** (matches ruling *framing*, e.g. "is haram", not proper nouns like "al-Masjid al-Haram"); the **final ruling-term set is owned by the 🕌 reviewer** per §4/§6. The primary control is the system prompt, not the regex.
+- Attribution is an honest disclaimer — **"AI-generated to aid understanding — not a religious ruling."** — superseding the API-SPEC placeholder "Powered by QuranlyAI".
+- The Worker (`islamicinfo-api-worker.zip`) is **extracted into the repo as `worker/`** (tracked source) so future edits are diffable; the stale root zip should be regenerated or removed.
+
+**Consequences:** The feature is functional once the operator provides an Anthropic key (with a spend limit), sets the secret, adds the dashboard rate-limit rule, and deploys. It ships behind the 🕌 gate (like Modules 2 & 3). Residual gaps accepted for v1: the post-filter catches verdict *framing* only (fabricated hadith/numbers rely on the system prompt); no cross-user cache (each user's first open of a verse bills once). Both are logged as follow-ups.
