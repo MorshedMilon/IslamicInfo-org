@@ -29,6 +29,13 @@ variants:
   `[wordIndex, startMs, endMs]` triple, or a `[_, wordIndex, startMs, endMs]`
   4-tuple (QUL/Quran.com share this convention), or an object
   `{ word, start, end }`. Malformed segments are dropped, not fabricated.
+  **`wordIndex` is expected 1-based** — the player maps segment word `w`
+  to the `(w-1)`th `.wbw-word`. If an export uses 0-based indices,
+  word-highlighting will be off by one; verify against a known verse
+  before shipping the reciter.
+- audio URLs **must be absolute** (`https://…`). The runtime uses them
+  verbatim (no base is applied), so relative URLs will fail — the ingest
+  tool warns if it finds any.
 
 ## File layout (output)
 

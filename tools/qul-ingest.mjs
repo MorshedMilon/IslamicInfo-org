@@ -16,10 +16,18 @@ if (!inFile || !qulId || !name) {
   process.exit(1);
 }
 
-const raw = JSON.parse(fs.readFileSync(inFile, 'utf8'));
+const offset = core.offsetId(qulId);
+if (!Number.isFinite(offset)) {
+  console.error('--id must be numeric (got "' + qulId + '")');
+  process.exit(1);
+}
+
+let raw;
+try { raw = JSON.parse(fs.readFileSync(inFile, 'utf8')); }
+catch (e) { console.error('Could not read/parse --in file "' + inFile + '": ' + e.message); process.exit(1); }
+
 const ayahs = Array.isArray(raw) ? raw : (raw.ayahs || raw.data || raw.segments || []);
 const grouped = core.groupBySurah(ayahs);
-const offset = core.offsetId(qulId);
 const outDir = path.join('src', 'data', 'qul', String(offset));
 fs.mkdirSync(outDir, { recursive: true });
 
@@ -37,6 +45,13 @@ manifest.push({ id: offset, name, style });
 manifest.sort((a, b) => a.id - b.id);
 fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
 
+// Warn on non-absolute audio URLs — the runtime QulAudioSource uses them verbatim (no normalizeAudioUrl), so relative URLs will break.
+let relCount = 0;
+for (const surah of Object.keys(grouped)) {
+  for (const a of grouped[surah]) { if (!/^https?:\/\//i.test(a.url || '')) relCount++; }
+}
+
 console.log(`Ingested "${name}" (QUL ${qulId} -> id ${offset}): ${surahCount} surahs, ${ayahCount} ayahs -> ${outDir}`);
 console.log(`Manifest: ${manifestPath} (${manifest.length} QUL reciters)`);
+if (relCount) console.warn(`WARNING: ${relCount} ayah(s) have non-absolute audio URLs — these WILL fail at runtime (no base is applied). Fix the export's URLs before shipping.`);
 console.log('REMINDER: confirm this reciter\'s QUL license permits redistribution AND that the audio URLs are hotlinkable before committing/pushing.');
