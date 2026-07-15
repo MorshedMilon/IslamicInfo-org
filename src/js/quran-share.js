@@ -183,6 +183,7 @@
     var content = document.querySelector('.share-content');
     if (!content || document.querySelector('.share-quick')) return;
     var row = document.createElement('div'); row.className = 'share-fmt share-quick';
+    row.style.marginTop = '12px'; // .share-fmt has margin-bottom only; add a gap above so it isn't jammed under .share-acts
     row.appendChild(mkQuickBtn('WhatsApp', SVG_WA, openWA));
     row.appendChild(mkQuickBtn('SMS', SVG_SMS, openSMS));
     row.appendChild(mkQuickBtn('Copy', SVG_COPY, copyText));
