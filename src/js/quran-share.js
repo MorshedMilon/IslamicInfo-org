@@ -10,7 +10,8 @@
   function toast(m) { if (typeof window.showToast === 'function') window.showToast(m); }
 
   function currentFmt() {
-    var btns = document.querySelectorAll('.share-fmt button');
+    // scope to the real format toggle only — the injected .share-quick row also has class .share-fmt
+    var btns = document.querySelectorAll('.share-fmt:not(.share-quick) button');
     for (var i = 0; i < btns.length; i++) { if (btns[i].classList.contains('on')) return i === 1 ? 'story' : 'square'; }
     return 'square';
   }
@@ -155,12 +156,14 @@
   function openWA() { if (!current) { toast('Open a verse to share'); return; } window.open(core.waHref(shareText()), '_blank', 'noopener'); }
   function openSMS() { if (!current) { toast('Open a verse to share'); return; } window.open(core.smsHref(shareText()), '_blank'); }
   function fallbackCopy(text) {
+    var ta;
     try {
-      var ta = document.createElement('textarea'); ta.value = text;
+      ta = document.createElement('textarea'); ta.value = text;
       ta.style.position = 'fixed'; ta.style.opacity = '0'; ta.style.left = '-9999px';
       document.body.appendChild(ta); ta.focus(); ta.select();
-      document.execCommand('copy'); document.body.removeChild(ta); toast('Copied');
+      document.execCommand('copy'); toast('Copied');
     } catch (_) { toast('Could not copy'); }
+    finally { if (ta && ta.parentNode) ta.parentNode.removeChild(ta); }
   }
   function copyText() {
     if (!current) { toast('Open a verse to share'); return; }
