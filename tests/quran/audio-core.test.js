@@ -45,3 +45,29 @@ test('cache keys + isFresh (7d)', () => {
   assert.equal(core.isFresh(now - 8*86400e3, now), false);
   assert.equal(core.isFresh(undefined, now), false);
 });
+
+test('parseHighlightMode reads ?highlight, defaults both', () => {
+  assert.equal(core.parseHighlightMode('?highlight=block'), 'block');
+  assert.equal(core.parseHighlightMode('?x=1&highlight=fill'), 'fill');
+  assert.equal(core.parseHighlightMode('?highlight=both'), 'both');
+  assert.equal(core.parseHighlightMode(''), 'both');
+  assert.equal(core.parseHighlightMode('?highlight=bogus'), 'both');
+});
+test('modeFlags', () => {
+  assert.deepEqual(core.modeFlags('both'), { block: true, fill: true });
+  assert.deepEqual(core.modeFlags('block'), { block: true, fill: false });
+  assert.deepEqual(core.modeFlags('fill'), { block: false, fill: true });
+});
+test('wordFillStates: active = current, filled = up to current (1-based w)', () => {
+  assert.deepEqual(core.wordFillStates(0, 3), [
+    { active: false, filled: false }, { active: false, filled: false }, { active: false, filled: false }]);
+  assert.deepEqual(core.wordFillStates(1, 3), [
+    { active: true, filled: true }, { active: false, filled: false }, { active: false, filled: false }]);
+  assert.deepEqual(core.wordFillStates(3, 3), [
+    { active: false, filled: true }, { active: false, filled: true }, { active: true, filled: true }]);
+});
+test('nextHighlightMode cycles both->block->fill->both', () => {
+  assert.equal(core.nextHighlightMode('both'), 'block');
+  assert.equal(core.nextHighlightMode('block'), 'fill');
+  assert.equal(core.nextHighlightMode('fill'), 'both');
+});
