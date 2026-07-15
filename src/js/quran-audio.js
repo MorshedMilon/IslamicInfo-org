@@ -63,8 +63,48 @@
     return ayahs;
   }
 
+  // ---- pluggable source: QUL (static-hosted timing JSON) ----
+  var QUL_BASE = 'src/data/qul/';
+  var qulCore = window.II && window.II.qulCore;
+  var WEEK = 7 * 24 * 3600 * 1000;
+  function QulAudioSource() {}
+  QulAudioSource.prototype.listReciters = function () {
+    var key = 'ii-qul-reciters';
+    var c = readCache(key);
+    if (c && Array.isArray(c.data) && core.isFresh(c.fetchedAt, Date.now(), WEEK)) return Promise.resolve(c.data);
+    var ctrl = new AbortController(); var t = setTimeout(function () { ctrl.abort(); }, 8000);
+    return fetch(QUL_BASE + 'reciters.json', { signal: ctrl.signal })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (list) { list = Array.isArray(list) ? list : []; writeCache(key, { fetchedAt: Date.now(), data: list }); return list; })
+      .catch(function () { return []; })
+      .finally(function () { clearTimeout(t); });
+  };
+  QulAudioSource.prototype.getSurahAudio = function (reciterId, surahId) {
+    var key = 'ii-qul-audio-' + reciterId + '-' + surahId;
+    var c = readCache(key);
+    if (c && Array.isArray(c.ayahs) && core.isFresh(c.fetchedAt, Date.now(), WEEK)) return Promise.resolve(c.ayahs);
+    var ctrl = new AbortController(); var t = setTimeout(function () { ctrl.abort(); }, 8000);
+    return fetch(QUL_BASE + reciterId + '/' + surahId + '.json', { signal: ctrl.signal })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (ayahs) { ayahs = Array.isArray(ayahs) ? ayahs : []; writeCache(key, { fetchedAt: Date.now(), ayahs: ayahs }); return ayahs; })
+      .catch(function () { return []; })
+      .finally(function () { clearTimeout(t); });
+  };
+
+  // ---- composite: Quran.com + QUL ----
+  function CompositeAudioSource(primary, qul) { this.primary = primary; this.qul = qul; }
+  CompositeAudioSource.prototype.listReciters = function () {
+    var p = this.primary.listReciters().catch(function () { return []; });
+    var q = this.qul.listReciters().catch(function () { return []; });
+    return Promise.all([p, q]).then(function (r) { return (r[0] || []).concat(r[1] || []); });
+  };
+  CompositeAudioSource.prototype.getSurahAudio = function (reciterId, surahId) {
+    if (qulCore && qulCore.isQulId(reciterId)) return this.qul.getSurahAudio(reciterId, surahId);
+    return this.primary.getSurahAudio(reciterId, surahId);
+  };
+
   // ---- state ----
-  var source = new QuranComAudioSource();
+  var source = new CompositeAudioSource(new QuranComAudioSource(), new QulAudioSource());
   var audio = null, reciters = [], reciterId = 7;
   var loadedSurah = null, loadedReciter = null, ayahs = [], idx = 0;
   var repeat = false, autoplay = true, speedIdx = 0;
