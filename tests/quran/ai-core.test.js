@@ -31,14 +31,25 @@ test('buildAskPayload assembles context + fixed question + ref', () => {
   assert.ok(!/\(\)/.test(p2.context));
 });
 
-test('containsVerdictLanguage flags rulings, not innocent words', () => {
+test('containsVerdictLanguage flags ruling framing, not proper nouns or descriptions', () => {
+  // TRUE — verdict framing / ruling terms
   assert.equal(core.containsVerdictLanguage('This is halal to eat'), true);
   assert.equal(core.containsVerdictLanguage('It is haram'), true);
-  assert.equal(core.containsVerdictLanguage('forbidden by the text'), true);
-  assert.equal(core.containsVerdictLanguage('This is obligatory'), true);
+  assert.equal(core.containsVerdictLanguage('eating it is forbidden'), true);
+  assert.equal(core.containsVerdictLanguage('prayer is obligatory'), true);
+  assert.equal(core.containsVerdictLanguage('it is not permissible'), true);
+  assert.equal(core.containsVerdictLanguage('it is strictly forbidden'), true);
   assert.equal(core.containsVerdictLanguage('a fatwa on this'), true);
+  assert.equal(core.containsVerdictLanguage('That is a fatwā'), true);
+  assert.equal(core.containsVerdictLanguage('it is a sin to lie'), true);
+  assert.equal(core.containsVerdictLanguage("it's a sin"), true);
+  // FALSE — proper nouns / descriptive mentions / innocent words
   assert.equal(core.containsVerdictLanguage('The verse speaks of mercy and gratitude'), false);
-  assert.equal(core.containsVerdictLanguage('wholeheartedly and hallowed'), false); // no false-positive on 'halal'
+  assert.equal(core.containsVerdictLanguage('wholeheartedly and hallowed'), false);
+  assert.equal(core.containsVerdictLanguage('They prayed at al-Masjid al-Haram in Mecca'), false);
+  assert.equal(core.containsVerdictLanguage('The sacred Haram is a holy site'), false);
+  assert.equal(core.containsVerdictLanguage('God forbade them from the tree'), false);
+  assert.equal(core.containsVerdictLanguage('This verse mentions halal foods'), false);
 });
 
 test('isFresh respects the 30-day window', () => {

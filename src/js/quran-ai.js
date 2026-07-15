@@ -4,7 +4,7 @@
   var core = (window.II && window.II.aiCore);
   if (!core) { console.warn('[quran-ai] aiCore missing'); return; }
 
-  var inflight = {}; // verseKey -> true
+  var inflight = {}; // ai-card element id -> true
 
   function stripQuotes(s) { return String(s || '').replace(/^\s*["“]|["”]\s*$/g, '').trim(); }
 
@@ -65,23 +65,25 @@
   }
 
   function fetchAndRender(aiEl, v) {
-    if (inflight[v.vk]) return;
-    inflight[v.vk] = true;
+    var fk = aiEl.id;
+    if (inflight[fk]) return;
+    inflight[fk] = true;
     renderLoading(aiEl);
     var payload = core.buildAskPayload({ arabic: v.arabic, translation: v.translation, ref: v.ref, edition: v.edition });
     var api = window.II && window.II.api;
     var p = (api && api.postAskClaude) ? api.postAskClaude(payload.context, payload.question, payload.sourceRef) : Promise.resolve(null);
     Promise.resolve(p).then(function (res) {
-      inflight[v.vk] = false;
+      inflight[fk] = false;
       if (res && res.answer) {
-        renderAnswer(aiEl, res.answer, v.ref);
+        var safe = core.containsVerdictLanguage(res.answer) ? core.SCHOLAR_REDIRECT : res.answer;
+        renderAnswer(aiEl, safe, v.ref);
         try {
-          localStorage.setItem(core.aiCacheKey(v.vk, v.edition), JSON.stringify({ answer: res.answer, ts: Date.now() }));
+          localStorage.setItem(core.aiCacheKey(v.vk, v.edition), JSON.stringify({ answer: safe, ts: Date.now() }));
         } catch (_) { /* quota — still shown */ }
       } else {
         renderFallback(aiEl, v);
       }
-    }, function () { inflight[v.vk] = false; renderFallback(aiEl, v); });
+    }, function () { inflight[fk] = false; renderFallback(aiEl, v); });
   }
 
   window.toggleAI = function (id) {
@@ -96,6 +98,12 @@
 
     var text = aiEl.querySelector('.ai-text');
     if (text && text.dataset.rendered) return; // already have an answer visible
+
+    // empty verse — nothing to explain; don't bill the API
+    if (!(v.arabic && v.arabic.trim()) && !(v.translation && v.translation.trim())) {
+      var t = aiEl.querySelector('.ai-text'); if (t) { t.textContent = 'Explanation unavailable for this verse.'; t.removeAttribute('data-rendered'); }
+      setFoot(aiEl, v.ref); return;
+    }
 
     // cache-first
     try {

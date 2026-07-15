@@ -167,7 +167,13 @@ const AI_SYSTEM_PROMPT = [
 
 const AI_ATTRIBUTION = 'AI-generated to aid understanding — not a religious ruling.';
 const SCHOLAR_REDIRECT = 'For personal religious guidance, consult a qualified scholar.';
-const AI_VERDICT_RE = /\b(halal|haraam|haram|forbidden|permissible|impermissible|obligatory|sinful|fatwa|fatwā)\b/i;
+// Conservative v1 backstop — final ruling-term set is owned by the 🕌 human reviewer (CONTENT-POLICY §4/§6).
+const AI_VERDICT_FRAMING = /\b(?:is|are|it'?s|its|be|being|was|were|becomes?|remains?|considered|declared|deemed|ruled)\s+(?:(?:not|an?|clearly|strictly|definitely|therefore|thus|now|then)\s+)?(?:haram|haraam|halal|forbidden|impermissible|permissible|unlawful|lawful|obligatory|sinful|makruh|mustahabb|wajib|fard)\b/i;
+const AI_VERDICT_TERMS = /\bfatwa\b|fatwā|\bit is a sin\b|\bit'?s a sin\b/i;
+function verdictLangDetected(answer) {
+  const s = String(answer || '');
+  return AI_VERDICT_FRAMING.test(s) || AI_VERDICT_TERMS.test(s);
+}
 
 async function handleAskClaude(request, env, origin) {
   if (!ALLOWED_ORIGINS.includes(origin)) return err('forbidden origin', origin, 403);
@@ -178,7 +184,8 @@ async function handleAskClaude(request, env, origin) {
   const context = typeof body.context === 'string' ? body.context : '';
   const question = typeof body.question === 'string' ? body.question : '';
   const sourceRef = typeof body.sourceRef === 'string' ? body.sourceRef : '';
-  if (!context || context.length > 1500) return err('context missing or too long', origin, 400);
+  var ctxTrim = context.trim();
+  if (!ctxTrim || ctxTrim.length < 3 || context.length > 1500) return err('context missing or too long', origin, 400);
   if (question.length > 200) return err('question too long', origin, 400);
   if (sourceRef.length > 40) return err('sourceRef too long', origin, 400);
 
@@ -219,7 +226,7 @@ async function handleAskClaude(request, env, origin) {
     if (tb) answer = String(tb.text || '').trim();
   }
   if (!answer || (data && data.stop_reason === 'refusal')) answer = SCHOLAR_REDIRECT;
-  if (AI_VERDICT_RE.test(answer)) {
+  if (verdictLangDetected(answer)) {
     console.log('[ask-claude] stripped verdict-language response for ref=' + sourceRef);
     answer = SCHOLAR_REDIRECT;
   }

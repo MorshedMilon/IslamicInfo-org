@@ -7,7 +7,9 @@
   'use strict';
 
   var THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
-  var VERDICT_RE = /\b(halal|haraam|haram|forbidden|permissible|impermissible|obligatory|sinful|fatwa|fatwā)\b/i;
+  // Conservative v1 backstop — final ruling-term set is owned by the 🕌 human reviewer (CONTENT-POLICY §4/§6).
+  var VERDICT_FRAMING = /\b(?:is|are|it'?s|its|be|being|was|were|becomes?|remains?|considered|declared|deemed|ruled)\s+(?:(?:not|an?|clearly|strictly|definitely|therefore|thus|now|then)\s+)?(?:haram|haraam|halal|forbidden|impermissible|permissible|unlawful|lawful|obligatory|sinful|makruh|mustahabb|wajib|fard)\b/i;
+  var VERDICT_TERMS = /\bfatwa\b|fatwā|\bit is a sin\b|\bit'?s a sin\b/i;
   var FIXED_Q = 'Explain the meaning of this verse in simple, easy language for a general reader.';
 
   function slugEdition(edition) {
@@ -31,7 +33,8 @@
     };
   }
   function containsVerdictLanguage(text) {
-    return VERDICT_RE.test(String(text || ''));
+    var s = String(text || '');
+    return VERDICT_FRAMING.test(s) || VERDICT_TERMS.test(s);
   }
   function isFresh(fetchedAt, now, maxAge) {
     if (maxAge == null) maxAge = THIRTY_DAYS;
