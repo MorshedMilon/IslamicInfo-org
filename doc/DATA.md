@@ -37,6 +37,8 @@
 | `ii-quran-reciter` | string (reciter id) | Quran Explorer | Until user changes |
 | `ii-reciters` | `{ fetchedAt:number, data:Reciter[] }` (JSON) | Quran Explorer | 7 days |
 | `ii-audio-{surah}-{reciter}` | `{ fetchedAt:number, ayahs:AyahAudio[] }` (JSON) | Quran Explorer | 7 days |
+| `ii-quran-bookmarks` | `Bookmark[]` (JSON) | Quran Explorer | Permanent |
+| `ii-quran-notes` | `Note[]` (JSON) | Quran Explorer | Permanent |
 | `islamicinfo-verse-{date}` | `/api/verse` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-hadith-daily-{date}` | `/api/hadith` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-dua-{date}` | `/api/dua` response (JSON) | Home | 1 day (UTC midnight bust) |
@@ -64,6 +66,8 @@ Chapter        = { id: number; name_simple: string; name_arabic: string; revelat
 Verse          = { verse_key: string; verse_number: number; text_uthmani: string; translation: string; words: { ar: string; en: string }[] }
 Reciter        = { id: number; name: string; style: string }
 AyahAudio      = { verse_key: string; url: string; segments: { word: number; start: number; end: number }[] }
+Bookmark       = { verseKey: string; surahName: string; surahId: number; ayahNo: number; arabic: string; translation: string; category: string; addedAt: number }
+Note           = { verseKey: string; text: string; updatedAt: number }
 ```
 
 ## 3. Islamic Studies Progress Schema (`islamicinfo-is-progress`)
