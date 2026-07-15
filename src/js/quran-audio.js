@@ -188,7 +188,9 @@
     var words = card.querySelectorAll('.wbw-row .wbw-word');
     Array.prototype.forEach.call(words, function (el, i) {
       el.classList.toggle('word-active', i === (w - 1));
-      el.classList.toggle('word-filled', w > 0 && i <= (w - 1));
+      // Monotonic fill: only ever ADD within an ayah (so it doesn't collapse during inter-word gaps
+      // when w === -1); clearHighlights() resets it on ayah change / stop.
+      if (w > 0 && i <= (w - 1)) el.classList.add('word-filled');
     });
   }
   function onMeta() { setText('#apDuration', core.formatTime(audio.duration)); }
@@ -340,10 +342,11 @@
 
   // Dev-only (temporary): Shift+H cycles highlight modes live for A/B — remove after the mode is chosen.
   document.addEventListener('keydown', function (e) {
-    if (e.shiftKey && (e.key === 'H' || e.key === 'h')) {
-      applyHighlightMode(core.nextHighlightMode(highlightMode));
-      toast('Highlight: ' + highlightMode);
-    }
+    if (!core || !e.shiftKey || (e.key !== 'H' && e.key !== 'h')) return;
+    var t = e.target || {};
+    if (/^(input|textarea|select)$/i.test(t.tagName || '') || t.isContentEditable) return; // don't hijack typing
+    applyHighlightMode(core.nextHighlightMode(highlightMode));
+    toast('Highlight: ' + highlightMode);
   });
 
   window.II = window.II || {};
