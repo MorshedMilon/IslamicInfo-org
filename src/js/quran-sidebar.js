@@ -121,6 +121,7 @@
       var s = document.createElement('div');
       s.className = 'surah-row sb-skeleton';
       s.setAttribute('aria-hidden', 'true');
+      s.style.pointerEvents = 'none';
       s.innerHTML = '<div class="surah-num"></div><div class="surah-info">' +
         '<div class="surah-en">&nbsp;</div><div class="surah-meta-row">' +
         '<span class="surah-chip">&nbsp;</span></div></div><div class="surah-ar"></div>';

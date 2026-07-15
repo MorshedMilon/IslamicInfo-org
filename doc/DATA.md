@@ -56,6 +56,7 @@ PrayerData = {
 NisabData      = { currency: string; goldPricePerGram: number; nisabValue: number; asOf: string; source: string }
 HadithBookmark = { collectionSlug: string; bookNum: number; hadithNum: number; savedAt: string }
 HadithNote     = { collectionSlug: string; bookNum: number; hadithNum: number; text: string; updatedAt: string }
+Chapter        = { id: number; name_simple: string; name_arabic: string; revelation_place: 'makkah' | 'madinah'; verses_count: number; slug: string }
 ```
 
 ## 3. Islamic Studies Progress Schema (`islamicinfo-is-progress`)
