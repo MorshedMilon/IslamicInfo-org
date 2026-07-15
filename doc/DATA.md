@@ -32,6 +32,7 @@
 | `ii-habits` | `HabitState` (see §4) | Habit Tracker | Permanent |
 | `ii-quran-translation` | string (edition id) | Quran Explorer | Until user changes |
 | `ii-quran-reading-mode` | boolean | Quran Explorer | Until user changes |
+| `ii-quran-chapters` | `{ fetchedAt:number, data:Chapter[] }` (JSON) | Quran Explorer | 1 day (24h revalidate) |
 | `islamicinfo-verse-{date}` | `/api/verse` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-hadith-daily-{date}` | `/api/hadith` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-dua-{date}` | `/api/dua` response (JSON) | Home | 1 day (UTC midnight bust) |
@@ -55,6 +56,7 @@ PrayerData = {
 NisabData      = { currency: string; goldPricePerGram: number; nisabValue: number; asOf: string; source: string }
 HadithBookmark = { collectionSlug: string; bookNum: number; hadithNum: number; savedAt: string }
 HadithNote     = { collectionSlug: string; bookNum: number; hadithNum: number; text: string; updatedAt: string }
+Chapter        = { id: number; name_simple: string; name_arabic: string; revelation_place: 'makkah' | 'madinah'; verses_count: number; slug: string }
 ```
 
 ## 3. Islamic Studies Progress Schema (`islamicinfo-is-progress`)
