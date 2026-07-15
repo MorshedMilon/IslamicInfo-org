@@ -14,21 +14,33 @@
   var ctxSurahId = 1, ctxSurahName = '', ctxSlug = 'al-fatihah', ctxEditionId = 20;
   var pending = null;        // remaining Verse[] to batch-render
   var io = null;             // IntersectionObserver for the sentinel
+  var gen = 0;               // request generation — guards against stale renders
 
   function list() { return document.getElementById('versesCardList'); }
   function edition() {
     var v = 20; try { v = Number(localStorage.getItem('ii-quran-translation')) || 20; } catch (e) {}
     return v;
   }
+  function subLabel(metaAyahs, type) {
+    var ayahs = (metaAyahs || '').replace('Ayahs', 'ayahs');
+    var t = type === 'makki' ? 'Makki' : (type === 'madinah' ? 'Madani' : '');
+    return ayahs + (t ? ' · ' + t : '');
+  }
   function surahMeta(id) {
     var row = document.querySelector('.surah-row[data-id="' + id + '"]');
-    if (row) return { name: row.dataset.name || ('Surah ' + id), slug: row.dataset.slug || String(id) };
+    if (row) return { name: row.dataset.name || ('Surah ' + id), slug: row.dataset.slug || String(id),
+                      sub: subLabel(row.dataset.meta, row.dataset.type) };
     try {
       var c = JSON.parse(localStorage.getItem('ii-quran-chapters'));
       var ch = c && c.data && c.data.filter(function (x) { return x.id === Number(id); })[0];
-      if (ch) return { name: ch.name_simple, slug: ch.slug };
+      if (ch) return { name: ch.name_simple, slug: ch.slug,
+                       sub: subLabel(ch.verses_count + ' Ayahs', ch.revelation_place === 'makkah' ? 'makki' : 'madinah') };
     } catch (e) {}
-    return { name: 'Surah ' + id, slug: String(id) };
+    return { name: 'Surah ' + id, slug: String(id), sub: '' };
+  }
+  function sameVerses(a, b) {
+    return !!(a && b) && a.length === b.length &&
+      (a.length === 0 || (a[0].verse_key === b[0].verse_key && a[a.length - 1].verse_key === b[b.length - 1].verse_key));
   }
 
   function readCache(key) {
@@ -179,21 +191,24 @@
   function appendNextSurahBtn() {
     var c = list(); if (!c) return;
     if (ctxSurahId >= 114) return;
-    var next = surahMeta(ctxSurahId + 1);
+    var nid = ctxSurahId + 1;
+    var next = surahMeta(nid);
     var b = el('div', 'next-surah-btn');
     var left = el('div');
     left.appendChild(el('div', 'nsb-label', 'Next Surah'));
     left.appendChild(el('div', 'nsb-name', next.name));
+    if (next.sub) left.appendChild(el('div', 'nsb-meta', next.sub));
     b.appendChild(left);
-    b.innerHTML += '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal-600)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>';
-    b.addEventListener('click', function () { window.loadSurah(ctxSurahId + 1); });
+    var chev = el('span');
+    chev.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal-600)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>';
+    b.appendChild(chev.firstChild);
+    b.addEventListener('click', function () { window.loadSurah(nid); });
     c.appendChild(b);
   }
   function renderSurah(verses, surahId) {
     var c = list(); if (!c) return;
     ctxSurahId = Number(surahId);
     var meta = surahMeta(ctxSurahId); ctxSurahName = meta.name; ctxSlug = meta.slug;
-    ctxEditionId = edition();
     byKey = {}; verses.forEach(function (v) { byKey[v.verse_key] = v; });
     clearDynamic();
     var b = banner(); if (b) b.style.display = core.showBismillah(ctxSurahId) ? '' : 'none';
@@ -217,25 +232,33 @@
   window.loadSurah = function (surahId) {
     if (!core || !list()) return;
     surahId = Number(surahId) || 1;
+    var myGen = ++gen;                                  // supersedes any in-flight load
     ctxSurahId = surahId; ctxEditionId = edition();
     var key = core.versesCacheKey(surahId, ctxEditionId);
-    renderSkeleton();
     var cached = readCache(key);
     if (cached && core.isFresh(cached.fetchedAt, Date.now())) {
       renderSurah(cached.verses, surahId);
       fetchAllVerses(surahId, ctxEditionId)
-        .then(function (v) { writeCache(key, v); renderSurah(v, surahId); })
+        .then(function (v) {
+          if (myGen !== gen) return;                   // a newer load won — drop
+          writeCache(key, v);
+          if (!sameVerses(v, cached.verses)) renderSurah(v, surahId); // don't wipe live state if unchanged
+        })
         .catch(function () { /* keep cached */ });
       return;
     }
+    renderSkeleton();
     fetchAllVerses(surahId, ctxEditionId)
-      .then(function (v) { writeCache(key, v); renderSurah(v, surahId); })
+      .then(function (v) { if (myGen !== gen) return; writeCache(key, v); renderSurah(v, surahId); })
       .catch(function (e) {
+        if (myGen !== gen) return;
         console.warn('[quran] verses API failed for surah ' + surahId + ':', e && e.message);
-        if (surahId === 1) { return fetchSeed1(ctxEditionId).then(function (v) { renderSurah(v, 1); }); }
+        if (surahId === 1) {
+          return fetchSeed1(20).then(function (v) { if (myGen !== gen) return; ctxEditionId = 20; renderSurah(v, 1); });
+        }
         renderError(surahId);
       })
-      .catch(function (e) { console.warn('[quran] seed failed:', e && e.message); renderError(surahId); });
+      .catch(function (e) { if (myGen !== gen) return; console.warn('[quran] seed failed:', e && e.message); renderError(surahId); });
   };
 
   window.setActiveVerse = function (card) {
