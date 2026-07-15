@@ -185,7 +185,9 @@ async function handleAskClaude(request, env, origin) {
   const question = typeof body.question === 'string' ? body.question : '';
   const sourceRef = typeof body.sourceRef === 'string' ? body.sourceRef : '';
   var ctxTrim = context.trim();
-  if (!ctxTrim || ctxTrim.length < 3 || context.length > 1500) return err('context missing or too long', origin, 400);
+  // 4000-char ceiling covers the longest verse (Al-Baqarah 2:282) + translation;
+  // input cost on Haiku is trivial, so max_tokens (output) is the real cost guard.
+  if (!ctxTrim || ctxTrim.length < 3 || context.length > 4000) return err('context missing or too long', origin, 400);
   if (question.length > 200) return err('question too long', origin, 400);
   if (sourceRef.length > 40) return err('sourceRef too long', origin, 400);
 

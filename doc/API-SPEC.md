@@ -100,7 +100,7 @@ Proxied Anthropic call for the Quran verse AI-explanation panel (`.ai-card`).
 
 - **Body:** `{ context: string, question: string, sourceRef?: string }`
 - **Upstream:** model `claude-haiku-4-5`, `max_tokens: 500`. Key is a Worker secret (`env.ANTHROPIC_API_KEY`) — never in client/HTML/`wrangler.toml` (RULE 6).
-- **Guards (abuse/cost):** POST-only; **Origin must be in the Worker's `ALLOWED_ORIGINS`** → 403; **input caps** — `context` (trimmed) 3–1500 chars, `question` ≤200, `sourceRef` ≤40 → 400; missing key → 503.
+- **Guards (abuse/cost):** POST-only; **Origin must be in the Worker's `ALLOWED_ORIGINS`** → 403; **input caps** — `context` ≥3 chars trimmed and ≤4000 chars (4000 covers the longest verse, Al-Baqarah 2:282, + translation), `question` ≤200, `sourceRef` ≤40 → 400; missing key → 503. Output cost is bounded by `max_tokens: 500`, not the input cap.
 - **Response:** `{ answer, attribution, sourcesCited: [sourceRef?] }` where `attribution = "AI-generated to aid understanding — not a religious ruling."` *(supersedes the earlier placeholder "Powered by QuranlyAI").*
 - **Cache:** none server-side (POST). **Client** caches per verse in `localStorage['ii-quran-ai-{verseKey}-{editionSlug}']` (30-day freshness) — re-opening a verse never re-bills. Cross-user KV cache + in-Worker per-IP rate-limit are deferred (need a binding; v1 uses a Cloudflare **dashboard** rate-limit rule + input caps).
 - **Hard-coded, non-overridable system-prompt safety (see CONTENT-POLICY §4):**
