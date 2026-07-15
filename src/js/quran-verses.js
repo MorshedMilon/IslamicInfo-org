@@ -288,5 +288,6 @@
   };
 
   window.II = window.II || {};
-  window.II.quranVerses = { loadSurah: window.loadSurah, _byKey: function () { return byKey; } };
+  window.II.quranVerses = { loadSurah: window.loadSurah, _byKey: function () { return byKey; },
+    renderAll: function () { while (pending && pending.length) appendBatch(); } };
 })();
