@@ -270,6 +270,7 @@
     // default: Al-Fatihah (id 1) — set active only, no URL push, no toast spam
     var first = document.querySelector('.surah-row[data-id="1"]');
     if (first) { activeId = 1; first.classList.add('active'); }
+    if (typeof window.loadSurah === 'function') window.loadSurah(1); // Module 2: render default surah
   }
 
   window.addEventListener('popstate', function () {
