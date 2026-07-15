@@ -3331,6 +3331,9 @@ function mushafChangePage(dir) {
 <script src="src/js/api.js"></script>
 <script src="src/js/quran-sidebar-core.js"></script>
 <script src="src/js/quran-sidebar.js"></script>
-<script src="src/js/quran.js"></script>
+<!-- src/js/quran.js deferred to Module 2 (verse engine): it targets a legacy
+     DOM (#surahSelect/#verseList) and its boot fires loadSurah()+#surah- hash,
+     which conflicts with Module 1's ?surah=<slug> scheme. Re-enable once
+     reconciled to this page's markup and the window.loadSurah hook. -->
 </body>
 </html>
