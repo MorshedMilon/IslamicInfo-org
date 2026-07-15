@@ -32,6 +32,7 @@
 | `ii-habits` | `HabitState` (see §4) | Habit Tracker | Permanent |
 | `ii-quran-translation` | string (edition id) | Quran Explorer | Until user changes |
 | `ii-quran-reading-mode` | boolean | Quran Explorer | Until user changes |
+| `ii-quran-chapters` | `{ fetchedAt:number, data:Chapter[] }` (JSON) | Quran Explorer | 1 day (24h revalidate) |
 | `islamicinfo-verse-{date}` | `/api/verse` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-hadith-daily-{date}` | `/api/hadith` response (JSON) | Home | 1 day (UTC midnight bust) |
 | `islamicinfo-dua-{date}` | `/api/dua` response (JSON) | Home | 1 day (UTC midnight bust) |

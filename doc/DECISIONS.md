@@ -151,3 +151,13 @@ id 131 must use 20 instead (API-SPEC updated 2026-06-10).
 **Decision.** <what was decided, stated plainly>
 **Consequences.** <trade-offs, what this enables/forecloses>
 ```
+
+## ADR-015: Quran deep-link URL scheme = `?surah=<slug>` (query param)
+
+**Status:** Accepted · 2026-07-14 · Module 1 (Sidebar)
+
+**Context:** The Quran Explorer is a static page (no server router). PRD §2.3 envisions `/quran/<surah>` paths, but clean paths require Cloudflare Worker rewrite config.
+
+**Decision:** Surah selection uses `history.pushState('?surah=<slug>')`. Static-safe, crawlable, shareable. Path-based `/quran/<slug>` is deferred to a future Worker-rewrite ADR.
+
+**Consequences:** No server change needed now; URLs upgrade to clean paths later without breaking `?surah=` links (a redirect can be added).
