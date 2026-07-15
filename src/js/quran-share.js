@@ -29,7 +29,7 @@
     if ($('shareEn')) $('shareEn').textContent = '"' + en + '"';
     if ($('shareRef')) $('shareRef').textContent = ref + (edition ? ' · ' + edition : '');
 
-    current = { ar: String(ar || ''), en: core.stripQuotes(en), ref: ref, edition: edition, vk: vk, surahName: surahName || ref };
+    current = { ar: String(ar || ''), en: String(en == null ? '' : en), ref: ref, edition: edition, vk: vk, surahName: surahName || ref };
     if ($('shareModal')) $('shareModal').classList.add('open');
   };
 
@@ -111,7 +111,7 @@
         if (!blob) { toast('Could not create image'); return; }
         cb(blob, built.filename);
       }, 'image/png');
-    });
+    }).catch(function () { toast('Could not create image'); });
   }
 
   function downloadBlob(blob, filename) {
@@ -140,8 +140,8 @@
   function init() {
     var dl = document.querySelector('.share-dl');
     var nat = document.querySelector('.share-native');
-    if (dl) dl.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); downloadPNG(); });
-    if (nat) nat.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); shareNative(); });
+    if (dl) { dl.removeAttribute('onclick'); dl.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); downloadPNG(); }); }
+    if (nat) { nat.removeAttribute('onclick'); nat.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); shareNative(); }); }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 
