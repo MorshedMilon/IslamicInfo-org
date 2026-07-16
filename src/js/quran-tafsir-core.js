@@ -13,7 +13,10 @@
   var SOURCES = [
     { key: 'ik', label: 'Ibn Kathir',        spa5k: 'en-tafisr-ibn-kathir',      quranId: 169, lang: 'en' },
     { key: 'ma', label: "Ma'arif al-Qur'an", spa5k: 'en-tafsir-maarif-ul-quran', quranId: 168, lang: 'en' },
-    { key: 'ja', label: 'Al-Jalalayn',       spa5k: 'tafsir-al-jalalayn',        quranId: null, lang: 'en' }
+    { key: 'ja', label: 'Al-Jalalayn',       spa5k: 'tafsir-al-jalalayn',        quranId: null, lang: 'en' },
+    // As-Sa'di: bundled static per-surah blocks (OCR-digitized from the archive.org
+    // English 10-vol set — no free API exists). Commentary is per verse-RANGE.
+    { key: 'sa', label: "As-Sa'di",          staticBase: 'src/data/tafsir-saadi/', lang: 'en', range: true }
   ];
   function sources() { return SOURCES.slice(); }
   function sourceByKey(key) {
@@ -55,9 +58,23 @@
       .filter(function (p) { return p.length > 0; });
   }
 
+  // As-Sa'di comments on verse RANGES. Find the block covering `ayah`; if none exactly
+  // matches (OCR range gaps), fall back to the nearest block that starts at or before it.
+  function findBlock(blocks, ayah) {
+    if (!Array.isArray(blocks) || !blocks.length) return null;
+    var a = Number(ayah);
+    var exact = null, prev = null;
+    for (var i = 0; i < blocks.length; i++) {
+      var b = blocks[i];
+      if (a >= b.from && a <= b.to) { exact = b; break; }
+      if (b.from <= a && (!prev || b.from > prev.from)) prev = b;
+    }
+    return exact || prev || blocks[0];
+  }
+
   return {
     sources: sources, sourceByKey: sourceByKey,
-    spa5kUrl: spa5kUrl, quranUrl: quranUrl,
+    spa5kUrl: spa5kUrl, quranUrl: quranUrl, findBlock: findBlock,
     decodeEntities: decodeEntities, formatTafsir: formatTafsir
   };
 });
