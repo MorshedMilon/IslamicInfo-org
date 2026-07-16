@@ -150,6 +150,28 @@ proxy — they are public, keyless, and CORS-enabled). Documented here so shapes
 
 ---
 
+## Tafsir + Daily Reflection (client-direct, keyless, free)
+
+Client-direct free CORS APIs (no `/api/` proxy — the Worker's `/api/hadith` is 501 and there
+is no `/api/tafsir`/`/api/dua`; these work on GitHub Pages too).
+
+### Tafsir (per-ayah, 3 English sources)
+- **Primary:** spa5k/tafsir_api (jsDelivr CDN) —
+  `https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/{slug}/{surah}/{ayah}.json` → `{text}` (plain).
+  Slugs: Ibn Kathir `en-tafisr-ibn-kathir`, Ma'arif `en-tafsir-maarif-ul-quran`, Jalalayn `tafsir-al-jalalayn`.
+- **Fallback:** quran.com v4 `https://api.quran.com/api/v4/tafsirs/{id}/by_ayah/{s:a}` → `{tafsir:{text}}` (HTML).
+  Ids: Ibn Kathir 169, Ma'arif 168. (Jalalayn has no quran.com id — spa5k only.)
+- **Note:** al-Tabari/al-Qurtubi/As-Sa'di have NO free English data (Arabic/PDF only).
+  As-Sa'di English = future archive.org OCR ingest.
+
+### Daily Reflection
+- **Verse:** `https://api.alquran.cloud/v1/ayah/{s:a}/editions/quran-uthmani,en.sahih` → `{data:[ar,en]}`.
+  Daily pick from a curated reflection-verse list (`reflection-core.verseRefs`).
+- **Hadith / Dua:** curated static seeds `src/data/reflection-hadith.json` (Sahih Bukhari via
+  fawazahmed0) + `reflection-dua.json` (Hisnul Muslim via dua-dhikr). UTC-daily rotation. No live call.
+
+---
+
 ## Cross-Cutting Rules
 
 - **No secret in client.** Any new route that touches a keyed API must be added here *and* implemented as a `/api/` proxy before client code calls it.
