@@ -2870,9 +2870,10 @@ function switchToMushafMode(btn) {
   var chapters = null;
   try { chapters = JSON.parse(localStorage.getItem('ii-quran-chapters') || 'null'); } catch (e) {}
   var sid = window.currentSurahId || 1;
-  var start = (window.II && window.II.mushafCore)
-    ? window.II.mushafCore.pageOfSurah(sid, chapters) : 1;
-  if (window.mushafGoToPage) window.mushafGoToPage(start);
+  if (window.II && window.II.mushafCore && window.mushafGoToPage) {
+    window.II.mushafCore.resolveStartPage(sid, chapters)
+      .then(function (start) { window.mushafGoToPage(start); });
+  } else if (window.mushafGoToPage) { window.mushafGoToPage(1); }
   if (window.II && window.II.tajweed) window.II.tajweed.reapply(); // apply v4 font if tajweed on
   showToast('Mushaf Mode — Madina page ✦');
 }

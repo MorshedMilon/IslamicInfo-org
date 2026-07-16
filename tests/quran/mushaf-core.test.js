@@ -14,6 +14,28 @@ test('pageOfSurah returns first page from chapters', () => {
   assert.equal(core.pageOfSurah(999, chapters), 1); // fallback
 });
 
+test('resolveStartPage: fast path uses chapters.pages[0]', async () => {
+  const p = await core.resolveStartPage(2, chapters);
+  assert.equal(p, 2);
+});
+
+test('resolveStartPage: falls back to API verse page_number when pages absent', async () => {
+  const noPages = { data: [{ id: 2, name_simple: 'Al-Baqarah' }] };
+  let calledUrl = null;
+  const fakeFetch = (url) => { calledUrl = url;
+    return Promise.resolve({ ok: true, json: () => Promise.resolve({ verse: { page_number: 2 } }) }); };
+  const p = await core.resolveStartPage(2, noPages, { fetchImpl: fakeFetch });
+  assert.equal(p, 2);
+  assert.ok(/verses\/by_key\/2:1\?fields=page_number/.test(calledUrl));
+});
+
+test('resolveStartPage: returns 1 on fetch failure', async () => {
+  const noPages = { data: [] };
+  const failFetch = () => Promise.reject(new Error('network'));
+  const p = await core.resolveStartPage(9, noPages, { fetchImpl: failFetch });
+  assert.equal(p, 1);
+});
+
 test('fontUrl builds correct CDN paths', () => {
   assert.equal(core.fontUrl(1, 'v2'),
     'https://verses.quran.foundation/fonts/quran/hafs/v2/woff2/p1.woff2');

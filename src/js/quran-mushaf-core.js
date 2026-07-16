@@ -88,6 +88,24 @@
     return { page: Number(page) || minLine, juz: juz, hizb: hizb, lines: lines };
   }
 
+  // Resolve a surah's first mushaf page. Fast path: chapters carry `pages`.
+  // Fallback (seed-only / offline chapters lack `pages`): ask the API for verse 1's page_number.
+  function resolveStartPage(surahId, chapters, opts) {
+    opts = opts || {};
+    var ch = chapterOf(surahId, chapters);
+    if (ch && ch.pages && ch.pages[0]) return Promise.resolve(Number(ch.pages[0]));
+    var f = opts.fetchImpl || (typeof fetch !== 'undefined' ? fetch : null);
+    if (!f) return Promise.resolve(1);
+    var url = 'https://api.quran.com/api/v4/verses/by_key/' + surahId + ':1?fields=page_number';
+    var ctrl = new AbortController();
+    var t = setTimeout(function () { ctrl.abort(); }, opts.timeout || 8000);
+    return f(url, { signal: ctrl.signal })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (j) { return (j && j.verse && j.verse.page_number) || 1; })
+      .catch(function () { return 1; })
+      .finally(function () { clearTimeout(t); });
+  }
+
   function fetchPage(page, opts) {
     opts = opts || {};
     var url = API + page + '?words=true&word_fields=code_v2,line_number,page_number,char_type_name,position' +
@@ -102,7 +120,7 @@
 
   return {
     PAGE_MIN: PAGE_MIN, PAGE_MAX: PAGE_MAX,
-    pageOfSurah: pageOfSurah, hasBismillah: hasBismillah,
+    pageOfSurah: pageOfSurah, resolveStartPage: resolveStartPage, hasBismillah: hasBismillah,
     fontUrl: fontUrl, fontFamily: fontFamily,
     buildPageModel: buildPageModel, fetchPage: fetchPage
   };
