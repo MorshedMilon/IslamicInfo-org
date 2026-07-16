@@ -4,7 +4,13 @@
 (function () {
   'use strict';
   var core = window.II && window.II.mushafCore;
-  var host = function () { return document.getElementById('mushafPageView'); };
+  var host = function () { return document.getElementById('mushafRender'); };
+
+  function updateNav(page) {
+    var ind = document.getElementById('mushafPageNum'); if (ind) ind.textContent = page + ' / ' + core.PAGE_MAX;
+    var prev = document.getElementById('mushafPrev'); if (prev) prev.disabled = page <= core.PAGE_MIN;
+    var next = document.getElementById('mushafNext'); if (next) next.disabled = page >= core.PAGE_MAX;
+  }
   var loaded = {};           // family -> true (font registered)
   var failed = {};           // family -> true (font failed to load)
   var state = { active: false, page: 1, variant: 'v2' };
@@ -92,7 +98,7 @@
     var variant = state.variant;
     Promise.all([ core.fetchPage(page, { chapters: chapters() }), ensureFont(page, variant) ])
       .then(function (res) {
-        renderModel(res[0], variant);
+        renderModel(res[0], variant); updateNav(page);
         try { localStorage.setItem('ii-quran-mushaf-page', String(page)); } catch (e) {}
         if (page < core.PAGE_MAX) ensureFont(page + 1, variant).catch(function () {}); // prefetch next
       })
