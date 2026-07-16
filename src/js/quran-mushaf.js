@@ -40,16 +40,24 @@
     } catch (e) { return ''; }
   }
 
-  // Size the Arabic from the page's content width so lines fill naturally (big + readable),
-  // matching the Madina page proportions. The page scrolls vertically when tall — we do NOT
-  // shrink to avoid scrolling (that made the text tiny).
+  // Size the Arabic so each line fills the content width naturally (like the printed
+  // Madina page). We MEASURE the widest line's natural width and scale the whole page to
+  // match — no CSS justify. This works identically for v2 and v4 (same glyph widths), so
+  // toggling Tajweed never shifts the layout. Page scrolls vertically when tall.
   function sizeToWidth(sheet) {
     var pageEl = sheet.querySelector('.mushaf-page');
     if (!pageEl) return;
-    var contentW = pageEl.clientWidth;           // inside padding
+    var contentW = pageEl.clientWidth;                 // inside padding
     if (!contentW) return;
-    var fs = contentW / 22;                       // tuned factor for the 15-line QCF page
-    fs = Math.max(26, Math.min(52, fs));
+    var ayah = pageEl.querySelectorAll('.m-line--ayah');
+    if (!ayah.length) { pageEl.style.fontSize = Math.max(24, Math.min(48, contentW / 24)) + 'px'; return; }
+    var REF = 80;                                       // measure at a reference size (lines are nowrap)
+    pageEl.style.fontSize = REF + 'px';
+    var maxNat = 0;
+    for (var i = 0; i < ayah.length; i++) { var w = ayah[i].scrollWidth; if (w > maxNat) maxNat = w; }
+    if (!maxNat) return;
+    var fs = REF * (contentW * 0.985 / maxNat);         // 1.5% safety so nowrap never overflows
+    fs = Math.max(18, Math.min(64, fs));
     pageEl.style.fontSize = fs + 'px';
   }
 
@@ -67,12 +75,10 @@
       } else if (line.type === 'basmallah') {
         row.innerHTML = '<span class="m-basmala">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</span>';
       } else {
-        var words = line.words.map(function (w) {
-          return '<span class="mushaf-word' + (w.type === 'end' ? ' m-end' : '') +
-                 '" data-vk="' + (w.verseKey || '') + '">' + w.code + '</span>';
-        }).join('');
+        // One concatenated glyph run per line — preserves the QCF font's natural
+        // inter-word spacing and shaping (per-word spans + CSS justify distorted it).
         row.style.fontFamily = "'" + fam + "', 'Amiri', serif";
-        row.innerHTML = words;   // PUA glyphs — must be innerHTML
+        row.innerHTML = line.words.map(function (w) { return w.code; }).join('');
       }
       pageEl.appendChild(row);
     });
