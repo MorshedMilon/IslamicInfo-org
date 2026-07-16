@@ -9,8 +9,10 @@
   function inMushaf() { return !!(window.II && window.II.mushaf && window.II.mushaf.isActive()); }
 
   function legend(show) {
-    var l = document.getElementById('tjLegend'); if (l) l.classList.toggle('show', show);
-    var m = document.getElementById('mushafTjLegend'); if (m) m.classList.toggle('show', show);
+    // Show only the legend for the active view (avoid a redundant double legend in Mushaf mode).
+    var mushaf = inMushaf();
+    var l = document.getElementById('tjLegend'); if (l) l.classList.toggle('show', show && !mushaf);
+    var m = document.getElementById('mushafTjLegend'); if (m) m.classList.toggle('show', show && mushaf);
   }
 
   // Study view: swap between the per-word .ayah-arabic layer and the colored .ayah-tajweed layer.
@@ -40,7 +42,7 @@
   window.II.tajweed = {
     isOn: function () { return on; },
     // Re-assert current tajweed state for the active view (called after (re)render / mode switch).
-    reapply: function () { if (inMushaf()) { if (on) applyMushaf(); } else applyFlow(); },
+    reapply: function () { legend(on); if (inMushaf()) { if (on) applyMushaf(); } else applyFlow(); },
     colorize: function (html) { return tcore ? tcore.colorize(html) : (html || ''); }
   };
 })();
