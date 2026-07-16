@@ -3,12 +3,24 @@ const test = require('node:test');
 const assert = require('node:assert');
 const core = require('../../src/js/quran-tafsir-core.js');
 
-test('sources: 3 English tafsirs with keys ik/ma/ja', () => {
+test('sources: 4 English tafsirs with keys ik/ma/ja/sa', () => {
   const s = core.sources();
-  assert.equal(s.length, 3);
-  assert.deepEqual(s.map(x => x.key), ['ik', 'ma', 'ja']);
+  assert.equal(s.length, 4);
+  assert.deepEqual(s.map(x => x.key), ['ik', 'ma', 'ja', 'sa']);
   assert.equal(core.sourceByKey('ma').label, "Ma'arif al-Qur'an");
+  assert.equal(core.sourceByKey('sa').label, "As-Sa'di");
+  assert.equal(core.sourceByKey('sa').staticBase, 'src/data/tafsir-saadi/');
   assert.equal(core.sourceByKey('zzz').key, 'ik'); // fallback to first
+});
+
+test('findBlock: exact range, then nearest-preceding fallback', () => {
+  const blocks = [{ from: 1, to: 5, text: 'A' }, { from: 8, to: 10, text: 'B' }, { from: 11, to: 12, text: 'C' }];
+  assert.equal(core.findBlock(blocks, 3).text, 'A');       // exact
+  assert.equal(core.findBlock(blocks, 9).text, 'B');       // exact
+  assert.equal(core.findBlock(blocks, 6).text, 'A');       // gap 6-7 → nearest preceding (1-5)
+  assert.equal(core.findBlock(blocks, 12).text, 'C');
+  assert.equal(core.findBlock(blocks, 1).text, 'A');
+  assert.equal(core.findBlock([], 3), null);
 });
 
 test('spa5kUrl / quranUrl build correct URLs', () => {

@@ -15,12 +15,15 @@
   function readCache(vk, sk) {
     try {
       var o = JSON.parse(localStorage.getItem(cacheKey(vk, sk)));
-      if (o && Array.isArray(o.paras) && (Date.now() - o.ts) < TTL) return o.paras;
+      if (o && Array.isArray(o.paras) && (Date.now() - o.ts) < TTL) {
+        if (o.range) o.paras._range = o.range;      // reattach (JSON drops array props)
+        return o.paras;
+      }
     } catch (e) {}
     return null;
   }
   function writeCache(vk, sk, paras) {
-    try { localStorage.setItem(cacheKey(vk, sk), JSON.stringify({ paras: paras, ts: Date.now() })); } catch (e) {}
+    try { localStorage.setItem(cacheKey(vk, sk), JSON.stringify({ paras: paras, range: paras._range, ts: Date.now() })); } catch (e) {}
   }
 
   function fetchJson(url) {
@@ -32,7 +35,17 @@
   }
 
   // Returns Promise<string[]> paragraphs. spa5k plain-text primary, quran.com HTML fallback.
+  // As-Sa'di is a bundled static per-surah file of verse-RANGE blocks.
   function fetchTafsir(src, surah, ayah) {
+    if (src.staticBase) {
+      return fetchJson(src.staticBase + surah + '.json').then(function (blocks) {
+        var b = core.findBlock(blocks, ayah);
+        if (!b) throw new Error('no block');
+        var paras = core.formatTafsir(b.text, false);
+        paras._range = (b.from === b.to) ? String(b.from) : (b.from + '–' + b.to);   // for the ref label
+        return paras;
+      });
+    }
     return fetchJson(core.spa5kUrl(src, surah, ayah))
       .then(function (j) {
         var txt = j && j.text;
@@ -64,12 +77,19 @@
     b.innerHTML = '';
     b.appendChild(el('div', 'tp-ref', state.surahName + ' · ' + state.verseKey + ' · ' + src.label));
     if (!paras.length) { b.appendChild(el('p', 'tp-text', 'No tafsir text for this ayah.')); }
+    // As-Sa'di comments on verse groups — note which verses this block covers.
+    if (paras._range) {
+      var surahNum = String(state.verseKey).split(':')[0];
+      var note = el('div', 'tp-attr', 'As-Sa’di comments on verses ' + surahNum + ':' + paras._range + ' together');
+      note.style.marginTop = '0'; note.style.marginBottom = '10px'; b.appendChild(note);
+    }
     paras.forEach(function (p) {
       var node = el('p', 'tp-text', p);
       if (src.lang === 'ar') { node.setAttribute('dir', 'rtl'); node.style.fontFamily = 'var(--font-arabic)'; }
       b.appendChild(node);
     });
-    b.appendChild(el('div', 'tp-attr', 'Tafsir ' + src.label + ' · sourced'));
+    var attr = 'Tafsir ' + src.label + (src.staticBase ? ' (English) · OCR-digitized, pending review' : ' · sourced');
+    b.appendChild(el('div', 'tp-attr', attr));
     b.scrollTop = 0;
   }
 
