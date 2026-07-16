@@ -40,16 +40,17 @@
     } catch (e) { return ''; }
   }
 
-  function fitToHeight(sheet) {
-    var va = document.getElementById('versesArea');
+  // Size the Arabic from the page's content width so lines fill naturally (big + readable),
+  // matching the Madina page proportions. The page scrolls vertically when tall — we do NOT
+  // shrink to avoid scrolling (that made the text tiny).
+  function sizeToWidth(sheet) {
     var pageEl = sheet.querySelector('.mushaf-page');
-    if (!va || !pageEl) return;
-    var avail = va.clientHeight - 96;            // minus footer + sheet padding
-    var over = pageEl.scrollHeight;
-    if (over > avail && avail > 120) {
-      var cur = parseFloat(getComputedStyle(pageEl).fontSize);
-      pageEl.style.fontSize = Math.max(15, cur * (avail / over)) + 'px';
-    }
+    if (!pageEl) return;
+    var contentW = pageEl.clientWidth;           // inside padding
+    if (!contentW) return;
+    var fs = contentW / 22;                       // tuned factor for the 15-line QCF page
+    fs = Math.max(26, Math.min(52, fs));
+    pageEl.style.fontSize = fs + 'px';
   }
 
   function renderModel(model, variant) {
@@ -81,7 +82,7 @@
       (model.juz ? ' · Juz ' + model.juz : '') + (model.hizb ? ' · Hizb ' + model.hizb : '');
     sheet.appendChild(pageEl); sheet.appendChild(footer);
     h.innerHTML = ''; h.appendChild(sheet);
-    requestAnimationFrame(function () { fitToHeight(sheet); });
+    requestAnimationFrame(function () { sizeToWidth(sheet); });
   }
 
   function showLoading() { var h = host(); if (h) h.innerHTML = '<div class="mushaf-loading">Loading page…</div>'; }
