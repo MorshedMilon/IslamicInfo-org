@@ -252,13 +252,13 @@
     repeat = !repeat; var b = btn || document.getElementById('repeatBtn'); if (b) b.classList.toggle('repeat-on', repeat);
     toast(repeat ? 'Repeat ayah on' : 'Repeat off');
   };
-  window.selectReciter = function (id, el) {
+  window.selectReciter = function (id) {
     var rid = Number(id);
-    if (!(rid > 0)) return;
+    if (!(rid > 0)) return;                       // ignore stale/invalid callers (e.g. the old inline 3-arg onclick)
     reciterId = rid;
     try { localStorage.setItem('ii-quran-reciter', String(reciterId)); } catch (e) {}
-    populatePicker();
-    Array.prototype.forEach.call(document.querySelectorAll('.reciter-picker.open'), function (p) { p.classList.remove('open'); });
+    syncLabels();
+    hideFloatPicker();
     var wasPlaying = audio && !audio.paused, resumeIdx = idx, s = loadedSurah || currentSurahFromDom();
     var myGen = ++gen, ed = reciterId;
     loadedSurah = null; ayahs = [];
@@ -269,49 +269,70 @@
     }).catch(function () {});
     toast('Reciter: ' + shortLabel(reciterId));
   };
-  window.toggleReciterPicker = function (btn) {
-    var target = (btn && btn.querySelector) ? btn.querySelector('.reciter-picker') : document.getElementById('reciterPicker');
-    var wasOpen = target && target.classList.contains('open');
-    Array.prototype.forEach.call(document.querySelectorAll('.reciter-picker.open'), function (p) { p.classList.remove('open'); });
-    if (target && !wasOpen) {
-      // The toolbar row (.rtb-row2) clips overflow, so anchor its picker with position:fixed to escape the clip.
-      if (target.id === 'reciterPickerTop' && btn && btn.getBoundingClientRect) {
-        var r = btn.getBoundingClientRect();
-        target.style.position = 'fixed';
-        target.style.top = (r.bottom + 6) + 'px';
-        target.style.left = r.left + 'px';
-        target.style.bottom = 'auto';
-        target.style.right = 'auto';
-      }
-      target.classList.add('open');
+
+  // ---- ONE floating reciter picker, appended to <body> so no ancestor overflow/clip/transform can affect it ----
+  var floatPicker = null;
+  function getFloatPicker() {
+    if (!floatPicker) {
+      floatPicker = document.createElement('div');
+      floatPicker.className = 'reciter-picker';
+      floatPicker.id = 'reciterFloatPicker';
+      floatPicker.style.position = 'fixed';
+      floatPicker.style.bottom = 'auto';
+      floatPicker.style.right = 'auto';
+      floatPicker.style.zIndex = '9999';
+      floatPicker.style.display = 'none';
+      (document.body || document.documentElement).appendChild(floatPicker);
     }
-  };
-  // Close any open reciter picker on an outside click (the inline closer only knows the player one).
-  document.addEventListener('click', function (e) {
-    if (e.target && e.target.closest && e.target.closest('#reciterBtn, #reciterBtnTop')) return;
-    Array.prototype.forEach.call(document.querySelectorAll('.reciter-picker.open'), function (p) { p.classList.remove('open'); });
-  });
-
-
-  // ---- reciter picker ----
-  function populatePicker() {
-    ['reciterPicker', 'reciterPickerTop'].forEach(function (pid) {
-      var picker = document.getElementById(pid);
-      if (!picker) return;
-      picker.innerHTML = '';
-      reciters.forEach(function (r) {
-        var opt = document.createElement('div');
-        opt.className = 'reciter-opt' + (r.id === reciterId ? ' on' : '');
-        var dot = document.createElement('div'); dot.className = 'reciter-opt-dot'; opt.appendChild(dot);
-        opt.appendChild(document.createTextNode(r.name + (r.style ? ' (' + r.style + ')' : '')));
-        opt.addEventListener('click', function (e) { if (e && e.stopPropagation) e.stopPropagation(); window.selectReciter(r.id, opt); });
-        picker.appendChild(opt);
-      });
+    return floatPicker;
+  }
+  function hideFloatPicker() { if (floatPicker) { floatPicker.style.display = 'none'; floatPicker._anchor = null; } }
+  function renderFloatOpts() {
+    var fp = getFloatPicker();
+    fp.innerHTML = '';
+    reciters.forEach(function (r) {
+      var opt = document.createElement('div');
+      opt.className = 'reciter-opt' + (r.id === reciterId ? ' on' : '');
+      var dot = document.createElement('div'); dot.className = 'reciter-opt-dot'; opt.appendChild(dot);
+      opt.appendChild(document.createTextNode(r.name + (r.style ? ' (' + r.style + ')' : '')));
+      opt.addEventListener('click', function (e) { if (e && e.stopPropagation) e.stopPropagation(); window.selectReciter(r.id); });
+      fp.appendChild(opt);
     });
+  }
+  window.toggleReciterPicker = function (btn) {
+    var fp = getFloatPicker();
+    if (fp.style.display === 'block' && fp._anchor === btn) { hideFloatPicker(); return; } // same button → close
+    renderFloatOpts();
+    fp._anchor = btn || null;
+    fp.style.display = 'block';
+    var vw = window.innerWidth || 360, vh = window.innerHeight || 640;
+    var r = (btn && btn.getBoundingClientRect) ? btn.getBoundingClientRect() : { top: 60, bottom: 60, left: 20 };
+    var pw = fp.offsetWidth || 210, ph = fp.offsetHeight || 220;
+    var top = (r.top > vh / 2) ? (r.top - ph - 6) : (r.bottom + 6);   // open upward if the trigger is in the lower half
+    var left = Math.max(8, Math.min(r.left, vw - pw - 8));            // keep it on-screen
+    fp.style.top = top + 'px';
+    fp.style.left = left + 'px';
+  };
+
+  // ---- reciter labels + emptying the locked in-place demo pickers ----
+  function syncLabels() {
     setText('#reciterLabel', shortLabel(reciterId));
     setText('#reciterLabelTop', shortLabel(reciterId));
     setText('#apReciterName', reciterStyled(reciterId));
   }
+  function populatePicker() {
+    // The floating picker (rebuilt on each open) is the real list; empty the locked in-place demo
+    // pickers (#reciterPicker inside the player btn, #reciterPickerTop inside the toolbar btn) so they never show stale opts.
+    ['reciterPicker', 'reciterPickerTop'].forEach(function (pid) { var p = document.getElementById(pid); if (p) p.innerHTML = ''; });
+    syncLabels();
+    if (floatPicker && floatPicker.style.display === 'block') renderFloatOpts(); // refresh the open list after an async reciter-list load
+  }
+  // Close the floating picker on an outside click. Opts stopPropagation; the trigger buttons re-toggle themselves.
+  document.addEventListener('click', function (e) {
+    if (!floatPicker || floatPicker.style.display !== 'block') return;
+    if (e.target && e.target.closest && (e.target.closest('#reciterFloatPicker') || e.target.closest('#reciterBtn, #reciterBtnTop'))) return;
+    hideFloatPicker();
+  });
 
   function init() {
     if (!core) return;
