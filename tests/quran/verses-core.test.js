@@ -29,11 +29,13 @@ test('pickTranslation selects by resource_id, falls back to first', () => {
 test('normalizeVerse shape', () => {
   const v = core.normalizeVerse({
     verse_key: '1:2', verse_number: 2, text_uthmani: 'ٱلْحَمْدُ',
+    text_uthmani_tajweed: '<tajweed class=ghunnah>ٱلْحَمْدُ</tajweed>',
     translations: [{ resource_id: 20, text: 'All praise<sup foot_note=1>x</sup>' }],
     words: [{ char_type_name: 'word', text_uthmani: 'ٱلْحَمْدُ', translation: { text: 'All praises' } }]
   }, 20);
   assert.equal(v.verse_key, '1:2');
   assert.equal(v.text_uthmani, 'ٱلْحَمْدُ');
+  assert.equal(v.text_uthmani_tajweed, '<tajweed class=ghunnah>ٱلْحَمْدُ</tajweed>');
   assert.equal(v.translation, 'All praise');
   assert.deepEqual(v.words, [{ ar: 'ٱلْحَمْدُ', en: 'All praises' }]);
 });

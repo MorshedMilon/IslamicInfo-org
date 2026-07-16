@@ -41,6 +41,7 @@
       verse_key: apiVerse.verse_key,
       verse_number: apiVerse.verse_number,
       text_uthmani: apiVerse.text_uthmani || '',
+      text_uthmani_tajweed: apiVerse.text_uthmani_tajweed || '',
       translation: pickTranslation(apiVerse.translations, editionId),
       words: wbwWords(apiVerse.words)
     };
