@@ -17,6 +17,23 @@
 
   function isFirefox() { return /firefox/i.test(navigator.userAgent); }
   function theme() { return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+
+  // The QCF Tajweed V4 (colrv1) font ships a DARK palette (base-palette index 1) whose
+  // base letters are light — needed so non-rule letters stay readable on a dark page.
+  // Inject an @font-palette-values rule per v4 family and return its name.
+  var paletteStyle = null;
+  function ensureDarkPalette(fam) {
+    if (!paletteStyle) {
+      paletteStyle = document.createElement('style'); paletteStyle.id = 'ii-mushaf-palettes';
+      document.head.appendChild(paletteStyle);
+    }
+    var name = '--iiDark-' + fam;
+    if (paletteStyle.textContent.indexOf(name + '{') === -1) {
+      paletteStyle.textContent += "@font-palette-values " + name +
+        "{font-family:'" + fam + "';base-palette:1;}";
+    }
+    return name;
+  }
   function chapters() { try { return JSON.parse(localStorage.getItem('ii-quran-chapters')); } catch (e) { return null; } }
 
   // Resolves to the family name on success; rejects if the font can't be loaded
@@ -66,6 +83,11 @@
     var fam = core.fontFamily(model.page, variant);
     var sheet = document.createElement('div'); sheet.className = 'mushaf-sheet';
     var pageEl = document.createElement('div'); pageEl.className = 'mushaf-page'; pageEl.setAttribute('dir', 'rtl');
+    // Dark mode + Tajweed (colrv1): select the font's dark palette so base letters are light.
+    // (Firefox uses the ot-svg/dark font — colors baked in — so no palette needed there.)
+    if (variant === 'v4' && theme() === 'dark' && !isFirefox()) {
+      pageEl.style.fontPalette = ensureDarkPalette(fam);
+    }
 
     model.lines.forEach(function (line) {
       var row = document.createElement('div');
@@ -113,6 +135,14 @@
   };
 
   window.mushafChangePage = function (dir) { window.mushafGoToPage(state.page + dir); };
+
+  // Re-render on theme switch so the Tajweed palette (and Firefox ot-svg light/dark font)
+  // update live while the Mushaf is open.
+  if (window.MutationObserver) {
+    new MutationObserver(function () {
+      if (state.active) window.mushafGoToPage(state.page);
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  }
 
   window.II = window.II || {};
   window.II.mushaf = {
