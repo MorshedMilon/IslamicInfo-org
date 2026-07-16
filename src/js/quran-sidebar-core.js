@@ -30,7 +30,9 @@
       name_arabic: raw.name_arabic || '',
       revelation_place: raw.revelation_place,
       verses_count: typeof raw.verses_count === 'number' ? raw.verses_count : 0,
-      slug: slugify(raw.name_simple)
+      slug: slugify(raw.name_simple),
+      pages: Array.isArray(raw.pages) ? raw.pages : undefined,          // Mushaf Mode start page
+      bismillah_pre: typeof raw.bismillah_pre === 'boolean' ? raw.bismillah_pre : undefined
     };
   }
 

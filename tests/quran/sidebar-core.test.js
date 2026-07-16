@@ -27,6 +27,9 @@ test('normalizeChapter valid + invalid', () => {
   const c = core.normalizeChapter({ id: 2, name_simple: 'Al-Baqarah', name_arabic: 'البقرة', revelation_place: 'madinah', verses_count: 286 });
   assert.equal(c.slug, 'al-baqarah');
   assert.equal(c.verses_count, 286);
+  const cp = core.normalizeChapter({ id: 2, name_simple: 'Al-Baqarah', verses_count: 286, pages: [2, 49], bismillah_pre: true });
+  assert.deepEqual(cp.pages, [2, 49]);
+  assert.equal(cp.bismillah_pre, true);
   assert.equal(core.normalizeChapter(null), null);
   assert.equal(core.normalizeChapter({ id: 'x' }), null);
 });

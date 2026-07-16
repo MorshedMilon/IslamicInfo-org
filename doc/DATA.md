@@ -32,6 +32,7 @@
 | `ii-habits` | `HabitState` (see §4) | Habit Tracker | Permanent |
 | `ii-quran-translation` | string (edition id) | Quran Explorer | Until user changes |
 | `ii-quran-reading-mode` | boolean | Quran Explorer | Until user changes |
+| `ii-quran-mushaf-page` | string (integer 1–604) | Quran Explorer (Mushaf Mode) | Until user changes (last-viewed QCF page) |
 | `ii-quran-chapters` | `{ fetchedAt:number, data:Chapter[] }` (JSON) | Quran Explorer | 1 day (24h revalidate) |
 | `ii-verses-{surah}-{edition}` | `{ fetchedAt:number, verses:Verse[] }` (JSON) | Quran Explorer | 1 day (24h revalidate) |
 | `ii-quran-reciter` | string (reciter id) | Quran Explorer | Until user changes |

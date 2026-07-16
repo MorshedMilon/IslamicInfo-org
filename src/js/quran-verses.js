@@ -56,7 +56,7 @@
 
   function fetchPage(id, ed, page) {
     var url = API + id + '?language=en&words=true&word_fields=text_uthmani,translation' +
-              '&fields=text_uthmani&translations=' + ed + '&per_page=50&page=' + page;
+              '&fields=text_uthmani,text_uthmani_tajweed&translations=' + ed + '&per_page=50&page=' + page;
     var ctrl = new AbortController();
     var t = setTimeout(function () { ctrl.abort(); }, 8000);
     return fetch(url, { signal: ctrl.signal })
@@ -138,6 +138,14 @@
     });
     card.appendChild(arabic);
 
+    // Hidden Tajweed layer — shown (and arabic hidden) when Tajweed Mode is on.
+    var tj = el('div', 'ayah-tajweed'); tj.setAttribute('dir', 'rtl');
+    tj.style.display = 'none';
+    tj.innerHTML = (window.II && window.II.tajweed)
+      ? window.II.tajweed.colorize(v.text_uthmani_tajweed || '')
+      : (v.text_uthmani_tajweed || '');
+    card.appendChild(tj);
+
     var wbw = el('div', 'wbw-row');
     v.words.forEach(function (w, i) {
       var word = el('div', 'wbw-word');
@@ -192,6 +200,7 @@
     slice.forEach(function (v) { frag.appendChild(buildCard(v)); });
     var sentinel = c.querySelector('.verses-sentinel');
     if (sentinel) c.insertBefore(frag, sentinel); else c.appendChild(frag);
+    if (window.II && window.II.tajweed) window.II.tajweed.reapply();  // color freshly-added cards
     if (pending.length === 0) {
       if (sentinel) sentinel.parentNode.removeChild(sentinel);
       if (io) { io.disconnect(); io = null; }
@@ -218,6 +227,7 @@
   function renderSurah(verses, surahId) {
     var c = list(); if (!c) return;
     ctxSurahId = Number(surahId);
+    window.currentSurahId = ctxSurahId;   // consumed by Mushaf Mode to pick the start page
     var meta = surahMeta(ctxSurahId); ctxSurahName = meta.name; ctxSlug = meta.slug;
     byKey = {}; verses.forEach(function (v) { byKey[v.verse_key] = v; });
     clearDynamic();

@@ -836,11 +836,41 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 /* Hide the standard study-mode card list in Mushaf mode */
 .mushaf-mode-active #versesCardList { display: none !important; }
 
-/* Show the Mushaf page view */
-.mushaf-mode-active #mushafPageView { display: block !important; }
+/* ── Outer container — QCF page render (quran-mushaf.js) ── */
+#mushafPageView { display: none; }
+.mushaf-mode-active #mushafPageView {
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 100%; padding: 10px 0 18px;
+}
 
-/* ── Outer container ── */
-#mushafPageView { display: none; padding: 0 0 16px; }
+/* ── Dynamic Madina page sheet ── */
+#mushafRender { width: 100%; display: flex; justify-content: center; align-items: center; flex: 1; }
+/* Transparent centering wrapper — the paper look comes from the existing .mushaf-page rule below */
+.mushaf-sheet { width: min(720px, 94%); margin: 0 auto; }
+.mushaf-sheet .mushaf-page { margin-top: 0; }
+.mushaf-page {
+  direction: rtl; text-align: justify; text-align-last: justify;
+  font-size: clamp(20px, 3.4vw, 34px); line-height: 2.15; color: var(--ink-primary);
+}
+.mushaf-page .m-line { display: block; position: relative; z-index: 1; }
+.mushaf-page .m-line--center { text-align: center; text-align-last: center; }
+.m-surah-frame { font-family: var(--font-arabic); color: var(--teal-700); font-size: .82em; letter-spacing: .04em; }
+.m-basmala { font-family: var(--font-arabic); color: var(--ink-muted); font-size: .72em; }
+.mushaf-page .mushaf-word { cursor: default; }
+.mushaf-page .mushaf-word.word-active { color: var(--gold-600); }
+.mushaf-page .m-line.ayah-playing { background: rgba(197,160,89,.08); border-radius: 6px; }
+.mushaf-foot {
+  margin-top: 14px; text-align: center;
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-subtle); letter-spacing: .04em;
+}
+.mushaf-loading, .mushaf-error { padding: 44px 20px; text-align: center; color: var(--ink-muted); font-size: 14px; }
+[data-theme="dark"] .mushaf-sheet { border-color: rgba(197,160,89,.28); box-shadow: 0 10px 40px rgba(0,0,0,.35); }
+
+/* Study-view Tajweed layer (shown when Tajweed Mode is on) */
+.ayah-tajweed {
+  font-family: var(--font-arabic); font-size: var(--ar-sz,28px); line-height: 2.1;
+  direction: rtl; text-align: right; margin-bottom: 16px; color: var(--ink-primary);
+}
 
 /* ── The Mushaf page itself — printed-book look ── */
 .mushaf-page {
@@ -987,13 +1017,6 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 [data-theme="dark"] .mushaf-wbw-ar.tj-ikhfa   { color: #FFD54F; }
 [data-theme="dark"] .mushaf-wbw-ar.tj-idgham  { color: #64B5F6; }
 [data-theme="dark"] .mushaf-wbw-ar.tj-qalqalah{ color: #F48FB1; }
-
-/* When tajweed is OFF (default), suppress all tj-* colours in mushaf view.
-   The tj-hidden class is removed by toggleTajweed when user turns it on.   */
-#mushafPageView.tj-hidden .mushaf-word,
-#mushafPageView.tj-hidden .mushaf-wbw-ar {
-  color: inherit !important;
-}
 
 /* Tajweed legend bar — sits just above the first ayah row */
 .mushaf-tj-legend {
@@ -1555,238 +1578,32 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
       <div class="ayah-card verses-skeleton" aria-hidden="true" style="opacity:.5;pointer-events:none;"><div class="ayah-header"><div class="ayah-num-badge"></div></div><div class="ayah-arabic">&nbsp;</div><div class="ayah-translation">&nbsp;</div></div>
       </div><!-- end versesCardList -->
 
-      <!-- ══ MUSHAF PAGE VIEW ══
-           Book-style 16-line layout.
-           WBW, Translation, and Compare panels appear
-           beneath each Arabic line — no mode switching needed.
-      ══ -->
-      <div id="mushafPageView" class="tj-hidden">
+      <!-- ══ MUSHAF PAGE VIEW — authentic QCF v2 Madina layout (rendered by quran-mushaf.js) ══ -->
+      <div id="mushafPageView">
+        <!-- Tajweed legend — visible only when Tajweed is on -->
+        <div class="mushaf-tj-legend" id="mushafTjLegend">
+          <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#2CA4AB;"></div><span data-i18n="quran.reader.tjMadd">Madd</span></div>
+          <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#2E7D32;"></div><span data-i18n="quran.reader.tjGhunna">Ghunna</span></div>
+          <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#8A6500;"></div><span data-i18n="quran.reader.tjIkhfa">Ikhfa</span></div>
+          <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#1565C0;"></div><span data-i18n="quran.reader.tjIdgham">Idgham</span></div>
+          <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#880E4F;"></div><span data-i18n="quran.reader.tjQalqalah">Qalqalah</span></div>
+        </div>
 
-        <div class="mushaf-page" id="mushafPage1">
-          <!-- Header -->
-          <div class="mushaf-page-header">
-            <div class="mushaf-surah-name">سُورَةُ الْفَاتِحَةِ</div>
-            <div class="mushaf-page-num">Page 1 · Juz 1 · Al-Fatihah</div>
-          </div>
-
-          <!-- Bismillah -->
-          <div class="mushaf-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-
-          <!-- Tajweed legend — only visible when tajweed is active -->
-          <div class="mushaf-tj-legend" id="mushafTjLegend">
-            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#2CA4AB;"></div><span data-i18n="quran.reader.tjMadd">Madd</span></div>
-            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#2E7D32;"></div><span data-i18n="quran.reader.tjGhunna">Ghunna</span></div>
-            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#8A6500;"></div><span data-i18n="quran.reader.tjIkhfa">Ikhfa</span></div>
-            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#1565C0;"></div><span data-i18n="quran.reader.tjIdgham">Idgham</span></div>
-            <div class="mushaf-tj-item"><div class="mushaf-tj-dot" style="background:#880E4F;"></div><span data-i18n="quran.reader.tjQalqalah">Qalqalah</span></div>
-          </div>
-
-          <!-- ─── Ayah 1 ─── -->
-          <div class="mushaf-ayah-row" id="mrow1">
-            <div class="mushaf-line" onclick="mushafSelectAyah(this)">
-              <span class="mushaf-word tj-madd"    data-ar="بِسْمِ"      data-en="In the name"      data-pos="noun" data-tj="madd">بِسْمِ</span>
-              <span class="mushaf-word tj-idgham"  data-ar="اللَّهِ"     data-en="of Allah"          data-pos="noun" data-tj="idgham">اللَّهِ</span>
-              <span class="mushaf-word tj-madd"    data-ar="الرَّحْمَٰنِ" data-en="the Most Gracious" data-pos="adj"  data-tj="madd">الرَّحْمَٰنِ</span>
-              <span class="mushaf-word tj-ghunna"  data-ar="الرَّحِيمِ"   data-en="the Most Merciful" data-pos="adj"  data-tj="ghunna">الرَّحِيمِ</span>
-              <span class="mushaf-ayah-end">﴿١﴾</span>
-            </div>
-            <!-- WBW panel -->
-            <div class="mushaf-wbw-panel" id="mwbw1">
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-madd">بِسْمِ</div><div class="mushaf-wbw-en">In the name</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-idgham">ٱللَّهِ</div><div class="mushaf-wbw-en">of Allah</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-madd">ٱلرَّحْمَٰنِ</div><div class="mushaf-wbw-en">the Most Gracious</div><div class="mushaf-wbw-pos pos-adj">ADJ</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-ghunna">ٱلرَّحِيمِ</div><div class="mushaf-wbw-en">the Most Merciful</div><div class="mushaf-wbw-pos pos-adj">ADJ</div></div>
-            </div>
-            <!-- Translation panel -->
-            <div class="mushaf-tr-panel" id="mtr1">
-              <div class="mushaf-tr-text">"In the name of Allah, the Entirely Merciful, the Especially Merciful."</div>
-              <div class="mushaf-tr-attr">Sahih International · Al-Fatihah 1:1</div>
-            </div>
-            <!-- Compare panel -->
-            <div class="mushaf-cmp-panel" id="mcmp1">
-              <div class="mushaf-cmp-item pri"><div class="mushaf-cmp-name">Sahih International</div><div class="mushaf-cmp-text">In the name of Allah, the Entirely Merciful, the Especially Merciful.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Pickthall</div><div class="mushaf-cmp-text">In the name of Allah, the Beneficent, the Merciful.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Yusuf Ali</div><div class="mushaf-cmp-text">In the name of Allah, Most Gracious, Most Merciful.</div></div>
-            </div>
-          </div>
-
-          <!-- ─── Ayah 2 ─── -->
-          <div class="mushaf-ayah-row" id="mrow2">
-            <div class="mushaf-line" onclick="mushafSelectAyah(this)">
-              <span class="mushaf-word tj-madd"   data-ar="ٱلۡحَمۡدُ"    data-en="The praise"   data-pos="noun" data-tj="madd">ٱلۡحَمۡدُ</span>
-              <span class="mushaf-word tj-idgham" data-ar="لِلَّهِ"       data-en="is for Allah"  data-pos="noun" data-tj="idgham">لِلَّهِ</span>
-              <span class="mushaf-word"           data-ar="رَبِّ"          data-en="Lord"          data-pos="noun">رَبِّ</span>
-              <span class="mushaf-word tj-madd"   data-ar="ٱلۡعَٰلَمِينَ" data-en="of the worlds" data-pos="noun" data-tj="madd">ٱلۡعَٰلَمِينَ</span>
-              <span class="mushaf-ayah-end">﴿٢﴾</span>
-            </div>
-            <div class="mushaf-wbw-panel" id="mwbw2">
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-madd">ٱلۡحَمۡدُ</div><div class="mushaf-wbw-en">The praise</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-idgham">لِلَّهِ</div><div class="mushaf-wbw-en">is for Allah</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar">رَبِّ</div><div class="mushaf-wbw-en">Lord</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-madd">ٱلۡعَٰلَمِينَ</div><div class="mushaf-wbw-en">of the worlds</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-            </div>
-            <div class="mushaf-tr-panel" id="mtr2">
-              <div class="mushaf-tr-text">"All praise is due to Allah, Lord of all the worlds."</div>
-              <div class="mushaf-tr-attr">Sahih International · Al-Fatihah 1:2</div>
-            </div>
-            <div class="mushaf-cmp-panel" id="mcmp2">
-              <div class="mushaf-cmp-item pri"><div class="mushaf-cmp-name">Sahih International</div><div class="mushaf-cmp-text">All praise is due to Allah, Lord of all the worlds.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Pickthall</div><div class="mushaf-cmp-text">Praise be to Allah, Lord of the Worlds.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Yusuf Ali</div><div class="mushaf-cmp-text">Praise be to Allah, the Cherisher and Sustainer of the Worlds.</div></div>
-            </div>
-          </div>
-
-          <!-- ─── Ayah 3 ─── -->
-          <div class="mushaf-ayah-row" id="mrow3">
-            <div class="mushaf-line" onclick="mushafSelectAyah(this)">
-              <span class="mushaf-word tj-madd"   data-ar="ٱلرَّحۡمَٰنِ" data-en="The Entirely Merciful"  data-pos="adj" data-tj="madd">ٱلرَّحۡمَٰنِ</span>
-              <span class="mushaf-word tj-ghunna" data-ar="ٱلرَّحِيمِ"   data-en="the Especially Merciful" data-pos="adj" data-tj="ghunna">ٱلرَّحِيمِ</span>
-              <span class="mushaf-ayah-end">﴿٣﴾</span>
-            </div>
-            <div class="mushaf-wbw-panel" id="mwbw3">
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-madd">ٱلرَّحۡمَٰنِ</div><div class="mushaf-wbw-en">The Entirely Merciful</div><div class="mushaf-wbw-pos pos-adj">ADJ</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-ghunna">ٱلرَّحِيمِ</div><div class="mushaf-wbw-en">the Especially Merciful</div><div class="mushaf-wbw-pos pos-adj">ADJ</div></div>
-            </div>
-            <div class="mushaf-tr-panel" id="mtr3">
-              <div class="mushaf-tr-text">"The Entirely Merciful, the Especially Merciful."</div>
-              <div class="mushaf-tr-attr">Sahih International · Al-Fatihah 1:3</div>
-            </div>
-            <div class="mushaf-cmp-panel" id="mcmp3">
-              <div class="mushaf-cmp-item pri"><div class="mushaf-cmp-name">Sahih International</div><div class="mushaf-cmp-text">The Entirely Merciful, the Especially Merciful.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Pickthall</div><div class="mushaf-cmp-text">The Beneficent, the Merciful.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Yusuf Ali</div><div class="mushaf-cmp-text">Most Gracious, Most Merciful.</div></div>
-            </div>
-          </div>
-
-          <!-- ─── Ayah 4 ─── -->
-          <div class="mushaf-ayah-row" id="mrow4">
-            <div class="mushaf-line" onclick="mushafSelectAyah(this)">
-              <span class="mushaf-word tj-madd"   data-ar="مَٰلِكِ"   data-en="Sovereign"     data-pos="noun" data-tj="madd">مَٰلِكِ</span>
-              <span class="mushaf-word"           data-ar="يَوۡمِ"   data-en="of the Day"    data-pos="noun">يَوۡمِ</span>
-              <span class="mushaf-word tj-ghunna" data-ar="ٱلدِّينِ" data-en="of Recompense" data-pos="noun" data-tj="ghunna">ٱلدِّينِ</span>
-              <span class="mushaf-ayah-end">﴿٤﴾</span>
-            </div>
-            <div class="mushaf-wbw-panel" id="mwbw4">
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-madd">مَٰلِكِ</div><div class="mushaf-wbw-en">Sovereign</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar">يَوۡمِ</div><div class="mushaf-wbw-en">of the Day</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-ghunna">ٱلدِّينِ</div><div class="mushaf-wbw-en">of Recompense</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-            </div>
-            <div class="mushaf-tr-panel" id="mtr4">
-              <div class="mushaf-tr-text">"Sovereign of the Day of Recompense."</div>
-              <div class="mushaf-tr-attr">Sahih International · Al-Fatihah 1:4</div>
-            </div>
-            <div class="mushaf-cmp-panel" id="mcmp4">
-              <div class="mushaf-cmp-item pri"><div class="mushaf-cmp-name">Sahih International</div><div class="mushaf-cmp-text">Sovereign of the Day of Recompense.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Pickthall</div><div class="mushaf-cmp-text">Owner of the Day of Judgment.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Yusuf Ali</div><div class="mushaf-cmp-text">Master of the Day of Judgment.</div></div>
-            </div>
-          </div>
-
-          <!-- ─── Ayah 5 ─── -->
-          <div class="mushaf-ayah-row" id="mrow5">
-            <div class="mushaf-line" onclick="mushafSelectAyah(this)">
-              <span class="mushaf-word"            data-ar="إِيَّاكَ"    data-en="You alone"      data-pos="pronoun">إِيَّاكَ</span>
-              <span class="mushaf-word tj-qalqalah" data-ar="نَعۡبُدُ"   data-en="we worship"     data-pos="verb"    data-tj="qalqalah">نَعۡبُدُ</span>
-              <span class="mushaf-word"            data-ar="وَإِيَّاكَ"  data-en="and You alone"   data-pos="pronoun">وَإِيَّاكَ</span>
-              <span class="mushaf-word tj-ghunna"  data-ar="نَسۡتَعِينُ" data-en="we ask for help" data-pos="verb"    data-tj="ghunna">نَسۡتَعِينُ</span>
-              <span class="mushaf-ayah-end">﴿٥﴾</span>
-            </div>
-            <div class="mushaf-wbw-panel" id="mwbw5">
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar">إِيَّاكَ</div><div class="mushaf-wbw-en">You alone</div><div class="mushaf-wbw-pos pos-pronoun">PRONOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-qalqalah">نَعۡبُدُ</div><div class="mushaf-wbw-en">we worship</div><div class="mushaf-wbw-pos pos-verb">VERB</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar">وَإِيَّاكَ</div><div class="mushaf-wbw-en">and You alone</div><div class="mushaf-wbw-pos pos-pronoun">PRONOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-ghunna">نَسۡتَعِينُ</div><div class="mushaf-wbw-en">we ask for help</div><div class="mushaf-wbw-pos pos-verb">VERB</div></div>
-            </div>
-            <div class="mushaf-tr-panel" id="mtr5">
-              <div class="mushaf-tr-text">"It is You we worship and You we ask for help."</div>
-              <div class="mushaf-tr-attr">Sahih International · Al-Fatihah 1:5</div>
-            </div>
-            <div class="mushaf-cmp-panel" id="mcmp5">
-              <div class="mushaf-cmp-item pri"><div class="mushaf-cmp-name">Sahih International</div><div class="mushaf-cmp-text">It is You we worship and You we ask for help.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Pickthall</div><div class="mushaf-cmp-text">Thee (alone) we worship; Thee (alone) we ask for help.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Yusuf Ali</div><div class="mushaf-cmp-text">Thee do we worship, and Thine aid we seek.</div></div>
-            </div>
-          </div>
-
-          <!-- ─── Ayah 6 ─── -->
-          <div class="mushaf-ayah-row" id="mrow6">
-            <div class="mushaf-line" onclick="mushafSelectAyah(this)">
-              <span class="mushaf-word tj-idgham" data-ar="ٱهۡدِنَا"       data-en="Guide us"   data-pos="verb" data-tj="idgham">ٱهۡدِنَا</span>
-              <span class="mushaf-word tj-madd"   data-ar="ٱلصِّرَٰطَ"     data-en="the path"   data-pos="noun" data-tj="madd">ٱلصِّرَٰطَ</span>
-              <span class="mushaf-word tj-ghunna" data-ar="ٱلۡمُسۡتَقِيمَ" data-en="the straight" data-pos="adj"  data-tj="ghunna">ٱلۡمُسۡتَقِيمَ</span>
-              <span class="mushaf-ayah-end">﴿٦﴾</span>
-            </div>
-            <div class="mushaf-wbw-panel" id="mwbw6">
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-idgham">ٱهۡدِنَا</div><div class="mushaf-wbw-en">Guide us</div><div class="mushaf-wbw-pos pos-verb">VERB</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-madd">ٱلصِّرَٰطَ</div><div class="mushaf-wbw-en">the path</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-ghunna">ٱلۡمُسۡتَقِيمَ</div><div class="mushaf-wbw-en">the straight</div><div class="mushaf-wbw-pos pos-adj">ADJ</div></div>
-            </div>
-            <div class="mushaf-tr-panel" id="mtr6">
-              <div class="mushaf-tr-text">"Guide us to the straight path."</div>
-              <div class="mushaf-tr-attr">Sahih International · Al-Fatihah 1:6</div>
-            </div>
-            <div class="mushaf-cmp-panel" id="mcmp6">
-              <div class="mushaf-cmp-item pri"><div class="mushaf-cmp-name">Sahih International</div><div class="mushaf-cmp-text">Guide us to the straight path.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Pickthall</div><div class="mushaf-cmp-text">Show us the straight path.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Yusuf Ali</div><div class="mushaf-cmp-text">Show us the straight way.</div></div>
-            </div>
-          </div>
-
-          <!-- ─── Ayah 7 ─── -->
-          <div class="mushaf-ayah-row" id="mrow7">
-            <div class="mushaf-line" onclick="mushafSelectAyah(this)">
-              <span class="mushaf-word tj-madd"    data-ar="صِرَٰطَ"       data-en="The path"              data-pos="noun"    data-tj="madd">صِرَٰطَ</span>
-              <span class="mushaf-word tj-idgham"  data-ar="ٱلَّذِينَ"     data-en="of those"              data-pos="pronoun" data-tj="idgham">ٱلَّذِينَ</span>
-              <span class="mushaf-word"            data-ar="أَنۡعَمۡتَ"    data-en="You bestowed favor"    data-pos="verb">أَنۡعَمۡتَ</span>
-              <span class="mushaf-word"            data-ar="عَلَيۡهِمۡ"    data-en="upon them"              data-pos="particle">عَلَيۡهِمۡ</span>
-              <span class="mushaf-word"            data-ar="غَيۡرِ"        data-en="not"                   data-pos="particle">غَيۡرِ</span>
-              <span class="mushaf-word tj-madd"    data-ar="ٱلۡمَغۡضُوبِ" data-en="those who earned anger" data-pos="noun"    data-tj="madd">ٱلۡمَغۡضُوبِ</span>
-              <span class="mushaf-word"            data-ar="عَلَيۡهِمۡ"    data-en="upon them"              data-pos="particle">عَلَيۡهِمۡ</span>
-              <span class="mushaf-word"            data-ar="وَلَا"         data-en="nor"                   data-pos="particle">وَلَا</span>
-              <span class="mushaf-word tj-ghunna"  data-ar="ٱلضَّآلِّينَ" data-en="those who are astray"  data-pos="noun"    data-tj="ghunna">ٱلضَّآلِّينَ</span>
-              <span class="mushaf-ayah-end">﴿٧﴾</span>
-            </div>
-            <div class="mushaf-wbw-panel" id="mwbw7">
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-madd">صِرَٰطَ</div><div class="mushaf-wbw-en">The path</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-idgham">ٱلَّذِينَ</div><div class="mushaf-wbw-en">of those</div><div class="mushaf-wbw-pos pos-pronoun">PRONOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar">أَنۡعَمۡتَ</div><div class="mushaf-wbw-en">You bestowed favor</div><div class="mushaf-wbw-pos pos-verb">VERB</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar">عَلَيۡهِمۡ</div><div class="mushaf-wbw-en">upon them</div><div class="mushaf-wbw-pos pos-particle">PREP</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar">غَيۡرِ</div><div class="mushaf-wbw-en">not</div><div class="mushaf-wbw-pos pos-particle">PREP</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-madd">ٱلۡمَغۡضُوبِ</div><div class="mushaf-wbw-en">earned anger</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar">عَلَيۡهِمۡ</div><div class="mushaf-wbw-en">upon them</div><div class="mushaf-wbw-pos pos-particle">PREP</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar">وَلَا</div><div class="mushaf-wbw-en">nor</div><div class="mushaf-wbw-pos pos-particle">PARTICLE</div></div>
-              <div class="mushaf-wbw-word"><div class="mushaf-wbw-ar tj-ghunna">ٱلضَّآلِّينَ</div><div class="mushaf-wbw-en">those who are astray</div><div class="mushaf-wbw-pos pos-noun">NOUN</div></div>
-            </div>
-            <div class="mushaf-tr-panel" id="mtr7">
-              <div class="mushaf-tr-text">"The path of those upon whom You have bestowed favor, not of those who have earned anger nor of those who are astray."</div>
-              <div class="mushaf-tr-attr">Sahih International · Al-Fatihah 1:7</div>
-            </div>
-            <div class="mushaf-cmp-panel" id="mcmp7">
-              <div class="mushaf-cmp-item pri"><div class="mushaf-cmp-name">Sahih International</div><div class="mushaf-cmp-text">The path of those upon whom You have bestowed favor, not of those who have evoked anger or of those who are astray.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Pickthall</div><div class="mushaf-cmp-text">The path of those whom Thou hast favoured; not the path of those who earn Thine anger nor of those who go astray.</div></div>
-              <div class="mushaf-cmp-item"><div class="mushaf-cmp-name">Yusuf Ali</div><div class="mushaf-cmp-text">The way of those on whom Thou hast bestowed Thy Grace, not of those who earned Thine anger nor of those who go astray.</div></div>
-            </div>
-          </div>
-
-          <!-- Footer -->
-          <div class="mushaf-page-footer">
-            <div class="mushaf-juz-label">الجزء الأول · Juz 1</div>
-          </div>
-        </div><!-- end mushaf-page -->
+        <!-- Page sheet render target (filled by quran-mushaf.js) -->
+        <div id="mushafRender"></div>
 
         <!-- Page navigation -->
         <div class="mushaf-nav">
-          <button class="mushaf-nav-btn" id="mushafPrev" onclick="mushafChangePage(-1)" disabled>
+          <button class="mushaf-nav-btn" id="mushafPrev" onclick="mushafChangePage(-1)">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
             Previous
           </button>
-          <span class="mushaf-page-indicator" id="mushafPageNum">1 / 1</span>
-          <button class="mushaf-nav-btn" id="mushafNext" onclick="mushafChangePage(1)" disabled>
+          <span class="mushaf-page-indicator" id="mushafPageNum">1 / 604</span>
+          <button class="mushaf-nav-btn" id="mushafNext" onclick="mushafChangePage(1)">
             Next
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
-
       </div><!-- end mushafPageView -->
 
     </div><!-- end verses-area -->
@@ -2310,30 +2127,9 @@ function toggleGrammarTags(){
 }
 
 /* ════ TAJWEED ════ */
-var tajweedOn=false;
-function toggleTajweed(btn){
-  tajweedOn=!tajweedOn;
-  if(btn)btn.classList.toggle('tajweed-active',tajweedOn);
-
-  /* Standard card view legend */
-  document.getElementById('tjLegend').classList.toggle('show',tajweedOn);
-
-  /* Mushaf page legend */
-  var mLegend = document.getElementById('mushafTjLegend');
-  if(mLegend) mLegend.classList.toggle('show', tajweedOn);
-
-  /* In Mushaf mode: show/hide tajweed colours on mushaf-word spans.
-     The tj-* classes are always present in the HTML; we just suppress them
-     with a parent class when tajweed is off.                               */
-  var mushafPage = document.getElementById('mushafPageView');
-  if(tajweedOn){
-    mushafPage.classList.remove('tj-hidden');
-  } else {
-    mushafPage.classList.add('tj-hidden');
-  }
-
-  showToast(tajweedOn?'Tajweed color-coding on ✦':'Tajweed off');
-}
+/* toggleTajweed is now owned by src/js/quran-tajweed.js (context-aware:
+   colors the Study flow layer, or swaps the Mushaf v2<->v4 font). The module
+   assigns window.toggleTajweed after this inline script, so it wins. */
 
 /* ════ TRANSLATION COMPARE ════ */
 var compareOn=false;
@@ -3052,34 +2848,34 @@ function toggleCompareMushaf(btn) {
 
 /* ── Main Mushaf Mode toggle ── */
 /* Study Mode ↔ Mushaf Mode — mutually exclusive switcher */
+/* Study Mode ↔ Mushaf Mode — mutually exclusive. Layout is driven by the
+   `.mushaf-mode-active` class on #versesArea (see CSS); the QCF page itself is
+   rendered by src/js/quran-mushaf.js. */
 function switchToStudyMode(btn) {
-  if (!mushafModeActive) return; // already in study mode
   mushafModeActive = false;
-  var versesArea = document.getElementById('versesArea');
-  var cardList   = document.getElementById('versesCardList');
-  var mushafView = document.getElementById('mushafPageView');
-  versesArea.classList.remove('mushaf-mode-active');
-  if (cardList)   cardList.style.display   = '';
-  if (mushafView) mushafView.style.display = 'none';
-  // badge swap
+  document.getElementById('versesArea').classList.remove('mushaf-mode-active');
   document.getElementById('studyModeBtn').classList.add('on');
   document.getElementById('mushafModeBtn').classList.remove('on');
+  if (window.II && window.II.mushaf) window.II.mushaf._setActive(false);
+  if (window.II && window.II.tajweed) window.II.tajweed.reapply(); // recolor Study cards if tajweed on
   showToast('Study Mode — verse cards ✦');
 }
 
 function switchToMushafMode(btn) {
-  if (mushafModeActive) return; // already in mushaf mode
   mushafModeActive = true;
-  var versesArea = document.getElementById('versesArea');
-  var cardList   = document.getElementById('versesCardList');
-  var mushafView = document.getElementById('mushafPageView');
-  versesArea.classList.add('mushaf-mode-active');
-  if (cardList)   cardList.style.display   = 'none';
-  if (mushafView) mushafView.style.display = 'block';
-  // badge swap
+  document.getElementById('versesArea').classList.add('mushaf-mode-active');
   document.getElementById('mushafModeBtn').classList.add('on');
   document.getElementById('studyModeBtn').classList.remove('on');
-  showToast('Mushaf Mode — traditional page ✦');
+  if (window.II && window.II.mushaf) window.II.mushaf._setActive(true);
+  var chapters = null;
+  try { chapters = JSON.parse(localStorage.getItem('ii-quran-chapters') || 'null'); } catch (e) {}
+  var sid = window.currentSurahId || 1;
+  if (window.II && window.II.mushafCore && window.mushafGoToPage) {
+    window.II.mushafCore.resolveStartPage(sid, chapters)
+      .then(function (start) { window.mushafGoToPage(start); });
+  } else if (window.mushafGoToPage) { window.mushafGoToPage(1); }
+  if (window.II && window.II.tajweed) window.II.tajweed.reapply(); // apply v4 font if tajweed on
+  showToast('Mushaf Mode — Madina page ✦');
 }
 
 function toggleMushafMode(btn) { // legacy — keep for any other callers
@@ -3216,6 +3012,10 @@ function mushafChangePage(dir) {
 <script src="src/js/quran-ai.js"></script>
 <script src="src/js/quran-share-core.js"></script>
 <script src="src/js/quran-share.js"></script>
+<script src="src/js/quran-mushaf-core.js"></script>
+<script src="src/js/quran-tajweed-core.js"></script>
+<script src="src/js/quran-mushaf.js"></script>
+<script src="src/js/quran-tajweed.js"></script>
 <!-- src/js/quran.js deferred to Module 3 (verse engine): it targets a legacy
      DOM (#surahSelect/#verseList) and its boot fires loadSurah()+#surah- hash,
      which conflicts with Module 1's ?surah=<slug> scheme. Re-enable once

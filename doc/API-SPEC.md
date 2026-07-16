@@ -123,6 +123,33 @@ Email capture (Knowledge Hub).
 
 ---
 
+## Madina Mushaf + Tajweed (Module 5a — client-direct, keyless)
+
+These are **third-party read-only** endpoints called directly from the client (no `/api/`
+proxy — they are public, keyless, and CORS-enabled). Documented here so shapes are not guessed.
+
+### Mushaf page layout — `GET https://api.quran.com/api/v4/verses/by_page/{page}`
+- **Params:** `words=true&word_fields=code_v2,line_number,page_number,char_type_name,position&fields=juz_number,hizb_number,page_number&per_page=50&mushaf=1`
+- **Returns:** `{ verses: [{ verse_key, verse_number, juz_number, hizb_number, words: [{ code_v2, line_number, char_type_name('word'|'end'), position }] }] }`
+- **Use:** `quran-mushaf-core.buildPageModel()` groups words **by `line_number`** (one printed line may span verses) and derives `surah_name`/`basmallah` header lines from empty line-gaps above each surah start.
+- **Cache/fallback:** 8s timeout + abort; on failure → toast + revert to Study Mode.
+- **Fallback host** (if keyless access ever changes): `https://apis.quran.foundation/content/api/v4` (may require a client key).
+
+### Tajweed (flowing Study view) — field on `verses/by_chapter`
+- Add `text_uthmani_tajweed` to the existing `fields=` list. Returns Uthmani HTML with
+  `<tajweed class="madda_normal|ghunnah|ikhafa|idgham_*|iqlab|qalqalah|ham_wasl|…">` spans.
+- `quran-tajweed-core.colorize()` maps the ~15 classes → 5 site families (`tj-madd/ghunna/ikhfa/idgham/qalqalah`); neutral classes unwrap to plain text.
+
+### QCF fonts — `https://verses.quran.foundation/fonts/quran/hafs/…` (CDN, on-demand)
+- **Plain (v2):** `v2/woff2/p{1..604}.woff2`, `@font-face` family `p{N}-v2`.
+- **Tajweed (v4, colored):** `v4/colrv1/woff2/p{N}.woff2` (COLRv1 + palettes; Chrome/Safari/Edge)
+  and `v4/ot-svg/{light|dark}/woff2/p{N}.woff2` (Firefox). Family `p{N}-v4`. Same `code_v2`
+  glyphs + identical page geometry as v2 — Tajweed Mode in Mushaf is a **font swap only**.
+- Loaded via `FontFace` (only visited page + prefetch next). Glyph codes injected via
+  `innerHTML` (Private-Use-Area chars). **CSP:** allow `verses.quran.foundation` in `font-src`.
+
+---
+
 ## Cross-Cutting Rules
 
 - **No secret in client.** Any new route that touches a keyed API must be added here *and* implemented as a `/api/` proxy before client code calls it.
