@@ -234,6 +234,10 @@
     var b = banner(); if (b) b.style.display = core.showBismillah(ctxSurahId) ? '' : 'none';
     pending = verses.slice();
     appendBatch();
+    // Preload the first ayah's tafsir so the (default-open) panel isn't empty.
+    if (verses[0] && window.II && window.II.tafsir) {
+      window.II.tafsir.setVerse(verses[0].verse_key, ctxSurahName);
+    }
     if (pending.length > 0) {
       var sentinel = el('div', 'verses-sentinel'); sentinel.setAttribute('aria-hidden', 'true');
       sentinel.style.height = '1px';
@@ -285,6 +289,10 @@
     Array.prototype.forEach.call(document.querySelectorAll('.ayah-card.active-verse'),
       function (c) { c.classList.remove('active-verse'); });
     if (card) card.classList.add('active-verse');
+    // Load this ayah's tafsir into the side panel.
+    if (card && window.II && window.II.tafsir && card.dataset.key) {
+      window.II.tafsir.setVerse(card.dataset.key, ctxSurahName);
+    }
   };
 
   window.copyVerse = function (evt, verseKey) {

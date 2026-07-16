@@ -1711,33 +1711,33 @@ html {
           <h2 class="t-display-lg" data-i18n="home.trio.h2" data-i18n-html>A daily portion of <span class="gradient-italic">light</span></h2>
         </div>
         <div class="trio-grid">
-          <article class="card trio-card reveal reveal-d1">
+          <article class="card trio-card reveal reveal-d1" data-refl-card="verse">
             <div class="head">
               <span class="eyebrow" data-i18n="home.trio.verseEyebrow">Verse of the Day</span>
               <button class="icon-btn" style="width:32px;height:32px;border:none;background:transparent;color:var(--ink-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
             </div>
-            <div class="arabic">وَمَن يَتَوَكَّلْ عَلَى ٱللَّهِ فَهُوَ حَسْبُهُۥ</div>
-            <div class="body" data-i18n="home.trio.verseBody">"And whosoever places his trust in Allah — sufficient is He for him."</div>
-            <div class="foot"><span class="font-mono" style="font-size:12px;">Surah At-Talaq · 65:3</span><a class="read-more" href="quran.html" data-i18n="home.trio.read">Read →</a></div>
+            <div class="arabic" data-refl="arabic">وَمَن يَتَوَكَّلْ عَلَى ٱللَّهِ فَهُوَ حَسْبُهُۥ</div>
+            <div class="body" data-refl="text">"And whosoever places his trust in Allah — sufficient is He for him."</div>
+            <div class="foot"><span class="font-mono" data-refl="ref" style="font-size:12px;">Surah At-Talaq · 65:3</span><a class="read-more" data-refl="action" href="quran.html?surah=at-talaq" data-i18n="home.trio.read">Read →</a></div>
           </article>
 
-          <article class="card trio-card reveal reveal-d2">
+          <article class="card trio-card reveal reveal-d2" data-refl-card="hadith">
             <div class="head">
               <span class="eyebrow" data-i18n="home.trio.hadithEyebrow">Hadith of the Day</span>
-              <span class="grade grade-sahih" data-i18n="home.trio.sahih">✓ Sahih</span>
+              <span class="grade grade-sahih" data-refl="grade">✓ Sahih</span>
             </div>
-            <div class="body" data-i18n="home.trio.hadithBody">"The most beloved deeds to Allah are those that are most consistent, even if they are small."</div>
-            <div class="foot"><span class="font-mono" style="font-size:12px;">Sahih al-Bukhari · 6464</span><a class="read-more" href="hadith.html" data-i18n="home.trio.read">Read →</a></div>
+            <div class="body" data-refl="text">"The most beloved deeds to Allah are those that are most consistent, even if they are small."</div>
+            <div class="foot"><span class="font-mono" data-refl="ref" style="font-size:12px;">Sahih al-Bukhari · 6464</span><a class="read-more" data-refl="action" href="hadith.html" data-i18n="home.trio.read">Read →</a></div>
           </article>
 
-          <article class="card trio-card reveal reveal-d3">
+          <article class="card trio-card reveal reveal-d3" data-refl-card="dua">
             <div class="head">
               <span class="eyebrow" data-i18n="home.trio.duaEyebrow">Dua of the Day</span>
               <button class="icon-btn" style="width:32px;height:32px;border:none;background:transparent;color:var(--ink-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 4 L12 8 L19 4 V20 L12 16 L5 20 Z"/></svg></button>
             </div>
-            <div class="arabic" style="font-size:20px">رَبِّ ٱشْرَحْ لِى صَدْرِى وَيَسِّرْ لِىٓ أَمْرِى</div>
-            <div class="body" data-i18n="home.trio.duaBody">"My Lord, expand for me my chest, and ease my task for me."</div>
-            <div class="foot"><span class="font-mono" style="font-size:12px;">Surah Ta-Ha · 20:25–26</span><a class="read-more" href="dua.html" data-i18n="home.trio.listen">Listen →</a></div>
+            <div class="arabic" data-refl="arabic" style="font-size:20px">رَبِّ ٱشْرَحْ لِى صَدْرِى وَيَسِّرْ لِىٓ أَمْرِى</div>
+            <div class="body" data-refl="text">"My Lord, expand for me my chest, and ease my task for me."</div>
+            <div class="foot"><span class="font-mono" data-refl="ref" style="font-size:12px;">Surah Ta-Ha · 20:25–26</span><a class="read-more" data-refl="action" href="dua.html" data-i18n="home.trio.listen">Listen →</a></div>
           </article>
         </div>
       </div>
@@ -2369,6 +2369,8 @@ QUICK TEST CHECKLIST:
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
 <script src="src/js/home.js"></script>
+<script src="src/js/reflection-core.js"></script>
+<script src="src/js/reflection.js"></script>
 <script src="src/js/prayer-widget.js"></script>
 </body>
 </html>

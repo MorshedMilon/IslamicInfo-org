@@ -1665,17 +1665,12 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   <div class="tafsir-panel" id="tafsirPanel">
     <div class="tp-head"><div class="tp-title">Tafsir</div><button class="tp-close" onclick="closeTafsir()">✕</button></div>
     <div class="tp-source-row">
-      <button class="tp-src on" onclick="switchTafsir(this,'ik')">Ibn Kathir</button>
-      <button class="tp-src" onclick="switchTafsir(this,'ta')">al-Tabari</button>
-      <button class="tp-src" onclick="switchTafsir(this,'qu')">al-Qurtubi</button>
+      <button class="tp-src on" data-src="ik" onclick="switchTafsir(this,'ik')">Ibn Kathir</button>
+      <button class="tp-src" data-src="ma" onclick="switchTafsir(this,'ma')">Ma'arif al-Qur'an</button>
+      <button class="tp-src" data-src="ja" onclick="switchTafsir(this,'ja')">Al-Jalalayn</button>
     </div>
     <div class="tp-body" id="tafsirBody">
-      <div class="tp-ref">Al-Fatihah · 1:1 · Ibn Kathir</div>
-      <div class="tp-arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-      <p class="tp-text"><strong>Bismillah</strong> — Ibn Kathir explains that beginning with Allah's name is a declaration seeking His blessing and assistance. The one who says Bismillah acknowledges that all power belongs to Allah and their action is connected to Him.</p>
-      <p class="tp-text">The two names <strong>ar-Rahman</strong> and <strong>ar-Rahim</strong> are both derived from <em>rahmah</em> (mercy). ar-Rahman denotes the breadth of mercy encompassing all creation; ar-Rahim denotes the depth of mercy reserved for the believers on the Day of Judgment.</p>
-      <p class="tp-text">The scholars noted that Bismillah serves as both an opening and a blessing — whoever begins any righteous act with it begins in Allah's name, connecting it to His infinite power.</p>
-      <div class="tp-attr">Tafsir Ibn Kathir · Vol. 1 · Verified</div>
+      <!-- filled per-ayah by src/js/quran-tafsir.js -->
     </div>
   </div>
 </div><!-- end reader-shell -->
@@ -1685,23 +1680,23 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 <section class="trio-section">
   <div class="trio-hdr"><div class="trio-title" data-i18n="quran.reflection.title">Today's Reflection</div><a class="trio-see-all" href="quran.html" data-i18n="quran.reflection.viewAllLink">View all →</a></div>
   <div class="trio-grid">
-    <div class="trio-card">
+    <div class="trio-card" data-refl-card="verse">
       <div class="trio-head"><div class="trio-icon">📖</div><span class="trio-label" data-i18n="quran.reflection.card1Label">Verse of the Day</span><span class="trio-tag" data-i18n="quran.reflection.card1Tag">LIVE</span></div>
-      <div class="trio-arabic">وَمَن يَتَوَكَّلۡ عَلَى ٱللَّهِ فَهُوَ حَسۡبُهُ</div>
-      <div class="trio-text" data-i18n="quran.reflection.card1Text">"And whoever relies upon Allah — then He is sufficient for him."</div>
-      <div class="trio-foot"><span>At-Talaq 65:3</span><span class="trio-read" onclick="showToast('Opening At-Talaq…')" data-i18n="quran.reflection.card1ReadLink">Read in context →</span></div>
+      <div class="trio-arabic" data-refl="arabic">وَمَن يَتَوَكَّلۡ عَلَى ٱللَّهِ فَهُوَ حَسۡبُهُ</div>
+      <div class="trio-text" data-refl="text">"And whoever relies upon Allah — then He is sufficient for him."</div>
+      <div class="trio-foot"><span data-refl="ref">At-Talaq 65:3</span><a class="trio-read" data-refl="action" href="quran.html?surah=at-talaq" data-i18n="quran.reflection.card1ReadLink">Read in context →</a></div>
     </div>
-    <div class="trio-card gold">
-      <div class="trio-head"><div class="trio-icon gold">📜</div><span class="trio-label" data-i18n="quran.reflection.card2Label">Hadith of the Day</span><span class="trio-tag" style="background:rgba(197,160,89,.12);color:var(--gold-700);" data-i18n="quran.reflection.card2Tag">SAHIH</span></div>
-      <div class="trio-arabic">إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ</div>
-      <div class="trio-text" data-i18n="quran.reflection.card2Text">"The reward of deeds depends upon the intentions."</div>
-      <div class="trio-foot"><span>Sahih al-Bukhari · 1</span><a class="trio-read" href="hadith.html" data-i18n="quran.reflection.viewLink">View →</a></div>
+    <div class="trio-card gold" data-refl-card="hadith">
+      <div class="trio-head"><div class="trio-icon gold">📜</div><span class="trio-label" data-i18n="quran.reflection.card2Label">Hadith of the Day</span><span class="trio-tag" data-refl="grade" style="background:rgba(197,160,89,.12);color:var(--gold-700);">✓ Sahih</span></div>
+      <div class="trio-arabic" data-refl="arabic">إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ</div>
+      <div class="trio-text" data-refl="text">"The reward of deeds depends upon the intentions."</div>
+      <div class="trio-foot"><span data-refl="ref">Sahih al-Bukhari · 1</span><a class="trio-read" data-refl="action" href="hadith.html" data-i18n="quran.reflection.viewLink">View →</a></div>
     </div>
-    <div class="trio-card">
+    <div class="trio-card" data-refl-card="dua">
       <div class="trio-head"><div class="trio-icon">🤲</div><span class="trio-label" data-i18n="quran.reflection.card3Label">Dua of the Day</span><span class="trio-tag" data-i18n="quran.reflection.card3Tag">DAILY</span></div>
-      <div class="trio-arabic">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً</div>
-      <div class="trio-text" data-i18n="quran.reflection.card3Text">"Our Lord, give us good in this world and good in the hereafter."</div>
-      <div class="trio-foot"><span>Al-Baqarah 2:201</span><a class="trio-read" href="dua.html" data-i18n="quran.reflection.viewLink">View →</a></div>
+      <div class="trio-arabic" data-refl="arabic">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً</div>
+      <div class="trio-text" data-refl="text">"Our Lord, give us good in this world and good in the hereafter."</div>
+      <div class="trio-foot"><span data-refl="ref">Al-Baqarah 2:201</span><a class="trio-read" data-refl="action" href="dua.html" data-i18n="quran.reflection.viewLink">View →</a></div>
     </div>
   </div>
 </section>
@@ -2173,16 +2168,9 @@ function closeTafsir(){
   document.getElementById('tafsirPanel').classList.add('closed');
   document.getElementById('tafsirCtrlBtn').classList.remove('on');
 }
-var tafsirTexts={
-  ik:'<div class="tp-ref">Al-Fatihah · 1:1 · Ibn Kathir</div><div class="tp-arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div><p class="tp-text"><strong>Bismillah</strong> — Ibn Kathir explains that beginning with Allah\'s name is a declaration seeking His blessing. The one who says Bismillah acknowledges that all power belongs to Allah.</p><p class="tp-text">The combination of <strong>ar-Rahman</strong> and <strong>ar-Rahim</strong> establishes that mercy is the primary attribute through which Allah relates to His creation. ar-Rahman is universal; ar-Rahim is specifically for the believers.</p><div class="tp-attr">Tafsir Ibn Kathir · Vol. 1 · Verified</div>',
-  ta:'<div class="tp-ref">Al-Fatihah · 1:1 · al-Tabari</div><div class="tp-arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div><p class="tp-text">Imam at-Tabari cites multiple companion narrations affirming that the Bismillah serves as a declaration of complete reliance upon Allah, without which no righteous act reaches its full blessing.</p><p class="tp-text">He records a scholarly difference of opinion regarding whether Bismillah constitutes a full verse of Al-Fatihah — the Kufan scholars affirming it, the Madinan scholars holding it to be a separator between surahs.</p><div class="tp-attr">Jami\' al-Bayan · Imam at-Tabari · Vol. 1</div>',
-  qu:'<div class="tp-ref">Al-Fatihah · 1:1 · al-Qurtubi</div><div class="tp-arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div><p class="tp-text">Al-Qurtubi opens with a comprehensive legal discussion: scholars across the four madhabs differ on whether reciting Bismillah audibly in Salah is obligatory, recommended, or permissible.</p><p class="tp-text">He also notes the grammatical subtlety: <em>ism</em> (name) implies that actions performed in Allah\'s name draw their legitimacy from His attributes, not the performer\'s own merit.</p><div class="tp-attr">Al-Jami\' li-Ahkam al-Qur\'an · al-Qurtubi · Vol. 1</div>'
-};
-function switchTafsir(btn,src){
-  document.querySelectorAll('.tp-src').forEach(function(b){b.classList.remove('on');});
-  btn.classList.add('on');
-  document.getElementById('tafsirBody').innerHTML=tafsirTexts[src]||tafsirTexts.ik;
-}
+/* Tafsir content + switchTafsir are owned by src/js/quran-tafsir.js (live per-ayah
+   fetch: Ibn Kathir / Ma'arif al-Qur'an / Al-Jalalayn). The module assigns
+   window.switchTafsir after this inline script, so it wins. */
 
 /* ════ SIDEBAR ════ */
 function toggleSidebar(){
@@ -3022,6 +3010,10 @@ function mushafChangePage(dir) {
 <script src="src/js/quran-tajweed-core.js"></script>
 <script src="src/js/quran-mushaf.js"></script>
 <script src="src/js/quran-tajweed.js"></script>
+<script src="src/js/quran-tafsir-core.js"></script>
+<script src="src/js/quran-tafsir.js"></script>
+<script src="src/js/reflection-core.js"></script>
+<script src="src/js/reflection.js"></script>
 <!-- src/js/quran.js deferred to Module 3 (verse engine): it targets a legacy
      DOM (#surahSelect/#verseList) and its boot fires loadSurah()+#surah- hash,
      which conflicts with Module 1's ?surah=<slug> scheme. Re-enable once
