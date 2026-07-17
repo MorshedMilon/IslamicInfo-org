@@ -87,6 +87,19 @@ test('compileIndex sorts by score desc, bakes translation + ref, builds reverse 
   assert.deepEqual(out.verseIndex['1:5'], ['patience']);
 });
 
+test('compileIndex degrades gracefully when translation and surah name are both missing', () => {
+  const src = {
+    misc: { label: 'Misc', verses: [
+      { key: '99:1', score: 5, sourceCitation: 'c' }
+    ] }
+  };
+  const out = core.compileIndex(src, {}, {});
+  const row = out.topics.misc.verses[0];
+  assert.equal(row.translation, '');
+  assert.equal(row.translator, '');
+  assert.equal(row.ref, '99:1');
+});
+
 const TOPICS = {
   patience: { label: 'Patience (Sabr)', verses: [
     { key: '2:153', ref: 'Al-Baqarah 2:153', score: 9, translation: 'A', translator: 'Saheeh International', sourceCitation: 'c' },
@@ -114,4 +127,22 @@ test('relatedVerses excludes self, dedups across topics (highest score), sorts d
 test('relatedVerses respects limit and returns [] for untagged verse', () => {
   assert.equal(core.relatedVerses('2:153', TOPICS, VERSE_INDEX, { limit: 1 }).length, 1);
   assert.deepEqual(core.relatedVerses('9:1', TOPICS, VERSE_INDEX), []);
+});
+
+const TIE_TOPICS = {
+  a: { label: 'A', verses: [
+    { key: '5:1', ref: 'X 5:1', score: 1, translation: '', translator: '', sourceCitation: 'c' },
+    { key: '3:3', ref: 'X 3:3', score: 5, translation: '', translator: '', sourceCitation: 'c' }
+  ] },
+  b: { label: 'B', verses: [
+    { key: '5:1', ref: 'X 5:1', score: 1, translation: '', translator: '', sourceCitation: 'c' },
+    { key: '2:2', ref: 'X 2:2', score: 5, translation: '', translator: '', sourceCitation: 'c' }
+  ] }
+};
+const TIE_INDEX = { '5:1': ['a', 'b'], '3:3': ['a'], '2:2': ['b'] };
+
+test('relatedVerses breaks a genuine score tie between different keys by ascending key', () => {
+  const out = core.relatedVerses('5:1', TIE_TOPICS, TIE_INDEX);
+  assert.deepEqual(out.map(r => r.key), ['2:2', '3:3']);
+  assert.equal(out[0].score, out[1].score);
 });
