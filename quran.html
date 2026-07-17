@@ -293,6 +293,16 @@ a{text-decoration:none;color:inherit;}
 .ai-card{display:none;margin-top:14px;padding:16px 18px;background:linear-gradient(135deg,rgba(197,160,89,.06),rgba(0,105,110,.03));border:.5px solid rgba(197,160,89,.25);border-radius:14px;}
 .ai-card.show{display:block;animation:slideUp .35s var(--ease-reverent) both;}
 @keyframes slideUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+/* Related Verses panel */
+.rv-panel{display:none;margin-top:14px;padding:14px 16px;background:rgba(0,105,110,.03);border:.5px solid rgba(197,160,89,.25);border-radius:14px;}
+.rv-panel.show{display:block;animation:slideUp .35s var(--ease-reverent) both;}
+.rv-row{display:block;padding:10px 0;border-bottom:.5px solid rgba(197,160,89,.18);text-decoration:none;color:inherit;}
+.rv-row:last-child{border-bottom:0;}
+.rv-ref{font-weight:600;}
+.rv-chip{margin-inline-start:8px;font-size:.72rem;padding:2px 8px;border-radius:999px;background:rgba(197,160,89,.14);}
+.rv-text{margin:4px 0 2px;opacity:.9;}
+.rv-attr{font-size:.72rem;opacity:.6;}
+.rv-empty{opacity:.6;margin:6px 0;}
 .ai-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .ai-title{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-700);}
 .ai-close{width:22px;height:22px;border:none;background:transparent;cursor:pointer;color:var(--ink-subtle);font-size:14px;display:flex;align-items:center;justify-content:center;border-radius:6px;}
@@ -3237,6 +3247,8 @@ function mushafChangePage(dir) {
 <script src="src/js/quran-tajweed.js"></script>
 <script src="src/js/quran-tafsir-core.js?v=20260716b"></script>
 <script src="src/js/quran-tafsir.js?v=20260716b"></script>
+<script src="src/js/quran-related-core.js"></script>
+<script src="src/js/quran-related.js"></script>
 <script src="src/js/reflection-core.js?v=20260716b"></script>
 <script src="src/js/reflection.js?v=20260716b"></script>
 <script src="src/js/reflection-actions-core.js?v=20260717b"></script>
