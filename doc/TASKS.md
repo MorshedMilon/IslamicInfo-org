@@ -23,6 +23,27 @@ _Top of the backlog, unblocked, scoped._
 - [ ] Stand up CI checks (see §CI below) before building more pages.
 - [ ] 🚧 Create missing utility pages: `contact.html`, `privacy.html`, `terms.html`.
 
+## Done
+_Shipped work, most recent first._
+
+- [x] **Related Verses** (Quran Explorer knowledge index — slice 1 of 3) — topic-based
+  "Related Verses" panel in the Quran reader, powered by a pre-built, hand-curated,
+  fully-sourced static JSON index (`src/data/related-verses/`); zero AI, zero backend,
+  client-side lookup. Build script (`tools/related-verses-build.mjs`) is fail-closed —
+  every row requires a `sourceCitation`. See `doc/DATA.md` and `doc/API-SPEC.md`. (2026-07-17)
+
+### Knowledge Index — Deferred Backlog (slices 2+3, to finish the 3-feature set)
+_Blocked on the D1/Hadith cycle; not yet scoped as individual tasks._
+
+- [ ] 🕌 Related Hadith — corpus + topic tags; gated by `grade`+`gradedBy`, hadith-verifier
+  skill, human-review gate, un-501 `/api/hadith`.
+- [ ] Vocabulary — terms + cross-references into verses & hadith; FTS lookup.
+- [ ] Adopt D1 + FTS5 for the corpus (with Hadith).
+- [ ] Introduce `/api/index/*` worker routes (with D1).
+- [ ] 🕌 AI connecting-explanation blurb — reuses `/api/ask-claude` guardrails + human-review gate.
+- [ ] Web-based admin bulk-review UI.
+- [ ] Scale tag coverage via external thematic index / staged suggestions.
+
 ---
 
 ## Stage 1 — Static Foundation

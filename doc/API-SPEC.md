@@ -170,6 +170,14 @@ is no `/api/tafsir`/`/api/dua`; these work on GitHub Pages too).
 - **Hadith / Dua:** curated static seeds `src/data/reflection-hadith.json` (Sahih Bukhari via
   fawazahmed0) + `reflection-dua.json` (Hisnul Muslim via dua-dhikr). UTC-daily rotation. No live call.
 
+### Related Verses (topic index — knowledge index slice 1)
+- **Source:** static JSON — `src/data/related-verses/topics.json` (topic → verses) and
+  `src/data/related-verses/verse-index.json` (verse → topic slugs). No `/api/` route in this
+  slice, and the AI is **not** involved — every row is pre-verified by a human curator with a
+  `sourceCitation` baked in at build time (see `DATA.md`).
+- **Deferred:** `/api/index/related-verses` (and D1 + FTS5 for the full corpus) are deferred to
+  the Hadith cycle, alongside Related Hadith and Vocabulary (see `TASKS.md`).
+
 ---
 
 ## Cross-Cutting Rules

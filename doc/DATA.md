@@ -71,6 +71,18 @@
 > `quran-audio.js` routes `getSurahAudio` by `id >= 1,000,000`. See
 > `src/data/qul/README.md` for the operator ingest workflow.
 
+> **Related Verses static index (Quran Explorer knowledge index, slice 1).**
+> Static JSON on Pages, no binding, no `/api/` route: `src/data/related-verses/topics.json`
+> → `{ [topicSlug]: { label, verses: [{ key, ref, score, translation, translator, sourceCitation }] } }`
+> and `src/data/related-verses/verse-index.json` → `{ [verseKey]: topicSlug[] }`. Both files
+> are **generated** by `tools/related-verses-build.mjs` from the hand-authored curation
+> source `tools/related-verses/topics.source.json` — do **not** hand-edit the generated
+> files; regenerate via the build script. Every tagged verse row carries a build-time-baked
+> Saheeh International translation (`translation`/`translator`) plus a `sourceCitation`;
+> the build is fail-closed and aborts if any row is missing one. Loaded client-side by
+> `src/js/quran-related.js` (pure lookup logic in `src/js/quran-related-core.js`) to render
+> the per-verse "Related Verses" panel in `quran.html`.
+
 ## 2. Small Value Shapes
 
 ```ts
