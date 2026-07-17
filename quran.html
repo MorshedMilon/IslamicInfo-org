@@ -1308,13 +1308,19 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
    a "More Languages" expander, and inline (accordion) translator sub-lists.
    Responsive: fixed-position panel that fits desktop, tablet, and mobile. */
 .translation-picker{width:min(300px,calc(100vw - 20px));}
-#translationFloatPicker{max-height:min(440px,78vh);display:flex;flex-direction:column;padding:8px;}
-.tp-search{width:100%;box-sizing:border-box;margin-bottom:6px;padding:9px 11px;border-radius:8px;
+#translationFloatPicker{display:flex;flex-direction:column;padding:8px;overflow:hidden;}
+.tp-search{flex:0 0 auto;width:100%;box-sizing:border-box;margin-bottom:6px;padding:9px 11px;border-radius:8px;
   border:.5px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;
   font-family:var(--font-body);font-size:13px;outline:none;}
 .tp-search::placeholder{color:rgba(255,255,255,.4);}
 .tp-search:focus{border-color:var(--gold-400);}
-.tp-list{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;}
+/* max-height + overflow live on the scrolling element itself — putting them on the
+   flex parent instead lets the list grow past the panel and spill rows onto the page. */
+.tp-list{flex:0 1 auto;max-height:min(62vh,400px);overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;}
+.tp-list::-webkit-scrollbar{width:9px;}
+.tp-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:9px;border:2px solid transparent;background-clip:content-box;}
+.tp-list::-webkit-scrollbar-thumb:hover{background:rgba(197,160,89,.55);background-clip:content-box;}
+.tp-list{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.20) transparent;}
 .tp-section-label{padding:8px 10px 4px;font-family:var(--font-body);font-size:10px;font-weight:700;
   letter-spacing:.08em;text-transform:uppercase;color:var(--gold-300);opacity:.75;}
 .tp-empty{padding:14px 10px;color:rgba(255,255,255,.5);font-size:12px;font-family:var(--font-body);text-align:center;}
