@@ -48,9 +48,35 @@
     return { ok: errors.length === 0, errors: errors };
   }
 
+  function compileIndex(source, taxonomy) {
+    var topics = {}, pendingCount = 0;
+    Object.keys(source).forEach(function (slug) {
+      var t = source[slug];
+      var reviewed = [];
+      t.hadith.forEach(function (h) {
+        if (h.reviewed === true) reviewed.push(h); else pendingCount++;
+      });
+      if (!reviewed.length) return;
+      var rows = reviewed.slice().sort(function (a, b) {
+        return (b.score - a.score) ||
+          ((a.collection + a.number) < (b.collection + b.number) ? -1 : 1);
+      }).map(function (h) {
+        return {
+          collection: h.collection, number: h.number, ref: h.collection + ' ' + h.number,
+          book: h.book || '', arabic: h.arabic, english: h.english, narrator: h.narrator,
+          isnadSummary: h.isnadSummary, grade: h.grade, gradedBy: h.gradedBy,
+          url: h.url, score: h.score
+        };
+      });
+      topics[slug] = { label: t.label, hadith: rows };
+    });
+    return { topics: topics, pendingCount: pendingCount };
+  }
+
   return {
     ALLOWED_COLLECTIONS: ALLOWED_COLLECTIONS,
     ALLOWED_GRADES: ALLOWED_GRADES,
-    validateSource: validateSource
+    validateSource: validateSource,
+    compileIndex: compileIndex
   };
 });

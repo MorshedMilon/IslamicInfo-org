@@ -53,3 +53,24 @@ test('validateSource enforces every fail-closed rule', () => {
   assert.ok(r.errors.some(e => /missing\/blank english/i.test(e)));
   assert.ok(r.errors.some(e => /duplicate/i.test(e)));
 });
+
+test('compileIndex emits only reviewed:true, strips flag, composes ref, sorts, counts pending', () => {
+  const src = {
+    patience: { label: 'Patience (Sabr)', hadith: [
+      goodRow({ number: 100, score: 5, reviewed: true }),
+      goodRow({ number: 200, score: 9, reviewed: true }),
+      goodRow({ number: 300, score: 8, reviewed: false })
+    ] },
+    gratitude: { label: 'Gratitude (Shukr)', hadith: [
+      goodRow({ number: 400, reviewed: false })
+    ] }
+  };
+  const out = core.compileIndex(src, TAX);
+  assert.deepEqual(Object.keys(out.topics), ['patience']);
+  assert.deepEqual(out.topics.patience.hadith.map(h => h.number), [200, 100]);
+  const row = out.topics.patience.hadith[0];
+  assert.equal(row.ref, 'Sahih al-Bukhari 200');
+  assert.equal('reviewed' in row, false);
+  assert.equal(row.grade, 'Sahih');
+  assert.equal(out.pendingCount, 2);
+});
