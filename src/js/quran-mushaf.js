@@ -13,7 +13,8 @@
   }
   var loaded = {};           // family -> true (font registered)
   var failed = {};           // family -> true (font failed to load)
-  var state = { active: false, page: 1, variant: 'v2' };
+  var state = { active: false, page: 1, variant: 'v2', zoom: 1 };
+  try { var _z = parseFloat(localStorage.getItem('ii-quran-mushaf-zoom')); if (_z > 0) state.zoom = _z; } catch (e) {}
 
   function isFirefox() { return /firefox/i.test(navigator.userAgent); }
   function theme() { return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
@@ -78,6 +79,17 @@
     pageEl.style.fontSize = fs + 'px';
   }
 
+  // Zoom the whole page (transform scale) — sizeToWidth already fills the width at 1×,
+  // so scaling from there keeps the authentic per-line layout while enlarging/shrinking.
+  // The mushaf view scrolls (safe-centered) when a zoomed-in page exceeds the canvas.
+  function applyZoom(sheet) {
+    var pageEl = (sheet || document).querySelector('.mushaf-page');
+    if (!pageEl) return;
+    var z = state.zoom || 1;
+    pageEl.style.transformOrigin = 'top center';
+    pageEl.style.transform = (z === 1) ? '' : 'scale(' + z + ')';
+  }
+
   function renderModel(model, variant) {
     var h = host(); if (!h) return;
     var fam = core.fontFamily(model.page, variant);
@@ -110,7 +122,7 @@
       (model.juz ? ' · Juz ' + model.juz : '') + (model.hizb ? ' · Hizb ' + model.hizb : '');
     sheet.appendChild(pageEl); sheet.appendChild(footer);
     h.innerHTML = ''; h.appendChild(sheet);
-    requestAnimationFrame(function () { sizeToWidth(sheet); });
+    requestAnimationFrame(function () { sizeToWidth(sheet); applyZoom(sheet); });
   }
 
   function showLoading() { var h = host(); if (h) h.innerHTML = '<div class="mushaf-loading">Loading page…</div>'; }
@@ -150,6 +162,14 @@
     isActive: function () { return state.active; },
     _setActive: function (b) { state.active = !!b; },
     _variant: function () { return state.variant; },
+    zoom: function () { return state.zoom; },
+    // Scale the mushaf page; mirrored from the reader's A−/A+ control. Persisted.
+    setZoom: function (z) {
+      state.zoom = Math.max(0.5, Math.min(2.5, Number(z) || 1));
+      try { localStorage.setItem('ii-quran-mushaf-zoom', String(state.zoom)); } catch (e) {}
+      applyZoom();      // apply to the current page immediately
+      return state.zoom;
+    },
     // Swap the page font between plain (v2) and tajweed (v4); re-renders current page.
     _setVariant: function (v) {
       state.variant = (v === 'v4') ? 'v4' : 'v2';

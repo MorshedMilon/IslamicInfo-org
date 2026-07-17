@@ -888,14 +888,16 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 /* ── Outer container — QCF page render (quran-mushaf.js) ── */
 #mushafPageView { display: none; }
 .mushaf-mode-active #mushafPageView {
-  display: flex; flex-direction: column; align-items: center;
+  display: flex; flex-direction: column; align-items: safe center;
   min-height: 100%; padding: clamp(20px,3vh,44px) 0;
 }
 
 /* ── Dynamic Madina page sheet — fills the canvas, centers, scrolls when tall ── */
+/* safe center + overflow so a zoomed-in (transform-scaled) page stays reachable. */
 #mushafRender {
   width: 100%; flex: 1;
-  display: flex; justify-content: center; align-items: safe center;
+  display: flex; justify-content: safe center; align-items: safe center;
+  overflow: auto;
 }
 /* Transparent centering wrapper — the paper look comes from the .mushaf-page rule below */
 .mushaf-sheet { width: 96%; max-width: 1400px; margin: auto; }
@@ -2323,6 +2325,8 @@ function zoomReader(dir){
   root.style.setProperty('--ar-sz',ar+'px');
   root.style.setProperty('--tr-sz',tr+'px');
   try{ localStorage.setItem('ii-quran-ar-size',ar+'px'); localStorage.setItem('ii-quran-tr-size',tr+'px'); }catch(e){}
+  // Mirror the same zoom factor to Mushaf Mode (its page is transform-scaled).
+  if(window.II && window.II.mushaf && window.II.mushaf.setZoom) window.II.mushaf.setZoom(ar/28);
 }
 
 /* Mobile reader init: tafsir starts closed as a drawer; close drawers on surah tap;
