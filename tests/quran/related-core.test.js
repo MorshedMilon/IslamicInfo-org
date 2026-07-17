@@ -79,3 +79,32 @@ test('compileIndex sorts by score desc, bakes translation + ref, builds reverse 
   assert.deepEqual(out.verseIndex['2:153'].sort(), ['patience', 'prayer']);
   assert.deepEqual(out.verseIndex['1:5'], ['patience']);
 });
+
+const TOPICS = {
+  patience: { label: 'Patience (Sabr)', verses: [
+    { key: '2:153', ref: 'Al-Baqarah 2:153', score: 9, translation: 'A', translator: 'Saheeh International', sourceCitation: 'c' },
+    { key: '3:200', ref: 'Aal-Imran 3:200', score: 8, translation: 'B', translator: 'Saheeh International', sourceCitation: 'c' },
+    { key: '1:5', ref: 'Al-Fatihah 1:5', score: 4, translation: 'C', translator: 'Saheeh International', sourceCitation: 'c' }
+  ] },
+  prayer: { label: 'Prayer (Salah)', verses: [
+    { key: '2:153', ref: 'Al-Baqarah 2:153', score: 6, translation: 'A', translator: 'Saheeh International', sourceCitation: 'c' },
+    { key: '1:5', ref: 'Al-Fatihah 1:5', score: 7, translation: 'C', translator: 'Saheeh International', sourceCitation: 'c' }
+  ] }
+};
+const VERSE_INDEX = { '2:153': ['patience', 'prayer'], '3:200': ['patience'], '1:5': ['patience', 'prayer'] };
+
+test('topicsForVerse returns the verse slugs, or [] when untagged', () => {
+  assert.deepEqual(core.topicsForVerse('2:153', VERSE_INDEX), ['patience', 'prayer']);
+  assert.deepEqual(core.topicsForVerse('9:1', VERSE_INDEX), []);
+});
+
+test('relatedVerses excludes self, dedups across topics (highest score), sorts desc', () => {
+  const out = core.relatedVerses('2:153', TOPICS, VERSE_INDEX, { limit: 8 });
+  assert.deepEqual(out.map(r => r.key), ['3:200', '1:5']);
+  assert.equal(out.find(r => r.key === '1:5').score, 7);
+});
+
+test('relatedVerses respects limit and returns [] for untagged verse', () => {
+  assert.equal(core.relatedVerses('2:153', TOPICS, VERSE_INDEX, { limit: 1 }).length, 1);
+  assert.deepEqual(core.relatedVerses('9:1', TOPICS, VERSE_INDEX), []);
+});

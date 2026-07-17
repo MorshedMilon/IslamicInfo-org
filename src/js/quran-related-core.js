@@ -71,9 +71,42 @@
     return { topics: topics, verseIndex: verseIndex };
   }
 
+  function topicsForVerse(verseKey, verseIndex) {
+    return (verseIndex && verseIndex[verseKey]) ? verseIndex[verseKey].slice() : [];
+  }
+
+  function relatedVerses(verseKey, topics, verseIndex, opts) {
+    opts = opts || {};
+    var limit = opts.limit == null ? 8 : opts.limit;
+    var slugs = topicsForVerse(verseKey, verseIndex);
+    var best = {};
+    slugs.forEach(function (slug) {
+      var t = topics && topics[slug];
+      if (!t || !t.verses) return;
+      t.verses.forEach(function (row) {
+        if (row.key === verseKey) return;
+        var cur = best[row.key];
+        if (!cur || row.score > cur.score) {
+          best[row.key] = {
+            key: row.key, ref: row.ref, score: row.score,
+            translation: row.translation, translator: row.translator,
+            sourceCitation: row.sourceCitation, topic: t.label, topicSlug: slug
+          };
+        }
+      });
+    });
+    var list = Object.keys(best).map(function (k) { return best[k]; });
+    list.sort(function (a, b) {
+      return (b.score - a.score) || (a.key < b.key ? -1 : a.key > b.key ? 1 : 0);
+    });
+    return list.slice(0, limit);
+  }
+
   return {
     isValidVerseKey: isValidVerseKey,
     validateSource: validateSource,
-    compileIndex: compileIndex
+    compileIndex: compileIndex,
+    topicsForVerse: topicsForVerse,
+    relatedVerses: relatedVerses
   };
 });
