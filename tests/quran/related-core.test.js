@@ -30,6 +30,13 @@ test('validateSource passes a clean source', () => {
   assert.deepEqual(r.errors, []);
 });
 
+test('validateSource rejects a non-object source (array / null / primitive)', () => {
+  assert.equal(core.validateSource([], AYAH_COUNTS).ok, false);
+  assert.equal(core.validateSource(null, AYAH_COUNTS).ok, false);
+  assert.equal(core.validateSource('x', AYAH_COUNTS).ok, false);
+  assert.ok(core.validateSource([], AYAH_COUNTS).errors.some(e => /object/i.test(e)));
+});
+
 test('validateSource rejects every violation with a message', () => {
   const src = {
     'Bad Slug': { label: 'x', verses: [{ key: '2:153', score: 5, sourceCitation: 'c' }] },
