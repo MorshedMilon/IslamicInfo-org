@@ -623,6 +623,55 @@ html.reading-mode .reader-topbar:hover .rtb-row2{opacity:1;}
 .reading-mode-exit{display:none;position:fixed;top:14px;right:14px;z-index:500;background:var(--teal-700);color:white;border:none;border-radius:12px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-body);}
 html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 
+/* ══ Zoom control (Task 1) — A− / A / A+ text-size stepper in the reader topbar ══ */
+.zoom-ctrl{display:inline-flex;align-items:center;gap:2px;border:.5px solid var(--ink-faint);border-radius:20px;padding:2px;background:transparent;flex-shrink:0;}
+.zoom-ctrl button{border:none;background:transparent;cursor:pointer;color:var(--ink-muted);font-family:var(--font-body);
+  font-weight:600;line-height:1;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;}
+.zoom-ctrl button:nth-child(1){font-size:11px;}
+.zoom-ctrl button:nth-child(2){font-size:12px;}
+.zoom-ctrl button:nth-child(3){font-size:13px;}
+.zoom-ctrl button:hover{background:var(--teal-50);color:var(--teal-700);}
+[data-theme="dark"] .zoom-ctrl button:hover{background:rgba(0,105,110,.18);color:var(--teal-300);}
+
+/* Mobile drawer backdrop — only active inside the reader shell on small screens */
+.shell-backdrop{display:none;}
+
+/* ══ MOBILE READER (Tasks 2 & 3) — ≤900px: sidebar & tafsir become off-canvas drawers,
+   reader-main goes full-width, toolbar scrolls horizontally ══ */
+@media(max-width:900px){
+  /* Sticky just below the (61px) site header so the reader topbar — title, zoom,
+     play — never tucks under it; also the containing block for the drawers. */
+  .reader-shell{position:sticky;top:61px;height:calc(100dvh - 61px);min-height:0;max-height:none;}
+  .reader-main{width:100%;flex:1 1 100%;}
+  /* Surah list → left drawer */
+  .sidebar{position:absolute;top:0;bottom:0;left:0;width:min(86vw,340px);transform:translateX(-100%);
+    z-index:60;box-shadow:10px 0 40px rgba(0,0,0,.30);transition:transform .32s var(--ease-reverent);}
+  .sidebar.collapsed{width:min(86vw,340px);}            /* neutralize desktop width:0 collapse */
+  .sidebar.sidebar-open{transform:translateX(0);}
+  /* Tafsir → right drawer, closed by default on mobile */
+  .tafsir-panel{position:absolute;top:0;bottom:0;right:0;width:min(90vw,380px);transform:translateX(100%);
+    z-index:60;box-shadow:-10px 0 40px rgba(0,0,0,.30);transition:transform .32s var(--ease-reverent);}
+  .tafsir-panel.closed{width:min(90vw,380px);transform:translateX(100%);}
+  .tafsir-panel:not(.closed){transform:translateX(0);}
+  /* Backdrop */
+  .shell-backdrop{display:block;position:absolute;inset:0;background:rgba(0,0,0,.46);
+    opacity:0;visibility:hidden;transition:opacity .3s;z-index:55;}
+  .shell-backdrop.show{opacity:1;visibility:visible;}
+  /* Toolbar / topbar tightening */
+  .rtb-row1{padding:9px 14px;gap:8px;}
+  .bc-title{font-size:15px;}
+  .rtb-row2{padding:8px 12px;flex-wrap:nowrap;}
+  .rtb-row2 .ctrl-btn,.rtb-row2 .ctrl-sep{flex-shrink:0;}
+  .audio-player{padding:10px 12px;}
+  .zoom-ctrl button{width:28px;height:28px;}     /* larger touch targets */
+}
+@media(max-width:560px){
+  .rtb-row1{flex-wrap:wrap;}
+  .bc-title{font-size:14px;}
+  .play-surah-btn #playLabel{display:none;}       /* icon-only play on very small screens */
+  .now-playing-badge{display:none;}
+}
+
 /* ════════════════════════════════════════════════════════
    ENHANCEMENT PACK v2 — Gradient Glow · Load Animations
    Scroll Counters · Universal Hover Glow System
@@ -1560,6 +1609,9 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
     </div>
   </aside>
 
+  <!-- Mobile drawer backdrop (sidebar / tafsir) -->
+  <div class="shell-backdrop" id="shellBackdrop" onclick="closeDrawers()" aria-hidden="true"></div>
+
   <!-- READER MAIN -->
   <div class="reader-main" id="readerMain">
     <div class="reader-topbar">
@@ -1573,6 +1625,11 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
+          <div class="zoom-ctrl" role="group" aria-label="Text size">
+            <button type="button" onclick="zoomReader(-1)" aria-label="Decrease text size" title="Smaller text">A&#8722;</button>
+            <button type="button" onclick="zoomReader(0)" aria-label="Reset text size" title="Reset text size">A</button>
+            <button type="button" onclick="zoomReader(1)" aria-label="Increase text size" title="Larger text">A+</button>
+          </div>
           <div class="now-playing-badge" id="nowPlayingBadge">
             <div class="npb-dot"></div>
             <span id="nowPlayingText">Ayah 1</span>
@@ -2204,17 +2261,34 @@ function saveNote(eid,bid){
   showToast('Note saved ✦');
 }
 
+/* ════ MOBILE DRAWERS (Task 3) ════ */
+function isMobileReader(){ return window.matchMedia('(max-width:900px)').matches; }
+function updateShellBackdrop(){
+  var bd=document.getElementById('shellBackdrop'); if(!bd) return;
+  var sbOpen=document.getElementById('sidebar').classList.contains('sidebar-open');
+  var tfOpen=isMobileReader() && !document.getElementById('tafsirPanel').classList.contains('closed');
+  bd.classList.toggle('show', sbOpen || tfOpen);
+}
+function closeDrawers(){
+  document.getElementById('sidebar').classList.remove('sidebar-open');
+  if(isMobileReader()) document.getElementById('tafsirPanel').classList.add('closed');
+  updateShellBackdrop();
+}
+
 /* ════ TAFSIR ════ */
 var tafsirOpen=true;
 function openTafsir(){
   tafsirOpen=true;
   document.getElementById('tafsirPanel').classList.remove('closed');
   document.getElementById('tafsirCtrlBtn').classList.add('on');
+  if(isMobileReader()) document.getElementById('sidebar').classList.remove('sidebar-open'); // one drawer at a time
+  updateShellBackdrop();
 }
 function closeTafsir(){
   tafsirOpen=false;
   document.getElementById('tafsirPanel').classList.add('closed');
   document.getElementById('tafsirCtrlBtn').classList.remove('on');
+  updateShellBackdrop();
 }
 /* Tafsir content + switchTafsir are owned by src/js/quran-tafsir.js (live per-ayah
    fetch: Ibn Kathir / Ma'arif al-Qur'an / Al-Jalalayn). The module assigns
@@ -2222,8 +2296,59 @@ function closeTafsir(){
 
 /* ════ SIDEBAR ════ */
 function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('collapsed');
+  var sb=document.getElementById('sidebar');
+  if(isMobileReader()){
+    var opening=!sb.classList.contains('sidebar-open');
+    if(opening) document.getElementById('tafsirPanel').classList.add('closed'); // one drawer at a time
+    sb.classList.toggle('sidebar-open');
+    updateShellBackdrop();
+  } else {
+    sb.classList.toggle('collapsed');
+  }
 }
+
+/* ════ ZOOM (Task 1) — A−/A+ scales Arabic + translation together, persisted ════ */
+function _readSz(varName, fallback){
+  var v=parseFloat(getComputedStyle(document.documentElement).getPropertyValue(varName));
+  return (v>0)?v:fallback;
+}
+function zoomReader(dir){
+  var root=document.documentElement, ar, tr;
+  if(dir===0){ ar=28; tr=17; }                         // reset to defaults
+  else {
+    var f = dir>0 ? 1.1 : 1/1.1;
+    ar=Math.round(Math.max(18,Math.min(56,_readSz('--ar-sz',28)*f)));
+    tr=Math.round(Math.max(12,Math.min(32,_readSz('--tr-sz',17)*f)));
+  }
+  root.style.setProperty('--ar-sz',ar+'px');
+  root.style.setProperty('--tr-sz',tr+'px');
+  try{ localStorage.setItem('ii-quran-ar-size',ar+'px'); localStorage.setItem('ii-quran-tr-size',tr+'px'); }catch(e){}
+}
+
+/* Mobile reader init: tafsir starts closed as a drawer; close drawers on surah tap;
+   clean up drawer state when resizing back to desktop. */
+(function initMobileReader(){
+  function apply(){ if(isMobileReader()) document.getElementById('tafsirPanel').classList.add('closed'); }
+  function onReady(){
+    apply();
+    var sb=document.getElementById('sidebar');
+    if(sb) sb.addEventListener('click', function(e){
+      if(isMobileReader() && e.target.closest('.surah-row')) setTimeout(closeDrawers, 60); // let loadSurah fire first
+    });
+    var last=isMobileReader();
+    window.addEventListener('resize', function(){
+      var now=isMobileReader();
+      if(now!==last){
+        last=now;
+        if(!now){ // back to desktop — drop mobile drawer state
+          document.getElementById('sidebar').classList.remove('sidebar-open');
+          document.getElementById('shellBackdrop').classList.remove('show');
+        } else { apply(); }
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', onReady); else onReady();
+})();
 
 /* ════ SETTINGS ════ */
 function toggleSettings(){
