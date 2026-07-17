@@ -1,0 +1,106 @@
+{
+  "patience": {
+    "label": "Patience (Sabr)",
+    "hadith": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "book": "Obligatory Charity Tax (Zakat)",
+        "number": 1469,
+        "arabic": "حَدَّثَنَا عَبْدُ اللَّهِ بْنُ يُوسُفَ ، أَخْبَرَنَا مَالِكٌ ، عَنِ ابْنِ شِهَابٍ ، عَنْ عَطَاءِ بْنِ يَزِيدَ اللَّيْثِيِّ ، عَنْ أَبِي سَعِيدٍ الْخُدْرِيِّ ـ رضى الله عنه ـ أَنَّ نَاسًا مِنَ الأَنْصَارِ سَأَلُوا رَسُولَ اللَّهِ صلى الله عليه وسلم فَأَعْطَاهُمْ، ثُمَّ سَأَلُوهُ فَأَعْطَاهُمْ، حَتَّى نَفِدَ مَا عِنْدَهُ فَقَالَ ‏\"‏ مَا يَكُونُ عِنْدِي مِنْ خَيْرٍ فَلَنْ أَدَّخِرَهُ عَنْكُمْ، وَمَنْ يَسْتَعْفِفْ يُعِفَّهُ اللَّهُ، وَمَنْ يَسْتَغْنِ يُغْنِهِ اللَّهُ، وَمَنْ يَتَصَبَّرْ يُصَبِّرْهُ اللَّهُ، وَمَا أُعْطِيَ أَحَدٌ عَطَاءً خَيْرًا وَأَوْسَعَ مِنَ الصَّبْرِ ‏\" ‏‏.‏",
+        "english": "Narrated Abu Sa`id Al-Khudri: Some Ansari persons asked for (something) from Allah's Messenger (ﷺ) (p.b.u.h) and he gave them. They again asked him for (something) and he again gave them. And then they asked him and he gave them again till all that was with him finished. And then he said \"If I had anything. I would not keep it away from you. (Remember) Whoever abstains from asking others, Allah will make him contented, and whoever tries to make himself self-sufficient, Allah will make him self-sufficient. And whoever remains patient, Allah will make him patient. Nobody can be given a blessing better and greater than patience.\"",
+        "narrator": "Abu Sa`id al-Khudri",
+        "isnadSummary": "Malik ibn Anas <- Ibn Shihab (al-Zuhri) <- 'Ata' ibn Yazid al-Laythi <- Abu Sa`id al-Khudri, from the Prophet (peace be upon him). Cross-confirmed by the parallel narration in Sahih Muslim 1053 via the same chain (Malik <- Ibn Shihab <- 'Ata' <- Abu Sa`id).",
+        "grade": "Sahih",
+        "gradedBy": "Al-Bukhari (in his Sahih); parallel in Sahih Muslim 1053",
+        "url": "https://sunnah.com/bukhari:1469",
+        "score": 9,
+        "reviewed": false
+      },
+      {
+        "collection": "Sahih Muslim",
+        "book": "The Book of Zuhd and Softening of Hearts (Kitab az-Zuhd wa ar-Raqaiq)",
+        "number": 2999,
+        "arabic": "حَدَّثَنَا هَدَّابُ بْنُ خَالِدٍ الأَزْدِيُّ ، وَشَيْبَانُ بْنُ فَرُّوخَ ، جَمِيعًا عَنْ سُلَيْمَانَ بْنِ الْمُغِيرَةِ ، - وَاللَّفْظُ لِشَيْبَانَ - حَدَّثَنَا سُلَيْمَانُ، حَدَّثَنَا ثَابِتٌ ، عَنْ عَبْدِ الرَّحْمَنِ بْنِ أَبِي لَيْلَى ، عَنْ صُهَيْبٍ ، قَالَ قَالَ رَسُولُ اللَّهِ صلى الله عليه وسلم ‏\"‏ عَجَبًا لأَمْرِ الْمُؤْمِنِ إِنَّ أَمْرَهُ كُلَّهُ خَيْرٌ وَلَيْسَ ذَاكَ لأَحَدٍ إِلاَّ لِلْمُؤْمِنِ إِنْ أَصَابَتْهُ سَرَّاءُ شَكَرَ فَكَانَ خَيْرًا لَهُ وَإِنْ أَصَابَتْهُ ضَرَّاءُ صَبَرَ فَكَانَ خَيْرًا لَهُ ‏\" ‏ ‏.‏",
+        "english": "Suhaib reported that Allah's Messenger (ﷺ) said: Strange are the ways of a believer for there is good in every affair of his and this is not the case with anyone else except in the case of a believer for if he has an occasion to feel delight, he thanks (God), thus there is a good for him in it, and if he gets into trouble and shows resignation (and endures it patiently), there is a good for him in it.",
+        "narrator": "Suhayb (ar-Rumi)",
+        "isnadSummary": "Sulayman ibn al-Mughira <- Thabit (al-Bunani) <- 'Abd al-Rahman ibn Abi Layla <- Suhayb, from the Messenger of Allah (peace be upon him). Authenticity independently confirmed by hadeethenc.com (hadith 3298: 'Authentic', Sahih Muslim 2999).",
+        "grade": "Sahih",
+        "gradedBy": "Muslim (in his Sahih); graded Authentic by hadeethenc.com (King Fahd Complex encyclopedia), hadith 3298",
+        "url": "https://sunnah.com/muslim:2999",
+        "score": 8,
+        "reviewed": false
+      }
+    ]
+  },
+  "mercy": {
+    "label": "Mercy (Rahmah)",
+    "hadith": [
+      {
+        "collection": "Sunan Abu Dawud",
+        "book": "General Behavior (Kitab Al-Adab)",
+        "number": 4941,
+        "arabic": "حَدَّثَنَا أَبُو بَكْرِ بْنُ أَبِي شَيْبَةَ ، وَمُسَدَّدٌ ، - الْمَعْنَى - قَالاَ حَدَّثَنَا سُفْيَانُ ، عَنْ عَمْرٍو ، عَنْ أَبِي قَابُوسَ ، مَوْلًى لِعَبْدِ اللَّهِ بْنِ عَمْرٍو عَنْ عَبْدِ اللَّهِ بْنِ عَمْرٍو ، يَبْلُغُ بِهِ النَّبِيَّ صلى الله عليه وسلم ‏\"‏ الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَنُ ارْحَمُوا أَهْلَ الأَرْضِ يَرْحَمْكُمْ مَنْ فِي السَّمَاءِ ‏\" ‏ ‏.‏ لَمْ يَقُلْ مُسَدَّدٌ مَوْلَى عَبْدِ اللَّهِ بْنِ عَمْرٍو وَقَالَ قَالَ النَّبِيُّ صلى الله عليه وسلم ‏.‏",
+        "english": "Narrated Abdullah ibn Amr ibn al-'As: The Prophet (ﷺ) said: The Compassionate One has mercy on those who are merciful. If you show mercy to those who are on the earth, He Who is in the heaven will show mercy to you. Musaddad did not say: The client of 'Adb Allah b. 'Amr. He said: The Prophet (ﷺ) said.",
+        "narrator": "'Abdullah ibn 'Amr ibn al-'As",
+        "isnadSummary": "Sufyan (ibn 'Uyaynah) <- 'Amr (ibn Dinar) <- Abu Qabus <- 'Abdullah ibn 'Amr ibn al-'As, reaching the Prophet (peace be upon him). Cross-confirmed by the parallel narration in Jami' at-Tirmidhi 1924 (Sufyan <- 'Amr ibn Dinar <- Abu Qabus <- 'Abdullah ibn 'Amr), which at-Tirmidhi graded hasan sahih.",
+        "grade": "Sahih",
+        "gradedBy": "Al-Albani (Sahih, on Sunan Abi Dawud 4941); parallel graded hasan sahih by at-Tirmidhi (Jami` at-Tirmidhi 1924)",
+        "url": "https://sunnah.com/abudawud:4941",
+        "score": 9,
+        "reviewed": false
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "book": "Oneness, Uniqueness of Allah (Tawheed)",
+        "number": 7376,
+        "arabic": "حَدَّثَنَا مُحَمَّدٌ بْنُ سَلَامٍ ، أَخْبَرَنَا أَبُو مُعَاوِيَةَ ، عَنِ الأَعْمَشِ ، عَنْ زَيْدِ بْنِ وَهْبٍ ، وَأَبِي، ظَبْيَانَ عَنْ جَرِيرِ بْنِ عَبْدِ اللَّهِ ، قَالَ قَالَ رَسُولُ اللَّهِ صلى الله عليه وسلم ‏\"‏ لاَ يَرْحَمُ اللَّهُ مَنْ لاَ يَرْحَمُ النَّاسَ ‏\" ‏‏.‏",
+        "english": "Narrated Jarir bin `Abdullah: Allah's Messenger (ﷺ) said, \"Allah will not be merciful to those who are not merciful to mankind.\"",
+        "narrator": "Jarir ibn 'Abdullah al-Bajali",
+        "isnadSummary": "Abu Mu'awiya <- al-A'mash <- Zayd ibn Wahb and Abu Zabyan <- Jarir ibn 'Abdullah, from the Messenger of Allah (peace be upon him). Cross-confirmed by the parallel narration in Sahih Muslim 2319 (al-A'mash <- Zayd ibn Wahb and Abu Zabyan <- Jarir ibn 'Abdullah).",
+        "grade": "Sahih",
+        "gradedBy": "Al-Bukhari (in his Sahih); parallel in Sahih Muslim 2319",
+        "url": "https://sunnah.com/bukhari:7376",
+        "score": 8,
+        "reviewed": false
+      }
+    ]
+  },
+  "gratitude": {
+    "label": "Gratitude (Shukr)",
+    "hadith": [
+      {
+        "collection": "Jami' at-Tirmidhi",
+        "book": "Chapters on Righteousness And Maintaining Good Relations With Relatives",
+        "number": 1954,
+        "arabic": "حَدَّثَنَا أَحْمَدُ بْنُ مُحَمَّدٍ ، أَخْبَرَنَا عَبْدُ اللَّهِ بْنُ الْمُبَارَكِ ، حَدَّثَنَا الرَّبِيعُ بْنُ مُسْلِمٍ ، حَدَّثَنَا مُحَمَّدُ بْنُ زِيَادٍ ، عَنْ أَبِي هُرَيْرَةَ ، قَالَ قَالَ رَسُولُ اللَّهِ صلى الله عليه وسلم ‏ \"‏ مَنْ لاَ يَشْكُرِ النَّاسَ لاَ يَشْكُرِ اللَّهَ ‏\" ‏ ‏.‏ قَالَ هَذَا حَدِيثٌ حَسَنٌ صَحِيحٌ ‏.‏",
+        "english": "Abu Hurairah narrated that the Messenger of Allah said : \"Whoever is not grateful to the people, he is not grateful to Allah.\"",
+        "narrator": "Abu Hurayrah",
+        "isnadSummary": "'Abdullah ibn al-Mubarak <- al-Rabi' ibn Muslim <- Muhammad ibn Ziyad <- Abu Hurayrah, from the Messenger of Allah (peace be upon him). At-Tirmidhi stated 'hasan sahih'. Cross-confirmed by the parallel narration in Sunan Abi Dawud 4811 (al-Rabi' ibn Muslim <- Muhammad ibn Ziyad <- Abu Hurayrah), graded Sahih by al-Albani.",
+        "grade": "Sahih",
+        "gradedBy": "At-Tirmidhi (stated hasan sahih); al-Albani graded the parallel Sunan Abi Dawud 4811 as Sahih",
+        "url": "https://sunnah.com/tirmidhi:1954",
+        "score": 9,
+        "reviewed": false
+      }
+    ]
+  },
+  "truthfulness": {
+    "label": "Truthfulness (Sidq)",
+    "hadith": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "book": "Good Manners and Form (Al-Adab)",
+        "number": 6094,
+        "arabic": "حَدَّثَنَا عُثْمَانُ بْنُ أَبِي شَيْبَةَ ، حَدَّثَنَا جَرِيرٌ ، عَنْ مَنْصُورٍ ، عَنْ أَبِي وَائِلٍ ، عَنْ عَبْدِ اللَّهِ ـ رضى الله عنه ـ عَنِ النَّبِيِّ صلى الله عليه وسلم قَالَ ‏\"‏ إِنَّ الصِّدْقَ يَهْدِي إِلَى الْبِرِّ، وَإِنَّ الْبِرَّ يَهْدِي إِلَى الْجَنَّةِ، وَإِنَّ الرَّجُلَ لَيَصْدُقُ حَتَّى يَكُونَ صِدِّيقًا، وَإِنَّ الْكَذِبَ يَهْدِي إِلَى الْفُجُورِ، وَإِنَّ الْفُجُورَ يَهْدِي إِلَى النَّارِ، وَإِنَّ الرَّجُلَ لَيَكْذِبُ، حَتَّى يُكْتَبَ عِنْدَ اللَّهِ كَذَّابًا ‏\" ‏‏.‏",
+        "english": "Narrated `Abdullah: The Prophet (ﷺ) said, \"Truthfulness leads to righteousness, and righteousness leads to Paradise. And a man keeps on telling the truth until he becomes a truthful person. Falsehood leads to Al-Fajur (i.e. wickedness, evil-doing), and Al-Fajur (wickedness) leads to the (Hell) Fire, and a man may keep on telling lies till he is written before Allah, a liar.\"",
+        "narrator": "'Abdullah ibn Mas'ud",
+        "isnadSummary": "'Uthman ibn Abi Shayba <- Jarir (ibn 'Abd al-Hamid) <- Mansur <- Abu Wa'il <- 'Abdullah (ibn Mas'ud), from the Prophet (peace be upon him). Cross-confirmed by the parallel narration in Sahih Muslim 2607 via the same chain (Jarir <- Mansur <- Abu Wa'il <- 'Abdullah).",
+        "grade": "Sahih",
+        "gradedBy": "Al-Bukhari (in his Sahih); parallel in Sahih Muslim 2607",
+        "url": "https://sunnah.com/bukhari:6094",
+        "score": 9,
+        "reviewed": false
+      }
+    ]
+  }
+}
