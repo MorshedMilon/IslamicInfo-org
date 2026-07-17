@@ -119,6 +119,13 @@
     if (el) { try { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} el.classList.add('pulse-hl'); setTimeout(function () { el.classList.remove('pulse-hl'); }, 3800); }
     var p = document.getElementById('bookmarksPanel'); if (p) p.classList.remove('open');
   };
+  // Cross-surah jump by verse key alone (no bookmark record needed) — reused by
+  // e.g. Related Verses rows. Drives the same surah-switch + poll + scroll path
+  // as jumpToVerse(bm) above, just built from the verse key's own surah id.
+  window.jumpToVerseKey = function (verseKey) {
+    var parts = String(verseKey).split(':');
+    jumpToVerse({ surahId: Number(parts[0]), verseKey: verseKey });
+  };
 
   // ---- notes ----
   window.toggleNote = function (id) {

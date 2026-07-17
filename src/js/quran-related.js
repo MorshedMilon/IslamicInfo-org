@@ -35,6 +35,12 @@
       a.appendChild(el('span', 'rv-chip', r.topic));
       a.appendChild(el('p', 'rv-text', r.translation));
       a.appendChild(el('span', 'rv-attr', r.translator + ' · ' + r.sourceCitation));
+      // Cross-surah aware navigation — reuses the same surah-switch + scroll
+      // path bookmarks use (src/js/quran-marks.js). The href stays as a
+      // graceful fallback for when that global isn't loaded.
+      a.addEventListener('click', function (e) {
+        if (window.jumpToVerseKey) { e.preventDefault(); window.jumpToVerseKey(r.key); }
+      });
       panel.appendChild(a);
     });
   }
