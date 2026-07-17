@@ -356,6 +356,14 @@ a{text-decoration:none;color:inherit;}
 [data-theme="dark"] .tp-title{color:#F5F8F8;}
 .tp-close{width:27px;height:27px;border-radius:7px;border:.5px solid var(--ink-faint);background:transparent;color:var(--ink-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;font-size:14px;}
 .tp-close:hover{background:rgba(0,105,110,.08);color:var(--teal-700);}
+/* Tafsir width chevron (VS Code-style expand/collapse) */
+.tp-head-left{display:flex;align-items:center;gap:9px;min-width:0;}
+.tp-collapse{width:27px;height:27px;border-radius:7px;border:.5px solid var(--ink-faint);background:transparent;color:var(--ink-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s,border-color .18s;flex-shrink:0;}
+.tp-collapse:hover{background:rgba(0,105,110,.08);color:var(--teal-700);border-color:var(--teal-300,rgba(0,105,110,.4));}
+.tp-collapse svg{transition:transform .32s var(--ease-reverent);}
+.tp-collapse.is-expanded svg{transform:rotate(180deg);}
+/* Expanded width — desktop only (mobile keeps the drawer); .closed always wins */
+@media(min-width:901px){ .tafsir-panel.expanded:not(.closed){width:clamp(400px,34vw,520px);} }
 .tp-source-row{display:flex;gap:5px;padding:10px 16px;border-bottom:.5px solid rgba(0,105,110,.07);flex-shrink:0;}
 .tp-src{font-size:10.5px;font-weight:600;padding:4px 10px;border-radius:12px;border:.5px solid var(--ink-faint);color:var(--ink-muted);cursor:pointer;transition:all .15s;background:transparent;font-family:var(--font-body);}
 .tp-src.on{background:var(--teal-700);color:white;border-color:var(--teal-700);}
@@ -653,6 +661,7 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
     z-index:60;box-shadow:-10px 0 40px rgba(0,0,0,.30);transition:transform .32s var(--ease-reverent);}
   .tafsir-panel.closed{width:min(90vw,380px);transform:translateX(100%);}
   .tafsir-panel:not(.closed){transform:translateX(0);}
+  .tp-collapse{display:none;}                            /* width states are desktop-only */
   /* Backdrop */
   .shell-backdrop{display:block;position:absolute;inset:0;background:rgba(0,0,0,.46);
     opacity:0;visibility:hidden;transition:opacity .3s;z-index:55;}
@@ -1769,7 +1778,7 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   </div><!-- end reader-main -->
   <!-- TAFSIR PANEL -->
   <div class="tafsir-panel" id="tafsirPanel">
-    <div class="tp-head"><div class="tp-title">Tafsir</div><button class="tp-close" onclick="closeTafsir()">✕</button></div>
+    <div class="tp-head"><div class="tp-head-left"><button class="tp-collapse" id="tafsirCollapseBtn" onclick="toggleTafsirWidth()" title="Expand Tafsir" aria-label="Expand Tafsir"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="tp-title">Tafsir</div></div><button class="tp-close" onclick="closeTafsir()" title="Hide Tafsir" aria-label="Hide Tafsir">✕</button></div>
     <div class="tp-source-row">
       <button class="tp-src on" data-src="ik" onclick="switchTafsir(this,'ik')">Ibn Kathir</button>
       <button class="tp-src" data-src="ma" onclick="switchTafsir(this,'ma')">Ma'arif al-Qur'an</button>
@@ -2284,14 +2293,42 @@ function openTafsir(){
   document.getElementById('tafsirPanel').classList.remove('closed');
   document.getElementById('tafsirCtrlBtn').classList.add('on');
   if(isMobileReader()) document.getElementById('sidebar').classList.remove('sidebar-open'); // one drawer at a time
+  try{ localStorage.setItem('ii-quran-tafsir-hidden','0'); }catch(e){}
   updateShellBackdrop();
 }
 function closeTafsir(){
   tafsirOpen=false;
   document.getElementById('tafsirPanel').classList.add('closed');
   document.getElementById('tafsirCtrlBtn').classList.remove('on');
+  try{ localStorage.setItem('ii-quran-tafsir-hidden','1'); }catch(e){}
   updateShellBackdrop();
 }
+/* Tafsir width: Normal ⇆ Expanded (VS Code-style). Chevron toggles; state remembered.
+   Hidden is handled by open/closeTafsir; the width preference is kept across hide/show. */
+function setTafsirExpanded(exp){
+  var p=document.getElementById('tafsirPanel'); if(!p) return;
+  p.classList.toggle('expanded', !!exp);
+  try{ localStorage.setItem('ii-quran-tafsir-expanded', exp?'1':'0'); }catch(e){}
+  var b=document.getElementById('tafsirCollapseBtn');
+  if(b){ b.classList.toggle('is-expanded', !!exp);
+    b.setAttribute('title', exp?'Collapse Tafsir':'Expand Tafsir');
+    b.setAttribute('aria-label', exp?'Collapse Tafsir':'Expand Tafsir'); }
+}
+function toggleTafsirWidth(){
+  var p=document.getElementById('tafsirPanel'); if(!p||p.classList.contains('closed')) return;
+  setTafsirExpanded(!p.classList.contains('expanded'));
+}
+/* Restore the saved Tafsir layout on the desktop reader (mobile = drawer, no widths). */
+(function initTafsirLayout(){
+  function apply(){
+    if(typeof isMobileReader==='function' && isMobileReader()) return;
+    try{
+      if(localStorage.getItem('ii-quran-tafsir-hidden')==='1') closeTafsir();
+      setTafsirExpanded(localStorage.getItem('ii-quran-tafsir-expanded')==='1');
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply); else apply();
+})();
 /* Tafsir content + switchTafsir are owned by src/js/quran-tafsir.js (live per-ayah
    fetch: Ibn Kathir / Ma'arif al-Qur'an / Al-Jalalayn). The module assigns
    window.switchTafsir after this inline script, so it wins. */

@@ -34,6 +34,8 @@
 | `ii-quran-translations-list` | `{ fetchedAt:number, data:Translation[] }` (JSON; `Translation = {id,name,language,languageLabel,dir}`) | Quran Explorer (translation picker) | 7 days (quran.com `/resources/translations` catalog; seeds from `src/data/translations.json` on failure) |
 | `ii-quran-reading-mode` | boolean | Quran Explorer | Until user changes |
 | `ii-quran-mushaf-page` | string (integer 1–604) | Quran Explorer (Mushaf Mode) | Until user changes (last-viewed QCF page) |
+| `ii-quran-tafsir-expanded` | `'0' \| '1'` | Quran Explorer (Tafsir panel) | Until user changes (Normal vs Expanded width, desktop chevron) |
+| `ii-quran-tafsir-hidden` | `'0' \| '1'` | Quran Explorer (Tafsir panel) | Until user changes (panel hidden/shown; remembers layout across visits) |
 | `ii-tafsir-{verseKey}-{src}` | `{ paras:string[], ts:number }` (JSON) | Quran Explorer (Tafsir panel) | 30 days (per-ayah, per-source tafsir cache; src ∈ ik/ma/ja) |
 | `ii-refl-verse` | `{ day:number, data:Verse }` (JSON) | Home + Quran (Daily Reflection) | 1 day (daily verse-of-the-day cache) |
 | `ii-refl-bookmarks` | `SavedReflection[]` — `{ id, type, ref, arabic, text, grade, savedAt }` (JSON) | Home + Quran (Daily Reflection cards) | Permanent (id = `type\|ref`; newest-first; bookmark icon on the trio cards) |
