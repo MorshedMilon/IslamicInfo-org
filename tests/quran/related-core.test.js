@@ -53,3 +53,29 @@ test('validateSource rejects every violation with a message', () => {
   assert.ok(r.errors.some(e => /invalid verse key/i.test(e)));
   assert.ok(r.errors.some(e => /duplicate/i.test(e)));
 });
+
+test('compileIndex sorts by score desc, bakes translation + ref, builds reverse map', () => {
+  const src = {
+    patience: { label: 'Patience (Sabr)', verses: [
+      { key: '1:5', score: 5, sourceCitation: 'c1' },
+      { key: '2:153', score: 9, sourceCitation: 'c2' }
+    ] },
+    prayer: { label: 'Prayer (Salah)', verses: [
+      { key: '2:153', score: 7, sourceCitation: 'c3' }
+    ] }
+  };
+  const translations = {
+    '1:5': { translation: 'It is You we worship…', translator: 'Saheeh International' },
+    '2:153': { translation: 'seek help through patience…', translator: 'Saheeh International' }
+  };
+  const surahNames = { 1: 'Al-Fatihah', 2: 'Al-Baqarah' };
+  const out = core.compileIndex(src, translations, surahNames);
+  assert.deepEqual(out.topics.patience.verses.map(v => v.key), ['2:153', '1:5']);
+  const row = out.topics.patience.verses[0];
+  assert.equal(row.ref, 'Al-Baqarah 2:153');
+  assert.equal(row.translation, 'seek help through patience…');
+  assert.equal(row.translator, 'Saheeh International');
+  assert.equal(row.sourceCitation, 'c2');
+  assert.deepEqual(out.verseIndex['2:153'].sort(), ['patience', 'prayer']);
+  assert.deepEqual(out.verseIndex['1:5'], ['patience']);
+});

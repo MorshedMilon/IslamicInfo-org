@@ -44,8 +44,36 @@
     return { ok: errors.length === 0, errors: errors };
   }
 
+  function compileIndex(source, translations, surahNames) {
+    var topics = {}, verseIndex = {};
+    translations = translations || {};
+    surahNames = surahNames || {};
+    Object.keys(source).forEach(function (slug) {
+      var t = source[slug];
+      var rows = t.verses.slice().sort(function (a, b) { return b.score - a.score; }).map(function (v) {
+        var tr = translations[v.key] || {};
+        var s = +v.key.split(':')[0];
+        return {
+          key: v.key,
+          ref: (surahNames[s] ? surahNames[s] + ' ' : '') + v.key,
+          score: v.score,
+          translation: tr.translation || '',
+          translator: tr.translator || '',
+          sourceCitation: v.sourceCitation
+        };
+      });
+      topics[slug] = { label: t.label, verses: rows };
+      t.verses.forEach(function (v) {
+        var arr = verseIndex[v.key] = verseIndex[v.key] || [];
+        if (arr.indexOf(slug) === -1) arr.push(slug);
+      });
+    });
+    return { topics: topics, verseIndex: verseIndex };
+  }
+
   return {
     isValidVerseKey: isValidVerseKey,
-    validateSource: validateSource
+    validateSource: validateSource,
+    compileIndex: compileIndex
   };
 });
