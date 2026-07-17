@@ -74,3 +74,26 @@ test('compileIndex emits only reviewed:true, strips flag, composes ref, sorts, c
   assert.equal(row.grade, 'Sahih');
   assert.equal(out.pendingCount, 2);
 });
+
+const HTOPICS = {
+  patience: { label: 'Patience (Sabr)', hadith: [
+    { collection: 'Sahih al-Bukhari', number: 1469, ref: 'Sahih al-Bukhari 1469', book: '', arabic: 'A', english: 'EN-A', narrator: 'N1', isnadSummary: 'i', grade: 'Sahih', gradedBy: 'Al-Bukhari', url: 'https://x', score: 9 },
+    { collection: 'Sahih Muslim', number: 55, ref: 'Sahih Muslim 55', book: '', arabic: 'B', english: 'EN-B', narrator: 'N2', isnadSummary: 'i', grade: 'Hasan', gradedBy: 'al-Albani', url: 'https://x', score: 4 }
+  ] },
+  gratitude: { label: 'Gratitude (Shukr)', hadith: [
+    { collection: 'Sahih al-Bukhari', number: 1469, ref: 'Sahih al-Bukhari 1469', book: '', arabic: 'A', english: 'EN-A', narrator: 'N1', isnadSummary: 'i', grade: 'Sahih', gradedBy: 'Al-Bukhari', url: 'https://x', score: 6 }
+  ] }
+};
+const VINDEX = { '2:153': ['patience', 'gratitude'], '14:7': ['gratitude'] };
+
+test('relatedHadith gathers across topics, dedups by collection+number (highest score), sorts, caps', () => {
+  const out = core.relatedHadith('2:153', HTOPICS, VINDEX, { limit: 5 });
+  assert.deepEqual(out.map(h => h.ref), ['Sahih al-Bukhari 1469', 'Sahih Muslim 55']);
+  assert.equal(out[0].score, 9);
+  assert.equal(out[0].topic, 'Patience (Sabr)');
+  assert.equal(core.relatedHadith('2:153', HTOPICS, VINDEX, { limit: 1 }).length, 1);
+});
+
+test('relatedHadith returns [] for an untagged verse', () => {
+  assert.deepEqual(core.relatedHadith('9:1', HTOPICS, VINDEX), []);
+});

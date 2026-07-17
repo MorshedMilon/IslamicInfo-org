@@ -73,10 +73,40 @@
     return { topics: topics, pendingCount: pendingCount };
   }
 
+  function relatedHadith(verseKey, hadithTopics, verseIndex, opts) {
+    opts = opts || {};
+    var limit = opts.limit == null ? 5 : opts.limit;
+    var slugs = (verseIndex && verseIndex[verseKey]) ? verseIndex[verseKey] : [];
+    var best = {};
+    slugs.forEach(function (slug) {
+      var t = hadithTopics && hadithTopics[slug];
+      if (!t || !t.hadith) return;
+      t.hadith.forEach(function (h) {
+        var k = h.collection + '|' + h.number;
+        var cur = best[k];
+        if (!cur || h.score > cur.score) {
+          best[k] = {
+            collection: h.collection, number: h.number, ref: h.ref, book: h.book,
+            arabic: h.arabic, english: h.english, narrator: h.narrator,
+            isnadSummary: h.isnadSummary, grade: h.grade, gradedBy: h.gradedBy,
+            url: h.url, score: h.score, topic: t.label, topicSlug: slug
+          };
+        }
+      });
+    });
+    var list = Object.keys(best).map(function (k) { return best[k]; });
+    list.sort(function (a, b) {
+      return (b.score - a.score) ||
+        ((a.collection + a.number) < (b.collection + b.number) ? -1 : (a.collection + a.number) > (b.collection + b.number) ? 1 : 0);
+    });
+    return list.slice(0, limit);
+  }
+
   return {
     ALLOWED_COLLECTIONS: ALLOWED_COLLECTIONS,
     ALLOWED_GRADES: ALLOWED_GRADES,
     validateSource: validateSource,
-    compileIndex: compileIndex
+    compileIndex: compileIndex,
+    relatedHadith: relatedHadith
   };
 });
