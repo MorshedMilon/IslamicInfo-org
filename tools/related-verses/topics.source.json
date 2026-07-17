@@ -1,0 +1,164 @@
+{
+  "patience": {
+    "label": "Patience (Sabr)",
+    "verses": [
+      { "key": "2:153", "score": 10, "sourceCitation": "Explicit in Saheeh International translation of 2:153: 'seek help through patience and prayer'" },
+      { "key": "2:155", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 2:155: 'give good tidings to the patient'" },
+      { "key": "16:127", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 16:127: 'your patience is not but through Allah'" },
+      { "key": "103:3", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 103:3: 'advised each other to patience'" }
+    ]
+  },
+  "gratitude": {
+    "label": "Gratitude (Shukr)",
+    "verses": [
+      { "key": "14:7", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 14:7: 'If you are grateful, I will surely increase you'" },
+      { "key": "2:152", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 2:152: 'be grateful to Me and do not deny Me'" },
+      { "key": "16:114", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 16:114: 'be grateful for the favor of Allah'" },
+      { "key": "31:12", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 31:12: 'Be grateful to Allah'" }
+    ]
+  },
+  "prayer": {
+    "label": "Prayer (Salah)",
+    "verses": [
+      { "key": "29:45", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 29:45: 'prayer prohibits immorality and wrongdoing'" },
+      { "key": "20:14", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 20:14: 'establish prayer for My remembrance'" },
+      { "key": "2:238", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 2:238: 'Maintain with care the [obligatory] prayers'" },
+      { "key": "11:114", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 11:114: 'establish prayer at the two ends of the day'" }
+    ]
+  },
+  "charity": {
+    "label": "Charity (Sadaqah)",
+    "verses": [
+      { "key": "57:18", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 57:18: 'the men who practice charity and the women who practice charity'" },
+      { "key": "63:10", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 63:10: 'so I would give charity and be among the righteous'" },
+      { "key": "2:261", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 2:261: 'spend their wealth in the way of Allah'" },
+      { "key": "3:92", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 3:92: 'until you spend [in the way of Allah] from that which you love'" }
+    ]
+  },
+  "fasting": {
+    "label": "Fasting (Sawm)",
+    "verses": [
+      { "key": "2:183", "score": 10, "sourceCitation": "Explicit in Saheeh International translation of 2:183: 'decreed upon you is fasting'" },
+      { "key": "2:185", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 2:185: 'let him fast it'" },
+      { "key": "2:187", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 2:187: 'complete the fast until the sunset'" }
+    ]
+  },
+  "forgiveness": {
+    "label": "Forgiveness (Maghfirah)",
+    "verses": [
+      { "key": "39:53", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 39:53: 'Allah forgives all sins'" },
+      { "key": "3:135", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 3:135: 'seek forgiveness for their sins'" },
+      { "key": "42:40", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 42:40: 'whoever pardons and makes reconciliation'" },
+      { "key": "24:22", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 24:22: 'let them pardon and overlook'" }
+    ]
+  },
+  "mercy": {
+    "label": "Mercy (Rahmah)",
+    "verses": [
+      { "key": "21:107", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 21:107: 'except as a mercy to the worlds'" },
+      { "key": "7:156", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 7:156: 'My mercy encompasses all things'" },
+      { "key": "39:53", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 39:53: 'do not despair of the mercy of Allah'" },
+      { "key": "2:163", "score": 6, "sourceCitation": "Explicit in Saheeh International translation of 2:163: 'the Entirely Merciful, the Especially Merciful'" }
+    ]
+  },
+  "justice": {
+    "label": "Justice (Adl)",
+    "verses": [
+      { "key": "16:90", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 16:90: 'Allah orders justice and good conduct'" },
+      { "key": "4:135", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 4:135: 'be persistently standing firm in justice'" },
+      { "key": "5:8", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 5:8: 'witnesses in justice'" }
+    ]
+  },
+  "truthfulness": {
+    "label": "Truthfulness (Sidq)",
+    "verses": [
+      { "key": "9:119", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 9:119: 'be with those who are true'" },
+      { "key": "33:35", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 33:35: 'the truthful men and truthful women'" }
+    ]
+  },
+  "humility": {
+    "label": "Humility",
+    "verses": [
+      { "key": "17:24", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 17:24: 'lower to them the wing of humility'" },
+      { "key": "33:35", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 33:35: 'the humble men and humble women'" }
+    ]
+  },
+  "fear-of-allah": {
+    "label": "Fear of Allah (Taqwa)",
+    "verses": [
+      { "key": "2:197", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 2:197: 'the best provision is fear of Allah'" },
+      { "key": "3:200", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 3:200: 'fear Allah that you may be successful'" },
+      { "key": "5:8", "score": 6, "sourceCitation": "Explicit in Saheeh International translation of 5:8: 'And fear Allah'" }
+    ]
+  },
+  "reliance-on-allah": {
+    "label": "Reliance on Allah (Tawakkul)",
+    "verses": [
+      { "key": "65:3", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 65:3: 'whoever relies upon Allah - then He is sufficient for him'" },
+      { "key": "3:159", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 3:159: 'then rely upon Allah'" }
+    ]
+  },
+  "repentance": {
+    "label": "Repentance (Tawbah)",
+    "verses": [
+      { "key": "66:8", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 66:8: 'repent to Allah with sincere repentance'" },
+      { "key": "2:222", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 2:222: 'those who are constantly repentant'" }
+    ]
+  },
+  "kindness-to-parents": {
+    "label": "Kindness to Parents",
+    "verses": [
+      { "key": "17:23", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 17:23: 'to parents, good treatment'" },
+      { "key": "31:14", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 31:14: 'enjoined upon man [care] for his parents'" }
+    ]
+  },
+  "remembrance-of-allah": {
+    "label": "Remembrance of Allah (Dhikr)",
+    "verses": [
+      { "key": "13:28", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 13:28: 'by the remembrance of Allah hearts are assured'" },
+      { "key": "33:41", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 33:41: 'remember Allah with much remembrance'" },
+      { "key": "2:152", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 2:152: 'remember Me; I will remember you'" },
+      { "key": "29:45", "score": 6, "sourceCitation": "Explicit in Saheeh International translation of 29:45: 'the remembrance of Allah is greater'" }
+    ]
+  },
+  "knowledge": {
+    "label": "Knowledge (Ilm)",
+    "verses": [
+      { "key": "39:9", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 39:9: 'Are those who know equal to those who do not know'" },
+      { "key": "20:114", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 20:114: 'increase me in knowledge'" },
+      { "key": "58:11", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 58:11: 'those who were given knowledge, by degrees'" }
+    ]
+  },
+  "hope": {
+    "label": "Hope (Do Not Despair)",
+    "verses": [
+      { "key": "39:53", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 39:53: 'do not despair of the mercy of Allah'" },
+      { "key": "12:87", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 12:87: 'despair not of relief from Allah'" }
+    ]
+  },
+  "oneness-of-allah": {
+    "label": "Oneness of Allah (Tawhid)",
+    "verses": [
+      { "key": "112:1", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 112:1: 'He is Allah, [who is] One'" },
+      { "key": "2:163", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 2:163: 'your god is one God'" },
+      { "key": "20:14", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 20:14: 'There is no deity except Me'" }
+    ]
+  },
+  "pilgrimage": {
+    "label": "Pilgrimage (Hajj)",
+    "verses": [
+      { "key": "22:27", "score": 9, "sourceCitation": "Explicit in Saheeh International translation of 22:27: 'proclaim to the people the Hajj [pilgrimage]'" },
+      { "key": "2:197", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 2:197: 'Hajj is [during] well-known months'" },
+      { "key": "3:97", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 3:97: 'a pilgrimage to the House'" }
+    ]
+  },
+  "orphans": {
+    "label": "Care for Orphans",
+    "verses": [
+      { "key": "4:2", "score": 8, "sourceCitation": "Explicit in Saheeh International translation of 4:2: 'give to the orphans their properties'" },
+      { "key": "93:9", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 93:9: 'as for the orphan, do not oppress'" },
+      { "key": "2:220", "score": 7, "sourceCitation": "Explicit in Saheeh International translation of 2:220: 'they ask you about orphans'" },
+      { "key": "76:8", "score": 6, "sourceCitation": "Explicit in Saheeh International translation of 76:8: 'the needy, the orphan, and the captive'" }
+    ]
+  }
+}

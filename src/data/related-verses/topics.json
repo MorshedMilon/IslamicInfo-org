@@ -1,0 +1,598 @@
+{
+  "patience": {
+    "label": "Patience (Sabr)",
+    "verses": [
+      {
+        "key": "2:153",
+        "ref": "Al-Baqarah 2:153",
+        "score": 10,
+        "translation": "O you who have believed, seek help through patience and prayer. Indeed, Allah is with the patient.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:153: 'seek help through patience and prayer'"
+      },
+      {
+        "key": "2:155",
+        "ref": "Al-Baqarah 2:155",
+        "score": 8,
+        "translation": "And We will surely test you with something of fear and hunger and a loss of wealth and lives and fruits, but give good tidings to the patient,",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:155: 'give good tidings to the patient'"
+      },
+      {
+        "key": "16:127",
+        "ref": "An-Nahl 16:127",
+        "score": 7,
+        "translation": "And be patient, [O Muhammad], and your patience is not but through Allah. And do not grieve over them and do not be in distress over what they conspire.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 16:127: 'your patience is not but through Allah'"
+      },
+      {
+        "key": "103:3",
+        "ref": "Al-'Asr 103:3",
+        "score": 7,
+        "translation": "Except for those who have believed and done righteous deeds and advised each other to truth and advised each other to patience.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 103:3: 'advised each other to patience'"
+      }
+    ]
+  },
+  "gratitude": {
+    "label": "Gratitude (Shukr)",
+    "verses": [
+      {
+        "key": "14:7",
+        "ref": "Ibrahim 14:7",
+        "score": 9,
+        "translation": "And [remember] when your Lord proclaimed, 'If you are grateful, I will surely increase you [in favor]; but if you deny, indeed, My punishment is severe.' \"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 14:7: 'If you are grateful, I will surely increase you'"
+      },
+      {
+        "key": "2:152",
+        "ref": "Al-Baqarah 2:152",
+        "score": 8,
+        "translation": "So remember Me; I will remember you. And be grateful to Me and do not deny Me.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:152: 'be grateful to Me and do not deny Me'"
+      },
+      {
+        "key": "16:114",
+        "ref": "An-Nahl 16:114",
+        "score": 8,
+        "translation": "Then eat of what Allah has provided for you [which is] lawful and good. And be grateful for the favor of Allah, if it is [indeed] Him that you worship.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 16:114: 'be grateful for the favor of Allah'"
+      },
+      {
+        "key": "31:12",
+        "ref": "Luqman 31:12",
+        "score": 7,
+        "translation": "And We had certainly given Luqman wisdom [and said], \"Be grateful to Allah.\" And whoever is grateful is grateful for [the benefit of] himself. And whoever denies [His favor] - then indeed, Allah is Free of need and Praiseworthy.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 31:12: 'Be grateful to Allah'"
+      }
+    ]
+  },
+  "prayer": {
+    "label": "Prayer (Salah)",
+    "verses": [
+      {
+        "key": "29:45",
+        "ref": "Al-'Ankabut 29:45",
+        "score": 9,
+        "translation": "Recite, [O Muhammad], what has been revealed to you of the Book and establish prayer. Indeed, prayer prohibits immorality and wrongdoing, and the remembrance of Allah is greater. And Allah knows that which you do.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 29:45: 'prayer prohibits immorality and wrongdoing'"
+      },
+      {
+        "key": "20:14",
+        "ref": "Taha 20:14",
+        "score": 9,
+        "translation": "Indeed, I am Allah. There is no deity except Me, so worship Me and establish prayer for My remembrance.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 20:14: 'establish prayer for My remembrance'"
+      },
+      {
+        "key": "2:238",
+        "ref": "Al-Baqarah 2:238",
+        "score": 8,
+        "translation": "Maintain with care the [obligatory] prayers and [in particular] the middle prayer and stand before Allah, devoutly obedient.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:238: 'Maintain with care the [obligatory] prayers'"
+      },
+      {
+        "key": "11:114",
+        "ref": "Hud 11:114",
+        "score": 7,
+        "translation": "And establish prayer at the two ends of the day and at the approach of the night. Indeed, good deeds do away with misdeeds. That is a reminder for those who remember.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 11:114: 'establish prayer at the two ends of the day'"
+      }
+    ]
+  },
+  "charity": {
+    "label": "Charity (Sadaqah)",
+    "verses": [
+      {
+        "key": "57:18",
+        "ref": "Al-Hadid 57:18",
+        "score": 9,
+        "translation": "Indeed, the men who practice charity and the women who practice charity and [they who] have loaned Allah a goodly loan - it will be multiplied for them, and they will have a noble reward.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 57:18: 'the men who practice charity and the women who practice charity'"
+      },
+      {
+        "key": "63:10",
+        "ref": "Al-Munafiqun 63:10",
+        "score": 8,
+        "translation": "And spend [in the way of Allah] from what We have provided you before death approaches one of you and he says, \"My Lord, if only You would delay me for a brief term so I would give charity and be among the righteous.\"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 63:10: 'so I would give charity and be among the righteous'"
+      },
+      {
+        "key": "2:261",
+        "ref": "Al-Baqarah 2:261",
+        "score": 8,
+        "translation": "The example of those who spend their wealth in the way of Allah is like a seed [of grain] which grows seven spikes; in each spike is a hundred grains. And Allah multiplies [His reward] for whom He wills. And Allah is all-Encompassing and Knowing.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:261: 'spend their wealth in the way of Allah'"
+      },
+      {
+        "key": "3:92",
+        "ref": "Ali 'Imran 3:92",
+        "score": 7,
+        "translation": "Never will you attain the good [reward] until you spend [in the way of Allah] from that which you love. And whatever you spend - indeed, Allah is Knowing of it.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 3:92: 'until you spend [in the way of Allah] from that which you love'"
+      }
+    ]
+  },
+  "fasting": {
+    "label": "Fasting (Sawm)",
+    "verses": [
+      {
+        "key": "2:183",
+        "ref": "Al-Baqarah 2:183",
+        "score": 10,
+        "translation": "O you who have believed, decreed upon you is fasting as it was decreed upon those before you that you may become righteous -",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:183: 'decreed upon you is fasting'"
+      },
+      {
+        "key": "2:185",
+        "ref": "Al-Baqarah 2:185",
+        "score": 8,
+        "translation": "The month of Ramadhan [is that] in which was revealed the Qur'an, a guidance for the people and clear proofs of guidance and criterion. So whoever sights [the new moon of] the month, let him fast it; and whoever is ill or on a journey - then an equal number of other days. Allah intends for you ease and does not intend for you hardship and [wants] for you to complete the period and to glorify Allah for that [to] which He has guided you; and perhaps you will be grateful.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:185: 'let him fast it'"
+      },
+      {
+        "key": "2:187",
+        "ref": "Al-Baqarah 2:187",
+        "score": 7,
+        "translation": "It has been made permissible for you the night preceding fasting to go to your wives [for sexual relations]. They are clothing for you and you are clothing for them. Allah knows that you used to deceive yourselves, so He accepted your repentance and forgave you. So now, have relations with them and seek that which Allah has decreed for you. And eat and drink until the white thread of dawn becomes distinct to you from the black thread [of night]. Then complete the fast until the sunset. And do not have relations with them as long as you are staying for worship in the mosques. These are the limits [set by] Allah, so do not approach them. Thus does Allah make clear His ordinances to the people that they may become righteous.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:187: 'complete the fast until the sunset'"
+      }
+    ]
+  },
+  "forgiveness": {
+    "label": "Forgiveness (Maghfirah)",
+    "verses": [
+      {
+        "key": "39:53",
+        "ref": "Az-Zumar 39:53",
+        "score": 8,
+        "translation": "Say, \"O My servants who have transgressed against themselves [by sinning], do not despair of the mercy of Allah. Indeed, Allah forgives all sins. Indeed, it is He who is the Forgiving, the Merciful.\"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 39:53: 'Allah forgives all sins'"
+      },
+      {
+        "key": "3:135",
+        "ref": "Ali 'Imran 3:135",
+        "score": 8,
+        "translation": "And those who, when they commit an immorality or wrong themselves [by transgression], remember Allah and seek forgiveness for their sins - and who can forgive sins except Allah? - and [who] do not persist in what they have done while they know.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 3:135: 'seek forgiveness for their sins'"
+      },
+      {
+        "key": "42:40",
+        "ref": "Ash-Shuraa 42:40",
+        "score": 7,
+        "translation": "And the retribution for an evil act is an evil one like it, but whoever pardons and makes reconciliation - his reward is [due] from Allah. Indeed, He does not like wrongdoers.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 42:40: 'whoever pardons and makes reconciliation'"
+      },
+      {
+        "key": "24:22",
+        "ref": "An-Nur 24:22",
+        "score": 7,
+        "translation": "And let not those of virtue among you and wealth swear not to give [aid] to their relatives and the needy and the emigrants for the cause of Allah, and let them pardon and overlook. Would you not like that Allah should forgive you? And Allah is Forgiving and Merciful.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 24:22: 'let them pardon and overlook'"
+      }
+    ]
+  },
+  "mercy": {
+    "label": "Mercy (Rahmah)",
+    "verses": [
+      {
+        "key": "21:107",
+        "ref": "Al-Anbya 21:107",
+        "score": 9,
+        "translation": "And We have not sent you, [O Muhammad], except as a mercy to the worlds.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 21:107: 'except as a mercy to the worlds'"
+      },
+      {
+        "key": "7:156",
+        "ref": "Al-A'raf 7:156",
+        "score": 8,
+        "translation": "And decree for us in this world [that which is] good and [also] in the Hereafter; indeed, we have turned back to You.\" [Allah] said, \"My punishment - I afflict with it whom I will, but My mercy encompasses all things.\" So I will decree it [especially] for those who fear Me and give zakah and those who believe in Our verses -",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 7:156: 'My mercy encompasses all things'"
+      },
+      {
+        "key": "39:53",
+        "ref": "Az-Zumar 39:53",
+        "score": 7,
+        "translation": "Say, \"O My servants who have transgressed against themselves [by sinning], do not despair of the mercy of Allah. Indeed, Allah forgives all sins. Indeed, it is He who is the Forgiving, the Merciful.\"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 39:53: 'do not despair of the mercy of Allah'"
+      },
+      {
+        "key": "2:163",
+        "ref": "Al-Baqarah 2:163",
+        "score": 6,
+        "translation": "And your god is one God. There is no deity [worthy of worship] except Him, the Entirely Merciful, the Especially Merciful.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:163: 'the Entirely Merciful, the Especially Merciful'"
+      }
+    ]
+  },
+  "justice": {
+    "label": "Justice (Adl)",
+    "verses": [
+      {
+        "key": "16:90",
+        "ref": "An-Nahl 16:90",
+        "score": 9,
+        "translation": "Indeed, Allah orders justice and good conduct and giving to relatives and forbids immorality and bad conduct and oppression. He admonishes you that perhaps you will be reminded.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 16:90: 'Allah orders justice and good conduct'"
+      },
+      {
+        "key": "4:135",
+        "ref": "An-Nisa 4:135",
+        "score": 9,
+        "translation": "O you who have believed, be persistently standing firm in justice, witnesses for Allah, even if it be against yourselves or parents and relatives. Whether one is rich or poor, Allah is more worthy of both. So follow not [personal] inclination, lest you not be just. And if you distort [your testimony] or refuse [to give it], then indeed Allah is ever, with what you do, Acquainted.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 4:135: 'be persistently standing firm in justice'"
+      },
+      {
+        "key": "5:8",
+        "ref": "Al-Ma'idah 5:8",
+        "score": 8,
+        "translation": "O you who have believed, be persistently standing firm for Allah, witnesses in justice, and do not let the hatred of a people prevent you from being just. Be just; that is nearer to righteousness. And fear Allah; indeed, Allah is Acquainted with what you do.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 5:8: 'witnesses in justice'"
+      }
+    ]
+  },
+  "truthfulness": {
+    "label": "Truthfulness (Sidq)",
+    "verses": [
+      {
+        "key": "9:119",
+        "ref": "At-Tawbah 9:119",
+        "score": 8,
+        "translation": "O you who have believed, fear Allah and be with those who are true.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 9:119: 'be with those who are true'"
+      },
+      {
+        "key": "33:35",
+        "ref": "Al-Ahzab 33:35",
+        "score": 7,
+        "translation": "Indeed, the Muslim men and Muslim women, the believing men and believing women, the obedient men and obedient women, the truthful men and truthful women, the patient men and patient women, the humble men and humble women, the charitable men and charitable women, the fasting men and fasting women, the men who guard their private parts and the women who do so, and the men who remember Allah often and the women who do so - for them Allah has prepared forgiveness and a great reward.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 33:35: 'the truthful men and truthful women'"
+      }
+    ]
+  },
+  "humility": {
+    "label": "Humility",
+    "verses": [
+      {
+        "key": "17:24",
+        "ref": "Al-Isra 17:24",
+        "score": 8,
+        "translation": "And lower to them the wing of humility out of mercy and say, \"My Lord, have mercy upon them as they brought me up [when I was] small.\"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 17:24: 'lower to them the wing of humility'"
+      },
+      {
+        "key": "33:35",
+        "ref": "Al-Ahzab 33:35",
+        "score": 7,
+        "translation": "Indeed, the Muslim men and Muslim women, the believing men and believing women, the obedient men and obedient women, the truthful men and truthful women, the patient men and patient women, the humble men and humble women, the charitable men and charitable women, the fasting men and fasting women, the men who guard their private parts and the women who do so, and the men who remember Allah often and the women who do so - for them Allah has prepared forgiveness and a great reward.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 33:35: 'the humble men and humble women'"
+      }
+    ]
+  },
+  "fear-of-allah": {
+    "label": "Fear of Allah (Taqwa)",
+    "verses": [
+      {
+        "key": "2:197",
+        "ref": "Al-Baqarah 2:197",
+        "score": 8,
+        "translation": "Hajj is [during] well-known months, so whoever has made Hajj obligatory upon himself therein [by entering the state of ihram], there is [to be for him] no sexual relations and no disobedience and no disputing during Hajj. And whatever good you do - Allah knows it. And take provisions, but indeed, the best provision is fear of Allah. And fear Me, O you of understanding.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:197: 'the best provision is fear of Allah'"
+      },
+      {
+        "key": "3:200",
+        "ref": "Ali 'Imran 3:200",
+        "score": 7,
+        "translation": "O you who have believed, persevere and endure and remain stationed and fear Allah that you may be successful.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 3:200: 'fear Allah that you may be successful'"
+      },
+      {
+        "key": "5:8",
+        "ref": "Al-Ma'idah 5:8",
+        "score": 6,
+        "translation": "O you who have believed, be persistently standing firm for Allah, witnesses in justice, and do not let the hatred of a people prevent you from being just. Be just; that is nearer to righteousness. And fear Allah; indeed, Allah is Acquainted with what you do.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 5:8: 'And fear Allah'"
+      }
+    ]
+  },
+  "reliance-on-allah": {
+    "label": "Reliance on Allah (Tawakkul)",
+    "verses": [
+      {
+        "key": "65:3",
+        "ref": "At-Talaq 65:3",
+        "score": 9,
+        "translation": "And will provide for him from where he does not expect. And whoever relies upon Allah - then He is sufficient for him. Indeed, Allah will accomplish His purpose. Allah has already set for everything a [decreed] extent.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 65:3: 'whoever relies upon Allah - then He is sufficient for him'"
+      },
+      {
+        "key": "3:159",
+        "ref": "Ali 'Imran 3:159",
+        "score": 8,
+        "translation": "So by mercy from Allah, [O Muhammad], you were lenient with them. And if you had been rude [in speech] and harsh in heart, they would have disbanded from about you. So pardon them and ask forgiveness for them and consult them in the matter. And when you have decided, then rely upon Allah. Indeed, Allah loves those who rely [upon Him].",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 3:159: 'then rely upon Allah'"
+      }
+    ]
+  },
+  "repentance": {
+    "label": "Repentance (Tawbah)",
+    "verses": [
+      {
+        "key": "66:8",
+        "ref": "At-Tahrim 66:8",
+        "score": 9,
+        "translation": "O you who have believed, repent to Allah with sincere repentance. Perhaps your Lord will remove from you your misdeeds and admit you into gardens beneath which rivers flow [on] the Day when Allah will not disgrace the Prophet and those who believed with him. Their light will proceed before them and on their right; they will say, \"Our Lord, perfect for us our light and forgive us. Indeed, You are over all things competent.\"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 66:8: 'repent to Allah with sincere repentance'"
+      },
+      {
+        "key": "2:222",
+        "ref": "Al-Baqarah 2:222",
+        "score": 7,
+        "translation": "And they ask you about menstruation. Say, \"It is harm, so keep away from wives during menstruation. And do not approach them until they are pure. And when they have purified themselves, then come to them from where Allah has ordained for you. Indeed, Allah loves those who are constantly repentant and loves those who purify themselves.\"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:222: 'those who are constantly repentant'"
+      }
+    ]
+  },
+  "kindness-to-parents": {
+    "label": "Kindness to Parents",
+    "verses": [
+      {
+        "key": "17:23",
+        "ref": "Al-Isra 17:23",
+        "score": 9,
+        "translation": "And your Lord has decreed that you not worship except Him, and to parents, good treatment. Whether one or both of them reach old age [while] with you, say not to them [so much as], \"uff,\" and do not repel them but speak to them a noble word.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 17:23: 'to parents, good treatment'"
+      },
+      {
+        "key": "31:14",
+        "ref": "Luqman 31:14",
+        "score": 8,
+        "translation": "And We have enjoined upon man [care] for his parents. His mother carried him, [increasing her] in weakness upon weakness, and his weaning is in two years. Be grateful to Me and to your parents; to Me is the [final] destination.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 31:14: 'enjoined upon man [care] for his parents'"
+      }
+    ]
+  },
+  "remembrance-of-allah": {
+    "label": "Remembrance of Allah (Dhikr)",
+    "verses": [
+      {
+        "key": "13:28",
+        "ref": "Ar-Ra'd 13:28",
+        "score": 9,
+        "translation": "Those who have believed and whose hearts are assured by the remembrance of Allah. Unquestionably, by the remembrance of Allah hearts are assured.\"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 13:28: 'by the remembrance of Allah hearts are assured'"
+      },
+      {
+        "key": "33:41",
+        "ref": "Al-Ahzab 33:41",
+        "score": 9,
+        "translation": "O you who have believed, remember Allah with much remembrance",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 33:41: 'remember Allah with much remembrance'"
+      },
+      {
+        "key": "2:152",
+        "ref": "Al-Baqarah 2:152",
+        "score": 7,
+        "translation": "So remember Me; I will remember you. And be grateful to Me and do not deny Me.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:152: 'remember Me; I will remember you'"
+      },
+      {
+        "key": "29:45",
+        "ref": "Al-'Ankabut 29:45",
+        "score": 6,
+        "translation": "Recite, [O Muhammad], what has been revealed to you of the Book and establish prayer. Indeed, prayer prohibits immorality and wrongdoing, and the remembrance of Allah is greater. And Allah knows that which you do.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 29:45: 'the remembrance of Allah is greater'"
+      }
+    ]
+  },
+  "knowledge": {
+    "label": "Knowledge (Ilm)",
+    "verses": [
+      {
+        "key": "39:9",
+        "ref": "Az-Zumar 39:9",
+        "score": 8,
+        "translation": "Is one who is devoutly obedient during periods of the night, prostrating and standing [in prayer], fearing the Hereafter and hoping for the mercy of his Lord, [like one who does not]? Say, \"Are those who know equal to those who do not know?\" Only they will remember [who are] people of understanding.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 39:9: 'Are those who know equal to those who do not know'"
+      },
+      {
+        "key": "20:114",
+        "ref": "Taha 20:114",
+        "score": 8,
+        "translation": "So high [above all] is Allah, the Sovereign, the Truth. And, [O Muhammad], do not hasten with [recitation of] the Qur'an before its revelation is completed to you, and say, \"My Lord, increase me in knowledge.\"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 20:114: 'increase me in knowledge'"
+      },
+      {
+        "key": "58:11",
+        "ref": "Al-Mujadila 58:11",
+        "score": 7,
+        "translation": "O you who have believed, when you are told, \"Space yourselves\" in assemblies, then make space; Allah will make space for you. And when you are told, \"Arise,\" then arise; Allah will raise those who have believed among you and those who were given knowledge, by degrees. And Allah is Acquainted with what you do.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 58:11: 'those who were given knowledge, by degrees'"
+      }
+    ]
+  },
+  "hope": {
+    "label": "Hope (Do Not Despair)",
+    "verses": [
+      {
+        "key": "39:53",
+        "ref": "Az-Zumar 39:53",
+        "score": 8,
+        "translation": "Say, \"O My servants who have transgressed against themselves [by sinning], do not despair of the mercy of Allah. Indeed, Allah forgives all sins. Indeed, it is He who is the Forgiving, the Merciful.\"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 39:53: 'do not despair of the mercy of Allah'"
+      },
+      {
+        "key": "12:87",
+        "ref": "Yusuf 12:87",
+        "score": 8,
+        "translation": "O my sons, go and find out about Joseph and his brother and despair not of relief from Allah. Indeed, no one despairs of relief from Allah except the disbelieving people.\"",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 12:87: 'despair not of relief from Allah'"
+      }
+    ]
+  },
+  "oneness-of-allah": {
+    "label": "Oneness of Allah (Tawhid)",
+    "verses": [
+      {
+        "key": "112:1",
+        "ref": "Al-Ikhlas 112:1",
+        "score": 9,
+        "translation": "Say, \"He is Allah, [who is] One,",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 112:1: 'He is Allah, [who is] One'"
+      },
+      {
+        "key": "2:163",
+        "ref": "Al-Baqarah 2:163",
+        "score": 9,
+        "translation": "And your god is one God. There is no deity [worthy of worship] except Him, the Entirely Merciful, the Especially Merciful.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:163: 'your god is one God'"
+      },
+      {
+        "key": "20:14",
+        "ref": "Taha 20:14",
+        "score": 7,
+        "translation": "Indeed, I am Allah. There is no deity except Me, so worship Me and establish prayer for My remembrance.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 20:14: 'There is no deity except Me'"
+      }
+    ]
+  },
+  "pilgrimage": {
+    "label": "Pilgrimage (Hajj)",
+    "verses": [
+      {
+        "key": "22:27",
+        "ref": "Al-Hajj 22:27",
+        "score": 9,
+        "translation": "And proclaim to the people the Hajj [pilgrimage]; they will come to you on foot and on every lean camel; they will come from every distant pass -",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 22:27: 'proclaim to the people the Hajj [pilgrimage]'"
+      },
+      {
+        "key": "2:197",
+        "ref": "Al-Baqarah 2:197",
+        "score": 8,
+        "translation": "Hajj is [during] well-known months, so whoever has made Hajj obligatory upon himself therein [by entering the state of ihram], there is [to be for him] no sexual relations and no disobedience and no disputing during Hajj. And whatever good you do - Allah knows it. And take provisions, but indeed, the best provision is fear of Allah. And fear Me, O you of understanding.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:197: 'Hajj is [during] well-known months'"
+      },
+      {
+        "key": "3:97",
+        "ref": "Ali 'Imran 3:97",
+        "score": 8,
+        "translation": "In it are clear signs [such as] the standing place of Abraham. And whoever enters it shall be safe. And [due] to Allah from the people is a pilgrimage to the House - for whoever is able to find thereto a way. But whoever disbelieves - then indeed, Allah is free from need of the worlds.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 3:97: 'a pilgrimage to the House'"
+      }
+    ]
+  },
+  "orphans": {
+    "label": "Care for Orphans",
+    "verses": [
+      {
+        "key": "4:2",
+        "ref": "An-Nisa 4:2",
+        "score": 8,
+        "translation": "And give to the orphans their properties and do not substitute the defective [of your own] for the good [of theirs]. And do not consume their properties into your own. Indeed, that is ever a great sin.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 4:2: 'give to the orphans their properties'"
+      },
+      {
+        "key": "93:9",
+        "ref": "Ad-Duhaa 93:9",
+        "score": 7,
+        "translation": "So as for the orphan, do not oppress [him].",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 93:9: 'as for the orphan, do not oppress'"
+      },
+      {
+        "key": "2:220",
+        "ref": "Al-Baqarah 2:220",
+        "score": 7,
+        "translation": "To this world and the Hereafter. And they ask you about orphans. Say, \"Improvement for them is best. And if you mix your affairs with theirs - they are your brothers. And Allah knows the corrupter from the amender. And if Allah had willed, He could have put you in difficulty. Indeed, Allah is Exalted in Might and Wise.",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 2:220: 'they ask you about orphans'"
+      },
+      {
+        "key": "76:8",
+        "ref": "Al-Insan 76:8",
+        "score": 6,
+        "translation": "And they give food in spite of love for it to the needy, the orphan, and the captive,",
+        "translator": "Saheeh International",
+        "sourceCitation": "Explicit in Saheeh International translation of 76:8: 'the needy, the orphan, and the captive'"
+      }
+    ]
+  }
+}
