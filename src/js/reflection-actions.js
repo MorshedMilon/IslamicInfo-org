@@ -72,7 +72,33 @@
       '.refl-share-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}',
       '.refl-share-acts button{font-family:var(--font-body);font-size:12.5px;font-weight:600;padding:11px;border-radius:10px;border:.5px solid var(--teal-200,rgba(0,105,110,.25));background:transparent;color:var(--teal-700);cursor:pointer;}',
       '.refl-share-acts .refl-dl{background:var(--teal-700);color:#fff;border-color:var(--teal-700);grid-column:1/-1;}',
-      '.refl-share-acts button:hover{border-color:var(--teal-500);}'
+      '.refl-share-acts button:hover{border-color:var(--teal-500);}',
+      // dated heading + Saved button
+      '.refl-date{color:var(--gold-600,#a9812f);font-weight:500;}',
+      '.refl-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1200px;margin:0 auto 16px;padding:0 4px;flex-wrap:wrap;}',
+      '.refl-bar-date{font-family:var(--font-body);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-700);}',
+      '.refl-saved-btn{font-family:var(--font-body);font-size:12px;font-weight:600;color:var(--teal-700);background:transparent;border:.5px solid var(--teal-200,rgba(0,105,110,.25));border-radius:20px;padding:6px 14px;cursor:pointer;transition:all .15s;white-space:nowrap;}',
+      '.refl-saved-btn:hover{background:var(--teal-50,rgba(0,105,110,.06));border-color:var(--teal-400);}',
+      '.trio-hdr .refl-saved-btn{margin-left:12px;}',
+      // saved modal
+      '.refl-saved-modal{position:fixed;inset:0;z-index:2900;display:none;align-items:center;justify-content:center;background:rgba(6,20,21,.62);padding:16px;}',
+      '.refl-saved-modal.open{display:flex;}',
+      '.refl-saved-box{background:var(--surface,#fff);border-radius:18px;max-width:460px;width:100%;max-height:88vh;display:flex;flex-direction:column;padding:16px;box-shadow:0 24px 64px rgba(0,0,0,.42);}',
+      '[data-theme="dark"] .refl-saved-box{background:#0f1b1d;}',
+      '.refl-saved-close{border:none;background:transparent;font-size:19px;line-height:1;color:var(--ink-muted);cursor:pointer;}',
+      '.refl-saved-list{overflow-y:auto;margin-top:6px;}',
+      '.refl-saved-empty{padding:30px 12px;text-align:center;color:var(--ink-subtle);font-size:13px;font-family:var(--font-body);line-height:1.6;}',
+      '.refl-saved-item{padding:13px 0;border-top:.5px solid rgba(0,105,110,.10);}',
+      '.refl-saved-item:first-child{border-top:none;}',
+      '.refl-saved-type{font-family:var(--font-body);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-700,#8a6a2f);margin-bottom:6px;}',
+      '.refl-saved-ar{font-family:var(--font-arabic);font-size:16px;color:var(--ink-primary);text-align:right;line-height:1.8;margin-bottom:5px;}',
+      '.refl-saved-text{font-family:var(--font-display);font-style:italic;font-size:14px;color:var(--ink-muted);line-height:1.5;margin-bottom:5px;}',
+      '.refl-saved-ref{font-family:var(--font-mono);font-size:11px;color:var(--ink-subtle);}',
+      '.refl-saved-note{margin-top:7px;padding:8px 10px;background:rgba(0,105,110,.05);border-radius:9px;font-family:var(--font-body);font-size:12px;color:var(--ink-muted);line-height:1.5;}',
+      '.refl-saved-acts{display:flex;gap:8px;margin-top:9px;}',
+      '.refl-saved-acts button{font-family:var(--font-body);font-size:12px;font-weight:600;padding:6px 14px;border-radius:9px;border:.5px solid var(--teal-200,rgba(0,105,110,.25));background:transparent;color:var(--teal-700);cursor:pointer;}',
+      '.refl-saved-acts .refl-saved-share{background:var(--teal-700);color:#fff;border-color:var(--teal-700);}',
+      '.refl-saved-acts .refl-saved-remove:hover{border-color:var(--gold-500,#c5a059);color:var(--gold-700,#8a6a2f);}'
     ].join('');
     document.head.appendChild(s);
   }
@@ -110,6 +136,7 @@
     write(BM_KEY, list);
     var saved = core.isSaved(list, d.id);
     btnEl.classList.toggle('on', saved);
+    updateSavedCounts();
     toast(saved ? 'Saved to your reflections ✦' : 'Removed from saved');
   }
 
@@ -226,16 +253,18 @@
     ensureFonts().then(function () { drawCard(ctx, shareState.model, d); });
   }
 
-  function openShare(card) {
+  function modelFor(src) {
+    return { type: src.type, label: core.typeMeta(src.type).label, arabic: src.arabic,
+             text: src.text, ref: src.ref, grade: src.grade, dateStr: todayStr() };
+  }
+  function openShareModel(model) {
     injectModal();
-    var d = cardData(card);
-    shareState.model = { type: d.type, label: core.typeMeta(d.type).label, arabic: d.arabic,
-                         text: d.text, ref: d.ref, grade: d.grade, dateStr: todayStr() };
-    shareState.fmt = 'square';
+    shareState.model = model; shareState.fmt = 'square';
     modal.querySelectorAll('.refl-share-fmt button').forEach(function (x) { x.classList.toggle('on', x.getAttribute('data-fmt') === 'square'); });
     modal.classList.add('open');
     render();
   }
+  function openShare(card) { openShareModel(modelFor(cardData(card))); }
   function closeShare() { if (modal) modal.classList.remove('open'); }
 
   function withBlob(cb) {
@@ -280,9 +309,93 @@
     } catch (e) { done(); }
   }
 
+  // ═══ Saved Reflections view ═══
+  function cap(s, n) { s = String(s == null ? '' : s); return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  var savedModal, savedListEl, savedBtns = [];
+  function updateSavedCounts() {
+    var n = read(BM_KEY).length;
+    savedBtns.forEach(function (b) { b.textContent = '★ Saved' + (n ? ' (' + n + ')' : ''); });
+  }
+  function injectSavedModal() {
+    if (savedModal) return;
+    savedModal = el('div', 'refl-saved-modal'); savedModal.id = 'reflSavedModal';
+    savedModal.innerHTML = '<div class="refl-saved-box" role="dialog" aria-label="Saved reflections">' +
+      '<div class="refl-share-topbar"><span>Saved Reflections</span><button class="refl-saved-close" type="button" aria-label="Close">✕</button></div>' +
+      '<div class="refl-saved-list"></div></div>';
+    document.body.appendChild(savedModal);
+    savedListEl = savedModal.querySelector('.refl-saved-list');
+    savedModal.addEventListener('click', function (e) { if (e.target === savedModal) savedModal.classList.remove('open'); });
+    savedModal.querySelector('.refl-saved-close').addEventListener('click', function () { savedModal.classList.remove('open'); });
+  }
+  function renderSaved() {
+    var list = read(BM_KEY), notes = read(NOTE_KEY);
+    savedListEl.innerHTML = '';
+    if (!list.length) {
+      savedListEl.appendChild(el('div', 'refl-saved-empty', 'No saved reflections yet.<br>Tap the bookmark on a card to save it here.'));
+      return;
+    }
+    list.forEach(function (item) {
+      var note = core.findNote(notes, item.id), m = core.typeMeta(item.type);
+      var row = el('div', 'refl-saved-item',
+        '<div class="refl-saved-type">' + m.emoji + ' ' + esc(m.label) + '</div>' +
+        (item.arabic ? '<div class="refl-saved-ar" dir="rtl">' + esc(cap(item.arabic, 96)) + '</div>' : '') +
+        '<div class="refl-saved-text">' + esc(cap(item.text, 170)) + '</div>' +
+        '<div class="refl-saved-ref">' + esc(item.ref || '') + (item.grade ? ' · ' + esc(String(item.grade).replace(/^✓\s*/, '')) : '') + '</div>' +
+        (note ? '<div class="refl-saved-note">📝 ' + esc(note.text) + '</div>' : ''));
+      var acts = el('div', 'refl-saved-acts');
+      var sh = el('button', 'refl-saved-share', 'Share'); sh.type = 'button';
+      var rm = el('button', 'refl-saved-remove', 'Remove'); rm.type = 'button';
+      sh.addEventListener('click', function () { openShareModel(modelFor(item)); });
+      rm.addEventListener('click', function () { removeSaved(item.id); });
+      acts.appendChild(sh); acts.appendChild(rm); row.appendChild(acts);
+      savedListEl.appendChild(row);
+    });
+  }
+  function removeSaved(id) {
+    write(BM_KEY, read(BM_KEY).filter(function (x) { return x.id !== id; }));
+    renderSaved();
+    Array.prototype.forEach.call(document.querySelectorAll('[data-refl-card]'), sync);
+    updateSavedCounts();
+    toast('Removed from saved');
+  }
+  function openSaved() { injectSavedModal(); renderSaved(); savedModal.classList.add('open'); }
+
+  // Dated heading ("Today's Reflection · <date>") + a Saved button, placed to suit
+  // each page's markup (quran has a .trio-hdr/.trio-title; home does not).
+  function injectSectionBar() {
+    var grid = document.querySelector('.trio-grid'); if (!grid) return;
+    var dateStr = todayStr();
+    var title = document.querySelector('.trio-title');
+    if (title && !title.querySelector('.refl-date')) title.appendChild(el('span', 'refl-date', ' · ' + dateStr));
+    var savedBtn = el('button', 'refl-saved-btn'); savedBtn.type = 'button';
+    savedBtn.addEventListener('click', openSaved); savedBtns.push(savedBtn);
+    var hdr = document.querySelector('.trio-hdr');
+    if (hdr) { hdr.appendChild(savedBtn); }
+    else {
+      var bar = el('div', 'refl-bar');
+      bar.appendChild(el('span', 'refl-bar-date', 'Today’s Reflection · ' + dateStr));
+      bar.appendChild(savedBtn);
+      grid.parentNode.insertBefore(bar, grid);
+    }
+    updateSavedCounts();
+  }
+
+  // Per-card action link: page-appropriate label + real destination (no fabricated audio).
+  var ACTION_LABEL = { verse: 'Read in context →', hadith: 'Read full hadith →', dua: 'Listen & reflect →' };
+  function refineActionLabels() {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-refl-card]'), function (card) {
+      var t = card.getAttribute('data-refl-card'), a = card.querySelector('[data-refl="action"]');
+      if (a && ACTION_LABEL[t]) { a.textContent = ACTION_LABEL[t]; a.removeAttribute('data-i18n'); }
+    });
+  }
+
   // ═══ init ═══
   function init() {
     injectCSS();
+    injectSectionBar();
+    refineActionLabels();
     var cards = document.querySelectorAll('[data-refl-card]');
     Array.prototype.forEach.call(cards, function (card) {
       buildActions(card); sync(card);
@@ -294,5 +407,5 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 
   window.II = window.II || {};
-  window.II.reflActions = { _draw: drawCard, _open: openShare, _sync: sync };
+  window.II.reflActions = { _draw: drawCard, _open: openShare, _sync: sync, _openSaved: openSaved };
 })();
