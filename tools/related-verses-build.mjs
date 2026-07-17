@@ -41,7 +41,10 @@ Object.keys(source).forEach(function (slug) {
 
 async function fetchTranslation(key) {
   const url = 'https://api.alquran.cloud/v1/ayah/' + key + '/en.sahih';
-  const res = await fetch(url, { headers: { 'User-Agent': 'IslamicInfo.org build (hello@islamicinfo.org)' } });
+  const res = await fetch(url, {
+    headers: { 'User-Agent': 'IslamicInfo.org build (hello@islamicinfo.org)' },
+    signal: AbortSignal.timeout(8000)
+  });
   if (!res.ok) throw new Error('HTTP ' + res.status);
   const data = await res.json();
   const text = data && data.data && data.data.text;
