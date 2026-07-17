@@ -156,8 +156,12 @@
     });
     card.appendChild(wbw);
 
-    card.appendChild(el('div', 'ayah-translation', '"' + v.translation + '"'));
-    card.appendChild(el('div', 'ayah-trans-attr', core.editionName(ctxEditionId) + ' · ' + ctxSurahName + ' ' + v.verse_key));
+    var tr = window.II && window.II.translations;
+    var transDiv = el('div', 'ayah-translation', '"' + v.translation + '"');
+    if (tr && tr.isRtl(ctxEditionId)) { transDiv.classList.add('trans-rtl'); transDiv.setAttribute('dir', 'rtl'); }
+    card.appendChild(transDiv);
+    var transName = tr ? tr.name(ctxEditionId) : core.editionName(ctxEditionId);
+    card.appendChild(el('div', 'ayah-trans-attr', transName + ' · ' + ctxSurahName + ' ' + v.verse_key));
 
     var cmp = el('div', 'cmp-block'); cmp.id = 'cmp-' + k; card.appendChild(cmp);
     var ai = el('div', 'ai-card'); ai.id = 'ai-' + k; card.appendChild(ai);
