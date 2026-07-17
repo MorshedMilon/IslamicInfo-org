@@ -303,6 +303,25 @@ a{text-decoration:none;color:inherit;}
 .rv-text{margin:4px 0 2px;opacity:.9;}
 .rv-attr{font-size:.72rem;opacity:.6;}
 .rv-empty{opacity:.6;margin:6px 0;}
+/* Related Hadith panel */
+.rh-panel{display:none;margin-top:14px;padding:14px 16px;background:rgba(0,105,110,.03);border:.5px solid rgba(197,160,89,.25);border-radius:14px;}
+.rh-panel.show{display:block;animation:slideUp .35s var(--ease-reverent) both;}
+.rh-row{padding:12px 0;border-bottom:.5px solid rgba(197,160,89,.18);}
+.rh-row:last-child{border-bottom:0;}
+.rh-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.rh-grade{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px;}
+.rh-grade-sahih{background:rgba(0,105,110,.14);}
+.rh-grade-hasan{background:rgba(197,160,89,.16);}
+.rh-ref{font-weight:600;}
+.rh-chip{font-size:.72rem;padding:2px 8px;border-radius:999px;background:rgba(197,160,89,.14);}
+.rh-narrator{font-size:.8rem;opacity:.7;margin:4px 0 2px;}
+.rh-text{margin:2px 0;opacity:.92;}
+.rh-expand{background:none;border:0;color:inherit;opacity:.7;cursor:pointer;font-size:.78rem;padding:4px 0;}
+.rh-full{margin-top:6px;}
+.rh-arabic{font-family:var(--font-arabic);font-size:1.15rem;line-height:2;text-align:right;}
+.rh-isnad,.rh-attr{font-size:.74rem;opacity:.7;margin:4px 0;}
+.rh-src{font-size:.74rem;}
+.rh-empty{opacity:.6;margin:6px 0;}
 .ai-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .ai-title{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-700);}
 .ai-close{width:22px;height:22px;border:none;background:transparent;cursor:pointer;color:var(--ink-subtle);font-size:14px;display:flex;align-items:center;justify-content:center;border-radius:6px;}
@@ -3249,6 +3268,8 @@ function mushafChangePage(dir) {
 <script src="src/js/quran-tafsir.js?v=20260716b"></script>
 <script src="src/js/quran-related-core.js"></script>
 <script src="src/js/quran-related.js"></script>
+<script src="src/js/quran-related-hadith-core.js"></script>
+<script src="src/js/quran-related-hadith.js"></script>
 <script src="src/js/reflection-core.js?v=20260716b"></script>
 <script src="src/js/reflection.js?v=20260716b"></script>
 <script src="src/js/reflection-actions-core.js?v=20260717b"></script>
