@@ -14,11 +14,13 @@
   function loadIndex() {
     if (state.loaded) return Promise.resolve();
     if (state.loading) return state.loading;
-    state.loading = Promise.all([
+    var p = Promise.all([
       fetch(TOPICS_URL).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
       fetch(VERSE_INDEX_URL).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     ]).then(function (res) { state.topics = res[0]; state.verseIndex = res[1]; state.loaded = true; });
-    return state.loading;
+    state.loading = p;
+    p.catch(function () { state.loading = null; }); // allow a later toggle to retry after a transient failure
+    return p;
   }
   function el(tag, cls, txt) {
     var e = document.createElement(tag); if (cls) e.className = cls;
