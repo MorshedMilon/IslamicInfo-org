@@ -171,7 +171,7 @@
     var footer = el('div', 'ayah-footer');
     footer.appendChild(el('span', 'ayah-ref', v.verse_key));
     var taf = btn('tafsir-btn', SVG.taf + 'Tafsir'); taf.addEventListener('click', function () { if (window.openTafsir) window.openTafsir(); });
-    var rel = btn('tafsir-btn', SVG.taf + 'Related'); rel.addEventListener('click', function (e) { e.stopPropagation(); window.toggleRelated('rv-' + k); });
+    var rel = btn('tafsir-btn', SVG.taf + 'Related'); rel.addEventListener('click', function () { window.toggleRelated('rv-' + k); });
     var tr = btn('trace-btn', SVG.trace + 'Trace View →'); tr.addEventListener('click', function () { if (window.openTrace) window.openTrace(ctxSurahName + ' ' + v.verse_key, v.text_uthmani, v.translation); });
     footer.appendChild(taf); footer.appendChild(rel); footer.appendChild(tr);
     card.appendChild(footer);
