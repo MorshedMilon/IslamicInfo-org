@@ -56,8 +56,23 @@
       .finally(function () { clearTimeout(t); });
   }
 
-  // ---- floating picker (appended to <body> so no ancestor clip/overflow affects it) ----
+  // ---- two-level floating picker (appended to <body> so no ancestor clip affects it) ----
+  // Level 1: search box + language list (English first). Hover/tap a language →
+  // Level 2: a submenu (separate float) listing that language's translators.
+  // When search is non-empty, level 1 becomes a flat filtered translator list.
   var floatPicker = null, searchInput = null, listWrap = null;
+  var subPicker = null, subList = null, closeTimer = null, openLang = null;
+
+  function makeOpt(tr) {
+    var opt = document.createElement('div');
+    opt.className = 'reciter-opt' + (tr.id === editionId ? ' on' : '');
+    if (tr.dir === 'rtl') opt.setAttribute('dir', 'rtl');
+    var dot = document.createElement('div'); dot.className = 'reciter-opt-dot'; opt.appendChild(dot);
+    opt.appendChild(document.createTextNode(tr.name));
+    opt.addEventListener('click', function (e) { if (e && e.stopPropagation) e.stopPropagation(); window.selectTranslation(tr.id); });
+    return opt;
+  }
+
   function getFloatPicker() {
     if (!floatPicker) {
       floatPicker = document.createElement('div');
@@ -66,7 +81,7 @@
       floatPicker.style.cssText = 'position:fixed;bottom:auto;right:auto;z-index:9999;display:none;';
       searchInput = document.createElement('input');
       searchInput.type = 'text'; searchInput.className = 'tp-search';
-      searchInput.setAttribute('placeholder', 'Search translations…');
+      searchInput.setAttribute('placeholder', 'Search language or translator…');
       searchInput.setAttribute('aria-label', 'Search translations');
       searchInput.addEventListener('input', renderList);
       searchInput.addEventListener('click', function (e) { e.stopPropagation(); });
@@ -77,37 +92,95 @@
     }
     return floatPicker;
   }
-  function hideFloatPicker() { if (floatPicker) { floatPicker.style.display = 'none'; floatPicker._anchor = null; } }
+  function getSubPicker() {
+    if (!subPicker) {
+      subPicker = document.createElement('div');
+      subPicker.className = 'reciter-picker translation-picker translation-subpicker';
+      subPicker.id = 'translationSubPicker';
+      subPicker.style.cssText = 'position:fixed;bottom:auto;right:auto;z-index:10000;display:none;';
+      subList = document.createElement('div'); subList.className = 'tp-list';
+      subPicker.appendChild(subList);
+      subPicker.addEventListener('mouseenter', cancelClose);
+      subPicker.addEventListener('mouseleave', scheduleClose);
+      (document.body || document.documentElement).appendChild(subPicker);
+    }
+    return subPicker;
+  }
+  function hideSub() { if (subPicker) { subPicker.style.display = 'none'; openLang = null; } }
+  function cancelClose() { if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; } }
+  function scheduleClose() { cancelClose(); closeTimer = setTimeout(hideSub, 180); }
+  function hideFloatPicker() { hideSub(); if (floatPicker) { floatPicker.style.display = 'none'; floatPicker._anchor = null; } }
+
+  function openSub(group, rowEl) {
+    cancelClose();
+    getSubPicker();
+    if (openLang === group.language && subPicker.style.display === 'block') return;
+    openLang = group.language;
+    subList.innerHTML = '';
+    // order by curated popularity then the rest, so the submenu reads best-first
+    var ordered = core.pickCompareSet(group.items, group.language, group.items.length);
+    ordered.forEach(function (tr) { subList.appendChild(makeOpt(tr)); });
+    subPicker.style.display = 'block';
+    positionSub(rowEl);
+  }
+  function positionSub(rowEl) {
+    var vw = window.innerWidth || 360, vh = window.innerHeight || 640;
+    var fr = floatPicker.getBoundingClientRect();
+    var rr = rowEl.getBoundingClientRect();
+    var sw = subPicker.offsetWidth || 240, sh = subPicker.offsetHeight || 300;
+    var left = fr.right + 4;
+    if (left + sw > vw - 8) left = Math.max(8, fr.left - sw - 4); // flip left if no room
+    var top = Math.max(8, Math.min(rr.top, vh - sh - 8));
+    subPicker.style.left = left + 'px';
+    subPicker.style.top = top + 'px';
+  }
 
   function renderList() {
     getFloatPicker();
-    var groups = core.groupTranslationsByLanguage(core.filterTranslations(translations, searchInput.value));
+    hideSub();
     listWrap.innerHTML = '';
-    if (!groups.length) {
-      var none = document.createElement('div'); none.className = 'tp-empty';
-      none.textContent = 'No matches'; listWrap.appendChild(none); return;
-    }
-    groups.forEach(function (g) {
-      var label = document.createElement('div'); label.className = 'tp-group-label';
-      label.textContent = g.languageLabel; listWrap.appendChild(label);
-      g.items.forEach(function (tr) {
-        var opt = document.createElement('div');
-        opt.className = 'reciter-opt' + (tr.id === editionId ? ' on' : '');
-        if (tr.dir === 'rtl') opt.setAttribute('dir', 'rtl');
-        var dot = document.createElement('div'); dot.className = 'reciter-opt-dot'; opt.appendChild(dot);
-        opt.appendChild(document.createTextNode(tr.name));
-        opt.addEventListener('click', function (e) { if (e && e.stopPropagation) e.stopPropagation(); window.selectTranslation(tr.id); });
+    var q = (searchInput.value || '').trim();
+    if (q) {
+      // flat filtered translator list, "Name · Language"
+      var hits = core.filterTranslations(translations, q);
+      if (!hits.length) { var none = document.createElement('div'); none.className = 'tp-empty'; none.textContent = 'No matches'; listWrap.appendChild(none); return; }
+      hits.slice(0, 60).forEach(function (tr) {
+        var opt = makeOpt(tr);
+        var tag = document.createElement('span'); tag.className = 'tp-opt-lang'; tag.textContent = tr.languageLabel;
+        opt.appendChild(tag);
         listWrap.appendChild(opt);
       });
+      return;
+    }
+    // language list (level 1)
+    var groups = core.groupTranslationsByLanguage(translations);
+    groups.forEach(function (g) {
+      var hasCurrent = g.items.some(function (t) { return t.id === editionId; });
+      var row = document.createElement('div');
+      row.className = 'tp-lang' + (hasCurrent ? ' on' : '');
+      row.setAttribute('data-lang', g.language);
+      var name = document.createElement('span'); name.className = 'tp-lang-name'; name.textContent = g.languageLabel;
+      var count = document.createElement('span'); count.className = 'tp-lang-count'; count.textContent = String(g.items.length);
+      var chev = document.createElement('span'); chev.className = 'tp-lang-chev'; chev.textContent = '›';
+      row.appendChild(name); row.appendChild(count); row.appendChild(chev);
+      row.addEventListener('mouseenter', function () { openSub(g, row); });
+      row.addEventListener('mouseleave', scheduleClose);
+      row.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (openLang === g.language && subPicker && subPicker.style.display === 'block') hideSub();
+        else openSub(g, row);
+      });
+      listWrap.appendChild(row);
     });
   }
 
   window.toggleTranslationPicker = function (btn) {
     var fp = getFloatPicker();
     if (fp.style.display === 'block' && fp._anchor === btn) { hideFloatPicker(); return; }
+    fp.style.display = 'block';           // display before measuring so offset* is valid
+    searchInput.value = '';
     renderList();
     fp._anchor = btn || null;
-    fp.style.display = 'block';
     var vw = window.innerWidth || 360, vh = window.innerHeight || 640;
     var r = (btn && btn.getBoundingClientRect) ? btn.getBoundingClientRect() : { top: 60, bottom: 60, left: 20 };
     var pw = fp.offsetWidth || 260, ph = fp.offsetHeight || 360;
@@ -137,7 +210,8 @@
   // Close on outside click. Trigger button re-toggles itself; search stops propagation.
   document.addEventListener('click', function (e) {
     if (!floatPicker || floatPicker.style.display !== 'block') return;
-    if (e.target && e.target.closest && (e.target.closest('#translationFloatPicker') || e.target.closest('#translationBtnTop'))) return;
+    if (e.target && e.target.closest && (e.target.closest('#translationFloatPicker') ||
+        e.target.closest('#translationSubPicker') || e.target.closest('#translationBtnTop'))) return;
     hideFloatPicker();
   });
 

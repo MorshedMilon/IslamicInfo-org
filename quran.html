@@ -1318,8 +1318,22 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   background:var(--teal-950);z-index:1;}
 .tp-empty{padding:14px 10px;color:rgba(255,255,255,.5);font-size:12px;font-family:var(--font-body);text-align:center;}
 .translation-picker .reciter-opt[dir="rtl"]{flex-direction:row-reverse;text-align:right;}
+/* Level 1 — language rows */
+.tp-lang{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;
+  color:rgba(255,255,255,.72);font-size:12.5px;font-family:var(--font-body);transition:background .15s,color .15s;}
+.tp-lang:hover,.tp-lang.on{background:rgba(255,255,255,.09);color:#fff;}
+.tp-lang.on{background:rgba(197,160,89,.16);}
+.tp-lang-name{flex:1;}
+.tp-lang-count{font-size:10.5px;color:rgba(255,255,255,.4);background:rgba(255,255,255,.06);border-radius:20px;padding:1px 7px;}
+.tp-lang-chev{color:rgba(255,255,255,.45);font-size:15px;line-height:1;}
+.translation-subpicker{min-width:230px;max-width:300px;max-height:min(420px,70vh);overflow-y:auto;padding:6px;}
+.tp-opt-lang{margin-left:auto;padding-left:10px;font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;}
 /* RTL translation text (Urdu, Persian, etc.) in verse cards */
 .ayah-translation.trans-rtl{direction:rtl;text-align:right;font-family:var(--font-arabic);line-height:2;}
+/* Compare items — RTL languages + not-enough-translations note */
+.cmp-item.rtl .cmp-name{text-align:right;}
+.cmp-item.rtl .cmp-text{direction:rtl;text-align:right;font-family:var(--font-arabic);font-style:normal;line-height:1.95;}
+.cmp-note{margin-top:6px;padding-left:16px;font-size:11px;color:var(--ink-subtle);font-style:italic;}
 /* Repeat mode */
 .ap-btn.repeat-on{color:var(--gold-400)!important;background:rgba(197,160,89,.15)!important;}
 
@@ -3018,6 +3032,7 @@ function mushafChangePage(dir) {
 <script src="src/js/quran-qul-core.js"></script>
 <script src="src/js/quran-audio.js"></script>
 <script src="src/js/quran-translations.js"></script>
+<script src="src/js/quran-compare.js"></script>
 <script src="src/js/quran-marks-core.js"></script>
 <script src="src/js/quran-marks.js"></script>
 <script src="src/js/quran-ai-core.js"></script>

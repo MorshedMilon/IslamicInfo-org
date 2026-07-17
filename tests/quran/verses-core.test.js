@@ -127,3 +127,44 @@ test('filterTranslations: matches name/language, empty query returns all', () =>
 test('translationsCacheKey', () => {
   assert.equal(core.translationsCacheKey(), 'ii-quran-translations-list');
 });
+
+// ── Task 7b: compare helpers ──
+
+test('pickCompareSet: curated-popular first, then catalog order, capped at n', () => {
+  const cat = [
+    core.normalizeTranslation({ id: 85, author_name: 'Haleem', language_name: 'english' }),
+    core.normalizeTranslation({ id: 20, author_name: 'Saheeh', language_name: 'english' }),
+    core.normalizeTranslation({ id: 19, author_name: 'Pickthall', language_name: 'english' }),
+    core.normalizeTranslation({ id: 999, author_name: 'Obscure', language_name: 'english' }),
+    core.normalizeTranslation({ id: 45, author_name: 'Kuliev', language_name: 'russian' })
+  ];
+  // english curated order [20,19,22,85,...] → 20,19,85 present; 22 absent skipped
+  assert.deepEqual(core.pickCompareSet(cat, 'english', 3).map(t => t.id), [20, 19, 85]);
+  // fewer than n available → returns what exists
+  assert.deepEqual(core.pickCompareSet(cat, 'russian', 3).map(t => t.id), [45]);
+  // uncurated language falls back to catalog order
+  const un = [
+    core.normalizeTranslation({ id: 301, author_name: 'B', language_name: 'swahili' }),
+    core.normalizeTranslation({ id: 300, author_name: 'A', language_name: 'swahili' })
+  ];
+  assert.deepEqual(core.pickCompareSet(un, 'swahili', 3).map(t => t.id), [301, 300]); // uncurated → preserves catalog order (no re-sort)
+  assert.deepEqual(core.pickCompareSet(cat, 'nonexistent', 3), []);
+});
+
+test('orderCompareTexts: aligns to requested id order, sanitizes, fills gaps', () => {
+  const tr = [
+    { resource_id: 19, text: 'Pickthall<sup>1</sup> text' },
+    { resource_id: 20, text: 'Saheeh text' }
+  ];
+  assert.deepEqual(core.orderCompareTexts(tr, [20, 19, 85]), [
+    { id: 20, text: 'Saheeh text' },
+    { id: 19, text: 'Pickthall text' },
+    { id: 85, text: '' }
+  ]);
+  assert.deepEqual(core.orderCompareTexts([], [20]), [{ id: 20, text: '' }]);
+});
+
+test('POPULAR_BY_LANG uses verified ids, english default first', () => {
+  assert.equal(core.POPULAR_BY_LANG.english[0], 20);
+  assert.ok(core.POPULAR_BY_LANG.urdu.includes(97));
+});

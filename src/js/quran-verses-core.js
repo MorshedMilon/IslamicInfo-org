@@ -74,6 +74,47 @@
 
   function translationsCacheKey() { return 'ii-quran-translations-list'; }
 
+  // ── Compare helpers (Task 7b) ──
+  // Curated popularity ranking (most popular first) per language. Verified real
+  // quran.com ids. Languages not listed fall back to the API's own order.
+  var POPULAR_BY_LANG = {
+    english:    [20, 19, 22, 85, 84, 95],
+    urdu:       [97, 234, 819, 54, 158],
+    bengali:    [161, 213, 163, 162],
+    turkish:    [77, 52, 210],
+    indonesian: [134, 33, 141],
+    french:     [31, 136, 779],
+    spanish:    [83, 140, 199],
+    german:     [27, 208],
+    russian:    [45, 79, 78],
+    hindi:      [122]
+  };
+
+  // Choose up to n translations to compare within one language: curated-popular
+  // first (in ranked order), then any remaining translations in catalog order.
+  function pickCompareSet(catalog, language, n) {
+    if (typeof n !== 'number') n = 3;
+    var lang = String(language == null ? '' : language).toLowerCase();
+    var inLang = (catalog || []).filter(function (t) { return t.language === lang; });
+    var byId = {}; inLang.forEach(function (t) { byId[t.id] = t; });
+    var ranked = POPULAR_BY_LANG[lang] || [];
+    var out = [];
+    ranked.forEach(function (id) { if (byId[id] && out.indexOf(byId[id]) === -1) out.push(byId[id]); });
+    inLang.forEach(function (t) { if (out.indexOf(t) === -1) out.push(t); });
+    return out.slice(0, n);
+  }
+
+  // Map an API verse's translations[] onto an ordered id list → [{id, text}],
+  // sanitized, preserving the requested order (missing ids yield empty text).
+  function orderCompareTexts(apiTranslations, orderedIds) {
+    var byId = {};
+    (apiTranslations || []).forEach(function (t) { byId[t.resource_id] = t; });
+    return (orderedIds || []).map(function (id) {
+      var hit = byId[id];
+      return { id: id, text: hit ? sanitizeTranslation(hit.text) : '' };
+    });
+  }
+
   function sanitizeTranslation(html) {
     return String(html == null ? '' : html)
       .replace(/<sup[^>]*>[\s\S]*?<\/sup>/gi, '')
@@ -128,5 +169,6 @@
   return { sanitizeTranslation, wbwWords, pickTranslation, normalizeVerse,
            showBismillah, versesCacheKey, isFresh, attributionText, editionName,
            isRtlLanguage, normalizeTranslation, groupTranslationsByLanguage,
-           filterTranslations, translationsCacheKey };
+           filterTranslations, translationsCacheKey,
+           POPULAR_BY_LANG, pickCompareSet, orderCompareTexts };
 });
