@@ -38,7 +38,7 @@
   --ease-reverent:cubic-bezier(.22,1,.36,1);
   --ease-premium:cubic-bezier(0.25,0.46,0.45,0.94);
   --r-sm:10px;--r-md:14px;--r-lg:18px;--r-xl:24px;
-  --ar-sz:28px;--tr-sz:17px;
+  --ar-sz:28px;--tr-sz:17px;--tafsir-sz:12.5px;--tafsir-ar-sz:18px;
 }
 [data-theme="dark"]{
   --surface:#0A1314;--surface-card:#0F1B1D;
@@ -363,9 +363,9 @@ a{text-decoration:none;color:inherit;}
 .tp-body::-webkit-scrollbar{width:3px;}
 .tp-body::-webkit-scrollbar-thumb{background:var(--teal-200);border-radius:2px;}
 .tp-ref{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-600);background:var(--teal-50);border:.5px solid var(--teal-100);padding:3px 9px;border-radius:6px;display:inline-block;margin-bottom:12px;}
-.tp-arabic{font-family:var(--font-arabic);font-size:18px;color:var(--ink-primary);direction:rtl;text-align:right;line-height:1.88;margin-bottom:12px;padding:10px 12px;background:rgba(0,105,110,.03);border-radius:10px;border:.5px solid rgba(0,105,110,.08);}
+.tp-arabic{font-family:var(--font-arabic);font-size:var(--tafsir-ar-sz,18px);color:var(--ink-primary);direction:rtl;text-align:right;line-height:1.88;margin-bottom:12px;padding:10px 12px;background:rgba(0,105,110,.03);border-radius:10px;border:.5px solid rgba(0,105,110,.08);}
 [data-theme="dark"] .tp-arabic{color:#D4DCDD;background:rgba(0,105,110,.06);}
-.tp-text{font-size:12.5px;color:var(--ink-muted);line-height:1.72;margin-bottom:10px;}
+.tp-text{font-size:var(--tafsir-sz,12.5px);color:var(--ink-muted);line-height:1.72;margin-bottom:10px;}
 .tp-text strong{color:var(--ink-primary);font-weight:500;}
 .tp-attr{font-size:10px;color:var(--ink-subtle);font-family:var(--font-mono);padding-top:12px;border-top:.5px solid rgba(0,105,110,.08);}
 /* SETTINGS */
@@ -2324,9 +2324,17 @@ function zoomReader(dir){
   }
   root.style.setProperty('--ar-sz',ar+'px');
   root.style.setProperty('--tr-sz',tr+'px');
+  applyTafsirZoom(ar/28);
   try{ localStorage.setItem('ii-quran-ar-size',ar+'px'); localStorage.setItem('ii-quran-tr-size',tr+'px'); }catch(e){}
   // Mirror the same zoom factor to Mushaf Mode (its page is transform-scaled).
   if(window.II && window.II.mushaf && window.II.mushaf.setZoom) window.II.mushaf.setZoom(ar/28);
+}
+/* Scale the Tafsir panel text with the same zoom factor (z = ar/28). */
+function applyTafsirZoom(z){
+  z = (z>0) ? z : 1;
+  var root=document.documentElement;
+  root.style.setProperty('--tafsir-sz', (Math.max(10, Math.min(24, 12.5*z))).toFixed(1)+'px');
+  root.style.setProperty('--tafsir-ar-sz', Math.round(Math.max(14, Math.min(34, 18*z)))+'px');
 }
 
 /* Mobile reader init: tafsir starts closed as a drawer; close drawers on surah tap;
@@ -2802,6 +2810,7 @@ document.querySelectorAll('.trio-card,.feat-card').forEach(function(card){
   var trSz=localStorage.getItem('ii-quran-tr-size');
   if(arSz)document.documentElement.style.setProperty('--ar-sz',arSz);
   if(trSz)document.documentElement.style.setProperty('--tr-sz',trSz);
+  if(arSz && typeof applyTafsirZoom==='function') applyTafsirZoom((parseFloat(arSz)||28)/28);  // restore tafsir zoom
   if(localStorage.getItem('ii-quran-reading-mode')==='1')toggleReadingMode();
 }());
 
