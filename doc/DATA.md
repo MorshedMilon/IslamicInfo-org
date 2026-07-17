@@ -83,6 +83,21 @@
 > `src/js/quran-related.js` (pure lookup logic in `src/js/quran-related-core.js`) to render
 > the per-verse "Related Verses" panel in `quran.html`.
 
+> **Related Hadith static index (Quran Explorer knowledge index, slice 2).**
+> Static JSON on Pages, no binding, no `/api/` route: `src/data/related-hadith/topics.json`
+> → `{ [slug]: { label, hadith: [{ collection, number, ref, book, arabic, english, narrator,
+> isnadSummary, grade, gradedBy, url, score }] } }`. **Generated** by
+> `tools/related-hadith-build.mjs` from the hand-authored curation source
+> `tools/related-hadith/topics.source.json` — do **not** hand-edit the generated file;
+> regenerate via the build script. The build emits **only `reviewed:true`** rows, so
+> `topics.json` currently ships **empty** (`{}`) pending 🕌 sign-off on the staged hadith.
+> Every row is verifier-confirmed: `collection`+`number`, `grade` (Sahih/Hasan only),
+> `gradedBy`, and a verified `isnadSummary`, plus Arabic + English text. Reuses the slice-1
+> `src/data/related-verses/verse-index.json` (a verse's topic tags drive both the Related
+> Verses and Related Hadith panels — no separate verse index). Loaded client-side by
+> `src/js/quran-related-hadith.js` (pure lookup logic in `src/js/quran-related-hadith-core.js`)
+> to render the per-verse "Related Hadith" panel in `quran.html`.
+
 ## 2. Small Value Shapes
 
 ```ts

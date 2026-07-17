@@ -31,17 +31,28 @@ _Shipped work, most recent first._
   fully-sourced static JSON index (`src/data/related-verses/`); zero AI, zero backend,
   client-side lookup. Build script (`tools/related-verses-build.mjs`) is fail-closed —
   every row requires a `sourceCitation`. See `doc/DATA.md` and `doc/API-SPEC.md`. (2026-07-17)
+- [x] 🕌 **Related Hadith** (Quran Explorer knowledge index — slice 2 of 3) — **built +
+  staged, pending 🕌 sign-off for go-live.** Topic-based "Related Hadith" panel in the Quran
+  reader, mirroring Related Verses; static JSON, zero AI, zero backend, client-side lookup;
+  reuses the slice-1 `src/data/related-verses/verse-index.json` for verse → topic mapping. Fail-
+  closed build (`tools/related-hadith-build.mjs`) emits only `reviewed:true` rows from the
+  verifier-confirmed curation source (`tools/related-hadith/topics.source.json`, 6 hadith staged,
+  all `reviewed:false`) into `src/data/related-hadith/topics.json` — **ships empty** until the
+  operator reviews and flips `reviewed:true` (CONTENT-POLICY §5). No new `/api/` route. See
+  `doc/DATA.md` and `doc/API-SPEC.md`. (2026-07-17)
 
-### Knowledge Index — Deferred Backlog (slices 2+3, to finish the 3-feature set)
+### Knowledge Index — Deferred Backlog (slice 3, to finish the 3-feature set)
 _Blocked on the D1/Hadith cycle; not yet scoped as individual tasks._
 
-- [ ] 🕌 Related Hadith — corpus + topic tags; gated by `grade`+`gradedBy`, hadith-verifier
-  skill, human-review gate, un-501 `/api/hadith`.
 - [ ] Vocabulary — terms + cross-references into verses & hadith; FTS lookup.
-- [ ] Adopt D1 + FTS5 for the corpus (with Hadith).
+- [ ] Adopt D1 + FTS5 for the corpus.
 - [ ] Introduce `/api/index/*` worker routes (with D1).
+- [ ] Hadith-page cross-linking (surface Related Hadith rows on `hadith.html`, not just the
+  Quran reader panel).
+- [ ] Disputed-grade handling (multiple graders disagree; currently Sahih/Hasan-only, single
+  `gradedBy` per row).
 - [ ] 🕌 AI connecting-explanation blurb — reuses `/api/ask-claude` guardrails + human-review gate.
-- [ ] Web-based admin bulk-review UI.
+- [ ] Web-based admin bulk-review UI (flip `reviewed:true` without hand-editing source JSON).
 - [ ] Scale tag coverage via external thematic index / staged suggestions.
 
 ---

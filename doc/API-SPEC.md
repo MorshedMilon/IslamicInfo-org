@@ -178,6 +178,19 @@ is no `/api/tafsir`/`/api/dua`; these work on GitHub Pages too).
 - **Deferred:** `/api/index/related-verses` (and D1 + FTS5 for the full corpus) are deferred to
   the Hadith cycle, alongside Related Hadith and Vocabulary (see `TASKS.md`).
 
+### Related Hadith (topic index — knowledge index slice 2)
+- **Source:** static JSON — `src/data/related-hadith/topics.json` (topic → hadith rows),
+  reusing the slice-1 `src/data/related-verses/verse-index.json` (verse → topic slugs). No
+  `/api/` route in this slice, and the AI is **not** involved. Curation source is
+  hadithapi.com, hand-authored into `tools/related-hadith/topics.source.json` and compiled by
+  `tools/related-hadith-build.mjs` (see `DATA.md`).
+- **Content gate:** every row passes the hadith-verifier skill gate (Sahih/Hasan grade only,
+  verified isnad) *and* a human-review gate — the build emits only `reviewed:true` rows.
+  Production is **gated on 🕌 sign-off**: the index ships **empty** until the operator reviews
+  the staged hadith and flips `reviewed:true` (CONTENT-POLICY §5).
+- **Deferred:** `/api/index/*` (and D1 + FTS5 for the full corpus) remain deferred to the
+  Vocabulary slice (see `TASKS.md`).
+
 ---
 
 ## Cross-Cutting Rules
