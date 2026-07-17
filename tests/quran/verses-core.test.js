@@ -65,3 +65,65 @@ test('editionName maps 20, falls back', () => {
   assert.equal(core.editionName(20), 'Saheeh International');
   assert.equal(core.editionName(99999), 'Translation');
 });
+
+// ── Task 7: translation catalog helpers ──
+
+test('isRtlLanguage: rtl langs, combined strings, ltr', () => {
+  assert.equal(core.isRtlLanguage('urdu'), true);
+  assert.equal(core.isRtlLanguage('Persian'), true);
+  assert.equal(core.isRtlLanguage('divehi, dhivehi, maldivian'), true); // combined API string
+  assert.equal(core.isRtlLanguage('uighur, uyghur'), true);
+  assert.equal(core.isRtlLanguage('english'), false);
+  assert.equal(core.isRtlLanguage('french'), false);
+  assert.equal(core.isRtlLanguage(''), false);
+  assert.equal(core.isRtlLanguage(null), false);
+});
+
+test('normalizeTranslation: API item → compact record, dir from language', () => {
+  assert.deepEqual(
+    core.normalizeTranslation({ id: 20, name: 'Saheeh International',
+      author_name: 'Saheeh International', language_name: 'english' }),
+    { id: 20, name: 'Saheeh International', language: 'english',
+      languageLabel: 'English', dir: 'ltr' });
+  const ur = core.normalizeTranslation({ id: 97, name: 'x',
+    author_name: 'Syed Abu Ali Maududi', language_name: 'urdu' });
+  assert.equal(ur.dir, 'rtl');
+  assert.equal(ur.name, 'Syed Abu Ali Maududi'); // prefers author_name
+  // falls back to name, then to a synthesized label
+  assert.equal(core.normalizeTranslation({ id: 5, name: 'OnlyName', language_name: 'x' }).name, 'OnlyName');
+  assert.equal(core.normalizeTranslation({ id: 7 }).name, 'Translation 7');
+  // Roman/transliterated Urdu carries an RTL language_name but Latin script → force LTR
+  assert.equal(core.normalizeTranslation({ id: 831, name: 'Roman Urdu',
+    slug: 'maududi-roman-urdu', language_name: 'urdu' }).dir, 'ltr');
+  assert.equal(core.normalizeTranslation({ id: 57, author_name: 'Transliteration',
+    language_name: 'english' }).dir, 'ltr');
+});
+
+test('groupTranslationsByLanguage: english first, then alpha; items by name', () => {
+  const list = [
+    core.normalizeTranslation({ id: 2, author_name: 'Zeta', language_name: 'french' }),
+    core.normalizeTranslation({ id: 3, author_name: 'Alpha', language_name: 'french' }),
+    core.normalizeTranslation({ id: 4, author_name: 'Beta', language_name: 'english' }),
+    core.normalizeTranslation({ id: 5, author_name: 'Amir', language_name: 'urdu' })
+  ];
+  const g = core.groupTranslationsByLanguage(list);
+  assert.deepEqual(g.map(x => x.language), ['english', 'french', 'urdu']);
+  assert.equal(g[0].languageLabel, 'English');
+  assert.deepEqual(g[1].items.map(x => x.name), ['Alpha', 'Zeta']); // sorted within group
+});
+
+test('filterTranslations: matches name/language, empty query returns all', () => {
+  const list = [
+    core.normalizeTranslation({ id: 20, author_name: 'Saheeh International', language_name: 'english' }),
+    core.normalizeTranslation({ id: 45, author_name: 'Elmir Kuliev', language_name: 'russian' })
+  ];
+  assert.equal(core.filterTranslations(list, 'kuliev').length, 1);
+  assert.equal(core.filterTranslations(list, 'RUSSIAN')[0].id, 45);
+  assert.equal(core.filterTranslations(list, 'saheeh')[0].id, 20);
+  assert.equal(core.filterTranslations(list, '').length, 2);
+  assert.equal(core.filterTranslations(list, 'zzz').length, 0);
+});
+
+test('translationsCacheKey', () => {
+  assert.equal(core.translationsCacheKey(), 'ii-quran-translations-list');
+});

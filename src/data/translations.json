@@ -1,0 +1,20 @@
+[
+  { "id": 20, "name": "Saheeh International", "author_name": "Saheeh International", "language_name": "english" },
+  { "id": 19, "name": "Pickthall", "author_name": "Mohammed Marmaduke William Pickthall", "language_name": "english" },
+  { "id": 22, "name": "Yusuf Ali", "author_name": "Abdullah Yusuf Ali", "language_name": "english" },
+  { "id": 85, "name": "Abdul Haleem", "author_name": "Abdul Haleem", "language_name": "english" },
+  { "id": 84, "name": "Mufti Taqi Usmani", "author_name": "Mufti Taqi Usmani", "language_name": "english" },
+  { "id": 95, "name": "Maududi", "author_name": "Sayyid Abul Ala Maududi", "language_name": "english" },
+  { "id": 97, "name": "Maududi (Urdu)", "author_name": "Syed Abu Ali Maududi", "language_name": "urdu" },
+  { "id": 234, "name": "Jalandhari", "author_name": "Fatah Muhammad Jalandhari", "language_name": "urdu" },
+  { "id": 122, "name": "Azizul Haque al-Umari", "author_name": "Maulana Azizul Haque al-Umari", "language_name": "hindi" },
+  { "id": 161, "name": "Taisirul Quran", "author_name": "Tawheed Publication", "language_name": "bengali" },
+  { "id": 213, "name": "Dr. Abu Bakr Muhammad Zakaria", "author_name": "Dr. Abu Bakr Muhammad Zakaria", "language_name": "bengali" },
+  { "id": 77, "name": "Diyanet Isleri", "author_name": "Diyanet Isleri", "language_name": "turkish" },
+  { "id": 52, "name": "Elmalili Hamdi Yazir", "author_name": "Elmalili Hamdi Yazir", "language_name": "turkish" },
+  { "id": 134, "name": "King Fahad Quran Complex", "author_name": "King Fahad Quran Complex", "language_name": "indonesian" },
+  { "id": 31, "name": "Hamidullah", "author_name": "Muhammad Hamidullah", "language_name": "french" },
+  { "id": 83, "name": "Isa Garcia", "author_name": "Sheikh Isa Garcia", "language_name": "spanish" },
+  { "id": 27, "name": "Bubenheim & Elyas", "author_name": "Frank Bubenheim and Nadeem", "language_name": "german" },
+  { "id": 45, "name": "Elmir Kuliev", "author_name": "Elmir Kuliev", "language_name": "russian" }
+]

@@ -31,6 +31,7 @@
 | `islamicinfo-is-visit` | `{ trackSlug, lessonIndex, departedAt }` | Islamic Studies | Cleared on return |
 | `ii-habits` | `HabitState` (see §4) | Habit Tracker | Permanent |
 | `ii-quran-translation` | string (edition id) | Quran Explorer | Until user changes |
+| `ii-quran-translations-list` | `{ fetchedAt:number, data:Translation[] }` (JSON; `Translation = {id,name,language,languageLabel,dir}`) | Quran Explorer (translation picker) | 7 days (quran.com `/resources/translations` catalog; seeds from `src/data/translations.json` on failure) |
 | `ii-quran-reading-mode` | boolean | Quran Explorer | Until user changes |
 | `ii-quran-mushaf-page` | string (integer 1–604) | Quran Explorer (Mushaf Mode) | Until user changes (last-viewed QCF page) |
 | `ii-tafsir-{verseKey}-{src}` | `{ paras:string[], ts:number }` (JSON) | Quran Explorer (Tafsir panel) | 30 days (per-ayah, per-source tafsir cache; src ∈ ik/ma/ja) |
