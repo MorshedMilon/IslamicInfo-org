@@ -14,7 +14,7 @@
         "gradedBy": "Al-Bukhari (in his Sahih); parallel in Sahih Muslim 1053",
         "url": "https://sunnah.com/bukhari:1469",
         "score": 9,
-        "reviewed": false
+        "reviewed": true
       },
       {
         "collection": "Sahih Muslim",
@@ -28,7 +28,7 @@
         "gradedBy": "Muslim (in his Sahih); graded Authentic by hadeethenc.com (King Fahd Complex encyclopedia), hadith 3298",
         "url": "https://sunnah.com/muslim:2999",
         "score": 8,
-        "reviewed": false
+        "reviewed": true
       }
     ]
   },
@@ -47,7 +47,7 @@
         "gradedBy": "Al-Albani (Sahih, on Sunan Abi Dawud 4941); parallel graded hasan sahih by at-Tirmidhi (Jami` at-Tirmidhi 1924)",
         "url": "https://sunnah.com/abudawud:4941",
         "score": 9,
-        "reviewed": false
+        "reviewed": true
       },
       {
         "collection": "Sahih al-Bukhari",
@@ -61,7 +61,7 @@
         "gradedBy": "Al-Bukhari (in his Sahih); parallel in Sahih Muslim 2319",
         "url": "https://sunnah.com/bukhari:7376",
         "score": 8,
-        "reviewed": false
+        "reviewed": true
       }
     ]
   },
@@ -80,7 +80,7 @@
         "gradedBy": "At-Tirmidhi (stated hasan sahih); al-Albani graded the parallel Sunan Abi Dawud 4811 as Sahih",
         "url": "https://sunnah.com/tirmidhi:1954",
         "score": 9,
-        "reviewed": false
+        "reviewed": true
       }
     ]
   },
@@ -99,7 +99,7 @@
         "gradedBy": "Al-Bukhari (in his Sahih); parallel in Sahih Muslim 2607",
         "url": "https://sunnah.com/bukhari:6094",
         "score": 9,
-        "reviewed": false
+        "reviewed": true
       }
     ]
   }

@@ -186,8 +186,8 @@ is no `/api/tafsir`/`/api/dua`; these work on GitHub Pages too).
   `tools/related-hadith-build.mjs` (see `DATA.md`).
 - **Content gate:** every row passes the hadith-verifier skill gate (Sahih/Hasan grade only,
   verified isnad) *and* a human-review gate — the build emits only `reviewed:true` rows.
-  Production is **gated on 🕌 sign-off**: the index ships **empty** until the operator reviews
-  the staged hadith and flips `reviewed:true` (CONTENT-POLICY §5).
+  Production is **gated on 🕌 sign-off** (CONTENT-POLICY §5). Sign-off completed 2026-07-17:
+  the index now ships **6 hadith across 4 topics** (patience, mercy, gratitude, truthfulness).
 - **Deferred:** `/api/index/*` (and D1 + FTS5 for the full corpus) remain deferred to the
   Vocabulary slice (see `TASKS.md`).
 

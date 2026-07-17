@@ -89,8 +89,9 @@
 > isnadSummary, grade, gradedBy, url, score }] } }`. **Generated** by
 > `tools/related-hadith-build.mjs` from the hand-authored curation source
 > `tools/related-hadith/topics.source.json` — do **not** hand-edit the generated file;
-> regenerate via the build script. The build emits **only `reviewed:true`** rows, so
-> `topics.json` currently ships **empty** (`{}`) pending 🕌 sign-off on the staged hadith.
+> regenerate via the build script. The build emits **only `reviewed:true`** rows. Operator
+> 🕌 sign-off completed 2026-07-17 — `topics.json` now ships **6 hadith across 4 topics**
+> (patience, mercy, gratitude, truthfulness).
 > Every row is verifier-confirmed: `collection`+`number`, `grade` (Sahih/Hasan only),
 > `gradedBy`, and a verified `isnadSummary`, plus Arabic + English text. Reuses the slice-1
 > `src/data/related-verses/verse-index.json` (a verse's topic tags drive both the Related
