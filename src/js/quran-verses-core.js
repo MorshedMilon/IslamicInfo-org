@@ -64,6 +64,25 @@
     });
   }
 
+  // The 18 most widely-used languages in the Muslim world, shown as a quick-access
+  // "primary" section (in this order). Any with zero translations are omitted.
+  var PRIMARY_LANGS = ['arabic', 'english', 'urdu', 'bengali', 'turkish', 'persian',
+    'indonesian', 'malay', 'hindi', 'french', 'russian', 'hausa', 'swahili',
+    'kurdish', 'pashto', 'tamil', 'chinese', 'german'];
+
+  // Split language groups into a primary section (PRIMARY_LANGS order, present only)
+  // and a "more" section (everything else, keeping the input order = alphabetical).
+  function partitionLanguages(groups, primaryOrder) {
+    primaryOrder = primaryOrder || PRIMARY_LANGS;
+    var byLang = {};
+    (groups || []).forEach(function (g) { byLang[g.language] = g; });
+    var primary = [];
+    primaryOrder.forEach(function (lang) { if (byLang[lang]) primary.push(byLang[lang]); });
+    var inPrimary = {}; primary.forEach(function (g) { inPrimary[g.language] = 1; });
+    var more = (groups || []).filter(function (g) { return !inPrimary[g.language]; });
+    return { primary: primary, more: more };
+  }
+
   function filterTranslations(list, query) {
     var q = String(query == null ? '' : query).trim().toLowerCase();
     if (!q) return (list || []).slice();
@@ -170,5 +189,6 @@
            showBismillah, versesCacheKey, isFresh, attributionText, editionName,
            isRtlLanguage, normalizeTranslation, groupTranslationsByLanguage,
            filterTranslations, translationsCacheKey,
-           POPULAR_BY_LANG, pickCompareSet, orderCompareTexts };
+           POPULAR_BY_LANG, pickCompareSet, orderCompareTexts,
+           PRIMARY_LANGS, partitionLanguages };
 });

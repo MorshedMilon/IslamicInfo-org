@@ -56,12 +56,13 @@
       .finally(function () { clearTimeout(t); });
   }
 
-  // ---- two-level floating picker (appended to <body> so no ancestor clip affects it) ----
-  // Level 1: search box + language list (English first). Hover/tap a language →
-  // Level 2: a submenu (separate float) listing that language's translators.
-  // When search is non-empty, level 1 becomes a flat filtered translator list.
-  var floatPicker = null, searchInput = null, listWrap = null;
-  var subPicker = null, subList = null, closeTimer = null, openLang = null;
+  // ---- floating picker (appended to <body> so no ancestor clip affects it) ----
+  // Search box + a language list: a curated PRIMARY section (18 most-used in the
+  // Muslim world) then a "More Languages" expander for the rest. Tapping a language
+  // opens its translators inline (accordion) — no side-flyout, so it behaves the
+  // same on desktop, tablet, and mobile. A non-empty search switches to a flat
+  // filtered translator list across all languages.
+  var floatPicker = null, searchInput = null, listWrap = null, openSub = null;
 
   function makeOpt(tr) {
     var opt = document.createElement('div');
@@ -92,52 +93,43 @@
     }
     return floatPicker;
   }
-  function getSubPicker() {
-    if (!subPicker) {
-      subPicker = document.createElement('div');
-      subPicker.className = 'reciter-picker translation-picker translation-subpicker';
-      subPicker.id = 'translationSubPicker';
-      subPicker.style.cssText = 'position:fixed;bottom:auto;right:auto;z-index:10000;display:none;';
-      subList = document.createElement('div'); subList.className = 'tp-list';
-      subPicker.appendChild(subList);
-      subPicker.addEventListener('mouseenter', cancelClose);
-      subPicker.addEventListener('mouseleave', scheduleClose);
-      (document.body || document.documentElement).appendChild(subPicker);
-    }
-    return subPicker;
+  function collapseSub() {
+    if (openSub) { openSub.sub.classList.remove('open'); openSub.row.classList.remove('expanded'); openSub = null; }
   }
-  function hideSub() { if (subPicker) { subPicker.style.display = 'none'; openLang = null; } }
-  function cancelClose() { if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; } }
-  function scheduleClose() { cancelClose(); closeTimer = setTimeout(hideSub, 180); }
-  function hideFloatPicker() { hideSub(); if (floatPicker) { floatPicker.style.display = 'none'; floatPicker._anchor = null; } }
+  function hideFloatPicker() { collapseSub(); if (floatPicker) { floatPicker.style.display = 'none'; floatPicker._anchor = null; } }
 
-  function openSub(group, rowEl) {
-    cancelClose();
-    getSubPicker();
-    if (openLang === group.language && subPicker.style.display === 'block') return;
-    openLang = group.language;
-    subList.innerHTML = '';
-    // order by curated popularity then the rest, so the submenu reads best-first
-    var ordered = core.pickCompareSet(group.items, group.language, group.items.length);
-    ordered.forEach(function (tr) { subList.appendChild(makeOpt(tr)); });
-    subPicker.style.display = 'block';
-    positionSub(rowEl);
+  // Accordion: open one language's translators inline; opening another closes it.
+  function toggleLang(group, row, sub) {
+    var wasOpen = openSub && openSub.sub === sub;
+    collapseSub();
+    if (wasOpen) return;
+    if (!sub._filled) {
+      var ordered = core.pickCompareSet(group.items, group.language, group.items.length); // popularity-ordered
+      ordered.forEach(function (tr) { sub.appendChild(makeOpt(tr)); });
+      sub._filled = true;
+    }
+    sub.classList.add('open'); row.classList.add('expanded');
+    openSub = { row: row, sub: sub };
+    try { row.scrollIntoView({ block: 'nearest' }); } catch (e) {}
   }
-  function positionSub(rowEl) {
-    var vw = window.innerWidth || 360, vh = window.innerHeight || 640;
-    var fr = floatPicker.getBoundingClientRect();
-    var rr = rowEl.getBoundingClientRect();
-    var sw = subPicker.offsetWidth || 240, sh = subPicker.offsetHeight || 300;
-    var left = fr.right + 4;
-    if (left + sw > vw - 8) left = Math.max(8, fr.left - sw - 4); // flip left if no room
-    var top = Math.max(8, Math.min(rr.top, vh - sh - 8));
-    subPicker.style.left = left + 'px';
-    subPicker.style.top = top + 'px';
+
+  function appendLangRow(container, group) {
+    var hasCurrent = group.items.some(function (t) { return t.id === editionId; });
+    var row = document.createElement('div');
+    row.className = 'tp-lang' + (hasCurrent ? ' on' : '');
+    row.setAttribute('data-lang', group.language);
+    var name = document.createElement('span'); name.className = 'tp-lang-name'; name.textContent = group.languageLabel;
+    var count = document.createElement('span'); count.className = 'tp-lang-count'; count.textContent = String(group.items.length);
+    var chev = document.createElement('span'); chev.className = 'tp-lang-chev'; chev.textContent = '›';
+    row.appendChild(name); row.appendChild(count); row.appendChild(chev);
+    var sub = document.createElement('div'); sub.className = 'tp-sub'; sub.setAttribute('data-lang', group.language);
+    row.addEventListener('click', function (e) { e.stopPropagation(); toggleLang(group, row, sub); });
+    container.appendChild(row); container.appendChild(sub);
   }
 
   function renderList() {
     getFloatPicker();
-    hideSub();
+    collapseSub();
     listWrap.innerHTML = '';
     var q = (searchInput.value || '').trim();
     if (q) {
@@ -152,26 +144,28 @@
       });
       return;
     }
-    // language list (level 1)
-    var groups = core.groupTranslationsByLanguage(translations);
-    groups.forEach(function (g) {
-      var hasCurrent = g.items.some(function (t) { return t.id === editionId; });
-      var row = document.createElement('div');
-      row.className = 'tp-lang' + (hasCurrent ? ' on' : '');
-      row.setAttribute('data-lang', g.language);
-      var name = document.createElement('span'); name.className = 'tp-lang-name'; name.textContent = g.languageLabel;
-      var count = document.createElement('span'); count.className = 'tp-lang-count'; count.textContent = String(g.items.length);
-      var chev = document.createElement('span'); chev.className = 'tp-lang-chev'; chev.textContent = '›';
-      row.appendChild(name); row.appendChild(count); row.appendChild(chev);
-      row.addEventListener('mouseenter', function () { openSub(g, row); });
-      row.addEventListener('mouseleave', scheduleClose);
-      row.addEventListener('click', function (e) {
+    var part = core.partitionLanguages(core.groupTranslationsByLanguage(translations));
+    if (part.primary.length) {
+      var lbl = document.createElement('div'); lbl.className = 'tp-section-label'; lbl.textContent = 'Frequently used';
+      listWrap.appendChild(lbl);
+      part.primary.forEach(function (g) { appendLangRow(listWrap, g); });
+    }
+    if (part.more.length) {
+      var moreToggle = document.createElement('div'); moreToggle.className = 'tp-more-toggle';
+      var mlabel = document.createElement('span'); mlabel.className = 'tp-lang-name'; mlabel.textContent = 'More Languages';
+      var mcount = document.createElement('span'); mcount.className = 'tp-lang-count'; mcount.textContent = String(part.more.length);
+      var mchev = document.createElement('span'); mchev.className = 'tp-lang-chev'; mchev.textContent = '›';
+      moreToggle.appendChild(mlabel); moreToggle.appendChild(mcount); moreToggle.appendChild(mchev);
+      var moreWrap = document.createElement('div'); moreWrap.className = 'tp-more-wrap';
+      moreToggle.addEventListener('click', function (e) {
         e.stopPropagation();
-        if (openLang === g.language && subPicker && subPicker.style.display === 'block') hideSub();
-        else openSub(g, row);
+        var opened = moreWrap.classList.toggle('open');
+        moreToggle.classList.toggle('expanded', opened);
+        if (opened && !moreWrap._filled) { part.more.forEach(function (g) { appendLangRow(moreWrap, g); }); moreWrap._filled = true; }
       });
-      listWrap.appendChild(row);
-    });
+      listWrap.appendChild(moreToggle);
+      listWrap.appendChild(moreWrap);
+    }
   }
 
   window.toggleTranslationPicker = function (btn) {
@@ -211,7 +205,7 @@
   document.addEventListener('click', function (e) {
     if (!floatPicker || floatPicker.style.display !== 'block') return;
     if (e.target && e.target.closest && (e.target.closest('#translationFloatPicker') ||
-        e.target.closest('#translationSubPicker') || e.target.closest('#translationBtnTop'))) return;
+        e.target.closest('#translationBtnTop'))) return;
     hideFloatPicker();
   });
 

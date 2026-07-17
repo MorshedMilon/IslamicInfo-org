@@ -168,3 +168,26 @@ test('POPULAR_BY_LANG uses verified ids, english default first', () => {
   assert.equal(core.POPULAR_BY_LANG.english[0], 20);
   assert.ok(core.POPULAR_BY_LANG.urdu.includes(97));
 });
+
+// ── Task 7c: primary language section ──
+
+test('partitionLanguages: primary in given order (present only), more = rest', () => {
+  const groups = [
+    { language: 'english', languageLabel: 'English', items: [1] },
+    { language: 'french', languageLabel: 'French', items: [1] },
+    { language: 'urdu', languageLabel: 'Urdu', items: [1] },
+    { language: 'swahili', languageLabel: 'Swahili', items: [1] },
+    { language: 'klingon', languageLabel: 'Klingon', items: [1] } // not in primary
+  ];
+  const { primary, more } = core.partitionLanguages(groups, ['arabic', 'english', 'urdu', 'french', 'swahili']);
+  // arabic absent from groups → skipped; order follows primaryOrder
+  assert.deepEqual(primary.map(g => g.language), ['english', 'urdu', 'french', 'swahili']);
+  assert.deepEqual(more.map(g => g.language), ['klingon']); // leftovers keep input order
+});
+
+test('PRIMARY_LANGS is the 18-language quick list, arabic first', () => {
+  assert.equal(core.PRIMARY_LANGS.length, 18);
+  assert.equal(core.PRIMARY_LANGS[0], 'arabic');
+  ['english', 'urdu', 'malay', 'persian', 'hausa', 'pashto', 'chinese'].forEach(l =>
+    assert.ok(core.PRIMARY_LANGS.includes(l), 'missing ' + l));
+});
