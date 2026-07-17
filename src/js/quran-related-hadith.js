@@ -24,6 +24,7 @@
 
   function render(panel, verseKey) {
     panel.innerHTML = '';
+    if (!core) { panel.appendChild(el('p', 'rh-empty', 'Related hadith unavailable.')); return; }
     var rows = core.relatedHadith(verseKey, state.topics, state.verseIndex, { limit: 5 });
     if (!rows.length) { panel.appendChild(el('p', 'rh-empty', 'No reviewed related hadith yet.')); return; }
     rows.forEach(function (h) {
