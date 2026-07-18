@@ -96,12 +96,10 @@ export async function handleQuranlyAiAsk(request, env, ctx, origin) {
   }
 
   // 8. Persist (off the response path) + 9. Stream
-  ctx.waitUntil((async () => {
-    try {
-      await putCached(kv, key, safe);
-      await incrementQuota(kv, fingerprint, date);
-    } catch (_) { /* soft */ }
-  })());
+  ctx.waitUntil(Promise.allSettled([
+    putCached(kv, key, safe),
+    incrementQuota(kv, fingerprint, date),
+  ]));
 
   const meta = extractMeta(safe);
   return streamSafeText(safe, { ...meta, model, cached: false, remaining: Math.max(0, quota.remaining - 1) }, origin);
