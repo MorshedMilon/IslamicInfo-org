@@ -8,7 +8,7 @@ import { groundingData } from './lib/grounding-data.js';
 import {
   QURANLYAI_SYSTEM_PROMPT, buildUserPrompt, maxTokensFor, chooseModel,
 } from './lib/prompts.js';
-import { callAnthropic } from './lib/anthropic.js';
+import { callGemini } from './lib/gemini.js';
 import { verdictLangDetected, looksRulingAdjacent, RULING_DEFLECTION } from './lib/safety.js';
 import { streamSafeText } from './lib/sse.js';
 
@@ -50,7 +50,7 @@ export async function handleQuranlyAiAsk(request, env, ctx, origin) {
   // rawText is required for ungrounded actions; grounded actions can rely on the index.
   if (!GROUNDED_ACTIONS.has(action) && rawText.length < 3) return err('context.rawText missing or too short', origin, 400);
 
-  if (!env || !env.ANTHROPIC_API_KEY) return err('AI temporarily unavailable', origin, 503);
+  if (!env || !env.GEMINI_API_KEY) return err('AI temporarily unavailable', origin, 503);
   if (!env.QURANLYAI_KV) return err('AI temporarily unavailable', origin, 503);
 
   const kv = env.QURANLYAI_KV;
@@ -84,7 +84,7 @@ export async function handleQuranlyAiAsk(request, env, ctx, origin) {
   const userContent = buildUserPrompt(action, context, customQuestion, groundingText);
   let result;
   try {
-    result = await callAnthropic(env, { model, system: QURANLYAI_SYSTEM_PROMPT, userContent, maxTokens: maxTokensFor(action) });
+    result = await callGemini(env, { model, system: QURANLYAI_SYSTEM_PROMPT, userContent, maxTokens: maxTokensFor(action) });
   } catch (_) {
     return err('AI explanation unavailable — please try again', origin, 502);
   }
