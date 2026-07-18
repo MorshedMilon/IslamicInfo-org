@@ -25,8 +25,8 @@
 | `/api/geocode` | GET | BigDataCloud reverse geocode | Session | 2 | `"Near your location"` |
 | `/api/quran/[surah]` | GET | api.quran.com `/v4/verses/by_chapter/{id}` | 7 days | 2 | Static seed data |
 | `/api/verify` | POST | IslamicInfo corpus search | None | 1→2 | 2200 ms simulation (v1) |
-| `/api/ask-claude` | POST | Anthropic API (Claude Haiku 4.5) | None (client caches 30d) | 3 | "AI unavailable" inline state |
-| `/api/quranlyai/ask` | POST | Anthropic API (Haiku 4.5 / Sonnet 5) | KV cross-user 30d + KV quota | 3 | SSE error / 429 / 503 |
+| `/api/ask-claude` | POST | Google Gemini (`gemini-2.5-flash`) | None (client caches 30d) | 3 | "AI unavailable" inline state |
+| `/api/quranlyai/ask` | POST | Google Gemini (`gemini-2.5-flash`) | KV cross-user 30d + KV quota | 3 | SSE error / 429 / 503 |
 | `/api/subscribe` | POST | Email provider | None | 2 | Inline error state |
 
 `robots.txt` disallows `/api/` and `/data/`.
@@ -96,11 +96,14 @@ Claim verification against the IslamicInfo corpus (Verify page).
 - **Content note:** `disclaimer` is a **hard-coded** string (CONTENT-POLICY §3); results never assert a ruling — they report what sources say.
 - **Errors handled:** 503 → error banner "Verification service unavailable"; empty → empty state + "Try a different search" + Verify CTA
 
-## POST `/api/ask-claude`  *(Stage 3 — implemented Module 5B, 2026-07-15)*
-Proxied Anthropic call for the Quran verse AI-explanation panel (`.ai-card`).
+## POST `/api/ask-claude`  *(Stage 3 — implemented Module 5B, 2026-07-15; migrated to Gemini 2026-07-18)*
+Proxied Google Gemini call for the Quran verse AI-explanation panel (`.ai-card`). **Note:** the
+`/api/ask-claude` path name is retained for client compatibility (`src/js/api.js` calls it
+directly) — the endpoint is now backed by Google Gemini, not Anthropic; only the path name is
+legacy.
 
 - **Body:** `{ context: string, question: string, sourceRef?: string }`
-- **Upstream:** model `claude-haiku-4-5`, `max_tokens: 500`. Key is a Worker secret (`env.ANTHROPIC_API_KEY`) — never in client/HTML/`wrangler.toml` (RULE 6).
+- **Upstream:** Google Gemini REST `generateContent` endpoint, model `gemini-2.5-flash`, `maxOutputTokens: 500`. Key is a Worker secret (`env.GEMINI_API_KEY`, obtained from Google AI Studio — https://aistudio.google.com/apikey) — never in client/HTML/`wrangler.toml` (RULE 6).
 - **Guards (abuse/cost):** POST-only; **Origin must be in the Worker's `ALLOWED_ORIGINS`** → 403; **input caps** — `context` ≥3 chars trimmed and ≤4000 chars (4000 covers the longest verse, Al-Baqarah 2:282, + translation), `question` ≤200, `sourceRef` ≤40 → 400; missing key → 503. Output cost is bounded by `max_tokens: 500`, not the input cap.
 - **Response:** `{ answer, attribution, sourcesCited: [sourceRef?] }` where `attribution = "Powered by QuranlyAI"` (brand-mandated AI attribution, CONTENT-POLICY §3/§8). The `.ai-card` footer renders **"✦ Powered by QuranlyAI ↗ · Not a religious ruling"** — combining the brand attribution with the §4 no-fatwa framing.
 - **Cache:** none server-side (POST). **Client** caches per verse in `localStorage['ii-quran-ai-{verseKey}-{editionSlug}']` (30-day freshness) — re-opening a verse never re-bills. Cross-user KV cache + in-Worker per-IP rate-limit are deferred (need a binding; v1 uses a Cloudflare **dashboard** rate-limit rule + input caps).
@@ -124,9 +127,9 @@ General-purpose QuranlyAI ask endpoint (`worker/src/quranlyai.js` + `worker/src/
 - **Quota:** per-fingerprint daily counter in KV — `quota:{fp}:{utcDate}`, TTL to UTC midnight. Guest limit **3/day**. Checked on every request; incremented only after a real generation (cache hits never burn quota). Over limit → **HTTP 429** `{ remaining: 0 }` (plain JSON, not SSE). Tiers (free/premium) are **deferred** — `resolveTier()` is a stub that always returns `"guest"`.
 - **Cache:** cross-user, keyed by SHA-256 of (context ids + translation + language + action + customQuestion) in KV — `cache:{hash}`, 30-day TTL. Stores only the **post-safety-filter** text. Hit → replays the cached text as SSE with `cached:true`, no AI call, no quota increment.
 - **Grounding:** for `related_verses` / `related_hadith` / `vocabulary` (and `asbab_al_nuzul`), the Worker calls the existing verified knowledge-index cores over **bundled static data** (`src/data/**` + `src/js/quran-*-core.js`) — never LLM memory — and injects the verified rows into the prompt. Related-hadith data now exists (patience/mercy/gratitude/truthfulness, Sahih grade); grounded actions currently resolve only for the ~6 verses in `verse-index.json` (2:153, 2:155, 16:127, 103:3, 14:7, 2:152) — other verses correctly return "not documented in available sources". `asbab_al_nuzul` has no dataset yet → always "not documented".
-- **Model routing:** cheap `claude-haiku-4-5` for `simple`, `summarize_tafsir`, `vocabulary`, `key_lessons`, `explain`, `related_verses`, `related_hadith`, `compare_translations`, `asbab_al_nuzul`; stronger `claude-sonnet-5` for `custom` and ruling-adjacent questions.
+- **Model:** single Google Gemini model `gemini-2.5-flash` for all actions — the cheap/strong (Haiku/Sonnet) split from the Anthropic version was dropped; `chooseModel()` in `worker/src/lib/prompts.js` is kept as a hook so tiered routing (e.g. a cheaper/stronger Gemini variant) can be reintroduced later without changing any call site. Gemini's own safety filters (`worker/src/lib/gemini.js`) are set to `BLOCK_NONE` for all four harm categories so legitimate Quran/Hadith text isn't over-blocked; the `verdictLangDetected` post-filter below remains the content-safety authority.
 - **Safety:** stricter QuranlyAI system prompt — answers only from provided sources; `RULING_DEFLECTION` template for fiqh questions; mandatory Sources block + Confidence rating + "Not a fatwa" footer. Reuses the shared `verdictLangDetected` post-filter, extracted to `worker/src/lib/safety.js` — `/api/ask-claude` now uses the same shared filter (behavior unchanged there).
-- **Bindings/secrets:** KV namespace binding `QURANLYAI_KV` (added to `wrangler.toml`; id currently a placeholder pending namespace creation). Secret `ANTHROPIC_API_KEY` (Worker secret, never in `wrangler.toml`).
+- **Bindings/secrets:** KV namespace binding `QURANLYAI_KV` (added to `wrangler.toml`; id currently a placeholder pending namespace creation). Secret `GEMINI_API_KEY` (Worker secret, obtained from Google AI Studio — https://aistudio.google.com/apikey; never in `wrangler.toml`) — shared with `/api/ask-claude`.
 - **Errors:** **400** invalid/missing `action`, missing fingerprint, oversized `customQuestion`/`rawText`, missing `rawText` for a non-grounded action, invalid JSON. **403** off-allowlist origin. **429** quota exceeded. **502** provider failure/timeout. **503** missing API key or missing KV binding.
 - **Content gate:** like Modules 2/3, generated output ships only **pending 🕌 human-review sign-off** (CONTENT-POLICY §5).
 
