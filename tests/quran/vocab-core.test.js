@@ -54,7 +54,7 @@ test('compileIndex emits term records + reverse topicTerms map (term under two t
 
 const TERMS = {
   taqwa: { arabic: 'تقوى', translit: 'Taqwā', shortDef: 'God-consciousness.', longDef: 'L', source: 'S', topics: ['fear-of-allah'] },
-  sabr:  { arabic: 'صبر', translit: 'Sabr', shortDef: 'Patient perseverance.', longDef: 'L', source: 'S', topics: ['patience', 'fear-of-allah'] }
+  sabr:  { arabic: 'صبر', translit: 'Ṣabr', shortDef: 'Patient perseverance.', longDef: 'L', source: 'S', topics: ['patience', 'fear-of-allah'] }
 };
 const TOPICTERMS = { 'fear-of-allah': ['taqwa', 'sabr'], patience: ['sabr'] };
 const VINDEX = { '2:153': ['patience', 'fear-of-allah'], '14:7': ['gratitude'] };

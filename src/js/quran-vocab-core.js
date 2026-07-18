@@ -57,8 +57,7 @@
       });
     });
     out.sort(function (a, b) {
-      var x = a.translit.toLowerCase(), y = b.translit.toLowerCase();
-      return x < y ? -1 : x > y ? 1 : 0;
+      return a.translit.localeCompare(b.translit, 'en', { sensitivity: 'base' });
     });
     return out;
   }
