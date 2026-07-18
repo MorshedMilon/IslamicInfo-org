@@ -1,7 +1,6 @@
 /* QuranlyAI system prompt, per-action user-prompt builder, token caps, model routing. */
 
-export const HAIKU = 'claude-haiku-4-5';
-export const SONNET = 'claude-sonnet-5';
+export const GEMINI_FLASH = 'gemini-2.5-flash';
 
 export const QURANLYAI_SYSTEM_PROMPT = [
   'You are QuranlyAI, an educational Islamic learning assistant. You are NOT a general chatbot.',
@@ -68,7 +67,7 @@ export function maxTokensFor(action) {
 }
 
 export function chooseModel(action, rulingAdjacent) {
-  if (rulingAdjacent) return SONNET;
-  if (action === 'custom') return SONNET;
-  return HAIKU; // simple/summarize/vocabulary/key_lessons/explain/related_*/compare/asbab
+  // Single model for now. Signature kept as a hook so cheap/strong routing (e.g. a lite
+  // model) can be reintroduced later without changing any call site.
+  return GEMINI_FLASH;
 }
