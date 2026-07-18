@@ -19,6 +19,8 @@
 import { todayUTC, secondsUntilUTCMidnight } from './lib/time.js';
 import { ALLOWED_ORIGINS, corsHeaders, json, err } from './lib/cors.js';
 import { ASK_CLAUDE_SYSTEM_PROMPT, AI_ATTRIBUTION, SCHOLAR_REDIRECT, verdictLangDetected } from './lib/safety.js';
+import { callGemini } from './lib/gemini.js';
+import { GEMINI_FLASH } from './lib/prompts.js';
 import { handleQuranlyAiAsk } from './quranlyai.js';
 
 /* ─── Upstream fetch with timeout ──────────────────────────────────── */
@@ -116,7 +118,7 @@ export async function handlePrayer(searchParams, origin) {
   return json(body, origin, { maxAge: 6 * 3600 }); // 6 h edge cache
 }
 
-/* ═══ POST /api/ask-claude — Anthropic proxy (Module 5B) ═══ */
+/* ═══ POST /api/ask-claude — Gemini proxy (Module 5B) ═══ */
 async function handleAskClaude(request, env, origin) {
   if (!ALLOWED_ORIGINS.includes(origin)) return err('forbidden origin', origin, 403);
 
@@ -128,48 +130,24 @@ async function handleAskClaude(request, env, origin) {
   const sourceRef = typeof body.sourceRef === 'string' ? body.sourceRef : '';
   var ctxTrim = context.trim();
   // 4000-char ceiling covers the longest verse (Al-Baqarah 2:282) + translation;
-  // input cost on Haiku is trivial, so max_tokens (output) is the real cost guard.
+  // input cost on the model is trivial, so max_tokens (output) is the real cost guard.
   if (!ctxTrim || ctxTrim.length < 3 || context.length > 4000) return err('context missing or too long', origin, 400);
   if (question.length > 200) return err('question too long', origin, 400);
   if (sourceRef.length > 40) return err('sourceRef too long', origin, 400);
 
-  if (!env || !env.ANTHROPIC_API_KEY) return err('AI temporarily unavailable', origin, 503);
+  if (!env || !env.GEMINI_API_KEY) return err('AI temporarily unavailable', origin, 503);
 
   const userContent = context + '\n\n' + (question || 'Explain the meaning of this verse in simple, easy language for a general reader.');
 
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 15000);
-  let data;
+  let result;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      signal: ctrl.signal,
-      headers: {
-        'content-type': 'application/json',
-        'x-api-key': env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5',
-        max_tokens: 500,
-        system: ASK_CLAUDE_SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: userContent }],
-      }),
-    });
-    if (!res.ok) throw new Error('anthropic HTTP ' + res.status);
-    data = await res.json();
+    result = await callGemini(env, { model: GEMINI_FLASH, system: ASK_CLAUDE_SYSTEM_PROMPT, userContent, maxTokens: 500 });
   } catch (e) {
     return err('AI explanation unavailable — please try again', origin, 502);
-  } finally {
-    clearTimeout(t);
   }
 
-  let answer = '';
-  if (data && Array.isArray(data.content)) {
-    const tb = data.content.find((b) => b && b.type === 'text');
-    if (tb) answer = String(tb.text || '').trim();
-  }
-  if (!answer || (data && data.stop_reason === 'refusal')) answer = SCHOLAR_REDIRECT;
+  let answer = (result.text || '').trim();
+  if (!answer || result.refusal) answer = SCHOLAR_REDIRECT;
   if (verdictLangDetected(answer)) {
     console.log('[ask-claude] stripped verdict-language response for ref=' + sourceRef);
     answer = SCHOLAR_REDIRECT;
