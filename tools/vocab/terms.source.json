@@ -1,0 +1,130 @@
+{
+  "taqwa": {
+    "arabic": "تَقْوَىٰ",
+    "translit": "Taqwā",
+    "shortDef": "God-consciousness: guarding oneself against wrongdoing out of reverent awareness of Allah.",
+    "longDef": "Taqwā derives from the root و-ق-ي, whose core sense is to protect, guard, or shield from harm. In its form-VIII verb (ittaqā) it means to guard oneself carefully, and in religious usage to guard oneself from sin and from what would bring harm in the life to come. It is often rendered as piety or careful attention to one's duty toward Allah.",
+    "source": "Lane's Arabic-English Lexicon, root و-ق-ي (w-q-y)",
+    "topics": ["fear-of-allah"]
+  },
+  "sabr": {
+    "arabic": "صَبْر",
+    "translit": "Ṣabr",
+    "shortDef": "Patience and steadfast endurance; restraining the self from anxiety and complaint in hardship.",
+    "longDef": "From the root ص-ب-ر, whose literal sense is to confine, restrain, or withhold. As a virtue, ṣabr is the restraint of the soul from impatience, the tongue from complaint, and the limbs from agitation, enduring trial with composure. Lane records it as the opposite of jazaʿ (impatient distress).",
+    "source": "Lane's Arabic-English Lexicon, root ص-ب-ر (ṣ-b-r)",
+    "topics": ["patience"]
+  },
+  "shukr": {
+    "arabic": "شُكْر",
+    "translit": "Shukr",
+    "shortDef": "Gratitude and thankfulness — recognizing and acknowledging a benefactor's favor.",
+    "longDef": "From the root ش-ك-ر, meaning to thank, praise, or acknowledge a benefit received. Classical lexicographers describe shukr as gratitude expressed with the heart (recognizing the favor), the tongue (praising the benefactor), and the limbs (acting in accordance with that acknowledgment). Lane distinguishes it from ḥamd (praise) in that shukr is specifically a response to a favor received.",
+    "source": "Lane's Arabic-English Lexicon, root ش-ك-ر (sh-k-r)",
+    "topics": ["gratitude"]
+  },
+  "salah": {
+    "arabic": "صَلَاة",
+    "translit": "Ṣalāh",
+    "shortDef": "The prescribed ritual prayer; in its root sense, supplication and invocation of blessing.",
+    "longDef": "From the root ص-ل-و, whose primary sense is prayer, supplication, or petition. Lane notes the verb ṣallā means to pray or supplicate, and the noun ṣalāh became the established term for the formal Islamic worship comprising bowing (rukūʿ) and prostration (sujūd). Used of angels it can mean invoking forgiveness, and of Allah, mercy and magnification.",
+    "source": "Lane's Arabic-English Lexicon, root ص-ل-و (ṣ-l-w)",
+    "topics": ["prayer"]
+  },
+  "sadaqah": {
+    "arabic": "صَدَقَة",
+    "translit": "Ṣadaqah",
+    "shortDef": "Voluntary charitable giving offered for the sake of Allah.",
+    "longDef": "From the root ص-د-ق, shared with truthfulness (ṣidq), reflecting the sincerity of the giver. Lane defines ṣadaqah as a gift given to the poor for the sake of Allah, or what is given seeking reward from Him. Sharing the root with words for truth, it expresses giving as an act of sincere conformity between faith and deed.",
+    "source": "Lane's Arabic-English Lexicon, root ص-د-ق (ṣ-d-q)",
+    "topics": ["charity"]
+  },
+  "sawm": {
+    "arabic": "صَوْم",
+    "translit": "Ṣawm",
+    "shortDef": "Fasting — abstaining from food, drink, and other appetites, especially from dawn to sunset.",
+    "longDef": "From the root ص-و-م, whose primary meaning is to abstain in an absolute sense, and by extension stillness or cessation from activity. Lane records its religious application as abstaining from food, drink, and marital relations during the daylight fast, and notes its figurative use for abstaining from speech.",
+    "source": "Lane's Arabic-English Lexicon, root ص-و-م (ṣ-w-m)",
+    "topics": ["fasting"]
+  },
+  "rahmah": {
+    "arabic": "رَحْمَة",
+    "translit": "Raḥmah",
+    "shortDef": "Mercy and compassion — tenderness of heart inclining one to kindness and forgiveness.",
+    "longDef": "From the root ر-ح-م, meaning tenderness of heart and the inclination to show favor, and also pardon. Lane notes that when applied to Allah it denotes beneficence and the desire to do good to His creation, or refraining from punishing one who deserves it, since divine mercy transcends human emotion. Lane records that His mercy embraces everything.",
+    "source": "Lane's Arabic-English Lexicon, root ر-ح-م (r-ḥ-m)",
+    "topics": ["mercy"]
+  },
+  "adl": {
+    "arabic": "عَدْل",
+    "translit": "ʿAdl",
+    "shortDef": "Justice and equity — giving each their due and keeping to the balanced mean.",
+    "longDef": "From the root ع-د-ل, defined by Lane as equity, justice, or rectitude, the opposite of jawr (injustice or tyranny). It is described as that which the mind holds to be right, and the mean between excess and deficiency. Lane distinguishes justice grounded in reason, such as returning good for good, from justice established by law.",
+    "source": "Lane's Arabic-English Lexicon, root ع-د-ل (ʿ-d-l)",
+    "topics": ["justice"]
+  },
+  "sidq": {
+    "arabic": "صِدْق",
+    "translit": "Ṣidq",
+    "shortDef": "Truthfulness — the agreement of what one says with reality and with one's inner conviction.",
+    "longDef": "From the root ص-د-ق, meaning to speak truth, the opposite of kadhaba (to lie). Lane describes ṣidq as the agreement of what is said with what is conceived in the mind and with the thing spoken of — an authentic correspondence between inner conviction, speech, and reality.",
+    "source": "Lane's Arabic-English Lexicon, root ص-د-ق (ṣ-d-q)",
+    "topics": ["truthfulness"]
+  },
+  "tawakkul": {
+    "arabic": "تَوَكُّل",
+    "translit": "Tawakkul",
+    "shortDef": "Trust in and reliance upon Allah, entrusting one's affairs to Him.",
+    "longDef": "From the root و-ك-ل. Lane defines the form-V verb tawakkala as to rely upon and confide in another, submitting one's affair to them; a wakīl is an entrusted agent or deputy. As a spiritual term it denotes placing one's reliance and trust in Allah while entrusting the outcome of one's affairs to Him.",
+    "source": "Lane's Arabic-English Lexicon, root و-ك-ل (w-k-l)",
+    "topics": ["reliance-on-allah"]
+  },
+  "tawbah": {
+    "arabic": "تَوْبَة",
+    "translit": "Tawbah",
+    "shortDef": "Repentance — turning back from sin to obedience with sincere regret.",
+    "longDef": "From the root ت-و-ب, whose core sense is to return. Lane defines tawbah as repenting of sin — grieving over it and confessing that one has no excuse — and describes tāba as returning from disobedience to obedience. When used of Allah (tāba ʿalayhi), it means He returned toward the servant with forgiveness and acceptance of repentance.",
+    "source": "Lane's Arabic-English Lexicon, root ت-و-ب (t-w-b)",
+    "topics": ["repentance"]
+  },
+  "dhikr": {
+    "arabic": "ذِكْر",
+    "translit": "Dhikr",
+    "shortDef": "Remembrance of Allah — keeping Him present in the heart and mentioning Him with the tongue.",
+    "longDef": "From the root ذ-ك-ر, meaning remembrance and the presence of a thing in the mind, as opposed to forgetting. Lane distinguishes remembrance in the heart (dhikr bil-qalb) from mention by the tongue (dhikr bil-lisān). In religious usage it denotes the praise and glorification of Allah, including formulas such as subḥān Allāh.",
+    "source": "Lane's Arabic-English Lexicon, root ذ-ك-ر (dh-k-r)",
+    "topics": ["remembrance-of-allah"]
+  },
+  "ilm": {
+    "arabic": "عِلْم",
+    "translit": "ʿIlm",
+    "shortDef": "Knowledge — knowing a thing as it truly is.",
+    "longDef": "From the root ع-ل-م, meaning to know or to become acquainted with something. Lane treats ʿilm as the highest term for knowledge, noting it is counted among the attributes of Allah. It can carry the sense of certain knowing (yaqīn) and, with the preposition bi-, the sense of perceiving or becoming aware.",
+    "source": "Lane's Arabic-English Lexicon, root ع-ل-م (ʿ-l-m)",
+    "topics": ["knowledge"]
+  },
+  "tawhid": {
+    "arabic": "تَوْحِيد",
+    "translit": "Tawḥīd",
+    "shortDef": "Affirming the oneness of Allah — that He is one, unique, and indivisible.",
+    "longDef": "From the root و-ح-د, whose base sense is being alone or single. Lane defines tawḥīd as belief in Allah alone and the assertion of His unity, and describes al-Wāḥid (the One) as He whose attribute is oneness and who is not susceptible of division into parts. It expresses both numerical oneness and the affirmation of monotheism.",
+    "source": "Lane's Arabic-English Lexicon, root و-ح-د (w-ḥ-d)",
+    "topics": ["oneness-of-allah"]
+  },
+  "hajj": {
+    "arabic": "حَجّ",
+    "translit": "Ḥajj",
+    "shortDef": "Pilgrimage — betaking oneself to the Sacred House in Mecca to perform its prescribed rites.",
+    "longDef": "From the root ح-ج-ج, whose general sense Lane gives as repairing or betaking oneself to a person or place, especially an object of reverence (synonym qaṣada). By conventional usage it denotes repairing to Mecca and the Kaʿbah to perform the rites and ceremonies of the pilgrimage prescribed in the Qur'an and Sunnah.",
+    "source": "Lane's Arabic-English Lexicon, root ح-ج-ج (ḥ-j-j)",
+    "topics": ["pilgrimage"]
+  },
+  "birr": {
+    "arabic": "بِرّ",
+    "translit": "Birr",
+    "shortDef": "Dutiful goodness and kindness, especially devoted good treatment of one's parents.",
+    "longDef": "From the root ب-ر-ر. Lane defines birr as benevolent and solicitous regard and conduct — piety toward Allah and kind, affectionate treatment of one's kindred. He specifically records barra wālidahu as treating one's parent with filial piety and dutiful obedience, and describes birr as ample, extensive goodness and beneficence.",
+    "source": "Lane's Arabic-English Lexicon, root ب-ر-ر (b-r-r)",
+    "topics": ["kindness-to-parents"]
+  }
+}
