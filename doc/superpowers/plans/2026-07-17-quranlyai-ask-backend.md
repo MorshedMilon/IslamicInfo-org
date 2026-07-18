@@ -10,6 +10,10 @@
 
 **Reference:** Design spec `doc/superpowers/specs/2026-07-17-quranlyai-ask-backend-design.md`.
 
+**Execution environment note:** Node v24 is installed; wrangler is NOT (running `npx wrangler` would trigger a network download). Therefore, wherever a task says `npx wrangler deploy --dry-run` as a bundle check, substitute a **Node import-smoke check** instead, e.g. from `worker/`:
+`node -e "import('./src/index.js').then(()=>console.log('OK')).catch(e=>{console.error(e);process.exit(1)})"`
+The authoritative gate for Tasks 1–12 is `node --test` passing. Only Task 14 (`wrangler dev`) truly needs wrangler; it is deferred pending the human-provided `ANTHROPIC_API_KEY` + live KV namespace. JSON module imports use `with { type: 'json' }` (works in both Node 24 and esbuild/wrangler). All test/verify commands run via the **Bash** tool (Git Bash) with `cd worker` first.
+
 ---
 
 ## File Structure
