@@ -46,6 +46,12 @@ test('containsVerdictLanguage matches parity with the AI backstop', () => {
   assert.match(core.SCHOLAR_REDIRECT, /qualified scholar/i);
 });
 
+test('containsVerdictLanguage does NOT fire on the mandated "Not a fatwa" footer', () => {
+  const answer = '**Answer**\nThis verse teaches patience.\n\n' +
+    '**Note**: Educational explanation only. Not a fatwa. Consult a qualified scholar for religious rulings.';
+  assert.equal(core.containsVerdictLanguage(answer), false);
+});
+
 test('fabBottomOffset clears the audio player bar when present', () => {
   assert.equal(core.fabBottomOffset(null, 800, 24, 12), 24);
   assert.equal(core.fabBottomOffset({ top: 740 }, 800, 24, 12), 72);

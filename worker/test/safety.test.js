@@ -14,6 +14,12 @@ test('verdictLangDetected passes plain explanation', () => {
   assert.equal(verdictLangDetected('This verse teaches patience and trust in God.'), false);
 });
 
+test('verdictLangDetected does NOT fire on the mandated "Not a fatwa" footer', () => {
+  const answer = '**Answer**\nThis verse teaches patience.\n\n' +
+    '**Note**: Educational explanation only. Not a fatwa. Consult a qualified scholar for religious rulings.';
+  assert.equal(verdictLangDetected(answer), false);
+});
+
 test('looksRulingAdjacent catches fiqh keywords', () => {
   assert.equal(looksRulingAdjacent('Is interest (riba) allowed?'), true);
   assert.equal(looksRulingAdjacent('Is Bitcoin halal?'), true);

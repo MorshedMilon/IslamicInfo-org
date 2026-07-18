@@ -10,7 +10,9 @@
 
   // Conservative v1 backstop — identical to quran-ai-core.js; final term set owned by the 🕌 reviewer (CONTENT-POLICY §4/§6).
   var VERDICT_FRAMING = /\b(?:is|are|it'?s|its|be|being|was|were|becomes?|remains?|considered|declared|deemed|ruled)\s+(?:(?:not|an?|clearly|strictly|definitely|therefore|thus|now|then)\s+)?(?:haram|haraam|halal|forbidden|impermissible|permissible|unlawful|lawful|obligatory|sinful|makruh|mustahabb|wajib|fard)\b/i;
-  var VERDICT_TERMS = /\bfatwa\b|fatwā|\bit is a sin\b|\bit'?s a sin\b/i;
+  // The bare word "fatwa"/"fatwā" is intentionally NOT a term — it appears in the mandated
+  // "Not a fatwa" footer on every answer; real rulings are caught by VERDICT_FRAMING.
+  var VERDICT_TERMS = /\bit is a sin\b|\bit'?s a sin\b/i;
 
   var CHIPS = {
     quran: [
