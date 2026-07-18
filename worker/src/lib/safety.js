@@ -11,7 +11,10 @@ export const RULING_DEFLECTION =
 
 // Verbatim from the original index.js so ask-claude behavior is unchanged.
 export const AI_VERDICT_FRAMING = /\b(?:is|are|it'?s|its|be|being|was|were|becomes?|remains?|considered|declared|deemed|ruled)\s+(?:(?:not|an?|clearly|strictly|definitely|therefore|thus|now|then)\s+)?(?:haram|haraam|halal|forbidden|impermissible|permissible|unlawful|lawful|obligatory|sinful|makruh|mustahabb|wajib|fard)\b/i;
-export const AI_VERDICT_TERMS = /\bfatwa\b|fatwā|\bit is a sin\b|\bit'?s a sin\b/i;
+// Note: the bare word "fatwa"/"fatwā" is deliberately NOT a term here — it appears in the
+// mandated "Not a fatwa" disclaimer footer on every response; actual rulings are caught by
+// AI_VERDICT_FRAMING (is/are + haram/halal/obligatory/…).
+export const AI_VERDICT_TERMS = /\bit is a sin\b|\bit'?s a sin\b/i;
 
 export function verdictLangDetected(answer) {
   const s = String(answer || '');
