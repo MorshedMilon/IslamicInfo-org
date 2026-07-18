@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
-import { QURANLYAI_SYSTEM_PROMPT, buildUserPrompt, maxTokensFor, chooseModel, HAIKU, SONNET } from '../src/lib/prompts.js';
+import { QURANLYAI_SYSTEM_PROMPT, buildUserPrompt, maxTokensFor, chooseModel, GEMINI_FLASH } from '../src/lib/prompts.js';
 
 test('system prompt bans rulings and mandates sources', () => {
   assert.match(QURANLYAI_SYSTEM_PROMPT, /never issue a fatwa/i);
@@ -31,10 +31,10 @@ test('maxTokensFor caps summarize and key_lessons lower', () => {
   assert.ok(maxTokensFor('custom') >= 600);
 });
 
-test('chooseModel routes cheap vs strong correctly', () => {
-  assert.equal(chooseModel('simple', false), HAIKU);
-  assert.equal(chooseModel('vocabulary', false), HAIKU);
-  assert.equal(chooseModel('custom', false), SONNET);
-  assert.equal(chooseModel('explain', true), SONNET);   // ruling-adjacent upgrades
-  assert.equal(chooseModel('explain', false), HAIKU);
+test('chooseModel returns gemini-2.5-flash for all actions', () => {
+  assert.equal(GEMINI_FLASH, 'gemini-2.5-flash');
+  assert.equal(chooseModel('simple', false), GEMINI_FLASH);
+  assert.equal(chooseModel('vocabulary', false), GEMINI_FLASH);
+  assert.equal(chooseModel('custom', false), GEMINI_FLASH);
+  assert.equal(chooseModel('explain', true), GEMINI_FLASH);
 });
