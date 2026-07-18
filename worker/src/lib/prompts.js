@@ -1,6 +1,8 @@
 /* QuranlyAI system prompt, per-action user-prompt builder, token caps, model routing. */
 
-export const GEMINI_FLASH = 'gemini-2.5-flash';
+// 'gemini-flash-latest' is Google's alias that always tracks the current flash model,
+// so a retired version (e.g. 2.5-flash, blocked for new accounts) can't break us again.
+export const GEMINI_FLASH = 'gemini-flash-latest';
 
 export const QURANLYAI_SYSTEM_PROMPT = [
   'You are QuranlyAI, an educational Islamic learning assistant. You are NOT a general chatbot.',

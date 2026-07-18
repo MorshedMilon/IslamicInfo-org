@@ -32,7 +32,7 @@ test('maxTokensFor caps summarize and key_lessons lower', () => {
 });
 
 test('chooseModel returns gemini-2.5-flash for all actions', () => {
-  assert.equal(GEMINI_FLASH, 'gemini-2.5-flash');
+  assert.equal(GEMINI_FLASH, 'gemini-flash-latest');
   assert.equal(chooseModel('simple', false), GEMINI_FLASH);
   assert.equal(chooseModel('vocabulary', false), GEMINI_FLASH);
   assert.equal(chooseModel('custom', false), GEMINI_FLASH);
