@@ -51,3 +51,33 @@ test('fabBottomOffset clears the audio player bar when present', () => {
   assert.equal(core.fabBottomOffset({ top: 740 }, 800, 24, 12), 72);
   assert.equal(core.fabBottomOffset({ top: 100 }, 800, 24, 12), 24 > 712 ? 24 : 712);
 });
+
+test('parseSSE parses a single message frame and leaves no remainder', () => {
+  const r = core.parseSSE('data: {"delta":"Hi"}\n\n');
+  assert.equal(r.rest, '');
+  assert.deepEqual(r.events, [{ event: 'message', data: { delta: 'Hi' } }]);
+});
+
+test('parseSSE returns multiple deltas in order', () => {
+  const r = core.parseSSE('data: {"delta":"A"}\n\ndata: {"delta":"B"}\n\n');
+  assert.deepEqual(r.events.map((e) => e.data.delta), ['A', 'B']);
+  assert.equal(r.rest, '');
+});
+
+test('parseSSE carries an unterminated frame forward as rest', () => {
+  const r = core.parseSSE('data: {"delta":"A"}\n\ndata: {"del');
+  assert.equal(r.events.length, 1);
+  assert.equal(r.rest, 'data: {"del');
+});
+
+test('parseSSE captures the done event with JSON metadata', () => {
+  const r = core.parseSSE('event: done\ndata: {"remaining":2,"confidence":"High","sources":["Quran 2:255"]}\n\n');
+  assert.equal(r.events[0].event, 'done');
+  assert.equal(r.events[0].data.remaining, 2);
+  assert.equal(r.events[0].data.confidence, 'High');
+});
+
+test('parseSSE ignores comments and blank lines, keeps raw string on non-JSON data', () => {
+  const r = core.parseSSE(': keep-alive\n\ndata: plain text\n\n');
+  assert.equal(r.events[r.events.length - 1].data, 'plain text');
+});

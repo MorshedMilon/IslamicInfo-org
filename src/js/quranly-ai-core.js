@@ -71,6 +71,39 @@
     return Math.max(defaultBottom, fromBottom + gap);
   }
 
+  // Incremental SSE frame parser. Pass the accumulated buffer (rest + newChunk);
+  // returns { events: [{event, data}], rest } where rest is the unterminated remainder.
+  // data is JSON-parsed when possible, else the raw string; frames with no data → null.
+  function parseSSE(buffer) {
+    var events = [];
+    var idx;
+    while ((idx = buffer.indexOf('\n\n')) !== -1) {
+      var frame = buffer.slice(0, idx);
+      buffer = buffer.slice(idx + 2);
+      var ev = 'message';
+      var dataLines = [];
+      frame.split('\n').forEach(function (line) {
+        if (line.charAt(line.length - 1) === '\r') line = line.slice(0, -1);
+        if (!line || line.charAt(0) === ':') return; // blank line or comment
+        var c = line.indexOf(':');
+        var field = c === -1 ? line : line.slice(0, c);
+        var val = c === -1 ? '' : line.slice(c + 1);
+        if (val.charAt(0) === ' ') val = val.slice(1);
+        if (field === 'event') ev = val;
+        else if (field === 'data') dataLines.push(val);
+      });
+      if (dataLines.length) {
+        var raw = dataLines.join('\n');
+        var data;
+        try { data = JSON.parse(raw); } catch (e) { data = raw; }
+        events.push({ event: ev, data: data });
+      } else {
+        events.push({ event: ev, data: null });
+      }
+    }
+    return { events: events, rest: buffer };
+  }
+
   return {
     getOrCreateAnonId: getOrCreateAnonId,
     chipsFor: chipsFor,
@@ -78,6 +111,7 @@
     quotaText: quotaText,
     containsVerdictLanguage: containsVerdictLanguage,
     fabBottomOffset: fabBottomOffset,
+    parseSSE: parseSSE,
     ANON_KEY: ANON_KEY,
     SCHOLAR_REDIRECT: 'For personal religious guidance, consult a qualified scholar.'
   };
