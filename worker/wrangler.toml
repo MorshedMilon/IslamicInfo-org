@@ -12,3 +12,7 @@ compatibility_date = "2026-06-01"
 # routes = [
 #   { pattern = "api.islamicinfo.org", custom_domain = true }
 # ]
+
+[[kv_namespaces]]
+binding = "QURANLYAI_KV"
+id = "REPLACE_WITH_NAMESPACE_ID"

@@ -19,6 +19,7 @@
 import { todayUTC, secondsUntilUTCMidnight } from './lib/time.js';
 import { ALLOWED_ORIGINS, corsHeaders, json, err } from './lib/cors.js';
 import { ASK_CLAUDE_SYSTEM_PROMPT, AI_ATTRIBUTION, SCHOLAR_REDIRECT, verdictLangDetected } from './lib/safety.js';
+import { handleQuranlyAiAsk } from './quranlyai.js';
 
 /* ─── Upstream fetch with timeout ──────────────────────────────────── */
 async function upstream(url, timeoutMs = 8000) {
@@ -218,6 +219,10 @@ export default {
 
       if (request.method === 'POST' && path === '/api/ask-claude') {
         return await handleAskClaude(request, env, origin);
+      }
+
+      if (request.method === 'POST' && path === '/api/quranlyai/ask') {
+        return await handleQuranlyAiAsk(request, env, ctx, origin);
       }
 
       if (path.startsWith('/api/quran/') || PENDING.includes(path)) {
