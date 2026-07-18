@@ -1,7 +1,7 @@
 /* POST /api/quranlyai/ask — the 8-step pipeline (design spec §6). */
 import { ALLOWED_ORIGINS, err, json } from './lib/cors.js';
 import { todayUTC } from './lib/time.js';
-import { resolveTier, getQuota, incrementQuota } from './lib/quota.js';
+import { getIpQuota, incrementIpQuota } from './lib/quota.js';
 import { cacheKey, getCached, putCached } from './lib/cache.js';
 import { buildGrounding, GROUNDED_ACTIONS } from './lib/grounding.js';
 import { groundingData } from './lib/grounding-data.js';
@@ -20,6 +20,19 @@ const VALID_ACTIONS = new Set([
 function verseKeyOf(ctx) {
   return (ctx && ctx.surah != null && ctx.ayah != null) ? `${ctx.surah}:${ctx.ayah}` : '';
 }
+
+// SHA-256 the client IP so we rate-limit without storing raw IPs (zero-PII).
+async function hashIp(ip) {
+  const bytes = new TextEncoder().encode('qai-ip:' + ip);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Grounding-only: a free-text ask with no source text gets guidance, not an answer —
+// the assistant never answers from the model's own memory (no-hallucination invariant).
+const NO_SOURCE_MESSAGE =
+  '**QuranlyAI**\nI explain a specific verse, hadith, or dua you’re viewing — open one and tap ✨ Ask QuranlyAI, or highlight a passage to ask about it.\n\n' +
+  '**Note**: Educational assistant. Not a fatwa. Consult a qualified scholar for religious rulings.';
 
 // Pull the Sources/Confidence out of the model text for the `done` metadata event.
 function extractMeta(text) {
@@ -47,26 +60,30 @@ export async function handleQuranlyAiAsk(request, env, ctx, origin) {
   if (!fingerprint || fingerprint.length > 128) return err('missing userIdOrFingerprint', origin, 400);
   if (customQuestion.length > 200) return err('customQuestion too long', origin, 400);
   if ((context.rawText || '').length > 4000) return err('context.rawText too long', origin, 400);
-  // rawText is required for ungrounded actions; grounded actions can rely on the index.
-  if (!GROUNDED_ACTIONS.has(action) && rawText.length < 3) return err('context.rawText missing or too short', origin, 400);
+  // Grounding-only: an ungrounded ask with no source text gets graceful guidance
+  // (not a 400) — the global widget stays source-bound, never answers from memory.
+  if (!GROUNDED_ACTIONS.has(action) && rawText.length < 3) {
+    return streamSafeText(NO_SOURCE_MESSAGE, { sources: [], confidence: 'High', model: 'guidance', cached: false, remaining: null }, origin);
+  }
 
   if (!env || !env.GEMINI_API_KEY) return err('AI temporarily unavailable', origin, 503);
   if (!env.QURANLYAI_KV) return err('AI temporarily unavailable', origin, 503);
 
   const kv = env.QURANLYAI_KV;
   const date = todayUTC();
-  const tier = resolveTier(request, env);
 
-  // 3. Quota check (checked every request; incremented only on real generation)
-  const quota = await getQuota(kv, fingerprint, date, tier);
-  if (quota.blocked) return json({ remaining: 0 }, origin, { status: 429 });
+  // 3. IP safety cap (beta): per-user is unlimited; the only hard block is a per-IP daily
+  //    cap that stops bot abuse. Checked every request; incremented only on real generation.
+  const ipHash = await hashIp(request.headers.get('CF-Connecting-IP') || 'unknown');
+  const ipQuota = await getIpQuota(kv, ipHash, date);
+  if (ipQuota.blocked) return json({ remaining: 0 }, origin, { status: 429 });
 
   // 4. Cache check
   const key = await cacheKey(context, action, customQuestion);
   const cached = await getCached(kv, key);
   if (cached != null) {
     const meta = extractMeta(cached);
-    return streamSafeText(cached, { ...meta, model: 'cache', cached: true, remaining: quota.remaining }, origin);
+    return streamSafeText(cached, { ...meta, model: 'cache', cached: true, remaining: ipQuota.remaining }, origin);
   }
 
   // 5. Grounding
@@ -98,9 +115,9 @@ export async function handleQuranlyAiAsk(request, env, ctx, origin) {
   // 8. Persist (off the response path) + 9. Stream
   ctx.waitUntil(Promise.allSettled([
     putCached(kv, key, safe),
-    incrementQuota(kv, fingerprint, date),
+    incrementIpQuota(kv, ipHash, date),
   ]));
 
   const meta = extractMeta(safe);
-  return streamSafeText(safe, { ...meta, model, cached: false, remaining: Math.max(0, quota.remaining - 1) }, origin);
+  return streamSafeText(safe, { ...meta, model, cached: false, remaining: Math.max(0, ipQuota.remaining - 1) }, origin);
 }

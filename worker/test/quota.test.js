@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
-import { GUEST_DAILY_LIMIT, resolveTier, quotaKey, getQuota, incrementQuota } from '../src/lib/quota.js';
+import { GUEST_DAILY_LIMIT, resolveTier, quotaKey, getQuota, incrementQuota, IP_DAILY_LIMIT, ipKey, getIpQuota, incrementIpQuota } from '../src/lib/quota.js';
 
 function fakeKV(initial = {}) {
   const store = new Map(Object.entries(initial));
@@ -14,6 +14,37 @@ function fakeKV(initial = {}) {
 
 test('resolveTier returns guest today', () => {
   assert.equal(resolveTier({}, {}), 'guest');
+});
+
+test('IP_DAILY_LIMIT is the 100/day beta safety cap', () => {
+  assert.equal(IP_DAILY_LIMIT, 100);
+});
+
+test('ipKey namespaces by ip hash and date', () => {
+  assert.equal(ipKey('abc123', '2026-07-18'), 'ip:abc123:2026-07-18');
+});
+
+test('getIpQuota reports remaining and not blocked below the cap', async () => {
+  const kv = fakeKV({ 'ip:h1:2026-07-18': '5' });
+  const q = await getIpQuota(kv, 'h1', '2026-07-18');
+  assert.equal(q.count, 5);
+  assert.equal(q.limit, IP_DAILY_LIMIT);
+  assert.equal(q.remaining, IP_DAILY_LIMIT - 5);
+  assert.equal(q.blocked, false);
+});
+
+test('getIpQuota blocks at the cap', async () => {
+  const kv = fakeKV({ 'ip:h1:2026-07-18': String(IP_DAILY_LIMIT) });
+  const q = await getIpQuota(kv, 'h1', '2026-07-18');
+  assert.equal(q.blocked, true);
+  assert.equal(q.remaining, 0);
+});
+
+test('incrementIpQuota writes count+1 with a TTL', async () => {
+  const kv = fakeKV({ 'ip:h1:2026-07-18': '9' });
+  await incrementIpQuota(kv, 'h1', '2026-07-18');
+  assert.equal(kv._store.get('ip:h1:2026-07-18'), '10');
+  assert.ok(kv._puts[0].opts.expirationTtl >= 60);
 });
 
 test('quotaKey namespaces by fingerprint and date', () => {
