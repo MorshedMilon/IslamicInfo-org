@@ -40,20 +40,36 @@ _Shipped work, most recent first._
   `src/data/related-hadith/topics.json` — **6 hadith across 4 topics** (patience, mercy,
   gratitude, truthfulness) signed off by the operator (CONTENT-POLICY §5). No new `/api/` route.
   See `doc/DATA.md` and `doc/API-SPEC.md`. (2026-07-17)
+- [x] **Vocabulary / Key Terms** (Quran Explorer knowledge index — slice 3 of 3) — **LIVE.**
+  Per-verse "Key Terms" glossary panel completing the reader trio (Related Verses · Related
+  Hadith · Key Terms); static JSON, zero AI, zero backend, client-side lookup. Fail-closed
+  build (`tools/vocab-build.mjs`) compiles the hand-authored curation source
+  (`tools/vocab/terms.source.json`) into `src/data/vocab/terms.json` +
+  `src/data/vocab/topic-terms.json` — **16 terms**, every definition grounded in Lane's
+  Arabic-English Lexicon (`source` field mandatory). Reuses the shared taxonomy plus the
+  slice-1/2 `related-verses`/`related-hadith` indexes for cross-refs — no new database. No
+  review gate (restricted to well-established lexical terms). No new `/api/` route.
+  See `doc/DATA.md` and `doc/API-SPEC.md`. (2026-07-17)
 
-### Knowledge Index — Deferred Backlog (slice 3, to finish the 3-feature set)
-_Blocked on the D1/Hadith cycle; not yet scoped as individual tasks._
+**Knowledge Index (all 3 slices — Related Verses, Related Hadith, Vocabulary) is now
+COMPLETE.** Entire feature ships as static JSON; D1 + FTS5 + `/api/index/*` were evaluated and
+dropped as unnecessary.
 
-- [ ] Vocabulary — terms + cross-references into verses & hadith; FTS lookup.
-- [ ] Adopt D1 + FTS5 for the corpus.
-- [ ] Introduce `/api/index/*` worker routes (with D1).
+### Knowledge Index — Deferred Backlog
+_Follow-on ideas beyond the shipped 3-slice set; not yet scoped as individual tasks._
+
+- [ ] Global glossary term-search (search across all Vocabulary terms, not just per-verse).
 - [ ] Hadith-page cross-linking (surface Related Hadith rows on `hadith.html`, not just the
   Quran reader panel).
 - [ ] Disputed-grade handling (multiple graders disagree; currently Sahih/Hasan-only, single
   `gradedBy` per row).
 - [ ] 🕌 AI connecting-explanation blurb — reuses `/api/ask-claude` guardrails + human-review gate.
 - [ ] Web-based admin bulk-review UI (flip `reviewed:true` without hand-editing source JSON).
+- [ ] Contested-terms handling (terms with disputed/multiple scholarly definitions).
 - [ ] Scale tag coverage via external thematic index / staged suggestions.
+
+**Dropped as unnecessary:** Adopt D1 + FTS5 for the corpus; introduce `/api/index/*` worker
+routes. The Knowledge Index ships entirely as static JSON — no database, no new routes.
 
 ---
 

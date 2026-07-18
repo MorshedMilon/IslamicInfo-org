@@ -175,8 +175,9 @@ is no `/api/tafsir`/`/api/dua`; these work on GitHub Pages too).
   `src/data/related-verses/verse-index.json` (verse → topic slugs). No `/api/` route in this
   slice, and the AI is **not** involved — every row is pre-verified by a human curator with a
   `sourceCitation` baked in at build time (see `DATA.md`).
-- **Deferred:** `/api/index/related-verses` (and D1 + FTS5 for the full corpus) are deferred to
-  the Hadith cycle, alongside Related Hadith and Vocabulary (see `TASKS.md`).
+- **Dropped:** `/api/index/related-verses` (and D1 + FTS5 for the full corpus) were evaluated and
+  **dropped as unnecessary** — the entire Knowledge Index (all 3 slices) ships as static JSON
+  (see `TASKS.md`).
 
 ### Related Hadith (topic index — knowledge index slice 2)
 - **Source:** static JSON — `src/data/related-hadith/topics.json` (topic → hadith rows),
@@ -188,8 +189,22 @@ is no `/api/tafsir`/`/api/dua`; these work on GitHub Pages too).
   verified isnad) *and* a human-review gate — the build emits only `reviewed:true` rows.
   Production is **gated on 🕌 sign-off** (CONTENT-POLICY §5). Sign-off completed 2026-07-17:
   the index now ships **6 hadith across 4 topics** (patience, mercy, gratitude, truthfulness).
-- **Deferred:** `/api/index/*` (and D1 + FTS5 for the full corpus) remain deferred to the
-  Vocabulary slice (see `TASKS.md`).
+- **Dropped:** `/api/index/*` (and D1 + FTS5 for the full corpus) were evaluated and **dropped
+  as unnecessary** — the entire Knowledge Index (all 3 slices) ships as static JSON (see
+  `TASKS.md`).
+
+### Vocabulary (Key Terms — knowledge index slice 3)
+- **Source:** static JSON — `src/data/vocab/terms.json` (term → definition/topics) and
+  `src/data/vocab/topic-terms.json` (topic → term slugs). No `/api/` route in this slice, and
+  the AI is **not** involved — every term carries a sourced definition grounded in Lane's
+  Arabic-English Lexicon. Curation source is `tools/vocab/terms.source.json`, compiled by
+  `tools/vocab-build.mjs` (see `DATA.md`).
+- **Cross-refs:** term → topic mapping reuses the shipped slice-1/2 indexes
+  (`src/data/related-verses/topics.json`, `src/data/related-hadith/topics.json`) rather than
+  maintaining separate vocab-specific cross-ref data.
+- **Status:** ships **live**, no review gate (restricted to well-established lexical terms) —
+  **16 terms** across the shared topic taxonomy. This completes the Knowledge Index (all 3
+  slices: Related Verses, Related Hadith, Vocabulary).
 
 ---
 

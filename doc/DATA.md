@@ -99,6 +99,21 @@
 > `src/js/quran-related-hadith.js` (pure lookup logic in `src/js/quran-related-hadith-core.js`)
 > to render the per-verse "Related Hadith" panel in `quran.html`.
 
+> **Vocabulary static index (Quran Explorer knowledge index, slice 3 — Knowledge Index now
+> COMPLETE).** Static JSON on Pages, no binding, no `/api/` route: `src/data/vocab/terms.json`
+> → `{ [termSlug]: { arabic, translit, shortDef, longDef, source, topics } }` and
+> `src/data/vocab/topic-terms.json` → `{ [topicSlug]: termSlug[] }` (reverse map). Both files
+> are **generated** by `tools/vocab-build.mjs` from the hand-authored curation source
+> `tools/vocab/terms.source.json` — do **not** hand-edit the generated files; regenerate via the
+> build script. Every term record carries a `source` field — definitions are grounded in **Lane's
+> Arabic-English Lexicon** — and the build fails closed if a term is missing one, has a blank
+> field, or maps to a `topics[]` slug outside the shared `related-verses` taxonomy. **16 terms**
+> ship live. `topics[]` reuses the slice-1/2 taxonomy: a term's cross-referenced verses and
+> hadith are looked up on demand from `src/data/related-verses/topics.json` and
+> `src/data/related-hadith/topics.json` (no separate vocab-specific cross-ref data; no database).
+> Loaded client-side by `src/js/quran-vocab.js` (pure lookup logic in
+> `src/js/quran-vocab-core.js`) to render the per-verse "Key Terms" panel in `quran.html`.
+
 ## 2. Small Value Shapes
 
 ```ts
