@@ -8,6 +8,7 @@ test('buildGeminiBody nests system + user content and sets config', () => {
   assert.equal(b.contents[0].role, 'user');
   assert.equal(b.contents[0].parts[0].text, 'HI');
   assert.equal(b.generationConfig.maxOutputTokens, 300);
+  assert.equal(b.generationConfig.thinkingConfig.thinkingBudget, 0); // thinking disabled
   assert.equal(b.safetySettings.length, 4);
   assert.ok(b.safetySettings.every((s) => s.threshold === 'BLOCK_NONE'));
 });

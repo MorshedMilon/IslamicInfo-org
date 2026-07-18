@@ -18,7 +18,13 @@ export function buildGeminiBody({ system, userContent, maxTokens }) {
   return {
     system_instruction: { parts: [{ text: system || '' }] },
     contents: [{ role: 'user', parts: [{ text: userContent || '' }] }],
-    generationConfig: { maxOutputTokens: maxTokens, temperature: 0.4 },
+    // thinkingBudget 0 disables Gemini flash "thinking": reasoning tokens otherwise
+    // consume maxOutputTokens and truncate the visible answer (finishReason MAX_TOKENS).
+    generationConfig: {
+      maxOutputTokens: maxTokens,
+      temperature: 0.4,
+      thinkingConfig: { thinkingBudget: 0 },
+    },
     safetySettings: SAFETY_SETTINGS,
   };
 }
