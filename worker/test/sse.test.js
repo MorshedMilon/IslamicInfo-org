@@ -16,7 +16,7 @@ async function readAll(res) {
 
 test('streamSafeText emits SSE headers, data events, and a done event', async () => {
   const res = streamSafeText('Hello world this is safe text.', {
-    sources: ['Quran 2:255'], confidence: 'High', model: 'claude-haiku-4-5', cached: false, remaining: 2,
+    sources: ['Quran 2:255'], confidence: 'High', model: 'gemini-2.5-flash', cached: false, remaining: 2,
   }, 'https://islamicinfo.org');
   assert.equal(res.headers.get('Content-Type'), 'text/event-stream; charset=utf-8');
   assert.equal(res.headers.get('X-Cache'), 'MISS');
