@@ -64,13 +64,14 @@ doc/DECISIONS.md                    MOD  ADR: KV (not D1), bundled-core groundin
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "test": "node --test test/"
+    "test": "node --test \"test/*.test.js\""
   },
   "devDependencies": {
     "wrangler": "^3.90.0"
   }
 }
 ```
+> Note: `node --test test/` (bare directory form) fails on Node 24/Windows with MODULE_NOT_FOUND; use the glob `"test/*.test.js"` as shown. Single-file forms (`node --test test/foo.test.js`) work fine.
 
 - [ ] **Step 2: Confirm the existing Worker still bundles**
 
