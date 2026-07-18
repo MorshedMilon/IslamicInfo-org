@@ -38,7 +38,7 @@
     this._els.input.addEventListener('keydown', function (e) { if (e.key === 'Enter') self._sendFree(); });
     this._loadStyles(sh);
     var cfg = (window.QuranlyAI.getState && window.QuranlyAI.getState().config) || {};
-    this._els.quota.textContent = core.quotaText(null, cfg.maxPerDay || 3);
+    this._els.quota.textContent = cfg.betaUnlimited ? 'Beta Testing: Unlimited Questions' : core.quotaText(null, cfg.maxPerDay || 3);
   };
 
   QuranlyPanel.prototype._loadStyles = function (sh) {
@@ -96,7 +96,7 @@
     fetch(cfg.apiBase + '/api/quranlyai/ask', {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
     }).then(function (res) {
-      if (res.status === 429) { self._fail(ai, 'Daily limit reached — you’ve used all ' + (cfg.maxPerDay || 3) + ' today.'); return null; }
+      if (res.status === 429) { self._fail(ai, 'You’ve reached today’s limit — please try again later.'); return null; }
       if (res.status === 403) { self._fail(ai, 'QuranlyAI isn’t available on this site.'); return null; }
       if (!res.ok || !res.body) { self._fail(ai, 'QuranlyAI is temporarily unavailable — please try again.'); return null; }
       return self._stream(res.body, ai);
@@ -137,7 +137,7 @@
         c.textContent = 'Confidence: ' + meta.confidence; ai.appendChild(c);
       }
       var cfg = window.QuranlyAI.getState().config;
-      this._els.quota.textContent = core.quotaText(meta.remaining, cfg.maxPerDay || 3);
+      this._els.quota.textContent = cfg.betaUnlimited ? 'Beta Testing: Unlimited Questions' : core.quotaText(meta.remaining, cfg.maxPerDay || 3);
     }
     this._els.send.disabled = false;
   };
