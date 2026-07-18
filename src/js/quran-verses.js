@@ -168,14 +168,16 @@
     var note = el('div', 'note-editor'); note.id = 'n-' + k; card.appendChild(note);
     var rv = el('div', 'rv-panel'); rv.id = 'rv-' + k; card.appendChild(rv);
     var rh = el('div', 'rh-panel'); rh.id = 'rh-' + k; card.appendChild(rh);
+    var kt = el('div', 'kt-panel'); kt.id = 'kt-' + k; card.appendChild(kt);
 
     var footer = el('div', 'ayah-footer');
     footer.appendChild(el('span', 'ayah-ref', v.verse_key));
     var taf = btn('tafsir-btn', SVG.taf + 'Tafsir'); taf.addEventListener('click', function () { if (window.openTafsir) window.openTafsir(); });
     var rel = btn('tafsir-btn', SVG.taf + 'Related'); rel.addEventListener('click', function () { window.toggleRelated('rv-' + k); });
     var relH = btn('tafsir-btn', SVG.taf + 'Related Hadith'); relH.addEventListener('click', function () { window.toggleRelatedHadith('rh-' + k); });
+    var relK = btn('tafsir-btn', SVG.taf + 'Key Terms'); relK.addEventListener('click', function () { window.toggleKeyTerms('kt-' + k); });
     var tr = btn('trace-btn', SVG.trace + 'Trace View →'); tr.addEventListener('click', function () { if (window.openTrace) window.openTrace(ctxSurahName + ' ' + v.verse_key, v.text_uthmani, v.translation); });
-    footer.appendChild(taf); footer.appendChild(rel); footer.appendChild(relH); footer.appendChild(tr);
+    footer.appendChild(taf); footer.appendChild(rel); footer.appendChild(relH); footer.appendChild(relK); footer.appendChild(tr);
     card.appendChild(footer);
     return card;
   }
