@@ -41,7 +41,8 @@
       box.appendChild(el('p', 'kt-xlabel', 'In hadith'));
       refs.hadith.forEach(function (h) {
         var row = el('p', 'kt-xref');
-        row.appendChild(el('span', 'kt-grade', h.grade));
+        var badge = el('span', 'kt-grade ' + (h.grade === 'Sahih' ? 'kt-grade-sahih' : 'kt-grade-hasan'), h.grade);
+        row.appendChild(badge);
         row.appendChild(document.createTextNode(' ' + h.ref + ' — ' + h.english));
         box.appendChild(row);
       });

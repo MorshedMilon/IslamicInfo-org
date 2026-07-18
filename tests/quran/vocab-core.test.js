@@ -54,15 +54,16 @@ test('compileIndex emits term records + reverse topicTerms map (term under two t
 
 const TERMS = {
   taqwa: { arabic: 'تقوى', translit: 'Taqwā', shortDef: 'God-consciousness.', longDef: 'L', source: 'S', topics: ['fear-of-allah'] },
-  sabr:  { arabic: 'صبر', translit: 'Ṣabr', shortDef: 'Patient perseverance.', longDef: 'L', source: 'S', topics: ['patience', 'fear-of-allah'] }
+  sabr:  { arabic: 'صبر', translit: 'Ṣabr', shortDef: 'Patient perseverance.', longDef: 'L', source: 'S', topics: ['patience', 'fear-of-allah'] },
+  adl:   { arabic: 'عدل', translit: 'ʿAdl', shortDef: 'Justice.', longDef: 'L', source: 'S', topics: ['fear-of-allah'] }
 };
-const TOPICTERMS = { 'fear-of-allah': ['taqwa', 'sabr'], patience: ['sabr'] };
+const TOPICTERMS = { 'fear-of-allah': ['taqwa', 'sabr', 'adl'], patience: ['sabr'] };
 const VINDEX = { '2:153': ['patience', 'fear-of-allah'], '14:7': ['gratitude'] };
 
-test('keyTermsForVerse returns the verse topics\' terms, dedups, sorts by translit', () => {
+test('keyTermsForVerse returns the verse topics\' terms, dedups, sorts diacritic-insensitively (ayn/hamza folded too)', () => {
   const out = core.keyTermsForVerse('2:153', TOPICTERMS, VINDEX, TERMS);
-  assert.deepEqual(out.map(t => t.slug), ['sabr', 'taqwa']);
-  assert.equal(out[0].shortDef, 'Patient perseverance.');
+  assert.deepEqual(out.map(t => t.slug), ['adl', 'sabr', 'taqwa']);
+  assert.equal(out.find(t => t.slug === 'sabr').shortDef, 'Patient perseverance.');
   assert.deepEqual(core.keyTermsForVerse('9:1', TOPICTERMS, VINDEX, TERMS), []);
 });
 

@@ -43,6 +43,14 @@
     return { terms: terms, topicTerms: topicTerms };
   }
 
+  function sortKey(s) {
+    return String(s == null ? '' : s)
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')          // combining diacritics (Ṣ→S, ā→a)
+      .replace(/[ʿʾʼ‘’'`]/g, '') // ayn, hamza, apostrophe variants
+      .toLowerCase();
+  }
+
   function keyTermsForVerse(verseKey, topicTerms, verseIndex, terms) {
     var topics = (verseIndex && verseIndex[verseKey]) ? verseIndex[verseKey] : [];
     var seen = {}, out = [];
@@ -57,7 +65,8 @@
       });
     });
     out.sort(function (a, b) {
-      return a.translit.localeCompare(b.translit, 'en', { sensitivity: 'base' });
+      var ka = sortKey(a.translit), kb = sortKey(b.translit);
+      return ka < kb ? -1 : ka > kb ? 1 : 0;
     });
     return out;
   }
