@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>QuranlyAI demo</title>
+<style>
+  :root{ --gold-500:#C5A059; --gold-400:#D9B358; --gold-aura:0 8px 24px rgba(197,160,89,.4);
+    --teal-700:#00696E; --ink-primary:#0F2A2C; --ink-body:#26403f; --ink-muted:#5a6f6e;
+    --surface:#F4F7F7; --surface-card:#FAFBFB; --white:#fff; --elev-4:0 24px 60px rgba(0,0,0,.22);
+    --ease-reverent:cubic-bezier(.22,1,.36,1); --r-md:14px; --r-lg:18px;
+    --font-body:Inter,system-ui,sans-serif; --font-display:"Cormorant Garamond",serif; }
+  body{ font-family:var(--font-body); background:var(--surface); color:var(--ink-body); padding:40px; }
+  .audio-player{ position:fixed; left:0; right:0; bottom:0; height:56px; background:#fff;
+    border-top:1px solid #ddd; display:flex; align-items:center; padding:0 20px; }
+  button.demo{ margin:6px; padding:8px 12px; }
+</style></head>
+<body>
+  <h1>QuranlyAI demo harness</h1>
+  <p>Start the mock first: <code>node tools/quranly-ai-mock.mjs</code></p>
+  <p>Inline context button target: <span id="ayah-btn"></span></p>
+  <button class="demo" onclick="QuranlyAI.setContext({type:'quran',surah:2,ayah:255,translationId:'en-saheeh',language:'en',rawText:'Allah - there is no deity except Him...'});QuranlyAI.open()">Set quran context + open</button>
+  <button class="demo" onclick="QuranlyAI.setContext({type:'hadith',hadithBook:'Sahih al-Bukhari',hadithNumber:1,language:'en',rawText:'Actions are by intentions...'});QuranlyAI.open()">Set hadith context + open</button>
+  <div class="audio-player">mock audio player bar</div>
+
+  <script src="../src/js/quranly-ai-core.js"></script>
+  <script src="../src/js/quranly-ai.js"></script>
+  <script>
+    QuranlyAI.init({ apiBase: 'http://localhost:8788', maxPerDay: 3, cssUrl: '../src/css/quranly-ai.css' });
+    QuranlyAI.setContext({ type: 'quran', surah: 2, ayah: 255, translationId: 'en-saheeh', language: 'en', rawText: 'Ayat al-Kursi text' });
+    QuranlyAI.renderContextButton('ayah-btn', '✨', 'explain');
+  </script>
+</body></html>
