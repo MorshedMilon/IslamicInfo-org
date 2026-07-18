@@ -38,3 +38,16 @@ test('validateSource enforces every fail-closed rule', () => {
   assert.ok(r.errors.some(e => /notopics.*non-empty/i.test(e)));
   assert.ok(r.errors.some(e => /not in .*taxonomy/i.test(e)));
 });
+
+test('compileIndex emits term records + reverse topicTerms map (term under two topics appears under both)', () => {
+  const src = {
+    taqwa: goodTerm({ topics: ['fear-of-allah'] }),
+    sabr: goodTerm({ translit: 'Sabr', topics: ['patience', 'fear-of-allah'] })
+  };
+  const out = core.compileIndex(src, TAX);
+  assert.deepEqual(Object.keys(out.terms).sort(), ['sabr', 'taqwa']);
+  assert.equal(out.terms.taqwa.translit, 'Taqwā');
+  assert.deepEqual(out.terms.sabr.topics, ['patience', 'fear-of-allah']);
+  assert.deepEqual(out.topicTerms.patience, ['sabr']);
+  assert.deepEqual(out.topicTerms['fear-of-allah'].sort(), ['sabr', 'taqwa']);
+});

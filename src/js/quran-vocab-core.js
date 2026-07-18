@@ -27,7 +27,24 @@
     return { ok: errors.length === 0, errors: errors };
   }
 
+  function compileIndex(source, taxonomy) {
+    var terms = {}, topicTerms = {};
+    Object.keys(source).forEach(function (slug) {
+      var t = source[slug];
+      terms[slug] = {
+        arabic: t.arabic, translit: t.translit, shortDef: t.shortDef,
+        longDef: t.longDef, source: t.source, topics: t.topics.slice()
+      };
+      t.topics.forEach(function (topic) {
+        var arr = topicTerms[topic] = topicTerms[topic] || [];
+        if (arr.indexOf(slug) === -1) arr.push(slug);
+      });
+    });
+    return { terms: terms, topicTerms: topicTerms };
+  }
+
   return {
-    validateSource: validateSource
+    validateSource: validateSource,
+    compileIndex: compileIndex
   };
 });
