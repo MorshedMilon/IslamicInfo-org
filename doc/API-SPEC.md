@@ -26,6 +26,7 @@
 | `/api/quran/[surah]` | GET | api.quran.com `/v4/verses/by_chapter/{id}` | 7 days | 2 | Static seed data |
 | `/api/verify` | POST | IslamicInfo corpus search | None | 1→2 | 2200 ms simulation (v1) |
 | `/api/ask-claude` | POST | Anthropic API (Claude Haiku 4.5) | None (client caches 30d) | 3 | "AI unavailable" inline state |
+| `/api/quranlyai/ask` | POST | Anthropic API (Haiku 4.5 / Sonnet 5) | KV cross-user 30d + KV quota | 3 | SSE error / 429 / 503 |
 | `/api/subscribe` | POST | Email provider | None | 2 | Inline error state |
 
 `robots.txt` disallows `/api/` and `/data/`.
@@ -110,6 +111,23 @@ Proxied Anthropic call for the Quran verse AI-explanation panel (`.ai-card`).
 - **Server post-filter:** verdict-language (framing-based detector — conservative v1 backstop; final term set owned by the 🕌 reviewer per §4/§6) → replace answer with the scholar-redirect line, keep attribution, log. The **client** re-runs the identical check on both the cache-read and fresh-fetch paths (defense-in-depth).
 - **Fallback:** "AI explanation unavailable — please try again" inline (retry, not cached); attribution still shown.
 - **Content gate:** AI output on scripture → ships **pending 🕌 human-review sign-off** (CONTENT-POLICY §5), like Modules 2 & 3.
+
+## POST `/api/quranlyai/ask`  *(Stage 3 — QuranlyAI ask backend, 2026-07-17)*
+General-purpose QuranlyAI ask endpoint (`worker/src/quranlyai.js` + `worker/src/lib/*`) — added **alongside** the existing `/api/ask-claude` (untouched); a future task migrates the client. Streams via Server-Sent Events.
+
+- **Body:** `{ context: { type, surah, ayah, hadithBook, hadithNumber, duaId, articleId, translationId, tafsirSource, language, rawText }, action, customQuestion?, userIdOrFingerprint }`.
+- **Actions:** `action` ∈ `explain`, `simple`, `summarize_tafsir`, `key_lessons`, `related_verses`, `related_hadith`, `asbab_al_nuzul`, `compare_translations`, `vocabulary`, `custom`.
+- **Validation:** `action` must be one of the set above → 400 if not; `userIdOrFingerprint` required, ≤128 chars → 400 if missing/oversized; `customQuestion` ≤200 chars → 400; `context.rawText` ≤4000 chars → 400; for **non-grounded** actions `rawText` must be ≥3 chars trimmed (grounded actions may rely on the index instead) → 400 if missing; invalid JSON body → 400. **Origin must be in the Worker's `ALLOWED_ORIGINS`** → 403.
+- **Response:** SSE, `Content-Type: text/event-stream`. Token events `data: {"delta":"..."}`; a terminal `event: done` with `data: {"sources":[...],"confidence":"High"|"Medium"|"Low","model":"...","cached":bool,"remaining":int}`. Header `X-Cache: HIT|MISS`.
+- **Streaming safety (buffered-safe):** the Worker fully generates the answer, runs the no-fatwa/verdict safety filter on the **complete** text, **then** streams the already-safe result token-by-token. No ruling language can reach the client. Deliberate trade-off: time-to-first-token ≈ full generation time; the stream is a progressive render, not a live token race.
+- **Quota:** per-fingerprint daily counter in KV — `quota:{fp}:{utcDate}`, TTL to UTC midnight. Guest limit **3/day**. Checked on every request; incremented only after a real generation (cache hits never burn quota). Over limit → **HTTP 429** `{ remaining: 0 }` (plain JSON, not SSE). Tiers (free/premium) are **deferred** — `resolveTier()` is a stub that always returns `"guest"`.
+- **Cache:** cross-user, keyed by SHA-256 of (context ids + translation + language + action + customQuestion) in KV — `cache:{hash}`, 30-day TTL. Stores only the **post-safety-filter** text. Hit → replays the cached text as SSE with `cached:true`, no AI call, no quota increment.
+- **Grounding:** for `related_verses` / `related_hadith` / `vocabulary` (and `asbab_al_nuzul`), the Worker calls the existing verified knowledge-index cores over **bundled static data** (`src/data/**` + `src/js/quran-*-core.js`) — never LLM memory — and injects the verified rows into the prompt. Related-hadith data now exists (patience/mercy/gratitude/truthfulness, Sahih grade); grounded actions currently resolve only for the ~6 verses in `verse-index.json` (2:153, 2:155, 16:127, 103:3, 14:7, 2:152) — other verses correctly return "not documented in available sources". `asbab_al_nuzul` has no dataset yet → always "not documented".
+- **Model routing:** cheap `claude-haiku-4-5` for `simple`, `summarize_tafsir`, `vocabulary`, `key_lessons`, `explain`, `related_verses`, `related_hadith`, `compare_translations`, `asbab_al_nuzul`; stronger `claude-sonnet-5` for `custom` and ruling-adjacent questions.
+- **Safety:** stricter QuranlyAI system prompt — answers only from provided sources; `RULING_DEFLECTION` template for fiqh questions; mandatory Sources block + Confidence rating + "Not a fatwa" footer. Reuses the shared `verdictLangDetected` post-filter, extracted to `worker/src/lib/safety.js` — `/api/ask-claude` now uses the same shared filter (behavior unchanged there).
+- **Bindings/secrets:** KV namespace binding `QURANLYAI_KV` (added to `wrangler.toml`; id currently a placeholder pending namespace creation). Secret `ANTHROPIC_API_KEY` (Worker secret, never in `wrangler.toml`).
+- **Errors:** **400** invalid/missing `action`, missing fingerprint, oversized `customQuestion`/`rawText`, missing `rawText` for a non-grounded action, invalid JSON. **403** off-allowlist origin. **429** quota exceeded. **502** provider failure/timeout. **503** missing API key or missing KV binding.
+- **Content gate:** like Modules 2/3, generated output ships only **pending 🕌 human-review sign-off** (CONTENT-POLICY §5).
 
 ## POST `/api/subscribe`
 Email capture (Knowledge Hub).
