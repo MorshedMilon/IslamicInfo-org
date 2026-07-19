@@ -24,10 +24,25 @@
     ],
     hadith: [
       { action: 'explain', label: 'Explain this Hadith' },
-      { action: 'related_verses', label: 'Related Verses' }
+      { action: 'simple', label: 'Explain Simply' },
+      { action: 'key_lessons', label: 'Key Lessons' },
+      { action: 'related_verses', label: 'Related Verses' },
+      { action: 'verify', label: 'Verify Hadith' }
     ],
-    dua: [{ action: 'explain', label: 'Explain this Dua' }],
-    article: [{ action: 'summarize_tafsir', label: 'Summarize this Article' }],
+    article: [
+      { action: 'explain', label: 'Explain this Passage' },
+      { action: 'simple', label: 'Explain Simply' },
+      { action: 'key_lessons', label: 'Key Lessons' },
+      { action: 'related_verses', label: 'Related Verses' },
+      { action: 'related_hadith', label: 'Related Hadith' }
+    ],
+    dua: [
+      { action: 'explain', label: 'Explain this Dua' },
+      { action: 'simple', label: 'Explain Simply' },
+      { action: 'key_lessons', label: 'Key Lessons' },
+      { action: 'related_verses', label: 'Related Verses' },
+      { action: 'related_hadith', label: 'Related Hadith' }
+    ],
     search: [{ action: 'custom', label: 'Explain these Results' }]
   };
   var DEFAULT_CHIPS = [
@@ -106,6 +121,37 @@
     return { events: events, rest: buffer };
   }
 
+  // Route classification shared by the widget chips and the selection menu.
+  function routeKind(action) {
+    if (action === 'verify') return 'verify';
+    if (action === 'save') return 'save';
+    return 'ai';
+  }
+
+  // Build the verify-page URL for prefill + auto-run; the matching ?q=/&ref= handler is added to verify.html.
+  function verifyUrl(meta) {
+    var m = meta || {};
+    var url = 'verify.html?mode=hadith&q=' + encodeURIComponent((m.rawText || '').trim());
+    if (m.sourceRef) url += '&ref=' + encodeURIComponent(m.sourceRef);
+    return url;
+  }
+
+  // Persist a highlighted snippet to a unified store (separate from per-item bookmarks).
+  function saveSelection(storage, meta) {
+    var KEY = 'ii-saved-selections';
+    var m = meta || {};
+    var text = String(m.rawText || '').trim();
+    if (!text) return { saved: false, reason: 'empty' };
+    var list;
+    try { list = JSON.parse(storage.getItem(KEY) || '[]'); } catch (e) { list = []; }
+    if (!Array.isArray(list)) list = [];
+    var dup = list.some(function (x) { return x && x.text === text && x.type === (m.type || ''); });
+    if (dup) return { saved: false, reason: 'duplicate' };
+    list.push({ text: text, type: m.type || '', sourceRef: m.sourceRef || '', ts: m.ts || 0 });
+    storage.setItem(KEY, JSON.stringify(list));
+    return { saved: true, count: list.length };
+  }
+
   return {
     getOrCreateAnonId: getOrCreateAnonId,
     chipsFor: chipsFor,
@@ -114,6 +160,9 @@
     containsVerdictLanguage: containsVerdictLanguage,
     fabBottomOffset: fabBottomOffset,
     parseSSE: parseSSE,
+    routeKind: routeKind,
+    verifyUrl: verifyUrl,
+    saveSelection: saveSelection,
     ANON_KEY: ANON_KEY,
     SCHOLAR_REDIRECT: 'For personal religious guidance, consult a qualified scholar.'
   };

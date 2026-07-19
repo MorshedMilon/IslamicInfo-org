@@ -3300,11 +3300,24 @@ function mushafChangePage(dir) {
      reconciled to this page's markup and the window.loadSurah hook. -->
 <!-- QuranlyAI floating assistant (global, one-tag) -->
 <script src="src/js/quranlyai-widget.js?v=20260718c"></script>
+<script src="src/js/select-to-ask.js?v=20260719a"></script>
 <script>
   // Verse-aware context: feed QuranlyAI the ayah the reader selects, so answers are
   // grounded on the current verse (5 Quran chips + real explanations, not "open a verse").
   (function () {
     function stripQuotes(s) { return String(s || '').replace(/^["'“”\s]+|["'“”\s]+$/g, ''); }
+
+    // Baseline: as soon as the (async-loaded) widget is ready, seed a Quran context so
+    // opening the floating panel COLD shows all 5 Quran chips — not the 2-chip default.
+    // Tapping a verse (below) enriches this with the specific ayah for grounded answers.
+    (function seedQuranContext() {
+      var Q = window.QuranlyAI;
+      if (!Q || !Q.setContext || !Q.getState) { setTimeout(seedQuranContext, 120); return; }
+      var st = Q.getState();
+      if (st && st.context && st.context.type) return; // a verse already set a richer context
+      Q.setContext({ type: 'quran', language: 'en' });
+    })();
+
     var prev = window.setActiveVerse;
     window.setActiveVerse = function (card) {
       try { if (typeof prev === 'function') prev.apply(this, arguments); } catch (e) { /* page-side */ }

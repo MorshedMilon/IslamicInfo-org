@@ -1024,5 +1024,28 @@ setTimeout(()=>animateDial(80),600);
 <script src="src/js/verify.js"></script>
 <!-- QuranlyAI floating assistant (global, one-tag) -->
 <script src="src/js/quranlyai-widget.js?v=20260718c"></script>
+<script src="src/js/select-to-ask.js?v=20260719a"></script>
+<!-- Select & Ask handoff: prefill + auto-run when arriving with ?q= -->
+<script>
+(function () {
+  try {
+    var p = new URLSearchParams(location.search);
+    var q = p.get('q'); if (!q) return;
+    var ref = p.get('ref'); var mode = p.get('mode');
+    function run() {
+      var input = document.getElementById('verifyInput');
+      if (!input) return;
+      input.value = ref ? (q + '\n\n(' + ref + ')') : q;
+      if (mode && typeof setMode === 'function') {
+        var btn = document.querySelector('.vmode[onclick*="\'' + mode + '\'"]');
+        if (btn) setMode(btn, mode);
+      }
+      if (typeof runVerify === 'function') runVerify();
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+    else run();
+  } catch (e) { /* non-fatal */ }
+})();
+</script>
 </body>
 </html>

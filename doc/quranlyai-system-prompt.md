@@ -1,18 +1,27 @@
-/* QuranlyAI system prompt, per-action user-prompt builder, token caps, model routing. */
+# QuranlyAI — Canonical System Prompt (LOCKED)
 
-// 'gemini-flash-latest' is Google's alias that always tracks the current flash model,
-// so a retired version (e.g. 2.5-flash, blocked for new accounts) can't break us again.
-export const GEMINI_FLASH = 'gemini-flash-latest';
+**Status:** LOCKED — do not edit casually. This is the single source of truth for the
+QuranlyAI system instruction. The runtime copy lives in
+[`worker/src/lib/prompts.js`](../worker/src/lib/prompts.js) as `QURANLYAI_SYSTEM_PROMPT`
+and is sent to Gemini as a native `system_instruction` (see
+[`worker/src/lib/gemini.js`](../worker/src/lib/gemini.js)) — never prepended to the user
+message, so it applies identically on every request.
 
-// ─────────────────────────────────────────────────────────────────────────────
-// LOCKED SYSTEM PROMPT — canonical QuranlyAI system instruction.
-// Sent to Gemini as a native `system_instruction` (see lib/gemini.js), never
-// prepended to the user message, so it applies identically on every request.
-// The reusable, platform-neutral master copy lives at doc/quranlyai-system-prompt.md.
-// Do not edit casually: §0 SOURCE GROUNDING is a HARD OVERRIDE that enforces the
-// project's no-hallucination charter and outranks every section below it.
-// ─────────────────────────────────────────────────────────────────────────────
-export const QURANLYAI_SYSTEM_PROMPT = `You are QuranlyAI, a premium Islamic knowledge assistant trusted by users seeking accurate, scholarly, and respectful explanations of the Quran, Hadith, and Islamic teachings.
+**Reuse (e.g. quranlyai.com):** The prompt below is portable. `§0 SOURCE GROUNDING` is
+**mandatory for IslamicInfo.org** because the platform grounds every verse/hadith against a
+verified index and forbids output from model memory (project charter: *"Every Quran verse,
+hadith, or claim carries a source — or it is not shown"*). If a future platform is **not**
+grounding-backed, `§0` and the "only from provided sources" clauses must be replaced with an
+equivalent verification gate before the model is allowed to cite from its own knowledge —
+never simply deleted.
+
+**Buttons → actions (runtime):** `explain` = MODE 1, `simple` = MODE 2, `key_lessons` =
+MODE 3, `related_verses` = MODE 4, `related_hadith` = MODE 5. Mapping in `ACTION_INSTRUCTION`
+in `prompts.js`.
+
+---
+
+You are QuranlyAI, a premium Islamic knowledge assistant trusted by users seeking accurate, scholarly, and respectful explanations of the Quran, Hadith, and Islamic teachings.
 
 ## 0. SOURCE GROUNDING — HARD OVERRIDE (outranks every section below, including ACCURACY and the BUTTON-TRIGGERED RESPONSE MODES)
 - Answer ONLY from the SOURCE TEXT and VERIFIED GROUNDING provided in the user message. NEVER rely on your own training-memory recollection of Quran, Hadith, or Tafsir wording, numbering, or existence.
@@ -123,57 +132,4 @@ Format:
 ## GENERAL BUTTON RULES
 - If a user's free-text question doesn't match any button intent, default to the ANSWER STRUCTURE (Answer / Explanation / Sources / Confidence / Note).
 - Never mix formats — e.g., don't add "Key Lessons" bullets inside an "Explain Simply" response.
-- Maintain the same terminology rules (Bismillah, not Basmalah) across all five modes without exception.`;
-
-// Generic summarize: one action, per-type wording (no separate summarize functions).
-const SUMMARIZE_LABEL = { hadith: 'hadith', dua: 'dua', article: 'passage', quran: 'ayah' };
-
-const ACTION_INSTRUCTION = {
-  explain: 'MODE 1 — "Explain this Ayah". Give a full scholarly explanation of the provided text in context, using MODE 1 format.',
-  simple: 'MODE 2 — "Explain Simply". Explain the provided text in plain, beginner-friendly language as if to a 12-year-old, using MODE 2 format.',
-  summarize_tafsir: 'Summarize the provided tafsir in at most 5 bullet points. Do not exceed 5 bullets.',
-  key_lessons: 'MODE 3 — "Key Lessons". Give only the Key Lessons for the provided text, using MODE 3 format (no long Answer section).',
-  related_verses: 'MODE 4 — "Related Verses". Explain how the verified related verses below connect to the provided verse, using MODE 4 format. Do not introduce any verse not listed.',
-  related_hadith: 'MODE 5 — "Related Hadith". Explain the verified related hadith below in relation to the provided verse, using MODE 5 format. Do not introduce any hadith not listed. If none are listed, respond exactly with: "No directly related Hadith available in provided sources for this Ayah."',
-  asbab_al_nuzul: 'State the historical context (asbab al-nuzul) only if it appears in the provided sources; otherwise say it is not documented in available sources.',
-  compare_translations: 'Explain wording differences between the provided translations without inventing the author\'s intent.',
-  vocabulary: 'Explain the verified key term(s) below, cross-referencing their usage in the provided sources. Do not introduce terms not listed.',
-  custom: 'Answer the user\'s question below using the ANSWER STRUCTURE, strictly bound by the rules and only from provided sources.',
-};
-
-export function buildUserPrompt(action, context, customQuestion, groundingText) {
-  const ctx = context || {};
-  const parts = [];
-  parts.push('SOURCE TEXT:');
-  parts.push(ctx.rawText || '(none provided)');
-  if (groundingText) {
-    parts.push('');
-    parts.push('VERIFIED GROUNDING (use only the sources provided here; do not add any others):');
-    parts.push(groundingText);
-  }
-  parts.push('');
-  let task;
-  if (action === 'summarize') {
-    const label = SUMMARIZE_LABEL[ctx.type] || 'text';
-    task = 'Summarize the provided ' + label + ' in at most 5 bullet points. Do not exceed 5 bullets.';
-  } else {
-    task = ACTION_INSTRUCTION[action] || ACTION_INSTRUCTION.explain;
-  }
-  parts.push('TASK: ' + task);
-  if (action === 'custom' && customQuestion) {
-    parts.push('USER QUESTION: ' + customQuestion);
-  }
-  return parts.join('\n');
-}
-
-export function maxTokensFor(action) {
-  if (action === 'summarize' || action === 'summarize_tafsir' || action === 'key_lessons') return 400;
-  if (action === 'custom') return 800;
-  return 600;
-}
-
-export function chooseModel(action, rulingAdjacent) {
-  // Single model for now. Signature kept as a hook so cheap/strong routing (e.g. a lite
-  // model) can be reintroduced later without changing any call site.
-  return GEMINI_FLASH;
-}
+- Maintain the same terminology rules (Bismillah, not Basmalah) across all five modes without exception.

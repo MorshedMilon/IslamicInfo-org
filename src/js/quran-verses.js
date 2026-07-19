@@ -112,6 +112,7 @@
   function buildCard(v) {
     var k = v.verse_key.replace(':', '-');
     var card = el('div', 'ayah-card'); card.id = 'a-' + k; card.dataset.key = v.verse_key;
+    card.setAttribute('data-ai-selectable', 'ayah'); card.setAttribute('data-ai-key', v.verse_key);
     card.addEventListener('click', function () { window.setActiveVerse(card); });
 
     var header = el('div', 'ayah-header');

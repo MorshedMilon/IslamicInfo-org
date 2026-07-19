@@ -64,7 +64,8 @@
   function _buildCard(h, idPrefix) {
     const cardId = `${idPrefix}-${h.collection}-${h.book}-${h.number}`.replace(/\s+/g, '-');
     return `
-    <article class="hadith-card reveal" id="${cardId}" role="article">
+    <article class="hadith-card reveal" id="${cardId}" role="article"
+             data-ai-selectable="hadith" data-ai-ref="${h.collection}:${h.number}">
 
       <header class="hadith-card-header">
         <span class="hadith-ref">${h.collection} · ${tr('js.hadith.book','Book')} ${h.book} · ${tr('js.hadith.hadithNo','Hadith')} ${h.number}</span>

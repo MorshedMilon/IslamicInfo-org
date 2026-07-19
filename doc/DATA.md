@@ -48,6 +48,7 @@
 | `ii-quran-bookmarks` | `Bookmark[]` (JSON) | Quran Explorer | Permanent |
 | `ii-quran-notes` | `Note[]` (JSON) | Quran Explorer | Permanent |
 | `ii-quran-ai-{verseKey}-{editionSlug}` | `{ answer:string, ts:number }` (JSON) | Quran Explorer | 30 days (per-verse AI explanation cache; `answer` is the post-filtered/displayed text; no PII) |
+| `ii-saved-selections` | `{ text, type, sourceRef, ts }[]` (JSON) | Select & Ask (QuranlyAI, all pages) | Permanent (highlighted snippets saved from the selection menu; de-duped by text+type) |
 | `ii-qul-reciters` | `{ fetchedAt:number, data:Reciter[] }` (JSON) | Quran Explorer | 7 days (Module 6 — QUL reciter list, empty until an operator ingests reciters) |
 | `ii-qul-audio-{reciter}-{surah}` | `{ fetchedAt:number, ayahs:AyahAudio[] }` (JSON) | Quran Explorer | 7 days (Module 6 — QUL per-surah timing JSON) |
 | `islamicinfo-verse-{date}` | `/api/verse` response (JSON) | Home | 1 day (UTC midnight bust) |

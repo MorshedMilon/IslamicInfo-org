@@ -114,6 +114,26 @@
         if (p && p.runAsk) { if (p.openPanel) p.openPanel(state.context, null); p.runAsk(action, customQuestion || ''); }
       });
     },
+    route: function (action, meta) {
+      var kind = core.routeKind ? core.routeKind(action) : 'ai';
+      if (kind === 'verify') {
+        window.location.href = core.verifyUrl(meta || state.context);
+        return;
+      }
+      if (kind === 'save') {
+        var res;
+        try { res = core.saveSelection(window.localStorage, meta || state.context); }
+        catch (e) { res = { saved: false }; }
+        var msg = (res && res.saved) ? 'Saved to your selections ✦'
+          : (res && res.reason === 'duplicate') ? 'Already saved'
+          : 'Could not save';
+        if (window.showToast) window.showToast(msg);
+        return;
+      }
+      // ai
+      if (meta) window.QuranlyAI.setContext(meta);
+      window.QuranlyAI.ask(action);
+    },
     renderContextButton: function (targetElementId, label, defaultAction) {
       var host = document.getElementById(targetElementId);
       if (!host) { console.warn('[QuranlyAI] renderContextButton: #' + targetElementId + ' not found'); return; }
