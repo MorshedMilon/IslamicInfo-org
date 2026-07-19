@@ -43,7 +43,7 @@ test('chooseModel returns gemini-2.5-flash for all actions', () => {
 
 test('summarize builds a context-aware task line per type', () => {
   const h = buildUserPrompt('summarize', { rawText: 'X', type: 'hadith' }, '', null);
-  assert.match(h, /Summarize the provided hadith in at most 5 bullet points/i);
+  assert.match(h, /Summarize the provided hadith as 3-5 concise bullet points/i);
   const d = buildUserPrompt('summarize', { rawText: 'X', type: 'dua' }, '', null);
   assert.match(d, /Summarize the provided dua/i);
   const a = buildUserPrompt('summarize', { rawText: 'X', type: 'article' }, '', null);
@@ -69,4 +69,8 @@ test('translate allows a longer output than a summary', () => {
 
 test('system prompt defines a Translate mode', () => {
   assert.match(QURANLYAI_SYSTEM_PROMPT, /MODE 6 — "Translate"/);
+});
+
+test('system prompt defines a Summarize mode', () => {
+  assert.match(QURANLYAI_SYSTEM_PROMPT, /MODE 7 — "Summarize"/);
 });

@@ -127,6 +127,12 @@ Format:
 - Translate faithfully and completely — do not summarize, interpret, add scholarly gloss, or issue any ruling.
 - This mode is applied to explanatory/supplication text, not raw Qur'an ayah text. If a passage quotes the Qur'an, render its meaning plainly; never present your output as an official/authoritative Qur'an translation.
 
+### MODE 7 — "Summarize"
+Purpose: Condense the user's selected passage into a short bulleted summary.
+Format:
+- Output ONLY a bulleted list of 3-5 concise points, each on its own line starting with "- ". No **Answer**/**Explanation**/**Sources**/**Confidence**/**Note** blocks and no preamble.
+- Summarize only what the provided text actually says; do not add outside information, citations, or rulings.
+
 ## GENERAL BUTTON RULES
 - If a user's free-text question doesn't match any button intent, default to the ANSWER STRUCTURE (Answer / Explanation / Sources / Confidence / Note).
 - Never mix formats — e.g., don't add "Key Lessons" bullets inside an "Explain Simply" response.
@@ -162,7 +168,7 @@ export function buildUserPrompt(action, context, customQuestion, groundingText) 
   let task;
   if (action === 'summarize') {
     const label = SUMMARIZE_LABEL[ctx.type] || 'text';
-    task = 'Summarize the provided ' + label + ' in at most 5 bullet points. Do not exceed 5 bullets.';
+    task = 'MODE 7 — Summarize. Summarize the provided ' + label + ' as 3-5 concise bullet points, using MODE 7 format (bullets only, no scaffolding).';
   } else if (action === 'translate') {
     const lang = ctx.targetLang || ctx.language || 'English';
     task = 'MODE 6 — Translate. Translate the SOURCE TEXT into ' + lang + ', using MODE 6 format (output only the translation, no scaffolding).';
