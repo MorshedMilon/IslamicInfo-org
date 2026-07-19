@@ -16,7 +16,7 @@
     if (!core.menuModel) { console.error('[select-to-ask] core did not load'); return; }
 
     var CSS =
-      '.m{position:fixed;display:none;align-items:stretch;background:#0F2A2C;' +
+      '.m{position:fixed;display:none;z-index:960;align-items:stretch;background:#0F2A2C;' +
       'border:.5px solid rgba(197,160,89,.4);border-radius:11px;overflow:hidden;' +
       'box-shadow:0 12px 34px rgba(0,0,0,.34);font:600 13px/1 var(--font-body,Inter,system-ui,sans-serif);}' +
       '.m.open{display:inline-flex;}' +
@@ -103,6 +103,7 @@
     document.addEventListener('selectionchange', schedule);
     document.addEventListener('scroll', function () { if (current) hide(); }, true);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+    document.addEventListener('mousedown', function (e) { if (current && e.target !== host && !host.contains(e.target)) hide(); });
     void qcore;
   }
 
