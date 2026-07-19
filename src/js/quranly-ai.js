@@ -131,8 +131,8 @@
         return;
       }
       // ai
-      if (meta) this.setContext(meta);
-      this.ask(action);
+      if (meta) window.QuranlyAI.setContext(meta);
+      window.QuranlyAI.ask(action);
     },
     renderContextButton: function (targetElementId, label, defaultAction) {
       var host = document.getElementById(targetElementId);
