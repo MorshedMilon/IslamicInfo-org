@@ -153,8 +153,8 @@
     // Skip the verdict backstop for translations — they reproduce already-sourced content.
     if (ai._action !== 'translate' && core.containsVerdictLanguage(full)) { ai.textContent = core.SCHOLAR_REDIRECT; }
     if (meta) {
-      // A translation is plain text — no Sources/Confidence scaffolding.
-      if (ai._action !== 'translate') {
+      // Translations and bullet summaries are plain output — no Sources/Confidence scaffolding.
+      if (ai._action !== 'translate' && ai._action !== 'summarize') {
         if (meta.sources && meta.sources.length) {
           var s = document.createElement('div'); s.className = 'qa-sources';
           s.textContent = 'Sources: ' + meta.sources.join(' · '); ai.appendChild(s);
