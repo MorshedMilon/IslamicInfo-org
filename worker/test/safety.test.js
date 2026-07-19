@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
 import {
-  verdictLangDetected, looksRulingAdjacent,
+  verdictLangDetected, verdictFilterApplies, looksRulingAdjacent,
   SCHOLAR_REDIRECT, RULING_DEFLECTION, ASK_CLAUDE_SYSTEM_PROMPT,
 } from '../src/lib/safety.js';
 
@@ -12,6 +12,16 @@ test('verdictLangDetected flags ruling framing', () => {
 
 test('verdictLangDetected passes plain explanation', () => {
   assert.equal(verdictLangDetected('This verse teaches patience and trust in God.'), false);
+});
+
+test('verdict filter is skipped for translate, applied to every other action', () => {
+  // A translation of already-sourced content may legitimately contain ruling words...
+  assert.equal(verdictLangDetected('Riba is forbidden and interest is unlawful.'), true);
+  // ...so the backstop must NOT run for translate, but must run everywhere else.
+  assert.equal(verdictFilterApplies('translate'), false);
+  assert.equal(verdictFilterApplies('explain'), true);
+  assert.equal(verdictFilterApplies('summarize'), true);
+  assert.equal(verdictFilterApplies('custom'), true);
 });
 
 test('verdictLangDetected does NOT fire on the mandated "Not a fatwa" footer', () => {

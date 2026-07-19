@@ -9,7 +9,7 @@ import {
   QURANLYAI_SYSTEM_PROMPT, buildUserPrompt, maxTokensFor, chooseModel,
 } from './lib/prompts.js';
 import { callGemini } from './lib/gemini.js';
-import { verdictLangDetected, looksRulingAdjacent, RULING_DEFLECTION } from './lib/safety.js';
+import { verdictLangDetected, verdictFilterApplies, looksRulingAdjacent, RULING_DEFLECTION } from './lib/safety.js';
 import { streamSafeText } from './lib/sse.js';
 
 const VALID_ACTIONS = new Set([
@@ -107,7 +107,7 @@ export async function handleQuranlyAiAsk(request, env, ctx, origin) {
   }
   let safe = result.text;
   if (!safe || result.refusal) safe = RULING_DEFLECTION;
-  if (verdictLangDetected(safe)) {
+  if (verdictFilterApplies(action) && verdictLangDetected(safe)) {
     console.log('[quranlyai] stripped verdict-language response');
     safe = RULING_DEFLECTION + (groundingText ? '\n\n**Sources**\n' + groundingText : '');
   }

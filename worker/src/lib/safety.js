@@ -21,6 +21,14 @@ export function verdictLangDetected(answer) {
   return AI_VERDICT_FRAMING.test(s) || AI_VERDICT_TERMS.test(s);
 }
 
+// The verdict backstop guards against the AI ISSUING a new ruling. It must NOT fire on
+// translate output: a translation faithfully reproduces already-published, sourced site
+// content (tafsir/dua/article) that legitimately contains "haram"/"obligatory"/etc.
+// Blanking it would (a) hide correct translations and (b) cache the deflection for 30 days.
+export function verdictFilterApplies(action) {
+  return action !== 'translate';
+}
+
 // Used ONLY to upgrade the model, never to decide the answer.
 const RULING_ADJACENT = /\b(riba|interest|usury|bitcoin|crypto|halal|haram|haraam|permissible|impermissible|forbidden|obligatory|wajib|fard|makruh|mustahabb|divorce|talaq|inheritance ruling|is it a sin|zakat on|fatwa)\b/i;
 

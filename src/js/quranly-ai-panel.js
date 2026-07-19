@@ -150,7 +150,8 @@
   };
 
   QuranlyPanel.prototype._finalize = function (ai, full, meta) {
-    if (core.containsVerdictLanguage(full)) { ai.textContent = core.SCHOLAR_REDIRECT; }
+    // Skip the verdict backstop for translations — they reproduce already-sourced content.
+    if (ai._action !== 'translate' && core.containsVerdictLanguage(full)) { ai.textContent = core.SCHOLAR_REDIRECT; }
     if (meta) {
       // A translation is plain text — no Sources/Confidence scaffolding.
       if (ai._action !== 'translate') {
@@ -188,6 +189,7 @@
         'padding:2px 9px;font:inherit;font-size:.78em;background:' +
         (active ? 'var(--gold-500,#C5A059)' : 'transparent') + ';color:' + (active ? '#1a1204' : 'inherit') + ';';
       b.addEventListener('click', function () {
+        if (self._els.send.disabled) return; // a request is already in flight
         if (l.name === self._translateLang) return;
         self._translateLang = l.name;
         self.runAsk('translate', '');
