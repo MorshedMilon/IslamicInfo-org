@@ -152,13 +152,16 @@
   QuranlyPanel.prototype._finalize = function (ai, full, meta) {
     if (core.containsVerdictLanguage(full)) { ai.textContent = core.SCHOLAR_REDIRECT; }
     if (meta) {
-      if (meta.sources && meta.sources.length) {
-        var s = document.createElement('div'); s.className = 'qa-sources';
-        s.textContent = 'Sources: ' + meta.sources.join(' · '); ai.appendChild(s);
-      }
-      if (meta.confidence) {
-        var c = document.createElement('span'); c.className = 'qa-confidence';
-        c.textContent = 'Confidence: ' + meta.confidence; ai.appendChild(c);
+      // A translation is plain text — no Sources/Confidence scaffolding.
+      if (ai._action !== 'translate') {
+        if (meta.sources && meta.sources.length) {
+          var s = document.createElement('div'); s.className = 'qa-sources';
+          s.textContent = 'Sources: ' + meta.sources.join(' · '); ai.appendChild(s);
+        }
+        if (meta.confidence) {
+          var c = document.createElement('span'); c.className = 'qa-confidence';
+          c.textContent = 'Confidence: ' + meta.confidence; ai.appendChild(c);
+        }
       }
       var cfg = window.QuranlyAI.getState().config;
       this._els.quota.textContent = cfg.betaUnlimited ? 'Beta Testing: Unlimited Questions' : core.quotaText(meta.remaining, cfg.maxPerDay || 3);
