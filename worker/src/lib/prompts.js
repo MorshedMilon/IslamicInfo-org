@@ -120,10 +120,17 @@ Format:
 - [Collection name, e.g., Bukhari/Muslim] — [Hadith number if provided] — [1-2 sentence summary of relevance]
 (List ONLY hadith provided in VERIFIED GROUNDING. If no verified Hadith is provided, respond exactly with: "No directly related Hadith available in provided sources for this Ayah." Never fabricate a Hadith number or wording — zero exceptions.)
 
+### MODE 6 — "Translate"
+Purpose: Translate the user's selected passage into the requested language.
+Format:
+- Output ONLY the translated text, as plain prose. Do NOT include **Answer**/**Explanation**/**Sources**/**Confidence**/**Note** blocks, transliteration, or any commentary.
+- Translate faithfully and completely — do not summarize, interpret, add scholarly gloss, or issue any ruling.
+- This mode is applied to explanatory/supplication text, not raw Qur'an ayah text. If a passage quotes the Qur'an, render its meaning plainly; never present your output as an official/authoritative Qur'an translation.
+
 ## GENERAL BUTTON RULES
 - If a user's free-text question doesn't match any button intent, default to the ANSWER STRUCTURE (Answer / Explanation / Sources / Confidence / Note).
 - Never mix formats — e.g., don't add "Key Lessons" bullets inside an "Explain Simply" response.
-- Maintain the same terminology rules (Bismillah, not Basmalah) across all five modes without exception.`;
+- Maintain the same terminology rules (Bismillah, not Basmalah) across all modes without exception.`;
 
 // Generic summarize: one action, per-type wording (no separate summarize functions).
 const SUMMARIZE_LABEL = { hadith: 'hadith', dua: 'dua', article: 'passage', quran: 'ayah' };
@@ -156,6 +163,9 @@ export function buildUserPrompt(action, context, customQuestion, groundingText) 
   if (action === 'summarize') {
     const label = SUMMARIZE_LABEL[ctx.type] || 'text';
     task = 'Summarize the provided ' + label + ' in at most 5 bullet points. Do not exceed 5 bullets.';
+  } else if (action === 'translate') {
+    const lang = ctx.targetLang || ctx.language || 'English';
+    task = 'MODE 6 — Translate. Translate the SOURCE TEXT into ' + lang + ', using MODE 6 format (output only the translation, no scaffolding).';
   } else {
     task = ACTION_INSTRUCTION[action] || ACTION_INSTRUCTION.explain;
   }
@@ -168,6 +178,7 @@ export function buildUserPrompt(action, context, customQuestion, groundingText) 
 
 export function maxTokensFor(action) {
   if (action === 'summarize' || action === 'summarize_tafsir' || action === 'key_lessons') return 400;
+  if (action === 'translate') return 1200; // a full passage translation can run long
   if (action === 'custom') return 800;
   return 600;
 }

@@ -14,7 +14,7 @@ import { streamSafeText } from './lib/sse.js';
 
 const VALID_ACTIONS = new Set([
   'explain', 'simple', 'summarize', 'summarize_tafsir', 'key_lessons', 'related_verses',
-  'related_hadith', 'asbab_al_nuzul', 'compare_translations', 'vocabulary', 'custom',
+  'related_hadith', 'translate', 'asbab_al_nuzul', 'compare_translations', 'vocabulary', 'custom',
 ]);
 
 function verseKeyOf(ctx) {
