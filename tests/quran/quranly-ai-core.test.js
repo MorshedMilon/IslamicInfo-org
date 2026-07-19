@@ -20,9 +20,12 @@ test('getOrCreateAnonId creates once and is stable on reread', () => {
 test('chipsFor returns the right chips per context type', () => {
   assert.deepEqual(core.chipsFor('quran').map((c) => c.action),
     ['explain', 'simple', 'key_lessons', 'related_verses', 'related_hadith']);
-  assert.deepEqual(core.chipsFor('hadith').map((c) => c.action), ['explain', 'related_verses']);
-  assert.deepEqual(core.chipsFor('dua').map((c) => c.action), ['explain']);
-  assert.deepEqual(core.chipsFor('article').map((c) => c.action), ['summarize_tafsir']);
+  assert.deepEqual(core.chipsFor('hadith').map((c) => c.action),
+    ['explain', 'simple', 'key_lessons', 'related_verses', 'verify']);
+  assert.deepEqual(core.chipsFor('dua').map((c) => c.action),
+    ['explain', 'simple', 'key_lessons', 'related_verses', 'related_hadith']);
+  assert.deepEqual(core.chipsFor('article').map((c) => c.action),
+    ['explain', 'simple', 'key_lessons', 'related_verses', 'related_hadith']);
   assert.deepEqual(core.chipsFor('search').map((c) => c.action), ['custom']);
   assert.deepEqual(core.chipsFor(undefined).map((c) => c.action), ['explain', 'custom']);
 });
@@ -86,4 +89,33 @@ test('parseSSE captures the done event with JSON metadata', () => {
 test('parseSSE ignores comments and blank lines, keeps raw string on non-JSON data', () => {
   const r = core.parseSSE(': keep-alive\n\ndata: plain text\n\n');
   assert.equal(r.events[r.events.length - 1].data, 'plain text');
+});
+
+test('chip labels are content-type aware for the first button', () => {
+  assert.equal(core.chipsFor('quran')[0].label, 'Explain this Ayah');
+  assert.equal(core.chipsFor('hadith')[0].label, 'Explain this Hadith');
+  assert.equal(core.chipsFor('article')[0].label, 'Explain this Passage');
+  assert.equal(core.chipsFor('dua')[0].label, 'Explain this Dua');
+});
+
+test('routeKind classifies actions into ai/verify/save', () => {
+  assert.equal(core.routeKind('verify'), 'verify');
+  assert.equal(core.routeKind('save'), 'save');
+  assert.equal(core.routeKind('explain'), 'ai');
+  assert.equal(core.routeKind('summarize'), 'ai');
+  assert.equal(core.routeKind('related_verses'), 'ai');
+});
+
+test('verifyUrl encodes selected text + ref for the verify page', () => {
+  assert.equal(core.verifyUrl({ rawText: 'x y', sourceRef: 'Bukhari:1' }),
+    'verify.html?mode=hadith&q=x%20y&ref=Bukhari%3A1');
+  assert.equal(core.verifyUrl({ rawText: 'a' }), 'verify.html?mode=hadith&q=a');
+});
+
+test('saveSelection persists to ii-saved-selections and de-dupes', () => {
+  const s = fakeStorage();
+  assert.equal(core.saveSelection(s, { rawText: 'hello world', type: 'hadith', sourceRef: 'Bukhari:1', ts: 1 }).saved, true);
+  assert.equal(core.saveSelection(s, { rawText: 'hello world', type: 'hadith', ts: 2 }).saved, false);
+  assert.equal(JSON.parse(s._m['ii-saved-selections']).length, 1);
+  assert.equal(core.saveSelection(s, { rawText: '   ', type: 'dua', ts: 3 }).saved, false);
 });

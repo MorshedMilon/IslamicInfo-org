@@ -128,7 +128,7 @@
     return 'ai';
   }
 
-  // Build the verify-page URL that prefills + auto-runs (contract defined in verify.html).
+  // Build the verify-page URL for prefill + auto-run; the matching ?q=/&ref= handler is added to verify.html.
   function verifyUrl(meta) {
     var m = meta || {};
     var url = 'verify.html?mode=hadith&q=' + encodeURIComponent((m.rawText || '').trim());
