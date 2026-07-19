@@ -12,13 +12,16 @@ test('maps data-ai-selectable values to QuranlyAI context types', () => {
   assert.equal(core.contextTypeFor('unknown'), 'article');
 });
 
-test('menu is always 4 buttons; contextual 4th swaps by type', () => {
+test('menu is always 5 buttons; Ask leads, contextual 4th swaps by type', () => {
   const h = core.menuModel('hadith');
-  assert.equal(h.length, 4);
-  assert.deepEqual(h.map((i) => i.action), ['summarize', 'explain', 'verify', 'save']);
-  const t = core.menuModel('tafsir');
-  assert.deepEqual(t.map((i) => i.action), ['summarize', 'explain', 'related_verses', 'save']);
-  assert.equal(core.menuModel('dua')[2].action, 'related_verses');
+  assert.equal(h.length, 5);
+  assert.deepEqual(h.map((i) => i.action), ['ask', 'summarize', 'explain', 'verify', 'save']);
+  // tafsir / article / dua -> Translate in the contextual slot
+  assert.deepEqual(core.menuModel('tafsir').map((i) => i.action), ['ask', 'summarize', 'explain', 'translate', 'save']);
+  assert.equal(core.menuModel('article')[3].action, 'translate');
+  assert.equal(core.menuModel('dua')[3].action, 'translate');
+  // raw Quran ayah is charter-excluded from Translate -> keeps Related Verses
+  assert.equal(core.menuModel('ayah')[3].action, 'related_verses');
 });
 
 test('eligible requires a minimum trimmed length', () => {

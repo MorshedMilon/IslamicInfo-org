@@ -98,11 +98,13 @@ test('chip labels are content-type aware for the first button', () => {
   assert.equal(core.chipsFor('dua')[0].label, 'Explain this Dua');
 });
 
-test('routeKind classifies actions into ai/verify/save', () => {
+test('routeKind classifies actions into ai/verify/save/open', () => {
   assert.equal(core.routeKind('verify'), 'verify');
   assert.equal(core.routeKind('save'), 'save');
+  assert.equal(core.routeKind('ask'), 'open');
   assert.equal(core.routeKind('explain'), 'ai');
   assert.equal(core.routeKind('summarize'), 'ai');
+  assert.equal(core.routeKind('translate'), 'ai');
   assert.equal(core.routeKind('related_verses'), 'ai');
 });
 

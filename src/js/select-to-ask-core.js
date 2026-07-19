@@ -16,13 +16,18 @@
     return TYPE_MAP[selectable] || 'article';
   }
 
-  // Always 4 buttons. Contextual 4th swaps (never hides): Verify Hadith on hadith,
-  // Related Verses elsewhere. Kind is resolved at click time via quranlyCore.routeKind.
+  // Always 5 buttons: Ask QuranlyAI leads; contextual 4th swaps (never hides):
+  //   hadith        -> Verify Hadith (routes to the hadith-authenticity flow)
+  //   ayah (Quran)  -> Related Verses (charter: raw ayah is excluded from Translate)
+  //   tafsir/article/dua -> Translate (machine-translate the selected text)
+  // Kind is resolved at click time via quranlyCore.routeKind.
   function menuModel(selectable) {
-    var contextual = (selectable === 'hadith')
-      ? { action: 'verify', label: 'Verify Hadith' }
-      : { action: 'related_verses', label: 'Related Verses' };
+    var contextual;
+    if (selectable === 'hadith') contextual = { action: 'verify', label: 'Verify Hadith' };
+    else if (selectable === 'ayah') contextual = { action: 'related_verses', label: 'Related Verses' };
+    else contextual = { action: 'translate', label: 'Translate' };
     return [
+      { action: 'ask', label: 'Ask QuranlyAI' },
       { action: 'summarize', label: 'Summarize' },
       { action: 'explain', label: 'Explain' },
       contextual,
