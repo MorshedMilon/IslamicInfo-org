@@ -14,7 +14,9 @@
   'use strict';
   var self = document.currentScript;
   var src = (self && self.src) || '';
-  var dir = src.replace(/[^/]*$/, ''); // .../src/js/
+  var ver = (src.match(/[?&]v=([^&]+)/) || [])[1];       // cache-buster, propagated to all assets
+  var q = ver ? ('?v=' + ver) : '';
+  var dir = src.replace(/[?#].*$/, '').replace(/[^/]*$/, ''); // .../src/js/  (query stripped)
   var apiBase = (self && self.getAttribute('data-api-base')) ||
     'https://islamicinfo-api.islamicinfo.workers.dev';
 
@@ -35,7 +37,7 @@
     window.QuranlyAI.init({ apiBase: apiBase, betaUnlimited: true });
   }
 
-  inject(dir + 'quranly-ai-core.js', function () {
-    inject(dir + 'quranly-ai.js', boot);
+  inject(dir + 'quranly-ai-core.js' + q, function () {
+    inject(dir + 'quranly-ai.js' + q, boot);
   });
 })();

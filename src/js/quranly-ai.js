@@ -5,9 +5,14 @@
   'use strict';
   var core = (window.II && window.II.quranlyCore) || {};
   var SELF_SRC = (document.currentScript && document.currentScript.src) || '';
-  var JS_DIR = SELF_SRC.replace(/[^/]*$/, '');            // .../src/js/
-  var CSS_URL = JS_DIR.replace(/\/js\/$/, '/css/') + 'quranly-ai.css';
-  var PANEL_URL = JS_DIR + 'quranly-ai-panel.js';
+  // Propagate a ?v=<version> cache-buster (if this script was loaded with one) to the
+  // lazily-loaded panel + CSS, so a version bump forces fresh copies everywhere.
+  var VER = (SELF_SRC.match(/[?&]v=([^&]+)/) || [])[1];
+  var Q = VER ? ('?v=' + VER) : '';
+  var BASE = SELF_SRC.replace(/[?#].*$/, '');             // drop any query/hash
+  var JS_DIR = BASE.replace(/[^/]*$/, '');                // .../src/js/
+  var CSS_URL = JS_DIR.replace(/\/js\/$/, '/css/') + 'quranly-ai.css' + Q;
+  var PANEL_URL = JS_DIR + 'quranly-ai-panel.js' + Q;
 
   var state = {
     inited: false,
