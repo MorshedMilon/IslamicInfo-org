@@ -4,6 +4,7 @@
 const KEY_FIELDS = [
   'type', 'surah', 'ayah', 'hadithBook', 'hadithNumber',
   'duaId', 'articleId', 'translationId', 'tafsirSource', 'language',
+  'targetLang', // translate mode: distinct target languages must not share a cache entry
 ];
 
 function hasStableId(ctx) {
