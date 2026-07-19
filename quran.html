@@ -3299,6 +3299,33 @@ function mushafChangePage(dir) {
      which conflicts with Module 1's ?surah=<slug> scheme. Re-enable once
      reconciled to this page's markup and the window.loadSurah hook. -->
 <!-- QuranlyAI floating assistant (global, one-tag) -->
-<script src="src/js/quranlyai-widget.js"></script>
+<script src="src/js/quranlyai-widget.js?v=20260718c"></script>
+<script>
+  // Verse-aware context: feed QuranlyAI the ayah the reader selects, so answers are
+  // grounded on the current verse (5 Quran chips + real explanations, not "open a verse").
+  (function () {
+    function stripQuotes(s) { return String(s || '').replace(/^["'“”\s]+|["'“”\s]+$/g, ''); }
+    var prev = window.setActiveVerse;
+    window.setActiveVerse = function (card) {
+      try { if (typeof prev === 'function') prev.apply(this, arguments); } catch (e) { /* page-side */ }
+      try {
+        if (!card || !card.dataset || !window.QuranlyAI) return;
+        var vk = card.dataset.key || '';               // "2:255"
+        var p = vk.split(':');
+        var arabic = (card.querySelector('.ayah-arabic') || {}).textContent || '';
+        var tr = stripQuotes((card.querySelector('.ayah-translation') || {}).textContent || '');
+        var tid = (window.II && II.translations && II.translations.current) ? II.translations.current() : undefined;
+        window.QuranlyAI.setContext({
+          type: 'quran',
+          surah: p[0] ? +p[0] : undefined,
+          ayah: p[1] ? +p[1] : undefined,
+          translationId: tid,
+          language: 'en',
+          rawText: (arabic + '\n' + tr).trim()
+        });
+      } catch (e) { /* non-fatal */ }
+    };
+  })();
+</script>
 </body>
 </html>
