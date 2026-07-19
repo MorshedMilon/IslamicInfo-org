@@ -3,9 +3,11 @@ import assert from 'node:assert';
 import { QURANLYAI_SYSTEM_PROMPT, buildUserPrompt, maxTokensFor, chooseModel, GEMINI_FLASH } from '../src/lib/prompts.js';
 
 test('system prompt bans rulings and mandates sources', () => {
-  assert.match(QURANLYAI_SYSTEM_PROMPT, /never issue a fatwa/i);
+  assert.match(QURANLYAI_SYSTEM_PROMPT, /do not issue fatwas/i);
   assert.match(QURANLYAI_SYSTEM_PROMPT, /Sources/);
   assert.match(QURANLYAI_SYSTEM_PROMPT, /Confidence/);
+  // The grounding override must stay first-class — it enforces the no-hallucination charter.
+  assert.match(QURANLYAI_SYSTEM_PROMPT, /SOURCE GROUNDING — HARD OVERRIDE/);
 });
 
 test('buildUserPrompt embeds rawText and the action instruction', () => {
