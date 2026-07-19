@@ -55,3 +55,18 @@ test('summarize builds a context-aware task line per type', () => {
 test('summarize is capped at 400 output tokens', () => {
   assert.ok(maxTokensFor('summarize') <= 400);
 });
+
+test('translate builds a MODE 6 task line with the target language', () => {
+  assert.match(buildUserPrompt('translate', { rawText: 'X', type: 'article', targetLang: 'Bangla' }, '', null),
+    /Translate the SOURCE TEXT into Bangla/i);
+  assert.match(buildUserPrompt('translate', { rawText: 'X', language: 'Urdu' }, '', null), /into Urdu/i);
+  assert.match(buildUserPrompt('translate', { rawText: 'X' }, '', null), /into English/i);
+});
+
+test('translate allows a longer output than a summary', () => {
+  assert.ok(maxTokensFor('translate') >= 800);
+});
+
+test('system prompt defines a Translate mode', () => {
+  assert.match(QURANLYAI_SYSTEM_PROMPT, /MODE 6 — "Translate"/);
+});

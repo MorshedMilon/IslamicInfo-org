@@ -130,6 +130,13 @@
         if (window.showToast) window.showToast(msg);
         return;
       }
+      if (kind === 'open') {
+        // "Ask QuranlyAI": load the selection as context and open the panel so the
+        // user can type any free-form question — no action is auto-run.
+        if (meta) window.QuranlyAI.setContext(meta);
+        window.QuranlyAI.open();
+        return;
+      }
       // ai
       if (meta) window.QuranlyAI.setContext(meta);
       window.QuranlyAI.ask(action);

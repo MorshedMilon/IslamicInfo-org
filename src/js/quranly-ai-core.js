@@ -125,6 +125,7 @@
   function routeKind(action) {
     if (action === 'verify') return 'verify';
     if (action === 'save') return 'save';
+    if (action === 'ask') return 'open';   // open the widget for a free-form question
     return 'ai';
   }
 
