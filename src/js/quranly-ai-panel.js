@@ -64,7 +64,11 @@
     core.chipsFor(this._context && this._context.type).forEach(function (chip) {
       var b = document.createElement('button');
       b.className = 'qa-chip'; b.type = 'button'; b.textContent = chip.label;
-      b.addEventListener('click', function () { self.runAsk(chip.action, ''); });
+      b.addEventListener('click', function () {
+        var kind = core.routeKind ? core.routeKind(chip.action) : 'ai';
+        if (kind === 'ai') { self.runAsk(chip.action, ''); }
+        else if (window.QuranlyAI && window.QuranlyAI.route) { window.QuranlyAI.route(chip.action, self._context); }
+      });
       self._els.chips.appendChild(b);
     });
   };
