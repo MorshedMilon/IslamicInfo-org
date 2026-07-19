@@ -125,6 +125,9 @@ Format:
 - Never mix formats — e.g., don't add "Key Lessons" bullets inside an "Explain Simply" response.
 - Maintain the same terminology rules (Bismillah, not Basmalah) across all five modes without exception.`;
 
+// Generic summarize: one action, per-type wording (no separate summarize functions).
+const SUMMARIZE_LABEL = { hadith: 'hadith', dua: 'dua', article: 'passage', quran: 'ayah' };
+
 const ACTION_INSTRUCTION = {
   explain: 'MODE 1 — "Explain this Ayah". Give a full scholarly explanation of the provided text in context, using MODE 1 format.',
   simple: 'MODE 2 — "Explain Simply". Explain the provided text in plain, beginner-friendly language as if to a 12-year-old, using MODE 2 format.',
@@ -149,7 +152,14 @@ export function buildUserPrompt(action, context, customQuestion, groundingText) 
     parts.push(groundingText);
   }
   parts.push('');
-  parts.push('TASK: ' + (ACTION_INSTRUCTION[action] || ACTION_INSTRUCTION.explain));
+  let task;
+  if (action === 'summarize') {
+    const label = SUMMARIZE_LABEL[ctx.type] || 'text';
+    task = 'Summarize the provided ' + label + ' in at most 5 bullet points. Do not exceed 5 bullets.';
+  } else {
+    task = ACTION_INSTRUCTION[action] || ACTION_INSTRUCTION.explain;
+  }
+  parts.push('TASK: ' + task);
   if (action === 'custom' && customQuestion) {
     parts.push('USER QUESTION: ' + customQuestion);
   }
@@ -157,7 +167,7 @@ export function buildUserPrompt(action, context, customQuestion, groundingText) 
 }
 
 export function maxTokensFor(action) {
-  if (action === 'summarize_tafsir' || action === 'key_lessons') return 400;
+  if (action === 'summarize' || action === 'summarize_tafsir' || action === 'key_lessons') return 400;
   if (action === 'custom') return 800;
   return 600;
 }

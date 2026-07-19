@@ -40,3 +40,18 @@ test('chooseModel returns gemini-2.5-flash for all actions', () => {
   assert.equal(chooseModel('custom', false), GEMINI_FLASH);
   assert.equal(chooseModel('explain', true), GEMINI_FLASH);
 });
+
+test('summarize builds a context-aware task line per type', () => {
+  const h = buildUserPrompt('summarize', { rawText: 'X', type: 'hadith' }, '', null);
+  assert.match(h, /Summarize the provided hadith in at most 5 bullet points/i);
+  const d = buildUserPrompt('summarize', { rawText: 'X', type: 'dua' }, '', null);
+  assert.match(d, /Summarize the provided dua/i);
+  const a = buildUserPrompt('summarize', { rawText: 'X', type: 'article' }, '', null);
+  assert.match(a, /Summarize the provided passage/i);
+  const q = buildUserPrompt('summarize', { rawText: 'X', type: 'quran' }, '', null);
+  assert.match(q, /Summarize the provided ayah/i);
+});
+
+test('summarize is capped at 400 output tokens', () => {
+  assert.ok(maxTokensFor('summarize') <= 400);
+});
