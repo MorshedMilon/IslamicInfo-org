@@ -51,11 +51,88 @@ async function collections(env, origin, deps) {
   }
 }
 
+async function chapters(slug, env, origin, deps) {
+  if (!ALLOWED_SLUGS.has(slug)) return fail('bad_slug', `unknown collection: ${slug}`, origin, 400, false);
+  if (!env.HADITH_API_KEY) return fail('no_key', 'Hadith service temporarily unavailable', origin, 503, true);
+  try {
+    const { data, source } = await liveOrCache(
+      env.QURANLYAI_KV, hKey('chapters', slug), TTL.WEEK,
+      () => chaptersUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, slug),
+      (raw) => (raw.chapters || []).map(normalizeChapter),   // ASSUMPTION: top-level `chapters`
+      deps,
+    );
+    return ok(data, source, origin, source === 'live' ? TTL.WEEK : 0);
+  } catch (_) {
+    return fail('upstream', 'Books temporarily unavailable — try again', origin, 502, true);
+  }
+}
+
+async function hadithList(slug, bookNum, searchParams, env, origin, deps) {
+  if (!ALLOWED_SLUGS.has(slug)) return fail('bad_slug', `unknown collection: ${slug}`, origin, 400, false);
+  if (!posInt(bookNum)) return fail('bad_book', 'book number must be a positive integer', origin, 400, false);
+  if (!env.HADITH_API_KEY) return fail('no_key', 'Hadith service temporarily unavailable', origin, 503, true);
+  const page = posInt(searchParams.get('page')) || 1;
+  const limit = Math.min(posInt(searchParams.get('limit')) || 25, 200);
+  try {
+    const { data, source } = await liveOrCache(
+      env.QURANLYAI_KV, hKey('list', slug, bookNum, page), TTL.DAY,
+      () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY,
+              { book: slug, chapter: bookNum, paginate: limit, page }),
+      (raw) => {
+        const wrap = raw.hadiths || {};                       // ASSUMPTION: `hadiths.data`
+        return {
+          hadiths: (wrap.data || []).map((h) => normalizeHadith(h, {})),
+          page, limit, total: wrap.total ?? null, lastPage: wrap.last_page ?? null,
+        };
+      },
+      deps,
+    );
+    return ok(data, source, origin, source === 'live' ? TTL.DAY : 0);
+  } catch (_) {
+    return fail('upstream', 'Hadiths temporarily unavailable — try again', origin, 502, true);
+  }
+}
+
+async function singleHadith(slug, bookNum, num, env, origin, deps) {
+  if (!ALLOWED_SLUGS.has(slug)) return fail('bad_slug', `unknown collection: ${slug}`, origin, 400, false);
+  if (!posInt(bookNum) || !posInt(num)) return fail('bad_ref', 'book and hadith numbers must be positive integers', origin, 400, false);
+  if (!env.HADITH_API_KEY) return fail('no_key', 'Hadith service temporarily unavailable', origin, 503, true);
+  try {
+    const { data, source } = await liveOrCache(
+      env.QURANLYAI_KV, hKey('one', slug, bookNum, num), TTL.DAY,
+      () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY,
+              { book: slug, chapter: bookNum, hadithNumber: num, paginate: 1 }),
+      (raw) => {
+        const first = (raw.hadiths && raw.hadiths.data && raw.hadiths.data[0]) || null;  // ASSUMPTION
+        if (!first) throw new Error('hadith not found');
+        return normalizeHadith(first, {});
+      },
+      deps,
+    );
+    return ok(data, source, origin, source === 'live' ? TTL.DAY : 0);
+  } catch (_) {
+    return fail('upstream', 'Hadith temporarily unavailable — try again', origin, 502, true);
+  }
+}
+
 export async function handleHadith(path, searchParams, env, origin, deps = {}) {
   const rest = path.replace(/^\/api\/hadith\/?/, '');   // '', 'collections', 'collections/sahih-bukhari/books', ...
   const seg = rest.split('/').filter(Boolean);
 
   if (seg[0] === 'collections' && seg.length === 1) return collections(env, origin, deps);
+
+  // /api/hadith/collections/:slug/books
+  if (seg[0] === 'collections' && seg.length === 3 && seg[2] === 'books') {
+    return chapters(seg[1], env, origin, deps);
+  }
+  // /api/hadith/collections/:slug/books/:bookNum/hadiths
+  if (seg[0] === 'collections' && seg.length === 5 && seg[2] === 'books' && seg[4] === 'hadiths') {
+    return hadithList(seg[1], seg[3], searchParams, env, origin, deps);
+  }
+  // /api/hadith/:slug/:bookNum/:hadithNum
+  if (seg.length === 3 && ALLOWED_SLUGS.has(seg[0])) {
+    return singleHadith(seg[0], seg[1], seg[2], env, origin, deps);
+  }
 
   return fail('not_found', `unknown hadith endpoint: /${rest}`, origin, 404, false);
 }

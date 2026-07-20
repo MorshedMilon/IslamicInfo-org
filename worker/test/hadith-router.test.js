@@ -51,3 +51,50 @@ test('missing API key yields a 503 retryable envelope', async () => {
   const b = await res.json();
   assert.equal(b.error.retryable, true);
 });
+
+const chaptersFetcher = async () => ({ ok: true, status: 200, json: async () => ({
+  chapters: [{ chapterNumber: '1', chapterEnglish: 'Revelation', chapterArabic: 'الوحي', bookSlug: 'sahih-bukhari' }],
+}) });
+
+const listFetcher = async () => ({ ok: true, status: 200, json: async () => ({
+  hadiths: { data: [{ hadithNumber: '1', hadithArabic: 'إنما الأعمال', hadithEnglish: 'Actions by intentions',
+    englishNarrator: 'Umar', status: 'Sahih', book: { bookSlug: 'sahih-bukhari', bookName: 'Sahih Bukhari' },
+    chapter: { chapterNumber: '1', chapterEnglish: 'Revelation' } }], last_page: 1, total: 1 },
+}) });
+
+test('chapters rejects a slug outside the allowlist', async () => {
+  const res = await handleHadith('/api/hadith/collections/evil-book/books', new URLSearchParams(), ENV(), ORIGIN, {});
+  assert.equal(res.status, 400);
+  assert.equal((await res.json()).error.retryable, false);
+});
+
+test('chapters returns normalized books for a valid slug', async () => {
+  const res = await handleHadith('/api/hadith/collections/sahih-bukhari/books', new URLSearchParams(),
+    ENV(), ORIGIN, { fetcher: chaptersFetcher });
+  const b = await res.json();
+  assert.equal(b.ok, true);
+  assert.equal(b.data[0].bookName, 'Revelation');
+});
+
+test('hadith list normalizes and echoes pagination', async () => {
+  const res = await handleHadith('/api/hadith/collections/sahih-bukhari/books/1/hadiths',
+    new URLSearchParams('page=1&limit=25'), ENV(), ORIGIN, { fetcher: listFetcher });
+  const b = await res.json();
+  assert.equal(b.ok, true);
+  assert.equal(b.data.hadiths[0].hadithNumber, 1);
+  assert.equal(b.data.hadiths[0].grade.value, 'sahih');
+  assert.equal(b.data.page, 1);
+});
+
+test('single hadith rejects a non-positive number', async () => {
+  const res = await handleHadith('/api/hadith/sahih-bukhari/1/0', new URLSearchParams(), ENV(), ORIGIN, {});
+  assert.equal(res.status, 400);
+});
+
+test('single hadith returns one normalized record', async () => {
+  const res = await handleHadith('/api/hadith/sahih-bukhari/1/1', new URLSearchParams(),
+    ENV(), ORIGIN, { fetcher: listFetcher });
+  const b = await res.json();
+  assert.equal(b.data.hadithNumber, 1);
+  assert.equal(b.data.collectionSlug, 'sahih-bukhari');
+});
