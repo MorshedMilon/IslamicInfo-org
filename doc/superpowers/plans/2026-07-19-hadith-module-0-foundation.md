@@ -1194,9 +1194,9 @@ git commit -m "feat(hadith): shared UI utils + REST client methods (no markup ch
 ## Task 10: Docs, ADRs & no-secret-leak guard
 
 **Files:**
-- Modify: `docs/API-SPEC.md`
-- Modify: `docs/DATA.md`
-- Modify: `docs/DECISIONS.md`
+- Modify: `doc/API-SPEC.md`
+- Modify: `doc/DATA.md`
+- Modify: `doc/DECISIONS.md`
 - Test: `worker/test/no-secret-leak.test.js`
 
 - [ ] **Step 1: Write the failing guard test**
@@ -1224,7 +1224,7 @@ test('no client file references the hadith API key or a raw hadithapi apiKey val
 Run: `cd worker && node --test test/no-secret-leak.test.js`
 Expected: PASS.
 
-- [ ] **Step 3: Update `docs/API-SPEC.md`** — replace the `/api/hadith` row/section with the hadithapi-backed REST contract. Add this block after the existing `/api/hadith` GET section:
+- [ ] **Step 3: Update `doc/API-SPEC.md`** — replace the `/api/hadith` row/section with the hadithapi-backed REST contract. Add this block after the existing `/api/hadith` GET section:
 
 ```markdown
 ## Hadith Library — `/api/hadith/*` (Module 0 · hadithapi.com-backed)
@@ -1247,7 +1247,7 @@ Allowed slugs: `sahih-bukhari, sahih-muslim, al-tirmidhi, abu-dawood, ibn-e-maja
 Content: grade + grader always present (missing → "Grade Unknown"); isnad/narrator/audio render `unavailable` until curated.
 ```
 
-- [ ] **Step 4: Update `docs/DATA.md`** — replace the three `islamicinfo-hadith-{...}` server/cache references that mention Sunnah.com, and add the KV cache keys. Append to the server-side cache-keys section:
+- [ ] **Step 4: Update `doc/DATA.md`** — replace the three `islamicinfo-hadith-{...}` server/cache references that mention Sunnah.com, and add the KV cache keys. Append to the server-side cache-keys section:
 
 ```markdown
 ### Hadith Library KV cache (Module 0 — namespace `QURANLYAI_KV`, `hadith:` prefix)
@@ -1261,7 +1261,7 @@ Content: grade + grader always present (missing → "Grade Unknown"); isnad/narr
 | `hadith:search:{lang}:{page}:{q}` | 1h |
 ```
 
-- [ ] **Step 5: Add ADRs to `docs/DECISIONS.md`** (append):
+- [ ] **Step 5: Add ADRs to `doc/DECISIONS.md`** (append):
 
 ```markdown
 ## ADR-020: hadithapi.com as the sole Hadith source (supersedes Sunnah.com)
@@ -1281,7 +1281,7 @@ enrichment pipeline exists; Cloudflare D1 is the future relational option if nee
 - [ ] **Step 6: Commit**
 
 ```bash
-git add docs/API-SPEC.md docs/DATA.md docs/DECISIONS.md worker/test/no-secret-leak.test.js
+git add doc/API-SPEC.md doc/DATA.md doc/DECISIONS.md worker/test/no-secret-leak.test.js
 git commit -m "docs(hadith): API-SPEC/DATA hadithapi contract + ADR-020/021 + secret-leak guard"
 ```
 
