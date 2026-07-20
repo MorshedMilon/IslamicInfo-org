@@ -34,7 +34,7 @@
       category: m.category || 'other',
       featured: m.featured === true,
       authLabel: m.authLabel || null,
-      authTone: m.authTone || 'sahih',
+      authTone: m.authTone || 'unknown',
     };
   }
 
@@ -84,6 +84,24 @@
     };
   }
 
+  function toneColor(tone) {
+    switch (tone) {
+      case 'hasan': return 'var(--grade-hasan)';
+      case 'daif':  return 'var(--grade-daif)';
+      case 'mawdu': return 'var(--grade-mawdu)';
+      case 'sahih': return 'var(--grade-sahih)';
+      default:      return 'var(--ink-muted)';
+    }
+  }
+
+  function hotdGradeText(h) {
+    h = h || {};
+    if (!h.gradeValue || h.gradeValue === 'unknown') return 'Grade Unknown';
+    var base = 'Graded ' + (h.gradeLabel || h.gradeValue);
+    if (h.grader) return base + ' by ' + h.grader;
+    return base + ' · grader not individually cited';
+  }
+
   var core = {
     CATEGORIES: CATEGORIES,
     mergeCollection: mergeCollection,
@@ -92,6 +110,8 @@
     formatCountK: formatCountK,
     formatInt: formatInt,
     hotdFields: hotdFields,
+    toneColor: toneColor,
+    hotdGradeText: hotdGradeText,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }

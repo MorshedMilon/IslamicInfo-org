@@ -20,8 +20,8 @@
   var state = { collections: [], activeTab: 'all', meta: {} };
 
   /* ── Templates (reproduce locked .collection-card / .sidebar-item anatomy) ── */
-  function toneStyle(tone) { return tone === 'hasan' ? ' style="color:var(--grade-hasan);"' : ''; }
-  function dotStyle(tone) { return tone === 'hasan' ? ' style="background:var(--grade-hasan);"' : ''; }
+  function toneStyle(tone) { return ' style="color:' + core.toneColor(tone) + ';"'; }
+  function dotStyle(tone) { return ' style="background:' + core.toneColor(tone) + ';"'; }
 
   function cardHTML(c) {
     var hadiths = core.formatInt(c.hadithCount);
@@ -128,12 +128,13 @@
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink-muted);">' +
       '<div style="font-family:var(--font-display);font-size:22px;color:var(--ink-primary);margin-bottom:8px;">' + esc(name) + '</div>' +
       '<div>Loading collection… the full library view arrives soon.</div>' +
-      '<a class="browse-btn" href="?" style="margin-top:14px;display:inline-block;">← All collections</a></div>';
+      '<a class="browse-btn" href="?" data-browse="" style="margin-top:14px;display:inline-block;">← All collections</a></div>';
   }
 
   function routeTo(slug, push) {
     if (push) { try { history.pushState({ collection: slug }, '', slug ? ('?collection=' + encodeURIComponent(slug)) : location.pathname); } catch (_) {} }
     reflectActiveRoute();
+    updateContinueReading(slug);
     if (slug) showLoadingShell(slug); else applyFilter();
   }
 
@@ -162,6 +163,12 @@
     el.style.display = 'inline-flex';
   }
 
+  function updateContinueReading(slug) {
+    var el = $('#ii-continue-reading'); if (!el) return;
+    if (slug) { el.style.display = 'none'; return; }
+    renderContinueReading();
+  }
+
   /* ── Load collections ── */
   function collectionsError() {
     var grid = $('#collections'); if (!grid) return;
@@ -185,17 +192,16 @@
     var res = await api.fetchHadithDaily();
     if (!res || !res.ok || !res.data) return;
     var h = core.hotdFields(res.data);
+    if (!h.arabic && !h.translation) return; // empty payload — keep static fallback
     var ar = $('#ii-hotd-arabic'); if (ar) ar.textContent = h.arabic;
     var tx = $('#ii-hotd-text'); if (tx) tx.textContent = '"' + h.translation + '"';
     var ref = $('#ii-hotd-ref');
     if (ref) {
       var narr = h.narrator ? (' · Narrated by ' + h.narrator) : '';
-      var grader = h.grader ? (' · ' + h.grader) : '';
-      ref.textContent = '📚 ' + h.reference + narr + ' · Graded ' + h.gradeLabel + grader;
+      ref.textContent = '📚 ' + h.reference + narr + ' · ' + core.hotdGradeText(h);
     }
     var isnad = $('#ii-hotd-isnad-btn');
     if (isnad) {
-      isnad.setAttribute('disabled', 'disabled');
       isnad.setAttribute('aria-disabled', 'true');
       isnad.setAttribute('title', 'Verified isnad data unavailable');
       isnad.style.opacity = '.55'; isnad.style.cursor = 'not-allowed';
@@ -231,7 +237,7 @@
   /* ── Init ── */
   async function init() {
     try {
-      var r = await fetch(META_URL);
+      var r = await ui.apiFetchWithTimeout(META_URL, { timeoutMs: 5000 });
       state.meta = await r.json();
     } catch (_) { state.meta = {}; }
     await loadCollections();

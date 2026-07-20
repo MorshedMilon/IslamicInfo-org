@@ -94,3 +94,24 @@ test('hotdFields: grade always present, missing → Grade Unknown', () => {
   assert.equal(noGrade.grader, null);
   assert.equal(noGrade.narrator, null);
 });
+
+test('mergeCollection: uncurated authTone defaults to unknown (no fabricated sahih signal)', () => {
+  const c = core.mergeCollection({ collectionSlug: 'unknown-x', collectionName: 'X' }, META);
+  assert.equal(c.authTone, 'unknown');
+  assert.equal(c.authLabel, null);
+});
+
+test('toneColor maps each grade tone, neutral for unknown/other', () => {
+  assert.equal(core.toneColor('sahih'), 'var(--grade-sahih)');
+  assert.equal(core.toneColor('hasan'), 'var(--grade-hasan)');
+  assert.equal(core.toneColor('daif'), 'var(--grade-daif)');
+  assert.equal(core.toneColor('mawdu'), 'var(--grade-mawdu)');
+  assert.equal(core.toneColor('unknown'), 'var(--ink-muted)');
+  assert.equal(core.toneColor(undefined), 'var(--ink-muted)');
+});
+
+test('hotdGradeText: named grader, honest fallback when grader absent, and Grade Unknown', () => {
+  assert.equal(core.hotdGradeText({ gradeValue: 'sahih', gradeLabel: 'Sahih', grader: 'Imam al-Bukhari' }), 'Graded Sahih by Imam al-Bukhari');
+  assert.equal(core.hotdGradeText({ gradeValue: 'sahih', gradeLabel: 'Sahih', grader: null }), 'Graded Sahih · grader not individually cited');
+  assert.equal(core.hotdGradeText({ gradeValue: 'unknown', gradeLabel: 'Grade Unknown', grader: null }), 'Grade Unknown');
+});
