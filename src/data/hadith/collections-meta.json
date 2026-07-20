@@ -1,0 +1,12 @@
+{
+  "_note": "Curated presentation metadata for Hadith collections. Reference data pending human review (CONTENT-POLICY §5). The live /api/hadith/collections governs counts, English name, and compiler; this map only fills Arabic name, lifespan, motif, filter category, and collection-level authenticity label — fields the API does not provide.",
+  "sahih-bukhari":     { "arabicName": "صحيح البخاري",  "lifespan": "810–870 CE",  "motif": "📖", "category": "sittah",   "featured": true,  "authLabel": "Sahih — Highest Standard", "authTone": "sahih", "compiledPeriod": "16 yrs" },
+  "sahih-muslim":      { "arabicName": "صحيح مسلم",     "lifespan": "815–875 CE",  "motif": "📬", "category": "sittah",   "featured": false, "authLabel": "Sahih",                    "authTone": "sahih" },
+  "abu-dawood":        { "arabicName": "سنن أبي داود",  "lifespan": "817–889 CE",  "motif": "⚖️", "category": "sittah",   "featured": false, "authLabel": "Mixed Grades",             "authTone": "hasan" },
+  "al-tirmidhi":       { "arabicName": "جامع الترمذي",  "lifespan": "824–892 CE",  "motif": "🌙", "category": "sittah",   "featured": false, "authLabel": "Mixed Grades",             "authTone": "hasan" },
+  "sunan-nasai":       { "arabicName": "سنن النسائي",   "lifespan": "829–915 CE",  "motif": "🕌", "category": "sittah",   "featured": false, "authLabel": "Mixed Grades",             "authTone": "hasan" },
+  "ibn-e-majah":       { "arabicName": "سنن ابن ماجه",  "lifespan": "824–887 CE",  "motif": "📜", "category": "sittah",   "featured": false, "authLabel": "Mixed Grades",             "authTone": "hasan" },
+  "musnad-ahmad":      { "arabicName": "مسند أحمد",     "lifespan": "780–855 CE",  "motif": "📚", "category": "musnad",   "featured": false, "authLabel": "Mixed Grades",             "authTone": "hasan" },
+  "mishkat":           { "arabicName": "مشكاة المصابيح", "lifespan": "d. ~741 AH",  "motif": "🔦", "category": "selected", "featured": false, "authLabel": "Mixed Grades",             "authTone": "hasan" },
+  "al-silsila-sahiha": { "arabicName": "السلسلة الصحيحة", "lifespan": "1914–1999 CE", "motif": "✨", "category": "selected", "featured": false, "authLabel": "Sahih",                    "authTone": "sahih" }
+}
