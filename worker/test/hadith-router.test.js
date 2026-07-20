@@ -86,6 +86,21 @@ test('hadith list normalizes and echoes pagination', async () => {
   assert.equal(b.data.page, 1);
 });
 
+test('hadith list survives a malformed record and returns the good ones', async () => {
+  const mixedFetcher = async () => ({ ok: true, status: 200, json: async () => ({
+    hadiths: { data: [null,
+      { hadithNumber: '2', hadithArabic: 'x', hadithEnglish: 'y', status: 'Sahih',
+        book: { bookSlug: 'sahih-bukhari', bookName: 'Sahih Bukhari' }, chapter: { chapterNumber: '1' } }],
+      last_page: 1, total: 2 },
+  }) });
+  const res = await handleHadith('/api/hadith/collections/sahih-bukhari/books/1/hadiths',
+    new URLSearchParams('page=1'), ENV(), ORIGIN, { fetcher: mixedFetcher });
+  assert.equal(res.status, 200);
+  const b = await res.json();
+  assert.equal(b.data.hadiths.length, 1);
+  assert.equal(b.data.hadiths[0].hadithNumber, 2);
+});
+
 test('single hadith rejects a non-positive number', async () => {
   const res = await handleHadith('/api/hadith/sahih-bukhari/1/0', new URLSearchParams(), ENV(), ORIGIN, {});
   assert.equal(res.status, 400);
@@ -102,6 +117,19 @@ test('single hadith returns one normalized record', async () => {
 test('search rejects q shorter than 2 chars', async () => {
   const res = await handleHadith('/api/hadith/search', new URLSearchParams('q=a'), ENV(), ORIGIN, {});
   assert.equal(res.status, 400);
+});
+
+test('search rejects a query longer than 100 chars', async () => {
+  const res = await handleHadith('/api/hadith/search', new URLSearchParams('q=' + 'a'.repeat(101)),
+    ENV(), ORIGIN, {});
+  assert.equal(res.status, 400);
+});
+
+test('search returns 503 retryable when the API key is missing', async () => {
+  const res = await handleHadith('/api/hadith/search', new URLSearchParams('q=mercy'),
+    ENV({ HADITH_API_KEY: '' }), ORIGIN, {});
+  assert.equal(res.status, 503);
+  assert.equal((await res.json()).error.retryable, true);
 });
 
 test('search returns normalized results', async () => {

@@ -32,6 +32,7 @@ export function normalizeGrade(status) {
 }
 
 export function normalizeBook(raw = {}) {
+  raw = raw || {};
   return {
     collectionSlug: raw.bookSlug || raw.bookslug || null,   // ASSUMPTION
     collectionName: raw.bookName || null,                   // ASSUMPTION
@@ -43,6 +44,7 @@ export function normalizeBook(raw = {}) {
 }
 
 export function normalizeChapter(raw = {}) {
+  raw = raw || {};
   return {
     collectionSlug: raw.bookSlug || null,                   // ASSUMPTION
     bookNumber: toInt(raw.chapterNumber),                   // ASSUMPTION
@@ -53,6 +55,7 @@ export function normalizeChapter(raw = {}) {
 }
 
 export function normalizeHadith(raw = {}, { language = 'en' } = {}) {
+  raw = raw || {};
   const book = raw.book || {};                              // ASSUMPTION nested object
   const chapter = raw.chapter || {};                        // ASSUMPTION nested object
   const arabicMatn = raw.hadithArabic || '';                // ASSUMPTION

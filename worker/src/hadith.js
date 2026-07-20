@@ -38,6 +38,19 @@ function posInt(v) {
   return Number.isInteger(n) && n > 0 ? n : null;
 }
 
+/* Map an upstream array to normalized items, dropping any null entry or any
+   record that throws — one malformed record must not fail the whole batch
+   (fail closed per-record). */
+function safeMap(arr, fn) {
+  const out = [];
+  if (!Array.isArray(arr)) return out;
+  for (const item of arr) {
+    if (item == null) continue;
+    try { out.push(fn(item)); } catch (_) { /* drop malformed record */ }
+  }
+  return out;
+}
+
 /* Fetch → normalize → cache; on any failure serve cache, else signal caller. */
 async function liveOrCache(kv, key, ttl, buildUrl, normalize, deps) {
   const fetcher = deps.fetcher || fetch;
@@ -60,7 +73,7 @@ async function collections(env, origin, deps) {
     const { data, source } = await liveOrCache(
       kv, hKey('collections'), TTL.WEEK,
       () => booksUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY),
-      (raw) => (raw.books || []).map(normalizeBook),   // ASSUMPTION: top-level `books`
+      (raw) => safeMap(raw.books, normalizeBook),   // ASSUMPTION: top-level `books`
       deps,
     );
     return ok(data, source, origin, source === 'live' ? TTL.WEEK : 0);
@@ -76,7 +89,7 @@ async function chapters(slug, env, origin, deps) {
     const { data, source } = await liveOrCache(
       env.QURANLYAI_KV, hKey('chapters', slug), TTL.WEEK,
       () => chaptersUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, slug),
-      (raw) => (raw.chapters || []).map(normalizeChapter),   // ASSUMPTION: top-level `chapters`
+      (raw) => safeMap(raw.chapters, normalizeChapter),   // ASSUMPTION: top-level `chapters`
       deps,
     );
     return ok(data, source, origin, source === 'live' ? TTL.WEEK : 0);
@@ -99,7 +112,7 @@ async function hadithList(slug, bookNum, searchParams, env, origin, deps) {
       (raw) => {
         const wrap = raw.hadiths || {};                       // ASSUMPTION: `hadiths.data`
         return {
-          hadiths: (wrap.data || []).map((h) => normalizeHadith(h, {})),
+          hadiths: safeMap(wrap.data, (h) => normalizeHadith(h, {})),
           page, limit, total: wrap.total ?? null, lastPage: wrap.last_page ?? null,
         };
       },
@@ -136,6 +149,7 @@ async function singleHadith(slug, bookNum, num, env, origin, deps) {
 async function search(searchParams, env, origin, deps) {
   const q = (searchParams.get('q') || '').trim();
   if (q.length < 2) return fail('bad_query', 'search query must be at least 2 characters', origin, 400, false);
+  if (q.length > 100) return fail('bad_query', 'search query too long (max 100 chars)', origin, 400, false);
   if (!env.HADITH_API_KEY) return fail('no_key', 'Hadith service temporarily unavailable', origin, 503, true);
   const page = posInt(searchParams.get('page')) || 1;
   const lang = searchParams.get('lang') === 'ar' ? 'ar' : 'en';
@@ -144,7 +158,7 @@ async function search(searchParams, env, origin, deps) {
     const { data, source } = await liveOrCache(
       env.QURANLYAI_KV, hKey('search', lang, page, q), TTL.HOUR,
       () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, { ...param, paginate: 25, page }),
-      (raw) => ({ results: ((raw.hadiths && raw.hadiths.data) || []).map((h) => normalizeHadith(h, { language: lang })),
+      (raw) => ({ results: safeMap(raw.hadiths && raw.hadiths.data, (h) => normalizeHadith(h, { language: lang })),
                   page, query: q }),
       deps,
     );

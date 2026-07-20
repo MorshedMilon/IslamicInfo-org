@@ -51,3 +51,9 @@ test('normalizeHadith with no status still renders an unknown badge', () => {
   assert.equal(h.grade.value, 'unknown');
   assert.equal(h.grade.label, 'Grade Unknown');
 });
+
+test('normalizeHadith tolerates a null record without throwing', () => {
+  const h = normalizeHadith(null, {});
+  assert.equal(h.grade.value, 'unknown');
+  assert.equal(h.isnad.status, 'unavailable');
+});

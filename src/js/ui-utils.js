@@ -50,7 +50,7 @@
       t = document.createElement('div');
       t.id = 'hadith-toast';
       t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);' +
-        'background:#0A3A3D;color:rgba(255,255,255,.9);padding:10px 22px;border-radius:20px;font-size:13px;' +
+        'background:var(--teal-900);color:rgba(255,255,255,.9);padding:10px 22px;border-radius:20px;font-size:13px;' +
         'font-weight:500;z-index:9999;opacity:0;transition:opacity .28s,transform .28s;pointer-events:none;' +
         'white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.25);';
       document.body.appendChild(t);
