@@ -73,7 +73,7 @@ async function collections(env, origin, deps) {
     const { data, source } = await liveOrCache(
       kv, hKey('collections'), TTL.WEEK,
       () => booksUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY),
-      (raw) => safeMap(raw.books, normalizeBook),   // ASSUMPTION: top-level `books`
+      (raw) => safeMap(raw.books, normalizeBook),   // VERIFIED 2026-07-19: top-level `books`
       deps,
     );
     return ok(data, source, origin, source === 'live' ? TTL.WEEK : 0);
@@ -89,7 +89,7 @@ async function chapters(slug, env, origin, deps) {
     const { data, source } = await liveOrCache(
       env.QURANLYAI_KV, hKey('chapters', slug), TTL.WEEK,
       () => chaptersUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, slug),
-      (raw) => safeMap(raw.chapters, normalizeChapter),   // ASSUMPTION: top-level `chapters`
+      (raw) => safeMap(raw.chapters, normalizeChapter),   // VERIFIED 2026-07-19: top-level `chapters`
       deps,
     );
     return ok(data, source, origin, source === 'live' ? TTL.WEEK : 0);
@@ -110,7 +110,7 @@ async function hadithList(slug, bookNum, searchParams, env, origin, deps) {
       () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY,
               { book: slug, chapter: bookNum, paginate: limit, page }),
       (raw) => {
-        const wrap = raw.hadiths || {};                       // ASSUMPTION: `hadiths.data`
+        const wrap = raw.hadiths || {};                       // VERIFIED 2026-07-19: `hadiths.data`
         return {
           hadiths: safeMap(wrap.data, (h) => normalizeHadith(h, {})),
           page, limit, total: wrap.total ?? null, lastPage: wrap.last_page ?? null,
@@ -134,7 +134,7 @@ async function singleHadith(slug, bookNum, num, env, origin, deps) {
       () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY,
               { book: slug, chapter: bookNum, hadithNumber: num, paginate: 1 }),
       (raw) => {
-        const first = (raw.hadiths && raw.hadiths.data && raw.hadiths.data[0]) || null;  // ASSUMPTION
+        const first = (raw.hadiths && raw.hadiths.data && raw.hadiths.data[0]) || null;  // VERIFIED 2026-07-19
         if (!first) throw new Error('hadith not found');
         return normalizeHadith(first, {});
       },

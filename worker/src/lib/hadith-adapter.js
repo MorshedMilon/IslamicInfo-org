@@ -1,7 +1,9 @@
 /* Normalizes hadithapi.com payloads into the internal safe schema.
    Rules: never fabricate; unconfirmed fields => explicit status; the grade
    badge is NEVER omitted (missing status => 'unknown'/'Grade Unknown').
-   NOTE: source field reads marked ASSUMPTION need one live-response check. */
+   NOTE: field reads VERIFIED 2026-07-19 against a live hadithapi.com response
+   (books/chapters/hadiths). The API provides no Arabic collection name, so
+   collectionArabicName is honestly null. */
 
 const GRADE_MAP = {
   'sahih': 'sahih', 'hasan': 'hasan', "da'eef": 'daif', 'daif': 'daif',
@@ -34,32 +36,32 @@ export function normalizeGrade(status) {
 export function normalizeBook(raw = {}) {
   raw = raw || {};
   return {
-    collectionSlug: raw.bookSlug || raw.bookslug || null,   // ASSUMPTION
-    collectionName: raw.bookName || null,                   // ASSUMPTION
-    collectionArabicName: raw.bookNameArabic || null,       // ASSUMPTION (may be absent)
-    compiler: raw.writerName || null,                       // ASSUMPTION
-    hadithCount: toInt(raw.hadiths_count),                  // ASSUMPTION
-    chaptersCount: toInt(raw.chapters_count),               // ASSUMPTION
+    collectionSlug: raw.bookSlug || raw.bookslug || null,   // VERIFIED 2026-07-19
+    collectionName: raw.bookName || null,                   // VERIFIED 2026-07-19
+    collectionArabicName: raw.bookNameArabic || null,       // VERIFIED 2026-07-19 (may be absent)
+    compiler: raw.writerName || null,                       // VERIFIED 2026-07-19
+    hadithCount: toInt(raw.hadiths_count),                  // VERIFIED 2026-07-19
+    chaptersCount: toInt(raw.chapters_count),               // VERIFIED 2026-07-19
   };
 }
 
 export function normalizeChapter(raw = {}) {
   raw = raw || {};
   return {
-    collectionSlug: raw.bookSlug || null,                   // ASSUMPTION
-    bookNumber: toInt(raw.chapterNumber),                   // ASSUMPTION
-    bookName: raw.chapterEnglish || null,                   // ASSUMPTION
-    bookArabicName: raw.chapterArabic || null,              // ASSUMPTION
-    hadithCount: toInt(raw.hadiths_count),                  // ASSUMPTION (may be absent)
+    collectionSlug: raw.bookSlug || null,                   // VERIFIED 2026-07-19
+    bookNumber: toInt(raw.chapterNumber),                   // VERIFIED 2026-07-19
+    bookName: raw.chapterEnglish || null,                   // VERIFIED 2026-07-19
+    bookArabicName: raw.chapterArabic || null,              // VERIFIED 2026-07-19
+    hadithCount: toInt(raw.hadiths_count),                  // VERIFIED 2026-07-19 (may be absent)
   };
 }
 
 export function normalizeHadith(raw = {}, { language = 'en' } = {}) {
   raw = raw || {};
-  const book = raw.book || {};                              // ASSUMPTION nested object
-  const chapter = raw.chapter || {};                        // ASSUMPTION nested object
-  const arabicMatn = raw.hadithArabic || '';                // ASSUMPTION
-  const text = raw.hadithEnglish || '';                     // ASSUMPTION
+  const book = raw.book || {};                              // VERIFIED 2026-07-19 nested object
+  const chapter = raw.chapter || {};                        // VERIFIED 2026-07-19 nested object
+  const arabicMatn = raw.hadithArabic || '';                // VERIFIED 2026-07-19
+  const text = raw.hadithEnglish || '';                     // VERIFIED 2026-07-19
   const slug = book.bookSlug || raw.bookSlug || null;
   const hadithNumber = toInt(raw.hadithNumber);
   const reference = slug && hadithNumber ? `${book.bookName || slug} · Hadith ${hadithNumber}` : null;
