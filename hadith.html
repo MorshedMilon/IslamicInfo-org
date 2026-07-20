@@ -467,6 +467,12 @@ a { text-decoration: none; color: inherit; }
 .grade-badge.grade-sahih { color: var(--grade-sahih); background: rgba(15,110,86,.1); border: 0.5px solid rgba(15,110,86,.25); }
 .grade-badge.grade-hasan { color: var(--grade-hasan); background: rgba(93,138,58,.1); border: 0.5px solid rgba(93,138,58,.25); }
 .grade-badge.grade-daif { color: var(--grade-daif); background: rgba(168,105,50,.1); border: 0.5px solid rgba(168,105,50,.25); }
+.grade-badge.grade-mawdu { color: var(--grade-mawdu); background: rgba(179,58,58,.1); border: 0.5px solid rgba(179,58,58,.25); }
+.grade-badge.grade-unknown { color: var(--ink-muted); background: rgba(90,102,104,.1); border: 0.5px solid rgba(90,102,104,.22); }
+.grade-badge.grade-disputed { color: var(--grade-mawdu); background: rgba(179,58,58,.08); border: 0.5px solid rgba(179,58,58,.28); }
+.grade-disputed-detail { font-size: 11px; color: var(--ink-muted); font-weight: 500; }
+[data-theme="dark"] .grade-badge.grade-unknown { color:#9AA6A8; background:rgba(154,166,168,.12); border-color:rgba(154,166,168,.28); }
+[data-theme="dark"] .grade-badge.grade-disputed { color:#E05555; background:rgba(224,85,85,.1); border-color:rgba(224,85,85,.3); }
 .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 [data-theme="dark"] .grade-badge.grade-sahih { color:#1FA882; background:rgba(31,168,130,.12); border-color:rgba(31,168,130,.3); }
 [data-theme="dark"] .grade-badge.grade-hasan { color:#7AB84E; background:rgba(122,184,78,.12); border-color:rgba(122,184,78,.3); }
@@ -1126,6 +1132,7 @@ a { text-decoration: none; color: inherit; }
       <span class="grade-filter-pill sahih"><span style="width:7px;height:7px;border-radius:50%;background:var(--grade-sahih);display:inline-block;"></span> <span data-i18n="hadith.grade.sahih">Sahih</span></span>
       <span class="grade-filter-pill hasan"><span style="width:7px;height:7px;border-radius:50%;background:var(--grade-hasan);display:inline-block;"></span> <span data-i18n="hadith.grade.hasan">Hasan</span></span>
       <span class="grade-filter-pill daif"><span style="width:7px;height:7px;border-radius:50%;background:var(--grade-daif);display:inline-block;"></span> <span data-i18n="hadith.grade.daif">Da'if</span></span>
+      <span id="ii-feed-status" class="sr-only" role="status" aria-live="polite"></span>
     </div>
 
     <div class="hadith-list fade-up" id="hadith-feed">
@@ -1265,8 +1272,8 @@ a { text-decoration: none; color: inherit; }
       </div>
     </div>
 
-    <div style="text-align:center;margin-top:4px;margin-bottom:20px;">
-      <button class="load-more-btn" onclick="showHadithToast('Loading more hadiths… ✦')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7 7 7-7"/></svg> <span data-i18n="hadith.feed.loadMore">Load more hadiths</span></button>
+    <div style="text-align:center;margin-top:4px;margin-bottom:20px;" id="ii-load-more-wrap">
+      <button class="load-more-btn" id="ii-load-more" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7 7 7-7"/></svg> <span data-i18n="hadith.feed.loadMore">Load more hadiths</span></button>
     </div>
 
     <!-- ──────── STAGE 2 — LIBRARY NAVIGATION ──────── -->
@@ -1694,12 +1701,9 @@ document.querySelectorAll('.filter-tab').forEach(function(tab){
     this.classList.add('active');
   });
 });
-document.querySelectorAll('.grade-filter-pill').forEach(function(pill){
-  pill.addEventListener('click', function(){
-    document.querySelectorAll('.grade-filter-pill').forEach(function(p){ p.classList.remove('on'); });
-    this.classList.add('on');
-  });
-});
+/* Grade-filter pills are wired in hadith.js (Module 2 · live feed): .on toggle
+   + data-grade DOM filter + aria-live count. Inline stub removed to avoid a
+   duplicate listener. */
 
 /* ── Intersection Observer for fade-up ── */
 var observer = new IntersectionObserver(function(entries){
@@ -1754,6 +1758,7 @@ function filterHadiths(q) {
 <script src="src/js/api.js"></script>
 <script src="src/js/ui-utils.js"></script>
 <script src="src/js/hadith-collections-core.js"></script>
+<script src="src/js/hadith-feed-core.js"></script>
 <script src="src/js/hadith.js"></script>
 <!-- QuranlyAI floating assistant (global, one-tag) -->
 <script src="src/js/quranlyai-widget.js?v=20260718c"></script>
