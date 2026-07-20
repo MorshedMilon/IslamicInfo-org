@@ -16,3 +16,8 @@ compatibility_date = "2026-06-01"
 [[kv_namespaces]]
 binding = "QURANLYAI_KV"
 id = "3a39753a664948b097149eb09c02e3bc"
+
+# Hadith Library source (public base URL only; HADITH_API_KEY is a Worker secret,
+# set via `npx wrangler secret put HADITH_API_KEY`, never committed).
+[vars]
+HADITH_API_BASE_URL = "https://hadithapi.com"
