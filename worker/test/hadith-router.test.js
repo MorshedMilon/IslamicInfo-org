@@ -98,3 +98,33 @@ test('single hadith returns one normalized record', async () => {
   assert.equal(b.data.hadithNumber, 1);
   assert.equal(b.data.collectionSlug, 'sahih-bukhari');
 });
+
+test('search rejects q shorter than 2 chars', async () => {
+  const res = await handleHadith('/api/hadith/search', new URLSearchParams('q=a'), ENV(), ORIGIN, {});
+  assert.equal(res.status, 400);
+});
+
+test('search returns normalized results', async () => {
+  const res = await handleHadith('/api/hadith/search', new URLSearchParams('q=intention'),
+    ENV(), ORIGIN, { fetcher: listFetcher });
+  const b = await res.json();
+  assert.equal(b.ok, true);
+  assert.equal(b.data.results[0].hadithNumber, 1);
+});
+
+test('daily falls back to the static hadith when upstream fails and cache is empty', async () => {
+  const failing = async () => { throw new Error('down'); };
+  const res = await handleHadith('/api/hadith/daily', new URLSearchParams(), ENV(), ORIGIN, { fetcher: failing });
+  const b = await res.json();
+  assert.equal(b.ok, true);
+  assert.equal(b.source, 'fallback');
+  assert.equal(b.data.collectionSlug, 'sahih-bukhari');
+  assert.equal(b.data.grade.value, 'sahih');
+});
+
+test('narrators endpoint honestly reports unavailable', async () => {
+  const res = await handleHadith('/api/hadith/narrators/123', new URLSearchParams(), ENV(), ORIGIN, {});
+  assert.equal(res.status, 200);
+  const b = await res.json();
+  assert.equal(b.data.status, 'unavailable');
+});

@@ -8,6 +8,24 @@ import { ALLOWED_SLUGS, booksUrl, chaptersUrl, hadithsUrl, fetchJson } from './l
 import { normalizeBook, normalizeChapter, normalizeHadith } from './lib/hadith-adapter.js';
 import { hKey, getJson, putJson, TTL } from './lib/hadith-cache.js';
 
+// Static fallback for /api/hadith/daily — the Intentions hadith (Bukhari #1).
+// Verified: Sahih al-Bukhari, Book of Revelation, Hadith 1. Graded Sahih.
+const DAILY_FALLBACK = {
+  id: 'sahih-bukhari:1:1', source: 'static', sourceId: null,
+  collectionSlug: 'sahih-bukhari', collectionName: 'Sahih al-Bukhari', collectionArabicName: null,
+  bookNumber: 1, bookName: 'Revelation', bookArabicName: null,
+  hadithNumber: 1, reference: 'Sahih al-Bukhari · Book 1 · Hadith 1',
+  arabicMatn: 'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ',
+  translation: { text: 'The reward of deeds depends upon the intentions.', language: 'en',
+                 edition: 'static', translator: null },
+  narrator: { id: null, name: "Umar ibn al-Khattab", arabicName: null },
+  grade: { value: 'sahih', label: 'Sahih', grader: 'Imam al-Bukhari', sourceCitation: null,
+           disputed: false, alternateGradings: [] },
+  isnad: { status: 'unavailable', narrators: [] }, topics: [],
+  audio: { status: 'unavailable', url: null, reciter: null },
+  sourceMetadata: { fetchedAt: null, sourceUrlOrId: null, contentHash: 'static-bukhari-1', verificationStatus: 'curated' },
+};
+
 function ok(data, source, origin, maxAge = 0) {
   return json({ ok: true, data, source }, origin, { maxAge });
 }
@@ -115,11 +133,62 @@ async function singleHadith(slug, bookNum, num, env, origin, deps) {
   }
 }
 
+async function search(searchParams, env, origin, deps) {
+  const q = (searchParams.get('q') || '').trim();
+  if (q.length < 2) return fail('bad_query', 'search query must be at least 2 characters', origin, 400, false);
+  if (!env.HADITH_API_KEY) return fail('no_key', 'Hadith service temporarily unavailable', origin, 503, true);
+  const page = posInt(searchParams.get('page')) || 1;
+  const lang = searchParams.get('lang') === 'ar' ? 'ar' : 'en';
+  const param = lang === 'ar' ? { hadithArabic: q } : { hadithEnglish: q };
+  try {
+    const { data, source } = await liveOrCache(
+      env.QURANLYAI_KV, hKey('search', lang, page, q), TTL.HOUR,
+      () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, { ...param, paginate: 25, page }),
+      (raw) => ({ results: ((raw.hadiths && raw.hadiths.data) || []).map((h) => normalizeHadith(h, { language: lang })),
+                  page, query: q }),
+      deps,
+    );
+    return ok(data, source, origin, source === 'live' ? TTL.HOUR : 0);
+  } catch (_) {
+    return fail('upstream', 'Search temporarily unavailable — try again', origin, 502, true);
+  }
+}
+
+async function daily(env, origin, deps) {
+  const kv = env.QURANLYAI_KV;
+  const day = new Date().toISOString().slice(0, 10);
+  const cached = await getJson(kv, hKey('daily', day));
+  if (cached) return ok(cached, 'cache', origin, 0);
+  if (env.HADITH_API_KEY) {
+    try {
+      const raw = await fetchJson(
+        hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, { book: 'sahih-bukhari', hadithNumber: 1, paginate: 1 }),
+        { fetcher: deps.fetcher || fetch });
+      const first = (raw.hadiths && raw.hadiths.data && raw.hadiths.data[0]) || null;
+      if (first) {
+        const data = normalizeHadith(first, {});
+        await putJson(kv, hKey('daily', day), data, TTL.DAY);
+        return ok(data, 'live', origin, 0);
+      }
+    } catch (_) { /* fall through to static */ }
+  }
+  return ok(DAILY_FALLBACK, 'fallback', origin, 0);
+}
+
+function narratorStub(origin) {
+  // No curator store exists yet (design D4) — report honestly, never fabricate.
+  return ok({ status: 'unavailable', message: 'No verified narrator data available for this narration.' }, 'fallback', origin, 0);
+}
+
 export async function handleHadith(path, searchParams, env, origin, deps = {}) {
   const rest = path.replace(/^\/api\/hadith\/?/, '');   // '', 'collections', 'collections/sahih-bukhari/books', ...
   const seg = rest.split('/').filter(Boolean);
 
   if (seg[0] === 'collections' && seg.length === 1) return collections(env, origin, deps);
+
+  if (seg[0] === 'search' && seg.length === 1) return search(searchParams, env, origin, deps);
+  if (seg[0] === 'daily' && seg.length === 1) return daily(env, origin, deps);
+  if (seg[0] === 'narrators' && seg.length === 2) return narratorStub(origin);
 
   // /api/hadith/collections/:slug/books
   if (seg[0] === 'collections' && seg.length === 3 && seg[2] === 'books') {
