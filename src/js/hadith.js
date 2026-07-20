@@ -1,292 +1,246 @@
 /* ═══════════════════════════════════════════════════════════════════
-   IslamicInfo.org — hadith.js  (v1.0 · 2026-06)
-   API integration for hadith.html (Hadith Library).
-
-   Requires: api.js loaded first (window.II.api)
-
-   Features:
-     1. Hadith of the Day     → GET /api/hadith (no params)
-     2. Browse by collection  → GET /api/hadith?collection=&book=
-     3. AI Explain per hadith → POST /api/ask-claude (Stage 3 stub)
-     4. Grade badge rendering → always displayed per content policy
-     5. Bookmark + Copy actions
-
-   Content-policy invariants enforced here:
-     - grade  + gradedBy are ALWAYS rendered — never hidden
-     - AI disclaimer is hard-coded, never API-supplied
-     - No fatwas or rulings are displayed
-
-   HTML IDs / classes expected on hadith.html:
-     #hadithOfDay           ← featured card element
-     #collectionSelect      ← <select> for collection
-     #bookSelect            ← <select> for book number
-     #hadithFeed            ← container for browsed hadiths
-     #aiModal, #aiContent, #aiClose, #aiDisclaimer
+   IslamicInfo.org — hadith.js  (Module 1 · Stage-1 foundation)
+   Wires hadith.html sidebar, collections grid, stats strip, Hadith of the
+   Day, filter tabs, Browse routing, Continue-Reading, and the mobile
+   bottom-sheet to live Module 0 data. No visual redesign.
+   Requires (loaded before this): api.js (window.II.api), ui-utils.js
+   (window.II.ui), hadith-collections-core.js (window.II.hadithCollections).
    ═══════════════════════════════════════════════════════════════════ */
-
 (function () {
   'use strict';
 
-  function tr(key, fallback, params) {
-    if (window.II && window.II.t) return window.II.t(key, fallback, params);
-    let s = fallback !== undefined ? fallback : key;
-    if (params) Object.keys(params).forEach(k => { s = s.split('{' + k + '}').join(params[k]); });
-    return s;
+  var II = window.II || {};
+  var api = II.api, ui = II.ui, core = II.hadithCollections;
+  if (!api || !ui || !core) { console.error('[hadith.js] missing II.api/ui/hadithCollections'); return; }
+
+  var META_URL = 'src/data/hadith/collections-meta.json';
+  var $ = function (sel, ctx) { return (ctx || document).querySelector(sel); };
+  var esc = ui.escapeHTML;
+
+  var state = { collections: [], activeTab: 'all', meta: {} };
+
+  /* ── Templates (reproduce locked .collection-card / .sidebar-item anatomy) ── */
+  function toneStyle(tone) { return tone === 'hasan' ? ' style="color:var(--grade-hasan);"' : ''; }
+  function dotStyle(tone) { return tone === 'hasan' ? ' style="background:var(--grade-hasan);"' : ''; }
+
+  function cardHTML(c) {
+    var hadiths = core.formatInt(c.hadithCount);
+    var books = core.formatInt(c.chaptersCount);
+    var compiler = [c.compiler, c.lifespan].filter(Boolean).map(esc).join(' · ');
+    var seal = c.featured ? '<div class="featured-seal">✦ Most Authentic</div>' : '';
+    var third = c.compiledPeriod ? ('<div class="card-stat"><div class="card-stat-num">' + esc(c.compiledPeriod) + '</div><div class="card-stat-label">Compiled</div></div>') : '';
+    var arabic = c.nameArabic ? ('<div class="card-arabic">' + esc(c.nameArabic) + '</div>') : '';
+    var motif = c.motif ? ('<div class="card-motif">' + esc(c.motif) + '</div>') : '';
+    return '' +
+      '<div class="collection-card' + (c.featured ? ' featured' : '') + '" data-slug="' + esc(c.slug) + '" data-cat="' + esc(c.category) + '">' +
+        seal + motif +
+        '<div class="card-name">' + esc(c.nameEnglish) + '</div>' +
+        arabic +
+        (compiler ? '<div class="card-compiler">' + compiler + '</div>' : '') +
+        '<div class="card-divider"></div>' +
+        '<div class="card-stats">' +
+          '<div class="card-stat"><div class="card-stat-num">' + esc(hadiths) + '</div><div class="card-stat-label">Hadiths</div></div>' +
+          '<div class="card-stat"><div class="card-stat-num">' + esc(books) + '</div><div class="card-stat-label">Books</div></div>' +
+          third +
+        '</div>' +
+        '<div class="card-footer">' +
+          '<div class="authenticity-badge"' + toneStyle(c.authTone) + '><div class="authenticity-dot"' + dotStyle(c.authTone) + '></div><span>' + esc(c.authLabel || 'Grade Unavailable') + '</span></div>' +
+          '<a class="browse-btn" href="?collection=' + encodeURIComponent(c.slug) + '" data-browse="' + esc(c.slug) + '">Browse →</a>' +
+        '</div>' +
+      '</div>';
   }
 
-  const api = window.II && window.II.api;
-  if (!api) { console.error('[hadith.js] api.js not loaded'); return; }
-
-  /* Hard-coded disclaimer — never replaced by API */
-  const AI_DISCLAIMER =
-    'AI-generated explanation for educational context only. ' +
-    'Not a fatwa or religious ruling. Consult a qualified scholar.';
-
-  const AI_CACHE_PREFIX = 'ii-hadith-ai-';
-
-
-  /* ─── Grade badge HTML ────────────────────────────────────────── */
-
-  function _gradeBadge(grade, gradedBy) {
-    const cls = grade && grade.toLowerCase().startsWith('sahih')
-      ? 'grade-sahih'
-      : grade && grade.toLowerCase().startsWith('hasan')
-        ? 'grade-hasan'
-        : 'grade-other';
-
-    return `<span class="hadith-grade ${cls}" title="${tr('js.hadith.gradedByTitle','Graded by {g}',{g: gradedBy || tr('js.hadith.unknownGrader','unknown')})}">${grade || tr('js.hadith.gradeUnknown','Grade unknown')}</span>
-            <span class="hadith-grader">— ${gradedBy || tr('js.hadith.graderUnknown','Grader unknown')}</span>`;
+  function sidebarRowHTML(c) {
+    var count = c.hadithCount != null ? core.formatInt(c.hadithCount) : '';
+    var badge = count ? ' <span class="count-badge">' + esc(count) + '</span>' : '';
+    return '<a class="sidebar-item" href="?collection=' + encodeURIComponent(c.slug) + '" data-browse="' + esc(c.slug) + '">' + esc(c.nameEnglish) + badge + '</a>';
   }
 
-
-  /* ─── Build hadith card HTML ──────────────────────────────────── */
-
-  function _buildCard(h, idPrefix) {
-    const cardId = `${idPrefix}-${h.collection}-${h.book}-${h.number}`.replace(/\s+/g, '-');
-    return `
-    <article class="hadith-card reveal" id="${cardId}" role="article"
-             data-ai-selectable="hadith" data-ai-ref="${h.collection}:${h.number}">
-
-      <header class="hadith-card-header">
-        <span class="hadith-ref">${h.collection} · ${tr('js.hadith.book','Book')} ${h.book} · ${tr('js.hadith.hadithNo','Hadith')} ${h.number}</span>
-        <div class="hadith-grade-block">${_gradeBadge(h.grade, h.gradedBy)}</div>
-      </header>
-
-      ${h.arabic ? `<p class="hadith-arabic" dir="rtl" lang="ar">${h.arabic}</p>` : ''}
-
-      <blockquote class="hadith-translation">${h.translation}</blockquote>
-
-      ${h.narrator ? `<p class="hadith-narrator">${tr('js.narrated','Narrated by: {n}',{n:'<em>'+h.narrator+'</em>'})}</p>` : ''}
-
-      <footer class="hadith-card-footer">
-        ${h.sourceUrl ? `<a class="hadith-source-link" href="${h.sourceUrl}" target="_blank" rel="noopener">${tr('js.viewSunnah','View on Sunnah.com')}</a>` : ''}
-
-        <div class="hadith-actions" role="toolbar" aria-label="${tr('js.hadith.actionsAria','Hadith actions')}">
-
-          <button class="btn-icon btn-copy"
-                  data-text="${encodeURIComponent((h.arabic || '') + '\n' + h.translation + '\n(' + h.collection + ' ' + h.book + ':' + h.number + ')')}"
-                  title="${tr('js.hadith.copyTitle','Copy hadith')}" aria-label="${tr('js.hadith.copyTitle','Copy hadith')}">⎘</button>
-
-          <button class="btn-icon btn-bookmark"
-                  data-id="hadith-${h.collection}-${h.book}-${h.number}"
-                  title="${tr('js.hadith.bookmarkTitle','Bookmark')}" aria-label="${tr('js.hadith.bookmarkAria','Bookmark hadith')}">☆</button>
-
-          <button class="btn-icon btn-ai-explain"
-                  data-collection="${encodeURIComponent(h.collection)}"
-                  data-book="${h.book}"
-                  data-number="${h.number}"
-                  data-text="${encodeURIComponent(h.translation)}"
-                  title="${tr('js.hadith.aiTitle','AI Explanation (Stage 3)')}"
-                  aria-label="${tr('js.hadith.aiAria','AI explanation for this hadith')}">✦</button>
-
-        </div>
-      </footer>
-    </article>`.trim();
-  }
-
-
-  /* ─── 1. Hadith of the Day ───────────────────────────────────── */
-
-  async function loadHadithOfDay() {
-    const container = document.getElementById('hadithOfDay');
-    if (!container) return;
-
-    const h = await api.fetchHadith();
-    if (!h) {
-      container.innerHTML = '<p class="error-msg" role="alert">' + tr('js.hadith.loadError','Could not load Hadith of the Day.') + '</p>';
-      return;
+  function gridSkeleton(n) {
+    var out = '';
+    for (var i = 0; i < (n || 6); i++) {
+      out += '<div class="collection-card" aria-hidden="true" style="opacity:.5;">' +
+        '<div style="height:24px;width:40%;background:rgba(0,105,110,.1);border-radius:6px;margin-bottom:14px;"></div>' +
+        '<div style="height:60px;background:rgba(0,105,110,.06);border-radius:10px;"></div></div>';
     }
-    container.innerHTML = _buildCard(h, 'hod');
-    _bindCardActions(container);
+    return out;
   }
 
-
-  /* ─── 2. Browse feed ──────────────────────────────────────────── */
-
-  async function loadFeed(collection, book) {
-    const feed = document.getElementById('hadithFeed');
-    if (!feed) return;
-
-    feed.innerHTML = '<p class="loading-msg" aria-live="polite">' + tr('js.hadith.loading','Loading hadiths…') + '</p>';
-
-    const h = await api.fetchHadith(collection, book);
-
-    if (!h) {
-      feed.innerHTML =
-        '<p class="error-msg" role="alert">' + tr('js.hadith.feedError','Could not load hadiths. Check your connection and try again.') + '</p>';
-      return;
-    }
-
-    /* API may return single object or array; normalise to array */
-    const list = Array.isArray(h) ? h : [h];
-    feed.innerHTML = list.map(item => _buildCard(item, 'feed')).join('\n');
-    _bindCardActions(feed);
-
-    if (window.initReveal) window.initReveal();
+  /* ── Renders ── */
+  function renderGrid(list) {
+    var grid = $('#collections'); if (!grid) return;
+    if (!list.length) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--ink-muted);padding:32px;">No collections available.</div>'; return; }
+    grid.innerHTML = list.map(cardHTML).join('');
   }
 
-
-  /* ─── 3. AI Explain ──────────────────────────────────────────── */
-
-  async function openAIExplain(collection, book, number, text) {
-    const modal      = document.getElementById('aiModal');
-    const content    = document.getElementById('aiContent');
-    const disclaimer = document.getElementById('aiDisclaimer');
-
-    if (!modal || !content) return;
-
-    if (disclaimer) disclaimer.textContent = tr('js.hadith.disclaimer', AI_DISCLAIMER);
-
-    modal.hidden = false;
-    modal.setAttribute('aria-modal', 'true');
-    content.innerHTML = '<p class="loading-msg" aria-live="polite">' + tr('js.hadith.explaining','Generating explanation…') + '</p>';
-
-    const cacheKey = `${AI_CACHE_PREFIX}${collection}-${book}-${number}`;
-    const cached   = sessionStorage.getItem(cacheKey);
-    if (cached) {
-      content.innerHTML = _sanitize(cached);
-      return;
-    }
-
-    const result = await api.postAskClaude(
-      decodeURIComponent(text),
-      'Explain this hadith with scholarly context.',
-      `${decodeURIComponent(collection)} ${book}:${number}`
-    );
-
-    if (!result) {
-      content.innerHTML =
-        '<p class="info-msg">' + tr('js.hadith.aiSoon','AI explanations are coming soon. Refer to a trusted hadith commentary in the meantime.') + '</p>';
-      return;
-    }
-
-    content.innerHTML = _sanitize(result.answer || '');
-    try { sessionStorage.setItem(cacheKey, result.answer || ''); } catch (_) {}
+  function renderSidebar(list) {
+    var box = $('#ii-sidebar-collections'); if (!box) return;
+    box.innerHTML = list.map(sidebarRowHTML).join('');
   }
 
+  function renderStats(list) {
+    var s = core.aggregateStats(list);
+    var total = $('#ii-stat-total');
+    if (total) { var f = core.formatCountK(s.totalHadiths); total.innerHTML = esc(f.lead) + (f.suffix ? '<span>' + f.suffix + '</span>' : ''); }
+    var colls = $('#ii-stat-collections');
+    if (colls) colls.textContent = String(s.collectionCount);
+  }
 
-  /* ─── Copy & Bookmark helpers ────────────────────────────────── */
+  function announce(list) {
+    var el = $('#ii-filter-status'); if (el) el.textContent = 'Showing ' + list.length + ' collection' + (list.length === 1 ? '' : 's');
+  }
 
-  function _copyText(encoded) {
-    const text = decodeURIComponent(encoded);
-    navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast(tr('js.hadith.copied','Hadith copied!'));
-    }).catch(() => {
-      const ta = document.createElement('textarea');
-      ta.value = text; document.body.appendChild(ta); ta.select();
-      document.execCommand('copy'); document.body.removeChild(ta);
-      if (window.showToast) window.showToast(tr('js.hadith.copied','Hadith copied!'));
+  function applyFilter() {
+    var visible = state.collections.filter(function (c) { return core.inCategory(c, state.activeTab); });
+    renderGrid(visible); announce(visible);
+    reflectActiveRoute();
+  }
+
+  /* ── Filter tabs (in-place, no route change) ── */
+  function wireFilterTabs() {
+    var tabs = document.querySelectorAll('.filter-tab');
+    var MAP = ['all', 'sittah', 'musnad', 'selected'];
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) { t.classList.remove('active'); t.setAttribute('aria-pressed', 'false'); });
+        tab.classList.add('active'); tab.setAttribute('aria-pressed', 'true');
+        state.activeTab = MAP[i] || 'all';
+        applyFilter();
+      });
+      tab.setAttribute('aria-pressed', tab.classList.contains('active') ? 'true' : 'false');
     });
   }
 
-  function _toggleBookmark(id, btn) {
-    let bm = {};
-    try { bm = JSON.parse(localStorage.getItem('ii-bookmarks') || '{}'); } catch (_) {}
-    if (bm[id]) {
-      delete bm[id];
-      if (btn) btn.textContent = '☆';
-      if (window.showToast) window.showToast(tr('js.hadith.bookmarkRemoved','Bookmark removed.'));
-    } else {
-      bm[id] = { ts: Date.now() };
-      if (btn) btn.textContent = '★';
-      if (window.showToast) window.showToast(tr('js.hadith.bookmarked','Bookmarked!'));
+  /* ── Browse / route (?collection=slug + loading shell; no faked Tier 2) ── */
+  function currentSlug() { try { return new URLSearchParams(location.search).get('collection'); } catch (_) { return null; } }
+
+  function reflectActiveRoute() {
+    var slug = currentSlug();
+    document.querySelectorAll('.sidebar-item[data-browse]').forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('data-browse') === slug);
+    });
+  }
+
+  function showLoadingShell(slug) {
+    var c = state.collections.filter(function (x) { return x.slug === slug; })[0];
+    var name = c ? c.nameEnglish : slug;
+    var grid = $('#collections'); if (!grid) return;
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink-muted);">' +
+      '<div style="font-family:var(--font-display);font-size:22px;color:var(--ink-primary);margin-bottom:8px;">' + esc(name) + '</div>' +
+      '<div>Loading collection… the full library view arrives soon.</div>' +
+      '<a class="browse-btn" href="?" style="margin-top:14px;display:inline-block;">← All collections</a></div>';
+  }
+
+  function routeTo(slug, push) {
+    if (push) { try { history.pushState({ collection: slug }, '', slug ? ('?collection=' + encodeURIComponent(slug)) : location.pathname); } catch (_) {} }
+    reflectActiveRoute();
+    if (slug) showLoadingShell(slug); else applyFilter();
+  }
+
+  function wireBrowse() {
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('[data-browse]');
+      if (!a) return;
+      e.preventDefault();
+      routeTo(a.getAttribute('data-browse'), true);
+      var main = document.querySelector('.main'); if (main) main.scrollIntoView({ behavior: 'smooth' });
+    });
+    window.addEventListener('popstate', function () { var s = currentSlug(); routeTo(s, false); });
+  }
+
+  /* ── Continue Reading (read-only; tracking is Module 7) ── */
+  function renderContinueReading() {
+    var el = $('#ii-continue-reading'); if (!el) return;
+    if (currentSlug()) return;
+    var lr = ui.safeLocalStorageGet('islamicinfo-hadith-last-read', null);
+    if (!lr || !lr.collectionSlug || lr.hadithNum == null) return;
+    var c = state.collections.filter(function (x) { return x.slug === lr.collectionSlug; })[0];
+    var name = c ? c.nameEnglish : lr.collectionSlug;
+    el.textContent = 'Continue where you left off → ' + name + ', Hadith ' + lr.hadithNum;
+    el.setAttribute('href', '?collection=' + encodeURIComponent(lr.collectionSlug));
+    el.setAttribute('data-browse', lr.collectionSlug);
+    el.style.display = 'inline-flex';
+  }
+
+  /* ── Load collections ── */
+  function collectionsError() {
+    var grid = $('#collections'); if (!grid) return;
+    ui.renderErrorState(grid, 'Collections temporarily unavailable.', function () { loadCollections(); });
+  }
+
+  async function loadCollections() {
+    var grid = $('#collections'); if (grid) grid.innerHTML = gridSkeleton(6);
+    var res = await api.fetchHadithCollections();
+    if (!res || !res.ok || !Array.isArray(res.data) || !res.data.length) { collectionsError(); return; }
+    state.collections = res.data.map(function (r) { return core.mergeCollection(r, state.meta); });
+    renderSidebar(state.collections);
+    renderStats(state.collections);
+    renderContinueReading();
+    var slug = currentSlug();
+    if (slug) { reflectActiveRoute(); showLoadingShell(slug); } else { applyFilter(); }
+  }
+
+  /* ── Hadith of the Day ── */
+  async function loadHotD() {
+    var res = await api.fetchHadithDaily();
+    if (!res || !res.ok || !res.data) return;
+    var h = core.hotdFields(res.data);
+    var ar = $('#ii-hotd-arabic'); if (ar) ar.textContent = h.arabic;
+    var tx = $('#ii-hotd-text'); if (tx) tx.textContent = '"' + h.translation + '"';
+    var ref = $('#ii-hotd-ref');
+    if (ref) {
+      var narr = h.narrator ? (' · Narrated by ' + h.narrator) : '';
+      var grader = h.grader ? (' · ' + h.grader) : '';
+      ref.textContent = '📚 ' + h.reference + narr + ' · Graded ' + h.gradeLabel + grader;
     }
-    localStorage.setItem('ii-bookmarks', JSON.stringify(bm));
-  }
-
-
-  /* ─── Event delegation ───────────────────────────────────────── */
-
-  function _bindCardActions(root) {
-    root.addEventListener('click', e => {
-      const copyBtn  = e.target.closest('.btn-copy');
-      const bmBtn    = e.target.closest('.btn-bookmark');
-      const aiBtn    = e.target.closest('.btn-ai-explain');
-
-      if (copyBtn)  { _copyText(copyBtn.dataset.text); return; }
-      if (bmBtn)    { _toggleBookmark(bmBtn.dataset.id, bmBtn); return; }
-      if (aiBtn)    {
-        const { collection, book, number, text } = aiBtn.dataset;
-        openAIExplain(collection, book, number, text);
-      }
-    });
-  }
-
-
-  /* ─── AI modal close ─────────────────────────────────────────── */
-
-  function initAIModal() {
-    const close = document.getElementById('aiClose');
-    const modal = document.getElementById('aiModal');
-    if (!close || !modal) return;
-    close.addEventListener('click',  () => { modal.hidden = true; });
-    modal.addEventListener('click', e => { if (e.target === modal) modal.hidden = true; });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && !modal.hidden) modal.hidden = true;
-    });
-  }
-
-
-  /* ─── Collection / book selectors ───────────────────────────── */
-
-  function initSelectors() {
-    const colSel  = document.getElementById('collectionSelect');
-    const bookSel = document.getElementById('bookSelect');
-
-    function doLoad() {
-      const col  = colSel  ? colSel.value  : '';
-      const book = bookSel ? bookSel.value : '';
-      loadFeed(col, book);
+    var isnad = $('#ii-hotd-isnad-btn');
+    if (isnad) {
+      isnad.setAttribute('disabled', 'disabled');
+      isnad.setAttribute('aria-disabled', 'true');
+      isnad.setAttribute('title', 'Verified isnad data unavailable');
+      isnad.style.opacity = '.55'; isnad.style.cursor = 'not-allowed';
+      isnad.onclick = function (e) { e.preventDefault(); e.stopPropagation(); ui.showToast('Verified isnad data unavailable'); };
     }
-
-    if (colSel)  colSel.addEventListener('change', doLoad);
-    if (bookSel) bookSel.addEventListener('change', doLoad);
-
-    doLoad();
   }
 
-
-  /* ─── Sanitise AI output ──────────────────────────────────────── */
-
-  function _sanitize(html) {
-    const div = document.createElement('div');
-    div.textContent = html;
-    return `<p>${div.innerHTML.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>`;
+  /* ── Mobile bottom-sheet ── */
+  function wireSheet() {
+    var trigger = $('#ii-sheet-trigger'), backdrop = $('#ii-sheet-backdrop'),
+        panel = $('#ii-sheet-panel'), listEl = $('#ii-sheet-list'), closeBtn = $('#ii-sheet-close');
+    if (!trigger || !backdrop || !listEl) return;
+    var lastFocus = null;
+    function open() {
+      listEl.innerHTML = state.collections.map(sidebarRowHTML).join('');
+      lastFocus = document.activeElement;
+      backdrop.style.display = 'block'; trigger.setAttribute('aria-expanded', 'true');
+      var first = listEl.querySelector('a'); if (first) first.focus();
+      document.addEventListener('keydown', onKey);
+    }
+    function close() {
+      backdrop.style.display = 'none'; trigger.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('keydown', onKey);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    trigger.addEventListener('click', open);
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', function (e) { if (e.target === backdrop) close(); });
+    ui.focusTrap(panel);
   }
 
+  /* ── Init ── */
+  async function init() {
+    try {
+      var r = await fetch(META_URL);
+      state.meta = await r.json();
+    } catch (_) { state.meta = {}; }
+    await loadCollections();
+    wireFilterTabs();
+    wireBrowse();
+    wireSheet();
+    loadHotD();
+  }
 
-  /* ─── Boot ────────────────────────────────────────────────────── */
-
-  document.addEventListener('DOMContentLoaded', () => {
-    loadHadithOfDay();
-    initSelectors();
-    initAIModal();
-    document.addEventListener('ii:langchange', () => {
-      loadHadithOfDay();
-      const colSel  = document.getElementById('collectionSelect');
-      const bookSel = document.getElementById('bookSelect');
-      loadFeed(colSel ? colSel.value : '', bookSel ? bookSel.value : '');
-    });
-  });
-
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 }());
