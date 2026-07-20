@@ -238,6 +238,32 @@
   }
 
 
+  /* ─── Hadith Library REST endpoints (Module 0 · ADR-021) ─────────
+     Relative /api/ URLs like every other method; the Worker's KV is the
+     cache, so these do a plain fetch and return the uniform envelope
+     { ok, data?, error?, source }. No new localStorage keys. */
+  async function _getHadith(path) {
+    try {
+      const res = await fetch(path, { headers: { Accept: 'application/json' } });
+      return await res.json();
+    } catch (err) {
+      console.warn(`[II/api] GET ${path} failed:`, err.message);
+      return { ok: false, error: { code: 'network', message: 'Network error', retryable: true }, source: 'fallback' };
+    }
+  }
+  function fetchHadithCollections() { return _getHadith('/api/hadith/collections'); }
+  function fetchHadithBooks(slug) { return _getHadith(`/api/hadith/collections/${encodeURIComponent(slug)}/books`); }
+  function fetchHadithList(slug, book, page, limit) {
+    return _getHadith(`/api/hadith/collections/${encodeURIComponent(slug)}/books/${book}/hadiths?page=${page || 1}&limit=${limit || 25}`);
+  }
+  function fetchHadithOne(slug, book, num) {
+    return _getHadith(`/api/hadith/${encodeURIComponent(slug)}/${book}/${num}`);
+  }
+  function fetchHadithSearch(q, lang, page) {
+    return _getHadith(`/api/hadith/search?q=${encodeURIComponent(q)}&lang=${lang || 'en'}&page=${page || 1}`);
+  }
+  function fetchHadithDaily() { return _getHadith('/api/hadith/daily'); }
+
   /* ─── Expose ─────────────────────────────────────────────────── */
   const api = {
     fetchVerse,
@@ -249,6 +275,12 @@
     postVerify,
     postAskClaude,
     postSubscribe,
+    fetchHadithCollections,
+    fetchHadithBooks,
+    fetchHadithList,
+    fetchHadithOne,
+    fetchHadithSearch,
+    fetchHadithDaily,
   };
 
   /* Support both ES module (if bundled later) and plain <script> */
