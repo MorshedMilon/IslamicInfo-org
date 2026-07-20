@@ -196,6 +196,16 @@ quran:{surah}                     → surah verses            TTL 7 days
 hadith:{collection}:{book}:{date} → book hadiths            TTL 24h
 ```
 
+### Hadith Library KV cache (Module 0 — namespace `QURANLYAI_KV`, `hadith:` prefix)
+| Key | TTL |
+|---|---|
+| `hadith:collections` | 7d |
+| `hadith:chapters:{slug}` | 7d |
+| `hadith:list:{slug}:{book}:{page}` | 24h |
+| `hadith:one:{slug}:{book}:{num}` | 24h |
+| `hadith:daily:{YYYY-MM-DD}` | to UTC midnight |
+| `hadith:search:{lang}:{page}:{q}` | 1h |
+
 ## 6. Future: Accounts & Sync (Stage 4 — NOT in v1)
 
 When optional accounts arrive, `localStorage` migrates to server-side and syncs via

@@ -68,6 +68,25 @@ Hadith of the day, or a hadith for a collection/book.
 - **Fallback:** last cached response
 - **Content note:** the verifier skill governs any hadith surfaced; `grade` and `gradedBy` are mandatory; daily hadith always carries the SAHIH badge.
 
+## Hadith Library — `/api/hadith/*` (Module 0 · hadithapi.com-backed)
+
+> Source is **hadithapi.com** (ADR-020), not Sunnah.com. Key is a Worker secret
+> (`HADITH_API_KEY`), passed upstream as `?apiKey=`, never in client code.
+> All responses use the envelope `{ ok, data?, error?:{code,message,retryable}, source:'live'|'cache'|'fallback' }`.
+
+| Endpoint | Method | Cache | Notes |
+|---|---|---|---|
+| `/api/hadith/collections` | GET | KV 7d | normalized collections list |
+| `/api/hadith/collections/:slug/books` | GET | KV 7d | chapters within a collection |
+| `/api/hadith/collections/:slug/books/:bookNum/hadiths?page=&limit=` | GET | KV 24h | paginated feed (limit ≤200) |
+| `/api/hadith/:slug/:bookNum/:hadithNum` | GET | KV 24h | single hadith |
+| `/api/hadith/search?q=&scope=&lang=&page=` | GET | KV 1h | `q` trimmed ≥2 chars |
+| `/api/hadith/daily` | GET | KV to UTC midnight | static Bukhari #1 fallback |
+| `/api/hadith/narrators/:id` | GET | — | **stub** → `{status:'unavailable'}` (no curator store yet) |
+
+Allowed slugs: `sahih-bukhari, sahih-muslim, al-tirmidhi, abu-dawood, ibn-e-majah, sunan-nasai, mishkat, musnad-ahmad, al-silsila-sahiha`.
+Content: grade + grader always present (missing → "Grade Unknown"); isnad/narrator/audio render `unavailable` until curated.
+
 ## GET `/api/geocode`
 Reverse-geocode coordinates to a city label (prayer-time UX).
 

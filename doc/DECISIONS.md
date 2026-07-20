@@ -213,3 +213,16 @@ id 131 must use 20 instead (API-SPEC updated 2026-06-10).
 **Rationale/notes:** Gemini's own safety filters are set to `BLOCK_NONE` across all four harm categories (`worker/src/lib/gemini.js`) so they don't over-block legitimate Quran/Hadith text; the existing server-side no-fatwa filter (`worker/src/lib/safety.js`, `verdictLangDetected`) remains the sole content-safety authority — this provider swap does not change that invariant.
 
 **Consequences:** No client-visible change (same routes, same request/response shapes, same caching/quota behavior). Operators must provision `GEMINI_API_KEY` instead of `ANTHROPIC_API_KEY` before deploying. API-SPEC.md's `/api/ask-claude` and `/api/quranlyai/ask` sections are updated to reflect Gemini as the upstream (this ADR supersedes the Anthropic references in ADR-008, ADR-009, ADR-016, and ADR-018, which are left as historical record and not deleted).
+
+## ADR-020: hadithapi.com as the sole Hadith source (supersedes Sunnah.com)
+**2026-07-19 · Accepted.** The PRD/TechSpec/API-SPEC were written around Sunnah.com.
+Per product direction, hadithapi.com is now the only hadith source. Requires a
+`HADITH_API_KEY` Worker secret; upstream auth is a `?apiKey=` query param (server-side only).
+Consequence: all Sunnah.com references in the hadith docs are superseded.
+
+## ADR-021: REST sub-path endpoints for the Hadith Library (supersedes query-param contract)
+**2026-07-19 · Accepted.** The legacy `/api/hadith?collection=&book=` contract in api.js is
+replaced by REST sub-paths (`/api/hadith/collections/:slug/books/:bookNum/hadiths`, etc.),
+matching the PRD route map. Backend is the existing Cloudflare Worker + KV — **not** the
+Supabase Postgres stack described in the Module 0 prompt (deferred as YAGNI until a curator
+enrichment pipeline exists; Cloudflare D1 is the future relational option if needed).
