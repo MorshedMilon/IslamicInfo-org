@@ -22,6 +22,7 @@ import { ASK_CLAUDE_SYSTEM_PROMPT, AI_ATTRIBUTION, SCHOLAR_REDIRECT, verdictLang
 import { callGemini } from './lib/gemini.js';
 import { GEMINI_FLASH } from './lib/prompts.js';
 import { handleQuranlyAiAsk } from './quranlyai.js';
+import { handleHadith } from './hadith.js';
 
 /* ─── Upstream fetch with timeout ──────────────────────────────────── */
 async function upstream(url, timeoutMs = 8000) {
@@ -159,7 +160,7 @@ async function handleAskClaude(request, env, origin) {
 /* ═══════════════════════════════════════════════════════════════════
    Router
    ═══════════════════════════════════════════════════════════════════ */
-const PENDING = ['/api/geocode', '/api/hadith', '/api/nisab',
+const PENDING = ['/api/geocode', '/api/nisab',
                  '/api/verify', '/api/subscribe'];
 
 export default {
@@ -182,6 +183,12 @@ export default {
           const res = new Response(hit.body, hit);
           // Re-stamp CORS for this caller's origin
           Object.entries(corsHeaders(origin)).forEach(([k, v]) => res.headers.set(k, v));
+          return res;
+        }
+
+        if (path.startsWith('/api/hadith')) {
+          const res = await handleHadith(path, url.searchParams, env, origin, {});
+          if (res.status === 200) await cache.put(request, res.clone());
           return res;
         }
 
