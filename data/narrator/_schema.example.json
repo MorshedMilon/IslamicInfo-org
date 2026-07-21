@@ -1,0 +1,13 @@
+{
+  "_note": "SCHEMA TEMPLATE ONLY — not real data, not loaded by any narrator id. Real /data/narrator/{id}.json files are authored by a human scholar-review process (DoD-9, CONTENT-POLICY §5); graderCitations must trace to Taqrib at-Tahdhib / Tahdhib al-Kamal / Siyar with a real folio/number, each verified via the islamic-authenticity skill. Never fabricated.",
+  "id": "example-id",
+  "fullName": "",
+  "arabicName": "",
+  "kunya": "",
+  "nasab": "",
+  "lifespan": "",
+  "era": "",
+  "place": "",
+  "reliabilityGrade": "unknown",
+  "graderCitations": []
+}
