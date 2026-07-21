@@ -21,6 +21,20 @@ _Top of the backlog, unblocked, scoped._
 
 - [ ] Create `docs/DATA.md` link-back from `ARCHITECTURE §6` (remove duplicated key tables; point to DATA.md).
 - [ ] Stand up CI checks (see §CI below) before building more pages.
+- [ ] 🚧🕌 **Deploy the HadithAPI.com Worker endpoints (9 collections) — OUTSTANDING infra.**
+  Verified 2026-07-21: the `islamicinfo-api` Worker is deployed/alive (root → 200, `/api/quran/*`
+  → 501) but **every `/api/hadith/*` path returns 404** — the Module-0 hadith endpoints
+  (`worker/src/hadith.js`, `handleHadith`) are NOT in the deployed build. So the 9 hadithapi.com
+  collections (Bukhari, Muslim, the Sittah, etc.) do **not** load live anywhere yet — Tier 1 feed,
+  Tier 3a lists, and Tier 3b deep-views for those collections fall to the honest "temporarily
+  unavailable"/seed-index states. **Two parts:** (1) redeploy `islamicinfo-api` from the current
+  `worker/` (which includes the hadith module) with the `HADITH_API_KEY` secret + KV binding set
+  (`cd worker && npm run deploy`; verify `/api/hadith/collections` → 200 after). (2) **Routing:**
+  `api.js` fetches `/api/hadith/*` **same-origin**, but production site = GitHub Pages while the
+  Worker = `*.workers.dev` — so even once deployed, the live site can't reach it without a
+  same-origin `/api` proxy or an absolute API origin. This part is coupled to the **Cloudflare
+  hosting migration** item below (ADR-026). Until BOTH land, only the 9 direct-source
+  (fawazahmed0/AhmedBaset) CDN collections work in production. See DECISIONS.md ADR-024 (3-provider routing) + ADR-026.
 - [ ] 🚧 **Cloudflare hosting migration (dedicated initiative — needs Milan's cost/benefit call).**
   Move static-site serving from GitHub Pages to Cloudflare (Worker static-assets or CF Pages) so
   path routes (`/hadith/[collection]/…`, ADR-026) return **HTTP 200** and are crawler-indexable.
