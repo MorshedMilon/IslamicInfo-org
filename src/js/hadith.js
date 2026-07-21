@@ -305,6 +305,20 @@
     if (rpTimer) { clearTimeout(rpTimer); rpTimer = null; }
     if (rpTracker) rpTracker.reset();
   }
+  // Restore-scroll (TechSpec §3.4): on a non-deep-link load, scroll the Tier-1 feed to
+  // the last-read card IF it is present in the currently-loaded default feed. One-shot.
+  var rpRestored = false;
+  function maybeRestoreScroll() {
+    if (rpRestored || state.arrivedViaDeepLink) return;
+    var lr = ui.safeLocalStorageGet('islamicinfo-hadith-last-read', null);
+    if (!lr || lr.collectionSlug !== FEED.slug || String(lr.bookNum) !== String(FEED.book)) return;
+    var el = feedEl(); if (!el) return;
+    var card = el.querySelector('.hadith-card[data-ref="' + FEED.slug + ':' + FEED.book + ':' + lr.hadithNum + '"]');
+    if (card) {
+      rpRestored = true;
+      card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+    }
+  }
   // Observe all current .hadith-card[data-ref] in a container (Tier-1 feed or Tier-3a list).
   function observeFeed(container) {
     if (!rpObserver || !container) return;
@@ -314,13 +328,17 @@
   /* ── Continue Reading (read-only; tracking is Module 7) ── */
   function renderContinueReading() {
     var el = $('#ii-continue-reading'); if (!el) return;
-    if (currentSlug()) return;
+    if (currentSlug()) return;                          // explicit deep-link present → suppress (§10)
     var lr = ui.safeLocalStorageGet('islamicinfo-hadith-last-read', null);
     if (!lr || !lr.collectionSlug || lr.hadithNum == null) return;
     var c = state.collections.filter(function (x) { return x.slug === lr.collectionSlug; })[0];
     var name = c ? c.nameEnglish : lr.collectionSlug;
+    var href = '/hadith/' + encodeURIComponent(lr.collectionSlug);
+    if (lr.bookNum != null && lr.hadithNum != null) {   // deep-link → Tier-3b scroll + pulse reuse
+      href += '/' + encodeURIComponent(lr.bookNum) + '/' + encodeURIComponent(lr.hadithNum);
+    }
     el.textContent = 'Continue where you left off → ' + name + ', Hadith ' + lr.hadithNum;
-    el.setAttribute('href', '/hadith/' + encodeURIComponent(lr.collectionSlug));
+    el.setAttribute('href', href);
     el.setAttribute('data-browse', lr.collectionSlug);
     el.style.display = 'inline-flex';
   }
@@ -473,6 +491,7 @@
     if (append) { if (html) el.insertAdjacentHTML('beforeend', html); }
     else { resetReadingProgress(); el.innerHTML = html || emptyFeedHTML(); }
     observeFeed(el);   // Module 9: track topmost visible card for last-read
+    if (!append) maybeRestoreScroll();
 
     FEED.page = nextPage;
     FEED.lastPage = data.lastPage;
@@ -714,6 +733,10 @@
   async function init() {
     // GitHub Pages 404 SPA fallback (see 404.html): restore the intended clean /hadith/... URL (ADR-026).
     try { var rd = new URLSearchParams(location.search).get('redirect'); if (rd && rd.charAt(0) === '/') history.replaceState(null, '', rd); } catch (_) {}
+    // Precedence (TechSpec §10): an explicit deep-link (a collection segment in the
+    // resolved path) always wins over last-read restoration — suppress the prompt and
+    // skip restore-scroll. Computed AFTER the ?redirect= restore above.
+    state.arrivedViaDeepLink = !!parseRoute().collection;
     try {
       var r = await ui.apiFetchWithTimeout(META_URL, { timeoutMs: 5000 });
       state.meta = await r.json();
