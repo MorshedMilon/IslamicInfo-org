@@ -72,3 +72,29 @@ test('panelFilter: all returns everything; a category filters', () => {
   assert.equal(core.panelFilter(list, 'all').length, 2);
   assert.equal(core.panelFilter(list, 'Reflection').length, 1);
 });
+
+test('clampNoteText: caps at 2000 chars', () => {
+  assert.equal(core.clampNoteText('x'.repeat(2500)).length, 2000);
+});
+
+test('upsertNote: inserts then replaces by hadithRef', () => {
+  let list = core.upsertNote([], core.buildNote('a:0:1', 'first', 10));
+  assert.equal(list.length, 1);
+  list = core.upsertNote(list, core.buildNote('a:0:1', 'second', 20));
+  assert.equal(list.length, 1);
+  assert.equal(core.getNote(list, 'a:0:1').text, 'second');
+});
+
+test('upsertNote: empty text removes the note', () => {
+  let list = core.upsertNote([], core.buildNote('a:0:1', 'hi', 10));
+  list = core.upsertNote(list, core.buildNote('a:0:1', '', 20));
+  assert.equal(list.length, 0);
+  assert.equal(core.getNote(list, 'a:0:1'), null);
+});
+
+test('buildNote: clamps text and stamps updatedAt', () => {
+  const n = core.buildNote('a:0:1', 'y'.repeat(3000), 55);
+  assert.equal(n.hadithRef, 'a:0:1');
+  assert.equal(n.text.length, 2000);
+  assert.equal(n.updatedAt, 55);
+});

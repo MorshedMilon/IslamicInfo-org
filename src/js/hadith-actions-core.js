@@ -88,11 +88,31 @@
     return arr.filter(function (b) { return b.category === category; });
   }
 
+  function clampNoteText(s) { return String(s == null ? '' : s).slice(0, MAX_NOTE); }
+
+  function buildNote(ref, text, now) {
+    return { hadithRef: ref, text: clampNoteText(text), updatedAt: (typeof now === 'number' ? now : 0) };
+  }
+
+  function getNote(list, ref) {
+    var arr = Array.isArray(list) ? list : [];
+    for (var i = 0; i < arr.length; i++) { if (arr[i] && arr[i].hadithRef === ref) return arr[i]; }
+    return null;
+  }
+
+  // Upsert by hadithRef; a note whose text is empty is removed (a cleared note is not stored).
+  function upsertNote(list, note) {
+    var arr = (Array.isArray(list) ? list : []).filter(function (n) { return n && n.hadithRef !== note.hadithRef; });
+    if (note.text && note.text.length) arr.push(note);
+    return arr;
+  }
+
   var core = {
     BUILTIN_CATEGORIES: BUILTIN_CATEGORIES, MAX_CUSTOM: MAX_CUSTOM, MAX_NOTE: MAX_NOTE,
     isBuiltin: isBuiltin, buildBookmark: buildBookmark, dedupeByRef: dedupeByRef,
     toggleBookmark: toggleBookmark, setCategory: setCategory, getBookmarkCategory: getBookmarkCategory,
     customCategoriesOf: customCategoriesOf, addCustomCategory: addCustomCategory, panelFilter: panelFilter,
+    clampNoteText: clampNoteText, buildNote: buildNote, getNote: getNote, upsertNote: upsertNote,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }
