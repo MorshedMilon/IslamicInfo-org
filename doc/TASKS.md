@@ -21,6 +21,18 @@ _Top of the backlog, unblocked, scoped._
 
 - [ ] Create `docs/DATA.md` link-back from `ARCHITECTURE §6` (remove duplicated key tables; point to DATA.md).
 - [ ] Stand up CI checks (see §CI below) before building more pages.
+- [ ] 🚧 **Hadith search — real proxy.** Stage-1 hero search is a client-side substring stub over
+  the *loaded* feed only (`hadith.js` `wireSearch`/`setSearchQuery`). Build the real
+  `GET /api/hadith/search` proxy (TechSpec §4.4) — full-corpus search with `<mark>` ranges,
+  grade badge, and Tier-3b `Open →` deep-links. Wire the scope chips (All/Qur'an/Dua/Verify) to
+  real cross-scope search once those exist.
+- [ ] 🕌🚧 **Hadith isnad chains + topic tags — curated data source.** hadithapi.com returns no
+  structured isnad (`narrators: []`) and no topic tags (`topics: []`), so at Stage 1 the isnad
+  panel shows "unavailable" and topic chips run a labeled keyword heuristic (not curated
+  classification). Provide a verifier-reviewed narrator/isnad + topic dataset (per TechSpec §4.3;
+  mirrors the related-hadith curation gate) so US-H05 renders real chains and US-H06 filters by
+  real topic tags. `hadith.js` `isnadInnerHTML`/`isnadNodeHTML` already render dot-nodes the moment
+  real `narrators[]` data arrives — no UI change needed, data only.
 - [ ] 🚧 Create missing utility pages: `contact.html`, `privacy.html`, `terms.html`.
 - [ ] 🚧 **Global grade-token WCAG sync** — propagate the ADR-025 grade-badge fix
   (`--grade-hasan #5D8A3A→#4A7030`, `--grade-daif #A86932→#8A5228`, plus the

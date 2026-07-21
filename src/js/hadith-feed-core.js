@@ -150,7 +150,7 @@
           '<div class="hadith-footer">' +
             '<div class="hadith-ref"><span class="hadith-ref-icon">📖</span>' + esc(reference) + '</div>' +
             '<div class="hadith-footer-actions">' +
-              '<button class="footer-action-btn" type="button" data-act="isnad" aria-disabled="true" title="Verified isnad data unavailable">' + SVG_ISNAD + ' <span>View Isnad</span></button>' +
+              '<button class="footer-action-btn" type="button" data-act="isnad" aria-expanded="false" title="View the isnad (chain of narrators)">' + SVG_ISNAD + ' <span>View Isnad</span></button>' +
               '<button class="footer-action-btn" type="button" data-act="listen" aria-disabled="true" title="Audio unavailable for this hadith">' + SVG_LISTEN + ' <span>Listen</span></button>' +
               '<button class="footer-action-btn primary" type="button" data-act="full">Open Full View</button>' +
             '</div>' +

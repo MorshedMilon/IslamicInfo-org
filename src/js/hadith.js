@@ -222,7 +222,7 @@
      the unit-tested II.hadithFeed core; this layer only does fetch + DOM +
      filter + pagination. Deep-link routing to other collections/books is a
      later module — the feed stays on the default here. */
-  var FEED = { slug: 'sahih-bukhari', book: 1, page: 0, lastPage: null, total: null, filter: 'all', refs: null, loading: false };
+  var FEED = { slug: 'sahih-bukhari', book: 1, page: 0, lastPage: null, total: null, filter: 'all', query: '', refs: null, byRef: {}, loading: false };
 
   function feedEl() { return $('#hadith-feed'); }
   function feedStatus(msg) { var el = $('#ii-feed-status'); if (el) el.textContent = msg; }
@@ -251,19 +251,33 @@
     else { btn.disabled = false; if (lbl) lbl.textContent = 'Load more hadiths'; }
   }
 
+  // Searchable text for a loaded card, sourced from the stored hadith object (never guessed).
+  function cardText(c) {
+    var h = FEED.byRef[c.getAttribute('data-ref')];
+    if (h) return [h.arabicMatn, h.translation && h.translation.text, h.reference, h.narrator && h.narrator.name].filter(Boolean).join(' ');
+    return c.textContent || '';
+  }
+  function cardMatchesQuery(c) {
+    if (!FEED.query) return true;
+    return cardText(c).toLowerCase().indexOf(FEED.query.toLowerCase()) !== -1;
+  }
+  // Unified in-place feed visibility: a card shows iff it matches the active grade pill AND the
+  // active text query (hero search OR topic chip). No routing; aria-live announces the count.
   function applyGradeFilter() {
     var el = feedEl(); if (!el) return;
     var cards = el.querySelectorAll('.hadith-card[data-ref]');
     var shown = 0;
     cards.forEach(function (c) {
-      var vis = FEED.filter === 'all' || c.getAttribute('data-grade') === FEED.filter;
+      var vis = (FEED.filter === 'all' || c.getAttribute('data-grade') === FEED.filter) && cardMatchesQuery(c);
       c.style.display = vis ? '' : 'none';
       if (vis) shown++;
     });
     var total = cards.length;
-    if (FEED.filter === 'all') feedStatus('Showing ' + shown + ' hadith' + (shown === 1 ? '' : 's'));
-    else if (shown === 0 && total > 0) feedStatus('No ' + FEED.filter + ' hadiths in the ' + total + ' loaded.');
-    else feedStatus('Showing ' + shown + ' ' + FEED.filter + ' hadith' + (shown === 1 ? '' : 's') + ' of ' + total + ' loaded');
+    var lbl = FEED.filter === 'all' ? '' : (FEED.filter + ' ');
+    var suffix = FEED.query ? (' matching “' + FEED.query + '”') : '';
+    var scoped = (FEED.filter !== 'all' || FEED.query);
+    if (shown === 0 && total > 0) feedStatus('No ' + lbl + 'hadiths' + suffix + ' in the ' + total + ' loaded.');
+    else feedStatus('Showing ' + shown + ' ' + lbl + 'hadith' + (shown === 1 ? '' : 's') + suffix + (scoped ? ' of ' + total + ' loaded' : ''));
   }
 
   function renderFeedError() {
@@ -277,7 +291,7 @@
     FEED.loading = true;
     var nextPage = append ? FEED.page + 1 : 1;
     if (append) setLoadMore('loading');
-    else { FEED.refs = new Set(); ui.renderLoadingState(el, 3); setLoadMore('hide'); feedStatus('Loading hadiths…'); }
+    else { FEED.refs = new Set(); FEED.byRef = {}; ui.renderLoadingState(el, 3); setLoadMore('hide'); feedStatus('Loading hadiths…'); }
 
     var res;
     try { res = await api.fetchHadithList(FEED.slug, FEED.book, nextPage, 25); }
@@ -292,7 +306,7 @@
 
     var data = res.data;
     var fresh = feed.dedupeByRef(FEED.refs, data.hadiths || []);
-    fresh.forEach(function (h) { FEED.refs.add(feed.refOf(h)); });
+    fresh.forEach(function (h) { var r = feed.refOf(h); FEED.refs.add(r); FEED.byRef[r] = h; });
     var html = fresh.map(feed.buildCardHTML).join('');
 
     if (append) { if (html) el.insertAdjacentHTML('beforeend', html); }
@@ -302,6 +316,7 @@
     FEED.lastPage = data.lastPage;
     FEED.total = data.total;
     applyGradeFilter();
+    if (FEED.query) highlightFeed();
 
     if (fresh.length === 0 && !append) setLoadMore('hide');
     else if (FEED.lastPage != null && FEED.page >= FEED.lastPage) setLoadMore('end');
@@ -359,12 +374,138 @@
     if (btn) btn.addEventListener('click', function () { loadHadithFeed(true); });
   }
 
-  // Honest per-card actions. isnad/listen have no verified data at Stage 1;
-  // full/bookmark/share/copy are later-stage UI. No dead or lying buttons.
+  /* ── Search match highlight (US-H07 stub) ── */
+  function highlightFeed() {
+    var el = feedEl(); if (!el) return;
+    var q = FEED.query.toLowerCase();
+    el.querySelectorAll('.hadith-card[data-ref]').forEach(function (c) {
+      var h = FEED.byRef[c.getAttribute('data-ref')];
+      var textEl = c.querySelector('.hadith-text');
+      if (!textEl || !h || !h.translation) return;
+      var original = h.translation.text || '';
+      if (!q) { textEl.innerHTML = esc(original); return; }
+      var lower = original.toLowerCase(), out = '', i = 0, idx;
+      while ((idx = lower.indexOf(q, i)) !== -1) {
+        out += esc(original.slice(i, idx)) + '<mark>' + esc(original.slice(idx, idx + q.length)) + '</mark>';
+        i = idx + q.length;
+      }
+      out += esc(original.slice(i));
+      textEl.innerHTML = out;
+    });
+  }
+  function setSearchQuery(q) { FEED.query = (q || '').trim(); applyGradeFilter(); highlightFeed(); }
+  function scrollFeed() { var f = feedEl(); if (f) f.scrollIntoView({ behavior: 'smooth' }); }
+
+  /* ── Hero search (US-H07) — client-side substring stub over the loaded feed.
+     The real /api/hadith/search proxy (TechSpec §4.4) is a separate module (see TASKS.md). ── */
+  function wireSearch() {
+    var input = $('#hadith-search-input'), submit = $('#hadith-search-submit'), mic = $('#hadith-mic-btn');
+    if (input) {
+      var t = null;
+      input.addEventListener('input', function () { clearTimeout(t); t = setTimeout(function () { setSearchQuery(input.value); }, 200); });
+      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); setSearchQuery(input.value); scrollFeed(); } });
+    }
+    if (submit) submit.addEventListener('click', function () { if (input) setSearchQuery(input.value); scrollFeed(); });
+
+    // Voice input — Web Speech API when present; silent, never throws when absent.
+    if (mic) {
+      var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) {
+        mic.addEventListener('click', function () { ui.showToast('Voice search isn’t supported in this browser'); });
+      } else {
+        mic.addEventListener('click', function () {
+          try {
+            var rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false; rec.maxAlternatives = 1;
+            mic.classList.add('listening');
+            rec.onresult = function (ev) { var txt = ev.results[0][0].transcript; if (input) { input.value = txt; setSearchQuery(txt); scrollFeed(); } };
+            rec.onerror = function () { ui.showToast('Voice search didn’t catch that'); };
+            rec.onend = function () { mic.classList.remove('listening'); };
+            rec.start();
+          } catch (_) { mic.classList.remove('listening'); }
+        });
+      }
+    }
+
+    // Scope chips are a visual selector; Stage-1 search is hadith-scoped (loaded feed). See verification note.
+    document.querySelectorAll('.scope-chips .scope-chip').forEach(function (chip) {
+      chip.setAttribute('role', 'button'); chip.setAttribute('tabindex', '0');
+      function act() {
+        document.querySelectorAll('.scope-chips .scope-chip').forEach(function (s) { s.classList.remove('active'); s.setAttribute('aria-pressed', 'false'); });
+        chip.classList.add('active'); chip.setAttribute('aria-pressed', 'true');
+      }
+      chip.addEventListener('click', act);
+      chip.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(); } });
+    });
+  }
+
+  /* ── Topics strip (US-H06) — in-place keyword filter over the loaded feed.
+     Honest Stage-1 heuristic: matches the topic keyword against hadith text; NOT a curated topic
+     classification (the provider returns no topic tags). Real topic index = Module 11. ── */
+  function wireTopics() {
+    var chips = document.querySelectorAll('.topics-grid .topic-chip');
+    var input = $('#hadith-search-input');
+    chips.forEach(function (chip) {
+      chip.setAttribute('aria-pressed', 'false');
+      function act() {
+        var already = chip.classList.contains('selected');
+        chips.forEach(function (c) { c.classList.remove('selected'); c.setAttribute('aria-pressed', 'false'); });
+        if (already) { if (input) input.value = ''; setSearchQuery(''); return; }
+        chip.classList.add('selected'); chip.setAttribute('aria-pressed', 'true');
+        var kw = chip.getAttribute('data-topic') || chip.textContent.trim();
+        if (input) input.value = kw;
+        setSearchQuery(kw);
+        scrollFeed();
+      }
+      chip.addEventListener('click', act);
+      chip.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(); } });
+    });
+  }
+
+  /* ── Isnad chain v1 (US-H05) — dots only; text panel is Module 8.
+     RELIGIOUS ACCURACY GATE: names + roles come ONLY from the provider's isnad data (Module 0).
+     hadithapi.com returns none today (isnad.status 'unavailable', narrators []), so the panel
+     honestly shows "unavailable" — never the mockup's placeholder narrators, never a role or
+     reliability guessed from a name. Unknown role → unlabeled node; unknown reliability → grey dot. ── */
+  var ISNAD_ROLE = { prophet: 'prophet', companion: 'companion', tabii: 'tabii', 'tabi-al-tabii': 'tabii', compiler: 'compiler' };
+  var ISNAD_REL = { thiqah: 'thiqah', 'thiqah-thabt': 'thiqah', saduq: 'saduq', daif: 'daif', matruk: 'daif' };
+  function isnadNodeHTML(n) {
+    n = n || {};
+    var role = ISNAD_ROLE[n.role] || '';                       // unknown → unlabeled node (gate)
+    var rel = ISNAD_REL[n.reliability] || 'unknown';           // unknown → grey dot (never guessed)
+    var face = n.arabicName ? n.arabicName.slice(0, 2) : (n.fullName ? String(n.fullName).trim().charAt(0) : '·');
+    var name = n.fullName ? '<div class="isnad-name">' + esc(n.fullName) + '</div>' : '';
+    var life = (n.lifespan || n.era) ? '<div class="isnad-lifespan">' + esc([n.lifespan, n.era].filter(Boolean).join(' · ')) + '</div>' : '';
+    return '<div class="isnad-link" role="listitem">' +
+      '<div class="isnad-avatar' + (role ? ' ' + role : '') + '">' + esc(face) + '</div>' +
+      name + life + '<div class="reliability-dot ' + rel + '"></div></div>';
+  }
+  function isnadInnerHTML(h) {
+    var isn = h && h.isnad;
+    var nodes = (isn && Array.isArray(isn.narrators)) ? isn.narrators : [];
+    var label = '<div class="isnad-label">Isnad Chain — Transmission from Prophet ﷺ to Compiler</div>';
+    if (!nodes.length) return label + '<div class="isnad-unavailable">Verified isnad data unavailable for this hadith.</div>';
+    return label + '<div class="isnad-chain" role="list">' + nodes.map(isnadNodeHTML).join('') + '</div>';
+  }
+  function toggleIsnad(card, btn) {
+    if (!card) return;
+    var ref = card.getAttribute('data-ref');
+    var panel = card.nextElementSibling;
+    if (!panel || !panel.classList.contains('isnad-preview')) {
+      panel = document.createElement('div');
+      panel.className = 'isnad-preview';
+      panel.id = 'isnad-' + String(ref || '').replace(/[^a-z0-9]+/gi, '-');
+      panel.innerHTML = isnadInnerHTML(FEED.byRef[ref]);
+      card.parentNode.insertBefore(panel, card.nextSibling);
+    }
+    var open = panel.classList.toggle('open');
+    if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  // Per-card actions. isnad toggles the chain panel (US-H05); listen/full/bookmark/share/copy are
+  // honestly deferred to later modules — no dead or lying onclick.
   function wireFeedActions() {
     var el = feedEl(); if (!el) return;
     var MSG = {
-      isnad: 'Verified isnad data unavailable',
       listen: 'Audio unavailable for this hadith',
       full: 'Full hadith view arrives in a later stage',
       bookmark: 'Bookmarking arrives in a later stage',
@@ -374,7 +515,9 @@
     el.addEventListener('click', function (e) {
       var btn = e.target.closest && e.target.closest('[data-act]');
       if (!btn || !el.contains(btn)) return;
-      var msg = MSG[btn.getAttribute('data-act')];
+      var act = btn.getAttribute('data-act');
+      if (act === 'isnad') { toggleIsnad(btn.closest('.hadith-card'), btn); return; }
+      var msg = MSG[act];
       if (msg) ui.showToast(msg);
     });
   }
@@ -414,6 +557,8 @@
     wireFilterTabs();
     wireBrowse();
     wireSheet();
+    wireSearch();
+    wireTopics();
     loadHotD();
     if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); loadHadithFeed(false); }
   }

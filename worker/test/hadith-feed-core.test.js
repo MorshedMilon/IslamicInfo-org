@@ -192,12 +192,13 @@ test('buildCardHTML: narrator line only appears when the source supplies one (ne
   assert.ok(!noNarr.includes('hadith-narrator'));
 });
 
-test('buildCardHTML: footer wires isnad/listen/full via data-act (no dead onclick), isnad honestly disabled', () => {
+test('buildCardHTML: footer wires isnad/listen/full via data-act; isnad is a toggle, listen honestly disabled', () => {
   const html = core.buildCardHTML(bukhari());
   assert.ok(html.includes('data-act="isnad"'));
   assert.ok(html.includes('data-act="listen"'));
   assert.ok(html.includes('data-act="full"'));
-  assert.ok(/data-act="isnad"[^>]*aria-disabled="true"/.test(html));
+  assert.ok(/data-act="isnad"[^>]*aria-expanded="false"/.test(html));   // US-H05 toggle, not disabled
+  assert.ok(/data-act="listen"[^>]*aria-disabled="true"/.test(html));    // audio still honestly unavailable
 });
 
 test('buildCardHTML: unrenderable record (null ref) yields empty string, never a broken card', () => {
