@@ -96,3 +96,75 @@ test('translationBlockHTML: empty model → honest unavailable state', () => {
   const html = core.translationBlockHTML([], 'en');
   assert.match(html, /Translation temporarily unavailable/);
 });
+
+/* ── bodyCardHTML ── */
+test('bodyCardHTML: enlarged variant class + shared grade badge + arabic', () => {
+  const html = core.bodyCardHTML(bukhari());
+  assert.match(html, /hadith-card--deep/);
+  assert.match(html, /dv-arabic/);
+  assert.match(html, /grade-badge grade-sahih/);
+  assert.match(html, /grader not individually cited/);
+  assert.match(html, /reward of deeds/);
+});
+test('bodyCardHTML: null hadith → "Hadith temporarily unavailable", never throws', () => {
+  const html = core.bodyCardHTML(null);
+  assert.match(html, /Hadith temporarily unavailable/);
+});
+
+/* ── isnadInlineHTML ── */
+test('isnadInlineHTML: empty narrators (live) → honest unavailable, NOT a modal', () => {
+  const html = core.isnadInlineHTML(bukhari());
+  assert.match(html, /Chain of narration not available/);
+  assert.doesNotMatch(html, /modal/);
+});
+test('isnadInlineHTML: narrators present → ordered chain nodes', () => {
+  const html = core.isnadInlineHTML(bukhari({ isnad: { status: 'ok', narrators: [
+    { fullName: 'Umar ibn al-Khattab', role: 'companion' }, { fullName: 'Alqamah', role: 'tabii' },
+  ]}}));
+  assert.match(html, /Umar ibn al-Khattab/);
+  assert.match(html, /Alqamah/);
+  assert.match(html, /<ol/);
+});
+
+/* ── topicsChipsHTML ── */
+test('topicsChipsHTML: empty topics (live) → empty string (block hidden)', () => {
+  assert.equal(core.topicsChipsHTML(bukhari()), '');
+});
+test('topicsChipsHTML: topics present → chips', () => {
+  const html = core.topicsChipsHTML(bukhari({ topics: ['Intentions', 'Deeds'] }));
+  assert.match(html, /Intentions/);
+  assert.match(html, /Deeds/);
+});
+
+/* ── relatedPlaceholderHTML ── */
+test('relatedPlaceholderHTML: renders a Related Narrations placeholder (Module 11)', () => {
+  assert.match(core.relatedPlaceholderHTML(), /Related Narrations/);
+});
+
+/* ── breadcrumbHTML ── */
+test('breadcrumbHTML: collection + book links + current hadith', () => {
+  const html = core.breadcrumbHTML({ collection: 'sahih-bukhari', book: '1', hadith: '1' },
+    { nameEnglish: 'Sahih al-Bukhari' }, bukhari());
+  assert.match(html, /href="\/hadith\/sahih-bukhari"[^>]*>Sahih al-Bukhari/);
+  assert.match(html, /href="\/hadith\/sahih-bukhari\/1"/);
+  assert.match(html, /aria-current="page"[^>]*>Hadith 1|Hadith 1/);
+});
+
+/* ── resolveNeighbors ── */
+test('resolveNeighbors: middle item → prev + next by list order (not numeric assumption)', () => {
+  const list = [{ hadithNumber: 1 }, { hadithNumber: 5 }, { hadithNumber: 9 }];
+  assert.deepEqual(core.resolveNeighbors(list, 5), { prev: 1, next: 9 });
+});
+test('resolveNeighbors: ends → null on the missing side; unknown → both null', () => {
+  const list = [1, 2, 3];
+  assert.deepEqual(core.resolveNeighbors(list, 1), { prev: null, next: 2 });
+  assert.deepEqual(core.resolveNeighbors(list, 3), { prev: 2, next: null });
+  assert.deepEqual(core.resolveNeighbors(list, 99), { prev: null, next: null });
+});
+
+/* ── prevNextNavHTML ── */
+test('prevNextNavHTML: links present sides, disables missing sides', () => {
+  const html = core.prevNextNavHTML({ prev: null, next: 5 }, 'sahih-bukhari', 1);
+  assert.match(html, /dv-nav-disabled[^>]*>← Previous|← Previous/);
+  assert.match(html, /href="\/hadith\/sahih-bukhari\/1\/5"[^>]*>Next/);
+});

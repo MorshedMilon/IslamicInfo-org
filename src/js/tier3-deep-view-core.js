@@ -107,6 +107,107 @@
     return '<div class="dv-block dv-translations"><h2 class="dv-block-title">Translation</h2>' + tabs + panes + '</div>';
   }
 
+  // ── bodyCardHTML (enlarged Tier 3b variant of the feed card) ──────
+  function bodyCardHTML(h) {
+    if (!h) return '<div class="dv-body-card dv-body-unavailable">Hadith temporarily unavailable</div>';
+    var p = feed.gradeParts(h);
+    var arabic = h.arabicMatn ? '<div class="hadith-arabic dv-arabic" dir="rtl" lang="ar">' + esc(h.arabicMatn) + '</div>' : '';
+    var narrator = (h.narrator && h.narrator.name) ? '<div class="hadith-narrator">' + esc(h.narrator.name) + '</div>' : '';
+    var text = (h.translation && h.translation.text) ? '<div class="hadith-text dv-text">' + esc(h.translation.text) + '</div>' : '';
+    var ref = h.reference || '';
+    return '<div class="hadith-card hadith-card--deep dv-body-card" data-ref="' + esc(feed.refOf(h) || '') + '" data-grade="' + esc(p.value) + '">' +
+      '<div class="hadith-teal-bar"></div><div class="hadith-inner">' +
+        '<div class="hadith-header"><div class="hadith-meta">' +
+          '<span class="hadith-num">Hadith #' + esc(h.hadithNumber) + '</span>' + feed.gradeBadgeHTML(p) +
+        '</div></div>' + arabic +
+        '<div class="hadith-translation">' + narrator + text + '</div>' +
+        (ref ? '<div class="hadith-footer"><div class="hadith-ref"><span class="hadith-ref-icon">📖</span>' + esc(ref) + '</div></div>' : '') +
+      '</div></div>';
+  }
+
+  // ── isnadInlineHTML (inline, NOT modal — TechSpec §2.7) ───────────
+  function isnadInlineHTML(h) {
+    var isn = h && h.isnad;
+    var nodes = (isn && Array.isArray(isn.narrators)) ? isn.narrators : [];
+    if (!nodes.length) {
+      return '<div class="dv-block dv-isnad"><h2 class="dv-block-title">Chain of Narration (Isnad)</h2>' +
+             '<div class="dv-empty">Chain of narration not available for this hadith.</div></div>';
+    }
+    var chain = nodes.map(function (n, i) {
+      n = n || {};
+      var nm = n.fullName || n.arabicName || ('Narrator ' + (i + 1));
+      var meta = [n.role, n.lifespan || n.era].filter(Boolean).map(esc).join(' · ');
+      return '<li class="dv-isnad-node"><span class="dv-isnad-name">' + esc(nm) + '</span>' +
+             (meta ? '<span class="dv-isnad-meta">' + meta + '</span>' : '') + '</li>';
+    }).join('');
+    return '<div class="dv-block dv-isnad"><h2 class="dv-block-title">Chain of Narration (Isnad)</h2>' +
+           '<ol class="dv-isnad-chain">' + chain + '</ol></div>';
+  }
+
+  // ── topicsChipsHTML (hidden when empty — always, live) ────────────
+  function topicsChipsHTML(h) {
+    var topics = (h && Array.isArray(h.topics)) ? h.topics.filter(Boolean) : [];
+    if (!topics.length) return '';
+    var chips = topics.map(function (t) {
+      var label = (typeof t === 'string') ? t : (t.name || t.label || '');
+      return label ? '<span class="dv-topic-chip">' + esc(label) + '</span>' : '';
+    }).join('');
+    return '<div class="dv-block dv-topics"><h2 class="dv-block-title">Topics</h2><div class="dv-topic-chips">' + chips + '</div></div>';
+  }
+
+  // ── relatedPlaceholderHTML (Module 11 fills it) ───────────────────
+  function relatedPlaceholderHTML() {
+    return '<div class="dv-block dv-related"><h2 class="dv-block-title">Related Narrations</h2>' +
+           '<div class="dv-empty">Related narrations arrive in a later update.</div></div>';
+  }
+
+  // ── breadcrumbHTML ────────────────────────────────────────────────
+  function breadcrumbHTML(r, c, h) {
+    var slug = r.collection;
+    var collName = (c && c.nameEnglish) || (h && h.collectionName) || slug || '';
+    var bookNum = (h && h.bookNumber != null) ? h.bookNumber : (r ? r.book : null);
+    var bookName = (h && h.bookName) || (bookNum != null ? ('Book ' + bookNum) : '');
+    var hadNum = (h && h.hadithNumber != null) ? h.hadithNumber : (r ? r.hadith : '');
+    var parts = [
+      '<a class="dv-crumb" href="/hadith.html">Hadith</a>',
+      '<a class="dv-crumb" href="/hadith/' + encodeURIComponent(slug) + '">' + esc(collName) + '</a>',
+    ];
+    if (bookNum != null) parts.push('<a class="dv-crumb" href="/hadith/' + encodeURIComponent(slug) + '/' + encodeURIComponent(bookNum) + '">' + esc(bookName) + '</a>');
+    parts.push('<span class="dv-crumb dv-crumb-current" aria-current="page">Hadith ' + esc(hadNum) + '</span>');
+    return '<nav class="dv-breadcrumb" aria-label="Breadcrumb">' + parts.join('<span class="dv-crumb-sep" aria-hidden="true">›</span>') + '</nav>';
+  }
+
+  // ── actionButtonsHTML (rendered; wiring is Module 10 — no dead onclick) ──
+  function actionButtonsHTML() {
+    return '<div class="dv-actions">' +
+      '<button class="dv-action-btn" type="button" data-act="bookmark" title="Bookmark" aria-label="Bookmark">🔖</button>' +
+      '<button class="dv-action-btn" type="button" data-act="share" title="Share" aria-label="Share">↗</button>' +
+      '<button class="dv-action-btn" type="button" data-act="copy" title="Copy with attribution" aria-label="Copy with attribution">📋</button>' +
+    '</div>';
+  }
+
+  // ── resolveNeighbors (by list order, not contiguous-number assumption) ──
+  function resolveNeighbors(list, currentNum) {
+    var nums = (Array.isArray(list) ? list : []).map(function (x) {
+      return (x && typeof x === 'object') ? x.hadithNumber : x;
+    }).filter(function (n) { return n != null; });
+    var i = nums.map(String).indexOf(String(currentNum));
+    if (i === -1) return { prev: null, next: null };
+    return { prev: i > 0 ? nums[i - 1] : null, next: i < nums.length - 1 ? nums[i + 1] : null };
+  }
+
+  // ── prevNextNavHTML ───────────────────────────────────────────────
+  function prevNextNavHTML(neighbors, slug, book) {
+    neighbors = neighbors || { prev: null, next: null };
+    function btn(num, dir, label) {
+      if (num == null) return '<span class="dv-nav-btn dv-nav-' + dir + ' dv-nav-disabled" aria-disabled="true">' + label + '</span>';
+      var href = '/hadith/' + encodeURIComponent(slug) + '/' + encodeURIComponent(book) + '/' + encodeURIComponent(num);
+      return '<a class="dv-nav-btn dv-nav-' + dir + '" href="' + href + '">' + label + '</a>';
+    }
+    return '<nav class="dv-prevnext" aria-label="Hadith navigation">' +
+      btn(neighbors.prev, 'prev', '← Previous') + btn(neighbors.next, 'next', 'Next →') + '</nav>';
+  }
+
   var core = {
     _esc: esc,
     LANG_ORDER: LANG_ORDER,
@@ -115,6 +216,14 @@
     chooseLang: chooseLang,
     gradingsTableHTML: gradingsTableHTML,
     translationBlockHTML: translationBlockHTML,
+    bodyCardHTML: bodyCardHTML,
+    isnadInlineHTML: isnadInlineHTML,
+    topicsChipsHTML: topicsChipsHTML,
+    relatedPlaceholderHTML: relatedPlaceholderHTML,
+    breadcrumbHTML: breadcrumbHTML,
+    actionButtonsHTML: actionButtonsHTML,
+    resolveNeighbors: resolveNeighbors,
+    prevNextNavHTML: prevNextNavHTML,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }
