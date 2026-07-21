@@ -652,6 +652,10 @@
         api: api, ui: ui, feed: feed,
       });
     }
+    if (II.narratorPanelDom && II.narratorPanelDom.init) {
+      II.narratorPanelDom.init({ api: api, ui: ui });
+      II.narratorPanelDom.wire(document);   // delegated, once — reachable when isnad nodes carry data-narrator-id
+    }
     await loadCollections();
     wireFilterTabs();
     wireRouting();
