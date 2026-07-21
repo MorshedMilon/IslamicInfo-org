@@ -371,3 +371,19 @@ into any content module (per owner direction).
 **Consequences.** `hadith.js` routing reworked from query-param to path parsing; Browse/sidebar
 links now `/hadith/[slug]`; new `404.html`; `<base href="/">` in `hadith.html`. Later Tier 2/3
 modules (7, 9, 11, deep-view/trace) inherit this model.
+
+## ADR-027 · Per-feature JS files for the Hadith app; CSS stays inline · Accepted · 2026-07-21
+**Context.** `hadith.js` reached ~656 lines through Module 6. Module 7 (Tier 3a list + Tier 3b
+deep-view: 7 blocks, translation tabs, prev/next) would push it well past a size that stays
+reasoning-friendly and reliably editable. TechSpec planned separate files
+(`src/js/tier3-deep-view.js`, `src/css/deep-view.css`), but Modules 1–6 kept all hadith CSS inline
+in `hadith.html`.
+**Decision.** Any hadith module whose JS would meaningfully bloat `hadith.js` gets its **own
+feature-named JS file** (e.g. `tier3-deep-view.js`, `tier3-deep-view-core.js`, future
+`narrator-panel.js`, `trace-view.js`), following the existing UMD pattern (`window.II.<feature>` /
+`module.exports`), with a pure `*-core.js` sibling for unit-testable logic where it helps. **CSS
+stays inline in `hadith.html`** everywhere until/unless we deliberately run a **full whole-page CSS
+extraction as its own planned pass** — never a per-module half-migration. Modules 8+ follow this
+without re-asking.
+**Consequences.** Module 7 adds `tier3-deep-view-core.js` + `tier3-deep-view.js`; `hadith.html`
+gains two `<script>` includes and an inline CSS block; no `src/css/*.css` files are created.

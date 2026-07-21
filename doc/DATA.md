@@ -24,6 +24,7 @@
 | `islamicinfo-nisab-{date}` | `NisabData` (JSON) | Tools | 1 day |
 | `islamicinfo-qibla-city` | string | Tools | Until user changes |
 | `islamicinfo-hadith-last-read` | `{ collectionSlug, bookNum, hadithNum }` | Hadith Library | Until overwritten |
+| `islamicinfo-hadith-lang` | string — preferred hadith translation language code (`en`/`ur`/`fr`/`id`/`tr`) for Tier 3b deep-view translation tabs; written on tab switch, read on deep-view render; defaults to `en` when unset or when the stored language is not present in the payload | Hadith Library (Module 7 — Tier 3b) | Until user changes |
 | `islamicinfo-hadith-bookmarks` | `HadithBookmark[]` | Hadith Library | Permanent |
 | `islamicinfo-hadith-notes` | `HadithNote[]` | Hadith Library | Permanent |
 | `islamicinfo-hadith-{collection}-{book}-{date}` | cached API response (JSON) | Hadith Library | 1 day |

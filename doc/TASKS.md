@@ -42,6 +42,14 @@ _Top of the backlog, unblocked, scoped._
   mirrors the related-hadith curation gate) so US-H05 renders real chains and US-H06 filters by
   real topic tags. `hadith.js` `isnadInnerHTML`/`isnadNodeHTML` already render dot-nodes the moment
   real `narrators[]` data arrives — no UI change needed, data only.
+- [ ] 🕌🚧 **Hadith translations — source additional editions (UR/FR/ID/TR).** The Tier 3b deep-view
+  translation-tab UI + `islamicinfo-hadith-lang` localStorage preference are **built and shipped**
+  (Module 7); they render a tab per language *present in the payload* and honor the saved choice the
+  moment more languages arrive. Today the provider returns a single English (or Arabic) translation,
+  so only one language renders and no tab strip shows. **This is unblocked-by-engineering,
+  blocked-by-content-sourcing:** obtain permissively-licensed UR/FR/ID/TR translation editions
+  (mirroring the ADR-024 direct-source approach) and surface them as `h.translations[]` on the
+  normalized hadith. No code change is required in Module 7's deep-view to light them up.
 - [ ] 🚧 Create missing utility pages: `contact.html`, `privacy.html`, `terms.html`.
 - [ ] 🚧 **Global grade-token WCAG sync** — propagate the ADR-025 grade-badge fix
   (`--grade-hasan #5D8A3A→#4A7030`, `--grade-daif #A86932→#8A5228`, plus the
