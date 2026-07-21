@@ -433,6 +433,44 @@
     });
   }
 
+  /* ── Module 10: audio mini-player — honest unavailable-only.
+     No hadith audio source exists (adapter audio.url/reciter are null for all;
+     see api.js). We render the player chrome disabled + an honest notice, and
+     NEVER print a reciter (null → would be fabrication). A functional player
+     arrives when a real audio source lands. ── */
+  function onListen(card, ref) {
+    var next = card.nextElementSibling;
+    if (next && next.classList.contains('audio-mini-player')) { next.parentNode.removeChild(next); return; }
+    var p = document.createElement('div');
+    p.className = 'audio-mini-player';
+    p.innerHTML =
+      '<div class="amp-controls">' +
+        '<button type="button" class="amp-play" aria-disabled="true" disabled title="Audio unavailable">▶</button>' +
+        '<div class="amp-progress"><div class="amp-progress-fill"></div></div>' +
+        '<span class="amp-speed" aria-disabled="true">1×</span>' +
+      '</div>' +
+      '<div class="amp-unavailable">Audio unavailable for this hadith</div>';
+    card.parentNode.insertBefore(p, card.nextSibling);
+  }
+
+  // Module 10: one document-delegated handler for bookmark/note/listen — works in the
+  // Tier-1 feed AND the Tier-3a list (both render via feed.buildCardHTML). isnad/share/
+  // copy/full stay with wireFeedActions on #hadith-feed.
+  function wireCardActions() {
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('.hadith-card [data-act]');
+      if (!btn) return;
+      var act = btn.getAttribute('data-act');
+      if (act !== 'bookmark' && act !== 'note' && act !== 'listen') return;
+      var card = btn.closest('.hadith-card'); if (!card) return;
+      var ref = card.getAttribute('data-ref'); if (!ref) return;
+      e.preventDefault();
+      if (act === 'bookmark') onBookmark(card, btn, ref);
+      else if (act === 'note') onNote(card, ref);
+      else if (act === 'listen') onListen(card, ref);
+    });
+  }
+
   /* ── Continue Reading (read-only; tracking is Module 7) ── */
   function renderContinueReading() {
     var el = $('#ii-continue-reading'); if (!el) return;
@@ -791,14 +829,14 @@
     if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
 
-  // Per-card actions. isnad toggles the chain panel (US-H05); listen/full/bookmark/share/copy are
-  // honestly deferred to later modules — no dead or lying onclick.
+  // Per-card actions. isnad toggles the chain panel (US-H05); full/share/copy are still
+  // honestly deferred to later modules — no dead or lying onclick. bookmark/note/listen
+  // are now live (Module 10) via the document-delegated wireCardActions() below, so they
+  // are absent from MSG here on purpose and simply no-op in this handler.
   function wireFeedActions() {
     var el = feedEl(); if (!el) return;
     var MSG = {
-      listen: 'Audio unavailable for this hadith',
       full: 'Full hadith view arrives in a later stage',
-      bookmark: 'Bookmarking arrives in a later stage',
       share: 'Sharing arrives in a later stage',
       copy: 'Copying arrives in a later stage',
     };
@@ -871,7 +909,7 @@
     wireTopics();
     loadHotD();
     initReadingObserver();
-    if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); loadHadithFeed(false); }
+    if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); wireCardActions(); loadHadithFeed(false); }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
