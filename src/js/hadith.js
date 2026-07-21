@@ -11,6 +11,7 @@
 
   var II = window.II || {};
   var api = II.api, ui = II.ui, core = II.hadithCollections, feed = II.hadithFeed;
+  var RP = II.readingProgress;
   if (!api || !ui || !core) { console.error('[hadith.js] missing II.api/ui/hadithCollections'); return; }
 
   var META_URL = 'src/data/hadith/collections-meta.json';
@@ -235,6 +236,62 @@
       }
     });
     window.addEventListener('popstate', function () { renderRoute(parseRoute()); });
+  }
+
+  /* ── Reading-progress tracker (US-H23b / FIX-5) ─────────────────────
+     One IntersectionObserver over .hadith-card[data-ref] across the Tier-1
+     feed AND Tier-3a list (via host.observeFeed). A card counts as "read"
+     after ≥3 continuous seconds ≥50% visible (IO + setTimeout combo; the
+     pure rules live in II.readingProgress). On read → persist last-read. */
+  var rpObserver = null, rpTracker = null, rpRecords = {}, rpTimer = null, rpCurrent = null;
+
+  function prefersReducedMotion() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  function rpPersist(ref) {
+    var payload = RP.payloadFromRef(ref, Date.now());
+    if (payload) ui.safeLocalStorageSet('islamicinfo-hadith-last-read', payload);
+  }
+  function rpEvaluate() {
+    var records = Object.keys(rpRecords).map(function (k) { return rpRecords[k]; });
+    var top = RP.topmost(records);
+    if (top === rpCurrent) return;                     // no change in topmost → nothing to do
+    rpCurrent = top;
+    rpTracker.update(top, Date.now());                 // (re)arm the dwell clock in the core
+    if (rpTimer) { clearTimeout(rpTimer); rpTimer = null; }
+    if (top) {
+      rpTimer = setTimeout(function () {
+        var read = rpTracker.update(rpCurrent, Date.now());
+        if (read) rpPersist(read);
+      }, RP.THRESHOLD_MS);
+    }
+  }
+  function initReadingObserver() {
+    if (!RP || typeof window.IntersectionObserver !== 'function') return;   // old browser → tracker no-ops
+    rpTracker = RP.createTracker();
+    var lastEval = 0, pending = false;
+    rpObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var ref = en.target.getAttribute('data-ref'); if (!ref) return;
+        if (en.isIntersecting && en.intersectionRatio >= RP.MIN_RATIO) {
+          rpRecords[ref] = { ref: ref, ratio: en.intersectionRatio, top: en.boundingClientRect.top };
+        } else { delete rpRecords[ref]; }
+      });
+      var now = Date.now();                            // throttle evaluate to ~1s (TechSpec §3.4)
+      if (now - lastEval >= 1000) { lastEval = now; rpEvaluate(); }
+      else if (!pending) { pending = true; setTimeout(function () { pending = false; lastEval = Date.now(); rpEvaluate(); }, 1000); }
+    }, { threshold: [0, RP.MIN_RATIO, 1] });
+  }
+  // Reset tracker state when a feed/list is fully re-rendered (not on append).
+  function resetReadingProgress() {
+    rpRecords = {}; rpCurrent = null;
+    if (rpTimer) { clearTimeout(rpTimer); rpTimer = null; }
+    if (rpTracker) rpTracker.reset();
+  }
+  // Observe all current .hadith-card[data-ref] in a container (Tier-1 feed or Tier-3a list).
+  function observeFeed(container) {
+    if (!rpObserver || !container) return;
+    container.querySelectorAll('.hadith-card[data-ref]').forEach(function (card) { rpObserver.observe(card); });
   }
 
   /* ── Continue Reading (read-only; tracking is Module 7) ── */
