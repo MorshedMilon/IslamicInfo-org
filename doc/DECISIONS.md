@@ -416,3 +416,22 @@ prayer + hadith) still degrades gracefully (TASKS.md).
 **Consequences.** `api.js` gains `API_BASE` + `_apiUrl` (both exported for tests); behavior unchanged in
 prod today. Two paired follow-ups in TASKS.md: (1) redeploy the Worker with hadith routes, (2) verify the
 site-wide flip against all `/api` call sites. Neither needs ADR-026.
+
+## ADR-029 · Module 8 narrator panel ships engineering-only; reliability data deferred · Accepted · 2026-07-21
+**Context.** US-H11's narrator reliability panel renders named scholarly judgments (Ibn Hajar,
+al-Dhahabi, al-Mizzi) with folio citations about named narrators — the platform's highest
+religious-accuracy-risk surface (PRD DoD-9: "no fabricated gradings"; charter: "never invent
+citations"). An AI agent cannot verify folio/entry numbers against the classical works, so authoring
+that data = fabrication. TechSpec §7.5 rule 3 already frames the citations as "validated at
+data-authoring time" — human content.
+**Decision.** Module 8 builds the full component (pure `narrator-panel-core.js` + DOM
+`narrator-panel.js` + `api.fetchNarrator` + `data-narrator-id` on isnad nodes + CSS) and every honest
+state (empty-citations → "No scholar citations available for this narrator"; unknown/not-in-DB → grey
+`.rel-unknown` + "Unknown narrator"; fetch-fail → "Reliability data unavailable for this narrator").
+It authors **zero** narrator citation data — only an empty structural template
+(`data/narrator/_schema.example.json`). Populated rendering is proven with **synthetic unit-test
+fixtures only** (never shipped), like the Module 2/7 disputed-grade dead-code path. The reliability
+dataset is a separate scholar-verified content task (TASKS.md), gated by CONTENT-POLICY §5.
+**Consequences.** Panels render honest-"unavailable" live (also because isnad `narrators:[]` means no
+rows to click). No fabricated gradings enter the repo. Data lights up with no code change once
+verified `/data/narrator/{id}.json` files land.

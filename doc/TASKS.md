@@ -72,6 +72,15 @@ _Top of the backlog, unblocked, scoped._
   blocked-by-content-sourcing:** obtain permissively-licensed UR/FR/ID/TR translation editions
   (mirroring the ADR-024 direct-source approach) and surface them as `h.translations[]` on the
   normalized hadith. No code change is required in Module 7's deep-view to light them up.
+- [ ] 🕌🚧 **Narrator reliability dataset — scholar-verified (Module 8 data half; DoD-9).** The panel
+  ENGINEERING ships in Module 8 (component, lazy-fetch, all honest states), rendering
+  honest-"unavailable" until data exists. Seed `/data/narrator/{id}.json` (schema:
+  `data/narrator/_schema.example.json`) from **Taqrib at-Tahdhib / Tahdhib al-Kamal / Siyar A'lam
+  an-Nubala'**; EVERY `graderCitations[]` entry (scholar + gradeText + source + folio/`sourceRef`) must
+  trace to a named classical work and pass the **islamic-authenticity / hadith-verifier** skill. This is
+  a **Product + Scholarly Review** task, NOT engineering — gated by CONTENT-POLICY §5 human sign-off; no
+  fabricated gradings, ever, and never pad to the "min 3 rows" target. Also needs the upstream curated
+  isnad dataset (live chains are `narrators:[]`, so panels aren't reachable until narrator rows exist).
 - [ ] 🚧 **Hadith page performance pass (PRD DoD-15 gap).** Local Lighthouse on the Tier 3b
   benchmark route (`/hadith/sahih-bukhari/1/1`) scored **Performance 62–65** (target ≥90);
   Accessibility 97, Best-Practices 96, SEO 90 all pass. The perf cost is **base-`hadith.html`
