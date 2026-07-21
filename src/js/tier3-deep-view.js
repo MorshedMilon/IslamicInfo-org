@@ -13,7 +13,6 @@
   var t3 = II.tier3Core;
   var host = null;                                   // set by init()
   var LANG_KEY = 'islamicinfo-hadith-lang';
-  var GRADE_VALUES = { all: 1, sahih: 1, hasan: 1, daif: 1, mawdu: 1 };
   var BOOKLESS_DEFAULT = 1;                          // bookless collections use book segment 1
 
   function esc(s) { return (host && host.ui && host.ui.escapeHTML) ? host.ui.escapeHTML(s) : String(s == null ? '' : s); }
@@ -34,7 +33,7 @@
 
   function listHeaderHTML(c, bookNum, bookName, count) {
     var name = bookName || (bookNum != null ? ('Book ' + bookNum) : c.nameEnglish);
-    var n = (count != null) ? (' · ' + count + ' hadith' + (count === 1 ? '' : 's')) : '';
+    var n = (count != null) ? (' · ' + esc(count) + ' hadith' + (count === 1 ? '' : 's')) : '';
     return '<div class="t3a-header">' +
       '<nav class="dv-breadcrumb" aria-label="Breadcrumb">' +
         '<a class="dv-crumb" href="/hadith.html">Hadith</a>' +
@@ -51,7 +50,7 @@
       pills.map(function (p) {
         var on = p[0] === active;
         return '<button class="grade-filter-pill ' + p[0] + (on ? ' on' : '') + '" type="button" ' +
-               'data-grade="' + p[0] + '" role="button" aria-pressed="' + (on ? 'true' : 'false') + '">' + p[1] + '</button>';
+               'data-grade="' + p[0] + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + p[1] + '</button>';
       }).join('') + '</div>';
   }
 
@@ -144,7 +143,9 @@
 
   /* ═══════════════ Tier 3b — deep-view ═══════════════ */
 
-  function wireDeepView(el, r, slug, book) {
+  function wireDeepView(el) {
+    if (el.dataset.dvWired) return;
+    el.dataset.dvWired = '1';
     // translation tab switching + persistence
     el.addEventListener('click', function (e) {
       var tab = e.target.closest && e.target.closest('.dv-tab[data-lang]');
@@ -178,14 +179,16 @@
     el.innerHTML = '<div class="dv dv-loading"><div class="dv-body-card" aria-hidden="true" style="opacity:.5;height:220px;"></div></div>';
 
     // 1) core single-hadith fetch (body block critical path)
+    var token = slug + ':' + book + ':' + num + ':' + Date.now();
+    el.dataset.t3bToken = token;
     var res;
     try { res = await host.api.fetchSingleHadith(slug, book, num); } catch (_) { res = null; }
-    if ($('#ii-tier2') !== el && !host.tier2El()) return;             // route changed mid-fetch
+    if (el.dataset.t3bToken !== token) return;   // a newer renderDeepView started during the await
     var h = (res && res.ok && res.data) ? res.data : null;
 
     // 2) paint immediately with no neighbors yet (prev/next resolved after)
     el.innerHTML = t3.deepViewHTML(r, c, h, { activeLang: activeLang, neighbors: { prev: null, next: null }, book: book });
-    wireDeepView(el, r, slug, book);
+    wireDeepView(el);
 
     // 3) deep-link scroll + gold pulse (TechSpec §3.5; respects reduced-motion)
     var body = el.querySelector('.dv-body-card');
@@ -199,6 +202,7 @@
 
     // 4) resolve prev/next from the book list (deferred, non-blocking — never blocks body paint)
     host.api.fetchHadithsByBook(slug, book, 1, 1000).then(function (lst) {
+      if (el.dataset.t3bToken !== token) return;
       var slot = el.querySelector('.dv-prevnext-slot'); if (!slot) return;
       var list = (lst && lst.ok && lst.data && Array.isArray(lst.data.hadiths)) ? lst.data.hadiths : [];
       var neighbors = t3.resolveNeighbors(list, num);
