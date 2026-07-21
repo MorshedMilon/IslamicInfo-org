@@ -400,6 +400,39 @@
     else { btn.classList.remove('active'); hideCategoryTooltip(); }
   }
 
+  /* ── Module 10: note editor (sibling below card — Module 4 DoD) ── */
+  function onNote(card, ref) {
+    if (!actions) return;
+    var next = card.nextElementSibling;
+    if (next && next.classList.contains('note-editor')) { next.parentNode.removeChild(next); return; } // toggle closed
+    var existing = actions.getNote(getNotes(), ref);
+    var ed = document.createElement('div');
+    ed.className = 'note-editor';
+    ed.innerHTML =
+      '<textarea class="note-textarea" maxlength="' + actions.MAX_NOTE + '" ' +
+        'placeholder="Your note (private, saved on this device)…"></textarea>' +
+      '<div class="note-editor-actions">' +
+        '<span class="note-count"></span>' +
+        '<button type="button" class="btn-glass note-cancel">Cancel</button>' +
+        '<button type="button" class="btn-glass primary note-save">Save</button>' +
+      '</div>';
+    card.parentNode.insertBefore(ed, card.nextSibling);
+    var ta = ed.querySelector('.note-textarea'), count = ed.querySelector('.note-count');
+    ta.value = existing ? existing.text : '';           // set via .value (never innerHTML) — no injection
+    function updateCount() { count.textContent = ta.value.length + ' / ' + actions.MAX_NOTE; }
+    updateCount(); ta.addEventListener('input', updateCount); ta.focus();
+    ed.querySelector('.note-cancel').addEventListener('click', function () {
+      if (ed.parentNode) ed.parentNode.removeChild(ed);   // discard — never persists
+    });
+    ed.querySelector('.note-save').addEventListener('click', function () {
+      var list = actions.upsertNote(getNotes(), actions.buildNote(ref, ta.value, Date.now()));
+      setNotes(list);
+      card.classList.toggle('has-note', !!ta.value.trim());
+      ui.showToast('Note saved');
+      if (ed.parentNode) ed.parentNode.removeChild(ed);
+    });
+  }
+
   /* ── Continue Reading (read-only; tracking is Module 7) ── */
   function renderContinueReading() {
     var el = $('#ii-continue-reading'); if (!el) return;
