@@ -435,3 +435,21 @@ dataset is a separate scholar-verified content task (TASKS.md), gated by CONTENT
 **Consequences.** Panels render honest-"unavailable" live (also because isnad `narrators:[]` means no
 rows to click). No fabricated gradings enter the repo. Data lights up with no code change once
 verified `/data/narrator/{id}.json` files land.
+
+## ADR-030 · Module 9 deep-link pulse-ring retimed to spec (1.8s ×2) · Accepted · 2026-07-21
+**Context.** Module 7 shipped the deep-link `.pulse-gold` as `dv-pulse-gold 1.6s var(--ease)` — a single
+run ending at `var(--elev-1)` — with `prefers-reduced-motion` set to `animation:none` only. TechSpec §3.5
+specifies a ring-expand pulse (`box-shadow 0 0 0 0 → 16px → 0`, gold `rgba(197,160,89,·)`), **1.8s, 2
+iterations**; §3.14 requires the reduced-motion fallback to apply a `border-color: rgba(197,160,89,.5)`
+highlight, not merely disable the animation.
+**Decision.** Rewrite `.pulse-gold` to the spec (1.8s, 2 iterations, ring-expand keyframe,
+`var(--ease-reverent)`) and add the §3.14 reduced-motion border highlight. Extract a single shared
+`pulseRing(el)` in `hadith.js`, exposed to Module 7 via the tier3 host (`host.pulseRing`), so Tier-3b
+deep-view and Module 9's Continue-Reading deep-link share ONE implementation instead of Module 7's former
+inline copy and its hardcoded `1600ms` cleanup. `pulseRing` owns the reduced-motion branch (static gold
+border, no animation) and a `3700ms` (2×1.8s + buffer) class-cleanup.
+**Consequences.** Before → after: `1.6s × 1`, ends at `--elev-1`  →  `1.8s × 2`, ring-expand to
+transparent. **This is a user-visible change** — the deep-link / Continue-Reading pulse now runs longer and
+repeats twice; flag for manual QA on the hadith deep-view (`/hadith/sahih-bukhari/1/1`) and on the
+Continue-Reading prompt click. Reduced-motion users now get a persistent gold border tint instead of no
+feedback at all. No content authored; design-system tokens only (gold `rgba(197,160,89,·)`, `--ease-reverent`).

@@ -11,6 +11,7 @@
 
   var II = window.II || {};
   var api = II.api, ui = II.ui, core = II.hadithCollections, feed = II.hadithFeed;
+  var RP = II.readingProgress;
   if (!api || !ui || !core) { console.error('[hadith.js] missing II.api/ui/hadithCollections'); return; }
 
   var META_URL = 'src/data/hadith/collections-meta.json';
@@ -154,8 +155,13 @@
   function collectionHeaderHTML(c) {
     var arabic = c.nameArabic ? '<div class="collection-header-arabic">' + esc(c.nameArabic) + '</div>' : '';
     var meta = [c.compiler, c.lifespan].filter(Boolean).map(esc).join(' · ');
+    var crumbs = '<nav class="dv-breadcrumb" aria-label="Breadcrumb" style="margin-bottom:12px;">' +
+      '<a class="dv-crumb" href="/hadith.html">Hadith</a>' +
+      '<span class="dv-crumb-sep" aria-hidden="true">›</span>' +
+      '<span class="dv-crumb dv-crumb-current" aria-current="page">' + esc(c.nameEnglish) + '</span>' +
+      '</nav>';
     return '<div class="collection-header">' +
-      '<a class="back-btn" href="/hadith.html">↩ All Collections</a>' +
+      '<a class="back-btn" href="/hadith.html">↩ All Collections</a>' + crumbs +
       '<h1 class="collection-header-name">' + esc(c.nameEnglish) + '</h1>' + arabic +
       (meta ? '<div class="collection-header-meta">' + meta + '</div>' : '') + '</div>';
   }
@@ -237,16 +243,104 @@
     window.addEventListener('popstate', function () { renderRoute(parseRoute()); });
   }
 
+  /* ── Reading-progress tracker (US-H23b / FIX-5) ─────────────────────
+     One IntersectionObserver over .hadith-card[data-ref] across the Tier-1
+     feed AND Tier-3a list (via host.observeFeed). A card counts as "read"
+     after ≥3 continuous seconds ≥50% visible (IO + setTimeout combo; the
+     pure rules live in II.readingProgress). On read → persist last-read. */
+  var rpObserver = null, rpTracker = null, rpRecords = {}, rpTimer = null, rpCurrent = null;
+
+  function prefersReducedMotion() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  // Shared deep-link pulse (TechSpec §3.5). Single source of truth: Module 7's
+  // Tier-3b deep-view calls this via the tier3 host, and the Continue-Reading
+  // deep-link reuses it through the normal deep-link render path. Reduced-motion
+  // users get the §3.14 border highlight instead of the animation.
+  function pulseRing(el) {
+    if (!el) return;
+    if (prefersReducedMotion()) { el.style.borderColor = 'rgba(197,160,89,.5)'; return; }
+    el.classList.remove('pulse-gold');
+    void el.offsetWidth;                                 // reflow so re-adding restarts the animation
+    el.classList.add('pulse-gold');
+    setTimeout(function () { el.classList.remove('pulse-gold'); }, 3700);   // 2 × 1.8s + buffer
+  }
+  function rpPersist(ref) {
+    var payload = RP.payloadFromRef(ref, Date.now());
+    if (payload) ui.safeLocalStorageSet('islamicinfo-hadith-last-read', payload);
+  }
+  function rpEvaluate() {
+    var records = Object.keys(rpRecords).map(function (k) { return rpRecords[k]; });
+    var top = RP.topmost(records);
+    if (top === rpCurrent) return;                     // no change in topmost → nothing to do
+    rpCurrent = top;
+    rpTracker.update(top, Date.now());                 // (re)arm the dwell clock in the core
+    if (rpTimer) { clearTimeout(rpTimer); rpTimer = null; }
+    if (top) {
+      rpTimer = setTimeout(function () {
+        var read = rpTracker.update(rpCurrent, Date.now());
+        if (read) rpPersist(read);
+      }, RP.THRESHOLD_MS);
+    }
+  }
+  function initReadingObserver() {
+    if (!RP || typeof window.IntersectionObserver !== 'function') return;   // old browser → tracker no-ops
+    rpTracker = RP.createTracker();
+    var lastEval = 0, pending = false;
+    rpObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var ref = en.target.getAttribute('data-ref'); if (!ref) return;
+        if (en.isIntersecting && en.intersectionRatio >= RP.MIN_RATIO) {
+          rpRecords[ref] = { ref: ref, ratio: en.intersectionRatio, top: en.boundingClientRect.top };
+        } else { delete rpRecords[ref]; }
+      });
+      var now = Date.now();                            // throttle evaluate to ~1s (TechSpec §3.4)
+      if (now - lastEval >= 1000) { lastEval = now; rpEvaluate(); }
+      else if (!pending) { pending = true; setTimeout(function () { pending = false; lastEval = Date.now(); rpEvaluate(); }, 1000); }
+    }, { threshold: [0, RP.MIN_RATIO, 1] });
+  }
+  // Reset tracker state when a feed/list is fully re-rendered (not on append).
+  function resetReadingProgress() {
+    rpRecords = {}; rpCurrent = null;
+    if (rpTimer) { clearTimeout(rpTimer); rpTimer = null; }
+    if (rpTracker) rpTracker.reset();
+  }
+  // Restore-scroll (TechSpec §3.4): on a non-deep-link load, scroll the Tier-1 feed to
+  // the last-read card IF it is present in the currently-loaded default feed. One-shot.
+  var rpRestored = false;
+  function maybeRestoreScroll() {
+    if (rpRestored || state.arrivedViaDeepLink) return;
+    var lr = ui.safeLocalStorageGet('islamicinfo-hadith-last-read', null);
+    if (!lr || lr.collectionSlug !== FEED.slug || String(lr.bookNum) !== String(FEED.book)) return;
+    var el = feedEl(); if (!el) return;
+    try {                                                // corrupt last-read must never throw (§7.4)
+      var card = el.querySelector('.hadith-card[data-ref="' + FEED.slug + ':' + FEED.book + ':' + lr.hadithNum + '"]');
+      if (card) {
+        rpRestored = true;
+        card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+      }
+    } catch (_) {}
+  }
+  // Observe all current .hadith-card[data-ref] in a container (Tier-1 feed or Tier-3a list).
+  function observeFeed(container) {
+    if (!rpObserver || !container) return;
+    container.querySelectorAll('.hadith-card[data-ref]').forEach(function (card) { rpObserver.observe(card); });
+  }
+
   /* ── Continue Reading (read-only; tracking is Module 7) ── */
   function renderContinueReading() {
     var el = $('#ii-continue-reading'); if (!el) return;
-    if (currentSlug()) return;
+    if (currentSlug()) return;                          // explicit deep-link present → suppress (§10)
     var lr = ui.safeLocalStorageGet('islamicinfo-hadith-last-read', null);
     if (!lr || !lr.collectionSlug || lr.hadithNum == null) return;
     var c = state.collections.filter(function (x) { return x.slug === lr.collectionSlug; })[0];
     var name = c ? c.nameEnglish : lr.collectionSlug;
+    var href = '/hadith/' + encodeURIComponent(lr.collectionSlug);
+    if (lr.bookNum != null && lr.hadithNum != null) {   // deep-link → Tier-3b scroll + pulse reuse
+      href += '/' + encodeURIComponent(lr.bookNum) + '/' + encodeURIComponent(lr.hadithNum);
+    }
     el.textContent = 'Continue where you left off → ' + name + ', Hadith ' + lr.hadithNum;
-    el.setAttribute('href', '/hadith/' + encodeURIComponent(lr.collectionSlug));
+    el.setAttribute('href', href);
     el.setAttribute('data-browse', lr.collectionSlug);
     el.style.display = 'inline-flex';
   }
@@ -397,7 +491,9 @@
     var html = fresh.map(feed.buildCardHTML).join('');
 
     if (append) { if (html) el.insertAdjacentHTML('beforeend', html); }
-    else el.innerHTML = html || emptyFeedHTML();
+    else { resetReadingProgress(); el.innerHTML = html || emptyFeedHTML(); }
+    observeFeed(el);   // Module 9: track topmost visible card for last-read
+    if (!append) maybeRestoreScroll();
 
     FEED.page = nextPage;
     FEED.lastPage = data.lastPage;
@@ -639,6 +735,10 @@
   async function init() {
     // GitHub Pages 404 SPA fallback (see 404.html): restore the intended clean /hadith/... URL (ADR-026).
     try { var rd = new URLSearchParams(location.search).get('redirect'); if (rd && rd.charAt(0) === '/') history.replaceState(null, '', rd); } catch (_) {}
+    // Precedence (TechSpec §10): an explicit deep-link (a collection segment in the
+    // resolved path) always wins over last-read restoration — suppress the prompt and
+    // skip restore-scroll. Computed AFTER the ?redirect= restore above.
+    state.arrivedViaDeepLink = !!parseRoute().collection;
     try {
       var r = await ui.apiFetchWithTimeout(META_URL, { timeoutMs: 5000 });
       state.meta = await r.json();
@@ -650,6 +750,7 @@
       II.tier3.init({
         setTier: setTier, tier2El: tier2El, routeTo: routeTo,
         api: api, ui: ui, feed: feed,
+        observeFeed: observeFeed, pulseRing: pulseRing, resetReadingProgress: resetReadingProgress,
       });
     }
     if (II.narratorPanelDom && II.narratorPanelDom.init) {
@@ -663,6 +764,7 @@
     wireSearch();
     wireTopics();
     loadHotD();
+    initReadingObserver();
     if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); loadHadithFeed(false); }
   }
 
