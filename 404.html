@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Redirecting… — IslamicInfo</title>
+<script>
+/* GitHub Pages SPA fallback (ADR-026). GitHub Pages serves this 404.html for any path that has
+   no matching file (e.g. /hadith/bukhari). For app-routed path prefixes we bounce to the owning
+   page, preserving the intended path in ?redirect= so the app can restore a clean URL and render
+   the right view. Client-side navigation (pushState) never hits this — only deep-links/refreshes.
+   NOTE: GitHub Pages returns this with an HTTP 404 status, so crawlers do NOT index these paths.
+   True 200 path routing requires moving site-serving to Cloudflare — tracked as its own initiative
+   in TASKS.md ("Cloudflare hosting migration"). */
+(function () {
+  var APPS = { hadith: '/hadith.html' };   // path first-segment → owning app page (extend per app)
+  var path = location.pathname || '/';
+  var seg = path.replace(/^\/+/, '').split('/')[0];
+  var app = APPS[seg];
+  if (app && path !== app) {
+    location.replace(app + '?redirect=' + encodeURIComponent(path + location.search + location.hash));
+  } else {
+    location.replace('/');
+  }
+})();
+</script>
+</head>
+<body>
+<noscript>Page not found. <a href="/">Return to the homepage</a>.</noscript>
+<p style="font-family:system-ui,-apple-system,sans-serif;color:#6D797A;padding:48px;text-align:center;">Redirecting…</p>
+</body>
+</html>

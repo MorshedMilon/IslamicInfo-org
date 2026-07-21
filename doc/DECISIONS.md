@@ -343,3 +343,31 @@ palette; they must re-sync these 6 grade values.
 **Known marginal.** Dark `--grade-mawdu` #E05555 = **4.17:1 vs its tinted badge bg** (4.69:1 vs raw
 surface) — kept as the TechSpec §2.6-specified value; Mawdu' is essentially never shown live
 (fabricated narrations). Flagged, not changed without direction.
+
+## ADR-026 · Path-based routing for the Hadith Library · Accepted · 2026-07-21
+**Context.** ARCHITECTURE.md's route map specified static multi-page-per-route
+(`/hadith/[collection]` → a file `hadith/[collection].html`), but Module 1 shipped a query-param
+interim (`?collection=slug`) single-page router, with `showLoadingShell` a deliberate stub for
+Tier 2. The two conflicted, and every Tier 2/3 module depends on the choice. Host reality
+(confirmed): **GitHub Pages is the sole site host** (`CNAME` = islamicinfo.org + `deploy.yml`);
+the Cloudflare Worker (`islamicinfo-api`) is **API-only** and serves no HTML; its custom domain is
+commented out (DNS not yet on Cloudflare). There is **no build step** (ADR-001), so per-route
+static files aren't viable.
+**Decision.** **Path-based single-page routing.** Canonical URLs
+`/hadith/[collection]/[book]/[hadith]` driven by History API `pushState` on the single `hadith.html`
+app (`parseRoute`/`routePath`/`renderRoute` in `hadith.js`). `<base href="/">` keeps relative
+assets/links/fetches resolving to root under deep paths; a fragment-link scroll interceptor keeps
+`#anchor` links on-page. Deep-links/refreshes survive via a **GitHub Pages `404.html` SPA
+fallback** that bounces `/hadith/*` → `/hadith.html?redirect=<path>`, which `init()` restores to a
+clean URL. This **supersedes** the `?collection=` interim (Module 1) and ARCHITECTURE.md's
+multi-page-files plan; going forward all Tier 2/3 modules build on path routes only. Tier 1 stays at
+`/hadith.html` (renaming to `/hadith/` is a file move affecting cross-page nav — deferred to the
+hosting-migration initiative).
+**Known limitation (SEO/unfurl).** GitHub Pages serves `404.html` with an **HTTP 404 status**, so
+deep-link paths are **not indexed by crawlers** and **social-preview unfurling breaks** on shared
+links. Clean URLs still give durable/shareable links for humans. True 200 path routing requires
+moving site-serving to Cloudflare — logged as its **own initiative** in TASKS.md, **not** folded
+into any content module (per owner direction).
+**Consequences.** `hadith.js` routing reworked from query-param to path parsing; Browse/sidebar
+links now `/hadith/[slug]`; new `404.html`; `<base href="/">` in `hadith.html`. Later Tier 2/3
+modules (7, 9, 11, deep-view/trace) inherit this model.

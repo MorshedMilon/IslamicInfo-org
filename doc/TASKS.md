@@ -21,6 +21,15 @@ _Top of the backlog, unblocked, scoped._
 
 - [ ] Create `docs/DATA.md` link-back from `ARCHITECTURE §6` (remove duplicated key tables; point to DATA.md).
 - [ ] Stand up CI checks (see §CI below) before building more pages.
+- [ ] 🚧 **Cloudflare hosting migration (dedicated initiative — needs Milan's cost/benefit call).**
+  Move static-site serving from GitHub Pages to Cloudflare (Worker static-assets or CF Pages) so
+  path routes (`/hadith/[collection]/…`, ADR-026) return **HTTP 200** and are crawler-indexable.
+  **Scope is broad: affects all 10 pages, DNS (islamicinfo.org → Cloudflare), and the deploy
+  pipeline** — this is NOT a quick follow-up and must not be folded into a content module.
+  **Until it happens:** shared hadith deep-links return 404 to crawlers (no search indexing) **and
+  have broken social-preview unfurling** (Open Graph/Twitter cards won't render) — weigh both when
+  prioritising. `worker/wrangler.toml` already anticipates the DNS move (commented `api.islamicinfo.org`
+  route). Also revisit renaming Tier 1 `/hadith.html` → `/hadith/` at that point. See DECISIONS.md ADR-026.
 - [ ] 🚧 **Hadith search — real proxy.** Stage-1 hero search is a client-side substring stub over
   the *loaded* feed only (`hadith.js` `wireSearch`/`setSearchQuery`). Build the real
   `GET /api/hadith/search` proxy (TechSpec §4.4) — full-corpus search with `<mark>` ranges,

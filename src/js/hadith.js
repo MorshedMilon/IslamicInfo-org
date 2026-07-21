@@ -45,7 +45,7 @@
         '</div>' +
         '<div class="card-footer">' +
           '<div class="authenticity-badge"' + toneStyle(c.authTone) + '><div class="authenticity-dot"' + dotStyle(c.authTone) + '></div><span>' + esc(c.authLabel || 'Grade Unavailable') + '</span></div>' +
-          '<a class="browse-btn" href="?collection=' + encodeURIComponent(c.slug) + '" data-browse="' + esc(c.slug) + '">Browse →</a>' +
+          '<a class="browse-btn" href="/hadith/' + encodeURIComponent(c.slug) + '" data-browse="' + esc(c.slug) + '">Browse →</a>' +
         '</div>' +
       '</div>';
   }
@@ -53,7 +53,7 @@
   function sidebarRowHTML(c) {
     var count = c.hadithCount != null ? core.formatInt(c.hadithCount) : '';
     var badge = count ? ' <span class="count-badge">' + esc(count) + '</span>' : '';
-    return '<a class="sidebar-item" href="?collection=' + encodeURIComponent(c.slug) + '" data-browse="' + esc(c.slug) + '">' + esc(c.nameEnglish) + badge + '</a>';
+    return '<a class="sidebar-item" href="/hadith/' + encodeURIComponent(c.slug) + '" data-browse="' + esc(c.slug) + '">' + esc(c.nameEnglish) + badge + '</a>';
   }
 
   function gridSkeleton(n) {
@@ -111,42 +111,129 @@
     });
   }
 
-  /* ── Browse / route (?collection=slug + loading shell; no faked Tier 2) ── */
-  function currentSlug() { try { return new URLSearchParams(location.search).get('collection'); } catch (_) { return null; } }
+  /* ── Path-based routing (ADR-026): /hadith/[collection]/[book]/[hadith] ──
+     Tier 1 = /hadith.html (this file). Tier 2 (this module) = /hadith/[collection] (books grid).
+     Tier 3a/3b = /hadith/[collection]/[book][/hadith] (Module 7 — honest placeholder here).
+     Client nav = pushState; deep-link/refresh survives via the GitHub Pages 404.html SPA
+     fallback which lands on /hadith.html?redirect=<path>, restored to a clean URL in init(). */
 
-  function reflectActiveRoute() {
-    var slug = currentSlug();
+  // Collections with no fixed book structure — Browse skips Tier 2, straight to Tier 3a (TechSpec §10).
+  var BOOKLESS = { 'riyad-assalihin': 1, 'nawawi40': 1, 'musnad-ahmad': 1 };
+  function isBookless(slug) { return !!BOOKLESS[slug]; }
+  function collectionBySlug(slug) { return state.collections.filter(function (x) { return x.slug === slug; })[0] || null; }
+
+  function parseRoute(path) {
+    try { path = decodeURIComponent(path || location.pathname); } catch (_) { path = path || location.pathname; }
+    var m = path.match(/^\/hadith\/([^\/?#]+)(?:\/([^\/?#]+))?(?:\/([^\/?#]+))?\/?$/);
+    if (!m) return { collection: null, book: null, hadith: null };
+    return { collection: m[1] || null, book: m[2] || null, hadith: m[3] || null };
+  }
+  function routePath(r) {
+    if (!r || !r.collection) return '/hadith.html';
+    var p = '/hadith/' + encodeURIComponent(r.collection);
+    if (r.book != null && r.book !== '') { p += '/' + encodeURIComponent(r.book); if (r.hadith != null && r.hadith !== '') p += '/' + encodeURIComponent(r.hadith); }
+    return p;
+  }
+  function currentSlug() { return parseRoute().collection; }
+
+  function reflectActiveRoute(slug) {
+    slug = slug || currentSlug();
     document.querySelectorAll('.sidebar-item[data-browse]').forEach(function (a) {
       a.classList.toggle('active', a.getAttribute('data-browse') === slug);
     });
   }
 
-  function showLoadingShell(slug) {
-    var c = state.collections.filter(function (x) { return x.slug === slug; })[0];
-    var name = c ? c.nameEnglish : slug;
-    var grid = $('#collections'); if (!grid) return;
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink-muted);">' +
-      '<div style="font-family:var(--font-display);font-size:22px;color:var(--ink-primary);margin-bottom:8px;">' + esc(name) + '</div>' +
-      '<div>Loading collection… the full library view arrives soon.</div>' +
-      '<a class="browse-btn" href="?" data-browse="" style="margin-top:14px;display:inline-block;">← All collections</a></div>';
+  /* ── Tier 2 view container (created once in .main; CSS hides Tier-1 sections when data-tier=2) ── */
+  function setTier(n) { var main = $('.main'); if (main) main.setAttribute('data-tier', n ? String(n) : '1'); }
+  function tier2El() {
+    var main = $('.main'); if (!main) return null;
+    var el = $('#ii-tier2');
+    if (!el) { el = document.createElement('div'); el.id = 'ii-tier2'; main.appendChild(el); }
+    return el;
+  }
+  function collectionHeaderHTML(c) {
+    var arabic = c.nameArabic ? '<div class="collection-header-arabic">' + esc(c.nameArabic) + '</div>' : '';
+    var meta = [c.compiler, c.lifespan].filter(Boolean).map(esc).join(' · ');
+    return '<div class="collection-header">' +
+      '<a class="back-btn" href="/hadith.html">↩ All Collections</a>' +
+      '<h1 class="collection-header-name">' + esc(c.nameEnglish) + '</h1>' + arabic +
+      (meta ? '<div class="collection-header-meta">' + meta + '</div>' : '') + '</div>';
+  }
+  function booksSkeleton() {
+    var out = '';
+    for (var i = 0; i < 6; i++) out += '<div class="book-card" aria-hidden="true" style="opacity:.5;"><div style="height:24px;width:30%;background:rgba(0,105,110,.1);border-radius:6px;"></div><div style="height:34px;margin-top:12px;background:rgba(0,105,110,.06);border-radius:8px;"></div></div>';
+    return out;
+  }
+  function bookCardHTML(c, b) {
+    var num = b.bookNumber;
+    var count = (typeof b.hadithCount === 'number') ? core.formatInt(b.hadithCount) : '';
+    var arabic = b.bookArabicName ? '<div class="book-arabic">' + esc(b.bookArabicName) + '</div>' : '';
+    var badge = count ? '<span class="count-badge">' + esc(count) + ' hadiths</span>' : '';
+    return '<a class="book-card" href="' + routePath({ collection: c.slug, book: num }) + '">' +
+      '<span class="book-num">' + esc(num) + '</span>' +
+      '<div class="book-name">' + esc(b.bookName || ('Book ' + num)) + '</div>' + arabic + badge +
+      '<span class="book-browse">Browse hadiths →</span></a>';
+  }
+  function renderBooksError(c) {
+    var grid = $('#ii-books-grid'); if (!grid) return;
+    grid.innerHTML = '<div class="books-error"><div class="books-empty-title">Books temporarily unavailable</div>' +
+      '<div>We couldn’t load the books for this collection.</div>' +
+      '<button class="btn-glass" id="ii-books-retry" type="button" style="margin-top:14px;">Try again</button></div>';
+    var retry = $('#ii-books-retry'); if (retry) retry.addEventListener('click', function () { loadBooksGrid(c); });
+  }
+  async function loadBooksGrid(c) {
+    setTier(2);
+    var el = tier2El(); if (!el) return;
+    el.innerHTML = collectionHeaderHTML(c) + '<div class="books-grid" id="ii-books-grid">' + booksSkeleton() + '</div>';
+    var res; try { res = await api.fetchHadithBooks(c.slug); } catch (_) { res = null; }
+    var grid = $('#ii-books-grid'); if (!grid) return;                      // route changed mid-fetch
+    if (!res || !res.ok || !Array.isArray(res.data) || !res.data.length) { renderBooksError(c); return; }
+    grid.innerHTML = res.data.map(function (b) { return bookCardHTML(c, b); }).join('');
+  }
+  // Tier 3a/3b live in Module 7; render an honest interim (back nav works) rather than faking a list.
+  function renderTier3Placeholder(r, c) {
+    setTier(2);
+    var el = tier2El(); if (!el) return;
+    var seg = r.hadith ? (' · Hadith ' + esc(r.hadith)) : (r.book ? (' · Book ' + esc(r.book)) : '');
+    el.innerHTML = collectionHeaderHTML(c) +
+      '<div class="books-empty"><div class="books-empty-title">' + esc(c.nameEnglish) + seg + '</div>' +
+      '<div>The hadith reading view (Tier 3) arrives in the next module.</div></div>';
   }
 
-  function routeTo(slug, push) {
-    if (push) { try { history.pushState({ collection: slug }, '', slug ? ('?collection=' + encodeURIComponent(slug)) : location.pathname); } catch (_) {} }
-    reflectActiveRoute();
-    updateContinueReading(slug);
-    if (slug) showLoadingShell(slug); else applyFilter();
+  function renderRoute(r) {
+    r = r || parseRoute();
+    reflectActiveRoute(r.collection);
+    updateContinueReading(r.collection);
+    if (!r.collection) { setTier(1); applyFilter(); return; }
+    var c = collectionBySlug(r.collection);
+    if (!c) { setTier(1); applyFilter(); try { history.replaceState(null, '', '/hadith.html'); } catch (_) {} return; } // invalid → Tier 1 (TechSpec §10)
+    if (r.book || isBookless(r.collection)) { renderTier3Placeholder(r, c); return; }   // skip Tier 2 for book-less
+    loadBooksGrid(c);
+  }
+  function routeTo(r, push) {
+    r = r || { collection: null };
+    if (push) { try { history.pushState(r, '', routePath(r)); } catch (_) {} }
+    renderRoute(r);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function wireBrowse() {
+  function wireRouting() {
     document.addEventListener('click', function (e) {
-      var a = e.target.closest && e.target.closest('[data-browse]');
+      var a = e.target.closest && e.target.closest('a[href]');
       if (!a) return;
-      e.preventDefault();
-      routeTo(a.getAttribute('data-browse'), true);
-      var main = document.querySelector('.main'); if (main) main.scrollIntoView({ behavior: 'smooth' });
+      var href = a.getAttribute('href');
+      if (href && href.charAt(0) === '#') {                 // base-href would send #anchors to "/#…"; keep them on-page
+        e.preventDefault();
+        var id = href.slice(1);
+        if (id) { var t = document.getElementById(id); if (t) t.scrollIntoView({ behavior: 'smooth' }); }
+        return;
+      }
+      if (href === '/hadith.html' || /^\/hadith(\/|$)/.test(href)) {   // internal hadith route → client-side nav
+        e.preventDefault();
+        routeTo(href === '/hadith.html' ? { collection: null } : parseRoute(href), true);
+      }
     });
-    window.addEventListener('popstate', function () { var s = currentSlug(); routeTo(s, false); });
+    window.addEventListener('popstate', function () { renderRoute(parseRoute()); });
   }
 
   /* ── Continue Reading (read-only; tracking is Module 7) ── */
@@ -158,7 +245,7 @@
     var c = state.collections.filter(function (x) { return x.slug === lr.collectionSlug; })[0];
     var name = c ? c.nameEnglish : lr.collectionSlug;
     el.textContent = 'Continue where you left off → ' + name + ', Hadith ' + lr.hadithNum;
-    el.setAttribute('href', '?collection=' + encodeURIComponent(lr.collectionSlug));
+    el.setAttribute('href', '/hadith/' + encodeURIComponent(lr.collectionSlug));
     el.setAttribute('data-browse', lr.collectionSlug);
     el.style.display = 'inline-flex';
   }
@@ -183,8 +270,7 @@
     renderSidebar(state.collections);
     renderStats(state.collections);
     renderContinueReading();
-    var slug = currentSlug();
-    if (slug) { reflectActiveRoute(); showLoadingShell(slug); } else { applyFilter(); }
+    renderRoute(parseRoute());
   }
 
   /* ── Hadith of the Day ── */
@@ -323,7 +409,7 @@
     else setLoadMore('idle');
   }
 
-  /* ── Grade filter deep-link (?grade=, TechSpec §5.1; preserves ?collection=) ── */
+  /* ── Grade filter deep-link (?grade=, TechSpec §5.1; preserves the current path + other params) ── */
   var GRADE_VALUES = { all: 1, sahih: 1, hasan: 1, daif: 1, mawdu: 1 };
   function readGradeFromUrl() {
     var g; try { g = new URLSearchParams(location.search).get('grade'); } catch (_) { g = null; }
@@ -549,13 +635,15 @@
 
   /* ── Init ── */
   async function init() {
+    // GitHub Pages 404 SPA fallback (see 404.html): restore the intended clean /hadith/... URL (ADR-026).
+    try { var rd = new URLSearchParams(location.search).get('redirect'); if (rd && rd.charAt(0) === '/') history.replaceState(null, '', rd); } catch (_) {}
     try {
       var r = await ui.apiFetchWithTimeout(META_URL, { timeoutMs: 5000 });
       state.meta = await r.json();
     } catch (_) { state.meta = {}; }
     await loadCollections();
     wireFilterTabs();
-    wireBrowse();
+    wireRouting();
     wireSheet();
     wireSearch();
     wireTopics();
