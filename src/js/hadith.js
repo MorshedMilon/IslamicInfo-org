@@ -642,15 +642,18 @@
       var r = await ui.apiFetchWithTimeout(META_URL, { timeoutMs: 5000 });
       state.meta = await r.json();
     } catch (_) { state.meta = {}; }
-    await loadCollections();
-    wireFilterTabs();
-    wireRouting();
+    // Register the Tier 3 host BEFORE loadCollections() — its final renderRoute()
+    // can dispatch straight to a Tier 3a/3b view on a direct deep-link load, and
+    // II.tier3.renderList/renderDeepView need the injected host to exist by then.
     if (II.tier3 && II.tier3.init) {
       II.tier3.init({
         setTier: setTier, tier2El: tier2El, routeTo: routeTo,
         api: api, ui: ui, feed: feed,
       });
     }
+    await loadCollections();
+    wireFilterTabs();
+    wireRouting();
     wireSheet();
     wireSearch();
     wireTopics();
