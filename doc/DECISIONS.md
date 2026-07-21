@@ -236,16 +236,23 @@ added" (Option a). Both could not stand. The 8 collections — Riyad as-Saliheen
 Muwatta Malik, Al-Adab al-Mufrad, Shamail Muhammadiyah, Sunan al-Darimi, Forty Hadith Qudsi, Forty
 Hadith of Shah Waliullah (all AhmedBaset-sourced) — have no per-hadith `grade` field at source
 (PRD §2.3).
-**Decision.** Adopt **Option (a)**. The 10 graded collections (9 HadithAPI.com + 1 fawazahmed0)
+**Decision.** Adopt **Option (a)**. The 9 graded collections (9 HadithAPI.com)
 keep the per-hadith grade badge with named grader; the "Grade Unknown" grey fallback applies only
-within those 10 (a record missing a grade in a source that has the field). The 8 AhmedBaset-sourced
-collections render a **collection-level characterization badge only** — no per-hadith grade badge,
-and specifically **not** a "Grade Unknown" badge. `grade`/`grader` are `null` on their hadith objects.
+within those 9 (a record missing a grade in a source that has the field). The 9 characterization-only
+collections (40 Hadith Nawawi + the 8 AhmedBaset-sourced) render a **collection-level characterization
+badge only** — no per-hadith grade badge, and specifically **not** a "Grade Unknown" badge.
+`grade`/`grader` are `null` on their hadith objects.
+
+**Refinement (2026-07-20, during the ADR-024 build; owner-confirmed).** The original split was "10 graded
+(9 HadithAPI.com + 1 fawazahmed0) / 8 ungraded". Endpoint verification found the fawazahmed0 edition of
+**40 Hadith Nawawi has no per-hadith grade field either**, so Nawawi is treated as characterization-only
+exactly like the 8 AhmedBaset collections. **Final split: 9 graded (the 9 HadithAPI.com collections) /
+9 characterization-only (40 Nawawi + 8 AhmedBaset).**
 **Rationale.** (1) No fabricated per-hadith claims — matches skills/islamic-authenticity/SKILL.md
 "does not invent Arabic text / grades" and the standing "never fabricate grader" rule. (2) Stamping
 thousands of well-characterized hadith (e.g. Muwatta, Riyad as-Saliheen) "Grade Unknown" would
 *misrepresent* known scholarly characterization — a collection-level badge is more honest. (3)
-Preserves the meaning of the badge on the 10 graded collections: a grade badge always means a real
+Preserves the meaning of the badge on the 9 graded collections: a grade badge always means a real
 per-hadith grade.
 **US-H16 copy-with-attribution fallback.** For the 8 collections, replace the
 `Grade: {grade} ({grader}, {year}).` segment with the literal
@@ -271,3 +278,40 @@ then retire the wrapper under a new ADR.
 **Dead-code note.** The **root-level `api.js`** (project root) is an unloaded duplicate of
 `src/js/api.js` — **no HTML page references it** (all 15 pages load `src/js/api.js`). Marked **dead
 code pending removal**; do not edit it. Deletion deferred pending owner confirmation.
+
+## ADR-024 · Hadith Library = 3-provider / 18-collection data layer · Accepted · 2026-07-20
+**Supersedes ADR-020** (hadithapi.com as the *sole* hadith source) and adds a **scoped
+carve-out to ADR-003** (all external APIs behind `/api/` proxies).
+**Context.** ADR-020 scoped Module 0 to hadithapi.com only (9 collections), deferring the
+remaining collections to "a separate backend module next" (design spec D1). PRD v1.2 §2.3/§5
+specifies the full target: **18 collections across 3 free providers**. Owner decision
+(2026-07-20) is to build the full 18/3-provider layer now rather than defer. The AhmedBaset
+license question (flagged unresolved in TechSpec §5 and the Module 0 build prompt) is
+**resolved: AhmedBaset/hadith-json is ISC-licensed** (permissive, owner-confirmed 2026-07-20);
+fawazahmed0/hadith-api is public domain (Unlicense).
+**Decision.** Hadith data routes across three providers:
+- **HadithAPI.com — 9 collections** (Bukhari, Muslim, Abu Dawud, Tirmidhi, Nasa'i, Ibn Majah,
+  Musnad Ahmad, Mishkat, al-Silsila al-Sahiha). Keyed source → **proxied through the Cloudflare
+  Worker** (`/api/hadith/*`); the API key stays a Worker secret. Unchanged from ADR-021.
+- **fawazahmed0/hadith-api — 1 collection** (40 Hadith Nawawi). Keyless public-domain static
+  JSON on jsDelivr → **direct client fetch, no proxy, no key**.
+- **AhmedBaset/hadith-json — 8 collections** (Riyad as-Saliheen, Bulugh al-Maram, Muwatta Malik,
+  Al-Adab al-Mufrad, Shamail Muhammadiyah, Sunan al-Darimi, Forty Hadith Qudsi, Forty Hadith of
+  Shah Waliullah). Keyless ISC static JSON on GitHub → **direct client fetch pinned to a release
+  tag** (never `main`), no proxy, no key.
+**ADR-003 carve-out (narrow).** ADR-003 ("no direct client calls to external APIs") stands for
+all **keyed** or **rate-limited** upstreams. It does **not** apply to **keyless, immutable,
+permissively-licensed static datasets** (public-domain / ISC) served from a CDN: there is no
+secret to protect and no server logic to add, so proxying them through the Worker would add
+latency and cost for zero benefit. Only fawazahmed0 and AhmedBaset qualify.
+**Grade policy interaction (ADR-022).** The **9 characterization-only** collections (40 Hadith Nawawi
++ 8 AhmedBaset) carry a **collection-level `gradeCharacterization`** only; their hadith objects have
+`grade`/`grader` = `null` and **no per-hadith grade badge** (never "Grade Unknown"). The **9 HadithAPI.com**
+collections keep per-hadith grades. (fawazahmed0's Nawawi edition has no grade field — see ADR-022 refinement.)
+**Total count.** The Stats-Strip total is **computed at runtime** from the merged 18-collection
+list — never hardcoded (PRD FIX-9 note + US-H02).
+**Consequences.** ADR-020 is superseded (kept as historical record, not deleted). A static
+`collections.json` seed of all 18 becomes the offline/failed-fetch fallback (TechSpec §8).
+`src/js/api.js` gains **additive** provider-routing (existing `fetchHadith*` REST methods and the
+legacy `fetchHadith` wrapper per ADR-023 are preserved). AhmedBaset is pinned to a release tag so
+upstream `main` churn can't silently change production data.

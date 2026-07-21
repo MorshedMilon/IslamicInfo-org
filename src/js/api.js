@@ -251,7 +251,37 @@
       return { ok: false, error: { code: 'network', message: 'Network error', retryable: true }, source: 'fallback' };
     }
   }
-  function fetchHadithCollections() { return _getHadith('/api/hadith/collections'); }
+  /* Merged 18-collection index (ADR-024): live hadithapi counts (Worker) layered over
+     the static 18-collection seed, seed as offline fallback (TechSpec §8 — no user error).
+     Same { ok, data:[...], source } envelope as the Worker, so existing callers
+     (hadith.js) render unchanged — now data-driven on all 18. Helpers (_hadithSeed,
+     _seedToCollection) are declared below and hoisted. */
+  async function fetchHadithCollections() {
+    const seedList = (await _hadithSeed()).map(_seedToCollection);
+    let live = null;
+    try { live = await _getHadith('/api/hadith/collections'); } catch (_) { live = null; }
+
+    if (live && live.ok && Array.isArray(live.data) && live.data.length) {
+      const bySlug = {};
+      live.data.forEach(function (d) { if (d && d.collectionSlug) bySlug[d.collectionSlug] = d; });
+      const merged = seedList.map(function (c) {
+        const d = bySlug[c.collectionSlug];
+        if (!d) return c;                                    // fawazahmed0/AhmedBaset → keep seed
+        return Object.assign({}, c, {                        // hadithapi → live count/name authoritative
+          collectionName: d.collectionName || c.collectionName,
+          collectionArabicName: d.collectionArabicName || c.collectionArabicName || null,
+          hadithCount: (typeof d.hadithCount === 'number') ? d.hadithCount : c.hadithCount,
+          chaptersCount: (typeof d.chaptersCount === 'number') ? d.chaptersCount : c.chaptersCount,
+        });
+      });
+      live.data.forEach(function (d) {                       // defensive: live collection not in seed
+        if (d && d.collectionSlug && !seedList.some(function (c) { return c.collectionSlug === d.collectionSlug; })) merged.push(d);
+      });
+      return { ok: true, data: merged, source: live.source || 'live' };
+    }
+    if (seedList.length) return { ok: true, data: seedList, source: 'fallback' };
+    return live || { ok: false, error: { code: 'unavailable', message: 'Collections unavailable', retryable: true }, source: 'fallback' };
+  }
   function fetchHadithBooks(slug) { return _getHadith(`/api/hadith/collections/${encodeURIComponent(slug)}/books`); }
   function fetchHadithList(slug, book, page, limit) {
     return _getHadith(`/api/hadith/collections/${encodeURIComponent(slug)}/books/${book}/hadiths?page=${page || 1}&limit=${limit || 25}`);
@@ -263,6 +293,154 @@
     return _getHadith(`/api/hadith/search?q=${encodeURIComponent(q)}&lang=${lang || 'en'}&page=${page || 1}`);
   }
   function fetchHadithDaily() { return _getHadith('/api/hadith/daily'); }
+
+  /* ═══════════════════════════════════════════════════════════════
+     Hadith 3-provider routing (ADR-024) — 18 collections.
+       · hadithapi (9): proxied via the Worker (/api/hadith/*) — key stays server-side.
+       · fawazahmed0 (1) + AhmedBaset (8): keyless, permissively-licensed static JSON
+         fetched DIRECT from CDN — no /api/ proxy, NO apiKey (none exists for these).
+         AhmedBaset is pinned to release tag v1.2.0 (never `main`) per ADR-024.
+     Cache-first via _get() → localStorage `islamicinfo-hadith-*` (JSON.parse/setItem
+     already wrapped in try/catch inside _get, per TechSpec §7.4).
+     ═══════════════════════════════════════════════════════════════ */
+
+  const HADITH_SEED_URL = 'src/data/hadith/collections.json';
+  const HADITH_DIRECT_BASE = {
+    fawazahmed0: 'https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/',
+    ahmedbaset:  'https://raw.githubusercontent.com/AhmedBaset/hadith-json/v1.2.0/db/by_book/',
+  };
+  // slug → direct-source route for the 9 non-hadithapi collections. Endpoints verified 2026-07-20.
+  const HADITH_ROUTES = {
+    'nawawi40':             { provider: 'fawazahmed0', eng: 'eng-nawawi', ara: 'ara-nawawi', characterization: "Sahih / Hasan — an-Nawawi's selection" },
+    'riyad-assalihin':      { provider: 'ahmedbaset', path: 'other_books/riyad_assalihin.json',      characterization: "Sahih / Hasan — compiler's selection" },
+    'bulugh-almaram':       { provider: 'ahmedbaset', path: 'other_books/bulugh_almaram.json',       characterization: 'Mixed Grades (ahkam / legal hadith)' },
+    'aladab-almufrad':      { provider: 'ahmedbaset', path: 'other_books/aladab_almufrad.json',      characterization: 'Mixed Grades' },
+    'shamail-muhammadiyah': { provider: 'ahmedbaset', path: 'other_books/shamail_muhammadiyah.json', characterization: 'Mixed Grades' },
+    'muwatta-malik':        { provider: 'ahmedbaset', path: 'the_9_books/malik.json',                characterization: 'Sahih / Hasan' },
+    'sunan-darimi':         { provider: 'ahmedbaset', path: 'the_9_books/darimi.json',               characterization: 'Mixed Grades' },
+    'forty-qudsi':          { provider: 'ahmedbaset', path: 'forties/qudsi40.json',                  characterization: 'Mixed (per source hadith)' },
+    'forty-shah-waliullah': { provider: 'ahmedbaset', path: 'forties/shahwaliullah40.json',          characterization: 'Mixed' },
+  };
+
+  /** Which provider serves a collection slug. Unknown slug → 'hadithapi' (Worker validates). */
+  function hadithProviderOf(slug) {
+    const r = HADITH_ROUTES[slug];
+    return r ? r.provider : 'hadithapi';
+  }
+
+  /* Static 18-collection seed (7d cache). */
+  async function _hadithSeed() {
+    const s = await _get('islamicinfo-hadith-collections', HADITH_SEED_URL, TTL_7D, false);
+    return (s && Array.isArray(s.collections)) ? s.collections : [];
+  }
+  /* Seed row → Worker-shaped collection item (so core.mergeCollection consumes it uniformly). */
+  function _seedToCollection(c) {
+    return {
+      collectionSlug: c.slug,
+      collectionName: c.nameEnglish,
+      collectionArabicName: c.nameArabic || null,
+      compiler: c.compiler || null,
+      hadithCount: (typeof c.hadithCount === 'number') ? c.hadithCount : null,
+      chaptersCount: null,
+      source: c.source || null,
+      perHadithGrade: c.perHadithGrade === true,
+      gradeCharacterization: c.gradeCharacterization || null,
+    };
+  }
+
+  /* Direct keyless fetchers — NO apiKey param (none exists for these public sources). */
+  function _fetchFawaz(edition) {
+    return _get('islamicinfo-hadith-fawaz-' + edition, HADITH_DIRECT_BASE.fawazahmed0 + edition + '.json', TTL_7D, false);
+  }
+  function _fetchAhmedBaset(path) {
+    const key = 'islamicinfo-hadith-ab-' + path.replace(/[^a-z0-9]+/gi, '-');
+    return _get(key, HADITH_DIRECT_BASE.ahmedbaset + path, TTL_7D, false);
+  }
+
+  /* Normalize a direct-source hadith into the SAME internal shape the Worker emits
+     (worker/src/lib/hadith-adapter.js → normalizeHadith). grade is NULL for these
+     collections (no per-hadith grade at source) — ADR-022/ADR-024: the UI shows the
+     collection-level gradeCharacterization badge, never a fabricated grade, never
+     "Grade Unknown". */
+  function _directHadith(slug, provider, num, book, arabic, text, narrator, characterization) {
+    return {
+      id: (slug && num != null) ? (slug + ':' + (book != null ? book : 0) + ':' + num) : null,
+      source: provider,
+      sourceId: null,
+      collectionSlug: slug,
+      collectionName: null,
+      collectionArabicName: null,
+      bookNumber: (book != null ? book : null),
+      bookName: null,
+      bookArabicName: null,
+      hadithNumber: (typeof num === 'number' ? num : null),
+      reference: (slug && num != null) ? (slug + ' · Hadith ' + num) : null,
+      arabicMatn: arabic || '',
+      translation: { text: text || '', language: 'en', edition: provider, translator: null },
+      narrator: { id: null, name: narrator || null, arabicName: null },
+      grade: null,
+      gradeCharacterization: characterization || null,
+      isnad: { status: 'unavailable', narrators: [] },
+      topics: [],
+      audio: { status: 'unavailable', url: null, reciter: null },
+      sourceMetadata: { fetchedAt: null, sourceUrlOrId: null, contentHash: null, verificationStatus: 'source-only' },
+    };
+  }
+
+  /* Paginate a flat array → Worker list envelope shape { hadiths, page, limit, total, lastPage }. */
+  function _pageDirect(list, page, limit) {
+    const p = Math.max(1, parseInt(page, 10) || 1);
+    const l = Math.max(1, parseInt(limit, 10) || 25);
+    const start = (p - 1) * l;
+    return { hadiths: list.slice(start, start + l), page: p, limit: l, total: list.length, lastPage: Math.max(1, Math.ceil(list.length / l)) };
+  }
+
+  /* fetchHadithsByBook — provider-routed hadith feed (ADR-024).
+     hadithapi → Worker (fetchHadithList). Direct sources → fetch file, normalize,
+     paginate the flat list (their Tier-2 book split is deferred per TechSpec §10). */
+  async function fetchHadithsByBook(slug, book, page, limit) {
+    if (hadithProviderOf(slug) === 'hadithapi') return fetchHadithList(slug, book, page, limit);
+    const route = HADITH_ROUTES[slug];
+    try {
+      if (route.provider === 'fawazahmed0') {
+        const pair = await Promise.all([_fetchFawaz(route.eng), _fetchFawaz(route.ara)]);
+        const eng = pair[0], ara = pair[1];
+        if (!eng || !Array.isArray(eng.hadiths)) return { ok: false, error: { code: 'upstream', message: 'Source unavailable', retryable: true }, source: 'fallback' };
+        const araBy = {};
+        (ara && Array.isArray(ara.hadiths) ? ara.hadiths : []).forEach(function (h) { araBy[h.hadithnumber] = h.text; });
+        const list = eng.hadiths.map(function (h) { return _directHadith(slug, 'fawazahmed0', h.hadithnumber, null, araBy[h.hadithnumber] || '', h.text, null, route.characterization); });
+        return { ok: true, data: _pageDirect(list, page, limit), source: 'live' };
+      }
+      const doc = await _fetchAhmedBaset(route.path);
+      if (!doc || !Array.isArray(doc.hadiths)) return { ok: false, error: { code: 'upstream', message: 'Source unavailable', retryable: true }, source: 'fallback' };
+      const list = doc.hadiths.map(function (h) {
+        return _directHadith(slug, 'ahmedbaset',
+          (typeof h.idInBook === 'number' ? h.idInBook : h.id),
+          (typeof h.chapterId === 'number' ? h.chapterId : null),
+          h.arabic || '', (h.english && h.english.text) || '', (h.english && h.english.narrator) || null,
+          route.characterization);
+      });
+      return { ok: true, data: _pageDirect(list, page, limit), source: 'live' };
+    } catch (err) {
+      console.warn('[II/api] fetchHadithsByBook direct failed:', err && err.message);
+      return { ok: false, error: { code: 'network', message: 'Network error', retryable: true }, source: 'fallback' };
+    }
+  }
+
+  /* fetchSingleHadith — provider-routed single hadith. hadithapi → Worker (needs book+num).
+     Direct sources → fetch (cached) file + find by hadith number. */
+  async function fetchSingleHadith(slug, book, num) {
+    if (hadithProviderOf(slug) === 'hadithapi') return fetchHadithOne(slug, book, num);
+    const res = await fetchHadithsByBook(slug, book, 1, 1000000);
+    if (!res || !res.ok || !res.data || !Array.isArray(res.data.hadiths)) {
+      return res || { ok: false, error: { code: 'upstream', message: 'unavailable', retryable: true }, source: 'fallback' };
+    }
+    const one = res.data.hadiths.find(function (h) { return String(h.hadithNumber) === String(num); });
+    return one ? { ok: true, data: one, source: res.source } : { ok: false, error: { code: 'not_found', message: 'Hadith not found', retryable: false }, source: 'fallback' };
+  }
+
+  /* fetchHadithOfDay — alias of the existing Worker daily endpoint (ADR-021). */
+  function fetchHadithOfDay() { return fetchHadithDaily(); }
 
   /* ─── Expose ─────────────────────────────────────────────────── */
   const api = {
@@ -281,6 +459,10 @@
     fetchHadithOne,
     fetchHadithSearch,
     fetchHadithDaily,
+    fetchHadithOfDay,
+    fetchHadithsByBook,
+    fetchSingleHadith,
+    hadithProviderOf,
   };
 
   /* Support both ES module (if bundled later) and plain <script> */

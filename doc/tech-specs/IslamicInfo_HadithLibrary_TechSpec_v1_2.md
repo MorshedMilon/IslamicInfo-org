@@ -10,7 +10,7 @@ The Hadith Library is the platform's primary scholarly reference tool. It delive
 
 Six functions:
 1. **Library navigation** — 3-tier drill-down: Collection → Book → Hadith (across 18 collections; total narration count computed live, see §1.1)
-2. **Authenticity transparency** — Grade badges (Sahih/Hasan/Da'if/Mawdu') with named graders on every hadith for the 10 graded collections; the 8 AhmedBaset-sourced collections have no per-hadith grade field at the source — this conflicts with "no hadith displayed without a grade" as literally stated, see §1.1 OPEN item
+2. **Authenticity transparency** — Grade badges (Sahih/Hasan/Da'if/Mawdu') with named graders on every hadith for the 9 graded collections (9 HadithAPI.com); the 9 characterization-only collections (40 Hadith Nawawi + 8 AhmedBaset-sourced) have no per-hadith grade field at the source and show a collection-level characterization badge only — resolved per ADR-022 (Option a) + 2026-07-20 refinement, see §1.1
 3. **Isnad research** — Visual chain of narrators with reliability grades sourced from classical works (Taqrib at-Tahdhib, Tahdhib al-Kamal)
 4. **Scholar tooling** — Trace View (3-column: Matn · Isnad · Grading), comparison mode, topic index, related-hadith graph
 5. **Reader tools** — Bookmarks, notes, copy-with-attribution, share image, audio, AI explanation (QuranlyAI), reading paths with progress rings
@@ -22,7 +22,7 @@ Six functions:
 
 This spec was corrected from v1.1's single-source, 9-collection assumption to the confirmed 3-provider, 18-collection routing (see companion PRD v1.2 for full changelog). Two items were flagged; **item 1 is now resolved (ADR-022, 2026-07-20)**; item 2 remains open:
 
-1. **Grade badge conflict — RESOLVED 2026-07-20 (ADR-022, Option a).** 8 of the 18 collections (all AhmedBaset-sourced) have no per-hadith grade field. The "every hadith shows a grade badge with a named grader" rule (§7.5 rule 1, §7.1) is now **scoped to the 10 graded collections** (9 HadithAPI.com + 1 fawazahmed0). The 8 AhmedBaset-sourced collections render a **collection-level characterization badge only — no per-hadith grade badge, and specifically NOT a "Grade Unknown" grey badge**. See DECISIONS.md ADR-022 and the carve-outs in §7.1 and §10.
+1. **Grade badge conflict — RESOLVED 2026-07-20 (ADR-022, Option a).** 8 of the 18 collections (all AhmedBaset-sourced) have no per-hadith grade field. The "every hadith shows a grade badge with a named grader" rule (§7.5 rule 1, §7.1) is now **scoped to the 9 graded collections (9 HadithAPI.com)**. The 9 characterization-only collections (40 Hadith Nawawi + 8 AhmedBaset-sourced) render a **collection-level characterization badge only — no per-hadith grade badge, and specifically NOT a "Grade Unknown" grey badge**. See DECISIONS.md ADR-022 and the carve-outs in §7.1 and §10.
 2. **Locked blueprint layout** — `hadith_module_enhanced__1_.html` was designed against a 9-collection sidebar/grid. Going to 18 may affect grid row count, sidebar height, and breakpoint behavior in ways this text-only spec correction can't verify. Check the actual blueprint HTML before Stage 1 starts.
 
 ---
@@ -323,9 +323,9 @@ paths      { userId, slug, readHadiths: string[], updatedAt }
 **Hadith object (required fields):**
 `id`, `hadithNumber`, `collection` (slug), `book` (number), `arabicText`, `translation.text`, `translation.edition`, `grade` (one of `sahih|hasan|daif|mawdu`), `grader` (named person/institution)
 
-**Graded collections (10 — 9 HadithAPI.com + 1 fawazahmed0):** no hadith may be rendered without `grade` + `grader` populated. On a *missing* grade for a record in one of these 10 collections (the source has a grade field but this record lacks it): render the grade badge showing "Grade Unknown" in grey — never silently omit the badge.
+**Graded collections (9 — 9 HadithAPI.com):** no hadith may be rendered without `grade` + `grader` populated. On a *missing* grade for a record in one of these 9 collections (the source has a grade field but this record lacks it): render the grade badge showing "Grade Unknown" in grey — never silently omit the badge.
 
-**Ungraded collections (8 — AhmedBaset-sourced: Riyad as-Saliheen, Bulugh al-Maram, Muwatta Malik, Al-Adab al-Mufrad, Shamail Muhammadiyah, Sunan al-Darimi, Forty Hadith Qudsi, Forty Hadith of Shah Waliullah):** these have **no per-hadith `grade` field at source**. Per **ADR-022 (Option a)** they render a **collection-level characterization badge only** — the per-hadith grade badge is **omitted entirely** (do **not** substitute "Grade Unknown"). `grade`/`grader` are `null` on their hadith objects; consumers must treat `null` as "not individually graded", not as an error. See DECISIONS.md ADR-022.
+**Characterization-only collections (9 — 40 Hadith Nawawi (fawazahmed0) + 8 AhmedBaset-sourced: Riyad as-Saliheen, Bulugh al-Maram, Muwatta Malik, Al-Adab al-Mufrad, Shamail Muhammadiyah, Sunan al-Darimi, Forty Hadith Qudsi, Forty Hadith of Shah Waliullah):** these have **no per-hadith `grade` field at source**. Per **ADR-022 (Option a)** they render a **collection-level characterization badge only** — the per-hadith grade badge is **omitted entirely** (do **not** substitute "Grade Unknown"). `grade`/`grader` are `null` on their hadith objects; consumers must treat `null` as "not individually graded", not as an error. See DECISIONS.md ADR-022.
 
 **Narrator object (required fields):**
 `id`, `fullName`, `arabicName`, `lifespan`, `era`, `reliabilityGrade`, `graderCitations[]` (each with `scholar`, `gradeText`, `source`, `sourceRef`)
@@ -352,7 +352,7 @@ Grade badge CSS classes (`--grade-sahih`, `--grade-hasan`, `--grade-daif`, `--gr
 - Reading path `readHadiths[]` array: deduplicate with `Set` before persisting
 
 ### 7.5 Content Safety Rules (Functional Doc §20)
-1. Every hadith shows a grade badge with a named grader for the 10 graded collections (9 HadithAPI.com + 1 fawazahmed0); the 8 AhmedBaset-sourced collections have no per-hadith grade field and render a collection-level characterization badge only (no per-hadith badge) — **resolved per ADR-022 (Option a), 2026-07-20**
+1. Every hadith shows a grade badge with a named grader for the 9 graded collections (9 HadithAPI.com); the 9 characterization-only collections (40 Hadith Nawawi + 8 AhmedBaset-sourced) have no per-hadith grade field and render a collection-level characterization badge only (no per-hadith badge) — **resolved per ADR-022 (Option a) + refinement, 2026-07-20**
 2. Isnad chains are real classical Arabic text from the source APIs (HadithAPI.com's `hadithArabic` field, or the `ara-*`/`arabic` field from fawazahmed0/AhmedBaset) — never fabricated, never machine-translated back into a reconstructed chain
 3. Narrator reliability text always cites a named classical work — validated at data-authoring time; display "unavailable" if citation missing
 4. Copy always includes full attribution — no "copy text only" option that strips scholarly reference (only Arabic-matn-only copy is the separate option)
@@ -401,8 +401,8 @@ The Hadith Library is **fully public** — no authentication gate at any stage.
 |---|---|
 | Musnad Ahmad (27,647 hadiths, no fixed book structure) | Handle missing `book` field gracefully; render in flat feed; breadcrumb shows "Musnad Ahmad › Hadith N" without book segment |
 | Riyad as-Saliheen / 40 Nawawi (no `bookNum` in Tier 2) | Tier 2 skipped for these collections; "Browse →" goes directly to Tier 3a hadith list |
-| Grade missing from API response (one of the 10 graded collections) | Render `.grade-badge` with "Grade Unknown" in grey rather than omitting badge entirely |
-| Hadith from one of the 8 ungraded collections (AhmedBaset — no source grade field) | **Omit** the per-hadith `.grade-badge` entirely; show the collection-level characterization badge instead. Do **not** render "Grade Unknown". Per ADR-022 (Option a) |
+| Grade missing from API response (one of the 9 graded collections) | Render `.grade-badge` with "Grade Unknown" in grey rather than omitting badge entirely |
+| Hadith from one of the 9 characterization-only collections (40 Nawawi + 8 AhmedBaset — no source grade field) | **Omit** the per-hadith `.grade-badge` entirely; show the collection-level characterization badge instead. Do **not** render "Grade Unknown". Per ADR-022 (Option a) |
 | Narrator in chain not in narrator DB | Render dot as grey (`.rel-unknown`) with tooltip "Unknown narrator"; never fabricate reliability grade |
 | "Ask a Question" on collections grid (Tier 1, no active hadith) | Navigate to `/verify` with empty input focused; no pre-fill |
 | Same hadith bookmarked twice | Idempotent: second click removes bookmark; Set deduplication in storage |

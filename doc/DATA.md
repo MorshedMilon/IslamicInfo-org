@@ -27,6 +27,9 @@
 | `islamicinfo-hadith-bookmarks` | `HadithBookmark[]` | Hadith Library | Permanent |
 | `islamicinfo-hadith-notes` | `HadithNote[]` | Hadith Library | Permanent |
 | `islamicinfo-hadith-{collection}-{book}-{date}` | cached API response (JSON) | Hadith Library | 1 day |
+| `islamicinfo-hadith-collections` | merged 18-collection index seed (JSON) — ADR-024 | Hadith Library | 7 days |
+| `islamicinfo-hadith-fawaz-{edition}` | fawazahmed0 edition file, e.g. `eng-nawawi` / `ara-nawawi` (JSON), keyless direct fetch — ADR-024 | Hadith Library | 7 days |
+| `islamicinfo-hadith-ab-{path}` | AhmedBaset v1.2.0 collection file (JSON), keyless direct fetch pinned to release tag — ADR-024 | Hadith Library | 7 days |
 | `islamicinfo-is-progress` | `ISProgress` (see §3) | Islamic Studies | Permanent |
 | `islamicinfo-is-visit` | `{ trackSlug, lessonIndex, departedAt }` | Islamic Studies | Cleared on return |
 | `ii-habits` | `HabitState` (see §4) | Habit Tracker | Permanent |
@@ -126,7 +129,7 @@ PrayerData = {
 NisabData      = { currency: string; goldPricePerGram: number; nisabValue: number; asOf: string; source: string }
 HadithBookmark = { collectionSlug: string; bookNum: number; hadithNum: number; savedAt: string }
 HadithNote     = { collectionSlug: string; bookNum: number; hadithNum: number; text: string; updatedAt: string }
-Hadith         = { id: string; collectionSlug: string; bookNum: number; hadithNum: number; arabic: string; translation: string; translator: string; narrator: string; grade: 'sahih'|'hasan'|'daif'|'mawdu'|null; grader: string|null }  // grade/grader null for the 8 ungraded collections — ADR-022
+Hadith         = { id: string; collectionSlug: string; bookNum: number; hadithNum: number; arabic: string; translation: string; translator: string; narrator: string; grade: 'sahih'|'hasan'|'daif'|'mawdu'|null; grader: string|null }  // grade/grader null for the 9 characterization-only collections (40 Nawawi + 8 AhmedBaset) — ADR-022
 Chapter        = { id: number; name_simple: string; name_arabic: string; revelation_place: 'makkah' | 'madinah'; verses_count: number; slug: string }
 Verse          = { verse_key: string; verse_number: number; text_uthmani: string; translation: string; words: { ar: string; en: string }[] }
 Reciter        = { id: number; name: string; style: string }
@@ -207,9 +210,11 @@ hadith:{collection}:{book}:{date} → book hadiths            TTL 24h
 | `hadith:daily:{YYYY-MM-DD}` | to UTC midnight |
 | `hadith:search:{lang}:{page}:{q}` | 1h |
 
-> **Grade/grader canonical shape (ADR-022, 2026-07-20).** `grade` and `grader` are populated only
-> for the **10 graded collections** (9 HadithAPI.com + 1 fawazahmed0). For the **8 AhmedBaset-sourced
-> collections** (Riyad as-Saliheen, Bulugh al-Maram, Muwatta Malik, Al-Adab al-Mufrad, Shamail
+> **Provider scope (ADR-024, 2026-07-20).** These `hadith:*` KV keys apply **only to the 9 HadithAPI.com collections** (proxied through the Worker, key server-side). The 1 fawazahmed0 (40 Nawawi) + 8 AhmedBaset collections are **keyless direct client fetches** — no Worker, no KV — cached client-side under `islamicinfo-hadith-collections` / `islamicinfo-hadith-fawaz-*` / `islamicinfo-hadith-ab-*` (see §2 localStorage table), with AhmedBaset pinned to release tag `v1.2.0`.
+
+> **Grade/grader canonical shape (ADR-022 + 2026-07-20 refinement).** `grade` and `grader` are populated
+> only for the **9 graded collections (9 HadithAPI.com)**. For the **9 characterization-only collections**
+> (40 Hadith Nawawi + Riyad as-Saliheen, Bulugh al-Maram, Muwatta Malik, Al-Adab al-Mufrad, Shamail
 > Muhammadiyah, Sunan al-Darimi, Forty Hadith Qudsi, Forty Hadith of Shah Waliullah) there is **no
 > per-hadith grade at source**: `grade` and `grader` are `null`, and the UI shows a **collection-level
 > characterization badge only** — no per-hadith grade badge, and **not** a "Grade Unknown" badge. All
