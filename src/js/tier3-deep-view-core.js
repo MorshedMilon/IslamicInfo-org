@@ -142,7 +142,8 @@
       n = n || {};
       var nm = n.fullName || n.arabicName || ('Narrator ' + (i + 1));
       var meta = [n.role, n.lifespan || n.era].filter(Boolean).map(esc).join(' · ');
-      return '<li class="dv-isnad-node"><span class="dv-isnad-name">' + esc(nm) + '</span>' +
+      var idAttr = n.id ? ' data-narrator-id="' + esc(n.id) + '" tabindex="0" role="button" aria-expanded="false"' : '';
+      return '<li class="dv-isnad-node"' + idAttr + '><span class="dv-isnad-name">' + esc(nm) + '</span>' +
              (meta ? '<span class="dv-isnad-meta">' + meta + '</span>' : '') + '</li>';
     }).join('');
     return '<div class="dv-block dv-isnad"><h2 class="dv-block-title">Chain of Narration (Isnad)</h2>' +

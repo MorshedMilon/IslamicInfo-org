@@ -154,6 +154,15 @@ test('isnadInlineHTML: escapes narrator names (no raw HTML)', () => {
   assert.doesNotMatch(html, /<script>alert\(3\)<\/script>/);
   assert.match(html, /&lt;script&gt;/);
 });
+test('isnadInlineHTML: nodes with an id carry data-narrator-id (narrator panel trigger); rows without id do not', () => {
+  const html = core.isnadInlineHTML(bukhari({ isnad: { status: 'ok', narrators: [
+    { id: 'malik-123', fullName: 'Malik ibn Anas' },
+    { fullName: 'Unknown One' },
+  ]}}));
+  assert.match(html, /data-narrator-id="malik-123"/);
+  // the id-less node must NOT get a fabricated/blank data-narrator-id attribute
+  assert.doesNotMatch(html, /data-narrator-id=""/);
+});
 
 /* ── topicsChipsHTML ── */
 test('topicsChipsHTML: empty topics (live) → empty string (block hidden)', () => {

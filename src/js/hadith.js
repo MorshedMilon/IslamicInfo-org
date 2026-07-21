@@ -562,7 +562,8 @@
     var face = n.arabicName ? n.arabicName.slice(0, 2) : (n.fullName ? String(n.fullName).trim().charAt(0) : '·');
     var name = n.fullName ? '<div class="isnad-name">' + esc(n.fullName) + '</div>' : '';
     var life = (n.lifespan || n.era) ? '<div class="isnad-lifespan">' + esc([n.lifespan, n.era].filter(Boolean).join(' · ')) + '</div>' : '';
-    return '<div class="isnad-link" role="listitem">' +
+    var idAttr = n.id ? ' data-narrator-id="' + esc(n.id) + '" tabindex="0" aria-expanded="false"' : ' title="Unknown narrator"';
+    return '<div class="isnad-link" role="listitem"' + idAttr + '>' +
       '<div class="isnad-avatar' + (role ? ' ' + role : '') + '">' + esc(face) + '</div>' +
       name + life + '<div class="reliability-dot ' + rel + '"></div></div>';
   }
