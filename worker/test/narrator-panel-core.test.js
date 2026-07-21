@@ -74,3 +74,21 @@ test('buildNarratorPanelHTML: narrator with empty citations → panel + honest n
   assert.match(html, /Test Narrator/);
   assert.match(html, /No scholar citations available for this narrator/);
 });
+
+test('buildNarratorPanelHTML: escapes its OWN fields (name/arabic/kunya/nasab/lifespan) — no raw HTML', () => {
+  const html = core.buildNarratorPanelHTML(narrator({
+    fullName: '<script>a</script>', arabicName: '<b>ar</b>', kunya: '<i>k</i>',
+    nasab: '<u>n</u>', lifespan: '<em>d.100</em>',
+  }));
+  ['<script>a</script>', '<b>ar</b>', '<i>k</i>', '<u>n</u>', '<em>d.100</em>'].forEach((raw) => {
+    assert.ok(!html.includes(raw), 'raw HTML leaked: ' + raw);
+  });
+  assert.match(html, /&lt;script&gt;/);
+});
+
+test('buildNarratorPanelHTML: unknown reliability + absent fullName → grey unknown badge + "Unknown narrator", never throws', () => {
+  const html = core.buildNarratorPanelHTML({ id: 'x', reliabilityGrade: 'majhul', graderCitations: [] });
+  assert.match(html, /rel-unknown/);
+  assert.match(html, /Unknown narrator/);
+  assert.match(html, /No scholar citations available for this narrator/);
+});
