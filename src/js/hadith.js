@@ -471,6 +471,86 @@
     });
   }
 
+  /* ── Module 10: bookmarks panel ── */
+  var bmLastFocus = null;
+  function onBmKey(e) { if (e.key === 'Escape') closeBookmarksPanel(); }
+  function renderBookmarksPanel(filter) {
+    var listEl = $('#ii-bookmarks-list'), chipRow = $('#ii-bookmarks-chips'); if (!listEl) return;
+    var all = getBookmarks();
+    var cats = ['all'].concat(actions.BUILTIN_CATEGORIES, actions.customCategoriesOf(all))
+      .filter(function (c, i, a) { return a.indexOf(c) === i; });
+    if (chipRow) chipRow.innerHTML = cats.map(function (c) {
+      return '<button type="button" class="bm-chip' + (c === filter ? ' on' : '') + '" data-cat="' + esc(c) + '">' +
+        esc(c === 'all' ? 'All' : c) + '</button>';
+    }).join('');
+    var rows = actions.panelFilter(all, filter);
+    if (!rows.length) {
+      listEl.innerHTML = '<div class="bm-empty">No bookmarks' + (filter === 'all' ? ' yet.' : ' in this category.') + '</div>';
+      return;
+    }
+    listEl.innerHTML = rows.map(function (b) {
+      var c = collectionBySlug(b.collectionSlug);
+      var name = c ? c.nameEnglish : (b.collectionSlug || 'Hadith');
+      return '<div class="bm-row" data-ref="' + esc(b.ref) + '">' +
+        '<div class="bm-row-main"><div class="bm-row-title">' + esc(name) + ' · Hadith ' + esc(b.hadithNum) + '</div>' +
+        '<div class="bm-row-cat">' + esc(b.category) + '</div></div>' +
+        '<button type="button" class="bm-jump" data-ref="' + esc(b.ref) + '" title="Jump to hadith" aria-label="Jump to hadith">→</button>' +
+        '<button type="button" class="bm-remove" data-ref="' + esc(b.ref) + '" title="Remove bookmark" aria-label="Remove bookmark">✕</button>' +
+      '</div>';
+    }).join('');
+  }
+  function openBookmarksPanel() {
+    var panel = $('#ii-bookmarks-panel'), backdrop = $('#ii-bookmarks-backdrop');
+    if (!panel || !backdrop || !actions) return;
+    renderBookmarksPanel('all');
+    backdrop.style.display = 'block';
+    panel.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
+    bmLastFocus = document.activeElement;
+    document.addEventListener('keydown', onBmKey);
+    ui.focusTrap(panel);
+    var first = panel.querySelector('button, a'); if (first) first.focus();
+  }
+  function closeBookmarksPanel() {
+    var panel = $('#ii-bookmarks-panel'), backdrop = $('#ii-bookmarks-backdrop');
+    if (backdrop) backdrop.style.display = 'none';
+    if (panel) { panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); }
+    document.removeEventListener('keydown', onBmKey);
+    if (bmLastFocus && bmLastFocus.focus) bmLastFocus.focus();
+  }
+  function jumpToBookmark(ref) {
+    closeBookmarksPanel();
+    var r = parseRefParts(ref);
+    routeTo({ collection: r.slug, book: r.book, hadith: r.num }, true);
+    setTimeout(function () {                              // let the target view render, then pulse
+      var card = document.querySelector('.hadith-card[data-ref="' + ref + '"]');
+      if (card) { card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' }); pulseRing(card); }
+    }, 350);
+  }
+  function wireBookmarksPanel() {
+    var trigger = $('#ii-bookmarks-trigger'), closeBtn = $('#ii-bookmarks-close'),
+        backdrop = $('#ii-bookmarks-backdrop'), chipRow = $('#ii-bookmarks-chips'), listEl = $('#ii-bookmarks-list');
+    if (trigger) trigger.addEventListener('click', function (e) { e.preventDefault(); openBookmarksPanel(); });
+    if (closeBtn) closeBtn.addEventListener('click', closeBookmarksPanel);
+    if (backdrop) backdrop.addEventListener('click', closeBookmarksPanel);
+    if (chipRow) chipRow.addEventListener('click', function (e) {
+      var chip = e.target.closest && e.target.closest('.bm-chip'); if (!chip) return;
+      renderBookmarksPanel(chip.getAttribute('data-cat'));
+    });
+    if (listEl) listEl.addEventListener('click', function (e) {
+      var jump = e.target.closest && e.target.closest('.bm-jump');
+      var rem = e.target.closest && e.target.closest('.bm-remove');
+      if (jump) { jumpToBookmark(jump.getAttribute('data-ref')); return; }
+      if (rem) {
+        var ref = rem.getAttribute('data-ref');
+        var res = actions.toggleBookmark(getBookmarks(), { ref: ref }, Date.now());
+        setBookmarks(res.list);                          // toggle of a present ref → removes
+        var active = $('#ii-bookmarks-chips .bm-chip.on');
+        renderBookmarksPanel(active ? active.getAttribute('data-cat') : 'all');
+        markCardStates(document);                        // clear the gold dot on any visible card
+      }
+    });
+  }
+
   /* ── Continue Reading (read-only; tracking is Module 7) ── */
   function renderContinueReading() {
     var el = $('#ii-continue-reading'); if (!el) return;
@@ -905,6 +985,7 @@
     wireFilterTabs();
     wireRouting();
     wireSheet();
+    wireBookmarksPanel();
     wireSearch();
     wireTopics();
     loadHotD();
