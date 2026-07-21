@@ -118,6 +118,7 @@
     listEl.innerHTML = hadiths.length
       ? hadiths.map(host.feed.buildCardHTML).join('')
       : '<div class="books-empty"><div class="books-empty-title">No hadiths in this book.</div></div>';
+    if (host.observeFeed) host.observeFeed(listEl);   // Module 9: same tracker observes Tier-3a cards
 
     // header count (now known) + status
     var header = $('.t3a-header');
@@ -202,14 +203,12 @@
     el.innerHTML = t3.deepViewHTML(r, c, h, { activeLang: activeLang, neighbors: { prev: null, next: null }, book: book });
     wireDeepView(el);
 
-    // 3) deep-link scroll + gold pulse (TechSpec §3.5; respects reduced-motion)
+    // 3) deep-link scroll + shared gold pulse (TechSpec §3.5; pulse fn owns reduced-motion)
     var body = el.querySelector('.dv-body-card');
     if (body) {
-      body.scrollIntoView({ behavior: (root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth', block: 'start' });
-      if (!(root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-        body.classList.add('pulse-gold');
-        setTimeout(function () { body.classList.remove('pulse-gold'); }, 1600);
-      }
+      var reduce = root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      body.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      if (host.pulseRing) host.pulseRing(body);
     }
 
     // 4) resolve prev/next from the book list (deferred, non-blocking — never blocks body paint)
