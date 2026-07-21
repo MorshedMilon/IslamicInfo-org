@@ -226,3 +226,48 @@ replaced by REST sub-paths (`/api/hadith/collections/:slug/books/:bookNum/hadith
 matching the PRD route map. Backend is the existing Cloudflare Worker + KV — **not** the
 Supabase Postgres stack described in the Module 0 prompt (deferred as YAGNI until a curator
 enrichment pipeline exists; Cloudflare D1 is the future relational option if needed).
+
+## ADR-022 · Grade badge policy for ungraded collections · Accepted · 2026-07-20
+**Context.** Review of PRD v1.2 §2.3 / TechSpec v1.2 found a hard contradiction. TechSpec §7.1
+and §10 hardcoded "on missing grade, render a grey 'Grade Unknown' badge — never omit" (Option c)
+as a *universal* rule, while TechSpec §1.1 (OPEN item) and the PRD §2.3 UI note leaned toward "do
+not render a per-hadith grade badge for the 8 ungraded collections unless a supplementary source is
+added" (Option a). Both could not stand. The 8 collections — Riyad as-Saliheen, Bulugh al-Maram,
+Muwatta Malik, Al-Adab al-Mufrad, Shamail Muhammadiyah, Sunan al-Darimi, Forty Hadith Qudsi, Forty
+Hadith of Shah Waliullah (all AhmedBaset-sourced) — have no per-hadith `grade` field at source
+(PRD §2.3).
+**Decision.** Adopt **Option (a)**. The 10 graded collections (9 HadithAPI.com + 1 fawazahmed0)
+keep the per-hadith grade badge with named grader; the "Grade Unknown" grey fallback applies only
+within those 10 (a record missing a grade in a source that has the field). The 8 AhmedBaset-sourced
+collections render a **collection-level characterization badge only** — no per-hadith grade badge,
+and specifically **not** a "Grade Unknown" badge. `grade`/`grader` are `null` on their hadith objects.
+**Rationale.** (1) No fabricated per-hadith claims — matches skills/islamic-authenticity/SKILL.md
+"does not invent Arabic text / grades" and the standing "never fabricate grader" rule. (2) Stamping
+thousands of well-characterized hadith (e.g. Muwatta, Riyad as-Saliheen) "Grade Unknown" would
+*misrepresent* known scholarly characterization — a collection-level badge is more honest. (3)
+Preserves the meaning of the badge on the 10 graded collections: a grade badge always means a real
+per-hadith grade.
+**US-H16 copy-with-attribution fallback.** For the 8 collections, replace the
+`Grade: {grade} ({grader}, {year}).` segment with the literal
+`Grade: Not individually graded — see collection note` (grader/year omitted).
+**Consequences.** TechSpec §1.1 item 1 closed; §7.1, §7.5 rule 1, §10, §3.11 scoped/carved out;
+DATA.md documents the canonical null-grade shape. Downstream consumers (feed renderer,
+copy-with-attribution, share image, deep-view alternate-gradings table) must treat `grade === null`
+as "not individually graded", never as an error or a "Grade Unknown" render. If a supplementary
+per-hadith grading source is added later, supersede this ADR.
+
+## ADR-023 · Preserve `fetchHadith(collection, book)` as a back-compat wrapper · Accepted · 2026-07-20
+**Context.** `src/js/api.js` defines the legacy `fetchHadith(collection, book)` (→ the old
+`/api/hadith?collection=&book=` route). `src/js/home.js` still calls `api.fetchHadith()` (no args)
+to power index.html's "Hadith of the Day". Per ADR-021 the query-param Worker route was superseded
+by REST sub-paths and now 404s, so Home currently runs on `FALLBACK_HADITH` (degraded, not broken).
+**Decision.** **Preserve** `fetchHadith(collection, book)` as a thin backward-compatible wrapper
+delegating to `fetchHadithDaily()` / the new REST methods (`src/js/api.js:254–265`), so index.html
+keeps working. `fetchHadith` must **not** be removed or renamed without updating `src/js/home.js`
+in the same change (ideally migrating Home to `fetchHadithDaily()` directly). Wrapper implementation
+is owned by Module 1, not this planning task.
+**Consequences.** No runtime break on Home. A follow-up may migrate `home.js` to the REST method and
+then retire the wrapper under a new ADR.
+**Dead-code note.** The **root-level `api.js`** (project root) is an unloaded duplicate of
+`src/js/api.js` — **no HTML page references it** (all 15 pages load `src/js/api.js`). Marked **dead
+code pending removal**; do not edit it. Deletion deferred pending owner confirmation.

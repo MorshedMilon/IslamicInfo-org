@@ -126,6 +126,7 @@ PrayerData = {
 NisabData      = { currency: string; goldPricePerGram: number; nisabValue: number; asOf: string; source: string }
 HadithBookmark = { collectionSlug: string; bookNum: number; hadithNum: number; savedAt: string }
 HadithNote     = { collectionSlug: string; bookNum: number; hadithNum: number; text: string; updatedAt: string }
+Hadith         = { id: string; collectionSlug: string; bookNum: number; hadithNum: number; arabic: string; translation: string; translator: string; narrator: string; grade: 'sahih'|'hasan'|'daif'|'mawdu'|null; grader: string|null }  // grade/grader null for the 8 ungraded collections — ADR-022
 Chapter        = { id: number; name_simple: string; name_arabic: string; revelation_place: 'makkah' | 'madinah'; verses_count: number; slug: string }
 Verse          = { verse_key: string; verse_number: number; text_uthmani: string; translation: string; words: { ar: string; en: string }[] }
 Reciter        = { id: number; name: string; style: string }
@@ -205,6 +206,17 @@ hadith:{collection}:{book}:{date} → book hadiths            TTL 24h
 | `hadith:one:{slug}:{book}:{num}` | 24h |
 | `hadith:daily:{YYYY-MM-DD}` | to UTC midnight |
 | `hadith:search:{lang}:{page}:{q}` | 1h |
+
+> **Grade/grader canonical shape (ADR-022, 2026-07-20).** `grade` and `grader` are populated only
+> for the **10 graded collections** (9 HadithAPI.com + 1 fawazahmed0). For the **8 AhmedBaset-sourced
+> collections** (Riyad as-Saliheen, Bulugh al-Maram, Muwatta Malik, Al-Adab al-Mufrad, Shamail
+> Muhammadiyah, Sunan al-Darimi, Forty Hadith Qudsi, Forty Hadith of Shah Waliullah) there is **no
+> per-hadith grade at source**: `grade` and `grader` are `null`, and the UI shows a **collection-level
+> characterization badge only** — no per-hadith grade badge, and **not** a "Grade Unknown" badge. All
+> consumers (feed renderer, copy-with-attribution, share image, deep-view alternate-gradings table)
+> must read `null` as "not individually graded". US-H16 copy fallback for these 8: replace
+> `Grade: {grade} ({grader}, {year}).` with `Grade: Not individually graded — see collection note`.
+> See DECISIONS.md ADR-022.
 
 ## 6. Future: Accounts & Sync (Stage 4 — NOT in v1)
 
