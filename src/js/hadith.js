@@ -466,7 +466,8 @@
     var html = fresh.map(feed.buildCardHTML).join('');
 
     if (append) { if (html) el.insertAdjacentHTML('beforeend', html); }
-    else el.innerHTML = html || emptyFeedHTML();
+    else { resetReadingProgress(); el.innerHTML = html || emptyFeedHTML(); }
+    observeFeed(el);   // Module 9: track topmost visible card for last-read
 
     FEED.page = nextPage;
     FEED.lastPage = data.lastPage;
@@ -733,6 +734,7 @@
     wireSearch();
     wireTopics();
     loadHotD();
+    initReadingObserver();
     if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); loadHadithFeed(false); }
   }
 
