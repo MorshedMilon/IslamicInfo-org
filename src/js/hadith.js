@@ -155,8 +155,13 @@
   function collectionHeaderHTML(c) {
     var arabic = c.nameArabic ? '<div class="collection-header-arabic">' + esc(c.nameArabic) + '</div>' : '';
     var meta = [c.compiler, c.lifespan].filter(Boolean).map(esc).join(' · ');
+    var crumbs = '<nav class="dv-breadcrumb" aria-label="Breadcrumb" style="margin-bottom:12px;">' +
+      '<a class="dv-crumb" href="/hadith.html">Hadith</a>' +
+      '<span class="dv-crumb-sep" aria-hidden="true">›</span>' +
+      '<span class="dv-crumb dv-crumb-current" aria-current="page">' + esc(c.nameEnglish) + '</span>' +
+      '</nav>';
     return '<div class="collection-header">' +
-      '<a class="back-btn" href="/hadith.html">↩ All Collections</a>' +
+      '<a class="back-btn" href="/hadith.html">↩ All Collections</a>' + crumbs +
       '<h1 class="collection-header-name">' + esc(c.nameEnglish) + '</h1>' + arabic +
       (meta ? '<div class="collection-header-meta">' + meta + '</div>' : '') + '</div>';
   }
