@@ -533,10 +533,12 @@ a { text-decoration: none; color: inherit; }
 .dv-crumb:hover { text-decoration: underline; }
 .dv-crumb-current { color: var(--ink-body); font-weight: 600; }
 .dv-crumb-sep { color: var(--ink-faint); }
-/* Module 9: collapse middle breadcrumb segments to … on narrow screens */
+/* Module 9: collapse middle breadcrumb segments to … on narrow screens
+   (only when there ARE middle segments — a 4th child means ≥3 crumbs; the
+   2-segment Tier-2 breadcrumb has no 4th child and is left uncollapsed) */
 @media (max-width: 700px) {
-  .dv-breadcrumb > :not(:first-child):not(.dv-crumb-current) { display: none; }
-  .dv-breadcrumb .dv-crumb-current::before { content: '\2026\00A0\203A\00A0'; color: var(--ink-faint); }
+  .dv-breadcrumb:has(> :nth-child(4)) > :not(:first-child):not(.dv-crumb-current) { display: none; }
+  .dv-breadcrumb:has(> :nth-child(4)) .dv-crumb-current::before { content: '\2026\00A0\203A\00A0'; color: var(--ink-faint); }
 }
 .dv-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .dv-actions { display: flex; gap: 8px; }

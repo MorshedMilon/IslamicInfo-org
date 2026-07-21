@@ -750,7 +750,7 @@
       II.tier3.init({
         setTier: setTier, tier2El: tier2El, routeTo: routeTo,
         api: api, ui: ui, feed: feed,
-        observeFeed: observeFeed, pulseRing: pulseRing,
+        observeFeed: observeFeed, pulseRing: pulseRing, resetReadingProgress: resetReadingProgress,
       });
     }
     if (II.narratorPanelDom && II.narratorPanelDom.init) {

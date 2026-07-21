@@ -89,6 +89,7 @@
 
   async function renderList(r, c) {
     host.setTier(2);
+    if (host.resetReadingProgress) host.resetReadingProgress();   // Module 9: cancel any pending dwell timer from the previous view
     var el = host.tier2El(); if (!el) return;
     var slug = c.slug;
     var book = (r.book != null && r.book !== '') ? r.book : BOOKLESS_DEFAULT;
@@ -183,6 +184,7 @@
 
   async function renderDeepView(r, c) {
     host.setTier(2);
+    if (host.resetReadingProgress) host.resetReadingProgress();   // Module 9: cancel any pending dwell timer from the previous view
     var el = host.tier2El(); if (!el) return;
     var slug = c.slug;
     var book = (r.book != null && r.book !== '') ? r.book : BOOKLESS_DEFAULT;
