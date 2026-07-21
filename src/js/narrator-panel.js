@@ -30,6 +30,9 @@
   async function toggleNarratorPanel(row, id) {
     if (!row) return;
     var existing = row.querySelector(':scope > .narrator-panel');
+    // A pending first-open fetch still writes into this panel if it's since been
+    // toggled closed — harmless (content is correct when re-opened; the id is
+    // cached so no re-fetch).
     if (existing) {
       var open = existing.classList.toggle('open');
       row.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -59,14 +62,14 @@
       if (!row || !container.contains(row)) return;
       var id = row.getAttribute('data-narrator-id');
       if (!id) return;                              // unknown narrator (no id) → not clickable
-      toggleNarratorPanel(row, id);
+      toggleNarratorPanel(row, id).catch(function () {});
     });
     container.addEventListener('keydown', function (e) {
       if (e.key !== 'Enter' && e.key !== ' ') return;
       var row = e.target.closest && e.target.closest('[data-narrator-id]');
       if (!row || !row.getAttribute('data-narrator-id')) return;
       e.preventDefault();
-      toggleNarratorPanel(row, row.getAttribute('data-narrator-id'));
+      toggleNarratorPanel(row, row.getAttribute('data-narrator-id')).catch(function () {});
     });
   }
 
