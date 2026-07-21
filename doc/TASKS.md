@@ -50,6 +50,17 @@ _Top of the backlog, unblocked, scoped._
   blocked-by-content-sourcing:** obtain permissively-licensed UR/FR/ID/TR translation editions
   (mirroring the ADR-024 direct-source approach) and surface them as `h.translations[]` on the
   normalized hadith. No code change is required in Module 7's deep-view to light them up.
+- [ ] 🚧 **Hadith page performance pass (PRD DoD-15 gap).** Local Lighthouse on the Tier 3b
+  benchmark route (`/hadith/sahih-bukhari/1/1`) scored **Performance 62–65** (target ≥90);
+  Accessibility 97, Best-Practices 96, SEO 90 all pass. The perf cost is **base-`hadith.html`
+  page-wide** (render-blocking web fonts, ~43 KiB unminified JS, LCP ~5–9s, the SPA loading all
+  Tier-1 sections + the live feed + widgets on every route) — the score is ~identical whether the
+  deep-view's data loads or not, so it is NOT specific to the Module-7 Tier-3 code (CLS 0.072, its
+  2 added scripts + inline CSS are negligible). Fix as a dedicated pass: `defer`/async non-critical
+  scripts, `font-display: swap`, and a JS-minify step (blocked by the no-build-step constraint,
+  ADR-001 — may need a lightweight build or CDN-minified assets). Re-run Lighthouse in a
+  production-like env (API reachable). NOTE: production SEO will also be capped by the ADR-026
+  GitHub-Pages 404-status deep-link limitation until the hosting migration lands.
 - [ ] 🚧 Create missing utility pages: `contact.html`, `privacy.html`, `terms.html`.
 - [ ] 🚧 **Global grade-token WCAG sync** — propagate the ADR-025 grade-badge fix
   (`--grade-hasan #5D8A3A→#4A7030`, `--grade-daif #A86932→#8A5228`, plus the
