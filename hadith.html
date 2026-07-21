@@ -672,7 +672,8 @@ a { text-decoration: none; color: inherit; }
 /* ─── NARRATOR RELIABILITY PANEL (Stage 2) ─── */
 .narrator-panel {
   background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.14);
-  border-radius: var(--r-lg); padding: 20px; margin-top: 12px; display: none;
+  border-radius: var(--r-lg); padding: 18px 20px; margin-top: 12px; display: none;
+  box-shadow: var(--inner-light);   /* nested .card, existing token (DoD: no new shadow) */
 }
 .narrator-panel.open { display: block; }
 .narrator-panel-name { font-family: var(--font-display); font-size: 20px; font-weight: 500; color: var(--ink-primary); margin-bottom: 4px; }
@@ -681,7 +682,27 @@ a { text-decoration: none; color: inherit; }
 .scholar-grading-row { display: flex; align-items: baseline; gap: 10px; font-size: 13px; }
 .sg-scholar { font-weight: 600; color: var(--ink-primary); min-width: 140px; }
 .sg-grade { color: var(--teal-700); font-style: italic; }
-.sg-note { font-size: 11.5px; color: var(--ink-muted); }
+.sg-note { font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); }
+.narrator-panel-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.narrator-panel-id { flex: 1; min-width: 0; }
+.narrator-avatar {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-arabic); font-size: 15px; color: var(--white);
+  background: var(--ink-muted);
+}
+.narrator-avatar.thiqah { background: var(--grade-sahih); }
+.narrator-avatar.saduq  { background: var(--gold-500); }
+.narrator-avatar.daif   { background: var(--grade-mawdu); }
+.narrator-avatar.unknown { background: var(--ink-muted); }
+.narrator-arabic { font-family: var(--font-arabic); font-size: 15px; color: var(--ink-body); font-weight: 400; }
+.narrator-lifespan { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+.rel-badge {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  background: var(--surface); border: 0.5px solid var(--ink-faint); color: var(--ink-body);
+}
+.narrator-empty { font-size: 12.5px; color: var(--ink-muted); padding: 4px 0; }
 
 /* ─── BREADCRUMB (Stage 2) ─── */
 .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-muted); margin-bottom: 20px; }
@@ -1880,6 +1901,8 @@ function showHadithToast(msg) {
 <script src="src/js/hadith-feed-core.js"></script>
 <script src="src/js/tier3-deep-view-core.js"></script>
 <script src="src/js/tier3-deep-view.js"></script>
+<script src="src/js/narrator-panel-core.js"></script>
+<script src="src/js/narrator-panel.js"></script>
 <script src="src/js/hadith.js"></script>
 <!-- QuranlyAI floating assistant (global, one-tag) -->
 <script src="src/js/quranlyai-widget.js?v=20260718c"></script>
