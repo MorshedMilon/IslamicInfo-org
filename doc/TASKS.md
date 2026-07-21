@@ -21,20 +21,29 @@ _Top of the backlog, unblocked, scoped._
 
 - [ ] Create `docs/DATA.md` link-back from `ARCHITECTURE §6` (remove duplicated key tables; point to DATA.md).
 - [ ] Stand up CI checks (see §CI below) before building more pages.
-- [ ] 🚧🕌 **Deploy the HadithAPI.com Worker endpoints (9 collections) — OUTSTANDING infra.**
-  Verified 2026-07-21: the `islamicinfo-api` Worker is deployed/alive (root → 200, `/api/quran/*`
-  → 501) but **every `/api/hadith/*` path returns 404** — the Module-0 hadith endpoints
-  (`worker/src/hadith.js`, `handleHadith`) are NOT in the deployed build. So the 9 hadithapi.com
-  collections (Bukhari, Muslim, the Sittah, etc.) do **not** load live anywhere yet — Tier 1 feed,
-  Tier 3a lists, and Tier 3b deep-views for those collections fall to the honest "temporarily
-  unavailable"/seed-index states. **Two parts:** (1) redeploy `islamicinfo-api` from the current
-  `worker/` (which includes the hadith module) with the `HADITH_API_KEY` secret + KV binding set
-  (`cd worker && npm run deploy`; verify `/api/hadith/collections` → 200 after). (2) **Routing:**
-  `api.js` fetches `/api/hadith/*` **same-origin**, but production site = GitHub Pages while the
-  Worker = `*.workers.dev` — so even once deployed, the live site can't reach it without a
-  same-origin `/api` proxy or an absolute API origin. This part is coupled to the **Cloudflare
-  hosting migration** item below (ADR-026). Until BOTH land, only the 9 direct-source
-  (fawazahmed0/AhmedBaset) CDN collections work in production. See DECISIONS.md ADR-024 (3-provider routing) + ADR-026.
+- [ ] 🚧 **api.js — absolute `API_BASE` for `/api/*` (client fix, NOT a hosting-migration dependency).**
+  Verified 2026-07-21: `api.js` `_get`/`_getHadith`/`_post` fetch **same-origin relative `/api/...`**
+  for EVERY endpoint (verse, quran, prayer, verify, the original `fetchHadith`, AND the new Module
+  0/1 hadith fns). Production site = GitHub Pages, which serves no `/api` → the **entire** `/api`
+  layer is 404 in prod (`islamicinfo.org/api/verse|quran/1|prayer|hadith/collections` all 404). This
+  is a site-wide design gap, NOT a Module-1 regression (the original `fetchHadith` is relative too);
+  the only place the absolute pattern already exists is the QuranlyAI widget (`apiBase:
+  'https://api.islamicinfo.org'`, fallback `…workers.dev`). **Fix (small, independent of ADR-026):**
+  add an `API_BASE` const in `api.js` (interim `https://islamicinfo-api.islamicinfo.workers.dev`;
+  swap to `https://api.islamicinfo.org` once DNS lands) and prepend it in `_get`/`_getHadith`/`_post`.
+  **CORS is already done** — `worker/src/lib/cors.js` `ALLOWED_ORIGINS` already includes
+  `https://islamicinfo.org` / `www.` / `morshedmilon.github.io`, with preflight in `index.js`. This
+  is site-wide (fixes verse/quran/prayer/verify + hadith at once) and touches the auth-adjacent
+  POST endpoints, so scope/origin needs a quick owner nod before flipping. Ships together with ↓.
+- [ ] 🚧🕌 **Redeploy the `islamicinfo-api` Worker so it carries the hadith routes.**
+  Verified 2026-07-21: the Worker is deployed/alive (root → 200, `/api/quran/*` → 501, a recognized
+  route) but **every `/api/hadith/*` path returns 404** — the Module-0 hadith endpoints
+  (`worker/src/hadith.js`, `handleHadith`) are NOT in the deployed build. Redeploy from the current
+  `worker/` with `HADITH_API_KEY` secret + KV binding (`cd worker && npm run deploy`; verify
+  `/api/hadith/collections` → 200 after). Pair with the `API_BASE` fix above so the 9 hadithapi.com
+  collections (Bukhari, Muslim, the Sittah…) load live. Until both land, only the 9 direct-source
+  (fawazahmed0/AhmedBaset) CDN collections work in production. Neither depends on the ADR-026 hosting
+  migration (that's page-route 200-status/SEO only). See DECISIONS.md ADR-024 (3-provider routing).
 - [ ] 🚧 **Cloudflare hosting migration (dedicated initiative — needs Milan's cost/benefit call).**
   Move static-site serving from GitHub Pages to Cloudflare (Worker static-assets or CF Pages) so
   path routes (`/hadith/[collection]/…`, ADR-026) return **HTTP 200** and are crawler-indexable.
