@@ -883,6 +883,68 @@ a { text-decoration: none; color: inherit; }
 [dir="rtl"] .ft-link:hover{transform:translateX(-4px);}
 [dir="rtl"] .mobile-menu{direction:rtl;}
 [dir="rtl"] .mm-link:hover{padding-left:0;padding-right:8px;}
+
+/* ── Module 10: gold dot on bookmarked/noted cards ── */
+.hadith-card.has-bookmark .hadith-num::after,
+.hadith-card.has-note .hadith-num::after {
+  content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold-500); margin-left: 6px; vertical-align: middle;
+}
+.hadith-action-btn.active { color: var(--gold-500); }
+
+/* ── Module 10: note editor (sibling below card) ── */
+.note-editor { background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.14);
+  border-radius: 12px; box-shadow: var(--elev-1); padding: 14px; margin: -6px 0 16px; }
+.note-textarea { width: 100%; min-height: 72px; resize: vertical; font: inherit;
+  color: var(--ink-body); background: transparent; border: 0.5px solid rgba(0,105,110,.18);
+  border-radius: 8px; padding: 10px; box-sizing: border-box; }
+.note-editor-actions { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.note-count { font-size: 12px; color: var(--ink-muted); margin-right: auto; }
+
+/* ── Module 10: audio mini-player (unavailable-only state) ── */
+.audio-mini-player { background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.14);
+  border-radius: 12px; padding: 12px 14px; margin: -6px 0 16px; }
+.amp-controls { display: flex; align-items: center; gap: 12px; opacity: .5; }
+.amp-play { width: 34px; height: 34px; border-radius: 50%; border: none; background: var(--teal-700);
+  color: #fff; cursor: not-allowed; }
+.amp-progress { flex: 1; height: 4px; border-radius: 2px; background: rgba(0,105,110,.15); }
+.amp-progress-fill { width: 0; height: 100%; border-radius: 2px; background: var(--teal-700); }
+.amp-speed { font-size: 12px; color: var(--ink-muted); }
+.amp-unavailable { margin-top: 8px; font-size: 12.5px; color: var(--ink-muted); }
+
+/* ── Module 10: bookmarks panel (slide from right) ── */
+.bm-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.28); z-index: 90; }
+.bm-panel { position: fixed; top: 0; right: 0; height: 100%; width: min(380px, 92vw);
+  background: var(--surface-base); box-shadow: var(--elev-3); z-index: 91;
+  transform: translateX(100%); transition: transform .28s ease; display: flex; flex-direction: column; }
+.bm-panel.open { transform: translateX(0); }
+@media (prefers-reduced-motion: reduce) { .bm-panel { transition: none; } }
+.bm-panel-head { display: flex; align-items: center; justify-content: space-between;
+  padding: 16px; border-bottom: 0.5px solid rgba(0,105,110,.1); }
+.bm-panel-title { font-weight: 600; color: var(--teal-700); }
+.bm-close { border: none; background: transparent; cursor: pointer; font-size: 16px; color: var(--ink-muted); }
+.bm-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; }
+.bm-chip { font-size: 12px; padding: 4px 10px; border-radius: 999px; cursor: pointer;
+  border: 0.5px solid rgba(0,105,110,.2); background: transparent; color: var(--ink-body); }
+.bm-chip.on { background: var(--teal-700); color: #fff; border-color: var(--teal-700); }
+.bm-list { overflow-y: auto; padding: 0 12px 16px; flex: 1; }
+.bm-row { display: flex; align-items: center; gap: 8px; padding: 10px;
+  border-bottom: 0.5px solid rgba(0,105,110,.08); }
+.bm-row-main { flex: 1; min-width: 0; }
+.bm-row-title { font-size: 13.5px; color: var(--ink-body); }
+.bm-row-cat { font-size: 11.5px; color: var(--ink-muted); margin-top: 2px; }
+.bm-jump, .bm-remove { border: none; background: transparent; cursor: pointer;
+  color: var(--teal-700); font-size: 15px; padding: 4px 6px; }
+.bm-remove { color: var(--ink-muted); }
+.bm-empty { padding: 28px 12px; text-align: center; color: var(--ink-muted); }
+
+/* ── Module 10: category tooltip ── */
+.bm-cat-tooltip { background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.16);
+  border-radius: 10px; box-shadow: var(--elev-2); padding: 6px; min-width: 180px; }
+.bm-cat-opt { display: block; width: 100%; text-align: left; border: none; background: transparent;
+  padding: 7px 10px; border-radius: 6px; cursor: pointer; font: inherit; color: var(--ink-body); }
+.bm-cat-opt:hover { background: rgba(0,105,110,.08); }
+.bm-cat-new { color: var(--teal-700); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -1092,19 +1154,23 @@ a { text-decoration: none; color: inherit; }
       <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
       <span data-i18n="hadith.sidebar.topicIndex">Topic Index</span>
     </a>
+    <a class="sidebar-item" href="#" id="ii-bookmarks-trigger">
+      <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+      <span>My Bookmarks</span>
+    </a>
     <div class="sidebar-cta-dock">
-      <div class="sidebar-cta" onclick="location.href='verify.html'">
+      <div class="sidebar-cta" id="ii-cta-verify">
         <div class="sidebar-cta-icon">✦</div>
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--teal-700);" data-i18n="hadith.sidebar.verifyTitle">Verify a Source</div>
           <div style="font-size:11.5px;color:var(--ink-subtle);font-weight:400;margin-top:1px;" data-i18n="hadith.sidebar.verifyDesc">Paste text to check authenticity</div>
         </div>
       </div>
-      <div class="sidebar-cta" style="margin-top:10px;" onclick="location.href='verify.html'">
+      <div class="sidebar-cta" style="margin-top:10px;" id="ii-cta-ask">
         <div class="sidebar-cta-icon" style="background:var(--gold-500);">?</div>
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--teal-700);" data-i18n="hadith.sidebar.askTitle">Ask a Question</div>
-          <div style="font-size:11.5px;color:var(--ink-subtle);font-weight:400;margin-top:1px;" data-i18n="hadith.sidebar.askDesc">Wired to verify engine</div>
+          <div style="font-size:11.5px;color:var(--ink-subtle);font-weight:400;margin-top:1px;" data-i18n="hadith.sidebar.askDesc">Prefills the verify engine with this hadith</div>
         </div>
       </div>
     </div>
@@ -1914,6 +1980,7 @@ function showHadithToast(msg) {
 <script src="src/js/hadith-feed-core.js"></script>
 <script src="src/js/tier3-deep-view-core.js"></script>
 <script src="src/js/reading-progress-core.js"></script>
+<script src="src/js/hadith-actions-core.js"></script>
 <script src="src/js/tier3-deep-view.js"></script>
 <script src="src/js/narrator-panel-core.js"></script>
 <script src="src/js/narrator-panel.js"></script>
@@ -1934,5 +2001,14 @@ function showHadithToast(msg) {
     <div id="ii-sheet-list"></div>
   </div>
 </div>
+<div class="bm-backdrop" id="ii-bookmarks-backdrop"></div>
+<aside class="bm-panel" id="ii-bookmarks-panel" role="dialog" aria-modal="true" aria-label="Your bookmarks" aria-hidden="true">
+  <div class="bm-panel-head">
+    <span class="bm-panel-title">Your Bookmarks</span>
+    <button type="button" class="bm-close" id="ii-bookmarks-close" aria-label="Close bookmarks">✕</button>
+  </div>
+  <div class="bm-chips" id="ii-bookmarks-chips"></div>
+  <div class="bm-list" id="ii-bookmarks-list"></div>
+</aside>
 </body>
 </html>
