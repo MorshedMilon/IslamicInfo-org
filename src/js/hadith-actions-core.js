@@ -107,12 +107,25 @@
     return arr;
   }
 
+  // Tier-aware "Ask a Question" target. Tier 3 (route.hadith present) with a resolvable
+  // matn → verify.html prefill (?q=&ref=&mode=claim, matching verify.html's real handoff
+  // contract at verify.html:1036). Otherwise → empty verify.html (Tier 1 focus behavior).
+  function buildAskUrl(route, hadith) {
+    var onTier3 = !!(route && route.hadith);
+    var matn = hadith && ((hadith.translation && hadith.translation.text) || hadith.arabicMatn);
+    if (!onTier3 || !matn) return 'verify.html';
+    var ref = (hadith && hadith.reference) || '';
+    var qs = 'q=' + encodeURIComponent(matn) + (ref ? '&ref=' + encodeURIComponent(ref) : '') + '&mode=claim';
+    return 'verify.html?' + qs;
+  }
+
   var core = {
     BUILTIN_CATEGORIES: BUILTIN_CATEGORIES, MAX_CUSTOM: MAX_CUSTOM, MAX_NOTE: MAX_NOTE,
     isBuiltin: isBuiltin, buildBookmark: buildBookmark, dedupeByRef: dedupeByRef,
     toggleBookmark: toggleBookmark, setCategory: setCategory, getBookmarkCategory: getBookmarkCategory,
     customCategoriesOf: customCategoriesOf, addCustomCategory: addCustomCategory, panelFilter: panelFilter,
     clampNoteText: clampNoteText, buildNote: buildNote, getNote: getNote, upsertNote: upsertNote,
+    buildAskUrl: buildAskUrl,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }

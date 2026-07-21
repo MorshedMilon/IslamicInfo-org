@@ -98,3 +98,26 @@ test('buildNote: clamps text and stamps updatedAt', () => {
   assert.equal(n.text.length, 2000);
   assert.equal(n.updatedAt, 55);
 });
+
+test('buildAskUrl: Tier 1 (no hadith in route) → empty verify.html', () => {
+  assert.equal(core.buildAskUrl({ collection: null }, null), 'verify.html');
+});
+
+test('buildAskUrl: Tier 3 with matn → prefilled q/ref/mode=claim', () => {
+  const url = core.buildAskUrl(
+    { collection: 'sahih-bukhari', book: 1, hadith: 1 },
+    { translation: { text: 'The reward of deeds...' }, reference: 'Sahih al-Bukhari · Book 1 · Hadith 1' });
+  assert.ok(url.indexOf('verify.html?') === 0);
+  assert.ok(url.indexOf('q=' + encodeURIComponent('The reward of deeds...')) !== -1);
+  assert.ok(url.indexOf('ref=' + encodeURIComponent('Sahih al-Bukhari · Book 1 · Hadith 1')) !== -1);
+  assert.ok(url.indexOf('mode=claim') !== -1);
+});
+
+test('buildAskUrl: Tier 3 route but no resolvable matn → empty verify.html', () => {
+  assert.equal(core.buildAskUrl({ collection: 'x', book: 1, hadith: 5 }, null), 'verify.html');
+});
+
+test('buildAskUrl: falls back to arabicMatn when translation missing', () => {
+  const url = core.buildAskUrl({ collection: 'x', book: 1, hadith: 5 }, { arabicMatn: 'نص' });
+  assert.ok(url.indexOf('q=' + encodeURIComponent('نص')) !== -1);
+});
