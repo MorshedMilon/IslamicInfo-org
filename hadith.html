@@ -594,10 +594,16 @@ a { text-decoration: none; color: inherit; }
 .t3a-list { display: flex; flex-direction: column; gap: 16px; }
 .t3a-grade-filter { margin: 0 0 8px; }
 
-/* Deep-link pulse (TechSpec §3.5) */
-@keyframes dv-pulse-gold { 0% { box-shadow: 0 0 0 0 var(--gold-aura); } 100% { box-shadow: var(--elev-1); } }
-.pulse-gold { animation: dv-pulse-gold 1.6s var(--ease); }
-@media (prefers-reduced-motion: reduce) { .pulse-gold { animation: none; } }
+/* Deep-link pulse (TechSpec §3.5) — 2-iteration gold ring; §3.14 reduced-motion */
+@keyframes dv-pulse-gold {
+  0%   { box-shadow: 0 0 0 0   rgba(197,160,89,.5); }
+  50%  { box-shadow: 0 0 0 16px rgba(197,160,89,0); }
+  100% { box-shadow: 0 0 0 0   rgba(197,160,89,0); }
+}
+.pulse-gold { animation: dv-pulse-gold 1.8s var(--ease-reverent) 2; }
+@media (prefers-reduced-motion: reduce) {
+  .pulse-gold { animation: none; border-color: rgba(197,160,89,.5); }
+}
 
 /* ─── TIER 2 — BOOK LIST (Module 6, ADR-026) ─── */
 /* When routed to /hadith/[collection], hide Tier-1 sections and show only the Tier-2 view. */

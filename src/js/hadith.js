@@ -248,6 +248,18 @@
   function prefersReducedMotion() {
     return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
+  // Shared deep-link pulse (TechSpec §3.5). Single source of truth: Module 7's
+  // Tier-3b deep-view calls this via the tier3 host, and the Continue-Reading
+  // deep-link reuses it through the normal deep-link render path. Reduced-motion
+  // users get the §3.14 border highlight instead of the animation.
+  function pulseRing(el) {
+    if (!el) return;
+    if (prefersReducedMotion()) { el.style.borderColor = 'rgba(197,160,89,.5)'; return; }
+    el.classList.remove('pulse-gold');
+    void el.offsetWidth;                                 // reflow so re-adding restarts the animation
+    el.classList.add('pulse-gold');
+    setTimeout(function () { el.classList.remove('pulse-gold'); }, 3700);   // 2 × 1.8s + buffer
+  }
   function rpPersist(ref) {
     var payload = RP.payloadFromRef(ref, Date.now());
     if (payload) ui.safeLocalStorageSet('islamicinfo-hadith-last-read', payload);
