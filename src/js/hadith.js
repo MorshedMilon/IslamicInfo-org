@@ -551,6 +551,38 @@
     });
   }
 
+  /* ── Module 10: tier-aware sidebar CTAs ──
+     Verify a Source → verify.html always. Ask a Question → verify.html prefilled
+     with the current hadith on Tier 3 (via actions.buildAskUrl), empty on Tier 1. ── */
+  function ctaContext() {
+    var r = parseRoute();
+    if (!r.hadith) return { route: r, hadith: null };
+    var ref = r.collection + ':' + (r.book == null ? 0 : r.book) + ':' + r.hadith;
+    var h = FEED.byRef[ref];                              // prefer loaded feed data
+    if (!h) {                                             // else read the rendered deep view (displayed = sourced)
+      var tEl = document.querySelector('#ii-tier2 .hadith-text, #ii-tier2 .hadith-translation, #ii-tier2 .dv-body');
+      var matn = tEl ? tEl.textContent.trim() : '';
+      if (matn) {
+        var c = collectionBySlug(r.collection);
+        var reference = [(c && c.nameEnglish) || r.collection,
+          r.book != null ? ('Book ' + r.book) : null, 'Hadith ' + r.hadith].filter(Boolean).join(' · ');
+        h = { translation: { text: matn }, reference: reference };
+      }
+    }
+    return { route: r, hadith: h || null };
+  }
+  function wireSidebarCtas() {
+    var verify = $('#ii-cta-verify'), ask = $('#ii-cta-ask');
+    if (verify) { verify.style.cursor = 'pointer'; verify.addEventListener('click', function () { location.href = 'verify.html'; }); }
+    if (ask) {
+      ask.style.cursor = 'pointer';
+      ask.addEventListener('click', function () {
+        var ctx = ctaContext();
+        location.href = actions ? actions.buildAskUrl(ctx.route, ctx.hadith) : 'verify.html';
+      });
+    }
+  }
+
   /* ── Continue Reading (read-only; tracking is Module 7) ── */
   function renderContinueReading() {
     var el = $('#ii-continue-reading'); if (!el) return;
@@ -986,6 +1018,7 @@
     wireRouting();
     wireSheet();
     wireBookmarksPanel();
+    wireSidebarCtas();
     wireSearch();
     wireTopics();
     loadHotD();
