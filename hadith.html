@@ -306,6 +306,9 @@ a { text-decoration: none; color: inherit; }
 }
 .sidebar-cta:hover { background: linear-gradient(135deg, rgba(0,105,110,.12), rgba(197,160,89,.10)); box-shadow: var(--elev-2); transform: scale(1.02); }
 .sidebar-cta-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--teal-700); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0; }
+/* Pin Verify/Ask CTAs to the sidebar bottom so they stay above the fold at any collection-row count (Module 2 · scoped fix for the 18-collection sidebar overflow flagged in Module 0 Task 2) */
+.sidebar-cta-dock { margin-top: auto; position: sticky; bottom: 0; background: var(--surface-base); padding: 10px 0 4px; border-top: 0.5px solid rgba(0,105,110,.08); }
+[data-theme="dark"] .sidebar-cta-dock { background: var(--surface-base); border-top-color: rgba(0,105,110,.2); }
 
 /* ─── MAIN ─── */
 .main { flex: 1; padding: 0 48px 0 48px; min-width: 0; }
@@ -933,18 +936,20 @@ a { text-decoration: none; color: inherit; }
       <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
       <span data-i18n="hadith.sidebar.topicIndex">Topic Index</span>
     </a>
-    <div class="sidebar-cta" onclick="location.href='verify.html'">
-      <div class="sidebar-cta-icon">✦</div>
-      <div>
-        <div style="font-size:13px;font-weight:600;color:var(--teal-700);" data-i18n="hadith.sidebar.verifyTitle">Verify a Source</div>
-        <div style="font-size:11.5px;color:var(--ink-subtle);font-weight:400;margin-top:1px;" data-i18n="hadith.sidebar.verifyDesc">Paste text to check authenticity</div>
+    <div class="sidebar-cta-dock">
+      <div class="sidebar-cta" onclick="location.href='verify.html'">
+        <div class="sidebar-cta-icon">✦</div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--teal-700);" data-i18n="hadith.sidebar.verifyTitle">Verify a Source</div>
+          <div style="font-size:11.5px;color:var(--ink-subtle);font-weight:400;margin-top:1px;" data-i18n="hadith.sidebar.verifyDesc">Paste text to check authenticity</div>
+        </div>
       </div>
-    </div>
-    <div class="sidebar-cta" style="margin-top:10px;" onclick="location.href='verify.html'">
-      <div class="sidebar-cta-icon" style="background:var(--gold-500);">?</div>
-      <div>
-        <div style="font-size:13px;font-weight:600;color:var(--teal-700);" data-i18n="hadith.sidebar.askTitle">Ask a Question</div>
-        <div style="font-size:11.5px;color:var(--ink-subtle);font-weight:400;margin-top:1px;" data-i18n="hadith.sidebar.askDesc">Wired to verify engine</div>
+      <div class="sidebar-cta" style="margin-top:10px;" onclick="location.href='verify.html'">
+        <div class="sidebar-cta-icon" style="background:var(--gold-500);">?</div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--teal-700);" data-i18n="hadith.sidebar.askTitle">Ask a Question</div>
+          <div style="font-size:11.5px;color:var(--ink-subtle);font-weight:400;margin-top:1px;" data-i18n="hadith.sidebar.askDesc">Wired to verify engine</div>
+        </div>
       </div>
     </div>
   </aside>
