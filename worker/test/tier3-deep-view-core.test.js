@@ -168,3 +168,29 @@ test('prevNextNavHTML: links present sides, disables missing sides', () => {
   assert.match(html, /dv-nav-disabled[^>]*>← Previous|← Previous/);
   assert.match(html, /href="\/hadith\/sahih-bukhari\/1\/5"[^>]*>Next/);
 });
+
+/* ── deepViewHTML: exact §2.7 block order ── */
+test('deepViewHTML: blocks appear in TechSpec §2.7 order', () => {
+  const r = { collection: 'sahih-bukhari', book: '1', hadith: '1' };
+  const html = core.deepViewHTML(r, { nameEnglish: 'Sahih al-Bukhari' }, bukhari(),
+    { activeLang: 'en', neighbors: { prev: null, next: 2 } });
+  const order = ['dv-breadcrumb', 'dv-actions', 'dv-body-card', 'dv-isnad',
+                 'dv-gradings', 'dv-translations', 'dv-related', 'dv-prevnext'];
+  let last = -1;
+  order.forEach((cls) => {
+    const idx = html.indexOf(cls);
+    assert.ok(idx > last, `block ${cls} out of order (idx ${idx} after ${last})`);
+    last = idx;
+  });
+  // topics is hidden (empty) live — must NOT appear
+  assert.doesNotMatch(html, /dv-topics/);
+});
+
+test('deepViewHTML: null hadith → body "temporarily unavailable" but prev/next still present', () => {
+  const r = { collection: 'sahih-bukhari', book: '1', hadith: '9' };
+  const html = core.deepViewHTML(r, { nameEnglish: 'Sahih al-Bukhari' }, null,
+    { neighbors: { prev: 5, next: null } });
+  assert.match(html, /Hadith temporarily unavailable/);
+  assert.match(html, /dv-prevnext/);
+  assert.match(html, /href="\/hadith\/sahih-bukhari\/1\/5"/);   // prev still works
+});

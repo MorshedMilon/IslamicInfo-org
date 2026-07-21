@@ -208,6 +208,26 @@
       btn(neighbors.prev, 'prev', '← Previous') + btn(neighbors.next, 'next', 'Next →') + '</nav>';
   }
 
+  // ── deepViewHTML — assembles Tier 3b in EXACT TechSpec §2.7 order:
+  //   header(breadcrumb+actions) → body card → isnad(inline) → gradings
+  //   → translations → topics(hidden if empty) → related → prev/next.
+  // opts: { activeLang, neighbors, book }. `book` for prev/next when h is null.
+  function deepViewHTML(r, c, h, opts) {
+    opts = opts || {};
+    var book = (h && h.bookNumber != null) ? h.bookNumber : (opts.book != null ? opts.book : r.book);
+    return '<article class="dv" data-slug="' + esc(r.collection) + '">' +
+      '<header class="dv-header">' + breadcrumbHTML(r, c, h) + actionButtonsHTML() + '</header>' +
+      bodyCardHTML(h) +
+      isnadInlineHTML(h) +
+      '<div class="dv-block dv-gradings-block"><h2 class="dv-block-title">Grading</h2>' +
+        (h ? gradingsTableHTML(h) : '<div class="dv-empty">—</div>') + '</div>' +
+      translationBlockHTML(translationModel(h), opts.activeLang) +
+      topicsChipsHTML(h) +
+      relatedPlaceholderHTML() +
+      '<div class="dv-prevnext-slot">' + prevNextNavHTML(opts.neighbors, r.collection, book) + '</div>' +
+    '</article>';
+  }
+
   var core = {
     _esc: esc,
     LANG_ORDER: LANG_ORDER,
@@ -224,6 +244,7 @@
     actionButtonsHTML: actionButtonsHTML,
     resolveNeighbors: resolveNeighbors,
     prevNextNavHTML: prevNextNavHTML,
+    deepViewHTML: deepViewHTML,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }
