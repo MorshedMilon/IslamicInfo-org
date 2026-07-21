@@ -12,6 +12,16 @@
   var II = window.II || {};
   var api = II.api, ui = II.ui, core = II.hadithCollections, feed = II.hadithFeed;
   var RP = II.readingProgress;
+  var actions = II.hadithActions;
+  var BM_KEY = 'islamicinfo-hadith-bookmarks', NOTE_KEY = 'islamicinfo-hadith-notes';
+  function getBookmarks() { var v = ui.safeLocalStorageGet(BM_KEY, []); return Array.isArray(v) ? v : []; }
+  function setBookmarks(list) { ui.safeLocalStorageSet(BM_KEY, actions ? actions.dedupeByRef(list) : list); }
+  function getNotes() { var v = ui.safeLocalStorageGet(NOTE_KEY, []); return Array.isArray(v) ? v : []; }
+  function setNotes(list) { ui.safeLocalStorageSet(NOTE_KEY, list); }
+  function parseRefParts(ref) {
+    var parts = String(ref).split(':');
+    return { slug: parts[0] || null, book: parts.length > 2 ? parts[1] : null, num: parts[parts.length - 1] || null };
+  }
   if (!api || !ui || !core) { console.error('[hadith.js] missing II.api/ui/hadithCollections'); return; }
 
   var META_URL = 'src/data/hadith/collections-meta.json';
@@ -321,10 +331,73 @@
       }
     } catch (_) {}
   }
+  // Module 10: apply .has-bookmark / .has-note (→ gold dot via CSS) to every card in a container.
+  function markCardStates(container) {
+    container = container || document;
+    if (!actions) return;
+    var bm = {}; getBookmarks().forEach(function (b) { if (b && b.ref) bm[b.ref] = 1; });
+    var nt = {}; getNotes().forEach(function (n) { if (n && n.hadithRef) nt[n.hadithRef] = 1; });
+    container.querySelectorAll('.hadith-card[data-ref]').forEach(function (card) {
+      var ref = card.getAttribute('data-ref');
+      card.classList.toggle('has-bookmark', !!bm[ref]);
+      card.classList.toggle('has-note', !!nt[ref]);
+    });
+  }
   // Observe all current .hadith-card[data-ref] in a container (Tier-1 feed or Tier-3a list).
   function observeFeed(container) {
-    if (!rpObserver || !container) return;
+    if (!container) return;
+    markCardStates(container);                       // Module 10: gold dots (runs even if IO unsupported)
+    if (!rpObserver) return;
     container.querySelectorAll('.hadith-card[data-ref]').forEach(function (card) { rpObserver.observe(card); });
+  }
+
+  /* ── Module 10: bookmark toggle + category tooltip ── */
+  var catTimer = null, catEl = null;
+  function hideCategoryTooltip() {
+    if (catTimer) { clearTimeout(catTimer); catTimer = null; }
+    if (catEl && catEl.parentNode) catEl.parentNode.removeChild(catEl);
+    catEl = null;
+  }
+  function positionTooltip(el, anchor) {
+    var rect = anchor.getBoundingClientRect();
+    el.style.position = 'absolute';
+    el.style.top = (window.pageYOffset + rect.bottom + 6) + 'px';
+    el.style.left = (window.pageXOffset + rect.left) + 'px';
+  }
+  function showCategoryTooltip(btn, ref) {
+    hideCategoryTooltip();
+    var cats = actions.BUILTIN_CATEGORIES.concat(actions.customCategoriesOf(getBookmarks()));
+    catEl = document.createElement('div');
+    catEl.className = 'bm-cat-tooltip'; catEl.setAttribute('role', 'menu');
+    catEl.innerHTML = cats.map(function (c) {
+      return '<button type="button" class="bm-cat-opt" role="menuitem" data-cat="' + esc(c) + '">' + esc(c) + '</button>';
+    }).join('') + '<button type="button" class="bm-cat-opt bm-cat-new" data-cat="__new__">+ New category</button>';
+    document.body.appendChild(catEl);
+    positionTooltip(catEl, btn);
+    catEl.addEventListener('click', function (e) {
+      var opt = e.target.closest && e.target.closest('.bm-cat-opt'); if (!opt) return;
+      var cat = opt.getAttribute('data-cat');
+      if (cat === '__new__') {
+        var name = window.prompt('New category name:'); if (name == null) return;
+        var add = actions.addCustomCategory(getBookmarks(), name);
+        if (!add.ok) { ui.showToast('Maximum 5 custom categories.'); return; }
+        cat = String(name).trim();
+      }
+      setBookmarks(actions.setCategory(getBookmarks(), ref, cat));
+      ui.showToast('Saved to “' + cat + '”');
+      hideCategoryTooltip();
+    });
+    catTimer = setTimeout(hideCategoryTooltip, 2500);   // 2.5s auto-dismiss
+  }
+  function onBookmark(card, btn, ref) {
+    if (!actions) return;
+    var r = parseRefParts(ref);
+    var res = actions.toggleBookmark(getBookmarks(),
+      { ref: ref, collectionSlug: r.slug, bookNum: r.book, hadithNum: r.num }, Date.now());
+    setBookmarks(res.list);
+    card.classList.toggle('has-bookmark', res.added);
+    if (res.added) { btn.classList.add('active'); showCategoryTooltip(btn, ref); }
+    else { btn.classList.remove('active'); hideCategoryTooltip(); }
   }
 
   /* ── Continue Reading (read-only; tracking is Module 7) ── */
