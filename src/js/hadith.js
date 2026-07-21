@@ -313,11 +313,13 @@
     var lr = ui.safeLocalStorageGet('islamicinfo-hadith-last-read', null);
     if (!lr || lr.collectionSlug !== FEED.slug || String(lr.bookNum) !== String(FEED.book)) return;
     var el = feedEl(); if (!el) return;
-    var card = el.querySelector('.hadith-card[data-ref="' + FEED.slug + ':' + FEED.book + ':' + lr.hadithNum + '"]');
-    if (card) {
-      rpRestored = true;
-      card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
-    }
+    try {                                                // corrupt last-read must never throw (§7.4)
+      var card = el.querySelector('.hadith-card[data-ref="' + FEED.slug + ':' + FEED.book + ':' + lr.hadithNum + '"]');
+      if (card) {
+        rpRestored = true;
+        card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+      }
+    } catch (_) {}
   }
   // Observe all current .hadith-card[data-ref] in a container (Tier-1 feed or Tier-3a list).
   function observeFeed(container) {
