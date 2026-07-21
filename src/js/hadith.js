@@ -207,7 +207,8 @@
     if (!r.collection) { setTier(1); applyFilter(); return; }
     var c = collectionBySlug(r.collection);
     if (!c) { setTier(1); applyFilter(); try { history.replaceState(null, '', '/hadith.html'); } catch (_) {} return; } // invalid → Tier 1 (TechSpec §10)
-    if (r.book || isBookless(r.collection)) { renderTier3Placeholder(r, c); return; }   // skip Tier 2 for book-less
+    if (r.hadith) { if (II.tier3) II.tier3.renderDeepView(r, c); else renderTier3Placeholder(r, c); return; }   // Tier 3b
+    if (r.book || isBookless(r.collection)) { if (II.tier3) II.tier3.renderList(r, c); else renderTier3Placeholder(r, c); return; }   // Tier 3a
     loadBooksGrid(c);
   }
   function routeTo(r, push) {
@@ -644,6 +645,12 @@
     await loadCollections();
     wireFilterTabs();
     wireRouting();
+    if (II.tier3 && II.tier3.init) {
+      II.tier3.init({
+        setTier: setTier, tier2El: tier2El, routeTo: routeTo,
+        api: api, ui: ui, feed: feed,
+      });
+    }
     wireSheet();
     wireSearch();
     wireTopics();
