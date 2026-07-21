@@ -15,6 +15,7 @@
 (function (root) {
   'use strict';
 
+  // Browser: hadith-feed-core.js MUST be loaded before this file (gradeParts/gradeBadgeHTML/refOf are used unguarded below).
   var feed = (typeof require !== 'undefined')
     ? require('./hadith-feed-core.js')
     : (root.II && root.II.hadithFeed);
@@ -63,7 +64,7 @@
   // one row, grader null → fallback text, + gap note. Multi-row only when
   // real alternateGradings exist (future curated data). Never fabricates.
   function gradingsTableHTML(h) {
-    var p = (h && h.value && h.className) ? h : feed.gradeParts(h);  // accept hadith OR gradeParts
+    var p = feed.gradeParts(h);
     if (p.value === 'unknown') {
       return '<div class="dv-gradings-empty">Scholarly grading not individually recorded for this narration.</div>';
     }

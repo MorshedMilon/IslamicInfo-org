@@ -111,6 +111,17 @@ test('bodyCardHTML: null hadith → "Hadith temporarily unavailable", never thro
   assert.match(html, /Hadith temporarily unavailable/);
 });
 
+/* ── XSS regression guards (mirror hadith-feed-core convention) ── */
+test('bodyCardHTML: escapes provider-sourced narrator/translation text (no raw HTML)', () => {
+  const html = core.bodyCardHTML(bukhari({
+    narrator: { name: '<script>alert(1)</script>' },
+    translation: { text: '<img src=x onerror=alert(2)>', language: 'en' },
+  }));
+  assert.doesNotMatch(html, /<script>alert\(1\)<\/script>/);
+  assert.doesNotMatch(html, /<img src=x onerror/);
+  assert.match(html, /&lt;script&gt;/);
+});
+
 /* ── isnadInlineHTML ── */
 test('isnadInlineHTML: empty narrators (live) → honest unavailable, NOT a modal', () => {
   const html = core.isnadInlineHTML(bukhari());
@@ -125,6 +136,13 @@ test('isnadInlineHTML: narrators present → ordered chain nodes', () => {
   assert.match(html, /Alqamah/);
   assert.match(html, /<ol/);
 });
+test('isnadInlineHTML: escapes narrator names (no raw HTML)', () => {
+  const html = core.isnadInlineHTML(bukhari({ isnad: { status: 'ok', narrators: [
+    { fullName: '<script>alert(3)</script>' },
+  ]}}));
+  assert.doesNotMatch(html, /<script>alert\(3\)<\/script>/);
+  assert.match(html, /&lt;script&gt;/);
+});
 
 /* ── topicsChipsHTML ── */
 test('topicsChipsHTML: empty topics (live) → empty string (block hidden)', () => {
@@ -134,6 +152,11 @@ test('topicsChipsHTML: topics present → chips', () => {
   const html = core.topicsChipsHTML(bukhari({ topics: ['Intentions', 'Deeds'] }));
   assert.match(html, /Intentions/);
   assert.match(html, /Deeds/);
+});
+test('topicsChipsHTML: escapes topic labels (no raw HTML)', () => {
+  const html = core.topicsChipsHTML(bukhari({ topics: ['<b>x</b>'] }));
+  assert.doesNotMatch(html, /<b>x<\/b>/);
+  assert.match(html, /&lt;b&gt;/);
 });
 
 /* ── relatedPlaceholderHTML ── */
