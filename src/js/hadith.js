@@ -198,7 +198,14 @@
     var ref = $('#ii-hotd-ref');
     if (ref) {
       var narr = h.narrator ? (' · Narrated by ' + h.narrator) : '';
-      ref.textContent = '📚 ' + h.reference + narr + ' · ' + core.hotdGradeText(h);
+      // Decision A (ADR-022/ADR-024): if the daily hadith is from a characterization-only
+      // collection (grade === null + a collection-level characterization), show that
+      // characterization — never a fabricated per-hadith grade, never "Grade Unknown".
+      // Forward guard: /api/hadith/daily currently serves graded hadithapi collections only.
+      var gradeText = (res.data && res.data.grade == null && res.data.gradeCharacterization)
+        ? res.data.gradeCharacterization
+        : core.hotdGradeText(h);
+      ref.textContent = '📚 ' + h.reference + narr + ' · ' + gradeText;
     }
     var isnad = $('#ii-hotd-isnad-btn');
     if (isnad) {
