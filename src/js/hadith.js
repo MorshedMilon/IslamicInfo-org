@@ -308,22 +308,50 @@
     else setLoadMore('idle');
   }
 
+  /* ── Grade filter deep-link (?grade=, TechSpec §5.1; preserves ?collection=) ── */
+  var GRADE_VALUES = { all: 1, sahih: 1, hasan: 1, daif: 1, mawdu: 1 };
+  function readGradeFromUrl() {
+    var g; try { g = new URLSearchParams(location.search).get('grade'); } catch (_) { g = null; }
+    return (g && GRADE_VALUES[g]) ? g : 'all';
+  }
+  function pillValue(pill) {
+    var cl = pill.classList;
+    return cl.contains('sahih') ? 'sahih' : cl.contains('hasan') ? 'hasan'
+      : cl.contains('daif') ? 'daif' : cl.contains('mawdu') ? 'mawdu' : 'all';
+  }
+  function reflectGradePill() {
+    document.querySelectorAll('.grade-filter .grade-filter-pill').forEach(function (pill) {
+      var on = pillValue(pill) === FEED.filter;
+      pill.classList.toggle('on', on);
+      pill.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  function syncGradeUrl(push) {
+    try {
+      var params = new URLSearchParams(location.search);
+      if (FEED.filter && FEED.filter !== 'all') params.set('grade', FEED.filter); else params.delete('grade');
+      var qs = params.toString(), url = qs ? ('?' + qs) : location.pathname;
+      if (push) history.pushState(history.state, '', url); else history.replaceState(history.state, '', url);
+    } catch (_) {}
+  }
+  function setGradeFilter(grade, push) {
+    FEED.filter = GRADE_VALUES[grade] ? grade : 'all';
+    reflectGradePill();
+    syncGradeUrl(push);
+    applyGradeFilter();
+  }
+
   function wireGradeFilter() {
-    var pills = document.querySelectorAll('.grade-filter .grade-filter-pill');
-    pills.forEach(function (pill) {
-      function activate() {
-        pills.forEach(function (p) { p.classList.remove('on'); });
-        pill.classList.add('on');
-        var cl = pill.classList;
-        FEED.filter = cl.contains('sahih') ? 'sahih' : cl.contains('hasan') ? 'hasan'
-          : cl.contains('daif') ? 'daif' : cl.contains('mawdu') ? 'mawdu' : 'all';
-        applyGradeFilter();
-      }
+    document.querySelectorAll('.grade-filter .grade-filter-pill').forEach(function (pill) {
+      var val = pillValue(pill);
+      function activate() { setGradeFilter(val, true); }
       pill.setAttribute('role', 'button');
       pill.setAttribute('tabindex', '0');
       pill.addEventListener('click', activate);
       pill.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); } });
     });
+    reflectGradePill();
+    window.addEventListener('popstate', function () { setGradeFilter(readGradeFromUrl(), false); });
   }
 
   function wireLoadMore() {
@@ -387,7 +415,7 @@
     wireBrowse();
     wireSheet();
     loadHotD();
-    if (feed) { wireGradeFilter(); wireLoadMore(); wireFeedActions(); loadHadithFeed(false); }
+    if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); loadHadithFeed(false); }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

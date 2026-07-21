@@ -78,6 +78,10 @@ test('refOf: any missing part → null (never a partial/fabricated ref)', () => 
   assert.equal(core.refOf(null), null);
 });
 
+test('refOf: book-less collection (Musnad Ahmad — no fixed book, TechSpec §10) → stable 0-book ref', () => {
+  assert.equal(core.refOf(bukhari({ collectionSlug: 'musnad-ahmad', bookNumber: null, hadithNumber: 42 })), 'musnad-ahmad:0:42');
+});
+
 /* ── matchesGrade ───────────────────────────────────────────── */
 
 test('matchesGrade: All Grades matches everything; specific pill matches its value', () => {
@@ -198,6 +202,17 @@ test('buildCardHTML: footer wires isnad/listen/full via data-act (no dead onclic
 
 test('buildCardHTML: unrenderable record (null ref) yields empty string, never a broken card', () => {
   assert.equal(core.buildCardHTML(bukhari({ hadithNumber: null })), '');
+});
+
+test('buildCardHTML: book-less hadith (Musnad Ahmad) renders flat — card present, no "Book" label, keeps Hadith #N', () => {
+  const html = core.buildCardHTML(bukhari({
+    collectionSlug: 'musnad-ahmad', collectionName: 'Musnad Ahmad',
+    bookNumber: null, bookName: null, hadithNumber: 42, reference: null,
+  }));
+  assert.ok(html.includes('class="hadith-card"'));
+  assert.ok(html.includes('data-ref="musnad-ahmad:0:42"'));
+  assert.ok(html.includes('Hadith #42'));
+  assert.ok(!/·\s*Book\s/.test(html));   // flat feed: no "· Book N" segment
 });
 
 test('buildCardHTML: card carries data-grade so the DOM grade filter can match it', () => {

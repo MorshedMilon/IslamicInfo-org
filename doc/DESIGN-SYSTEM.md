@@ -80,11 +80,13 @@ Every page begins with `<html lang="en" data-theme="light">` and this exact `:ro
   --inner-light: inset 0 1px 0 rgba(255,255,255,.7);
   --gold-aura: 0 0 0 1px rgba(197,160,89,.22), 0 8px 32px rgba(197,160,89,.18);
 
-  /* ── Hadith grade badges ── */
-  --grade-sahih: #0F6E56;
-  --grade-hasan: #5D8A3A;
-  --grade-daif:  #A86932;
-  --grade-mawdu: #B33A3A;
+  /* ── Hadith grade badges (light) — WCAG AA corrected 2026-07-20, see DECISIONS.md ADR-025 ── */
+  --grade-sahih: #0F6E56;   /* 5.19:1 ✅ */
+  --grade-hasan: #4A7030;   /* was #5D8A3A (3.51:1 ✗ AA) → 4.85:1 ✅ */
+  --grade-daif:  #8A5228;   /* was #A86932 (3.79:1 ✗ AA) → 5.30:1 ✅ */
+  --grade-mawdu: #B33A3A;   /* 4.89:1 ✅ */
+  /* Dark-theme grade overrides — REQUIRED on any page that renders a grade badge; add inside
+     [data-theme="dark"]:  --grade-sahih:#1FA882; --grade-hasan:#7AB84E; --grade-daif:#D4884A; --grade-mawdu:#E05555; */
 
   /* ── Typography ── */
   --font-display: 'Cormorant Garamond', Georgia, serif;

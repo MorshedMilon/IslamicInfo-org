@@ -22,6 +22,14 @@ _Top of the backlog, unblocked, scoped._
 - [ ] Create `docs/DATA.md` link-back from `ARCHITECTURE §6` (remove duplicated key tables; point to DATA.md).
 - [ ] Stand up CI checks (see §CI below) before building more pages.
 - [ ] 🚧 Create missing utility pages: `contact.html`, `privacy.html`, `terms.html`.
+- [ ] 🚧 **Global grade-token WCAG sync** — propagate the ADR-025 grade-badge fix
+  (`--grade-hasan #5D8A3A→#4A7030`, `--grade-daif #A86932→#8A5228`, plus the
+  `[data-theme="dark"]` grade overrides `#1FA882/#7AB84E/#D4884A/#E05555`) to pages **not**
+  touched by the hadith module: `about`, `contact`, `dua`, `terms`, `privacy`, `tools`,
+  `islamic-studies`, `habits`, `inheritance` (+ all `mockups/*`). Most only use `--grade-sahih`
+  as a decorative green accent (no grade badge, no WCAG bug), **but `inheritance.html` renders
+  text in `--grade-daif` for deduction values (3.79:1) — a real fix, not decorative.** Verify
+  each page before editing. Re-sync sibling sites (QuranlyAI/MosqueFinder/…). See DECISIONS.md ADR-025.
 
 ## Done
 _Shipped work, most recent first._

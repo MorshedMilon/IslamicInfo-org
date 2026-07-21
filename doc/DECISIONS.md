@@ -315,3 +315,31 @@ list — never hardcoded (PRD FIX-9 note + US-H02).
 `src/js/api.js` gains **additive** provider-routing (existing `fetchHadith*` REST methods and the
 legacy `fetchHadith` wrapper per ADR-023 are preserved). AhmedBaset is pinned to a release tag so
 upstream `main` churn can't silently change production data.
+
+## ADR-025 · Grade-badge WCAG AA token correction (PRD FIX-1) · Accepted · 2026-07-20
+**Context.** The `--grade-hasan` / `--grade-daif` light-mode token values failed WCAG AA (4.5:1)
+for text — PRD FIX-1 / TechSpec §2.6. Measured against the actual tinted badge background:
+- `--grade-hasan` **#5D8A3A → 3.51:1 ✗**
+- `--grade-daif`  **#A86932 → 3.79:1 ✗**
+(`--grade-sahih` #0F6E56 = 5.19:1 ✅ and `--grade-mawdu` #B33A3A = 4.89:1 ✅ already passed.)
+**Decision — light values corrected** (TechSpec §2.6 recommended):
+- `--grade-hasan`: **#5D8A3A → #4A7030** (now **4.85:1 ✅**)
+- `--grade-daif`:  **#A86932 → #8A5228** (now **5.30:1 ✅**)
+**Decision — dark theme:** added **token-level** `[data-theme="dark"]` overrides
+(`--grade-sahih:#1FA882; --grade-hasan:#7AB84E; --grade-daif:#D4884A; --grade-mawdu:#E05555`) so
+**every** grade usage (badge, filter pill, authenticity badge, Verify verdict banner) gets the
+correct dark colour — the previous per-class `.grade-badge.grade-*` dark overrides only covered the
+feed badge, leaving pills/authenticity/verdict text on the failing light token in dark mode.
+**Who this affects.** `--grade-*` is inlined per page (static-first, ADR-001). Changed in this
+commit — the pages that actually **render a grade badge**: `hadith.html`, `verify.html` (renders
+Ḥasan/Ḍaʿīf verdict badges — was a live WCAG bug), `index.html` (grade-badge system: Daily
+Reflection + Related Hadith grades), and the design-system source `docs/DESIGN-SYSTEM.md`.
+**Not swept here** (only decorative `--grade-sahih` green accents, or grade text that already
+passes): about, contact, dua, terms, privacy, tools, islamic-studies, inheritance, habits, and all
+`mockups/*` — logged as one "global grade-token sync" task in TASKS.md. `inheritance.html` also
+reuses `--grade-daif` as a *deduction-value* colour (not a grade badge) — noted in that task.
+**Sibling sites.** DESIGN-SYSTEM.md notes QuranlyAI/MosqueFinder/TravellyAI/LearnSpeakAI copy this
+palette; they must re-sync these 6 grade values.
+**Known marginal.** Dark `--grade-mawdu` #E05555 = **4.17:1 vs its tinted badge bg** (4.69:1 vs raw
+surface) — kept as the TechSpec §2.6-specified value; Mawdu' is essentially never shown live
+(fabricated narrations). Flagged, not changed without direction.

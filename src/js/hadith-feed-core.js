@@ -58,9 +58,12 @@
   function refOf(h) {
     if (!h) return null;
     var slug = h.collectionSlug;
-    var book = h.bookNumber;
     var num = h.hadithNumber;
-    if (!slug || book == null || num == null) return null;
+    if (!slug || num == null) return null;
+    // Musnad Ahmad (and similar) have no fixed book structure (TechSpec §10) — bookNumber
+    // may be null. Use a 0 book segment so the ref stays stable and dedupe still works;
+    // the card renders flat (buildCardHTML omits the "Book N" label when bookNumber is null).
+    var book = (h.bookNumber == null) ? 0 : h.bookNumber;
     return slug + ':' + book + ':' + num;
   }
 
