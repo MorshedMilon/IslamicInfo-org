@@ -52,3 +52,47 @@ test('chooseLang: honors preferred when present, else first available', () => {
   assert.equal(core.chooseLang(m, 'fr'), 'en');   // preferred absent → first
   assert.equal(core.chooseLang([], 'en'), null);
 });
+
+/* ── gradingsTableHTML ── */
+test('gradingsTableHTML: live single grade → one row + gap note, no fabricated scholar', () => {
+  const html = core.gradingsTableHTML(bukhari());
+  assert.match(html, /Sahih/);
+  assert.match(html, /grader not individually cited/);
+  assert.match(html, /Additional scholarly gradings not yet available/);
+  assert.doesNotMatch(html, /Darussalam|al-Albani/);   // never invented
+});
+
+test('gradingsTableHTML: characterization-only (unknown value) → no table, honest note', () => {
+  const html = core.gradingsTableHTML(bukhari({ grade: { value: null } }));
+  assert.match(html, /not individually recorded/);
+  assert.doesNotMatch(html, /<table/);
+});
+
+test('gradingsTableHTML: 2+ real gradings (future curated) → multi-row, NO gap note', () => {
+  const html = core.gradingsTableHTML(bukhari({ grade: {
+    value: 'sahih', label: 'Sahih', grader: 'al-Bukhari', disputed: false,
+    alternateGradings: [{ value: 'sahih', label: 'Sahih', grader: 'al-Albani' }],
+  }}));
+  assert.match(html, /al-Bukhari/);
+  assert.match(html, /al-Albani/);
+  assert.doesNotMatch(html, /Additional scholarly gradings not yet available/);
+});
+
+/* ── translationBlockHTML ── */
+test('translationBlockHTML: single language → NO tab strip, translation shown', () => {
+  const html = core.translationBlockHTML(core.translationModel(bukhari()), 'en');
+  assert.doesNotMatch(html, /class="dv-tabs"/);
+  assert.match(html, /reward of deeds/);
+});
+
+test('translationBlockHTML: 2+ languages → tab strip with active tab flagged', () => {
+  const m = core.translationModel(bukhari({ translations: [{ text: 'اردو', language: 'ur' }] }));
+  const html = core.translationBlockHTML(m, 'ur');
+  assert.match(html, /class="dv-tabs"/);
+  assert.match(html, /data-lang="ur"[^>]*aria-selected="true"|aria-selected="true"[^>]*data-lang="ur"/);
+});
+
+test('translationBlockHTML: empty model → honest unavailable state', () => {
+  const html = core.translationBlockHTML([], 'en');
+  assert.match(html, /Translation temporarily unavailable/);
+});
