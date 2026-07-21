@@ -387,3 +387,32 @@ extraction as its own planned pass** — never a per-module half-migration. Modu
 without re-asking.
 **Consequences.** Module 7 adds `tier3-deep-view-core.js` + `tier3-deep-view.js`; `hadith.html`
 gains two `<script>` includes and an inline CSS block; no `src/css/*.css` files are created.
+
+## ADR-028 · `api.js` `API_BASE` seam for `/api/*` (absolute origin), decoupled from hosting migration · Accepted · 2026-07-21
+**Context.** `api.js` `_get`/`_getHadith`/`_post` fetched **same-origin relative `/api/...`** for
+EVERY endpoint (verse, quran, prayer, verify, subscribe, ask-claude, the original `fetchHadith`, and
+the Module 0/1 hadith fns). Production site = GitHub Pages, which serves no `/api`, so the **entire**
+`/api` layer is 404 in prod (verified 2026-07-21: `islamicinfo.org/api/{verse,quran/1,prayer,hadith/collections}`
+all 404). This is a pre-existing site-wide design gap, **not** a Module-1 regression — the original
+`fetchHadith` is relative too; the only place the absolute pattern already existed is the QuranlyAI
+widget (`apiBase`). It was **wrongly** framed as coupled to the ADR-026 Cloudflare hosting migration.
+The Worker already implements CORS and `ALLOWED_ORIGINS` already includes the Pages origins
+(`worker/src/lib/cors.js`), so no CORS work is needed to route `/api` cross-origin to the Worker.
+**Decision.** Introduce a single `API_BASE` const in `api.js` (default `''` = same-origin) and a
+`_apiUrl(u)` helper that prefixes `API_BASE` **only** to paths starting `/api/` (leaving absolute CDN
+direct-source URLs and `src/data/...` asset paths untouched). Threaded through `_get`/`_getHadith`/`_post`
+so one knob rebases every `/api` call site. **Shipped INERT** (`API_BASE = ''`), so nothing changes for
+any endpoint until deliberately flipped. Flip target: interim `https://islamicinfo-api.islamicinfo.workers.dev`
+(live, CORS-ready), later `https://api.islamicinfo.org` once DNS lands. This is **independent of the
+ADR-026 hosting migration** (which is now only about page-route 200-status/SEO/unfurl).
+**Verification method (how we prove it's inert until deploy).** Unit tests in
+`worker/test/ui-utils.test.js` assert `api.API_BASE === ''` and `_apiUrl('/api/…')` returns the path
+unchanged while absolute/asset URLs pass through untouched — i.e. default behavior is byte-identical to
+the legacy relative calls. Same "prove-it's-inert" discipline as the grade-token change.
+**⚠ Flipping is site-wide.** Setting `API_BASE` activates cross-origin for **all** `/api/*` endpoints at
+once — and only makes hadith work AFTER the `islamicinfo-api` Worker is redeployed with the hadith routes
+(currently 404 there). Before flipping, verify EACH call site (verify/subscribe/ask-claude/verse/quran/
+prayer + hadith) still degrades gracefully (TASKS.md).
+**Consequences.** `api.js` gains `API_BASE` + `_apiUrl` (both exported for tests); behavior unchanged in
+prod today. Two paired follow-ups in TASKS.md: (1) redeploy the Worker with hadith routes, (2) verify the
+site-wide flip against all `/api` call sites. Neither needs ADR-026.

@@ -21,20 +21,19 @@ _Top of the backlog, unblocked, scoped._
 
 - [ ] Create `docs/DATA.md` link-back from `ARCHITECTURE §6` (remove duplicated key tables; point to DATA.md).
 - [ ] Stand up CI checks (see §CI below) before building more pages.
-- [ ] 🚧 **api.js — absolute `API_BASE` for `/api/*` (client fix, NOT a hosting-migration dependency).**
-  Verified 2026-07-21: `api.js` `_get`/`_getHadith`/`_post` fetch **same-origin relative `/api/...`**
-  for EVERY endpoint (verse, quran, prayer, verify, the original `fetchHadith`, AND the new Module
-  0/1 hadith fns). Production site = GitHub Pages, which serves no `/api` → the **entire** `/api`
-  layer is 404 in prod (`islamicinfo.org/api/verse|quran/1|prayer|hadith/collections` all 404). This
-  is a site-wide design gap, NOT a Module-1 regression (the original `fetchHadith` is relative too);
-  the only place the absolute pattern already exists is the QuranlyAI widget (`apiBase:
-  'https://api.islamicinfo.org'`, fallback `…workers.dev`). **Fix (small, independent of ADR-026):**
-  add an `API_BASE` const in `api.js` (interim `https://islamicinfo-api.islamicinfo.workers.dev`;
-  swap to `https://api.islamicinfo.org` once DNS lands) and prepend it in `_get`/`_getHadith`/`_post`.
-  **CORS is already done** — `worker/src/lib/cors.js` `ALLOWED_ORIGINS` already includes
-  `https://islamicinfo.org` / `www.` / `morshedmilon.github.io`, with preflight in `index.js`. This
-  is site-wide (fixes verse/quran/prayer/verify + hadith at once) and touches the auth-adjacent
-  POST endpoints, so scope/origin needs a quick owner nod before flipping. Ships together with ↓.
+- [x] **api.js — `API_BASE` seam added (INERT), 2026-07-21 (ADR-028).** `_get`/`_getHadith`/`_post`
+  now route through `_apiUrl()` which prefixes `API_BASE` to `/api/*` paths only (CDN + `src/data`
+  URLs untouched). Default `API_BASE=''` = same-origin, byte-identical to legacy behavior — unit-tested
+  inert (`worker/test/ui-utils.test.js`). Flip target wired: `https://islamicinfo-api.islamicinfo.workers.dev`
+  (later `api.islamicinfo.org`). CORS + Pages-origin allowlist already done. NOT a Module-1 regression;
+  independent of ADR-026. **Remaining = flip + verify ↓↓.**
+- [ ] 🚧🕌 **Flip `API_BASE` + verify EVERY `/api/*` call site degrades gracefully (site-wide).**
+  Before setting `API_BASE` to the Worker origin, confirm each endpoint — `verse`, `quran`, `prayer`,
+  `verify`, `subscribe`, `ask-claude`, **and** hadith — still degrades gracefully cross-origin (the flip
+  activates all of them at once, and touches the auth-adjacent POST endpoints). The whole `/api` layer
+  shares this same latent gap today (all 404 in prod), not just hadith — so this is a site-wide check,
+  not a per-page one. **Gated on:** the Worker redeploy ↓ (hadith routes must exist first, else hadith
+  stays 404 cross-origin). See DECISIONS.md ADR-028.
 - [ ] 🚧🕌 **Redeploy the `islamicinfo-api` Worker so it carries the hadith routes.**
   Verified 2026-07-21: the Worker is deployed/alive (root → 200, `/api/quran/*` → 501, a recognized
   route) but **every `/api/hadith/*` path returns 404** — the Module-0 hadith endpoints
@@ -224,6 +223,11 @@ routes. The Knowledge Index ships entirely as static JSON — no database, no ne
 ## Known Gaps 🚧
 - [ ] `contact.html` — linked from About/footer, not yet created
 - [ ] `team.html` — footer "Meet the Team" target (Stage 2)
+- [ ] _(low priority)_ **Custom API domain `api.islamicinfo.org`.** Once the API is routed via
+  `API_BASE` (ADR-028), optionally set up a Cloudflare custom-domain route so `API_BASE` can move from
+  `…workers.dev` to `https://api.islamicinfo.org` (nicer/stable URL; the QuranlyAI widget already
+  prefers it with a `…workers.dev` fallback). Cosmetic — `…workers.dev` works fine; do NOT block the
+  API flip or the Worker redeploy on this. Separate from (and lighter than) the ADR-026 site-hosting migration.
 
 ## CI Checks (wire once, run every deploy)
 - [ ] Lighthouse ≥ 90 on all 10 core pages

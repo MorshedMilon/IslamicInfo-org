@@ -36,6 +36,28 @@
   const TTL_7D     = 7  * 24 * 60 * 60 * 1000;
   const TTL_SESSION = Infinity;   // geocode: keep until tab closes → we store it
 
+  /* ─── API origin for same-origin /api/* calls (ADR-028) ───────────
+     Empty '' = same-origin (DEFAULT, INERT — identical to legacy behavior;
+     nothing changes for any endpoint). GitHub Pages serves no /api, so in
+     production the whole /api layer is 404 until this is pointed at the Worker.
+     To route /api/* at the Worker cross-origin, set API_BASE to its origin:
+       interim: 'https://islamicinfo-api.islamicinfo.workers.dev'  (live now)
+       later:   'https://api.islamicinfo.org'                      (once DNS lands)
+     CORS is already handled + the Pages origins are allow-listed
+     (worker/src/lib/cors.js ALLOWED_ORIGINS). ⚠ Flipping this activates
+     cross-origin for EVERY /api/* endpoint at once (verse, quran, prayer,
+     verify, subscribe, ask-claude, hadith) — and only makes hadith work AFTER
+     the Worker is redeployed with the hadith routes. See DECISIONS.md ADR-028
+     + TASKS.md (verify each call site still degrades gracefully before flipping). */
+  const API_BASE = '';
+
+  /* Prefix a same-origin `/api/...` path with API_BASE. Leaves absolute URLs
+     (CDN direct sources) and non-/api asset paths (src/data/...) untouched, so a
+     single knob rebases every /api call site without corrupting other fetches. */
+  function _apiUrl(u) {
+    return (typeof u === 'string' && u.indexOf('/api/') === 0) ? API_BASE + u : u;
+  }
+
   /* ─── Internal: midnight-UTC bust for Verse of the Day ───────── */
   function _todayUTC() {
     const d = new Date();
@@ -70,7 +92,7 @@
     if (cached) return cached;
 
     try {
-      const res = await fetch(url);
+      const res = await fetch(_apiUrl(url));
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       _writeCache(cacheKey, data, isDailyBust);
@@ -89,7 +111,7 @@
   /* ─── Internal: POST helper (never cached) ───────────────────── */
   async function _post(url, body) {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(_apiUrl(url), {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(body),
@@ -244,7 +266,7 @@
      { ok, data?, error?, source }. No new localStorage keys. */
   async function _getHadith(path) {
     try {
-      const res = await fetch(path, { headers: { Accept: 'application/json' } });
+      const res = await fetch(_apiUrl(path), { headers: { Accept: 'application/json' } });
       return await res.json();
     } catch (err) {
       console.warn(`[II/api] GET ${path} failed:`, err.message);
@@ -463,6 +485,8 @@
     fetchHadithsByBook,
     fetchSingleHadith,
     hadithProviderOf,
+    API_BASE,          // exposed for tests + debugging (ADR-028)
+    _apiUrl,
   };
 
   /* Support both ES module (if bundled later) and plain <script> */
