@@ -34,3 +34,9 @@ test('api.js _apiUrl: leaves absolute CDN + non-/api asset URLs untouched (only 
                            'https://raw.githubusercontent.com/AhmedBaset/hadith-json/v1.2.0/db/x.json');
   assert.equal(api._apiUrl('src/data/hadith/collections.json'), 'src/data/hadith/collections.json');
 });
+
+test('api.js exposes fetchNarrator (Module 8) and it targets /data/narrator (not /api, so API_BASE-exempt)', () => {
+  assert.equal(typeof api.fetchNarrator, 'function');
+  // /data/ path is NOT rebased by _apiUrl (only /api/ is) — stays same-origin static asset
+  assert.equal(api._apiUrl('/data/narrator/x.json'), '/data/narrator/x.json');
+});

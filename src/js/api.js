@@ -316,6 +316,15 @@
   }
   function fetchHadithDaily() { return _getHadith('/api/hadith/daily'); }
 
+  /* Narrator reliability data (Module 8, TechSpec §4.3) — self-hosted static
+     JSON, cache-first 7d, lazy on panel open. Returns the narrator object or
+     null (honest "unavailable"). NOT an /api route → API_BASE-exempt. */
+  function fetchNarrator(id) {
+    var safe = String(id == null ? '' : id).replace(/[^a-z0-9_-]/gi, '');
+    if (!safe) return Promise.resolve(null);
+    return _get('ii-cache-narrator-' + safe, '/data/narrator/' + safe + '.json', TTL_7D, false);
+  }
+
   /* ═══════════════════════════════════════════════════════════════
      Hadith 3-provider routing (ADR-024) — 18 collections.
        · hadithapi (9): proxied via the Worker (/api/hadith/*) — key stays server-side.
@@ -481,6 +490,7 @@
     fetchHadithOne,
     fetchHadithSearch,
     fetchHadithDaily,
+    fetchNarrator,
     fetchHadithOfDay,
     fetchHadithsByBook,
     fetchSingleHadith,
