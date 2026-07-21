@@ -525,6 +525,79 @@ a { text-decoration: none; color: inherit; }
 .footer-action-btn.primary { background: rgba(0,105,110,.08); border-color: rgba(0,105,110,.22); color: var(--teal-700); font-weight: 600; }
 .footer-action-btn.primary:hover { background: rgba(0,105,110,.15); }
 
+/* ── Module 7: Tier 3a list + Tier 3b deep-view ── */
+.t3a-header, .dv-header { margin: 0 0 18px; }
+.dv { max-width: 760px; margin: 0 auto; padding: 8px 0 48px; }
+.dv-breadcrumb { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-muted); }
+.dv-crumb { color: var(--teal-700); text-decoration: none; }
+.dv-crumb:hover { text-decoration: underline; }
+.dv-crumb-current { color: var(--ink-body); font-weight: 600; }
+.dv-crumb-sep { color: var(--ink-faint); }
+.dv-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.dv-actions { display: flex; gap: 8px; }
+.dv-action-btn { width: 38px; height: 38px; border-radius: var(--r-md); border: 1px solid var(--ink-faint);
+  background: var(--surface-card); cursor: pointer; font-size: 16px; line-height: 1; display: inline-flex;
+  align-items: center; justify-content: center; transition: box-shadow .2s var(--ease); }
+.dv-action-btn:hover { box-shadow: var(--elev-1); }
+
+/* Enlarged body card (§2.7: Arabic 24px+) */
+.hadith-card--deep { margin: 18px 0; }
+.hadith-card--deep .dv-arabic { font-size: 26px; line-height: 2.1; padding: 24px; }
+.hadith-card--deep .dv-text { font-size: 17px; line-height: 1.85; }
+.dv-body-unavailable { padding: 40px 24px; text-align: center; color: var(--ink-muted);
+  border: 1px dashed var(--ink-faint); border-radius: var(--r-xl); margin: 18px 0; }
+
+/* Generic block chrome */
+.dv-block { margin: 24px 0; }
+.dv-block-title { font-family: var(--font-serif); font-size: 18px; color: var(--ink-primary); margin: 0 0 12px; }
+.dv-empty { color: var(--ink-muted); font-size: 14px; padding: 14px 16px; background: var(--surface);
+  border-radius: var(--r-md); border: 1px solid var(--ink-faint); }
+
+/* Isnad (inline) */
+.dv-isnad-chain { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.dv-isnad-node { padding: 10px 14px; background: var(--teal-50); border-radius: var(--r-md);
+  display: flex; flex-direction: column; }
+.dv-isnad-name { font-weight: 600; color: var(--ink-body); }
+.dv-isnad-meta { font-size: 12px; color: var(--ink-muted); }
+
+/* Gradings table */
+.dv-gradings { width: 100%; border-collapse: collapse; font-size: 14px; }
+.dv-gradings th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .04em;
+  color: var(--ink-muted); padding: 6px 12px; border-bottom: 1px solid var(--ink-faint); }
+.dv-gradings td { padding: 10px 12px; border-bottom: 1px solid var(--ink-faint); color: var(--ink-body); }
+.dv-grade-cell { font-weight: 600; }
+.dv-gradings-note, .dv-gradings-empty { font-size: 13px; color: var(--ink-muted); margin: 10px 0 0; font-style: italic; }
+
+/* Translation tabs */
+.dv-tabs { display: flex; gap: 6px; margin: 0 0 12px; flex-wrap: wrap; }
+.dv-tab { padding: 6px 14px; border-radius: var(--r-sm); border: 1px solid var(--ink-faint);
+  background: var(--surface-card); cursor: pointer; font-size: 13px; color: var(--ink-body); }
+.dv-tab.on { background: var(--teal-700); color: var(--white); border-color: var(--teal-700); }
+.dv-tr-text { font-size: 16px; line-height: 1.8; color: var(--ink-body); margin: 0; }
+.dv-tr-by { font-size: 13px; color: var(--ink-muted); margin-top: 8px; }
+
+/* Topics */
+.dv-topic-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.dv-topic-chip { padding: 5px 12px; border-radius: 999px; background: var(--teal-50);
+  color: var(--teal-700); font-size: 13px; }
+
+/* Prev/Next (shared by 3a book nav + 3b hadith nav) */
+.dv-prevnext { display: flex; justify-content: space-between; gap: 12px; margin: 32px 0 0; }
+.dv-nav-btn { padding: 10px 18px; border-radius: var(--r-md); border: 1px solid var(--ink-faint);
+  background: var(--surface-card); color: var(--teal-700); text-decoration: none; font-size: 14px; font-weight: 600; }
+.dv-nav-btn:hover { box-shadow: var(--elev-1); }
+.dv-nav-disabled { opacity: .4; pointer-events: none; color: var(--ink-muted); }
+.dv-nav-next { margin-left: auto; }
+
+/* Tier 3a list */
+.t3a-list { display: flex; flex-direction: column; gap: 16px; }
+.t3a-grade-filter { margin: 0 0 8px; }
+
+/* Deep-link pulse (TechSpec §3.5) */
+@keyframes dv-pulse-gold { 0% { box-shadow: 0 0 0 0 var(--gold-aura); } 100% { box-shadow: var(--elev-1); } }
+.pulse-gold { animation: dv-pulse-gold 1.6s var(--ease); }
+@media (prefers-reduced-motion: reduce) { .pulse-gold { animation: none; } }
+
 /* ─── TIER 2 — BOOK LIST (Module 6, ADR-026) ─── */
 /* When routed to /hadith/[collection], hide Tier-1 sections and show only the Tier-2 view. */
 .main[data-tier="2"] > *:not(#ii-tier2) { display: none !important; }
@@ -1804,6 +1877,8 @@ function showHadithToast(msg) {
 <script src="src/js/ui-utils.js"></script>
 <script src="src/js/hadith-collections-core.js"></script>
 <script src="src/js/hadith-feed-core.js"></script>
+<script src="src/js/tier3-deep-view-core.js"></script>
+<script src="src/js/tier3-deep-view.js"></script>
 <script src="src/js/hadith.js"></script>
 <!-- QuranlyAI floating assistant (global, one-tag) -->
 <script src="src/js/quranlyai-widget.js?v=20260718c"></script>
