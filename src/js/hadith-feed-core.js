@@ -161,6 +161,7 @@
 
   var core = {
     gradeParts: gradeParts,
+    gradeBadgeHTML: gradeBadgeHTML,
     refOf: refOf,
     matchesGrade: matchesGrade,
     dedupeByRef: dedupeByRef,

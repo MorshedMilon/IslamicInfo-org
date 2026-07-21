@@ -221,3 +221,11 @@ test('buildCardHTML: card carries data-grade so the DOM grade filter can match i
   assert.ok(core.buildCardHTML(bukhari(grade({ value: 'daif', label: "Da'if" }))).includes('data-grade="daif"'));
   assert.ok(core.buildCardHTML(bukhari(grade({ value: 'unknown', label: 'Grade Unknown' }))).includes('data-grade="unknown"'));
 });
+
+/* ── gradeBadgeHTML export (Module 7: deep-view reuses it) ── */
+test('gradeBadgeHTML is exported and renders the null-grader fallback (shared source of truth)', () => {
+  assert.equal(typeof core.gradeBadgeHTML, 'function');
+  const html = core.gradeBadgeHTML(core.gradeParts(bukhari()));
+  assert.match(html, /grade-badge grade-sahih/);
+  assert.match(html, /grader not individually cited/);
+});
