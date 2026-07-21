@@ -66,6 +66,10 @@
   function gradingsTableHTML(h) {
     var p = feed.gradeParts(h);
     if (p.value === 'unknown') {
+      if (p.characterization) {
+        return '<div class="dv-gradings-empty">' + esc(p.characterization) +
+               ' <span class="dv-gradings-sub">— collection-level characterization; per-hadith grade not individually recorded.</span></div>';
+      }
       return '<div class="dv-gradings-empty">Scholarly grading not individually recorded for this narration.</div>';
     }
     var rows = [{ label: p.label, grader: p.grader }];

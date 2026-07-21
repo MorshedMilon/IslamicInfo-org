@@ -68,6 +68,17 @@ test('gradingsTableHTML: characterization-only (unknown value) → no table, hon
   assert.doesNotMatch(html, /<table/);
 });
 
+test('gradingsTableHTML: characterization-only collection surfaces the characterization (not "Grade Unknown")', () => {
+  const html = core.gradingsTableHTML(bukhari({ grade: { value: null }, gradeCharacterization: 'Sahih / Hasan — compiler’s selection' }));
+  assert.match(html, /Sahih \/ Hasan/);
+  assert.doesNotMatch(html, /Grade Unknown/);
+});
+test('bodyCardHTML: characterization-only hadith body badge shows characterization, not "Grade Unknown"', () => {
+  const html = core.bodyCardHTML(bukhari({ grade: { value: null }, gradeCharacterization: 'Mixed Grades' }));
+  assert.match(html, /Mixed Grades/);
+  assert.doesNotMatch(html, /Grade Unknown/);
+});
+
 test('gradingsTableHTML: 2+ real gradings (future curated) → multi-row, NO gap note', () => {
   const html = core.gradingsTableHTML(bukhari({ grade: {
     value: 'sahih', label: 'Sahih', grader: 'al-Bukhari', disputed: false,

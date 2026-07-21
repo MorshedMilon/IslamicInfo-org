@@ -14,9 +14,17 @@
   var host = null;                                   // set by init()
   var LANG_KEY = 'islamicinfo-hadith-lang';
   var BOOKLESS_DEFAULT = 1;                          // bookless collections use book segment 1
+  var GRADES = { sahih: 1, hasan: 1, daif: 1, mawdu: 1 };
 
   function esc(s) { return (host && host.ui && host.ui.escapeHTML) ? host.ui.escapeHTML(s) : String(s == null ? '' : s); }
   function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+
+  // ?grade= deep-link (TechSpec §4): read once on load; only a recognized
+  // grade value is honored, else 'all' (never trust an arbitrary query string).
+  function readGradeParam() {
+    var g; try { g = new URLSearchParams(location.search).get('grade'); } catch (_) { g = null; }
+    return (g && GRADES[g]) ? g : 'all';
+  }
 
   function init(h) { host = h; }
 
@@ -84,7 +92,9 @@
     var el = host.tier2El(); if (!el) return;
     var slug = c.slug;
     var book = (r.book != null && r.book !== '') ? r.book : BOOKLESS_DEFAULT;
-    var grade = 'all';
+    var grade = readGradeParam();
+    var token = slug + ':' + book + ':' + Date.now();
+    el.dataset.t3aToken = token;
     var skeleton = '';
     for (var i = 0; i < 4; i++) skeleton += '<div class="hadith-card" aria-hidden="true" style="opacity:.5;height:120px;"></div>';
     el.innerHTML = listHeaderHTML(c, book, null, null) + gradePillsHTML(grade) +
@@ -96,6 +106,7 @@
     var res;
     try { res = await host.api.fetchHadithsByBook(slug, book, 1, 25); } catch (_) { res = null; }
     var listEl = $('#ii-t3a-list'); if (!listEl) return;              // route changed mid-fetch
+    if (el.dataset.t3aToken !== token) return;                        // a newer renderList started during the await
     if (!res || !res.ok || !res.data || !Array.isArray(res.data.hadiths)) {
       listEl.innerHTML = '<div class="books-error"><div class="books-empty-title">Hadiths temporarily unavailable</div>' +
         '<div>We couldn’t load the hadiths for this book.</div>' +
@@ -136,6 +147,7 @@
 
     // book nav (deferred, non-blocking): needs the collection's book list
     host.api.fetchHadithBooks(slug).then(function (b) {
+      if (el.dataset.t3aToken !== token) return;
       var nav = $('#ii-t3a-booknav');
       if (nav && b && b.ok && Array.isArray(b.data)) nav.innerHTML = bookNavHTML(slug, b.data, book);
     }).catch(function () {});

@@ -52,6 +52,7 @@
       badgeGraderText: badgeGraderText,
       disputed: g.disputed === true,
       alternates: Array.isArray(g.alternateGradings) ? g.alternateGradings : [],
+      characterization: (h && h.gradeCharacterization) ? String(h.gradeCharacterization) : null,
     };
   }
 
@@ -96,6 +97,11 @@
       }).join(' | ');
       return '<div class="grade-badge grade-disputed"><span class="grade-dot"></span>[GRADE DISPUTED]</div>' +
              '<span class="grade-disputed-detail">' + chips + '</span>';
+    }
+    if (p.value === 'unknown' && p.characterization) {
+      // Characterization-only collections (ADR-022/024): show the collection-level
+      // characterization, never "Grade Unknown", never a fabricated grade.
+      return '<div class="grade-badge grade-unknown"><span class="grade-dot"></span>' + esc(p.characterization) + '</div>';
     }
     var graderSpan = p.badgeGraderText ? ('<span class="grader-label">' + esc(p.badgeGraderText) + '</span>') : '';
     return '<div class="grade-badge ' + p.className + '"><span class="grade-dot"></span>' + esc(p.label) + graderSpan + '</div>';

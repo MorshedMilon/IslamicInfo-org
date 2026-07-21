@@ -229,3 +229,25 @@ test('gradeBadgeHTML is exported and renders the null-grader fallback (shared so
   assert.match(html, /grade-badge grade-sahih/);
   assert.match(html, /grader not individually cited/);
 });
+
+/* ── characterization-only collections: never "Grade Unknown" (ADR-022/024) ── */
+test('gradeParts: surfaces gradeCharacterization when present', () => {
+  const p = core.gradeParts(bukhari({ grade: { value: null }, gradeCharacterization: 'Sahih / Hasan — compiler’s selection' }));
+  assert.equal(p.value, 'unknown');
+  assert.equal(p.characterization, 'Sahih / Hasan — compiler’s selection');
+});
+test('gradeBadgeHTML: unknown grade WITH characterization → shows characterization, NOT "Grade Unknown"', () => {
+  const p = core.gradeParts(bukhari({ grade: { value: null }, gradeCharacterization: 'Mixed Grades' }));
+  const html = core.gradeBadgeHTML(p);
+  assert.match(html, /Mixed Grades/);
+  assert.doesNotMatch(html, /Grade Unknown/);
+});
+test('gradeBadgeHTML: unknown grade WITHOUT characterization → still "Grade Unknown" (genuinely unknown)', () => {
+  const p = core.gradeParts(bukhari({ grade: { value: 'unknown', label: 'Grade Unknown' } }));
+  assert.match(core.gradeBadgeHTML(p), /Grade Unknown/);
+});
+test('buildCardHTML: characterization-only hadith card badge shows characterization, not "Grade Unknown"', () => {
+  const html = core.buildCardHTML(bukhari({ grade: { value: null }, gradeCharacterization: 'Sahih / Hasan' }));
+  assert.match(html, /Sahih \/ Hasan/);
+  assert.doesNotMatch(html, /Grade Unknown/);
+});
