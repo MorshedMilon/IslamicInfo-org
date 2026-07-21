@@ -63,10 +63,36 @@
     return i !== -1 ? list[i].category : null;
   }
 
+  function customCategoriesOf(list) {
+    var seen = {}, out = [];
+    (Array.isArray(list) ? list : []).forEach(function (b) {
+      if (!b || !b.category || isBuiltin(b.category)) return;
+      if (!seen[b.category]) { seen[b.category] = 1; out.push(b.category); }
+    });
+    return out;
+  }
+
+  // Returns { ok, customs }. ok:false when name blank/builtin, or 5 distinct customs already in use.
+  function addCustomCategory(list, name) {
+    var customs = customCategoriesOf(list);
+    name = (name == null ? '' : String(name)).trim();
+    if (!name || isBuiltin(name)) return { ok: false, customs: customs };
+    if (customs.indexOf(name) !== -1) return { ok: true, customs: customs };
+    if (customs.length >= MAX_CUSTOM) return { ok: false, customs: customs };
+    return { ok: true, customs: customs.concat([name]) };
+  }
+
+  function panelFilter(list, category) {
+    var arr = dedupeByRef(list);
+    if (!category || category === 'all') return arr;
+    return arr.filter(function (b) { return b.category === category; });
+  }
+
   var core = {
     BUILTIN_CATEGORIES: BUILTIN_CATEGORIES, MAX_CUSTOM: MAX_CUSTOM, MAX_NOTE: MAX_NOTE,
     isBuiltin: isBuiltin, buildBookmark: buildBookmark, dedupeByRef: dedupeByRef,
     toggleBookmark: toggleBookmark, setCategory: setCategory, getBookmarkCategory: getBookmarkCategory,
+    customCategoriesOf: customCategoriesOf, addCustomCategory: addCustomCategory, panelFilter: panelFilter,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }

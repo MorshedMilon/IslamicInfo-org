@@ -33,3 +33,42 @@ test('setCategory: updates matching ref only', () => {
   assert.equal(core.getBookmarkCategory(out, 'sahih-bukhari:1:1'), 'Reflection');
   assert.equal(core.getBookmarkCategory(out, 'x:0:9'), 'General');
 });
+
+test('customCategoriesOf: distinct non-builtins in use', () => {
+  const list = [
+    core.buildBookmark({ ref: 'a:0:1', category: 'General' }, 0),
+    core.buildBookmark({ ref: 'a:0:2', category: 'Fiqh' }, 0),
+    core.buildBookmark({ ref: 'a:0:3', category: 'Fiqh' }, 0),
+  ];
+  assert.deepEqual(core.customCategoriesOf(list), ['Fiqh']);
+});
+
+test('addCustomCategory: rejects a 6th distinct custom (max 5)', () => {
+  let list = [];
+  ['c1','c2','c3','c4','c5'].forEach((name, i) => {
+    list = list.concat(core.buildBookmark({ ref: 'a:0:' + i, category: name }, 0));
+  });
+  const res = core.addCustomCategory(list, 'c6');
+  assert.equal(res.ok, false);
+  assert.equal(res.customs.length, 5);
+});
+
+test('addCustomCategory: existing custom is ok (no new slot consumed)', () => {
+  const list = [core.buildBookmark({ ref: 'a:0:1', category: 'Fiqh' }, 0)];
+  const res = core.addCustomCategory(list, 'Fiqh');
+  assert.equal(res.ok, true);
+});
+
+test('addCustomCategory: blank or builtin name rejected', () => {
+  assert.equal(core.addCustomCategory([], '  ').ok, false);
+  assert.equal(core.addCustomCategory([], 'General').ok, false);
+});
+
+test('panelFilter: all returns everything; a category filters', () => {
+  const list = [
+    core.buildBookmark({ ref: 'a:0:1', category: 'General' }, 0),
+    core.buildBookmark({ ref: 'a:0:2', category: 'Reflection' }, 0),
+  ];
+  assert.equal(core.panelFilter(list, 'all').length, 2);
+  assert.equal(core.panelFilter(list, 'Reflection').length, 1);
+});
