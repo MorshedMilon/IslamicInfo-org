@@ -115,3 +115,27 @@ test('computeDiff: 2 lists → delegates to LCS (order-aware); 3 lists → share
   ]);
   assert.deepEqual(three, [[false, false], [false, false], [false, false]]);
 });
+
+test('diffChains: identical chains → sameChain true, no divergence', () => {
+  const c1 = [{ id: 'n1' }, { id: 'n2' }, { id: 'n3' }];
+  const c2 = [{ id: 'n1' }, { id: 'n2' }, { id: 'n3' }];
+  const r = core.diffChains([c1, c2]);
+  assert.equal(r.sameChain, true);
+  assert.deepEqual(r.diverge[0], [false, false, false]);
+  assert.deepEqual(r.diverge[1], [false, false, false]);
+});
+
+test('diffChains: chains diverge at a position where narrators differ', () => {
+  const c1 = [{ id: 'n1' }, { id: 'n2' }, { id: 'n3' }];
+  const c2 = [{ id: 'n1' }, { id: 'nX' }, { id: 'n3' }];
+  const r = core.diffChains([c1, c2]);
+  assert.equal(r.sameChain, false);
+  assert.deepEqual(r.diverge[0], [false, true, false]);
+  assert.deepEqual(r.diverge[1], [false, true, false]);
+});
+
+test('diffChains: uses fullName when id absent', () => {
+  const r = core.diffChains([[{ fullName: 'Yahya' }], [{ fullName: 'Malik' }]]);
+  assert.equal(r.sameChain, false);
+  assert.equal(r.diverge[0][0], true);
+});

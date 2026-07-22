@@ -104,12 +104,40 @@
     return diffMany(tokenLists);
   }
 
+  // DORMANT chain-diverge. Computes, per narrator position, whether narrators differ
+  // across the compared chains, and whether all chains are identical (sameChain). Only
+  // invoked by the DOM layer when EVERY compared hadith has a non-empty isnad.narrators
+  // array — which never happens with today's data, so prod always renders the honest
+  // "isnad comparison not yet available" note instead. Unit-tested against mocks so it
+  // lights up automatically once narrator data lands.
+  function narratorKey(n) { n = n || {}; return String(n.id || n.fullName || n.arabicName || '').trim(); }
+  function diffChains(isnadArrays) {
+    var chains = (isnadArrays || []).map(function (a) { return Array.isArray(a) ? a : []; });
+    var same = chains.every(function (c) { return c.length === (chains[0] ? chains[0].length : 0); });
+    var maxLen = chains.reduce(function (mx, c) { return Math.max(mx, c.length); }, 0);
+    if (same) {
+      for (var p = 0; p < maxLen && same; p++) {
+        var k0 = narratorKey(chains[0][p]);
+        for (var c = 1; c < chains.length; c++) { if (narratorKey(chains[c][p]) !== k0) { same = false; break; } }
+      }
+    }
+    var diverge = chains.map(function (chain) {
+      return chain.map(function (n, pos) {
+        var k = narratorKey(n);
+        for (var i = 0; i < chains.length; i++) { if (narratorKey(chains[i][pos] || {}) !== k) return true; }
+        return false;
+      });
+    });
+    return { diverge: diverge, sameChain: same };
+  }
+
   var core = {
     esc: esc, MAX_COMPARE: MAX_COMPARE,
     addRef: addRef, removeRef: removeRef, canCompare: canCompare,
     serializeRefs: serializeRefs, parseRefs: parseRefs,
     normalizeArabicToken: normalizeArabicToken, tokenizeMatn: tokenizeMatn, diffTwo: diffTwo,
     diffMany: diffMany, computeDiff: computeDiff,
+    diffChains: diffChains,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }
