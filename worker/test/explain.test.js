@@ -80,6 +80,7 @@ test('cache hit → returns cached JSON, no fetch', async () => {
   assert.equal(res.status, 200);
   const j = JSON.parse(await res.text());
   assert.equal(j.summary, 'cached');
+  assert.equal(j.model, 'cache');
 });
 
 test('ADVERSARIAL: model coaxed into a ruling → 200 { safe:false }, no flagged text leaks', async () => {

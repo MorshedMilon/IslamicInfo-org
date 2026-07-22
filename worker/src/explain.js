@@ -61,7 +61,7 @@ export async function handleExplain(request, env, ctx, origin) {
   if (cachedRaw != null) {
     try {
       const parsed = JSON.parse(cachedRaw);
-      if (parsed && parsed.safe === true) return json(parsed, origin);
+      if (parsed && parsed.safe === true) return json({ ...parsed, model: 'cache' }, origin);
       // wrong shape / not a safe payload — fall through and regenerate rather than trust it
     } catch (_) { /* corrupt JSON — regenerate */ }
   }
