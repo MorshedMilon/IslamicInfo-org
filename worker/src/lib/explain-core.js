@@ -19,11 +19,14 @@ export function explainCacheKey(ref, lang) {
 }
 
 // Non-global regexes so .exec() yields a stable .index for the first occurrence of each label.
+// Anchored to line start (^ with the m flag; [ \t]* tolerates indentation) so a label that
+// appears mid-sentence inside a section's body (e.g. the model echoing "### LESSON" in prose)
+// is not mistaken for a real heading.
 const SECTION_LABELS = [
-  ['summary', /###\s*SUMMARY[^\n]*\n?/i],
-  ['vocabulary', /###\s*VOCABULARY[^\n]*\n?/i],
-  ['context', /###\s*CONTEXT[^\n]*\n?/i],
-  ['lesson', /###\s*LESSON[^\n]*\n?/i],
+  ['summary', /^[ \t]*###\s*SUMMARY[^\n]*\n?/im],
+  ['vocabulary', /^[ \t]*###\s*VOCABULARY[^\n]*\n?/im],
+  ['context', /^[ \t]*###\s*CONTEXT[^\n]*\n?/im],
+  ['lesson', /^[ \t]*###\s*LESSON[^\n]*\n?/im],
 ];
 
 export function parseExplainSections(text) {

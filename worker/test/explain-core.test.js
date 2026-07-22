@@ -46,3 +46,25 @@ test('parseExplainSections: tolerant of missing sections', () => {
   assert.equal(s.lesson, 'Be sincere.');
   assert.equal(s.vocabulary, '');
 });
+
+test('parseExplainSections: label-substring inside a body (mid-line) is not a boundary', () => {
+  const s = parseExplainSections('### SUMMARY\nThe lesson here (see ### LESSON below) matters.\n### LESSON\nBe sincere.');
+  assert.equal(s.summary, 'The lesson here (see ### LESSON below) matters.');
+  assert.equal(s.lesson, 'Be sincere.');
+});
+
+test('parseExplainSections: CRLF line endings still parse', () => {
+  const s = parseExplainSections('### SUMMARY\r\nHello.\r\n### LESSON\r\nBe sincere.');
+  assert.equal(s.summary, 'Hello.');
+  assert.equal(s.lesson, 'Be sincere.');
+});
+
+test('parseExplainSections: empty string input', () => {
+  const s = parseExplainSections('');
+  assert.deepEqual(s, { summary: '', vocabulary: '', context: '', lesson: '' });
+});
+
+test('parseExplainSections: duplicate label — only the first counts', () => {
+  const s = parseExplainSections('### SUMMARY\nFirst.\n### SUMMARY\nSecond.');
+  assert.equal(s.summary, 'First.\n### SUMMARY\nSecond.');
+});
