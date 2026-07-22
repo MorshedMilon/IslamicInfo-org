@@ -102,3 +102,18 @@ test('applyExplainSafety: ADVERSARIAL — ruling framing is rejected wholesale',
 test('applyExplainSafety: empty text → unsafe', () => {
   assert.equal(applyExplainSafety({ text: '', refusal: false }).safe, false);
 });
+
+test('applyExplainSafety: null/undefined/malformed result → unsafe, never throws', () => {
+  assert.equal(applyExplainSafety(null).safe, false);
+  assert.equal(applyExplainSafety(undefined).safe, false);
+  assert.equal(applyExplainSafety({}).safe, false);
+  assert.equal(applyExplainSafety({ text: 123 }).safe, false); // non-string text coerced, not crashed
+});
+
+test('applyExplainSafety: verdict language split across a newline is still caught', () => {
+  // safety.js AI_VERDICT_FRAMING uses \s+ which spans newlines — confirm the gate catches it.
+  const d = applyExplainSafety({ text: '### SUMMARY\nThis is\nharam here.', refusal: false });
+  assert.equal(d.safe, false);
+  assert.equal(d.fallback, EXPLAIN_FALLBACK);
+  assert.equal(d.summary, undefined);
+});
