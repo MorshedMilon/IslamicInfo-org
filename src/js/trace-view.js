@@ -10,7 +10,6 @@
   var core = II.traceViewCore;
   var host = null;          // { ui, fetchHadithByRef, onTraceBookmark, onTraceShare, onTraceCopy, exitTrace }
   var state = { open: false, viaRoute: false, ref: null, route: null, hadith: null, lastFocus: null };
-  var untrap = function () {};
 
   function el(id) { return document.getElementById(id); }
   function overlay() { return el('trace-overlay'); }
@@ -20,7 +19,7 @@
   function wireActs() {
     var ov = overlay(); if (!ov || ov.dataset.wired) return;
     ov.dataset.wired = '1';
-    if (II.ui && II.ui.focusTrap) untrap = II.ui.focusTrap(ov); // Tab-cycle (applied once)
+    if (II.ui && II.ui.focusTrap) II.ui.focusTrap(ov); // Tab-cycle (applied once)
     ov.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-trace-act], #trace-exit');
       if (!b) return;
@@ -44,9 +43,9 @@
     opts = opts || {};
     if (!core || !host) return;
     wireActs();
+    state.lastFocus = document.activeElement;
     var hadith = opts.hadith || (host.fetchHadithByRef ? await host.fetchHadithByRef(ref) : null);
     var ov = overlay(); if (!ov) return;
-    state.lastFocus = document.activeElement;
     state.open = true; state.viaRoute = !!opts.viaRoute; state.ref = ref; state.route = opts.route || null; state.hadith = hadith;
     if (hadith) renderInto(hadith);
     else { var l = el('trace-layout'); if (l) l.innerHTML = '<div class="dv-empty">This hadith could not be loaded. Please try again.</div>'; var bc = el('trace-breadcrumb'); if (bc) bc.textContent = ''; }
