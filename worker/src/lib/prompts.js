@@ -203,13 +203,19 @@ export function chooseModel(action, rulingAdjacent) {
 // message — they can never alter the system prompt (see explain.js / gemini.js split).
 // ─────────────────────────────────────────────────────────────────────────────
 export function buildExplainUserPrompt(ref, arabic, translation, lang) {
+  // Defense-in-depth: the /api/explain route already normalizes language via
+  // explain-core.normalizeLang; we re-strip here so a hostile lang can never
+  // become an instruction fragment even if this builder is called directly.
+  const safeLang = String(lang || 'en').toLowerCase().replace(/[^a-z-]/g, '').slice(0, 8) || 'en';
   const parts = [];
   parts.push('SOURCE TEXT — the hadith to explain. Rely ONLY on this; never on training memory.');
   parts.push('Reference: ' + (ref || '(unknown)'));
+  // Invariant: the /api/explain route (Task 5) rejects requests where BOTH arabic
+  // and translation are empty with a 400, so at least one source block is present here.
   if (arabic && arabic.trim()) { parts.push('Arabic matn:'); parts.push(arabic.trim()); }
   if (translation && translation.trim()) { parts.push('Translation:'); parts.push(translation.trim()); }
   parts.push('');
-  parts.push('TASK: Explain this hadith for a general reader, written in language code: ' + (lang || 'en') + '.');
+  parts.push('TASK: Explain this hadith for a general reader, written in language code: ' + safeLang + '.');
   parts.push('Output EXACTLY these four sections, each starting with its heading on its own line, in order:');
   parts.push('### SUMMARY');
   parts.push('One short paragraph on what this hadith means.');
