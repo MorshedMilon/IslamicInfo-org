@@ -184,6 +184,14 @@ test('relatedPlaceholderHTML: renders a Related Narrations placeholder (Module 1
   assert.match(core.relatedPlaceholderHTML(), /Related Narrations/);
 });
 
+test('relatedPlaceholderHTML: honest "unavailable" state, no fabricated relation cards', () => {
+  const html = core.relatedPlaceholderHTML();
+  assert.ok(html.indexOf('Related Narrations') !== -1);
+  assert.ok(/compiled|verified against source chains/i.test(html), 'honest deferral copy');
+  ['Same narrator', 'Parallel narration', 'Scholar commentary', 'Thematically related']
+    .forEach(l => assert.ok(html.indexOf(l) === -1, l + ' must not appear'));
+});
+
 /* ── breadcrumbHTML ── */
 test('breadcrumbHTML: collection + book links + current hadith', () => {
   const html = core.breadcrumbHTML({ collection: 'sahih-bukhari', book: '1', hadith: '1' },

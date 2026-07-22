@@ -161,10 +161,12 @@
     return '<div class="dv-block dv-topics"><h2 class="dv-block-title">Topics</h2><div class="dv-topic-chips">' + chips + '</div></div>';
   }
 
-  // ── relatedPlaceholderHTML (Module 11 fills it) ───────────────────
+  // Honest "unavailable" state (Module 11). No /similar endpoint + no verified
+  // similarity/chain data exist, so we render NO relation cards and never fabricate
+  // a "same narrator"/"parallel"/"commentary" relationship. Real graph is deferred.
   function relatedPlaceholderHTML() {
     return '<div class="dv-block dv-related"><h2 class="dv-block-title">Related Narrations</h2>' +
-           '<div class="dv-empty">Related narrations arrive in a later update.</div></div>';
+           '<div class="dv-empty">Related narrations are being compiled and will appear once verified against source chains.</div></div>';
   }
 
   // ── breadcrumbHTML ────────────────────────────────────────────────
