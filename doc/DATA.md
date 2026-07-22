@@ -128,8 +128,8 @@ PrayerData = {
   source: 'aladhan' | 'cache' | 'fallback';
 }
 NisabData      = { currency: string; goldPricePerGram: number; nisabValue: number; asOf: string; source: string }
-HadithBookmark = { collectionSlug: string; bookNum: number; hadithNum: number; savedAt: string }
-HadithNote     = { collectionSlug: string; bookNum: number; hadithNum: number; text: string; updatedAt: string }
+HadithBookmark = { ref: string /* "collectionSlug:bookNum:hadithNum" */; collectionSlug: string; bookNum: string|null; hadithNum: string; category: string /* default 'General'; 4 built-ins + ≤5 custom categories derived from bookmarks in use */; createdAt: number /* ms epoch */ }  // Module 10 (per-hadith action suite)
+HadithNote     = { hadithRef: string /* "collectionSlug:bookNum:hadithNum" */; text: string /* ≤2000 chars, client-enforced */; updatedAt: number /* ms epoch */ }  // Module 10
 Hadith         = { id: string; collectionSlug: string; bookNum: number; hadithNum: number; arabic: string; translation: string; translator: string; narrator: string; grade: 'sahih'|'hasan'|'daif'|'mawdu'|null; grader: string|null }  // grade/grader null for the 9 characterization-only collections (40 Nawawi + 8 AhmedBaset) — ADR-022
 Chapter        = { id: number; name_simple: string; name_arabic: string; revelation_place: 'makkah' | 'madinah'; verses_count: number; slug: string }
 Verse          = { verse_key: string; verse_number: number; text_uthmani: string; translation: string; words: { ar: string; en: string }[] }
