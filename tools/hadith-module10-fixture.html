@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 10 — net-new component fixture</title>
+<style>
+:root{
+  --teal-500:#2CA4AB;--teal-600:#0297A1;--teal-700:#00696E;--teal-900:#0A3A3D;
+  --gold-500:#C5A059;--gold-700:#9A7C3F;
+  --ink-primary:#0F2A2C;--ink-body:#243738;--ink-muted:#6D797A;--ink-subtle:#9DA8A9;
+  --surface:#F4F7F7;--surface-base:#FAFBFB;--white:#FFFFFF;
+  --elev-1:0 1px 3px rgba(15,42,44,.06);
+  --elev-2:0 4px 14px rgba(15,42,44,.08),0 1px 3px rgba(15,42,44,.04);
+  --elev-3:0 12px 32px rgba(0,105,110,.10),0 4px 10px rgba(0,105,110,.06);
+  --grade-sahih:#0F6E56;
+  --font-body:'Inter',-apple-system,'Segoe UI',sans-serif;
+  --font-serif:'Cormorant Garamond',Georgia,serif;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-body);color:var(--ink-body);background:var(--surface);
+  padding:32px 420px 48px 32px;}   /* right padding leaves room for the docked panel */
+h1{font-family:var(--font-serif);color:var(--teal-900);font-size:26px;margin:0 0 4px}
+.sub{color:var(--ink-muted);font-size:13px;margin:0 0 28px}
+.zone-label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--teal-700);margin:26px 0 10px}
+.col{max-width:720px}
+
+/* ── approximate real hadith card chrome (for context only) ── */
+.hadith-card{position:relative;background:var(--white);border:0.5px solid rgba(0,105,110,.14);
+  border-radius:16px;box-shadow:var(--elev-2);overflow:hidden;}
+.hadith-teal-bar{height:4px;background:linear-gradient(90deg,var(--teal-700),var(--teal-500));}
+.hadith-inner{padding:18px 20px 16px;}
+.hadith-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.hadith-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hadith-num{font-size:12px;font-weight:600;color:var(--teal-700);background:rgba(0,105,110,.08);
+  padding:4px 10px;border-radius:999px;}
+.grade-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+  color:var(--grade-sahih);}
+.grade-dot{width:7px;height:7px;border-radius:50%;background:var(--grade-sahih);display:inline-block;}
+.grader-label{color:var(--ink-subtle);font-weight:500;}
+.hadith-actions{display:flex;gap:4px;}
+.hadith-action-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  border:none;background:transparent;color:var(--ink-muted);border-radius:8px;cursor:pointer;}
+.hadith-action-btn:hover{background:rgba(0,105,110,.08);color:var(--teal-700);}
+.hadith-arabic{font-family:var(--font-serif);font-size:22px;text-align:right;direction:rtl;
+  color:var(--ink-primary);margin:14px 0 6px;line-height:1.9;}
+.hadith-text{font-size:14.5px;line-height:1.7;color:var(--ink-body);margin-top:8px;}
+.hadith-narrator{font-size:12.5px;color:var(--ink-muted);font-style:italic;}
+.btn-glass{border:0.5px solid rgba(0,105,110,.2);background:var(--white);color:var(--teal-700);
+  padding:7px 14px;border-radius:9px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;}
+.btn-glass.primary{background:var(--teal-700);color:#fff;border-color:var(--teal-700);}
+
+/* ═══ Module 10 CSS (verbatim from hadith.html) ═══ */
+.hadith-card.has-bookmark .hadith-num::after,
+.hadith-card.has-note .hadith-num::after {
+  content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold-500); margin-left: 6px; vertical-align: middle;
+}
+.hadith-action-btn.active { color: var(--gold-500); }
+.note-editor { background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.14);
+  border-radius: 12px; box-shadow: var(--elev-1); padding: 14px; margin: -6px 0 16px; }
+.note-textarea { width: 100%; min-height: 72px; resize: vertical; font: inherit;
+  color: var(--ink-body); background: transparent; border: 0.5px solid rgba(0,105,110,.18);
+  border-radius: 8px; padding: 10px; box-sizing: border-box; }
+.note-editor-actions { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.note-count { font-size: 12px; color: var(--ink-muted); margin-right: auto; }
+.audio-mini-player { background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.14);
+  border-radius: 12px; padding: 12px 14px; margin: -6px 0 16px; }
+.amp-controls { display: flex; align-items: center; gap: 12px; opacity: .5; }
+.amp-play { width: 34px; height: 34px; border-radius: 50%; border: none; background: var(--teal-700);
+  color: #fff; cursor: not-allowed; }
+.amp-progress { flex: 1; height: 4px; border-radius: 2px; background: rgba(0,105,110,.15); }
+.amp-progress-fill { width: 0; height: 100%; border-radius: 2px; background: var(--teal-700); }
+.amp-speed { font-size: 12px; color: var(--ink-muted); }
+.amp-unavailable { margin-top: 8px; font-size: 12.5px; color: var(--ink-muted); }
+.bm-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.28); z-index: 90; }
+.bm-panel { position: fixed; top: 0; right: 0; height: 100%; width: min(380px, 92vw);
+  background: var(--surface-base); box-shadow: var(--elev-3); z-index: 91;
+  transform: translateX(100%); transition: transform .28s ease; display: flex; flex-direction: column; }
+.bm-panel.open { transform: translateX(0); }
+@media (prefers-reduced-motion: reduce) { .bm-panel { transition: none; } }
+.bm-panel-head { display: flex; align-items: center; justify-content: space-between;
+  padding: 16px; border-bottom: 0.5px solid rgba(0,105,110,.1); }
+.bm-panel-title { font-weight: 600; color: var(--teal-700); }
+.bm-close { border: none; background: transparent; cursor: pointer; font-size: 16px; color: var(--ink-muted); }
+.bm-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; }
+.bm-chip { font-size: 12px; padding: 4px 10px; border-radius: 999px; cursor: pointer;
+  border: 0.5px solid rgba(0,105,110,.2); background: transparent; color: var(--ink-body); }
+.bm-chip.on { background: var(--teal-700); color: #fff; border-color: var(--teal-700); }
+.bm-list { overflow-y: auto; padding: 0 12px 16px; flex: 1; }
+.bm-row { display: flex; align-items: center; gap: 8px; padding: 10px;
+  border-bottom: 0.5px solid rgba(0,105,110,.08); }
+.bm-row-main { flex: 1; min-width: 0; }
+.bm-row-title { font-size: 13.5px; color: var(--ink-body); }
+.bm-row-cat { font-size: 11.5px; color: var(--ink-muted); margin-top: 2px; }
+.bm-jump, .bm-remove { border: none; background: transparent; cursor: pointer;
+  color: var(--teal-700); font-size: 15px; padding: 4px 6px; }
+.bm-remove { color: var(--ink-muted); }
+.bm-empty { padding: 28px 12px; text-align: center; color: var(--ink-muted); }
+.bm-cat-tooltip { background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.16);
+  border-radius: 10px; box-shadow: var(--elev-2); padding: 6px; min-width: 180px; }
+.bm-cat-opt { display: block; width: 100%; text-align: left; border: none; background: transparent;
+  padding: 7px 10px; border-radius: 6px; cursor: pointer; font: inherit; color: var(--ink-body); }
+.bm-cat-opt:hover { background: rgba(0,105,110,.08); }
+.bm-cat-new { color: var(--teal-700); font-weight: 600; }
+
+/* fixture-only: render the tooltip/panel inline & visible for the screenshot */
+.bm-cat-tooltip{position:static;margin:10px 0 0;}
+</style>
+</head>
+<body>
+<h1>Module 10 — net-new components</h1>
+<p class="sub">Built from locked design-system tokens. No mockup precedent. Fixture render (no backend).</p>
+
+<div class="col">
+
+  <div class="zone-label">1 · Card with note button + gold dots (bookmarked &amp; noted)</div>
+  <div class="hadith-card has-bookmark has-note">
+    <div class="hadith-teal-bar"></div>
+    <div class="hadith-inner">
+      <div class="hadith-header">
+        <div class="hadith-meta">
+          <span class="hadith-num">Hadith #1</span>
+          <span class="grade-badge"><span class="grade-dot"></span>Sahih<span class="grader-label"> · grader not individually cited</span></span>
+        </div>
+        <div class="hadith-actions">
+          <button class="hadith-action-btn active" title="Bookmark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
+          <button class="hadith-action-btn" title="Add a private note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="hadith-action-btn" title="Share"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          <button class="hadith-action-btn" title="Copy with attribution"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+        </div>
+      </div>
+      <div class="hadith-arabic" dir="rtl" lang="ar">إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ</div>
+      <div class="hadith-narrator">Narrated 'Umar ibn al-Khattab:</div>
+      <div class="hadith-text">The reward of deeds depends upon the intentions, and every person will get the reward according to what he has intended.</div>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:6px">↑ Gold dot on the <code>Hadith #1</code> badge = bookmarked/noted. Note button is 2nd in the row; Bookmark button shown active (gold).</p>
+
+  <div class="zone-label">2 · Category tooltip (on bookmark)</div>
+  <div class="bm-cat-tooltip" role="menu" style="min-width:200px">
+    <button class="bm-cat-opt" role="menuitem">General</button>
+    <button class="bm-cat-opt" role="menuitem">For Memorisation</button>
+    <button class="bm-cat-opt" role="menuitem">Reflection</button>
+    <button class="bm-cat-opt" role="menuitem">To Verify</button>
+    <button class="bm-cat-opt" role="menuitem">Fiqh</button>
+    <button class="bm-cat-opt bm-cat-new">+ New category</button>
+  </div>
+
+  <div class="zone-label">3 · Note editor (sibling below card, 2000-char cap)</div>
+  <div class="note-editor">
+    <textarea class="note-textarea" maxlength="2000">Cross-reference with the hadith on sincerity in Book of Faith — memorise for Friday reflection.</textarea>
+    <div class="note-editor-actions">
+      <span class="note-count">92 / 2000</span>
+      <button class="btn-glass">Cancel</button>
+      <button class="btn-glass primary">Save</button>
+    </div>
+  </div>
+
+  <div class="zone-label">4 · Audio mini-player (honest unavailable-only — no reciter)</div>
+  <div class="audio-mini-player">
+    <div class="amp-controls">
+      <button class="amp-play" aria-disabled="true" disabled title="Audio unavailable">▶</button>
+      <div class="amp-progress"><div class="amp-progress-fill"></div></div>
+      <span class="amp-speed" aria-disabled="true">1×</span>
+    </div>
+    <div class="amp-unavailable">Audio unavailable for this hadith</div>
+  </div>
+
+</div>
+
+<!-- 5 · Bookmarks panel (docked open on the right, real fixed positioning) -->
+<aside class="bm-panel open" role="dialog" aria-modal="true" aria-label="Your bookmarks">
+  <div class="bm-panel-head">
+    <span class="bm-panel-title">Your Bookmarks</span>
+    <button class="bm-close" aria-label="Close bookmarks">✕</button>
+  </div>
+  <div class="bm-chips">
+    <button class="bm-chip on">All</button>
+    <button class="bm-chip">General</button>
+    <button class="bm-chip">For Memorisation</button>
+    <button class="bm-chip">Reflection</button>
+    <button class="bm-chip">Fiqh</button>
+  </div>
+  <div class="bm-list">
+    <div class="bm-row">
+      <div class="bm-row-main"><div class="bm-row-title">Sahih al-Bukhari · Hadith 1</div><div class="bm-row-cat">For Memorisation</div></div>
+      <button class="bm-jump" title="Jump to hadith" aria-label="Jump to hadith">→</button>
+      <button class="bm-remove" title="Remove bookmark" aria-label="Remove bookmark">✕</button>
+    </div>
+    <div class="bm-row">
+      <div class="bm-row-main"><div class="bm-row-title">Sahih Muslim · Hadith 2564</div><div class="bm-row-cat">Reflection</div></div>
+      <button class="bm-jump" title="Jump to hadith" aria-label="Jump to hadith">→</button>
+      <button class="bm-remove" title="Remove bookmark" aria-label="Remove bookmark">✕</button>
+    </div>
+    <div class="bm-row">
+      <div class="bm-row-main"><div class="bm-row-title">Riyad as-Salihin · Hadith 95</div><div class="bm-row-cat">Fiqh</div></div>
+      <button class="bm-jump" title="Jump to hadith" aria-label="Jump to hadith">→</button>
+      <button class="bm-remove" title="Remove bookmark" aria-label="Remove bookmark">✕</button>
+    </div>
+  </div>
+</aside>
+
+</body>
+</html>
