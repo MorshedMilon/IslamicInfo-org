@@ -245,3 +245,11 @@ test('deepViewHTML: null hadith → body "temporarily unavailable" but prev/next
   assert.match(html, /dv-prevnext/);
   assert.match(html, /href="\/hadith\/sahih-bukhari\/1\/5"/);   // prev still works
 });
+
+/* ── traceLinkHTML (Module 14) ── */
+test('deep-view header has a "View as Trace" link to /hadith/trace/{c}/{b}/{h}', () => {
+  const r = { collection: 'sahih-bukhari', book: 1, hadith: 1 };
+  const html = core.deepViewHTML(r, { name: 'Sahih al-Bukhari' }, bukhari(), {});
+  assert.match(html, /href="\/hadith\/trace\/sahih-bukhari\/1\/1"/);
+  assert.match(html, /View as Trace/);
+});
