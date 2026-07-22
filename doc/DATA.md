@@ -68,6 +68,11 @@
 > is a bug. Date-suffixed keys (`{date}`, `{YYYY-MM-DD}`, `{month-year}`) are how we
 > expire data without a TTL mechanism — old keys are swept lazily on next access.
 
+> **Module 15 (Comparison Mode).** Uses NO localStorage/sessionStorage key. The selected
+> comparison set (up to 3 hadith refs) is held in memory for the session and encoded in
+> the URL (`/hadith/compare?refs=slug:book:num,…`); deep-links and shares work via a
+> fresh per-ref fetch on load, not stored state — see ADR-039.
+
 > **Module 6 — QUL static file layout.** In addition to the `ii-qul-*`
 > `localStorage` caches above, QUL reciter data itself is static JSON on Pages
 > (no binding): `src/data/qul/reciters.json` → `Reciter[]` (ships `[]`) and
