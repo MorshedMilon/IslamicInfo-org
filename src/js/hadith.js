@@ -242,6 +242,59 @@
       '<p class="topic-index-sub">Browse hadith by subject. Curated topic statistics and study aids are being prepared and will appear after review.</p></div>' +
       '<div class="topic-index-grid">' + cards + '</div>';
   }
+  function renderTopicLanding(key) {
+    var t = topics && topics.topicByKey(key);
+    if (!t) { try { history.replaceState(null, '', '/hadith/topics'); } catch (_) {} renderTopicIndex(); return; }
+    setTier(2);
+    var el = tier2El(); if (!el) return;
+    el.innerHTML = topicsBreadcrumb(t.label) +
+      '<div class="topic-landing-head"><h1 class="collection-header-name">' + esc(t.label) + '</h1>' +
+      '<p class="topic-landing-note">Curated study aids for this topic — scholarly summary, key narrations, and study order — are being prepared and will appear after review.</p></div>' +
+      '<div class="topic-landing-body">' +
+        '<div class="topic-feed">' +
+          '<div class="topic-feed-label">Hadith matching “' + esc(t.label) + '” — a keyword match across the loaded hadith, not a curated topic classification.</div>' +
+          '<div id="ii-topic-feed-list"></div>' +
+        '</div>' +
+        '<aside class="topic-rail" id="ii-topic-rail"></aside>' +
+      '</div>';
+    renderTopicFeed(t);
+  }
+  function loadedHadithArray() {
+    return Object.keys(FEED.byRef).map(function (r) { return FEED.byRef[r]; });
+  }
+  function renderTopicFeed(t) {
+    var listEl = $('#ii-topic-feed-list'); if (!listEl) return;
+    var loaded = loadedHadithArray();
+    if (!loaded.length) {                                  // direct deep-link before the feed loaded
+      listEl.innerHTML = '<div class="topic-feed-loading">Loading hadith…</div>';
+      loadHadithFeed(false).then(function () {
+        if ($('#ii-topic-feed-list') === listEl) renderTopicFeed(t);   // still on this landing
+      });
+      return;
+    }
+    var kw = t.keyword.toLowerCase();
+    var matches = loaded.filter(function (h) { return feedHadithText(h).toLowerCase().indexOf(kw) !== -1; });
+    if (!matches.length) {
+      listEl.innerHTML = '<div class="topic-feed-empty">No matching hadith in the loaded set yet. Full cross-collection topic search arrives with curated topic data.</div>';
+    } else {
+      listEl.innerHTML = matches.map(feed.buildCardHTML).join('');
+      markCardStates(listEl);                              // Module 10 gold dots
+    }
+    renderTopicRail(t, loaded);
+  }
+  function renderTopicRail(t, loaded) {
+    var rail = $('#ii-topic-rail'); if (!rail || !topics) return;
+    var withText = loaded.map(function (h) { return { text: feedHadithText(h) }; });
+    var co = topics.coOccurringTopics(withText, t.keyword, topics.TOPICS);
+    if (!co.length) { rail.style.display = 'none'; rail.innerHTML = ''; return; }   // honest empty → omit
+    rail.style.display = '';
+    rail.innerHTML = '<h2 class="topic-rail-title">Also appears in these hadith</h2>' +
+      '<p class="topic-rail-note">Topics whose keywords co-occur in the loaded hadith — a text signal over the loaded sample, not a curated relationship.</p>' +
+      '<ul class="topic-rail-list">' + co.map(function (x) {
+        return '<li><a href="/hadith/topics/' + encodeURIComponent(x.key) + '">' + esc(x.label) +
+          '</a><span class="topic-rail-count">' + x.count + '</span></li>';
+      }).join('') + '</ul>';
+  }
 
   // Tier 3a/3b live in Module 7; render an honest interim (back nav works) rather than faking a list.
   function renderTier3Placeholder(r, c) {
