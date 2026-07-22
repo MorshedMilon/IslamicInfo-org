@@ -251,3 +251,12 @@ test('buildCardHTML: characterization-only hadith card badge shows characterizat
   assert.match(html, /Sahih \/ Hasan/);
   assert.doesNotMatch(html, /Grade Unknown/);
 });
+
+/* ── Module 10: per-card note action button ── */
+test('buildCardHTML: renders a data-act="note" header button between bookmark and share', () => {
+  const html = core.buildCardHTML(bukhari());
+  assert.ok(html.indexOf('data-act="note"') !== -1, 'note button present');
+  // order: bookmark then note then share
+  assert.ok(html.indexOf('data-act="bookmark"') < html.indexOf('data-act="note"'));
+  assert.ok(html.indexOf('data-act="note"') < html.indexOf('data-act="share"'));
+});
