@@ -74,11 +74,42 @@
     return { a: af, b: bf };
   }
 
+  // N-way (order-independent) diff: a token is "shared" only if its normalized key is
+  // present (frequency-aware) in EVERY list; otherwise it differs. Honest signal
+  // "this word isn't in all N". Empty keys never flag.
+  function diffMany(tokenLists) {
+    var lists = (tokenLists || []).map(function (t) { return (t || []).map(function (x) { return x.key; }); });
+    function counts(arr) { var m = {}; arr.forEach(function (k) { if (k !== '') m[k] = (m[k] || 0) + 1; }); return m; }
+    var cs = lists.map(counts);
+    var common = {};
+    Object.keys(cs[0] || {}).forEach(function (k) {
+      var min = cs[0][k];
+      for (var i = 1; i < cs.length; i++) { var c = cs[i][k] || 0; if (c < min) min = c; }
+      if (min > 0) common[k] = min;
+    });
+    return lists.map(function (arr) {
+      var budget = Object.assign({}, common);
+      return arr.map(function (k) {
+        if (k === '') return false;
+        if (budget[k] > 0) { budget[k]--; return false; }
+        return true;
+      });
+    });
+  }
+
+  // Dispatcher: 2 lists → order-aware LCS (tighter); N>2 → shared-token model.
+  function computeDiff(tokenLists) {
+    tokenLists = tokenLists || [];
+    if (tokenLists.length === 2) { var d = diffTwo(tokenLists[0], tokenLists[1]); return [d.a, d.b]; }
+    return diffMany(tokenLists);
+  }
+
   var core = {
     esc: esc, MAX_COMPARE: MAX_COMPARE,
     addRef: addRef, removeRef: removeRef, canCompare: canCompare,
     serializeRefs: serializeRefs, parseRefs: parseRefs,
     normalizeArabicToken: normalizeArabicToken, tokenizeMatn: tokenizeMatn, diffTwo: diffTwo,
+    diffMany: diffMany, computeDiff: computeDiff,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }

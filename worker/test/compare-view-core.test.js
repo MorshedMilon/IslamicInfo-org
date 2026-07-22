@@ -88,3 +88,30 @@ test('diffTwo: VERIFICATION NOTE — punctuation/diacritic differences are NOT f
   assert.ok(d.a.every(function (x) { return x === false; }), 'no side-a false positives');
   assert.ok(d.b.every(function (x) { return x === false; }), 'no side-b false positives');
 });
+
+test('diffMany (3-way): a word present in ALL three is not flagged; a word missing from one IS flagged', () => {
+  const lists = [
+    core.tokenizeMatn('إنما الأعمال بالنيات'),
+    core.tokenizeMatn('إنما الصيام بالنيات'),
+    core.tokenizeMatn('إنما الأعمال بالنيات'),
+  ];
+  const flags = core.diffMany(lists);
+  // "إنما" and "بالنيات" appear in all three → false everywhere at those positions.
+  assert.equal(flags[0][0], false); // إنما
+  assert.equal(flags[0][2], false); // بالنيات
+  // position 1: list0/list2 = الأعمال (2 of 3), list1 = الصيام (unique) → all flagged (not in ALL three)
+  assert.equal(flags[0][1], true);  // الأعمال not in list1
+  assert.equal(flags[1][1], true);  // الصيام not in list0/list2
+  assert.equal(flags[2][1], true);
+});
+
+test('computeDiff: 2 lists → delegates to LCS (order-aware); 3 lists → shared-token', () => {
+  const two = core.computeDiff([core.tokenizeMatn('إنما الأعمال'), core.tokenizeMatn('إنما الصيام')]);
+  assert.deepEqual(two, [[false, true], [false, true]]);
+  const three = core.computeDiff([
+    core.tokenizeMatn('إنما الأعمال'),
+    core.tokenizeMatn('إنما الأعمال'),
+    core.tokenizeMatn('إنما الأعمال'),
+  ]);
+  assert.deepEqual(three, [[false, false], [false, false], [false, false]]);
+});
