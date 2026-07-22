@@ -268,7 +268,10 @@
     if (!loaded.length) {                                  // direct deep-link before the feed loaded
       listEl.innerHTML = '<div class="topic-feed-loading">Loading hadith…</div>';
       loadHadithFeed(false).then(function () {
-        if ($('#ii-topic-feed-list') === listEl) renderTopicFeed(t);   // still on this landing
+        if ($('#ii-topic-feed-list') !== listEl) return;   // navigated away
+        if (loadedHadithArray().length) { renderTopicFeed(t); return; }   // feed arrived → render
+        // zero hadith loaded → stop (never recurse); honest message, no re-fetch
+        listEl.innerHTML = '<div class="topic-feed-empty">Hadith couldn’t be loaded right now — please try again shortly.</div>';
       });
       return;
     }
@@ -1039,7 +1042,6 @@
   function wireTopics() {
     var chips = document.querySelectorAll('.topics-grid .topic-chip');
     chips.forEach(function (chip) {
-      chip.setAttribute('aria-pressed', 'false');
       function act() {
         var key = chip.getAttribute('data-topic');
         if (key) routeTo({ collection: 'topics', book: key }, true);
