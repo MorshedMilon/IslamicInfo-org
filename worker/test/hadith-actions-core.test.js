@@ -121,3 +121,20 @@ test('buildAskUrl: falls back to arabicMatn when translation missing', () => {
   const url = core.buildAskUrl({ collection: 'x', book: 1, hadith: 5 }, { arabicMatn: 'نص' });
   assert.ok(url.indexOf('q=' + encodeURIComponent('نص')) !== -1);
 });
+
+test('buildCopyText: includes attribution (reference + grade) and provenance line', () => {
+  const t = core.buildCopyText({ arabic: 'نص', translation: 'The reward of deeds…', narrator: "Narrated 'Umar:", reference: 'Sahih al-Bukhari · Book 1 · Hadith 1', grade: 'Sahih · grader not individually cited' });
+  assert.ok(t.indexOf('نص') !== -1);
+  assert.ok(t.indexOf('The reward of deeds…') !== -1);
+  assert.ok(t.indexOf("Narrated 'Umar:") !== -1);
+  assert.ok(t.indexOf('Sahih al-Bukhari · Book 1 · Hadith 1') !== -1);
+  assert.ok(t.indexOf('Sahih · grader not individually cited') !== -1);
+  assert.ok(t.indexOf('IslamicInfo.org') !== -1);
+});
+test('buildCopyText: returns empty string when no reference (never copy an unattributed hadith)', () => {
+  assert.equal(core.buildCopyText({ arabic: 'نص', translation: 'x' }), '');
+});
+test('buildCopyText: works with translation-only (no arabic/narrator/grade)', () => {
+  const t = core.buildCopyText({ translation: 'x', reference: 'Sunan Abi Dawud · Hadith 5' });
+  assert.ok(t.indexOf('"x"') !== -1 && t.indexOf('Sunan Abi Dawud · Hadith 5') !== -1);
+});

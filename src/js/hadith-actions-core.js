@@ -119,13 +119,30 @@
     return 'verify.html?' + qs;
   }
 
+  // Format a hadith for clipboard copy WITH attribution. Invariant: never emit an
+  // unattributed hadith — returns '' when there is no reference/source.
+  function buildCopyText(content) {
+    content = content || {};
+    var ref = (content.reference || '').trim();
+    if (!ref) return '';
+    var lines = [];
+    if (content.arabic) lines.push(String(content.arabic).trim());
+    var tr = (content.translation || '').trim();
+    if (tr) { lines.push(''); lines.push('"' + tr + '"'); }
+    if (content.narrator) lines.push('— ' + String(content.narrator).trim());
+    lines.push('');
+    lines.push(ref + (content.grade ? ' · ' + String(content.grade).trim() : ''));
+    lines.push('via IslamicInfo.org');
+    return lines.join('\n');
+  }
+
   var core = {
     BUILTIN_CATEGORIES: BUILTIN_CATEGORIES, MAX_CUSTOM: MAX_CUSTOM, MAX_NOTE: MAX_NOTE,
     isBuiltin: isBuiltin, buildBookmark: buildBookmark, dedupeByRef: dedupeByRef,
     toggleBookmark: toggleBookmark, setCategory: setCategory, getBookmarkCategory: getBookmarkCategory,
     customCategoriesOf: customCategoriesOf, addCustomCategory: addCustomCategory, panelFilter: panelFilter,
     clampNoteText: clampNoteText, buildNote: buildNote, getNote: getNote, upsertNote: upsertNote,
-    buildAskUrl: buildAskUrl,
+    buildAskUrl: buildAskUrl, buildCopyText: buildCopyText,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }
