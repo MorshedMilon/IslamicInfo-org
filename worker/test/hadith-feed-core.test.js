@@ -260,3 +260,58 @@ test('buildCardHTML: renders a data-act="note" header button between bookmark an
   assert.ok(html.indexOf('data-act="bookmark"') < html.indexOf('data-act="note"'));
   assert.ok(html.indexOf('data-act="note"') < html.indexOf('data-act="share"'));
 });
+
+/* ── Module 12: translation compare (US-H23) + copy-arabic action ── */
+test('buildTranslations: single adapter shape → one primary edition, translator omitted when null', () => {
+  const out = core.buildTranslations(bukhari());
+  assert.equal(out.length, 1);
+  assert.equal(out[0].primary, true);
+  assert.equal('translator' in out[0], false);
+});
+test('buildTranslations: keeps translator when present; multi-edition marks only first primary + drops empty', () => {
+  const out = core.buildTranslations({ translations: [
+    { text: 'A', edition: 'darussalam', translator: 'Khan' }, { text: '', edition: 'ghost' }, { text: 'B', edition: 'usc-msa' },
+  ] });
+  assert.deepEqual(out.map(e => e.edition), ['darussalam', 'usc-msa']);
+  assert.equal(out[0].primary, true);
+  assert.equal(out[1].primary, false);
+  assert.equal(out[0].translator, 'Khan');
+});
+test('buildTranslations: no translation data → empty array', () => {
+  assert.deepEqual(core.buildTranslations({ translation: null }), []);
+});
+test('renderTranslations: single edition → plain .hadith-text row, no tabs (visual unchanged)', () => {
+  const html = core.renderTranslations(core.buildTranslations(bukhari()));
+  assert.match(html, /<div class="hadith-text">/);
+  assert.doesNotMatch(html, /dv-tabs/);
+});
+test('renderTranslations: >1 edition → tablist with one panel each, only first tab on', () => {
+  const html = core.renderTranslations([
+    { text: 'A', edition: 'darussalam', primary: true }, { text: 'B', edition: 'usc-msa', primary: false },
+  ]);
+  assert.match(html, /class="dv-tabs"/);
+  assert.equal((html.match(/class="dv-tab( on)?"/g) || []).length, 2);
+  assert.equal((html.match(/aria-selected="true"/g) || []).length, 1);
+  assert.match(html, /data-edition="darussalam"/);
+  assert.match(html, /data-edition="usc-msa"/);
+  assert.match(html, /hidden/); // the non-primary panel is hidden
+});
+test('renderTranslations: prefEdition selects the active tab when present', () => {
+  const html = core.renderTranslations([
+    { text: 'A', edition: 'darussalam' }, { text: 'B', edition: 'usc-msa' },
+  ], 'usc-msa');
+  assert.match(html, /data-edition="usc-msa" aria-selected="true"/);
+});
+test('renderTranslations: 0 editions → empty string', () => {
+  assert.equal(core.renderTranslations([]), '');
+});
+test('renderTranslations: translator label only when present', () => {
+  assert.doesNotMatch(core.renderTranslations([{ text: 'x', edition: 'e' }]), /Translated by/);
+  assert.match(core.renderTranslations([{ text: 'x', edition: 'e', translator: 'Khan' }]), /Translated by Khan/);
+});
+test('buildCardHTML: exposes copy + copy-arabic actions in order', () => {
+  const html = core.buildCardHTML(bukhari());
+  assert.ok(html.indexOf('data-act="copy"') !== -1);
+  assert.ok(html.indexOf('data-act="copy-arabic"') !== -1);
+  assert.ok(html.indexOf('data-act="copy"') < html.indexOf('data-act="copy-arabic"'));
+});

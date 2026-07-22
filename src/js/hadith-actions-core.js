@@ -119,21 +119,40 @@
     return 'verify.html?' + qs;
   }
 
-  // Format a hadith for clipboard copy WITH attribution. Invariant: never emit an
-  // unattributed hadith — returns '' when there is no reference/source.
+  // Normalize a displayed narrator string into a citation clause. De-double: if the
+  // source already begins with "Narrated" (e.g. "Narrated 'Umar:"), keep it verbatim
+  // (minus a trailing colon) rather than emitting "Narrated by Narrated 'Umar". We never
+  // rewrite the sourced narrator name — only add "Narrated by " when it is absent.
+  function normNarrator(n) {
+    n = (n || '').trim().replace(/:\s*$/, '');
+    if (!n) return '';
+    return /^Narrated\b/i.test(n) ? n : 'Narrated by ' + n;
+  }
+
+  // Format a hadith for clipboard copy WITH citation (US-H16 / TechSpec §3.11), as a single
+  // string matching the M12 template:
+  //   "{translation}" — Narrated by {narrator}. {reference}. Grade: {grade}. Source: {url}
+  // Honest fields only: the raw template's "({grader}, {year})" clause is omitted because
+  // both are null in provider data and are NEVER fabricated (see hadith-module-decisions).
+  // {grade} is the displayed (= sourced) grade text; for ungraded collections that is the
+  // characterization string, not an invented grade. Invariant: never emit an unattributed
+  // hadith — returns '' when there is no reference. (Arabic matn is the separate Arabic-only
+  // copy button's job; it is intentionally absent from this attributed string.)
   function buildCopyText(content) {
     content = content || {};
     var ref = (content.reference || '').trim();
     if (!ref) return '';
-    var lines = [];
-    if (content.arabic) lines.push(String(content.arabic).trim());
+    var s = '';
     var tr = (content.translation || '').trim();
-    if (tr) { lines.push(''); lines.push('"' + tr + '"'); }
-    if (content.narrator) lines.push('— ' + String(content.narrator).trim());
-    lines.push('');
-    lines.push(ref + (content.grade ? ' · ' + String(content.grade).trim() : ''));
-    lines.push('via IslamicInfo.org');
-    return lines.join('\n');
+    if (tr) s += '"' + tr + '"';
+    var narr = normNarrator(content.narrator);
+    if (narr) s += (s ? ' — ' : '') + narr + '.';
+    s += (s ? ' ' : '') + ref + '.';
+    var grade = (content.grade || '').trim();
+    if (grade) s += ' Grade: ' + grade + '.';
+    var url = (content.sourceUrl || '').trim();
+    if (url) s += ' Source: ' + url;
+    return s;
   }
 
   var core = {

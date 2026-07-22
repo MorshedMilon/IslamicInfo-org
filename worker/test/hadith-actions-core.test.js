@@ -122,19 +122,45 @@ test('buildAskUrl: falls back to arabicMatn when translation missing', () => {
   assert.ok(url.indexOf('q=' + encodeURIComponent('نص')) !== -1);
 });
 
-test('buildCopyText: includes attribution (reference + grade) and provenance line', () => {
-  const t = core.buildCopyText({ arabic: 'نص', translation: 'The reward of deeds…', narrator: "Narrated 'Umar:", reference: 'Sahih al-Bukhari · Book 1 · Hadith 1', grade: 'Sahih · grader not individually cited' });
-  assert.ok(t.indexOf('نص') !== -1);
-  assert.ok(t.indexOf('The reward of deeds…') !== -1);
-  assert.ok(t.indexOf("Narrated 'Umar:") !== -1);
-  assert.ok(t.indexOf('Sahih al-Bukhari · Book 1 · Hadith 1') !== -1);
-  assert.ok(t.indexOf('Sahih · grader not individually cited') !== -1);
-  assert.ok(t.indexOf('IslamicInfo.org') !== -1);
+test('buildCopyText: single-string citation matches M12 template character-for-character', () => {
+  const t = core.buildCopyText({
+    translation: 'The reward of deeds depends upon the intentions',
+    narrator: "Narrated 'Umar:",
+    reference: 'Sahih al-Bukhari · Book 1 · Hadith 1',
+    grade: 'Sahih',
+    sourceUrl: 'https://islamicinfo.org/hadith/sahih-bukhari/1/1',
+  });
+  assert.equal(t,
+    '"The reward of deeds depends upon the intentions" — Narrated \'Umar. ' +
+    'Sahih al-Bukhari · Book 1 · Hadith 1. Grade: Sahih. ' +
+    'Source: https://islamicinfo.org/hadith/sahih-bukhari/1/1');
+});
+test('buildCopyText: main copy excludes Arabic matn (that is the Arabic-only button)', () => {
+  const t = core.buildCopyText({ arabic: 'نص عربي', translation: 'x', reference: 'Sahih Muslim · Hadith 1' });
+  assert.equal(t.indexOf('نص عربي'), -1);
+});
+test('buildCopyText: narrator de-doubling — no "Narrated by Narrated"', () => {
+  const t = core.buildCopyText({ translation: 'x', narrator: "Narrated Anas:", reference: 'r' });
+  assert.ok(t.indexOf('Narrated Anas.') !== -1);
+  assert.equal(t.indexOf('Narrated by Narrated'), -1);
+});
+test('buildCopyText: prefixes "Narrated by" when the narrator name lacks it', () => {
+  const t = core.buildCopyText({ translation: 'x', narrator: 'Aisha', reference: 'r' });
+  assert.ok(t.indexOf('Narrated by Aisha.') !== -1);
+});
+test('buildCopyText: grade without grader emits no (grader, year) clause', () => {
+  const t = core.buildCopyText({ translation: 'x', reference: 'r', grade: 'Hasan' });
+  assert.ok(t.indexOf('Grade: Hasan.') !== -1);
+  assert.equal(t.indexOf('('), -1);
+});
+test('buildCopyText: omits Source clause when no sourceUrl', () => {
+  const t = core.buildCopyText({ translation: 'x', reference: 'r' });
+  assert.equal(t.indexOf('Source:'), -1);
 });
 test('buildCopyText: returns empty string when no reference (never copy an unattributed hadith)', () => {
   assert.equal(core.buildCopyText({ arabic: 'نص', translation: 'x' }), '');
 });
-test('buildCopyText: works with translation-only (no arabic/narrator/grade)', () => {
+test('buildCopyText: works with translation-only (no narrator/grade/url)', () => {
   const t = core.buildCopyText({ translation: 'x', reference: 'Sunan Abi Dawud · Hadith 5' });
-  assert.ok(t.indexOf('"x"') !== -1 && t.indexOf('Sunan Abi Dawud · Hadith 5') !== -1);
+  assert.equal(t, '"x" Sunan Abi Dawud · Hadith 5.');
 });

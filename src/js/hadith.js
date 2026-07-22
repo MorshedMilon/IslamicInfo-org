@@ -20,6 +20,12 @@
             h.narrator && h.narrator.name].filter(Boolean).join(' ');
   }
   var BM_KEY = 'islamicinfo-hadith-bookmarks', NOTE_KEY = 'islamicinfo-hadith-notes';
+  var TRANS_PREF_KEY = 'islamicinfo-hadith-translation-pref';   // US-H23 preferred translation edition
+  // Canonical origin for copyable citations. No shared/exported constant exists in the codebase
+  // (reflection-actions.js/quran-share.js each define their own literal), so follow that
+  // per-module convention. Deliberately NOT location.origin — a localhost URL must never leak
+  // into a hadith citation copied off the page.
+  var SITE = 'https://islamicinfo.org';
   function getBookmarks() { var v = ui.safeLocalStorageGet(BM_KEY, []); return Array.isArray(v) ? v : []; }
   function setBookmarks(list) { ui.safeLocalStorageSet(BM_KEY, actions ? actions.dedupeByRef(list) : list); }
   function getNotes() { var v = ui.safeLocalStorageGet(NOTE_KEY, []); return Array.isArray(v) ? v : []; }
@@ -40,6 +46,40 @@
   function toneStyle(tone) { return ' style="color:' + core.toneColor(tone) + ';"'; }
   function dotStyle(tone) { return ' style="background:' + core.toneColor(tone) + ';"'; }
 
+  /* ── Module 12: illustrated collection motifs (US-H17) ──
+     Custom inline line-art, one per collection that has full metadata (the 9 real slugs in
+     collections-meta.json). 64×64 viewBox, currentColor stroke (themed teal via .card-motif-svg)
+     + a single var(--gold-500) accent, no fills beyond the gold accent — readable at 32px.
+     These are trusted code literals (not user/JSON data), so they are injected as raw HTML.
+     Slugs not in this map fall back to the meta emoji. The other ~9 PRD collections are
+     deferred until they exist as real collections (same gap as Module 1/2/11). */
+  var MS_OPEN = '<svg class="card-motif-svg" width="44" height="44" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+  var MOTIF_SVG = {
+    // 8-pointed star (square + diamond) with gold center — premier authenticity
+    'sahih-bukhari': MS_OPEN + '<rect x="17" y="17" width="30" height="30"/><path d="M32 9 L55 32 L32 55 L9 32 Z"/><circle cx="32" cy="32" r="4.5" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Octagon (rub el hizb) with an inner gold 8-point star
+    'sahih-muslim': MS_OPEN + '<path d="M22 8 H42 L56 22 V42 L42 56 H22 L8 42 V22 Z"/><path d="M32 20 L35 29 L44 32 L35 35 L32 44 L29 35 L20 32 L29 29 Z" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Open book with a gold spine
+    'abu-dawood': MS_OPEN + '<path d="M32 18 C26 14 16 14 10 16 V46 C16 44 26 44 32 48"/><path d="M32 18 C38 14 48 14 54 16 V46 C48 44 38 44 32 48"/><path d="M32 18 V48" stroke="var(--gold-500)"/></svg>',
+    // Crescent with a gold star
+    'al-tirmidhi': MS_OPEN + '<path d="M42 14 A20 20 0 1 0 42 50 A15.5 15.5 0 1 1 42 14 Z"/><path d="M52 15 L54 21 L60 23 L54 25 L52 31 L50 25 L44 23 L50 21 Z" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Mihrab arch with a gold finial
+    'sunan-nasai': MS_OPEN + '<path d="M16 53 V30 C16 20 23 13 32 13 C41 13 48 20 48 30 V53"/><path d="M14 53 H50"/><path d="M32 13 V7" stroke="var(--gold-500)"/><circle cx="32" cy="6" r="2.6" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Scroll with a gold wax seal
+    'ibn-e-majah': MS_OPEN + '<path d="M20 15 H46 V45 C46 49 43 52 39 52 H17 C21 52 22 49 22 45 V17"/><path d="M20 15 C16 15 15 18 15 20 C15 22 17 23 20 23 H26"/><path d="M27 27 H40 M27 34 H40"/><circle cx="34" cy="47" r="3.6" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Stacked books, top edge gold
+    'musnad-ahmad': MS_OPEN + '<rect x="13" y="41" width="38" height="9" rx="1.5"/><rect x="16" y="30" width="32" height="9" rx="1.5"/><rect x="19" y="19" width="26" height="9" rx="1.5" stroke="var(--gold-500)"/></svg>',
+    // Niche (mishkat) holding a lamp with a gold flame
+    'mishkat': MS_OPEN + '<path d="M16 53 V29 C16 20 23 12 32 12 C41 12 48 20 48 29 V53"/><path d="M32 21 V29"/><path d="M26 35 H38 L35 45 H29 Z"/><path d="M32 27 C34 30 34 33 32 35 C30 33 30 30 32 27 Z" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Chain links (silsila) with a gold end link
+    'al-silsila-sahiha': MS_OPEN + '<rect x="9" y="27" width="20" height="10" rx="5"/><rect x="25" y="27" width="20" height="10" rx="5"/><rect x="41" y="27" width="14" height="10" rx="5" stroke="var(--gold-500)"/></svg>',
+  };
+  function motifHTML(c) {
+    var svg = c && MOTIF_SVG[c.slug];
+    if (svg) return '<div class="card-motif">' + svg + '</div>';
+    return (c && c.motif) ? ('<div class="card-motif">' + esc(c.motif) + '</div>') : '';
+  }
+
   function cardHTML(c) {
     var hadiths = core.formatInt(c.hadithCount);
     var books = core.formatInt(c.chaptersCount);
@@ -47,7 +87,7 @@
     var seal = c.featured ? '<div class="featured-seal">✦ Most Authentic</div>' : '';
     var third = c.compiledPeriod ? ('<div class="card-stat"><div class="card-stat-num">' + esc(c.compiledPeriod) + '</div><div class="card-stat-label">Compiled</div></div>') : '';
     var arabic = c.nameArabic ? ('<div class="card-arabic">' + esc(c.nameArabic) + '</div>') : '';
-    var motif = c.motif ? ('<div class="card-motif">' + esc(c.motif) + '</div>') : '';
+    var motif = motifHTML(c);
     return '' +
       '<div class="collection-card' + (c.featured ? ' featured' : '') + '" data-slug="' + esc(c.slug) + '" data-cat="' + esc(c.category) + '">' +
         seal + motif +
@@ -428,6 +468,7 @@
   // Module 10: apply .has-bookmark / .has-note (→ gold dot via CSS) to every card in a container.
   function markCardStates(container) {
     container = container || document;
+    applyTransPref(container);   // Module 12: restore saved translation edition (no-op if single-edition)
     if (!actions) return;
     var bm = {}; getBookmarks().forEach(function (b) { if (b && b.ref) bm[b.ref] = 1; });
     var nt = {}; getNotes().forEach(function (n) { if (n && n.hadithRef) nt[n.hadithRef] = 1; });
@@ -570,24 +611,45 @@
     return { arabic: txt('.hadith-arabic'), translation: txt('.hadith-text'),
              narrator: txt('.hadith-narrator'), reference: reference, grade: txt('.grade-badge') };
   }
-  function onCopy(card, ref) {
-    var text = actions ? actions.buildCopyText(readCardContent(card)) : '';
-    if (!text) { ui.showToast('Nothing to copy'); return; }
+  // Canonical citation URL for a card's hadith, built from its stable ref (no fabrication).
+  function sourceUrlFor(ref) {
+    var r = parseRefParts(ref);
+    return SITE + routePath({ collection: r.slug, book: r.book, hadith: r.num });
+  }
+  // Shared clipboard writer with graceful execCommand fallback.
+  function copyToClipboard(text, okMsg) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function () { ui.showToast('Copied with attribution'); },
+      navigator.clipboard.writeText(text).then(function () { ui.showToast(okMsg); },
                                               function () { ui.showToast('Couldn’t copy'); });
     } else {
       try {
         var ta = document.createElement('textarea'); ta.value = text;
         ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta);
         ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-        ui.showToast('Copied with attribution');
+        ui.showToast(okMsg);
       } catch (_) { ui.showToast('Couldn’t copy'); }
     }
+  }
+  function onCopy(card, ref) {
+    if (!actions) return;
+    var content = readCardContent(card);
+    content.sourceUrl = sourceUrlFor(ref);
+    var text = actions.buildCopyText(content);
+    if (!text) { ui.showToast('Nothing to copy'); return; }   // never copy an unattributed hadith
+    copyToClipboard(text, 'Copied with citation ✦');
+  }
+  // US-H16 Arabic-only copy: bare .hadith-arabic matn, no attribution (the attributed copy is
+  // the main Copy button's job). Non-fabricating — equivalent to selecting the on-page Arabic.
+  function onCopyArabic(card) {
+    var el = card.querySelector('.hadith-arabic');
+    var text = el ? el.textContent.trim() : '';
+    if (!text) { ui.showToast('No Arabic text for this hadith'); return; }
+    copyToClipboard(text, 'Copied Arabic text ✦');
   }
   function onShare(card, ref) {
     var r = parseRefParts(ref);
     var content = readCardContent(card);
+    content.sourceUrl = sourceUrlFor(ref);   // canonical Source line in the shared text
     var url = location.origin + routePath({ collection: r.slug, book: r.book, hadith: r.num });
     if (navigator.share) {
       navigator.share({ title: 'Hadith · ' + (content.reference || 'IslamicInfo.org'),
@@ -607,7 +669,8 @@
       if (!btn) return;
       if (btn.classList.contains('dv-action-btn')) return;   // Tier-3b deep-view actions stay deferred (their own handler)
       var act = btn.getAttribute('data-act');
-      if (act !== 'bookmark' && act !== 'note' && act !== 'listen' && act !== 'share' && act !== 'copy') return;
+      if (act !== 'bookmark' && act !== 'note' && act !== 'listen' && act !== 'share' &&
+          act !== 'copy' && act !== 'copy-arabic') return;
       var card = btn.closest('.hadith-card'); if (!card) return;
       var ref = card.getAttribute('data-ref'); if (!ref) return;
       e.preventDefault();
@@ -616,6 +679,42 @@
       else if (act === 'listen') onListen(card, ref);
       else if (act === 'share') onShare(card, ref);
       else if (act === 'copy') onCopy(card, ref);
+      else if (act === 'copy-arabic') onCopyArabic(card);
+    });
+  }
+
+  /* ── Module 12: translation compare (US-H23) ──
+     One document-delegated handler for the '.dv-tab' edition selector. Dormant with today's
+     single-edition data (feed-core renders no tabs when only one edition exists); activates
+     automatically once >1 edition is present. Persists the chosen edition so it is restored
+     on re-render. */
+  function selectTranslation(wrap, ed) {
+    wrap.querySelectorAll('.dv-tab').forEach(function (t) {
+      var on = t.getAttribute('data-edition') === ed;
+      t.classList.toggle('on', on); t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    wrap.querySelectorAll('.trans-panel').forEach(function (p) {
+      p.hidden = p.getAttribute('data-edition') !== ed;
+    });
+  }
+  function wireTranslationTabs() {
+    document.addEventListener('click', function (e) {
+      var tab = e.target.closest && e.target.closest('.hadith-translations .dv-tab[data-edition]');
+      if (!tab) return;
+      var wrap = tab.closest('.hadith-translations'); if (!wrap) return;
+      var ed = tab.getAttribute('data-edition');
+      selectTranslation(wrap, ed);
+      ui.safeLocalStorageSet(TRANS_PREF_KEY, ed);
+    });
+  }
+  // Restore the saved edition on any multi-edition block within scope (no-op for single-edition).
+  function applyTransPref(scope) {
+    var ed = ui.safeLocalStorageGet(TRANS_PREF_KEY, null);
+    if (!ed) return;
+    (scope || document).querySelectorAll('.hadith-translations').forEach(function (wrap) {
+      if (wrap.querySelector('.dv-tab[data-edition="' + (window.CSS && CSS.escape ? CSS.escape(ed) : ed) + '"]')) {
+        selectTranslation(wrap, ed);
+      }
     });
   }
 
@@ -1170,7 +1269,7 @@
     wireTopics();
     loadHotD();
     initReadingObserver();
-    if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); wireCardActions(); loadHadithFeed(false); }
+    if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); wireCardActions(); wireTranslationTabs(); loadHadithFeed(false); }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
