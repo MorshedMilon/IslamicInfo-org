@@ -33,7 +33,6 @@
     hasText: hasText,
   };
 
-  if (typeof module !== 'undefined' && module.exports) module.exports = api;
-  root.II = root.II || {};
-  root.II.hadithAICore = api;
-}(typeof globalThis !== 'undefined' ? globalThis : this));
+  if (typeof module !== 'undefined' && module.exports) { module.exports = api; }
+  else { root.II = root.II || {}; root.II.hadithAICore = api; }
+}(typeof globalThis !== 'undefined' ? globalThis : window));
