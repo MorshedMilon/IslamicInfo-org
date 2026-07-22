@@ -783,12 +783,36 @@ a { text-decoration: none; color: inherit; }
 .compare-remove { width: 16px; height: 16px; border-radius: 50%; background: rgba(0,0,0,.08); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-muted); font-size: 10px; transition: all .2s; }
 .compare-remove:hover { background: var(--grade-mawdu); color: white; }
 
-/* ─── TRACE VIEW COLUMNS (Stage 4) ─── */
-.trace-layout { display: grid; grid-template-columns: 1fr 1fr 300px; gap: 20px; }
-@media(max-width:1300px){ .trace-layout{ grid-template-columns: 1fr 1fr; } .trace-col-3{ grid-column: 1/-1; } }
-@media(max-width:900px){ .trace-layout{ grid-template-columns: 1fr; } }
-.trace-col { background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.10); border-radius: var(--r-lg); padding: 20px; }
-.trace-col-label { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-subtle); margin-bottom: 16px; }
+/* ─── TRACE VIEW (Module 14) ─── */
+.trace-overlay{position:fixed;inset:0;z-index:300;background:var(--surface-canvas);display:none;flex-direction:column;}
+.trace-overlay.open{display:flex;}
+.trace-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 24px;border-bottom:.5px solid rgba(0,105,110,.10);background:var(--surface-raised);flex-shrink:0;}
+.trace-bc{font-size:14px;color:var(--ink-subtle);}
+.trace-bc strong{color:var(--teal-700);}
+.trace-top-acts{display:flex;gap:8px;align-items:center;}
+.trace-act{width:34px;height:34px;border-radius:50%;border:.5px solid var(--ink-faint);background:transparent;color:var(--ink-subtle);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .18s;}
+.trace-act:hover{border-color:var(--teal-700);color:var(--teal-700);}
+.trace-exit{background:var(--teal-700);color:white;border:none;border-radius:12px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;margin-left:6px;}
+.trace-layout{flex:1;display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:20px;padding:20px 24px;overflow:hidden;}
+@media(max-width:1300px){.trace-layout{grid-template-columns:1fr 1fr;}.trace-col-3{grid-column:1/-1;}}
+@media(max-width:900px){.trace-layout{grid-template-columns:1fr;overflow-y:auto;}}
+.trace-col{background:var(--surface-base);border:.5px solid rgba(0,105,110,.10);border-radius:var(--r-lg);padding:20px;overflow-y:auto;}
+.trace-col-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-subtle);margin-bottom:16px;}
+.trace-sub-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-500);margin:14px 0 6px;}
+.trace-matn{font-size:19px;line-height:1.9;background:rgba(0,105,110,.05);border-radius:12px;padding:16px;margin-bottom:12px;}
+.trace-trans{border-inline-start:3px solid var(--teal-700);padding-inline-start:12px;font-style:italic;line-height:1.7;color:var(--ink-body);}
+.trace-narrator{font-size:12px;color:var(--ink-subtle);margin-top:8px;}
+.trace-isnad-chain{list-style:none;padding:0;margin:0;}
+.trace-isnad-node{padding:10px 12px;border-inline-start:2px dashed var(--ink-faint);margin-inline-start:6px;}
+.trace-isnad-node[data-narrator-id]{cursor:pointer;}
+.trace-isnad-name{display:block;font-weight:600;}
+.trace-isnad-meta{display:block;font-size:12px;color:var(--ink-subtle);}
+.trace-grade{border-radius:12px;padding:12px 14px;margin-bottom:12px;background:rgba(15,110,86,.10);}
+.trace-grade.grade-unknown{background:rgba(0,105,110,.06);}
+.trace-grade-label{display:block;font-weight:700;color:var(--grade-sahih);}
+.trace-grade.grade-unknown .trace-grade-label{color:var(--ink-body);}
+.trace-grade-grader{display:block;font-size:12px;color:var(--ink-subtle);margin-top:2px;}
+.trace-commentary,.trace-related,.trace-qverses,.trace-topics{margin-top:10px;}
 .diff-highlight { background: rgba(197,160,89,.2); border-radius: 3px; padding: 0 2px; }
 .chain-diverge { color: var(--gold-500); font-size: 13px; margin: 0 2px; }
 
@@ -1749,71 +1773,6 @@ a { text-decoration: none; color: inherit; }
       </div>
     </div>
 
-    <!-- Hadith Trace View (Stage 4 §12.6.1) -->
-    <div class="section-header fade-up">
-      <h2 class="section-title"><span data-i18n="hadith.trace.title">Hadith Trace View</span> <span class="prd-stage-label stage-4">Stage 4 · Signature</span></h2>
-    </div>
-    <div class="trace-layout fade-up" style="margin-bottom:36px;">
-      <!-- Matn Column -->
-      <div class="trace-col">
-        <div class="trace-col-label" data-i18n="hadith.trace.colMatn">Matn (Text)</div>
-        <div style="font-family:var(--font-arabic);font-size:18px;direction:rtl;line-height:2;color:var(--ink-body);margin-bottom:14px;">إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى</div>
-        <div style="font-size:14px;color:var(--ink-body);line-height:1.75;border-left:3px solid var(--teal-500);padding-left:14px;margin-bottom:14px;">"The reward of deeds depends upon the intentions and every person will get the reward according to what he has intended."</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <span class="topic-chip" style="font-size:11px;padding:4px 10px;">Intentions (Niyyah)</span>
-          <span class="topic-chip" style="font-size:11px;padding:4px 10px;">Actions</span>
-          <span class="topic-chip" style="font-size:11px;padding:4px 10px;">Reward</span>
-        </div>
-      </div>
-      <!-- Isnad Column -->
-      <div class="trace-col">
-        <div class="trace-col-label" data-i18n="hadith.trace.colIsnad">Isnad Chain (Click narrators for reliability)</div>
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <div style="display:flex;align-items:center;gap:12px;cursor:pointer;padding:8px;border-radius:10px;transition:background .2s;" onmouseenter="this.style.background='rgba(0,105,110,.06)'" onmouseleave="this.style.background=''">
-            <div class="isnad-avatar prophet" style="width:36px;height:36px;font-size:14px;">ﷺ</div>
-            <div><div style="font-size:13px;font-weight:600;color:var(--ink-body);">Prophet Muhammad ﷺ</div><div style="font-size:11px;color:var(--ink-subtle);">570–632 CE · Source</div></div>
-            <div class="reliability-dot rel-thiqah" style="margin-left:auto;"></div>
-          </div>
-          <div style="width:1px;height:16px;background:rgba(0,105,110,.25);margin-left:18px;border-left:1px dashed rgba(0,105,110,.25);"></div>
-          <div style="display:flex;align-items:center;gap:12px;cursor:pointer;padding:8px;border-radius:10px;transition:background .2s;" onmouseenter="this.style.background='rgba(0,105,110,.06)'" onmouseleave="this.style.background=''">
-            <div class="isnad-avatar companion" style="width:36px;height:36px;font-size:13px;">عمر</div>
-            <div><div style="font-size:13px;font-weight:600;color:var(--ink-body);">'Umar ibn al-Khattab</div><div style="font-size:11px;color:var(--ink-subtle);">584–644 CE · Companion</div></div>
-            <div class="reliability-dot rel-thiqah" style="margin-left:auto;"></div>
-          </div>
-          <div style="width:1px;height:16px;background:rgba(0,105,110,.25);margin-left:18px;border-left:1px dashed rgba(0,105,110,.25);"></div>
-          <div style="display:flex;align-items:center;gap:12px;cursor:pointer;padding:8px;border-radius:10px;transition:background .2s;" onmouseenter="this.style.background='rgba(0,105,110,.06)'" onmouseleave="this.style.background=''">
-            <div class="isnad-avatar tabii" style="width:36px;height:36px;font-size:13px;">ع</div>
-            <div><div style="font-size:13px;font-weight:600;color:var(--ink-body);">'Alqama ibn Waqqas</div><div style="font-size:11px;color:var(--ink-subtle);">d. ~80 AH · Tabi'i</div></div>
-            <div class="reliability-dot rel-thiqah" style="margin-left:auto;"></div>
-          </div>
-          <div style="width:1px;height:16px;background:rgba(0,105,110,.25);margin-left:18px;border-left:1px dashed rgba(0,105,110,.25);"></div>
-          <div style="display:flex;align-items:center;gap:12px;cursor:pointer;padding:8px;border-radius:10px;transition:background .2s;" onmouseenter="this.style.background='rgba(0,105,110,.06)'" onmouseleave="this.style.background=''">
-            <div class="isnad-avatar compiler" style="width:36px;height:36px;font-size:12px;">بخ</div>
-            <div><div style="font-size:13px;font-weight:600;color:var(--ink-body);">Imam al-Bukhari</div><div style="font-size:11px;color:var(--ink-subtle);">810–870 CE · Compiler</div></div>
-            <div class="reliability-dot rel-thiqah" style="margin-left:auto;"></div>
-          </div>
-        </div>
-      </div>
-      <!-- Grading Panel Column -->
-      <div class="trace-col trace-col-3">
-        <div class="trace-col-label" data-i18n="hadith.trace.colGrading">Scholarly Grading</div>
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <div style="padding:12px 14px;background:rgba(15,110,86,.06);border:0.5px solid rgba(15,110,86,.2);border-radius:var(--r-sm);">
-            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--grade-sahih);margin-bottom:6px;">✓ Sahih (Authentic)</div>
-            <div style="font-size:12.5px;color:var(--ink-body);line-height:1.6;">Imam al-Bukhari: Highest authenticity. Narrated in the opening position of the Sahih, signifying its primacy.</div>
-          </div>
-          <div style="padding:12px 14px;background:rgba(0,105,110,.04);border:0.5px solid rgba(0,105,110,.12);border-radius:var(--r-sm);">
-            <div style="font-size:11px;font-weight:600;color:var(--ink-primary);margin-bottom:4px;">Ibn Hajar al-'Asqalani</div>
-            <div style="font-size:12px;color:var(--ink-muted);">Fath al-Bari: "Among the most important hadiths upon which the religion pivots."</div>
-          </div>
-          <div style="padding:12px 14px;background:rgba(0,105,110,.04);border:0.5px solid rgba(0,105,110,.12);border-radius:var(--r-sm);">
-            <div style="font-size:11px;font-weight:600;color:var(--ink-primary);margin-bottom:4px;">Imam an-Nawawi</div>
-            <div style="font-size:12px;color:var(--ink-muted);">40 Nawawi: Listed as Hadith #1 — "One of the foundations of Islam."</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </main>
 </div><!-- end layout -->
 
@@ -1904,6 +1863,20 @@ a { text-decoration: none; color: inherit; }
     <div class="ft-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
   </div>
 </footer>
+
+<!-- Hadith Trace View overlay (Module 14) — hidden by default; JS controller (trace-view.js) opens it -->
+<div class="trace-overlay" id="trace-overlay" role="dialog" aria-modal="true" aria-label="Hadith Trace View" hidden>
+  <div class="trace-top">
+    <div class="trace-bc" id="trace-breadcrumb"></div>
+    <div class="trace-top-acts">
+      <button class="trace-act" type="button" data-trace-act="bookmark" title="Bookmark" aria-label="Bookmark">🔖</button>
+      <button class="trace-act" type="button" data-trace-act="share" title="Share" aria-label="Share">↗</button>
+      <button class="trace-act" type="button" data-trace-act="copy" title="Copy with citation" aria-label="Copy with citation">📋</button>
+      <button class="trace-exit" type="button" id="trace-exit">Exit Trace View →</button>
+    </div>
+  </div>
+  <div class="trace-layout" id="trace-layout"></div>
+</div>
 
 <script>
 /* ── Theme ── */
@@ -2037,6 +2010,8 @@ function showHadithToast(msg) {
 <script src="src/js/tier3-deep-view.js"></script>
 <script src="src/js/narrator-panel-core.js"></script>
 <script src="src/js/narrator-panel.js"></script>
+<script src="src/js/trace-view-core.js"></script>
+<script src="src/js/trace-view.js"></script>
 <script src="src/js/hadith.js"></script>
 <script src="src/js/hadith-ai-core.js"></script>
 <script src="src/js/hadith-ai.js"></script>

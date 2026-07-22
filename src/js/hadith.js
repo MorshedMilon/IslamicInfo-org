@@ -181,11 +181,16 @@
 
   function parseRoute(path) {
     try { path = decodeURIComponent(path || location.pathname); } catch (_) { path = path || location.pathname; }
+    var t = path.match(/^\/hadith\/trace\/([^\/?#]+)\/([^\/?#]+)\/([^\/?#]+)\/?$/);   // Module 14 trace route (4-seg; must precede the 3-seg match)
+    if (t) return { trace: true, collection: t[1], book: t[2], hadith: t[3] };
     var m = path.match(/^\/hadith\/([^\/?#]+)(?:\/([^\/?#]+))?(?:\/([^\/?#]+))?\/?$/);
     if (!m) return { collection: null, book: null, hadith: null };
     return { collection: m[1] || null, book: m[2] || null, hadith: m[3] || null };
   }
   function routePath(r) {
+    if (r && r.trace && r.collection) {   // Module 14 trace route
+      return '/hadith/trace/' + encodeURIComponent(r.collection) + '/' + encodeURIComponent(r.book) + '/' + encodeURIComponent(r.hadith);
+    }
     if (!r || !r.collection) return '/hadith.html';
     var p = '/hadith/' + encodeURIComponent(r.collection);
     if (r.book != null && r.book !== '') { p += '/' + encodeURIComponent(r.book); if (r.hadith != null && r.hadith !== '') p += '/' + encodeURIComponent(r.hadith); }
@@ -351,6 +356,18 @@
 
   function renderRoute(r) {
     r = r || parseRoute();
+    if (r.trace) {   // Module 14 — render the deep-view underneath, then open the trace overlay on top
+      var tc = collectionBySlug(r.collection);
+      if (!tc) { setTier(1); applyFilter(); try { history.replaceState(null, '', '/hadith.html'); } catch (_) {} return; }
+      if (II.tier3) II.tier3.renderDeepView({ collection: r.collection, book: r.book, hadith: r.hadith }, tc);
+      if (II.traceView) II.traceView.open((r.collection + ':' + r.book + ':' + r.hadith), { viaRoute: true, route: { collection: r.collection, book: r.book, hadith: r.hadith } });
+      return;
+    }
+    // Navigating to a NON-trace route while the overlay is open (Back/popstate): hide the overlay
+    // but pass skipNav — renderRoute is ALREADY rendering the target, so exitTrace's replaceState+
+    // renderRoute must not fire (would double-render / fight history). close() has cleared state.open
+    // before exitTrace, so no reentry loop here.
+    if (II.traceView && II.traceView.isOpen && II.traceView.isOpen()) { II.traceView.close({ skipNav: true }); }
     reflectActiveRoute(r.collection);
     updateContinueReading(r.collection);
     if (!r.collection) { setTier(1); applyFilter(); return; }
@@ -659,6 +676,41 @@
     } else { ui.showToast('Sharing isn’t supported in this browser'); }
   }
 
+  // --- Module 14 Trace View host handlers (reuse hadith-actions core, read a hadith OBJECT) ---
+  async function fetchHadithByRef(ref) {
+    if (!api || !api.fetchSingleHadith) return null;
+    var r = parseRefParts(ref);
+    try { var res = await api.fetchSingleHadith(r.slug, r.book, r.num); return (res && res.ok) ? res.data : null; }
+    catch (_) { return null; }
+  }
+  function traceCopyContent(hadith) {
+    // canonical source URL from the hadith's own identifiers (never location.origin)
+    var url = SITE + routePath({ collection: hadith.collectionSlug, book: hadith.bookNumber, hadith: hadith.hadithNumber });
+    return II.traceViewCore.buildCopyContent(hadith, url);
+  }
+  function onTraceCopy(hadith) {
+    if (!actions || !hadith) return;
+    var text = actions.buildCopyText(traceCopyContent(hadith));
+    if (!text) { ui.showToast('Nothing to copy'); return; }
+    copyToClipboard(text, 'Copied with citation ✦');
+  }
+  function onTraceShare(hadith) {
+    if (!hadith) return;
+    var content = traceCopyContent(hadith);
+    if (navigator.share) { navigator.share({ title: 'Hadith · ' + (content.reference || 'IslamicInfo.org'), text: (actions ? actions.buildCopyText(content) : ''), url: content.sourceUrl }).catch(function () {}); }
+    else if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(content.sourceUrl).then(function () { ui.showToast('Link copied'); }, function () { ui.showToast('Couldn’t copy link'); }); }
+    else { ui.showToast('Sharing isn’t supported in this browser'); }
+  }
+  function onTraceBookmark(hadith, btn) {
+    if (!actions || !hadith) return;
+    var ref = hadith.reference || hadith.id;
+    var res = actions.toggleBookmark(getBookmarks(), { ref: ref, collectionSlug: hadith.collectionSlug, bookNum: hadith.bookNumber, hadithNum: hadith.hadithNumber }, Date.now());
+    setBookmarks(res.list);
+    if (btn) btn.classList.toggle('active', res.added);
+    ui.showToast(res.added ? 'Bookmarked ✦' : 'Bookmark removed');
+  }
+  function exitTrace(route) { try { history.replaceState(route, '', routePath(route)); } catch (_) {} renderRoute(route); }
+
   // Module 10: one document-delegated handler for bookmark/note/listen/share/copy — works
   // in the Tier-1 feed AND the Tier-3a list (both render via feed.buildCardHTML). isnad/full
   // stay with wireFeedActions on #hadith-feed.
@@ -669,7 +721,7 @@
       if (btn.classList.contains('dv-action-btn')) return;   // Tier-3b deep-view actions stay deferred (their own handler)
       var act = btn.getAttribute('data-act');
       if (act !== 'bookmark' && act !== 'note' && act !== 'listen' && act !== 'share' &&
-          act !== 'copy' && act !== 'copy-arabic') return;
+          act !== 'copy' && act !== 'copy-arabic' && act !== 'trace') return;
       var card = btn.closest('.hadith-card'); if (!card) return;
       var ref = card.getAttribute('data-ref'); if (!ref) return;
       e.preventDefault();
@@ -679,6 +731,7 @@
       else if (act === 'share') onShare(card, ref);
       else if (act === 'copy') onCopy(card, ref);
       else if (act === 'copy-arabic') onCopyArabic(card);
+      else if (act === 'trace') { if (II.traceView) II.traceView.open(ref, { viaRoute: false }); }
     });
   }
 
@@ -1257,6 +1310,10 @@
     if (II.narratorPanelDom && II.narratorPanelDom.init) {
       II.narratorPanelDom.init({ api: api, ui: ui });
       II.narratorPanelDom.wire(document);   // delegated, once — reachable when isnad nodes carry data-narrator-id
+    }
+    if (II.traceView && II.traceView.init) {
+      II.traceView.init({ ui: ui, fetchHadithByRef: fetchHadithByRef,
+        onTraceBookmark: onTraceBookmark, onTraceShare: onTraceShare, onTraceCopy: onTraceCopy, exitTrace: exitTrace });
     }
     await loadCollections();
     wireFilterTabs();

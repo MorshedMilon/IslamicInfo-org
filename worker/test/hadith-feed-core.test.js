@@ -315,3 +315,10 @@ test('buildCardHTML: exposes copy + copy-arabic actions in order', () => {
   assert.ok(html.indexOf('data-act="copy-arabic"') !== -1);
   assert.ok(html.indexOf('data-act="copy"') < html.indexOf('data-act="copy-arabic"'));
 });
+
+/* ── Module 14: card action row includes View-as-Trace ── */
+test('card action row includes a View-as-Trace button (data-act="trace")', () => {
+  const html = core.buildCardHTML(bukhari());
+  assert.match(html, /data-act="trace"/);
+  assert.match(html, /title="View as Trace"/);
+});

@@ -185,6 +185,15 @@
     return '<nav class="dv-breadcrumb" aria-label="Breadcrumb">' + parts.join('<span class="dv-crumb-sep" aria-hidden="true">›</span>') + '</nav>';
   }
 
+  // ── traceLinkHTML (Module 14) — plain <a> under /hadith/... so the
+  // existing routing click-interceptor in hadith.js handles navigation. ──
+  function traceLinkHTML(r, h) {
+    var book = (h && h.bookNumber != null) ? h.bookNumber : r.book;
+    var num = (h && h.hadithNumber != null) ? h.hadithNumber : r.hadith;
+    var href = '/hadith/trace/' + encodeURIComponent(r.collection) + '/' + encodeURIComponent(book) + '/' + encodeURIComponent(num);
+    return '<a class="dv-trace-link" href="' + href + '">View as Trace →</a>';
+  }
+
   // ── actionButtonsHTML (rendered; wiring is Module 10 — no dead onclick) ──
   function actionButtonsHTML() {
     return '<div class="dv-actions">' +
@@ -224,7 +233,7 @@
     opts = opts || {};
     var book = (h && h.bookNumber != null) ? h.bookNumber : (opts.book != null ? opts.book : r.book);
     return '<article class="dv" data-slug="' + esc(r.collection) + '">' +
-      '<header class="dv-header">' + breadcrumbHTML(r, c, h) + actionButtonsHTML() + '</header>' +
+      '<header class="dv-header">' + breadcrumbHTML(r, c, h) + traceLinkHTML(r, h) + actionButtonsHTML() + '</header>' +
       bodyCardHTML(h) +
       isnadInlineHTML(h) +
       '<div class="dv-block dv-gradings-block"><h2 class="dv-block-title">Grading</h2>' +
@@ -249,6 +258,7 @@
     topicsChipsHTML: topicsChipsHTML,
     relatedPlaceholderHTML: relatedPlaceholderHTML,
     breadcrumbHTML: breadcrumbHTML,
+    traceLinkHTML: traceLinkHTML,
     actionButtonsHTML: actionButtonsHTML,
     resolveNeighbors: resolveNeighbors,
     prevNextNavHTML: prevNextNavHTML,
