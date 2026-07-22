@@ -181,11 +181,16 @@
 
   function parseRoute(path) {
     try { path = decodeURIComponent(path || location.pathname); } catch (_) { path = path || location.pathname; }
+    var t = path.match(/^\/hadith\/trace\/([^\/?#]+)\/([^\/?#]+)\/([^\/?#]+)\/?$/);   // Module 14 trace route (4-seg; must precede the 3-seg match)
+    if (t) return { trace: true, collection: t[1], book: t[2], hadith: t[3] };
     var m = path.match(/^\/hadith\/([^\/?#]+)(?:\/([^\/?#]+))?(?:\/([^\/?#]+))?\/?$/);
     if (!m) return { collection: null, book: null, hadith: null };
     return { collection: m[1] || null, book: m[2] || null, hadith: m[3] || null };
   }
   function routePath(r) {
+    if (r && r.trace && r.collection) {   // Module 14 trace route
+      return '/hadith/trace/' + encodeURIComponent(r.collection) + '/' + encodeURIComponent(r.book) + '/' + encodeURIComponent(r.hadith);
+    }
     if (!r || !r.collection) return '/hadith.html';
     var p = '/hadith/' + encodeURIComponent(r.collection);
     if (r.book != null && r.book !== '') { p += '/' + encodeURIComponent(r.book); if (r.hadith != null && r.hadith !== '') p += '/' + encodeURIComponent(r.hadith); }
@@ -351,6 +356,18 @@
 
   function renderRoute(r) {
     r = r || parseRoute();
+    if (r.trace) {   // Module 14 — render the deep-view underneath, then open the trace overlay on top
+      var tc = collectionBySlug(r.collection);
+      if (!tc) { setTier(1); applyFilter(); try { history.replaceState(null, '', '/hadith.html'); } catch (_) {} return; }
+      if (II.tier3) II.tier3.renderDeepView({ collection: r.collection, book: r.book, hadith: r.hadith }, tc);
+      if (II.traceView) II.traceView.open((r.collection + ':' + r.book + ':' + r.hadith), { viaRoute: true, route: { collection: r.collection, book: r.book, hadith: r.hadith } });
+      return;
+    }
+    // Navigating to a NON-trace route while the overlay is open (Back/popstate): hide the overlay
+    // but pass skipNav — renderRoute is ALREADY rendering the target, so exitTrace's replaceState+
+    // renderRoute must not fire (would double-render / fight history). close() has cleared state.open
+    // before exitTrace, so no reentry loop here.
+    if (II.traceView && II.traceView.isOpen && II.traceView.isOpen()) { II.traceView.close({ skipNav: true }); }
     reflectActiveRoute(r.collection);
     updateContinueReading(r.collection);
     if (!r.collection) { setTier(1); applyFilter(); return; }
