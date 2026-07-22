@@ -25,7 +25,7 @@
   function canCompare(list) { return (Array.isArray(list) ? list : []).length >= 2; }
 
   /* ── URL ref (de)serialization ── */
-  function serializeRefs(refs) { return (Array.isArray(refs) ? refs : []).filter(Boolean).join(','); }
+  function serializeRefs(refs) { return (Array.isArray(refs) ? refs : []).filter(Boolean).slice(0, MAX_COMPARE).join(','); }
   function parseRefs(param) {
     var out = [], seen = {};
     String(param == null ? '' : param).split(',').forEach(function (r) {

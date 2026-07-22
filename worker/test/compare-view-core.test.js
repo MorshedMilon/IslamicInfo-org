@@ -216,3 +216,17 @@ test('builders never throw on null/malformed input', () => {
     assert.doesNotThrow(function () { core.buildHeaderChipsHTML([x]); });
   });
 });
+
+test('computeDiff: single list returns that list flags with no highlight', () => {
+  assert.deepEqual(core.computeDiff([core.tokenizeMatn('إنما الأعمال')]), [[false, false]]);
+});
+
+test('buildCompareHTML: all-punctuation matns produce no highlight', () => {
+  assert.ok(!/diff-highlight/.test(core.buildCompareHTML([{ arabicMatn: '، ؛', collectionSlug: 'x', hadithNumber: 1 }, { arabicMatn: '، ؛', collectionSlug: 'y', hadithNumber: 2 }])));
+});
+
+test('diffChains: unequal-length chains do not throw and flag divergence at the out-of-range position', () => {
+  const r = core.diffChains([[{ id: 'n1' }, { id: 'n2' }], [{ id: 'n1' }]]);
+  assert.equal(r.sameChain, false);
+  assert.equal(r.diverge[0][1], true);
+});
