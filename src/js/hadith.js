@@ -1035,10 +1035,8 @@
     });
   }
 
-  /* ── Topics strip (US-H06) — in-place keyword filter over the loaded feed.
-     Honest Stage-1 heuristic: matches the topic keyword against hadith text; NOT a curated topic
-     classification (the provider returns no topic tags). Real topic index = Module 11. ── */
-  // Module 11: topic chips ROUTE (Stage 3) instead of filtering in-place (Module 5 behavior removed).
+  /* ── Topics strip (US-H06/H14) — Module 11: chips ROUTE (Stage 3) to
+     /hadith/topics/[topic]; the Module 5 in-place keyword filter is removed. ── */
   function wireTopics() {
     var chips = document.querySelectorAll('.topics-grid .topic-chip');
     chips.forEach(function (chip) {
