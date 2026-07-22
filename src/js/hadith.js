@@ -498,6 +498,7 @@
   function markCardStates(container) {
     container = container || document;
     applyTransPref(container);   // Module 12: restore saved translation edition (no-op if single-edition)
+    reflectCompareButtons();     // Module 15: compare-add state is independent of II.hadithActions — reflect before the actions guard
     if (!actions) return;
     var bm = {}; getBookmarks().forEach(function (b) { if (b && b.ref) bm[b.ref] = 1; });
     var nt = {}; getNotes().forEach(function (n) { if (n && n.hadithRef) nt[n.hadithRef] = 1; });
@@ -506,7 +507,6 @@
       card.classList.toggle('has-bookmark', !!bm[ref]);
       card.classList.toggle('has-note', !!nt[ref]);
     });
-    reflectCompareButtons();   // Module 15: newly-rendered cards reflect capacity/added state
   }
   // Observe all current .hadith-card[data-ref] in a container (Tier-1 feed or Tier-3a list).
   function observeFeed(container) {
