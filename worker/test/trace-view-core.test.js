@@ -92,3 +92,30 @@ test('XSS: matn/translation are escaped', () => {
   assert.ok(!/<img /.test(h));
   assert.match(h, /&lt;script&gt;/);
 });
+
+test('builders never throw on null/undefined/malformed hadith', () => {
+  const inputs = [null, undefined, {}, { topics: 'nope', isnad: { narrators: 'nope' } }, { grade: null }, { isnad: {} }];
+  for (const h of inputs) {
+    assert.doesNotThrow(() => core.buildTraceHTML(h));
+    assert.doesNotThrow(() => core.buildBreadcrumb(h));
+    assert.doesNotThrow(() => core.buildCopyContent(h, ''));
+  }
+});
+
+test('non-array topics/narrators fall back to honest states, no fabrication', () => {
+  const h = core.buildMatnColHTML(bukhari({ topics: 'notanarray' }));
+  assert.match(h, /Topics are being compiled/);
+  assert.ok(!/topic-chip/.test(h));
+  const i = core.buildIsnadColHTML(bukhari({ isnad: { narrators: 'notanarray' } }));
+  assert.match(i, /Chain of narration not available/);
+  assert.ok(!/trace-isnad-node/.test(i));
+});
+
+test('XSS: narrator id + name and grade fields are escaped', () => {
+  const i = core.buildIsnadColHTML(bukhari({ isnad: { narrators: [{ id: '"><img src=x onerror=1>', fullName: '<script>a</script>', role: 'Tabii' }] } }));
+  assert.ok(!/<img /.test(i));
+  assert.ok(!/<script>/.test(i));
+  assert.match(i, /data-narrator-id="&quot;&gt;/); // quote-breakout neutralized in the attribute
+  const g = core.buildGradingColHTML(bukhari({ grade: { value: 'sahih', label: '<b>x</b>', grader: '<i>y</i>' } }));
+  assert.ok(!/<b>/.test(g) && !/<i>/.test(g));
+});
