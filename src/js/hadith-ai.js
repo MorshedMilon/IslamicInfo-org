@@ -49,6 +49,7 @@
     var head = document.createElement('div'); head.className = 'ai-head';
     var title = document.createElement('div'); title.className = 'ai-title'; title.textContent = 'AI Explanation';
     var close = document.createElement('button'); close.className = 'ai-close'; close.type = 'button'; close.textContent = '✕';
+    close.setAttribute('aria-label', 'Close');
     close.addEventListener('click', function (e) { e.stopPropagation(); el.classList.remove('show'); });
     head.appendChild(title); head.appendChild(close);
     var body = document.createElement('div'); body.className = 'ai-body';
@@ -153,7 +154,10 @@
 
   function start() {
     injectAll(document);
-    var feed = document.getElementById('hadith-feed') || document.body;
+    // Observe .main so cards in BOTH the Tier-1 feed (#hadith-feed) and the async
+    // Tier-3a book list (#ii-t3a-list, a sibling under .main) get the ✦ button,
+    // matching how Modules 10/9 cover Tier-3a. Both render via feed.buildCardHTML.
+    var feed = document.querySelector('.main') || document.getElementById('hadith-feed') || document.body;
     if (window.MutationObserver) {
       var mo = new MutationObserver(function (muts) {
         for (var i = 0; i < muts.length; i++) {
