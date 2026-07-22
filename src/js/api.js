@@ -49,7 +49,7 @@
      verify, subscribe, ask-claude, hadith) — and only makes hadith work AFTER
      the Worker is redeployed with the hadith routes. See DECISIONS.md ADR-028
      + TASKS.md (verify each call site still degrades gracefully before flipping). */
-  const API_BASE = '';
+  const API_BASE = 'https://islamicinfo-api.islamicinfo.workers.dev';  // ACTIVE (interim workers.dev): routes all /api/* to the Worker (ADR-028). Swap to https://api.islamicinfo.org once DNS lands.
 
   /* Prefix a same-origin `/api/...` path with API_BASE. Leaves absolute URLs
      (CDN direct sources) and non-/api asset paths (src/data/...) untouched, so a
