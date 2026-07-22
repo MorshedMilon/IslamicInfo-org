@@ -49,3 +49,16 @@ export function parseExplainSections(text) {
   }
   return out;
 }
+
+// The DoD-10 gate: runs the shared verdict filter on the FULL model text BEFORE parsing,
+// so no flagged/refused text ever reaches the client — not even inside a section field.
+export function applyExplainSafety(result) {
+  const text = result && typeof result.text === 'string' ? result.text : '';
+  if (!text.trim() || (result && result.refusal)) {
+    return { safe: false, fallback: EXPLAIN_FALLBACK };
+  }
+  if (verdictLangDetected(text)) {
+    return { safe: false, fallback: EXPLAIN_FALLBACK };
+  }
+  return { safe: true, ...parseExplainSections(text) };
+}

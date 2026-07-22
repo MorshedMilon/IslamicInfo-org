@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert';
 import {
   normalizeLang, explainCacheKey, parseExplainSections, SUPPORTED_EXPLAIN_LANGS,
+  applyExplainSafety, EXPLAIN_FALLBACK,
 } from '../src/lib/explain-core.js';
 
 test('normalizeLang: known langs pass, unknown falls back to en', () => {
@@ -67,4 +68,37 @@ test('parseExplainSections: empty string input', () => {
 test('parseExplainSections: duplicate label — only the first counts', () => {
   const s = parseExplainSections('### SUMMARY\nFirst.\n### SUMMARY\nSecond.');
   assert.equal(s.summary, 'First.\n### SUMMARY\nSecond.');
+});
+
+test('applyExplainSafety: clean four-section output is safe and parsed', () => {
+  const text = '### SUMMARY\nSincere intention.\n### VOCABULARY\nniyyah\n### CONTEXT\nn/a\n### LESSON\nBe sincere.';
+  const d = applyExplainSafety({ text, refusal: false });
+  assert.equal(d.safe, true);
+  assert.equal(d.summary, 'Sincere intention.');
+  assert.equal(d.lesson, 'Be sincere.');
+});
+
+test('applyExplainSafety: refusal → unsafe fallback', () => {
+  const d = applyExplainSafety({ text: '', refusal: true });
+  assert.equal(d.safe, false);
+  assert.equal(d.fallback, EXPLAIN_FALLBACK);
+});
+
+test('applyExplainSafety: ADVERSARIAL — ruling framing is rejected wholesale', () => {
+  // Simulates the model being coaxed (via injected content) into issuing a verdict.
+  const rulingOutputs = [
+    '### SUMMARY\nThis action is haram for everyone.',
+    '### LESSON\nTherefore it is obligatory to fast today.',
+    'Skipping this is a sin and it is forbidden.',
+  ];
+  for (const text of rulingOutputs) {
+    const d = applyExplainSafety({ text, refusal: false });
+    assert.equal(d.safe, false, `expected unsafe for: ${text}`);
+    assert.equal(d.fallback, EXPLAIN_FALLBACK);
+    assert.equal(d.summary, undefined); // no flagged text leaks into the payload
+  }
+});
+
+test('applyExplainSafety: empty text → unsafe', () => {
+  assert.equal(applyExplainSafety({ text: '', refusal: false }).safe, false);
 });
