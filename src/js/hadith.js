@@ -13,6 +13,12 @@
   var api = II.api, ui = II.ui, core = II.hadithCollections, feed = II.hadithFeed;
   var RP = II.readingProgress;
   var actions = II.hadithActions;
+  var topics = II.hadithTopics;
+  function feedHadithText(h) {
+    if (!h) return '';
+    return [h.arabicMatn, h.translation && h.translation.text, h.reference,
+            h.narrator && h.narrator.name].filter(Boolean).join(' ');
+  }
   var BM_KEY = 'islamicinfo-hadith-bookmarks', NOTE_KEY = 'islamicinfo-hadith-notes';
   function getBookmarks() { var v = ui.safeLocalStorageGet(BM_KEY, []); return Array.isArray(v) ? v : []; }
   function setBookmarks(list) { ui.safeLocalStorageSet(BM_KEY, actions ? actions.dedupeByRef(list) : list); }
@@ -206,6 +212,37 @@
     if (!res || !res.ok || !Array.isArray(res.data) || !res.data.length) { renderBooksError(c); return; }
     grid.innerHTML = res.data.map(function (b) { return bookCardHTML(c, b); }).join('');
   }
+  /* ── Module 11: topic index / landing ── */
+  var TOPIC_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>';
+  function topicsBreadcrumb(currentLabel) {
+    var crumbs = '<a class="dv-crumb" href="/hadith.html">Hadith</a><span class="dv-crumb-sep" aria-hidden="true">›</span>';
+    if (currentLabel) {
+      crumbs += '<a class="dv-crumb" href="/hadith/topics">Topics</a><span class="dv-crumb-sep" aria-hidden="true">›</span>' +
+                '<span class="dv-crumb dv-crumb-current" aria-current="page">' + esc(currentLabel) + '</span>';
+    } else {
+      crumbs += '<span class="dv-crumb dv-crumb-current" aria-current="page">Topics</span>';
+    }
+    return '<nav class="dv-breadcrumb" aria-label="Breadcrumb" style="margin-bottom:12px;">' + crumbs + '</nav>';
+  }
+  function renderTopics(topicKey) {
+    if (topicKey) renderTopicLanding(topicKey);
+    else renderTopicIndex();
+  }
+  function renderTopicIndex() {
+    setTier(2);
+    var el = tier2El(); if (!el || !topics) return;
+    var cards = topics.TOPICS.map(function (t) {
+      return '<a class="topic-card" href="/hadith/topics/' + encodeURIComponent(t.key) + '">' +
+        '<span class="topic-card-icon">' + TOPIC_ICON + '</span>' +
+        '<span class="topic-card-name">' + esc(t.label) + '</span>' +
+        '<span class="topic-card-cta">Study this topic →</span></a>';
+    }).join('');
+    el.innerHTML = topicsBreadcrumb('') +
+      '<div class="topic-index-head"><h1 class="collection-header-name">Topics</h1>' +
+      '<p class="topic-index-sub">Browse hadith by subject. Curated topic statistics and study aids are being prepared and will appear after review.</p></div>' +
+      '<div class="topic-index-grid">' + cards + '</div>';
+  }
+
   // Tier 3a/3b live in Module 7; render an honest interim (back nav works) rather than faking a list.
   function renderTier3Placeholder(r, c) {
     setTier(2);
@@ -221,6 +258,7 @@
     reflectActiveRoute(r.collection);
     updateContinueReading(r.collection);
     if (!r.collection) { setTier(1); applyFilter(); return; }
+    if (r.collection === 'topics') { renderTopics(r.book); return; }   // Module 11
     var c = collectionBySlug(r.collection);
     if (!c) { setTier(1); applyFilter(); try { history.replaceState(null, '', '/hadith.html'); } catch (_) {} return; } // invalid → Tier 1 (TechSpec §10)
     if (r.hadith) { if (II.tier3) II.tier3.renderDeepView(r, c); else renderTier3Placeholder(r, c); return; }   // Tier 3b
