@@ -453,3 +453,88 @@ transparent. **This is a user-visible change** — the deep-link / Continue-Read
 repeats twice; flag for manual QA on the hadith deep-view (`/hadith/sahih-bukhari/1/1`) and on the
 Continue-Reading prompt click. Reduced-motion users now get a persistent gold border tint instead of no
 feedback at all. No content authored; design-system tokens only (gold `rgba(197,160,89,·)`, `--ease-reverent`).
+
+## ADR-031 · `/api/explain` deliberately shares the governed pipeline internals (`callGemini`, `QURANLYAI_SYSTEM_PROMPT`, `safety.js`) with `/api/quranlyai/ask` — not drift · Accepted · 2026-07-22 · Module 13 (AI Explanation for Hadith)
+**Context.** Module 13 adds `POST /api/explain`, a new thin route for per-hadith AI explanation.
+It needs a model call and a no-fatwa safety filter — both of which already exist, locked, for
+`/api/quranlyai/ask` (ADR-018/ADR-019): `callGemini` (`worker/src/lib/gemini.js`), the
+`QURANLYAI_SYSTEM_PROMPT`, and `safety.js`'s `verdictLangDetected`. A future session skimming the
+diff could read "two routes calling the same internals" as accidental duplication that should be
+"cleaned up" or forked per-route.
+**Decision.** `/api/explain` **imports and reuses** `callGemini`, the locked
+`QURANLYAI_SYSTEM_PROMPT`, and `safety.js`'s `verdictLangDetected` as-is. There is exactly **one**
+copy of the no-fatwa system prompt and exactly **one** copy of the verdict filter in the Worker;
+both routes deliberately sharing them is the design, not drift.
+**Consequences.** A single place governs "no fatwa, ever" and the verdict-language backstop for
+every AI route. **Do not** de-duplicate-by-forking these into per-route copies, and do not treat
+the shared import as something to "fix" — any change to the system prompt or the filter must be
+made once, in the shared file, and applies to both routes together.
+**References.** `docs/superpowers/specs/2026-07-22-module-13-hadith-ai-explanation-design.md`,
+`docs/superpowers/plans/2026-07-22-module-13-hadith-ai-explanation.md`.
+
+## ADR-032 · `/api/explain` is blocking JSON, not streaming SSE · Accepted · 2026-07-22 · Module 13 (AI Explanation for Hadith)
+**Context.** `/api/quranlyai/ask` (ADR-018) streams already-safety-filtered text as SSE
+(buffered-safe: the Worker fully generates and filters before streaming). Module 13's PRD DoD-10
+requires the verdict/fatwa filter to clear the **complete** model text server-side before **any**
+of it reaches the client. Reusing the SSE `streamSafeText` path might look like the obvious code
+reuse, but it was built around chunking already-cleared text — not around withholding output
+until a filter decision.
+**Decision.** `/api/explain` returns a single **blocking JSON** response. The full model output is
+generated, then passed through `verdictLangDetected` (per ADR-031), and only on a clean result is
+the JSON response sent. **No SSE / streaming path is used for this route.**
+**Consequences.** Time-to-first-byte equals full generation time (same accepted trade-off as
+ADR-018's buffered-safe streaming, minus the streaming). This is intentional: streaming would let
+unfiltered tokens reach the client mid-stream, which DoD-10 forbids. Do not "upgrade" this route to
+SSE/streaming without first re-deriving how the filter can gate a stream it hasn't fully seen yet.
+**References.** `docs/superpowers/specs/2026-07-22-module-13-hadith-ai-explanation-design.md`,
+`docs/superpowers/plans/2026-07-22-module-13-hadith-ai-explanation.md`.
+
+## ADR-033 · Client uses `fetch` + `AbortController`, not a Web Worker, despite spec wording · Accepted · 2026-07-22 · Module 13 (AI Explanation for Hadith)
+**Context.** The Module 13 spec text says the client calls `/api/explain` "via Web Worker." The
+existing AI-explain client patterns in this codebase (`quran-ai.js`, `quran-verses.js`) use a plain
+`fetch` with a 10s `AbortController` timeout and no worker thread — there is no prior art for a
+dedicated Web Worker anywhere in the repo's AI-call paths.
+**Decision.** The hadith AI-explain client call is implemented with a plain `fetch` + 10s
+`AbortController`, matching `quran-ai.js`/`quran-verses.js`. The spec's "via Web Worker" wording is
+**intentionally not followed**.
+**Consequences.** A single blocking JSON network call (ADR-032) gains nothing from a Web Worker — a
+worker thread would add a bundled worker file plus `postMessage` plumbing for a response that is
+already off the main thread's critical path via `fetch`. **Do not "restore" a Web Worker** to match
+the spec text; the spec wording is superseded by this ADR for this module.
+**References.** `docs/superpowers/specs/2026-07-22-module-13-hadith-ai-explanation-design.md`,
+`docs/superpowers/plans/2026-07-22-module-13-hadith-ai-explanation.md`.
+
+## ADR-034 · `hadithAIExplainEnabled` / `HADITH_AI_EXPLAIN_ENABLED` ships default OFF; flipping requires explicit human sign-off, not an automated build step · Accepted · 2026-07-22 · Module 13 (AI Explanation for Hadith)
+**Context.** CONTENT-POLICY's human-review gate (§5) requires qualified human review before any
+Islamic content ships to users. Module 13 generates AI explanatory text about hadith — squarely
+inside that gate. Prior AI modules (ADR-016 `/api/ask-claude`, ADR-018 `/api/quranlyai/ask`) shipped
+"pending 🕌 human-review sign-off" as a stated condition rather than a hard code gate; Module 13
+adds an explicit client-side kill switch instead of relying only on the stated condition.
+**Decision.** A client flag `HADITH_AI_EXPLAIN_ENABLED` (backing config key
+`hadithAIExplainEnabled`) gates the feature, **default `false`/OFF**. Flipping it to `true` requires
+explicit human sign-off on three things together: the system prompt, the safety filter, and
+adversarial-test evidence (prompt-injection / verdict-framing attempts against the actual route).
+**Consequences.** The feature is inert-by-default in every build/deploy until a human explicitly
+flips the flag after reviewing evidence. **This flip is not an automatic step in any future
+build/deploy session** — a future agent must not set it to `true` as part of "finishing" the
+module, merging, or deploying; that decision belongs to a human reviewer per CONTENT-POLICY §5.
+**References.** `docs/superpowers/specs/2026-07-22-module-13-hadith-ai-explanation-design.md`,
+`docs/superpowers/plans/2026-07-22-module-13-hadith-ai-explanation.md`.
+
+## ADR-035 · Labeled-text (`### LABEL`) parsing instead of Gemini native JSON mode · Accepted · 2026-07-22 · Module 13 (AI Explanation for Hadith)
+**Context.** `/api/explain` needs four structured sections back from the model. Gemini supports a
+native JSON output mode (`responseMimeType: "application/json"`), which could seem like the more
+robust way to get structured output. But there is **zero prior art** in this repo for that mode —
+`gemini.js`'s `callGemini` (the single governed AI-call path per ADR-031) would need to be modified
+to support it, and a per-route `responseMimeType` risks conflicting with the locked
+`QURANLYAI_SYSTEM_PROMPT`'s existing markdown MODE-format instructions used by `/api/quranlyai/ask`.
+**Decision.** The hadith-explain user prompt asks the model for four `### LABEL` markdown sections;
+a new, **non-governed** `explain-core.js` parses those labeled sections into structured fields. The
+governed `callGemini`/`gemini.js` path is used unmodified — no `responseMimeType` JSON mode.
+**Consequences.** Achieves the same structured-output goal as JSON mode with **zero governed-file
+risk**, keeping ADR-031's "exactly one copy, unmodified" guarantee intact. Cost: `explain-core.js`
+must parse markdown-labeled text rather than trust a schema-enforced JSON response — a future
+session should not "simplify" this by switching `callGemini` to native JSON mode without weighing
+that trade-off against ADR-031.
+**References.** `docs/superpowers/specs/2026-07-22-module-13-hadith-ai-explanation-design.md`,
+`docs/superpowers/plans/2026-07-22-module-13-hadith-ai-explanation.md`.

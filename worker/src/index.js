@@ -23,6 +23,7 @@ import { callGemini } from './lib/gemini.js';
 import { GEMINI_FLASH } from './lib/prompts.js';
 import { handleQuranlyAiAsk } from './quranlyai.js';
 import { handleHadith } from './hadith.js';
+import { handleExplain } from './explain.js';
 
 /* ─── Upstream fetch with timeout ──────────────────────────────────── */
 async function upstream(url, timeoutMs = 8000) {
@@ -208,6 +209,10 @@ export default {
 
       if (request.method === 'POST' && path === '/api/quranlyai/ask') {
         return await handleQuranlyAiAsk(request, env, ctx, origin);
+      }
+
+      if (request.method === 'POST' && path === '/api/explain') {
+        return await handleExplain(request, env, ctx, origin);
       }
 
       if (path.startsWith('/api/quran/') || PENDING.includes(path)) {

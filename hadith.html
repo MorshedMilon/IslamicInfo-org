@@ -500,6 +500,24 @@ a { text-decoration: none; color: inherit; }
   transition: all .2s var(--ease-premium);
 }
 .hadith-action-btn:hover { background: rgba(0,105,110,.08); color: var(--teal-700); transform: scale(1.1); box-shadow: 0 0 8px rgba(0,105,110,.15); }
+/* AI Explanation card (flag-gated: HADITH_AI_EXPLAIN_ENABLED in hadith-ai-core.js, default OFF) */
+.ai-card{display:none;margin-top:14px;padding:16px 18px;background:linear-gradient(135deg,rgba(197,160,89,.06),rgba(0,105,110,.03));border:.5px solid rgba(197,160,89,.25);border-radius:14px;}
+.ai-card.show{display:block;animation:slideUp .38s var(--ease-reverent) both;}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.ai-card .ai-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.ai-card .ai-title{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-700);}
+.ai-card .ai-close{width:22px;height:22px;border:none;background:transparent;cursor:pointer;color:var(--ink-subtle);font-size:14px;display:flex;align-items:center;justify-content:center;border-radius:6px;}
+.ai-card .ai-close:hover{background:rgba(0,105,110,.08);color:var(--teal-700);}
+.ai-card .ai-section{margin-bottom:10px;}
+.ai-card .ai-section-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-700);margin-bottom:3px;}
+.ai-card .ai-section p{font-size:15px;line-height:1.72;color:var(--ink-body);margin:0;}
+[data-theme="dark"] .ai-card .ai-section p{color:#D4DCDD;}
+.ai-card .ai-retry{margin-top:8px;padding:5px 12px;border:.5px solid var(--gold-500);background:transparent;color:var(--gold-700);border-radius:8px;cursor:pointer;font-size:12px;}
+.ai-card .ai-foot{margin-top:10px;padding-top:8px;border-top:.5px solid rgba(197,160,89,.2);font-size:10px;color:var(--gold-700);display:flex;align-items:center;gap:5px;}
+.ai-card .ai-foot a{color:var(--gold-500);font-weight:600;}
+.ai-card .ai-skeleton{height:12px;border-radius:6px;margin-bottom:8px;background:linear-gradient(90deg,rgba(0,105,110,.06),rgba(0,105,110,.14),rgba(0,105,110,.06));background-size:200% 100%;animation:aiShimmer 1.2s ease-in-out infinite;}
+.ai-card .ai-skeleton.short{width:60%;}
+@keyframes aiShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 .hadith-arabic {
   font-family: var(--font-arabic); font-size: 19px; direction: rtl; text-align: right;
   line-height: 2.0; color: var(--ink-body); background: rgba(0,105,110,.04);
@@ -2020,6 +2038,8 @@ function showHadithToast(msg) {
 <script src="src/js/narrator-panel-core.js"></script>
 <script src="src/js/narrator-panel.js"></script>
 <script src="src/js/hadith.js"></script>
+<script src="src/js/hadith-ai-core.js"></script>
+<script src="src/js/hadith-ai.js"></script>
 <!-- QuranlyAI floating assistant (global, one-tag) -->
 <script src="src/js/quranlyai-widget.js?v=20260718c"></script>
 <script src="src/js/select-to-ask.js?v=20260719a"></script>
