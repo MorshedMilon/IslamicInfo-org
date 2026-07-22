@@ -538,3 +538,21 @@ session should not "simplify" this by switching `callGemini` to native JSON mode
 that trade-off against ADR-031.
 **References.** `docs/superpowers/specs/2026-07-22-module-13-hadith-ai-explanation-design.md`,
 `docs/superpowers/plans/2026-07-22-module-13-hadith-ai-explanation.md`.
+
+## ADR-036 · Hadith Trace View ships live (no runtime flag) · Accepted · 2026-07-22 · Module 14 (Hadith Trace View)
+**Context.** Module 13 (hadith AI explanation) shipped behind `HADITH_AI_EXPLAIN_ENABLED=false`
+(ADR-034) pending human sign-off, because it generates Islamic content at runtime via an LLM.
+Module 14 (Trace View) is different in kind: it has no LLM call and authors no new content.
+**Decision.** Trace View ships live, both entry points (route `/hadith/trace/...` and the card
+overlay) visible on merge, with no runtime flag gating it. Rationale: it authors no content and
+runs no LLM — it reformats already-authenticated matn/grade and renders honest "not yet available"
+states for all absent data (isnad, Ibn Hajar/an-Nawawi commentary, related narrations/verses,
+topics). The residual risk is assistive-tech behavior on a reused, production-proven focus
+mechanism (`II.ui.focusTrap` plus the bookmarks-panel Escape/focus-return pattern), not content
+correctness, so a content-style review gate (CONTENT-POLICY §5) does not apply.
+**Consequences.** Manual VoiceOver + NVDA verification of the focus trap (DoD-13) is an explicit
+outstanding QA item — tracked and never marked done until a human runs it. No fabricated scholar
+commentary ships (honest-empty boxes only). Reuses the Module 8 narrator panel and the Module
+10/12 action handlers; no new gate mechanism was introduced for this module.
+**References.** `docs/superpowers/specs/2026-07-22-module-14-hadith-trace-view-design.md`,
+`docs/superpowers/plans/2026-07-22-module-14-hadith-trace-view.md`.
