@@ -131,6 +131,73 @@
     return { diverge: diverge, sameChain: same };
   }
 
+  var CHAIN_UNAVAILABLE = 'Isnad comparison not yet available — chains are being compiled.';
+  var ARABIC_UNAVAILABLE = 'Arabic unavailable — cannot diff narration.';
+
+  function refOf(h) {
+    h = h || {};
+    if (!h.collectionSlug || h.hadithNumber == null) return '';
+    var book = (h.bookNumber == null) ? 0 : h.bookNumber;
+    return h.collectionSlug + ':' + book + ':' + h.hadithNumber;
+  }
+  function columnLabel(h) {
+    h = h || {};
+    var parts = [String(h.collectionName || h.collectionSlug || 'Hadith')];
+    if (h.bookNumber != null) parts.push('Book ' + h.bookNumber);
+    if (h.hadithNumber != null) parts.push('#' + h.hadithNumber);
+    return esc(parts.join(' · '));
+  }
+  function matnHTML(h, flags) {
+    var ar = (h && h.arabicMatn && typeof h.arabicMatn === 'string') ? h.arabicMatn : '';
+    if (!ar) return '<div class="cmp-arabic-empty dv-empty">' + ARABIC_UNAVAILABLE + '</div>';
+    var toks = tokenizeMatn(ar); flags = flags || [];
+    var body = toks.map(function (t, i) {
+      var raw = esc(t.raw);
+      return flags[i] ? '<span class="diff-highlight">' + raw + '</span>' : raw;
+    }).join(' ');
+    return '<div class="cmp-arabic font-arabic" dir="rtl" lang="ar">' + body + '</div>';
+  }
+  function transHTML(h) {
+    var tr = (h && h.translation && h.translation.text) || '';
+    if (!tr) return '';
+    return '<div class="cmp-trans">' + esc(tr) + '</div>';
+  }
+  function buildColumnHTML(h, flags) {
+    return '<div class="cmp-col">' +
+      '<div class="cmp-col-label">' + columnLabel(h) + '</div>' +
+      matnHTML(h, flags) + transHTML(h) +
+      '<div class="cmp-chain-note dv-empty">' + CHAIN_UNAVAILABLE + '</div>' +
+      '</div>';
+  }
+  function buildEmptyStateHTML(reason) {
+    var msg = reason === 'unfetchable' ? 'These hadiths could not be loaded. Please try again.'
+      : 'Select at least 2 hadiths to compare.';
+    return '<div class="cmp-empty dv-empty">' + esc(msg) + '</div>';
+  }
+  function buildCompareHTML(hadiths) {
+    hadiths = (hadiths || []).filter(Boolean);
+    if (hadiths.length < 2) return buildEmptyStateHTML('need2');
+    var withAr = [];
+    hadiths.forEach(function (h, i) { if (h && typeof h.arabicMatn === 'string' && h.arabicMatn) withAr.push(i); });
+    var flagsByIndex = {};
+    if (withAr.length >= 2) {
+      var lists = withAr.map(function (i) { return tokenizeMatn(hadiths[i].arabicMatn); });
+      var diff = computeDiff(lists);
+      withAr.forEach(function (i, k) { flagsByIndex[i] = diff[k]; });
+    }
+    var cols = hadiths.map(function (h, i) { return buildColumnHTML(h, flagsByIndex[i] || []); }).join('');
+    return '<div class="cmp-cols cmp-n' + hadiths.length + '">' + cols + '</div>';
+  }
+  function buildHeaderChipsHTML(hadiths) {
+    hadiths = (hadiths || []).filter(Boolean);
+    var chips = hadiths.map(function (h) {
+      return '<span class="cmp-chip"><span class="cmp-chip-label">' + columnLabel(h) + '</span>' +
+        '<button type="button" class="cmp-chip-x" data-cmp-remove="' + esc(refOf(h)) + '" aria-label="Remove from comparison">×</button></span>';
+    }).join('');
+    return '<span class="cmp-comparing">Comparing</span>' + chips +
+      '<button type="button" class="cmp-add-more" data-cmp-add-more>+ Add Hadith</button>';
+  }
+
   var core = {
     esc: esc, MAX_COMPARE: MAX_COMPARE,
     addRef: addRef, removeRef: removeRef, canCompare: canCompare,
@@ -138,6 +205,10 @@
     normalizeArabicToken: normalizeArabicToken, tokenizeMatn: tokenizeMatn, diffTwo: diffTwo,
     diffMany: diffMany, computeDiff: computeDiff,
     diffChains: diffChains,
+    refOf: refOf, columnLabel: columnLabel, buildColumnHTML: buildColumnHTML,
+    buildCompareHTML: buildCompareHTML, buildHeaderChipsHTML: buildHeaderChipsHTML,
+    buildEmptyStateHTML: buildEmptyStateHTML,
+    CHAIN_UNAVAILABLE: CHAIN_UNAVAILABLE, ARABIC_UNAVAILABLE: ARABIC_UNAVAILABLE,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }

@@ -2,6 +2,15 @@ import { test } from 'node:test';
 import assert from 'node:assert';
 import core from '../../src/js/compare-view-core.js';
 
+function had(over = {}) {
+  return Object.assign({
+    collectionSlug: 'sahih-bukhari', collectionName: 'Sahih al-Bukhari',
+    bookNumber: 1, hadithNumber: 1,
+    arabicMatn: 'إنما الأعمال بالنيات', translation: { text: 'Actions are but by intentions' },
+    isnad: { status: 'unavailable', narrators: [] },
+  }, over);
+}
+
 test('MAX_COMPARE is 3', () => {
   assert.equal(core.MAX_COMPARE, 3);
 });
@@ -138,4 +147,72 @@ test('diffChains: uses fullName when id absent', () => {
   const r = core.diffChains([[{ fullName: 'Yahya' }], [{ fullName: 'Malik' }]]);
   assert.equal(r.sameChain, false);
   assert.equal(r.diverge[0][0], true);
+});
+
+test('buildCompareHTML: two hadiths → two columns, matn + translation both present', () => {
+  const h = core.buildCompareHTML([had(), had({ hadithNumber: 2, arabicMatn: 'إنما الصيام بالنيات' })]);
+  assert.match(h, /cmp-n2/);
+  assert.match(h, /إنما/);
+  assert.match(h, /Actions are but by intentions/);
+});
+
+test('buildCompareHTML: differing matn word gets .diff-highlight; translation NEVER highlighted', () => {
+  const h = core.buildCompareHTML([had(), had({ hadithNumber: 2, arabicMatn: 'إنما الصيام بالنيات' })]);
+  assert.match(h, /diff-highlight/);
+  // the translation block must not contain a diff-highlight span
+  const transBlocks = h.match(/<div class="cmp-trans">[\s\S]*?<\/div>/g) || [];
+  transBlocks.forEach(function (b) { assert.ok(!/diff-highlight/.test(b), 'translation must not be highlighted'); });
+});
+
+test('buildCompareHTML: identical matns → NO diff-highlight', () => {
+  const h = core.buildCompareHTML([had(), had({ hadithNumber: 2 })]);
+  assert.ok(!/diff-highlight/.test(h));
+});
+
+test('buildCompareHTML: missing Arabic → honest state, no fallback to diffing translation', () => {
+  const h = core.buildCompareHTML([had({ arabicMatn: '' }), had({ hadithNumber: 2, arabicMatn: 'إنما الصيام بالنيات' })]);
+  assert.match(h, /Arabic unavailable — cannot diff narration/);
+  // with only one Arabic column, nothing to diff → no highlight
+  assert.ok(!/diff-highlight/.test(h));
+});
+
+test('buildCompareHTML: chain layer is the honest dormant note (never a fabricated ◆)', () => {
+  const h = core.buildCompareHTML([had(), had({ hadithNumber: 2 })]);
+  assert.match(h, /Isnad comparison not yet available/);
+  assert.ok(!/chain-diverge/.test(h)); // no ◆ markers with empty narrator data
+});
+
+test('buildCompareHTML: fewer than 2 → honest empty state', () => {
+  assert.match(core.buildCompareHTML([had()]), /Select at least 2 hadiths/);
+  assert.match(core.buildCompareHTML([]), /Select at least 2 hadiths/);
+});
+
+test('buildHeaderChipsHTML: Comparing label + removable chips (data-cmp-remove=ref) + Add Hadith', () => {
+  const h = core.buildHeaderChipsHTML([had(), had({ hadithNumber: 2 })]);
+  assert.match(h, /Comparing/);
+  assert.match(h, /data-cmp-remove="sahih-bukhari:1:1"/);
+  assert.match(h, /data-cmp-remove="sahih-bukhari:1:2"/);
+  assert.match(h, /data-cmp-add-more/);
+});
+
+test('buildEmptyStateHTML: unfetchable reason', () => {
+  assert.match(core.buildEmptyStateHTML('unfetchable'), /could not be loaded/i);
+});
+
+test('XSS: matn, translation, and labels are escaped', () => {
+  const h = core.buildCompareHTML([
+    had({ arabicMatn: '<script>x</script>', translation: { text: '<img src=x onerror=1>' }, collectionName: '<b>c</b>' }),
+    had({ hadithNumber: 2, arabicMatn: 'إنما الصيام' }),
+  ]);
+  assert.ok(!/<script>/.test(h));
+  assert.ok(!/<img /.test(h));
+  assert.ok(!/<b>c<\/b>/.test(h));
+});
+
+test('builders never throw on null/malformed input', () => {
+  const inputs = [null, undefined, {}, { arabicMatn: 123 }, { translation: null }, { isnad: { narrators: 'nope' } }];
+  inputs.forEach(function (x) {
+    assert.doesNotThrow(function () { core.buildCompareHTML([x, had()]); });
+    assert.doesNotThrow(function () { core.buildHeaderChipsHTML([x]); });
+  });
 });
