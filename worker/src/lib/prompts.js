@@ -194,3 +194,34 @@ export function chooseModel(action, rulingAdjacent) {
   // model) can be reintroduced later without changing any call site.
   return GEMINI_FLASH;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Module 13 — hadith AI explanation USER prompt. This is user-prompt construction
+// ONLY; it never touches QURANLYAI_SYSTEM_PROMPT (the locked system_instruction).
+// The four "### LABEL" headings are parsed by lib/explain-core.js parseExplainSections.
+// Client-supplied ref/arabic/translation/lang are user CONTENT, carried in the user
+// message — they can never alter the system prompt (see explain.js / gemini.js split).
+// ─────────────────────────────────────────────────────────────────────────────
+export function buildExplainUserPrompt(ref, arabic, translation, lang) {
+  const parts = [];
+  parts.push('SOURCE TEXT — the hadith to explain. Rely ONLY on this; never on training memory.');
+  parts.push('Reference: ' + (ref || '(unknown)'));
+  if (arabic && arabic.trim()) { parts.push('Arabic matn:'); parts.push(arabic.trim()); }
+  if (translation && translation.trim()) { parts.push('Translation:'); parts.push(translation.trim()); }
+  parts.push('');
+  parts.push('TASK: Explain this hadith for a general reader, written in language code: ' + (lang || 'en') + '.');
+  parts.push('Output EXACTLY these four sections, each starting with its heading on its own line, in order:');
+  parts.push('### SUMMARY');
+  parts.push('One short paragraph on what this hadith means.');
+  parts.push('### VOCABULARY');
+  parts.push('Key Arabic term(s) from the matn with a brief meaning. If none, write "None."');
+  parts.push('### CONTEXT');
+  parts.push('Scholarly/historical context ONLY if grounded in the text above; otherwise write "Not available in provided sources."');
+  parts.push('### LESSON');
+  parts.push('One practical lesson the reader can reflect on.');
+  parts.push('');
+  parts.push('STRICT RULES: Do not issue any ruling, fatwa, or halal/haram/permissible/forbidden verdict. '
+    + 'Do not invent narrators, chains, collections, hadith numbers, or citations that are not present above. '
+    + 'Cite named classical scholars only if accurate. Educational explanation only.');
+  return parts.join('\n');
+}
