@@ -556,3 +556,50 @@ commentary ships (honest-empty boxes only). Reuses the Module 8 narrator panel a
 10/12 action handlers; no new gate mechanism was introduced for this module.
 **References.** `docs/superpowers/specs/2026-07-22-module-14-hadith-trace-view-design.md`,
 `docs/superpowers/plans/2026-07-22-module-14-hadith-trace-view.md`.
+
+## ADR-037 · Chain-diverge (◆) built but dormant · Accepted · 2026-07-22 · Module 15 (Comparison Mode)
+**Context.** Comparison Mode's spec calls for `.chain-diverge` (◆) markers where narrators differ
+between compared isnads. Isnad/narrator-chain data is universally absent in today's dataset —
+Modules 8 and 14 already render chains as honest "not available" for the same reason. Computing
+divergence with no narrator arrays to compare would either render nothing meaningful or fabricate
+content to fill the gap, either of which is a §0 violation.
+**Decision.** `diffChains` is implemented and unit-tested against mock narrator arrays, but stays
+dormant in production. The comparison overlay shows an honest "Isnad comparison not yet available —
+chains are being compiled" note instead. `diffChains` activates automatically, with no further code
+change, once real narrator-chain data lands. (Matches Modules 7–14.)
+**Consequences.** No fabricated or inferred isnad divergence ever reaches a user. A future session
+that adds narrator-chain data should verify `diffChains` activates correctly rather than assuming
+it needs to be "turned on" — the gate is data presence, not a flag.
+**References.** `docs/superpowers/plans/2026-07-22-module-15-comparison-mode.md`.
+
+## ADR-038 · Translation excluded from diff-highlighting · Accepted · 2026-07-22 · Module 15 (Comparison Mode)
+**Context.** Comparison Mode shows Arabic matn and translations side-by-side across compared
+hadith. Per §0, the Arabic matn IS the narration, so a word-diff over it is a genuine
+narration-level diff. Translations, by contrast, differ by translator word-choice — highlighting
+those differences would misrepresent two translations of the same narration as different
+narrations, which is a factual misrepresentation risk.
+**Decision.** `.diff-highlight` runs **only** on `arabicMatn`. Translations are rendered
+side-by-side for reading but are **never** passed through the diff/highlight logic. When Arabic is
+missing for a compared hadith, the UI shows an honest "cannot diff narration" state — it never
+falls back to diffing translations instead.
+**Consequences.** Diff highlighting always means "these are different narrations," never "these
+are different translations of the same narration." A future session must not extend
+`.diff-highlight` to translation text as a "convenience" — that would reintroduce the
+misrepresentation this ADR exists to prevent.
+**References.** `docs/superpowers/plans/2026-07-22-module-15-comparison-mode.md`.
+
+## ADR-039 · Comparison selection is in-memory + URL-encoded refs · Accepted · 2026-07-22 · Module 15 (Comparison Mode)
+**Context.** Comparison Mode needs a selection of up to 3 hadith to persist across the "Compare →"
+navigation and to be shareable/deep-linkable. The obvious options were a new `localStorage`/
+`sessionStorage` key (per DATA.md's registry discipline) or encoding the selection directly in the
+URL.
+**Decision.** The comparison Set lives in memory only for the active session. Activating
+"Compare →" writes the selected refs into the URL (`/hadith/compare?refs=slug:book:num,…`).
+Deep-links and shares work by re-fetching each ref fresh on load — not by reading stored state. **No
+sessionStorage key and no new DATA.md storage-key row were added.**
+**Consequences.** Losing an in-progress (not-yet-navigated) selection on an accidental reload is a
+known, narrow edge case, deferred until it proves real in practice. Deep-linked/shared comparison
+URLs are always self-contained and reproducible without depending on the visiting browser's prior
+state. A future session must not add a `localStorage`/`sessionStorage` key for this selection
+without first re-deriving why the URL-only approach stopped being sufficient.
+**References.** `docs/superpowers/plans/2026-07-22-module-15-comparison-mode.md`.

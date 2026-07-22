@@ -119,6 +119,8 @@
   var SVG_COPY_AR = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/><line x1="19" y1="13.5" x2="12.5" y2="13.5"/><line x1="19" y1="17.5" x2="14.5" y2="17.5"/></svg>';
   var SVG_ISNAD = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
   var SVG_TRACE = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6" y1="3" x2="6" y2="21"/><line x1="18" y1="3" x2="18" y2="21"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>';
+  // Add-to-comparison: two side-by-side panels (distinct from SVG_TRACE's single frame).
+  var SVG_COMPARE = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="7" height="16" rx="1"/><rect x="14" y="4" width="7" height="16" rx="1"/></svg>';
   var SVG_LISTEN = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
 
   // US-H23 translation compare — normalize the editions ACTUALLY present for a hadith.
@@ -211,6 +213,7 @@
               actionBtn('copy', 'Copy with citation', SVG_COPY) +
               actionBtn('copy-arabic', 'Copy Arabic text only', SVG_COPY_AR) +
               actionBtn('trace', 'View as Trace', SVG_TRACE) +
+              actionBtn('compare-add', 'Add to comparison', SVG_COMPARE) +
             '</div>' +
           '</div>' +
           arabicHTML +
