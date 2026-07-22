@@ -107,3 +107,49 @@ test('gemini network failure → 502', async () => {
   const res = await handleExplain(req(GOOD_BODY, { 'CF-Connecting-IP': '4.4.4.4' }), env, ctx, ORIGIN);
   assert.equal(res.status, 502);
 });
+
+test('both arabic and translation empty → 400', async () => {
+  stubGemini(GOOD_TEXT);
+  const env = { GEMINI_API_KEY: 'x', QURANLYAI_KV: fakeKV() };
+  const res = await handleExplain(req({ ...GOOD_BODY, arabic: '', translation: '' }, { 'CF-Connecting-IP': '5.5.5.5' }), env, ctx, ORIGIN);
+  assert.equal(res.status, 400);
+});
+
+test('combined content over 4000 chars → 400', async () => {
+  stubGemini(GOOD_TEXT);
+  const env = { GEMINI_API_KEY: 'x', QURANLYAI_KV: fakeKV() };
+  const big = 'a'.repeat(4001);
+  const res = await handleExplain(req({ ...GOOD_BODY, arabic: big, translation: '' }, { 'CF-Connecting-IP': '5.5.5.6' }), env, ctx, ORIGIN);
+  assert.equal(res.status, 400);
+});
+
+test('ref longer than 120 chars → 400', async () => {
+  stubGemini(GOOD_TEXT);
+  const env = { GEMINI_API_KEY: 'x', QURANLYAI_KV: fakeKV() };
+  const res = await handleExplain(req({ ...GOOD_BODY, ref: 'x'.repeat(121) }, { 'CF-Connecting-IP': '5.5.5.7' }), env, ctx, ORIGIN);
+  assert.equal(res.status, 400);
+});
+
+test('missing QURANLYAI_KV → 503', async () => {
+  const res = await handleExplain(req(GOOD_BODY, { 'CF-Connecting-IP': '5.5.5.8' }), { GEMINI_API_KEY: 'x' }, ctx, ORIGIN);
+  assert.equal(res.status, 503);
+});
+
+test('corrupt cached JSON → regenerates, does not 500 or leak', async () => {
+  stubGemini(GOOD_TEXT);
+  const kv = fakeKV({ 'hadith_explain:sahih-bukhari:1:1:en': '{not valid json' });
+  const res = await handleExplain(req(GOOD_BODY, { 'CF-Connecting-IP': '5.5.5.9' }), { GEMINI_API_KEY: 'x', QURANLYAI_KV: kv }, ctx, ORIGIN);
+  assert.equal(res.status, 200);
+  const j = JSON.parse(await res.text());
+  assert.equal(j.safe, true);
+  assert.equal(j.summary, 'Intentions matter.');
+});
+
+test('wrong-shape cached value (safe:false / missing) → regenerates, not trusted', async () => {
+  stubGemini(GOOD_TEXT);
+  const kv = fakeKV({ 'hadith_explain:sahih-bukhari:1:1:en': JSON.stringify({ safe: false, fallback: 'stale' }) });
+  const res = await handleExplain(req(GOOD_BODY, { 'CF-Connecting-IP': '5.5.6.0' }), { GEMINI_API_KEY: 'x', QURANLYAI_KV: kv }, ctx, ORIGIN);
+  assert.equal(res.status, 200);
+  const j = JSON.parse(await res.text());
+  assert.equal(j.safe, true); // did not serve the stale safe:false payload
+});

@@ -59,7 +59,11 @@ export async function handleExplain(request, env, ctx, origin) {
   const key = explainCacheKey(ref, lang);
   const cachedRaw = await getCached(kv, key);
   if (cachedRaw != null) {
-    try { return json(JSON.parse(cachedRaw), origin); } catch (_) { /* corrupt — regenerate */ }
+    try {
+      const parsed = JSON.parse(cachedRaw);
+      if (parsed && parsed.safe === true) return json(parsed, origin);
+      // wrong shape / not a safe payload — fall through and regenerate rather than trust it
+    } catch (_) { /* corrupt JSON — regenerate */ }
   }
 
   // 6. Generate (locked system prompt + hadith user prompt; existing 15s abort inside callGemini)
@@ -85,7 +89,8 @@ export async function handleExplain(request, env, ctx, origin) {
       incrementExplainQuota(kv, ipHash, now),
     ]));
   } else {
-    ctx.waitUntil(incrementExplainQuota(kv, ipHash, now));
+    console.log('[explain] blocked unsafe explanation (refusal or verdict language)');
+    ctx.waitUntil(Promise.allSettled([incrementExplainQuota(kv, ipHash, now)]));
   }
 
   // 9. Respond (blocking JSON)
