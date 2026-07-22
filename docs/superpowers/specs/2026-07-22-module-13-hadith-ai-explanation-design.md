@@ -27,7 +27,7 @@ human check.
 
 ## 1. Key decisions (with rationale)
 
-These four decisions were made explicitly during brainstorming and each gets a
+These five decisions were made explicitly during brainstorming and each gets a
 `DECISION:` entry in `docs/DECISIONS.md` so a future session does not "correct"
 them back:
 
@@ -60,6 +60,16 @@ them back:
    charter's human-review gate for religious content. Flipping to `true` requires
    explicit human sign-off on the system prompt, filter, and adversarial-test
    evidence — it is **not** an automatic step in any future build session.
+
+5. **Labeled-text parsing, not Gemini JSON mode.** The four sections are produced
+   by the hadith-explain *user* prompt asking for four clearly delimited sections,
+   parsed out of the returned text in the new (non-governed) `explain.js`. Gemini's
+   native JSON mode (`responseMimeType`) was considered and deliberately **not**
+   used: it would require modifying the governed `gemini.js` / `callGemini` path,
+   for which there is zero prior art in the repo, and it risks conflicting with the
+   system prompt's markdown formatting rules. Labeled-text parsing achieves the
+   same four-section output with zero governed-file risk, keeping Decision #1
+   intact (`/api/explain` is a new entry point, not a modification of the pipeline).
 
 ---
 
@@ -162,23 +172,27 @@ fallback is documented in §5.
 
 ---
 
-## 5. Structured output (▶ default choice)
+## 5. Structured output — labeled-text parsing (Decision #5)
 
-**Chosen:** instruct Gemini (via the user prompt) to return a compact JSON object
-`{ summary, vocabulary, context, lesson }`, using `responseMimeType:
-'application/json'` on the Gemini call. Parse defensively server-side.
+**Chosen:** the hadith-explain **user** prompt instructs the model to return the
+four sections as clearly delimited labeled blocks (e.g. `### SUMMARY`,
+`### VOCABULARY`, `### CONTEXT`, `### LESSON`). The new `explain.js` handler parses
+these out of the returned text with a tolerant parser. **`gemini.js`, the system
+prompt, and `safety.js` are not touched.**
 
-- Run `verdictLangDetected` on the **concatenated** text of all four fields
-  before trusting any of them. Any match → `{ safe:false, fallback }` (whole
-  response rejected, not partially redacted).
-- **Parse-failure fallback:** if JSON parse fails or a field is missing, run the
-  safety filter on the raw text and, if clean, render it as the `summary` section
-  only (other three sections omitted/empty). This guarantees the four-section
-  contract degrades gracefully rather than erroring.
+- Run `verdictLangDetected` on the **full returned text** (before parsing) so the
+  filter sees everything the model produced. Any match → `{ safe:false, fallback }`
+  (whole response rejected, not partially redacted).
+- **Parse-tolerance / fallback:** the parser extracts whatever labeled sections it
+  finds. If no labels are present (model ignored the structure) but the text is
+  clean, render the entire text as the `summary` section only (other three
+  omitted/empty). This guarantees the four-section contract degrades gracefully
+  rather than erroring.
 
-*(Alternative considered: labeled plain-text with regex section splits — rejected
-as more brittle than model-native JSON. Revisit only if JSON mode proves
-unreliable under the locked system prompt.)*
+*(Alternative considered and rejected: Gemini native JSON mode via
+`responseMimeType` — would require modifying the governed `gemini.js`/`callGemini`
+path with zero prior art in the repo, and risks conflicting with the system
+prompt's markdown MODE formats. See Decision #5.)*
 
 ---
 
@@ -300,5 +314,5 @@ not used).
 - [ ] "✦ Powered by QuranlyAI" always visible in every successful rendered output.
 - [ ] `hadithAIExplainEnabled` defaults OFF; documented that enabling requires
       explicit human sign-off.
-- [ ] 4 `DECISION:` entries added to `docs/DECISIONS.md`.
+- [ ] 5 `DECISION:` entries added to `docs/DECISIONS.md`.
 - [ ] `✕` close works during loading and every error state.
