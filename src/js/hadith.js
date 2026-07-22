@@ -380,7 +380,12 @@
       if (cat === '__new__') {
         var name = window.prompt('New category name:'); if (name == null) return;
         var add = actions.addCustomCategory(getBookmarks(), name);
-        if (!add.ok) { ui.showToast('Maximum 5 custom categories.'); return; }
+        if (!add.ok) {
+          ui.showToast(actions.customCategoriesOf(getBookmarks()).length >= actions.MAX_CUSTOM
+            ? 'Maximum 5 custom categories.'
+            : 'That category name can’t be used.');
+          return;
+        }
         cat = String(name).trim();
       }
       setBookmarks(actions.setCategory(getBookmarks(), ref, cat));
@@ -388,6 +393,16 @@
       hideCategoryTooltip();
     });
     catTimer = setTimeout(hideCategoryTooltip, 2500);   // 2.5s auto-dismiss
+  }
+  // Find an already-open sibling panel of the given class belonging to this card
+  // (scans forward until the next .hadith-card). Fixes cross-panel toggle collisions.
+  function findCardPanel(card, className) {
+    var n = card.nextElementSibling;
+    while (n && !n.classList.contains('hadith-card')) {
+      if (n.classList.contains(className)) return n;
+      n = n.nextElementSibling;
+    }
+    return null;
   }
   function onBookmark(card, btn, ref) {
     if (!actions) return;
@@ -403,8 +418,8 @@
   /* ── Module 10: note editor (sibling below card — Module 4 DoD) ── */
   function onNote(card, ref) {
     if (!actions) return;
-    var next = card.nextElementSibling;
-    if (next && next.classList.contains('note-editor')) { next.parentNode.removeChild(next); return; } // toggle closed
+    var existingEd = findCardPanel(card, 'note-editor');
+    if (existingEd) { existingEd.parentNode.removeChild(existingEd); return; } // toggle closed
     var existing = actions.getNote(getNotes(), ref);
     var ed = document.createElement('div');
     ed.className = 'note-editor';
@@ -439,8 +454,8 @@
      NEVER print a reciter (null → would be fabrication). A functional player
      arrives when a real audio source lands. ── */
   function onListen(card, ref) {
-    var next = card.nextElementSibling;
-    if (next && next.classList.contains('audio-mini-player')) { next.parentNode.removeChild(next); return; }
+    var existingP = findCardPanel(card, 'audio-mini-player');
+    if (existingP) { existingP.parentNode.removeChild(existingP); return; }
     var p = document.createElement('div');
     p.className = 'audio-mini-player';
     p.innerHTML =
@@ -507,7 +522,6 @@
     panel.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
     bmLastFocus = document.activeElement;
     document.addEventListener('keydown', onBmKey);
-    ui.focusTrap(panel);
     var first = panel.querySelector('button, a'); if (first) first.focus();
   }
   function closeBookmarksPanel() {
@@ -521,14 +535,23 @@
     closeBookmarksPanel();
     var r = parseRefParts(ref);
     routeTo({ collection: r.slug, book: r.book, hadith: r.num }, true);
-    setTimeout(function () {                              // let the target view render, then pulse
-      var card = document.querySelector('.hadith-card[data-ref="' + ref + '"]');
-      if (card) { card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' }); pulseRing(card); }
-    }, 350);
+    var sel = '.hadith-card[data-ref="' + ((window.CSS && CSS.escape) ? CSS.escape(ref) : ref) + '"]';
+    var tries = 0;
+    (function poll() {
+      var card = document.querySelector(sel);
+      if (card) {
+        card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+        pulseRing(card);
+        return;
+      }
+      if (++tries < 20) setTimeout(poll, 120);   // up to ~2.4s for the async deep-view fetch
+    }());
   }
   function wireBookmarksPanel() {
     var trigger = $('#ii-bookmarks-trigger'), closeBtn = $('#ii-bookmarks-close'),
-        backdrop = $('#ii-bookmarks-backdrop'), chipRow = $('#ii-bookmarks-chips'), listEl = $('#ii-bookmarks-list');
+        backdrop = $('#ii-bookmarks-backdrop'), chipRow = $('#ii-bookmarks-chips'), listEl = $('#ii-bookmarks-list'),
+        panel = $('#ii-bookmarks-panel');
+    if (panel) ui.focusTrap(panel);
     if (trigger) trigger.addEventListener('click', function (e) { e.preventDefault(); openBookmarksPanel(); });
     if (closeBtn) closeBtn.addEventListener('click', closeBookmarksPanel);
     if (backdrop) backdrop.addEventListener('click', closeBookmarksPanel);
@@ -547,6 +570,8 @@
         var active = $('#ii-bookmarks-chips .bm-chip.on');
         renderBookmarksPanel(active ? active.getAttribute('data-cat') : 'all');
         markCardStates(document);                        // clear the gold dot on any visible card
+        var vc = document.querySelector('.hadith-card[data-ref="' + ((window.CSS && CSS.escape) ? CSS.escape(ref) : ref) + '"]');
+        if (vc) { var vb = vc.querySelector('[data-act="bookmark"]'); if (vb) vb.classList.remove('active'); }
       }
     });
   }
@@ -560,7 +585,7 @@
     var ref = r.collection + ':' + (r.book == null ? 0 : r.book) + ':' + r.hadith;
     var h = FEED.byRef[ref];                              // prefer loaded feed data
     if (!h) {                                             // else read the rendered deep view (displayed = sourced)
-      var tEl = document.querySelector('#ii-tier2 .hadith-text, #ii-tier2 .hadith-translation, #ii-tier2 .dv-body');
+      var tEl = document.querySelector('#ii-tier2 .hadith-text') || document.querySelector('#ii-tier2 .hadith-arabic');
       var matn = tEl ? tEl.textContent.trim() : '';
       if (matn) {
         var c = collectionBySlug(r.collection);
@@ -929,8 +954,8 @@
   function toggleIsnad(card, btn) {
     if (!card) return;
     var ref = card.getAttribute('data-ref');
-    var panel = card.nextElementSibling;
-    if (!panel || !panel.classList.contains('isnad-preview')) {
+    var panel = findCardPanel(card, 'isnad-preview');
+    if (!panel) {
       panel = document.createElement('div');
       panel.className = 'isnad-preview';
       panel.id = 'isnad-' + String(ref || '').replace(/[^a-z0-9]+/gi, '-');
