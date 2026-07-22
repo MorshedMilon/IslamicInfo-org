@@ -27,6 +27,7 @@
 | `islamicinfo-hadith-lang` | string — preferred hadith translation language code (`en`/`ur`/`fr`/`id`/`tr`) for Tier 3b deep-view translation tabs; written on tab switch, read on deep-view render; defaults to `en` when unset or when the stored language is not present in the payload | Hadith Library (Module 7 — Tier 3b) | Until user changes |
 | `islamicinfo-hadith-bookmarks` | `HadithBookmark[]` | Hadith Library | Permanent |
 | `islamicinfo-hadith-notes` | `HadithNote[]` | Hadith Library | Permanent |
+| `islamicinfo-hadith-translation-pref` | string — preferred translation **edition** id for the Tier-1 feed-card compare row (US-H23, Module 12); written on `.dv-tab` edition click, read on card render to restore the active tab. Distinct from `islamicinfo-hadith-lang` (that is the Tier-3b deep-view *language* selector). Dormant until provider data exposes >1 edition per hadith — today the adapter returns a single edition, so no compare tabs render. | Hadith Library (Module 12) | Until user changes |
 | `islamicinfo-hadith-{collection}-{book}-{date}` | cached API response (JSON) | Hadith Library | 1 day |
 | `islamicinfo-hadith-collections` | merged 18-collection index seed (JSON) — ADR-024 | Hadith Library | 7 days |
 | `islamicinfo-hadith-fawaz-{edition}` | fawazahmed0 edition file, e.g. `eng-nawawi` / `ara-nawawi` (JSON), keyless direct fetch — ADR-024 | Hadith Library | 7 days |

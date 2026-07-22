@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 12 — copy citation, translation compare, motifs fixture</title>
+<style>
+:root{
+  --teal-100:#C8EEF1;--teal-300:#6AD7DE;--teal-500:#2CA4AB;--teal-600:#0297A1;--teal-700:#00696E;--teal-900:#0A3A3D;
+  --gold-500:#C5A059;--gold-700:#9A7B3A;
+  --ink-primary:#0F2A2C;--ink-body:#243738;--ink-muted:#6D797A;--ink-subtle:#9DA8A9;--ink-faint:#C7D0D0;
+  --surface:#F4F7F7;--surface-base:#FAFBFB;--surface-card:#FFFFFF;--white:#FFFFFF;
+  --elev-1:0 1px 3px rgba(15,42,44,.06);
+  --elev-2:0 4px 14px rgba(15,42,44,.08),0 1px 3px rgba(15,42,44,.04);
+  --gold-aura:0 8px 30px rgba(197,160,89,.14);
+  --grade-sahih:#0F6E56;--r-sm:8px;--r-md:12px;--r-xl:18px;
+  --ease-reverent:cubic-bezier(.2,.7,.2,1);--ease-premium:cubic-bezier(.4,0,.2,1);
+  --font-body:'Inter',-apple-system,'Segoe UI',sans-serif;
+  --font-display:'Cormorant Garamond',Georgia,serif;
+}
+[data-theme="dark"]{
+  --teal-700:#1A8A91;--teal-500:#5BC1C7;--teal-300:#6AD7DE;--teal-900:#0A3A3D;
+  --ink-primary:#F5F8F8;--ink-body:#D4DCDD;--ink-muted:#9AAAAB;--ink-subtle:#6E7E80;--ink-faint:#31494B;
+  --surface:#0A1314;--surface-base:#0F1B1D;--surface-card:#132123;--white:#152527;--grade-sahih:#1FA882;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-body);color:var(--ink-body);background:var(--surface);
+  padding:28px 32px 80px;transition:background .3s,color .3s;}
+h1.fixture{font-family:var(--font-display);color:var(--teal-900);font-size:24px;margin:0 0 2px;}
+.fixture-sub{color:var(--ink-muted);font-size:13px;margin:0 0 22px;max-width:680px;}
+.section-tag{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--teal-700);margin:34px 0 14px;padding-top:22px;border-top:1px dashed rgba(0,105,110,.25);}
+
+/* motif grid */
+.motif-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;}
+.motif-cell{background:var(--surface-card);border:0.5px solid rgba(0,105,110,.14);border-radius:14px;
+  box-shadow:var(--elev-1);padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.motif-cell.featured{background:linear-gradient(135deg,rgba(0,105,110,.06),rgba(197,160,89,.04));border-color:rgba(197,160,89,.25);box-shadow:var(--gold-aura);}
+.motif-sizes{display:flex;align-items:flex-end;gap:14px;}
+.motif-slug{font-size:11px;color:var(--ink-muted);font-family:monospace;}
+.card-motif-svg{color:var(--teal-700);display:block;}
+[data-theme="dark"] .card-motif-svg{color:var(--teal-300);}
+.sz64{width:64px;height:64px;} .sz32{width:32px;height:32px;}
+.sz-label{font-size:10px;color:var(--ink-subtle);text-align:center;margin-top:2px;}
+
+/* copy sample */
+.copy-sample{background:var(--surface-card);border:0.5px solid rgba(0,105,110,.14);border-radius:12px;
+  padding:16px 18px;font-family:monospace;font-size:12.5px;line-height:1.7;color:var(--ink-body);white-space:pre-wrap;max-width:760px;}
+
+/* translation compare (reuse hadith.html dv-tabs) */
+.hadith-card{position:relative;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.14);border-radius:14px;box-shadow:var(--elev-2);overflow:hidden;max-width:620px;}
+.hadith-inner{padding:16px 18px;}
+.hadith-arabic{font-family:var(--font-display);font-size:19px;text-align:right;direction:rtl;color:var(--ink-primary);margin:0 0 10px;line-height:1.9;}
+.hadith-narrator{font-size:12px;color:var(--ink-muted);font-style:italic;margin-bottom:8px;}
+.dv-tabs{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap;}
+.dv-tab{padding:6px 14px;border-radius:var(--r-sm);border:1px solid var(--ink-faint);background:var(--surface-card);cursor:pointer;font-size:13px;color:var(--ink-body);}
+.dv-tab.on{background:var(--teal-700);color:var(--white);border-color:var(--teal-700);}
+.hadith-text{font-size:14.5px;color:var(--ink-body);line-height:1.75;border-left:3px solid var(--teal-500);padding-left:14px;}
+.hadith-tr-by{font-size:12px;color:var(--ink-muted);margin-top:6px;}
+[hidden]{display:none;}
+
+button.tgl{position:fixed;left:16px;bottom:16px;z-index:99;padding:8px 14px;border-radius:8px;border:0.5px solid rgba(0,105,110,.3);background:var(--surface-base);color:var(--ink-body);cursor:pointer;font:inherit;}
+</style>
+</head>
+<body>
+<h1 class="fixture">Module 12 — copy-with-citation · translation compare · illustrated motifs</h1>
+<p class="fixture-sub">Honest engineering slice. Motifs mirror <code>MOTIF_SVG</code> in <code>src/js/hadith.js</code> verbatim. Verify each motif is legible in BOTH themes at 32px and 64px, and that the translation-compare tabs (a code path only reachable when &gt;1 edition exists) render correctly.</p>
+
+<div class="section-tag">1 · Illustrated collection motifs (US-H17) — 9 real collections, 64px + 32px</div>
+<div class="motif-grid" id="motif-grid"></div>
+
+<div class="section-tag">2 · Copy-with-citation (US-H16) — exact single-string payload for a real hadith</div>
+<div class="copy-sample" id="copy-sample"></div>
+
+<div class="section-tag">3 · Translation compare (US-H23) — dormant &gt;1-edition path (synthetic 2-edition sample)</div>
+<div class="hadith-card"><div class="hadith-inner">
+  <div class="hadith-arabic" dir="rtl">إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ</div>
+  <div class="hadith-narrator">Narrated 'Umar ibn al-Khattab:</div>
+  <div class="hadith-translations" id="tr-compare"></div>
+</div></div>
+
+<button class="tgl" id="tgl">Toggle dark</button>
+<script>
+/* ── 9 motifs — copied verbatim from src/js/hadith.js MOTIF_SVG (keep in sync) ── */
+var MS='<svg class="card-motif-svg %SZ%" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+var BODY={
+ 'sahih-bukhari':'<rect x="17" y="17" width="30" height="30"/><path d="M32 9 L55 32 L32 55 L9 32 Z"/><circle cx="32" cy="32" r="4.5" fill="var(--gold-500)" stroke="none"/>',
+ 'sahih-muslim':'<path d="M22 8 H42 L56 22 V42 L42 56 H22 L8 42 V22 Z"/><path d="M32 20 L35 29 L44 32 L35 35 L32 44 L29 35 L20 32 L29 29 Z" fill="var(--gold-500)" stroke="none"/>',
+ 'abu-dawood':'<path d="M32 18 C26 14 16 14 10 16 V46 C16 44 26 44 32 48"/><path d="M32 18 C38 14 48 14 54 16 V46 C48 44 38 44 32 48"/><path d="M32 18 V48" stroke="var(--gold-500)"/>',
+ 'al-tirmidhi':'<path d="M42 14 A20 20 0 1 0 42 50 A15.5 15.5 0 1 1 42 14 Z"/><path d="M52 15 L54 21 L60 23 L54 25 L52 31 L50 25 L44 23 L50 21 Z" fill="var(--gold-500)" stroke="none"/>',
+ 'sunan-nasai':'<path d="M16 53 V30 C16 20 23 13 32 13 C41 13 48 20 48 30 V53"/><path d="M14 53 H50"/><path d="M32 13 V7" stroke="var(--gold-500)"/><circle cx="32" cy="6" r="2.6" fill="var(--gold-500)" stroke="none"/>',
+ 'ibn-e-majah':'<path d="M20 15 H46 V45 C46 49 43 52 39 52 H17 C21 52 22 49 22 45 V17"/><path d="M20 15 C16 15 15 18 15 20 C15 22 17 23 20 23 H26"/><path d="M27 27 H40 M27 34 H40"/><circle cx="34" cy="47" r="3.6" fill="var(--gold-500)" stroke="none"/>',
+ 'musnad-ahmad':'<rect x="13" y="41" width="38" height="9" rx="1.5"/><rect x="16" y="30" width="32" height="9" rx="1.5"/><rect x="19" y="19" width="26" height="9" rx="1.5" stroke="var(--gold-500)"/>',
+ 'mishkat':'<path d="M16 53 V29 C16 20 23 12 32 12 C41 12 48 20 48 29 V53"/><path d="M32 21 V29"/><path d="M26 35 H38 L35 45 H29 Z"/><path d="M32 27 C34 30 34 33 32 35 C30 33 30 30 32 27 Z" fill="var(--gold-500)" stroke="none"/>',
+ 'al-silsila-sahiha':'<rect x="9" y="27" width="20" height="10" rx="5"/><rect x="25" y="27" width="20" height="10" rx="5"/><rect x="41" y="27" width="14" height="10" rx="5" stroke="var(--gold-500)"/>'
+};
+var NAMES={'sahih-bukhari':'Sahih al-Bukhari','sahih-muslim':'Sahih Muslim','abu-dawood':'Sunan Abi Dawud','al-tirmidhi':"Jami' at-Tirmidhi",'sunan-nasai':"Sunan an-Nasa'i",'ibn-e-majah':'Sunan Ibn Majah','musnad-ahmad':'Musnad Ahmad','mishkat':'Mishkat al-Masabih','al-silsila-sahiha':'Al-Silsila al-Sahiha'};
+function svg(slug,sz){return MS.replace('%SZ%',sz)+BODY[slug]+'</svg>';}
+document.getElementById('motif-grid').innerHTML=Object.keys(BODY).map(function(slug){
+  return '<div class="motif-cell'+(slug==='sahih-bukhari'?' featured':'')+'">'+
+    '<div class="motif-sizes"><div><div>'+svg(slug,'sz64')+'</div><div class="sz-label">64px</div></div>'+
+    '<div><div>'+svg(slug,'sz32')+'</div><div class="sz-label">32px</div></div></div>'+
+    '<div class="motif-slug">'+slug+'</div><div style="font-size:12px;color:var(--ink-body);">'+NAMES[slug]+'</div></div>';
+}).join('');
+
+/* copy-with-citation sample (mirrors buildCopyText output for a real hadith) */
+document.getElementById('copy-sample').textContent =
+  '"The reward of deeds depends upon the intentions" — Narrated \'Umar. ' +
+  'Sahih al-Bukhari · Book 1 · Hadith 1. Grade: Sahih. ' +
+  'Source: https://islamicinfo.org/hadith/sahih-bukhari/1/1';
+
+/* translation compare — synthetic 2-edition sample to exercise the dormant >1 path */
+var EDS=[{text:'The reward of deeds depends upon the intentions.',edition:'darussalam',translator:'M. Muhsin Khan'},{text:'Actions are but by intention.',edition:'usc-msa'}];
+function renderTr(eds){
+  var tabs='<div class="dv-tabs" role="tablist" aria-label="Translations">',panels='';
+  eds.forEach(function(e,i){var on=i===0,by=e.translator?'<div class="hadith-tr-by">Translated by '+e.translator+'</div>':'';
+    tabs+='<button type="button" class="dv-tab'+(on?' on':'')+'" role="tab" data-edition="'+e.edition+'" aria-selected="'+(on?'true':'false')+'">'+e.edition+'</button>';
+    panels+='<div class="hadith-text trans-panel" data-edition="'+e.edition+'"'+(on?'':' hidden')+'>'+e.text+'</div>'+by;});
+  return tabs+'</div>'+panels;
+}
+var wrap=document.getElementById('tr-compare');wrap.innerHTML=renderTr(EDS);
+wrap.addEventListener('click',function(e){var t=e.target.closest('.dv-tab');if(!t)return;var ed=t.getAttribute('data-edition');
+  wrap.querySelectorAll('.dv-tab').forEach(function(x){var on=x===t;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');});
+  wrap.querySelectorAll('.trans-panel').forEach(function(p){p.hidden=p.getAttribute('data-edition')!==ed;});});
+
+try{var p=new URLSearchParams(location.search);if(p.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}
+document.getElementById('tgl').addEventListener('click',function(){var d=document.documentElement;d.setAttribute('data-theme',d.getAttribute('data-theme')==='dark'?'':'dark');});
+</script>
+</body>
+</html>
