@@ -475,6 +475,7 @@
     document.addEventListener('click', function (e) {
       var btn = e.target.closest && e.target.closest('.hadith-card [data-act]');
       if (!btn) return;
+      if (btn.classList.contains('dv-action-btn')) return;   // Tier-3b deep-view actions stay deferred (their own handler)
       var act = btn.getAttribute('data-act');
       if (act !== 'bookmark' && act !== 'note' && act !== 'listen') return;
       var card = btn.closest('.hadith-card'); if (!card) return;
