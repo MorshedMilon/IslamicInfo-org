@@ -1035,20 +1035,14 @@
   /* ── Topics strip (US-H06) — in-place keyword filter over the loaded feed.
      Honest Stage-1 heuristic: matches the topic keyword against hadith text; NOT a curated topic
      classification (the provider returns no topic tags). Real topic index = Module 11. ── */
+  // Module 11: topic chips ROUTE (Stage 3) instead of filtering in-place (Module 5 behavior removed).
   function wireTopics() {
     var chips = document.querySelectorAll('.topics-grid .topic-chip');
-    var input = $('#hadith-search-input');
     chips.forEach(function (chip) {
       chip.setAttribute('aria-pressed', 'false');
       function act() {
-        var already = chip.classList.contains('selected');
-        chips.forEach(function (c) { c.classList.remove('selected'); c.setAttribute('aria-pressed', 'false'); });
-        if (already) { if (input) input.value = ''; setSearchQuery(''); return; }
-        chip.classList.add('selected'); chip.setAttribute('aria-pressed', 'true');
-        var kw = chip.getAttribute('data-topic') || chip.textContent.trim();
-        if (input) input.value = kw;
-        setSearchQuery(kw);
-        scrollFeed();
+        var key = chip.getAttribute('data-topic');
+        if (key) routeTo({ collection: 'topics', book: key }, true);
       }
       chip.addEventListener('click', act);
       chip.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(); } });
