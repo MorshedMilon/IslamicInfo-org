@@ -53,5 +53,10 @@ test('incrementExplainQuota: writes count+1 with a TTL that outlives the hour', 
   await incrementExplainQuota(kv, 'abc', NOW);
   assert.equal(kv._store.get('explain_quota:abc:2026072213'), '5');
   const put = kv._puts[kv._puts.length - 1];
-  assert.ok(put.opts.expirationTtl >= 2400);
+  assert.equal(put.opts.expirationTtl, 2460);
+});
+
+test('secondsUntilNextHour: exactly on the hour → full 3600', () => {
+  assert.equal(secondsUntilNextHour(Date.UTC(2026, 6, 22, 14, 0, 0)), 3600);
+  assert.equal(hourStamp(Date.UTC(2026, 6, 22, 14, 0, 0)), '2026072214');
 });
