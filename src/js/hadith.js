@@ -468,22 +468,60 @@
     card.parentNode.insertBefore(p, card.nextSibling);
   }
 
-  // Module 10: one document-delegated handler for bookmark/note/listen — works in the
-  // Tier-1 feed AND the Tier-3a list (both render via feed.buildCardHTML). isnad/share/
-  // copy/full stay with wireFeedActions on #hadith-feed.
+  // Read the displayed hadith content from a rendered card (feed + Tier-3a). Displayed = sourced.
+  function readCardContent(card) {
+    function txt(sel) { var e = card.querySelector(sel); return e ? e.textContent.trim() : ''; }
+    var refEl = card.querySelector('.hadith-ref'), reference = '';
+    if (refEl) { var clone = refEl.cloneNode(true); var ic = clone.querySelector('.hadith-ref-icon'); if (ic) ic.parentNode.removeChild(ic); reference = clone.textContent.trim(); }
+    return { arabic: txt('.hadith-arabic'), translation: txt('.hadith-text'),
+             narrator: txt('.hadith-narrator'), reference: reference, grade: txt('.grade-badge') };
+  }
+  function onCopy(card, ref) {
+    var text = actions ? actions.buildCopyText(readCardContent(card)) : '';
+    if (!text) { ui.showToast('Nothing to copy'); return; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { ui.showToast('Copied with attribution'); },
+                                              function () { ui.showToast('Couldn’t copy'); });
+    } else {
+      try {
+        var ta = document.createElement('textarea'); ta.value = text;
+        ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        ui.showToast('Copied with attribution');
+      } catch (_) { ui.showToast('Couldn’t copy'); }
+    }
+  }
+  function onShare(card, ref) {
+    var r = parseRefParts(ref);
+    var content = readCardContent(card);
+    var url = location.origin + routePath({ collection: r.slug, book: r.book, hadith: r.num });
+    if (navigator.share) {
+      navigator.share({ title: 'Hadith · ' + (content.reference || 'IslamicInfo.org'),
+                        text: (actions ? actions.buildCopyText(content) : ''), url: url }).catch(function () {});
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function () { ui.showToast('Link copied'); },
+                                            function () { ui.showToast('Couldn’t copy link'); });
+    } else { ui.showToast('Sharing isn’t supported in this browser'); }
+  }
+
+  // Module 10: one document-delegated handler for bookmark/note/listen/share/copy — works
+  // in the Tier-1 feed AND the Tier-3a list (both render via feed.buildCardHTML). isnad/full
+  // stay with wireFeedActions on #hadith-feed.
   function wireCardActions() {
     document.addEventListener('click', function (e) {
       var btn = e.target.closest && e.target.closest('.hadith-card [data-act]');
       if (!btn) return;
       if (btn.classList.contains('dv-action-btn')) return;   // Tier-3b deep-view actions stay deferred (their own handler)
       var act = btn.getAttribute('data-act');
-      if (act !== 'bookmark' && act !== 'note' && act !== 'listen') return;
+      if (act !== 'bookmark' && act !== 'note' && act !== 'listen' && act !== 'share' && act !== 'copy') return;
       var card = btn.closest('.hadith-card'); if (!card) return;
       var ref = card.getAttribute('data-ref'); if (!ref) return;
       e.preventDefault();
       if (act === 'bookmark') onBookmark(card, btn, ref);
       else if (act === 'note') onNote(card, ref);
       else if (act === 'listen') onListen(card, ref);
+      else if (act === 'share') onShare(card, ref);
+      else if (act === 'copy') onCopy(card, ref);
     });
   }
 
@@ -967,16 +1005,14 @@
     if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
 
-  // Per-card actions. isnad toggles the chain panel (US-H05); full/share/copy are still
-  // honestly deferred to later modules — no dead or lying onclick. bookmark/note/listen
+  // Per-card actions. isnad toggles the chain panel (US-H05); full is still honestly
+  // deferred to a later module — no dead or lying onclick. bookmark/note/listen/share/copy
   // are now live (Module 10) via the document-delegated wireCardActions() below, so they
   // are absent from MSG here on purpose and simply no-op in this handler.
   function wireFeedActions() {
     var el = feedEl(); if (!el) return;
     var MSG = {
       full: 'Full hadith view arrives in a later stage',
-      share: 'Sharing arrives in a later stage',
-      copy: 'Copying arrives in a later stage',
     };
     el.addEventListener('click', function (e) {
       var btn = e.target.closest && e.target.closest('[data-act]');
