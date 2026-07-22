@@ -322,3 +322,10 @@ test('card action row includes a View-as-Trace button (data-act="trace")', () =>
   assert.match(html, /data-act="trace"/);
   assert.match(html, /title="View as Trace"/);
 });
+
+/* ── Module 15: card action row includes Add-to-comparison ── */
+test('card action row includes an Add-to-comparison button (data-act="compare-add")', () => {
+  const html = core.buildCardHTML(bukhari());
+  assert.match(html, /data-act="compare-add"/);
+  assert.match(html, /Add to comparison/);
+});
