@@ -65,13 +65,16 @@
     el.querySelector('.ai-foot').textContent = '';
   }
 
-  function renderError(el, cardData, msg) {
+  function renderError(el, cardData, msg, opts) {
     var body = el.querySelector('.ai-body');
     body.textContent = '';
     var p = document.createElement('p'); p.textContent = msg || 'Explanation unavailable — please try again';
-    var retry = document.createElement('button'); retry.type = 'button'; retry.className = 'ai-retry'; retry.textContent = 'Retry';
-    retry.addEventListener('click', function () { fetchAndRender(el, cardData); });
-    body.appendChild(p); body.appendChild(retry);
+    body.appendChild(p);
+    if (!(opts && opts.noRetry)) {
+      var retry = document.createElement('button'); retry.type = 'button'; retry.className = 'ai-retry'; retry.textContent = 'Retry';
+      retry.addEventListener('click', function () { fetchAndRender(el, cardData); });
+      body.appendChild(retry);
+    }
     setFoot(el.querySelector('.ai-foot'), cardData.ref);
   }
 
@@ -105,7 +108,7 @@
       if (res && res.safe === true) {
         renderAnswer(el, res, cardData);
       } else if (res && res._status === 429) {
-        renderError(el, cardData, 'Too many requests — please try again later');
+        renderError(el, cardData, 'Too many requests — please try again later', { noRetry: true });
       } else if (res && res.safe === false) {
         renderError(el, cardData, res.fallback || 'Unable to generate explanation for this hadith.');
       } else {
