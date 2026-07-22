@@ -677,8 +677,6 @@
   }
 
   // --- Module 14 Trace View host handlers (reuse hadith-actions core, read a hadith OBJECT) ---
-  function refPartsToRoute(ref) { var r = parseRefParts(ref); return { collection: r.slug, book: r.book, hadith: r.num }; }
-
   async function fetchHadithByRef(ref) {
     if (!api || !api.fetchSingleHadith) return null;
     var r = parseRefParts(ref);
