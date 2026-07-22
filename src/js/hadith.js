@@ -659,6 +659,43 @@
     } else { ui.showToast('Sharing isn’t supported in this browser'); }
   }
 
+  // --- Module 14 Trace View host handlers (reuse hadith-actions core, read a hadith OBJECT) ---
+  function refPartsToRoute(ref) { var r = parseRefParts(ref); return { collection: r.slug, book: r.book, hadith: r.num }; }
+
+  async function fetchHadithByRef(ref) {
+    if (!api || !api.fetchSingleHadith) return null;
+    var r = parseRefParts(ref);
+    try { var res = await api.fetchSingleHadith(r.slug, r.book, r.num); return (res && res.ok) ? res.data : null; }
+    catch (_) { return null; }
+  }
+  function traceCopyContent(hadith) {
+    // canonical source URL from the hadith's own identifiers (never location.origin)
+    var url = SITE + routePath({ collection: hadith.collectionSlug, book: hadith.bookNumber, hadith: hadith.hadithNumber });
+    return II.traceViewCore.buildCopyContent(hadith, url);
+  }
+  function onTraceCopy(hadith) {
+    if (!actions || !hadith) return;
+    var text = actions.buildCopyText(traceCopyContent(hadith));
+    if (!text) { ui.showToast('Nothing to copy'); return; }
+    copyToClipboard(text, 'Copied with citation ✦');
+  }
+  function onTraceShare(hadith) {
+    if (!hadith) return;
+    var content = traceCopyContent(hadith);
+    if (navigator.share) { navigator.share({ title: 'Hadith · ' + (content.reference || 'IslamicInfo.org'), text: (actions ? actions.buildCopyText(content) : ''), url: content.sourceUrl }).catch(function () {}); }
+    else if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(content.sourceUrl).then(function () { ui.showToast('Link copied'); }, function () { ui.showToast('Couldn’t copy link'); }); }
+    else { ui.showToast('Sharing isn’t supported in this browser'); }
+  }
+  function onTraceBookmark(hadith, btn) {
+    if (!actions || !hadith) return;
+    var ref = hadith.reference || hadith.id;
+    var res = actions.toggleBookmark(getBookmarks(), { ref: ref, collectionSlug: hadith.collectionSlug, bookNum: hadith.bookNumber, hadithNum: hadith.hadithNumber }, Date.now());
+    setBookmarks(res.list);
+    if (btn) btn.classList.toggle('active', res.added);
+    ui.showToast(res.added ? 'Bookmarked ✦' : 'Bookmark removed');
+  }
+  function exitTrace(route) { try { history.replaceState(route, '', routePath(route)); } catch (_) {} renderRoute(route); }
+
   // Module 10: one document-delegated handler for bookmark/note/listen/share/copy — works
   // in the Tier-1 feed AND the Tier-3a list (both render via feed.buildCardHTML). isnad/full
   // stay with wireFeedActions on #hadith-feed.
@@ -669,7 +706,7 @@
       if (btn.classList.contains('dv-action-btn')) return;   // Tier-3b deep-view actions stay deferred (their own handler)
       var act = btn.getAttribute('data-act');
       if (act !== 'bookmark' && act !== 'note' && act !== 'listen' && act !== 'share' &&
-          act !== 'copy' && act !== 'copy-arabic') return;
+          act !== 'copy' && act !== 'copy-arabic' && act !== 'trace') return;
       var card = btn.closest('.hadith-card'); if (!card) return;
       var ref = card.getAttribute('data-ref'); if (!ref) return;
       e.preventDefault();
@@ -679,6 +716,7 @@
       else if (act === 'share') onShare(card, ref);
       else if (act === 'copy') onCopy(card, ref);
       else if (act === 'copy-arabic') onCopyArabic(card);
+      else if (act === 'trace') { if (II.traceView) II.traceView.open(ref, { viaRoute: false }); }
     });
   }
 
@@ -1257,6 +1295,10 @@
     if (II.narratorPanelDom && II.narratorPanelDom.init) {
       II.narratorPanelDom.init({ api: api, ui: ui });
       II.narratorPanelDom.wire(document);   // delegated, once — reachable when isnad nodes carry data-narrator-id
+    }
+    if (II.traceView && II.traceView.init) {
+      II.traceView.init({ ui: ui, fetchHadithByRef: fetchHadithByRef,
+        onTraceBookmark: onTraceBookmark, onTraceShare: onTraceShare, onTraceCopy: onTraceCopy, exitTrace: exitTrace });
     }
     await loadCollections();
     wireFilterTabs();
