@@ -183,6 +183,7 @@
     try { path = decodeURIComponent(path || location.pathname); } catch (_) { path = path || location.pathname; }
     var t = path.match(/^\/hadith\/trace\/([^\/?#]+)\/([^\/?#]+)\/([^\/?#]+)\/?$/);   // Module 14 trace route (4-seg; must precede the 3-seg match)
     if (t) return { trace: true, collection: t[1], book: t[2], hadith: t[3] };
+    if (/^\/hadith\/compare\/?$/.test(path)) return { compare: true };   // Module 15 compare route (refs read from ?refs=)
     var m = path.match(/^\/hadith\/([^\/?#]+)(?:\/([^\/?#]+))?(?:\/([^\/?#]+))?\/?$/);
     if (!m) return { collection: null, book: null, hadith: null };
     return { collection: m[1] || null, book: m[2] || null, hadith: m[3] || null };
@@ -191,6 +192,7 @@
     if (r && r.trace && r.collection) {   // Module 14 trace route
       return '/hadith/trace/' + encodeURIComponent(r.collection) + '/' + encodeURIComponent(r.book) + '/' + encodeURIComponent(r.hadith);
     }
+    if (r && r.compare) return '/hadith/compare';   // Module 15 (refs live in ?refs=, added by openCompareRoute)
     if (!r || !r.collection) return '/hadith.html';
     var p = '/hadith/' + encodeURIComponent(r.collection);
     if (r.book != null && r.book !== '') { p += '/' + encodeURIComponent(r.book); if (r.hadith != null && r.hadith !== '') p += '/' + encodeURIComponent(r.hadith); }
@@ -356,6 +358,16 @@
 
   function renderRoute(r) {
     r = r || parseRoute();
+    if (r.compare) {   // Module 15 — refs come from ?refs= (not the path), mirroring the grade-filter pattern
+      var refsParam; try { refsParam = new URLSearchParams(location.search).get('refs'); } catch (_) { refsParam = ''; }
+      var refs = compareCore() ? compareCore().parseRefs(refsParam) : [];
+      if (II.compareView) II.compareView.open(refs, { viaRoute: true });
+      return;
+    }
+    // Navigating to a NON-compare route while the compare overlay is open (Back/popstate):
+    // close it with skipNav (renderRoute is already rendering the target). Runs only when leaving
+    // compare because the compare branch above return's early on entry — no render/popstate loop.
+    if (II.compareView && II.compareView.isOpen && II.compareView.isOpen()) { II.compareView.close({ skipNav: true }); }
     if (r.trace) {   // Module 14 — render the deep-view underneath, then open the trace overlay on top
       var tc = collectionBySlug(r.collection);
       if (!tc) { setTier(1); applyFilter(); try { history.replaceState(null, '', '/hadith.html'); } catch (_) {} return; }
@@ -494,6 +506,7 @@
       card.classList.toggle('has-bookmark', !!bm[ref]);
       card.classList.toggle('has-note', !!nt[ref]);
     });
+    reflectCompareButtons();   // Module 15: newly-rendered cards reflect capacity/added state
   }
   // Observe all current .hadith-card[data-ref] in a container (Tier-1 feed or Tier-3a list).
   function observeFeed(container) {
@@ -711,6 +724,70 @@
   }
   function exitTrace(route) { try { history.replaceState(route, '', routePath(route)); } catch (_) {} renderRoute(route); }
 
+  /* ── Module 15: Comparison Mode ── */
+  var compareSet = [];   // in-memory ordered Set of refs (slug:book:num), max 3
+  function compareCore() { return II.compareViewCore; }
+  function renderCompareDrawer() {
+    var drawer = document.getElementById('compare-drawer'); if (!drawer || !compareCore()) return;
+    if (!compareSet.length) { drawer.classList.remove('open'); drawer.innerHTML = ''; return; }
+    var hadiths = compareSet.map(function (ref) { return FEED.byRef[ref] || refStub(ref); });
+    var chips = compareCore().buildHeaderChipsHTML(hadiths)
+      .replace('<span class="cmp-comparing">Comparing</span>', '<span class="cmp-drawer-label">Comparing</span>')
+      .replace(/<button type="button" class="cmp-add-more"[^>]*>[^<]*<\/button>/, '');
+    var canGo = compareCore().canCompare(compareSet);
+    drawer.innerHTML = chips +
+      '<button class="footer-action-btn primary cmp-compare-go" type="button" data-cmp-go' +
+      (canGo ? '' : ' disabled') + '>Compare →</button>';
+    drawer.classList.add('open');
+  }
+  // Minimal hadith-like object so a drawer chip label renders before the feed object is present.
+  function refStub(ref) {
+    var p = parseRefParts(ref);
+    return { collectionSlug: p.slug, collectionName: p.slug, bookNumber: p.book, hadithNumber: p.num };
+  }
+  function addToCompare(ref) {
+    if (!compareCore()) return;
+    var res = compareCore().addRef(compareSet, ref);
+    compareSet = res.list;
+    if (!res.added && res.full) ui.showToast('You can compare up to 3 hadiths');
+    else if (res.added) ui.showToast('Added to comparison');
+    reflectCompareButtons();
+    renderCompareDrawer();
+  }
+  function removeFromCompare(ref) {
+    if (!compareCore()) return;
+    compareSet = compareCore().removeRef(compareSet, ref);
+    reflectCompareButtons();
+    renderCompareDrawer();
+  }
+  // Disable every compare-add button once at capacity; reflect "added" state per card.
+  function reflectCompareButtons() {
+    var full = compareSet.length >= (compareCore() ? compareCore().MAX_COMPARE : 3);
+    document.querySelectorAll('.hadith-card [data-act="compare-add"]').forEach(function (b) {
+      var card = b.closest('.hadith-card'); var ref = card && card.getAttribute('data-ref');
+      var added = ref && compareSet.indexOf(ref) !== -1;
+      b.classList.toggle('active', !!added);
+      b.disabled = full && !added;
+    });
+  }
+  function openCompareRoute() {
+    if (!compareCore() || !compareCore().canCompare(compareSet)) return;
+    var url = '/hadith/compare?refs=' + encodeURIComponent(compareCore().serializeRefs(compareSet));
+    try { history.pushState({ compare: true }, '', url); } catch (_) {}
+    renderRoute({ compare: true });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function exitCompare() { try { history.replaceState({ collection: null }, '', '/hadith.html'); } catch (_) {} renderRoute({ collection: null }); }
+  function wireCompareDrawer() {
+    var drawer = document.getElementById('compare-drawer'); if (!drawer || drawer.dataset.wired) return;
+    drawer.dataset.wired = '1';
+    drawer.addEventListener('click', function (e) {
+      if (e.target.closest('[data-cmp-go]')) { openCompareRoute(); return; }
+      var rm = e.target.closest('[data-cmp-remove]');
+      if (rm) { removeFromCompare(rm.getAttribute('data-cmp-remove')); }
+    });
+  }
+
   // Module 10: one document-delegated handler for bookmark/note/listen/share/copy — works
   // in the Tier-1 feed AND the Tier-3a list (both render via feed.buildCardHTML). isnad/full
   // stay with wireFeedActions on #hadith-feed.
@@ -721,7 +798,7 @@
       if (btn.classList.contains('dv-action-btn')) return;   // Tier-3b deep-view actions stay deferred (their own handler)
       var act = btn.getAttribute('data-act');
       if (act !== 'bookmark' && act !== 'note' && act !== 'listen' && act !== 'share' &&
-          act !== 'copy' && act !== 'copy-arabic' && act !== 'trace') return;
+          act !== 'copy' && act !== 'copy-arabic' && act !== 'trace' && act !== 'compare-add') return;
       var card = btn.closest('.hadith-card'); if (!card) return;
       var ref = card.getAttribute('data-ref'); if (!ref) return;
       e.preventDefault();
@@ -732,6 +809,7 @@
       else if (act === 'copy') onCopy(card, ref);
       else if (act === 'copy-arabic') onCopyArabic(card);
       else if (act === 'trace') { if (II.traceView) II.traceView.open(ref, { viaRoute: false }); }
+      else if (act === 'compare-add') { addToCompare(ref); }
     });
   }
 
@@ -1315,6 +1393,9 @@
       II.traceView.init({ ui: ui, fetchHadithByRef: fetchHadithByRef,
         onTraceBookmark: onTraceBookmark, onTraceShare: onTraceShare, onTraceCopy: onTraceCopy, exitTrace: exitTrace });
     }
+    if (II.compareView && II.compareView.init) {
+      II.compareView.init({ ui: ui, fetchHadithByRef: fetchHadithByRef, exitCompare: exitCompare, addMore: exitCompare });
+    }
     await loadCollections();
     wireFilterTabs();
     wireRouting();
@@ -1325,7 +1406,7 @@
     wireTopics();
     loadHotD();
     initReadingObserver();
-    if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); wireCardActions(); wireTranslationTabs(); loadHadithFeed(false); }
+    if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); wireCardActions(); wireCompareDrawer(); wireTranslationTabs(); loadHadithFeed(false); }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
