@@ -36,10 +36,49 @@
     return out;
   }
 
+  /* ── Arabic tokenization + normalization (comparison key only; display uses raw) ──
+     Strips Quranic annotation signs (U+0610–U+061A), harakat/tanwin (U+064B–U+065F),
+     superscript alef (U+0670), and tatweel (U+0640); then drops anything that is not a
+     letter or number. This is why whitespace / punctuation / diacritic-only differences
+     never produce a false-positive highlight (VERIFICATION NOTE). */
+  function normalizeArabicToken(tok) {
+    return String(tok == null ? '' : tok)
+      .replace(/[ؐ-ًؚ-ٰٟـ]/g, '')
+      .replace(/[^\p{L}\p{N}]/gu, '')
+      .trim();
+  }
+  function tokenizeMatn(text) {
+    return String(text == null ? '' : text).split(/\s+/).filter(function (s) { return s.length; })
+      .map(function (raw) { return { raw: raw, key: normalizeArabicToken(raw) }; });
+  }
+
+  // Classic LCS over normalized keys. Tokens inside the longest common subsequence are
+  // "shared" (flag false); the rest differ (flag true). Empty keys (pure punctuation
+  // tokens) are forced non-differing so they never highlight.
+  function diffTwo(aTokens, bTokens) {
+    var a = (aTokens || []).map(function (t) { return t.key; });
+    var b = (bTokens || []).map(function (t) { return t.key; });
+    var n = a.length, m = b.length, i, j;
+    var dp = []; for (i = 0; i <= n; i++) { dp.push(new Array(m + 1).fill(0)); }
+    for (i = 1; i <= n; i++) for (j = 1; j <= m; j++) {
+      dp[i][j] = (a[i - 1] !== '' && a[i - 1] === b[j - 1]) ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
+    }
+    var af = new Array(n).fill(true), bf = new Array(m).fill(true);
+    i = n; j = m;
+    while (i > 0 && j > 0) {
+      if (a[i - 1] !== '' && a[i - 1] === b[j - 1]) { af[i - 1] = false; bf[j - 1] = false; i--; j--; }
+      else if (dp[i - 1][j] >= dp[i][j - 1]) i--; else j--;
+    }
+    for (i = 0; i < n; i++) if (a[i] === '') af[i] = false;
+    for (j = 0; j < m; j++) if (b[j] === '') bf[j] = false;
+    return { a: af, b: bf };
+  }
+
   var core = {
     esc: esc, MAX_COMPARE: MAX_COMPARE,
     addRef: addRef, removeRef: removeRef, canCompare: canCompare,
     serializeRefs: serializeRefs, parseRefs: parseRefs,
+    normalizeArabicToken: normalizeArabicToken, tokenizeMatn: tokenizeMatn, diffTwo: diffTwo,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }

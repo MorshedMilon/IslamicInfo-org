@@ -49,3 +49,42 @@ test('serializeRefs / parseRefs round-trip, cap at 3, dedupe, drop empties', () 
   assert.deepEqual(core.parseRefs(''), []);
   assert.deepEqual(core.parseRefs(null), []);
 });
+
+test('normalizeArabicToken: strips tashkeel, tatweel, and punctuation; keeps base letters', () => {
+  // "الأعمالُ،" (with damma + Arabic comma) normalizes to the bare word "الأعمال"
+  assert.equal(core.normalizeArabicToken('الأعمالُ،'), core.normalizeArabicToken('الأعمال'));
+  // tatweel (ـ) removed
+  assert.equal(core.normalizeArabicToken('الأعمـال'), core.normalizeArabicToken('الأعمال'));
+});
+
+test('tokenizeMatn: splits on whitespace with raw + normalized key', () => {
+  const t = core.tokenizeMatn('إنما الأعمال');
+  assert.equal(t.length, 2);
+  assert.equal(t[0].raw, 'إنما');
+  assert.ok(t[0].key.length > 0);
+});
+
+test('diffTwo: identical matns → zero highlights', () => {
+  const a = core.tokenizeMatn('إنما الأعمال بالنيات');
+  const b = core.tokenizeMatn('إنما الأعمال بالنيات');
+  const d = core.diffTwo(a, b);
+  assert.deepEqual(d.a, [false, false, false]);
+  assert.deepEqual(d.b, [false, false, false]);
+});
+
+test('diffTwo: one changed word → exactly that word flagged on each side', () => {
+  const a = core.tokenizeMatn('إنما الأعمال بالنيات');
+  const b = core.tokenizeMatn('إنما الصيام بالنيات');
+  const d = core.diffTwo(a, b);
+  assert.deepEqual(d.a, [false, true, false]);
+  assert.deepEqual(d.b, [false, true, false]);
+});
+
+test('diffTwo: VERIFICATION NOTE — punctuation/diacritic differences are NOT false positives', () => {
+  // Same words, one side has extra diacritics + a trailing comma. Must show zero diff.
+  const a = core.tokenizeMatn('إنما الأعمال بالنيات');
+  const b = core.tokenizeMatn('إنَّما الأعمالُ بالنياتِ،');
+  const d = core.diffTwo(a, b);
+  assert.ok(d.a.every(function (x) { return x === false; }), 'no side-a false positives');
+  assert.ok(d.b.every(function (x) { return x === false; }), 'no side-b false positives');
+});
