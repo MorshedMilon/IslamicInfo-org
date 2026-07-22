@@ -32,9 +32,37 @@
   function topicByKey(key) { return BY_KEY[key] || null; }
   function isTopicKey(key) { return Object.prototype.hasOwnProperty.call(BY_KEY, key); }
 
-  // (coOccurringTopics added in Task 2)
+  // Over the loaded hadith whose text contains the current topic's keyword, count how
+  // many ALSO contain each OTHER topic's keyword. Returns others with count>=1, sorted
+  // count desc then label asc. Matching = case-insensitive substring (same shallow
+  // heuristic as the feed's keyword filter — a text signal, NOT a curated relationship).
+  function coOccurringTopics(loadedHadith, topicKeyword, topics) {
+    topics = topics || TOPICS;
+    var kw = String(topicKeyword == null ? '' : topicKeyword).toLowerCase();
+    if (!kw) return [];
+    var texts = (Array.isArray(loadedHadith) ? loadedHadith : [])
+      .map(function (h) { return String((h && h.text) || '').toLowerCase(); })
+      .filter(function (t) { return t.indexOf(kw) !== -1; });
+    if (!texts.length) return [];
+    var out = [];
+    topics.forEach(function (t) {
+      if (!t || !t.keyword) return;
+      var uk = String(t.keyword).toLowerCase();
+      if (uk === kw) return;                       // exclude the current topic
+      var count = 0;
+      texts.forEach(function (txt) { if (txt.indexOf(uk) !== -1) count++; });
+      if (count > 0) out.push({ key: t.key, label: t.label, count: count });
+    });
+    out.sort(function (a, b) {
+      return (b.count - a.count) || (a.label < b.label ? -1 : a.label > b.label ? 1 : 0);
+    });
+    return out;
+  }
 
-  var core = { TOPICS: TOPICS, topicByKey: topicByKey, isTopicKey: isTopicKey };
+  var core = {
+    TOPICS: TOPICS, topicByKey: topicByKey, isTopicKey: isTopicKey,
+    coOccurringTopics: coOccurringTopics,
+  };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }
   else { root.II = root.II || {}; root.II.hadithTopics = core; }

@@ -17,3 +17,31 @@ test('topicByKey / isTopicKey', () => {
   assert.equal(core.isTopicKey('hajj'), true);
   assert.equal(core.isTopicKey('xyz'), false);
 });
+
+const H = (txt) => ({ text: txt });
+
+test('coOccurringTopics: counts other-topic keyword co-occurrence among current-topic hadith', () => {
+  const loaded = [
+    H('prayer and charity'), H('prayer and charity again'),
+    H('prayer and fast'), H('unrelated hajj text'),
+  ];
+  const co = core.coOccurringTopics(loaded, 'prayer', core.TOPICS);
+  const charity = co.find(x => x.key === 'charity');
+  const fast = co.find(x => x.key === 'fast');
+  assert.equal(charity.count, 2);
+  assert.equal(fast.count, 1);
+  assert.ok(!co.find(x => x.key === 'hajj'), 'hajj not among prayer-matching hadith');
+  assert.ok(!co.find(x => x.key === 'prayer'), 'current topic excluded');
+  assert.ok(co.indexOf(charity) < co.indexOf(fast), 'sorted by count desc');
+});
+
+test('coOccurringTopics: empty when no hadith match the current topic, or blank keyword', () => {
+  assert.deepEqual(core.coOccurringTopics([H('only hajj')], 'prayer', core.TOPICS), []);
+  assert.deepEqual(core.coOccurringTopics([H('prayer')], '', core.TOPICS), []);
+  assert.deepEqual(core.coOccurringTopics([], 'prayer', core.TOPICS), []);
+});
+
+test('coOccurringTopics: matching is case-insensitive', () => {
+  const co = core.coOccurringTopics([H('PRAYER and CHARITY')], 'prayer', core.TOPICS);
+  assert.equal(co.find(x => x.key === 'charity').count, 1);
+});
