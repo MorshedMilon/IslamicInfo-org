@@ -647,10 +647,9 @@
     copyToClipboard(text, 'Copied Arabic text ✦');
   }
   function onShare(card, ref) {
-    var r = parseRefParts(ref);
     var content = readCardContent(card);
     content.sourceUrl = sourceUrlFor(ref);   // canonical Source line in the shared text
-    var url = location.origin + routePath({ collection: r.slug, book: r.book, hadith: r.num });
+    var url = content.sourceUrl;             // share the same canonical link the Copy action cites (never location.origin)
     if (navigator.share) {
       navigator.share({ title: 'Hadith · ' + (content.reference || 'IslamicInfo.org'),
                         text: (actions ? actions.buildCopyText(content) : ''), url: url }).catch(function () {});
