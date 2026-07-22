@@ -772,20 +772,52 @@ a { text-decoration: none; color: inherit; }
 .exit-study { margin-left: auto; font-size: 12px; color: rgba(255,255,255,.5); cursor: pointer; border: 0.5px solid rgba(255,255,255,.2); border-radius: 14px; padding: 4px 12px; transition: all .2s; }
 .exit-study:hover { color: white; border-color: rgba(255,255,255,.4); }
 
-/* ─── COMPARISON CHIPS (Stage 4) ─── */
-.compare-header {
-  background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.14);
-  border-radius: var(--r-lg); padding: 14px 20px; margin-bottom: 20px;
-  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-}
-.compare-label { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-subtle); }
-.compare-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-body); background: rgba(0,105,110,.06); border: 0.5px solid rgba(0,105,110,.15); border-radius: 20px; padding: 5px 12px; }
-.compare-remove { width: 16px; height: 16px; border-radius: 50%; background: rgba(0,0,0,.08); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-muted); font-size: 10px; transition: all .2s; }
-.compare-remove:hover { background: var(--grade-mawdu); color: white; }
-
 /* ─── TRACE VIEW (Module 14) ─── */
 .trace-overlay{position:fixed;inset:0;z-index:300;background:var(--surface-canvas);display:none;flex-direction:column;}
 .trace-overlay.open{display:flex;}
+
+/* ── Module 15: Comparison Mode ── */
+.compare-drawer{position:fixed;left:0;right:0;bottom:0;z-index:250;display:none;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 20px;background:var(--surface-card);border-top:0.5px solid rgba(0,105,110,.10);box-shadow:0 -6px 24px rgba(0,0,0,.08);}
+.compare-drawer.open{display:flex;}
+.compare-drawer .cmp-drawer-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-subtle);}
+.compare-drawer .cmp-chip{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-body);background:rgba(0,105,110,.06);border:0.5px solid rgba(0,105,110,.15);border-radius:20px;padding:5px 12px;}
+.compare-drawer .cmp-chip-x{width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-muted);font-size:12px;line-height:1;}
+.compare-drawer .cmp-chip-x:hover{background:var(--grade-mawdu);color:#fff;}
+.compare-drawer .cmp-compare-go{margin-left:auto;}
+.compare-drawer .cmp-compare-go[disabled]{opacity:.45;cursor:not-allowed;}
+
+.compare-overlay{position:fixed;inset:0;z-index:300;background:var(--surface-canvas);display:none;flex-direction:column;}
+.compare-overlay.open{display:flex;}
+.compare-overlay .compare-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 24px;border-bottom:0.5px solid rgba(0,105,110,.10);}
+.compare-overlay .cmp-comparing{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-subtle);}
+.compare-overlay .cmp-chip{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-body);background:rgba(0,105,110,.06);border:0.5px solid rgba(0,105,110,.15);border-radius:20px;padding:5px 12px;}
+.compare-overlay .cmp-chip-x{width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,.08);border:none;cursor:pointer;color:var(--ink-muted);font-size:12px;line-height:1;}
+.compare-overlay .cmp-add-more{background:none;border:0.5px solid rgba(0,105,110,.10);border-radius:20px;padding:5px 12px;font-size:13px;color:var(--ink-body);cursor:pointer;}
+.compare-overlay #compare-exit{margin-left:auto;}
+#compare-body{flex:1;overflow:auto;padding:24px;}
+.cmp-cols{display:grid;gap:20px;}
+.cmp-cols.cmp-n2{grid-template-columns:1fr 1fr;}
+.cmp-cols.cmp-n3{grid-template-columns:1fr 1fr 1fr;}
+.cmp-col{border:0.5px solid rgba(0,105,110,.10);border-radius:14px;padding:18px;background:var(--surface-card);}
+.cmp-col-label{font-size:12px;font-weight:600;color:var(--ink-muted);margin-bottom:12px;}
+.cmp-arabic{font-size:22px;line-height:2.1;color:var(--ink-body);margin-bottom:14px;}
+.cmp-arabic-empty{margin-bottom:14px;}
+.diff-highlight{background:var(--gold-50,rgba(212,160,23,.16));border-radius:3px;padding:0 3px;}
+.cmp-trans{position:relative;padding-left:14px;color:var(--ink-muted);font-size:15px;line-height:1.7;}
+.cmp-trans::before{content:"";position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:2px;background:var(--teal-700,#00696e);}
+.cmp-chain-note{margin-top:14px;font-size:13px;}
+.cmp-empty{padding:40px;text-align:center;}
+/* Mobile: tabs instead of squeezed columns (DoD-3) */
+@media (max-width:900px){
+  .cmp-cols.cmp-n2,.cmp-cols.cmp-n3{grid-template-columns:1fr;}
+  .cmp-col{display:none;}
+  .cmp-col.cmp-tab-active{display:block;}
+  .cmp-tabbar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .cmp-tab-btn.on{background:rgba(0,105,110,.10);border-color:rgba(0,105,110,.3);}
+}
+/* wide screens: tabbar never shows (columns are side-by-side) */
+@media (min-width:901px){ .cmp-tabbar{display:none;} }
+
 .trace-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 24px;border-bottom:.5px solid rgba(0,105,110,.10);background:var(--surface-raised);flex-shrink:0;}
 .trace-bc{font-size:14px;color:var(--ink-subtle);}
 .trace-bc strong{color:var(--teal-700);}
@@ -813,7 +845,6 @@ a { text-decoration: none; color: inherit; }
 .trace-grade.grade-unknown .trace-grade-label{color:var(--ink-body);}
 .trace-grade-grader{display:block;font-size:12px;color:var(--ink-subtle);margin-top:2px;}
 .trace-commentary,.trace-related,.trace-qverses,.trace-topics{margin-top:10px;}
-.diff-highlight { background: rgba(197,160,89,.2); border-radius: 3px; padding: 0 2px; }
 .chain-diverge { color: var(--gold-500); font-size: 13px; margin: 0 2px; }
 
 /* ─── RELATED HADITH (Stage 3) ─── */
@@ -1744,35 +1775,6 @@ a { text-decoration: none; color: inherit; }
       <button class="exit-study" data-i18n="hadith.study.exit">Exit Study Mode ×</button>
     </div>
 
-    <!-- Comparison Mode (Stage 4 §12.6.2) -->
-    <div class="section-header fade-up">
-      <h2 class="section-title"><span data-i18n="hadith.compare.title">Comparison Mode</span> <span class="prd-stage-label stage-4">Stage 4</span></h2>
-    </div>
-    <div class="compare-header fade-up">
-      <span class="compare-label" data-i18n="hadith.compare.label">Comparing</span>
-      <div class="compare-item">
-        <span>Bukhari #1 · Intentions</span>
-        <button class="compare-remove">×</button>
-      </div>
-      <div class="compare-item">
-        <span>Muslim #1907 · Intentions</span>
-        <button class="compare-remove">×</button>
-      </div>
-      <button class="footer-action-btn" style="margin-left:auto;" data-i18n="hadith.compare.add">+ Add Hadith</button>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px;" class="fade-up">
-      <div style="background:var(--surface-base);border:0.5px solid rgba(0,105,110,.1);border-radius:var(--r-lg);padding:20px;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-subtle);margin-bottom:14px;">Sahih al-Bukhari · #1</div>
-        <div style="font-family:var(--font-arabic);font-size:16px;direction:rtl;line-height:1.9;color:var(--ink-body);margin-bottom:12px;">إِنَّمَا <span class="diff-highlight">الأَعْمَالُ</span> بِالنِّيَّاتِ</div>
-        <div style="font-size:13.5px;color:var(--ink-body);line-height:1.75;border-left:3px solid var(--teal-500);padding-left:12px;">"The reward of <span class="diff-highlight">deeds</span> depends upon the intentions…"</div>
-      </div>
-      <div style="background:var(--surface-base);border:0.5px solid rgba(0,105,110,.1);border-radius:var(--r-lg);padding:20px;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-subtle);margin-bottom:14px;">Sahih Muslim · #1907</div>
-        <div style="font-family:var(--font-arabic);font-size:16px;direction:rtl;line-height:1.9;color:var(--ink-body);margin-bottom:12px;">إِنَّمَا <span class="diff-highlight">الأَعْمَالُ</span> بِالنِّيَّةِ <span class="chain-diverge">◆</span></div>
-        <div style="font-size:13.5px;color:var(--ink-body);line-height:1.75;border-left:3px solid var(--teal-500);padding-left:12px;">"Verily <span class="diff-highlight">actions</span> are by intentions… <span class="chain-diverge" style="font-size:12px;color:var(--gold-500);">◆ Chain diverges at Tabi'i level</span>"</div>
-      </div>
-    </div>
-
   </main>
 </div><!-- end layout -->
 
@@ -1876,6 +1878,17 @@ a { text-decoration: none; color: inherit; }
     </div>
   </div>
   <div class="trace-layout" id="trace-layout"></div>
+</div>
+
+<!-- Module 15: Comparison Mode drawer (feed) + overlay -->
+<div class="compare-drawer" id="compare-drawer" role="region" aria-label="Comparison selection"></div>
+
+<div class="compare-overlay" id="compare-overlay" role="dialog" aria-modal="true" aria-label="Hadith Comparison" hidden>
+  <div class="compare-top">
+    <div id="compare-header"></div>
+    <button class="footer-action-btn" type="button" id="compare-exit">Exit Comparison →</button>
+  </div>
+  <div id="compare-body"></div>
 </div>
 
 <script>
@@ -2012,6 +2025,8 @@ function showHadithToast(msg) {
 <script src="src/js/narrator-panel.js"></script>
 <script src="src/js/trace-view-core.js"></script>
 <script src="src/js/trace-view.js"></script>
+<script src="src/js/compare-view-core.js"></script>
+<script src="src/js/compare-view.js"></script>
 <script src="src/js/hadith.js"></script>
 <script src="src/js/hadith-ai-core.js"></script>
 <script src="src/js/hadith-ai.js"></script>
