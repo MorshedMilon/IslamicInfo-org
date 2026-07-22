@@ -13,6 +13,12 @@
   var api = II.api, ui = II.ui, core = II.hadithCollections, feed = II.hadithFeed;
   var RP = II.readingProgress;
   var actions = II.hadithActions;
+  var topics = II.hadithTopics;
+  function feedHadithText(h) {
+    if (!h) return '';
+    return [h.arabicMatn, h.translation && h.translation.text, h.reference,
+            h.narrator && h.narrator.name].filter(Boolean).join(' ');
+  }
   var BM_KEY = 'islamicinfo-hadith-bookmarks', NOTE_KEY = 'islamicinfo-hadith-notes';
   function getBookmarks() { var v = ui.safeLocalStorageGet(BM_KEY, []); return Array.isArray(v) ? v : []; }
   function setBookmarks(list) { ui.safeLocalStorageSet(BM_KEY, actions ? actions.dedupeByRef(list) : list); }
@@ -206,6 +212,93 @@
     if (!res || !res.ok || !Array.isArray(res.data) || !res.data.length) { renderBooksError(c); return; }
     grid.innerHTML = res.data.map(function (b) { return bookCardHTML(c, b); }).join('');
   }
+  /* ── Module 11: topic index / landing ── */
+  var TOPIC_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>';
+  function topicsBreadcrumb(currentLabel) {
+    var crumbs = '<a class="dv-crumb" href="/hadith.html">Hadith</a><span class="dv-crumb-sep" aria-hidden="true">›</span>';
+    if (currentLabel) {
+      crumbs += '<a class="dv-crumb" href="/hadith/topics">Topics</a><span class="dv-crumb-sep" aria-hidden="true">›</span>' +
+                '<span class="dv-crumb dv-crumb-current" aria-current="page">' + esc(currentLabel) + '</span>';
+    } else {
+      crumbs += '<span class="dv-crumb dv-crumb-current" aria-current="page">Topics</span>';
+    }
+    return '<nav class="dv-breadcrumb" aria-label="Breadcrumb" style="margin-bottom:12px;">' + crumbs + '</nav>';
+  }
+  function renderTopics(topicKey) {
+    if (topicKey) renderTopicLanding(topicKey);
+    else renderTopicIndex();
+  }
+  function renderTopicIndex() {
+    setTier(2);
+    var el = tier2El(); if (!el || !topics) return;
+    var cards = topics.TOPICS.map(function (t) {
+      return '<a class="topic-card" href="/hadith/topics/' + encodeURIComponent(t.key) + '">' +
+        '<span class="topic-card-icon">' + TOPIC_ICON + '</span>' +
+        '<span class="topic-card-name">' + esc(t.label) + '</span>' +
+        '<span class="topic-card-cta">Study this topic →</span></a>';
+    }).join('');
+    el.innerHTML = topicsBreadcrumb('') +
+      '<div class="topic-index-head"><h1 class="collection-header-name">Topics</h1>' +
+      '<p class="topic-index-sub">Browse hadith by subject. Curated topic statistics and study aids are being prepared and will appear after review.</p></div>' +
+      '<div class="topic-index-grid">' + cards + '</div>';
+  }
+  function renderTopicLanding(key) {
+    var t = topics && topics.topicByKey(key);
+    if (!t) { try { history.replaceState(null, '', '/hadith/topics'); } catch (_) {} renderTopicIndex(); return; }
+    setTier(2);
+    var el = tier2El(); if (!el) return;
+    el.innerHTML = topicsBreadcrumb(t.label) +
+      '<div class="topic-landing-head"><h1 class="collection-header-name">' + esc(t.label) + '</h1>' +
+      '<p class="topic-landing-note">Curated study aids for this topic — scholarly summary, key narrations, and study order — are being prepared and will appear after review.</p></div>' +
+      '<div class="topic-landing-body">' +
+        '<div class="topic-feed">' +
+          '<div class="topic-feed-label">Hadith matching “' + esc(t.label) + '” — a keyword match across the loaded hadith, not a curated topic classification.</div>' +
+          '<div id="ii-topic-feed-list"></div>' +
+        '</div>' +
+        '<aside class="topic-rail" id="ii-topic-rail"></aside>' +
+      '</div>';
+    renderTopicFeed(t);
+  }
+  function loadedHadithArray() {
+    return Object.keys(FEED.byRef).map(function (r) { return FEED.byRef[r]; });
+  }
+  function renderTopicFeed(t) {
+    var listEl = $('#ii-topic-feed-list'); if (!listEl) return;
+    var loaded = loadedHadithArray();
+    if (!loaded.length) {                                  // direct deep-link before the feed loaded
+      listEl.innerHTML = '<div class="topic-feed-loading">Loading hadith…</div>';
+      loadHadithFeed(false).then(function () {
+        if ($('#ii-topic-feed-list') !== listEl) return;   // navigated away
+        if (loadedHadithArray().length) { renderTopicFeed(t); return; }   // feed arrived → render
+        // zero hadith loaded → stop (never recurse); honest message, no re-fetch
+        listEl.innerHTML = '<div class="topic-feed-empty">Hadith couldn’t be loaded right now — please try again shortly.</div>';
+      });
+      return;
+    }
+    var kw = t.keyword.toLowerCase();
+    var matches = loaded.filter(function (h) { return feedHadithText(h).toLowerCase().indexOf(kw) !== -1; });
+    if (!matches.length) {
+      listEl.innerHTML = '<div class="topic-feed-empty">No matching hadith in the loaded set yet. Full cross-collection topic search arrives with curated topic data.</div>';
+    } else {
+      listEl.innerHTML = matches.map(feed.buildCardHTML).join('');
+      markCardStates(listEl);                              // Module 10 gold dots
+    }
+    renderTopicRail(t, loaded);
+  }
+  function renderTopicRail(t, loaded) {
+    var rail = $('#ii-topic-rail'); if (!rail || !topics) return;
+    var withText = loaded.map(function (h) { return { text: feedHadithText(h) }; });
+    var co = topics.coOccurringTopics(withText, t.keyword, topics.TOPICS);
+    if (!co.length) { rail.style.display = 'none'; rail.innerHTML = ''; return; }   // honest empty → omit
+    rail.style.display = '';
+    rail.innerHTML = '<h2 class="topic-rail-title">Also appears in these hadith</h2>' +
+      '<p class="topic-rail-note">Topics whose keywords co-occur in the loaded hadith — a text signal over the loaded sample, not a curated relationship.</p>' +
+      '<ul class="topic-rail-list">' + co.map(function (x) {
+        return '<li><a href="/hadith/topics/' + encodeURIComponent(x.key) + '">' + esc(x.label) +
+          '</a><span class="topic-rail-count">' + x.count + '</span></li>';
+      }).join('') + '</ul>';
+  }
+
   // Tier 3a/3b live in Module 7; render an honest interim (back nav works) rather than faking a list.
   function renderTier3Placeholder(r, c) {
     setTier(2);
@@ -221,6 +314,7 @@
     reflectActiveRoute(r.collection);
     updateContinueReading(r.collection);
     if (!r.collection) { setTier(1); applyFilter(); return; }
+    if (r.collection === 'topics') { renderTopics(r.book); return; }   // Module 11
     var c = collectionBySlug(r.collection);
     if (!c) { setTier(1); applyFilter(); try { history.replaceState(null, '', '/hadith.html'); } catch (_) {} return; } // invalid → Tier 1 (TechSpec §10)
     if (r.hadith) { if (II.tier3) II.tier3.renderDeepView(r, c); else renderTier3Placeholder(r, c); return; }   // Tier 3b
@@ -941,23 +1035,14 @@
     });
   }
 
-  /* ── Topics strip (US-H06) — in-place keyword filter over the loaded feed.
-     Honest Stage-1 heuristic: matches the topic keyword against hadith text; NOT a curated topic
-     classification (the provider returns no topic tags). Real topic index = Module 11. ── */
+  /* ── Topics strip (US-H06/H14) — Module 11: chips ROUTE (Stage 3) to
+     /hadith/topics/[topic]; the Module 5 in-place keyword filter is removed. ── */
   function wireTopics() {
     var chips = document.querySelectorAll('.topics-grid .topic-chip');
-    var input = $('#hadith-search-input');
     chips.forEach(function (chip) {
-      chip.setAttribute('aria-pressed', 'false');
       function act() {
-        var already = chip.classList.contains('selected');
-        chips.forEach(function (c) { c.classList.remove('selected'); c.setAttribute('aria-pressed', 'false'); });
-        if (already) { if (input) input.value = ''; setSearchQuery(''); return; }
-        chip.classList.add('selected'); chip.setAttribute('aria-pressed', 'true');
-        var kw = chip.getAttribute('data-topic') || chip.textContent.trim();
-        if (input) input.value = kw;
-        setSearchQuery(kw);
-        scrollFeed();
+        var key = chip.getAttribute('data-topic');
+        if (key) routeTo({ collection: 'topics', book: key }, true);
       }
       chip.addEventListener('click', act);
       chip.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(); } });

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 11 — topic pages fixture</title>
+<style>
+:root{
+  --teal-500:#2CA4AB;--teal-600:#0297A1;--teal-700:#00696E;--teal-900:#0A3A3D;
+  --gold-500:#C5A059;
+  --ink-primary:#0F2A2C;--ink-body:#243738;--ink-muted:#6D797A;--ink-subtle:#9DA8A9;
+  --surface:#F4F7F7;--surface-base:#FAFBFB;--white:#FFFFFF;
+  --elev-1:0 1px 3px rgba(15,42,44,.06);
+  --elev-2:0 4px 14px rgba(15,42,44,.08),0 1px 3px rgba(15,42,44,.04);
+  --grade-sahih:#0F6E56;
+  --font-body:'Inter',-apple-system,'Segoe UI',sans-serif;
+  --font-serif:'Cormorant Garamond',Georgia,serif;
+}
+[data-theme="dark"]{
+  --teal-700:#1A8A91;--teal-500:#5BC1C7;--teal-900:#0A3A3D;
+  --ink-primary:#F5F8F8;--ink-body:#D4DCDD;--ink-muted:#9AAAAB;--ink-subtle:#6E7E80;
+  --surface:#0A1314;--surface-base:#0F1B1D;--white:#152527;--grade-sahih:#1FA882;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-body);color:var(--ink-body);background:var(--surface);
+  padding:28px 32px 64px;transition:background .3s,color .3s;}
+.section-tag{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--teal-700);margin:34px 0 14px;padding-top:22px;border-top:1px dashed rgba(0,105,110,.25);}
+.section-tag:first-of-type{border-top:none;padding-top:0;margin-top:6px;}
+h1.fixture{font-family:var(--font-serif);color:var(--teal-900);font-size:24px;margin:0 0 2px;}
+.fixture-sub{color:var(--ink-muted);font-size:13px;margin:0 0 22px;}
+
+/* breadcrumb + header (approx of hadith.html) */
+.dv-breadcrumb{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;margin-bottom:12px;}
+.dv-crumb{color:var(--teal-700);text-decoration:none;}
+.dv-crumb-current{color:var(--ink-muted);}
+.dv-crumb-sep{color:var(--ink-subtle);}
+.collection-header-name{font-family:var(--font-serif);font-size:30px;font-weight:500;color:var(--ink-primary);margin:0;}
+
+/* minimal hadith-card chrome for the landing feed sample */
+.hadith-card{position:relative;background:var(--white);border:0.5px solid rgba(0,105,110,.14);
+  border-radius:14px;box-shadow:var(--elev-2);overflow:hidden;margin-bottom:14px;}
+.hadith-teal-bar{height:4px;background:linear-gradient(90deg,var(--teal-700),var(--teal-500));}
+.hadith-inner{padding:16px 18px;}
+.hadith-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;}
+.hadith-num{font-size:12px;font-weight:600;color:var(--teal-700);background:rgba(0,105,110,.08);padding:3px 9px;border-radius:999px;}
+.grade-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--grade-sahih);}
+.grade-dot{width:7px;height:7px;border-radius:50%;background:var(--grade-sahih);}
+.hadith-arabic{font-family:var(--font-serif);font-size:19px;text-align:right;direction:rtl;color:var(--ink-primary);margin:8px 0 6px;line-height:1.9;}
+.hadith-narrator{font-size:12px;color:var(--ink-muted);font-style:italic;}
+.hadith-text{font-size:14px;line-height:1.65;color:var(--ink-body);margin-top:6px;}
+
+/* ═══ Module 11 CSS (verbatim from hadith.html) ═══ */
+.topic-index-head { margin-bottom: 20px; }
+.topic-index-sub { color: var(--ink-muted); font-size: 13.5px; margin-top: 6px; max-width: 640px; }
+.topic-index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.topic-card { display: flex; flex-direction: column; gap: 8px; padding: 18px; text-decoration: none;
+  background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.14); border-radius: 14px;
+  box-shadow: var(--elev-1); transition: transform .18s, box-shadow .18s; }
+.topic-card:hover { transform: translateY(-2px); box-shadow: var(--elev-2); }
+.topic-card-icon { color: var(--teal-700); }
+.topic-card-name { font-weight: 600; font-size: 16px; color: var(--ink-body); }
+.topic-card-cta { font-size: 13px; color: var(--teal-700); font-weight: 600; margin-top: 2px; }
+.topic-landing-head { margin-bottom: 18px; }
+.topic-landing-note { color: var(--ink-muted); font-size: 13px; font-style: italic; margin-top: 6px; max-width: 640px; }
+.topic-landing-body { display: grid; grid-template-columns: 1fr; gap: 24px; }
+@media (min-width: 900px) { .topic-landing-body { grid-template-columns: 1fr 260px; } }
+.topic-feed-label { font-size: 12.5px; color: var(--ink-muted); margin-bottom: 14px; }
+.topic-feed-loading, .topic-feed-empty { color: var(--ink-muted); font-size: 13.5px; padding: 24px 0; }
+.topic-rail { align-self: start; }
+.topic-rail-title { font-size: 14px; font-weight: 600; color: var(--teal-700); }
+.topic-rail-note { font-size: 11.5px; color: var(--ink-muted); margin: 4px 0 10px; }
+.topic-rail-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.topic-rail-list a { color: var(--ink-body); text-decoration: none; font-size: 13.5px; }
+.topic-rail-list a:hover { color: var(--teal-700); }
+.topic-rail-count { color: var(--ink-subtle); font-size: 12px; margin-left: 6px; }
+</style>
+</head>
+<body>
+<h1 class="fixture">Module 11 — topic pages</h1>
+<p class="fixture-sub">Honest engineering slice. Built from locked design-system tokens, no mockup. Fixture render (no backend).</p>
+
+<div class="section-tag">1 · Topic index — /hadith/topics (14 nav-only cards, no faked counts)</div>
+<nav class="dv-breadcrumb" aria-label="Breadcrumb"><a class="dv-crumb" href="#">Hadith</a><span class="dv-crumb-sep">›</span><span class="dv-crumb dv-crumb-current">Topics</span></nav>
+<div class="topic-index-head"><h1 class="collection-header-name">Topics</h1>
+<p class="topic-index-sub">Browse hadith by subject. Curated topic statistics and study aids are being prepared and will appear after review.</p></div>
+<div class="topic-index-grid" id="index-grid"></div>
+
+<div class="section-tag">2 · Topic landing — /hadith/topics/prayer (honest header + keyword feed + co-occurrence rail)</div>
+<nav class="dv-breadcrumb" aria-label="Breadcrumb"><a class="dv-crumb" href="#">Hadith</a><span class="dv-crumb-sep">›</span><a class="dv-crumb" href="#">Topics</a><span class="dv-crumb-sep">›</span><span class="dv-crumb dv-crumb-current">Prayer (Salah)</span></nav>
+<div class="topic-landing-head"><h1 class="collection-header-name">Prayer (Salah)</h1>
+<p class="topic-landing-note">Curated study aids for this topic — scholarly summary, key narrations, and study order — are being prepared and will appear after review.</p></div>
+<div class="topic-landing-body">
+  <div class="topic-feed">
+    <div class="topic-feed-label">Hadith matching “Prayer (Salah)” — a keyword match across the loaded hadith, not a curated topic classification.</div>
+    <div id="topic-feed-list">
+      <div class="hadith-card"><div class="hadith-teal-bar"></div><div class="hadith-inner">
+        <div class="hadith-header"><span class="hadith-num">Hadith #528</span><span class="grade-badge"><span class="grade-dot"></span>Sahih · grader not individually cited</span></div>
+        <div class="hadith-arabic" dir="rtl">أَفْضَلُ الأَعْمَالِ الصَّلاَةُ لِوَقْتِهَا</div>
+        <div class="hadith-narrator">Narrated 'Abdullah ibn Mas'ud:</div>
+        <div class="hadith-text">I asked the Prophet ﷺ which deed is dearest to Allah. He replied, "To offer the prayer at its earliest fixed time."</div>
+      </div></div>
+      <div class="hadith-card"><div class="hadith-teal-bar"></div><div class="hadith-inner">
+        <div class="hadith-header"><span class="hadith-num">Hadith #8</span><span class="grade-badge"><span class="grade-dot"></span>Sahih · grader not individually cited</span></div>
+        <div class="hadith-narrator">Narrated Ibn 'Umar:</div>
+        <div class="hadith-text">Islam is built upon five: the testimony of faith, establishing the prayer, giving charity, the pilgrimage, and fasting Ramadan.</div>
+      </div></div>
+    </div>
+  </div>
+  <aside class="topic-rail">
+    <h2 class="topic-rail-title">Also appears in these hadith</h2>
+    <p class="topic-rail-note">Topics whose keywords co-occur in the loaded hadith — a text signal over the loaded sample, not a curated relationship.</p>
+    <ul class="topic-rail-list">
+      <li><a href="#">Charity (Zakat)</a><span class="topic-rail-count">4</span></li>
+      <li><a href="#">Faith &amp; Belief</a><span class="topic-rail-count">3</span></li>
+      <li><a href="#">Fasting (Sawm)</a><span class="topic-rail-count">1</span></li>
+    </ul>
+  </aside>
+</div>
+
+<button id="themeToggle" style="position:fixed;left:16px;bottom:16px;z-index:99;padding:8px 14px;border-radius:8px;border:0.5px solid rgba(0,105,110,.3);background:var(--surface-base);color:var(--ink-body);cursor:pointer;font:inherit;">Toggle dark</button>
+<script>
+(function () {
+  var ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>';
+  var TOPICS = [
+    ['faith','Faith & Belief'],['prayer','Prayer (Salah)'],['charity','Charity (Zakat)'],
+    ['fast','Fasting (Sawm)'],['hajj',"Hajj & 'Umrah"],['purification','Purification'],
+    ['knowledge','Knowledge & Wisdom'],['character','Ethics & Character'],['marriage','Family & Marriage'],
+    ['supplication','Supplications'],['hereafter','Afterlife & Judgment'],['trade','Trade & Finance'],
+    ['death','Death & Burial'],['justice','Governance & Justice']
+  ];
+  document.getElementById('index-grid').innerHTML = TOPICS.map(function (t) {
+    return '<a class="topic-card" href="#"><span class="topic-card-icon">' + ICON + '</span>' +
+      '<span class="topic-card-name">' + t[1] + '</span>' +
+      '<span class="topic-card-cta">Study this topic →</span></a>';
+  }).join('');
+  try { var p = new URLSearchParams(location.search); if (p.get('theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) {}
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var d = document.documentElement; d.setAttribute('data-theme', d.getAttribute('data-theme') === 'dark' ? '' : 'dark');
+  });
+}());
+</script>
+</body>
+</html>
