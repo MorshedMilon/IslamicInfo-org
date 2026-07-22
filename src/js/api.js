@@ -5,7 +5,7 @@
    Usage:
      import { fetchPrayer, fetchVerse, fetchHadith, fetchNisab,
               fetchGeocode, fetchQuranSurah,
-              postVerify, postAskClaude, postSubscribe } from './api.js';
+              postVerify, postAskClaude, postExplain, postSubscribe } from './api.js';
 
    Or load as a classic script (no module bundler):
      <script src="../js/api.js"></script>
@@ -248,6 +248,37 @@
   }
 
   /**
+   * POST /api/explain  (Module 13)
+   * AI plain-language explanation of a hadith/verse passage, with a 10s
+   * client-side AbortController timeout. Never cached; never throws.
+   *
+   * @param {{type?:string, ref?:string, arabic?:string, translation?:string, language?:string}} payload
+   * @param {{timeoutMs?:number}} [opts]
+   * @returns {Promise<object>} parsed JSON on success; { _status:429 } on rate-limit;
+   *   { _error:'timeout'|'network' } on failure. Never throws.
+   */
+  async function postExplain(payload, opts) {
+    const ms = (opts && opts.timeoutMs) || 10000;
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), ms);
+    try {
+      const res = await fetch(_apiUrl('/api/explain'), {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+        signal:  ctrl.signal,
+      });
+      if (res.status === 429) return { _status: 429 };
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } catch (err) {
+      return { _error: err && err.name === 'AbortError' ? 'timeout' : 'network' };
+    } finally {
+      clearTimeout(t);
+    }
+  }
+
+  /**
    * POST /api/subscribe
    * Email capture (Knowledge Hub).
    *
@@ -483,6 +514,7 @@
     fetchQuranSurah,
     postVerify,
     postAskClaude,
+    postExplain,
     postSubscribe,
     fetchHadithCollections,
     fetchHadithBooks,
