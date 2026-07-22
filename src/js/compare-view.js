@@ -10,13 +10,15 @@
   'use strict';
   var II = window.II || {};
   var core = II.compareViewCore;
-  var host = null;   // { ui, fetchHadithByRef, exitCompare, addMore }
+  var host = null;   // { ui, fetchHadithByRef, exitCompare, addMore, removeFromCompare }
   var state = { open: false, refs: [], hadiths: [], lastFocus: null };
+  var mq = null;
 
   function el(id) { return document.getElementById(id); }
   function overlay() { return el('compare-overlay'); }
 
   function onKey(e) { if (e.key === 'Escape' && state.open) { e.preventDefault(); close(); } }
+  function onMqChange() { if (state.open) renderInto(); }
 
   function wireActs() {
     var ov = overlay(); if (!ov || ov.dataset.wired) return;
@@ -75,6 +77,7 @@
     state.hadiths = state.hadiths.filter(function (h) { return refKey(h) !== ref; });
     syncUrl(true);
     renderInto();
+    if (host && host.removeFromCompare) host.removeFromCompare(ref);
   }
   function refKey(h) { h = h || {}; if (!h.collectionSlug || h.hadithNumber == null) return ''; return h.collectionSlug + ':' + (h.bookNumber == null ? 0 : h.bookNumber) + ':' + h.hadithNumber; }
   function syncUrl(replace) {
@@ -86,6 +89,7 @@
     opts = opts || {};
     if (!core || !host) return;
     wireActs();
+    try { if (!mq) { mq = window.matchMedia('(max-width:900px)'); if (mq.addEventListener) mq.addEventListener('change', onMqChange); } } catch (_) {}
     state.lastFocus = document.activeElement;
     state.refs = (refs || []).slice(0, core.MAX_COMPARE);
     // Fetch each ref fresh (deep-link safe). Nulls dropped; honest state if <2 resolve.
@@ -110,6 +114,7 @@
     if (ov) { ov.classList.remove('open'); ov.hidden = true; }
     var main = document.querySelector('.main'); if (main) main.removeAttribute('aria-hidden');
     document.removeEventListener('keydown', onKey);
+    try { if (mq && mq.removeEventListener) mq.removeEventListener('change', onMqChange); mq = null; } catch (_) {}
     var lf = state.lastFocus;
     state.open = false; state.hadiths = []; state.refs = [];
     // skipNav: popstate reconcile is ALREADY rendering the target route → suppress our exit nav.

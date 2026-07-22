@@ -1394,7 +1394,7 @@
         onTraceBookmark: onTraceBookmark, onTraceShare: onTraceShare, onTraceCopy: onTraceCopy, exitTrace: exitTrace });
     }
     if (II.compareView && II.compareView.init) {
-      II.compareView.init({ ui: ui, fetchHadithByRef: fetchHadithByRef, exitCompare: exitCompare, addMore: exitCompare });
+      II.compareView.init({ ui: ui, fetchHadithByRef: fetchHadithByRef, exitCompare: exitCompare, addMore: exitCompare, removeFromCompare: removeFromCompare });
     }
     await loadCollections();
     wireFilterTabs();
