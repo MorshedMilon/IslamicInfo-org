@@ -106,3 +106,49 @@ test('buildNarratorPanelHTML: unknown reliability + absent fullName → grey unk
   assert.match(html, /Unknown narrator/);
   assert.match(html, /No scholar citations available for this narrator/);
 });
+
+/* ── Itqan Rijal profile rendering (ADR-046/047) — consolidated + per-text breakdown ── */
+// Verified sample shape (Abu Hurairah, from the live Itqan companion chunk).
+const ITQAN_ABU_HURAIRAH = {
+  full_name: 'عبد الرحمن بن صخر', kunya: 'أبو هريرة',
+  grade_en: 'companion', grade_ar: 'صحابي',
+  classical_sources: {
+    taqrib: { entry_id: 8426, grade_en: 'companion', grade_ar: 'صحابي' },
+    thiqat: { entry_id: 924, grade_en: 'reliable', grade_ar: 'ذكره ابن حبان في الثقات' },
+    siyar:  { entry_id: 126, grade_en: 'mostly_reliable', grade_ar: 'إمام' },
+  },
+};
+
+test('itqanProfileHTML: consolidated grade headline + Itqan attribution', () => {
+  const html = core.itqanProfileHTML(ITQAN_ABU_HURAIRAH);
+  assert.match(html, /rel-badge/);
+  assert.match(html, /Companion/);                       // consolidated grade_en → label
+  assert.match(html, /عبد الرحمن بن صخر/);                // real Arabic name shown
+  assert.match(html, /Itqan Rijal Database/);            // cited source
+});
+
+test('itqanProfileHTML: shows the per-classical-text breakdown (disagreement not flattened)', () => {
+  const html = core.itqanProfileHTML(ITQAN_ABU_HURAIRAH);
+  assert.match(html, /Taqrib al-Tahdhib \(Ibn Hajar\)/);
+  assert.match(html, /Kitab al-Thiqat \(Ibn Hibban\)/);
+  assert.match(html, /al-Nubala \(al-Dhahabi\)/);   // apostrophe in "A'lam" is esc'd to &#39; (correct)
+  // the three texts grade him companion / reliable / mostly_reliable — all surfaced
+  assert.match(html, /Reliable \(Thiqah\)/);
+  assert.match(html, /Mostly Reliable \(Saduq\)/);
+});
+
+test('itqanProfileHTML: null profile → honest unavailable (never invented)', () => {
+  assert.match(core.itqanProfileHTML(null), /Reliability data unavailable/);
+});
+
+test('itqanProfileHTML: escapes fields (XSS-safe)', () => {
+  const html = core.itqanProfileHTML({ full_name: '<img src=x onerror=alert(1)>', grade_en: 'reliable', classical_sources: {} });
+  assert.doesNotMatch(html, /<img src=x/);
+  assert.match(html, /&lt;img/);
+});
+
+test('itqanGradeParts: unknown/garbage grade → unknown class, never a guessed verdict', () => {
+  assert.equal(core.itqanGradeParts('bogus').cls, 'rel-unknown');
+  assert.equal(core.itqanGradeParts(null).cls, 'rel-unknown');
+  assert.equal(core.itqanGradeParts('reliable').cls, 'rel-thiqah');
+});

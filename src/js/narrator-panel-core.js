@@ -76,10 +76,70 @@
     '</div>';
   }
 
+  // ── Itqan Rijal profile rendering (ADR-046/047) ────────────────────
+  // Consolidated grade as headline + the per-classical-text breakdown, so
+  // scholar disagreement is visible (never flattened). Renders ONLY real
+  // Itqan data; caller shows "not yet verified" when there is no match.
+  var ITQAN_GRADE = {
+    companion:       { label: 'Companion', cls: 'rel-thiqah' },
+    reliable:        { label: 'Reliable (Thiqah)', cls: 'rel-thiqah' },
+    mostly_reliable: { label: 'Mostly Reliable (Saduq)', cls: 'rel-saduq' },
+    weak:            { label: "Weak (Da'if)", cls: 'rel-daif' },
+    abandoned:       { label: 'Abandoned (Matruk)', cls: 'rel-daif' },
+    fabricator:      { label: 'Fabricator (Kadhdhab)', cls: 'rel-daif' },
+    unknown:         { label: 'Unknown (Majhul)', cls: 'rel-unknown' },
+  };
+  var TEXT_NAMES = {
+    taqrib: 'Taqrib al-Tahdhib (Ibn Hajar)', tahdhib_tahdhib: 'Tahdhib al-Tahdhib (Ibn Hajar)',
+    mizan: "Mizan al-I'tidal (al-Dhahabi)", lisan_mizan: 'Lisan al-Mizan (Ibn Hajar)',
+    thiqat: 'Kitab al-Thiqat (Ibn Hibban)', jarh: "al-Jarh wa al-Ta'dil (Ibn Abi Hatim)",
+    siyar: "Siyar A'lam al-Nubala (al-Dhahabi)", kashif: 'al-Kashif (al-Dhahabi)',
+    isaba: 'al-Isaba (Ibn Hajar)', mughni_ducafa: "al-Mughni fi al-Du'afa (al-Dhahabi)",
+    diwan_ducafa: "Diwan al-Du'afa (al-Dhahabi)",
+  };
+  function itqanGradeParts(g) {
+    var key = String(g == null ? '' : g).toLowerCase();
+    return Object.prototype.hasOwnProperty.call(ITQAN_GRADE, key) ? ITQAN_GRADE[key] : ITQAN_GRADE.unknown;
+  }
+  function classicalSourceRows(sources) {
+    sources = sources || {};
+    var keys = Object.keys(sources);
+    if (!keys.length) return '';
+    var rows = keys.map(function (k) {
+      var s = sources[k] || {};
+      var gp = itqanGradeParts(s.grade_en);
+      var ar = s.grade_ar ? ' <span dir="rtl" lang="ar">' + esc(s.grade_ar) + '</span>' : '';
+      return '<div class="itqan-src-row"><span class="itqan-src-text">' + esc(TEXT_NAMES[k] || k) + '</span>' +
+        '<span class="itqan-src-grade ' + gp.cls + '">' + esc(gp.label) + ar + '</span></div>';
+    });
+    return '<div class="itqan-sources-label">Graded across classical texts</div>' +
+      '<div class="itqan-sources">' + rows.join('') + '</div>';
+  }
+  // p = D1/endpoint profile: { full_name, kunya, grade_en, grade_ar, classical_sources }
+  function itqanProfileHTML(p) {
+    if (!p) return buildNarratorPanelHTML(null);
+    var gp = itqanGradeParts(p.grade_en);
+    var face = p.full_name ? String(p.full_name).trim().slice(0, 2) : '·';
+    var name = p.full_name ? '<span class="narrator-arabic" dir="rtl" lang="ar">' + esc(p.full_name) + '</span>' : 'Unknown narrator';
+    var kunya = p.kunya ? '<div class="narrator-panel-kunya" dir="rtl" lang="ar">' + esc(p.kunya) + '</div>' : '';
+    var gradeAr = p.grade_ar ? ' <span dir="rtl" lang="ar">' + esc(p.grade_ar) + '</span>' : '';
+    return '<div class="narrator-panel-inner">' +
+      '<div class="narrator-panel-head">' +
+        '<div class="narrator-avatar ' + gp.cls + '">' + esc(face) + '</div>' +
+        '<div class="narrator-panel-id"><div class="narrator-panel-name">' + name + '</div>' + kunya + '</div>' +
+        '<span class="rel-badge ' + gp.cls + '"><span class="reliability-dot ' + gp.cls + '"></span>' + esc(gp.label) + gradeAr + '</span>' +
+      '</div>' +
+      classicalSourceRows(p.classical_sources) +
+      '<div class="tp-attr">Source: Itqan Rijal Database — classical rijal texts (public domain)</div>' +
+    '</div>';
+  }
+
   var core = {
     reliabilityParts: reliabilityParts,
     graderRowsHTML: graderRowsHTML,
     buildNarratorPanelHTML: buildNarratorPanelHTML,
+    itqanGradeParts: itqanGradeParts,
+    itqanProfileHTML: itqanProfileHTML,
     _esc: esc,
   };
 
