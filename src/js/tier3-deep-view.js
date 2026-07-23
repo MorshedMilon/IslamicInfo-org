@@ -225,15 +225,17 @@
       host.routeTo({ collection: c.slug, book: BOOKLESS_DEFAULT, hadith: num }, true);
       return;
     }
+    var token = LIST.token;
     if (status) status.textContent = 'Finding hadith #' + num + '…';
     host.api.fetchHadithByNumber(c.slug, num).then(function (res) {
+      if (token !== LIST.token) return;                       // navigated away → drop stale result
       var h = res && res.ok && res.data && Array.isArray(res.data.hadiths) ? res.data.hadiths[0] : null;
       if (h && h.bookNumber != null) {
         host.routeTo({ collection: c.slug, book: h.bookNumber, hadith: num }, true);
       } else if (status) {
         status.textContent = 'No hadith #' + num + ' found in ' + c.nameEnglish + '.';
       }
-    }).catch(function () { if (status) status.textContent = 'Couldn’t look up hadith #' + num + ' — try again.'; });
+    }).catch(function () { if (token === LIST.token && status) status.textContent = 'Couldn’t look up hadith #' + num + ' — try again.'; });
   }
 
   // Keyword search, scoped to the current collection. Renders results in the list
@@ -241,28 +243,31 @@
   function runKeywordSearch(c, q) {
     var listEl = $('#ii-t3a-list'), status = $('#t3a-status');
     if (!listEl) return;
+    var token = LIST.token;
     setListLoadMore('hide');
     listEl.innerHTML = '<div class="books-empty"><div class="books-empty-title">Searching “' + esc(q) + '”…</div></div>';
     host.api.fetchHadithSearch(q, readLang(), 1, c.slug).then(function (res) {
-      if (LIST.token == null) return;
+      if (token !== LIST.token) return;                       // navigated away → drop stale result
+      var listEl2 = $('#ii-t3a-list'); if (!listEl2) return;
       var results = res && res.ok && res.data && Array.isArray(res.data.results) ? res.data.results : null;
       if (!results) {
-        listEl.innerHTML = '<div class="books-error"><div class="books-empty-title">Search unavailable</div>' +
+        listEl2.innerHTML = '<div class="books-error"><div class="books-empty-title">Search unavailable</div>' +
           '<div>Please try again in a moment.</div></div>';
         return;
       }
       results = results.filter(function (h) { return !h.collectionSlug || h.collectionSlug === c.slug; });
       if (!results.length) {
-        listEl.innerHTML = '<div class="books-empty"><div class="books-empty-title">No matches for “' + esc(q) + '” in ' + esc(c.nameEnglish) + '.</div></div>';
+        listEl2.innerHTML = '<div class="books-empty"><div class="books-empty-title">No matches for “' + esc(q) + '” in ' + esc(c.nameEnglish) + '.</div></div>';
       } else {
         results.forEach(function (h) { var r = host.feed.refOf(h); if (r) LIST.byRef[r] = h; });
-        listEl.innerHTML = results.map(host.feed.buildCardHTML).join('');
-        if (host.observeFeed) host.observeFeed(listEl);
-        applyListGradeFilter(listEl, LIST.grade);
+        listEl2.innerHTML = results.map(host.feed.buildCardHTML).join('');
+        if (host.observeFeed) host.observeFeed(listEl2);
+        applyListGradeFilter(listEl2, LIST.grade);
       }
       renderSearchClear(q, results.length);
     }).catch(function () {
-      listEl.innerHTML = '<div class="books-error"><div class="books-empty-title">Search unavailable</div><div>Please try again.</div></div>';
+      if (token !== LIST.token) return;
+      var listEl2 = $('#ii-t3a-list'); if (listEl2) listEl2.innerHTML = '<div class="books-error"><div class="books-empty-title">Search unavailable</div><div>Please try again.</div></div>';
     });
   }
 
