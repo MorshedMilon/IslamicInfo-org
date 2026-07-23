@@ -183,16 +183,21 @@ deep view for **every** collection (bookless `slug:0:num` included), with no stu
 
 ## 7. Verification (Definition of Done)
 
-- [ ] Live hadithapi book-only listing confirmed (§5.1 VERIFY) before merge.
-- [ ] Every collection (hadithapi + direct-source) loads > 25 via Load More, endlessly to end.
-- [ ] Number search opens the correct hadith on both provider families.
-- [ ] Keyword search returns in-collection matches; clear returns to full list.
-- [ ] "Open Full View" opens the deep view on every collection.
-- [ ] Grade filter works across the grown list.
-- [ ] Unit + Worker tests pass; no regression in existing hadith tests.
-- [ ] Live browser smoke (deferred to human sign-off per prior module posture).
+Status legend: ✅ done · 🔎 proven by static code-trace + review · 🕓 deferred to human live-browser sign-off (repo posture).
+
+- [x] 🔎 Endless pagination implemented via **chapter-walk** (hadithapi) + flat paging (direct sources); Load More appends 25 and crosses book boundaries; end state at true end. *(Live cross-book transition → 🕓.)*
+- [x] 🔎 Number search: hadithapi resolves number→book via the new resolver route then routes to the deep view; direct sources route straight through (deep view finds by number). *(Live → 🕓.)*
+- [x] ✅ Keyword search returns in-collection matches for **all** providers — hadithapi via `/api/hadith/search?collection=`, direct sources via client-side filter (fixes the direct-source + Musnad Ahmad false-empty gap found in final review); "Clear search" restores the full list. *(Live → 🕓.)*
+- [x] 🔎 "Open Full View" routes to the deep view from both the landing feed (was a stale toast) and the Tier-3a list.
+- [x] 🔎 Grade filter works across the grown list (append scopes display writes to new cards).
+- [x] ✅ Unit + Worker tests pass — **450/450**, incl. new `hadith-router` (flat route, resolver, scoped search, no_key) and `hadith-list-core` (parse/advance/load-more) tests; no regression.
+- [x] 🔎 Books-grid entry anchors the endless list at the chosen book (static end-to-end trace, Task 8).
+- [ ] 🕓 Live hadithapi book-only listing (§5.1 flat-list bonus) — **not required**: pagination uses chapter-walk, which does not depend on it. Confirm only if enabling the flat-list mode.
+- [ ] 🕓 Live browser smoke across one collection per provider family (Bukhari / Bulugh / Nawawi40): endless Load More, number jump, keyword + clear, Open Full View, grade filter, light/dark + screen-reader on `#t3a-status` and Load More.
 
 ## 8. Open Questions
 
 - None blocking. "↑ Earlier books" when entering mid-collection (§5.2) is a plan-time
-  refinement, not a design blocker.
+  refinement, not a design blocker. If the hadithapi `/books` endpoint ever returns books
+  out of numeric order, the chapter-walk follows API order (still covers the whole
+  collection) — sort `bookOrder` numerically if strict numeric order is ever required.
