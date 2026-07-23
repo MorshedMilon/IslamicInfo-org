@@ -33,9 +33,40 @@
     return { dashArray: circ, dashOffset: circ * (1 - pct / 100) };
   }
 
+  // ── refId ─────────────────────────────────────────────────────────
+  // Stable string id for a hadith reference (the value stored in the
+  // per-path read array). Order: collection:book:hadith.
+  function refId(ref) {
+    if (!ref) return '';
+    return [ref.collection, ref.book, ref.hadith].join(':');
+  }
+
+  // ── pathProgress ──────────────────────────────────────────────────
+  // readSet is a Set of refId strings. Only refs that belong to THIS
+  // path's hadithRefs count. percent is against targetCount (so a
+  // deferred/empty path honestly reports 0%). complete requires a
+  // non-empty target fully read.
+  function pathProgress(path, readSet) {
+    var refs = (path && path.hadithRefs) || [];
+    var target = (path && path.targetCount) || 0;
+    var read = 0;
+    for (var i = 0; i < refs.length; i++) {
+      if (readSet && readSet.has(refId(refs[i]))) read++;
+    }
+    var percent = target > 0 ? Math.round((read / target) * 100) : 0;
+    return {
+      readCount: read,
+      targetCount: target,
+      percent: percent,
+      complete: target > 0 && read >= target,
+    };
+  }
+
   var core = {
     ringGeometry: ringGeometry,
     _clampPercent: clampPercent,
+    refId: refId,
+    pathProgress: pathProgress,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }
