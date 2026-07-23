@@ -89,14 +89,18 @@ The homepage hero search is non-functional: the `<form>` has `onsubmit="event.pr
 
 ## 7. Verification (Definition of Done)
 
-- [ ] Each tab dispatches correctly: Hadith → hadith.html?q= results; Verify → verify.html prefilled; Qur'an/Dua/All → honest coming-soon note.
-- [ ] Hadith `?q=` runs the real global search and renders `buildCardHTML` results; the hadith page's own hero search uses the same path.
-- [ ] Mic fills the input and dispatches; no-op when unsupported.
-- [ ] Continue chip shows the most-recent by timestamp, deep-links correctly, hides when none; both write sites stamp `ts`.
-- [ ] Topic pills link to `/hadith/topics/<key>`; "View all topics" → `/hadith/topics`.
-- [ ] Verify prefill populates (no auto-submit).
-- [ ] Unit tests pass (new core + no regressions); parse checks pass.
-- [ ] Live browser smoke (deferred to human sign-off).
+Legend: ✅ done · 🔎 static-proven (code trace + review) · 🕓 human live-browser sign-off.
+
+- [x] 🔎 Each tab dispatches: Hadith → `hadith.html?q=` results; Verify → `verify.html?claim=` prefilled; Qur'an/Dua/All → honest coming-soon note (unit-tested in `home-search-core`).
+- [x] 🔎 Hadith `?q=` runs the real global `/api/hadith/search` and renders `feed.buildCardHTML` results; the hadith page's own hero search uses the same path (replaced the client-side substring stub). Server results filter by grade only (FEED.query cleared). *(Live → 🕓.)*
+- [x] 🔎 Mic fills the input and dispatches; no-op/note when unsupported. *(Live mic permission → 🕓.)*
+- [x] ✅ Continue chip shows the most-recent by timestamp across hadith + quran, hides when none. **Both** hadith writers honored — deep-view (`ts`) and feed-scroll reading tracker (`timestamp`), normalized in `pickContinue` (fix from final review). *(Live → 🕓.)*
+- [x] ✅ Topic pills link to real `/hadith/topics/<key>` (keys verified against `hadith-topics-core`); "View all topics" → `/hadith/topics`.
+- [x] 🔎 Verify prefill populates from `?claim=` (no auto-submit); no conflict with verify.html's pre-existing `?q=` handler.
+- [x] ✅ Unit tests pass — **461/461** (11 new `home-search-core` tests); parse checks pass for all changed files.
+- [ ] 🕓 Live browser smoke: tab switching, mic, continue-chip recency across hadith/quran, coming-soon notes, topic-pill landings, `hadith.html?q=` results, verify prefill — light/dark + screen-reader.
+
+**Known-limited (out of scope, documented):** the Verify engine itself (`/api/verify` stub / canned demo — see `verify-demo-fallback-bug`); Qur'an/Dua/All search backends (coming-soon). This slice does not fix those.
 
 ## 8. Open Questions
 
