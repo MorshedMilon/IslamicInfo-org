@@ -103,13 +103,20 @@
     });
   }
 
+  // Path-based deep-view route (see hadith.js routePath/parseRoute):
+  // /hadith/[collection]/[book]/[hadith], each segment encoded to match
+  // routePath's encodeURIComponent contract.
+  function routeFor(ref) {
+    return '/hadith/' + encodeURIComponent(ref.collection) +
+      '/' + encodeURIComponent(ref.book) + '/' + encodeURIComponent(ref.hadith);
+  }
+
   function openNextUnread(slug) {
     var path = paths.filter(function (p) { return p.slug === slug; })[0];
     if (!path) return;
     var next = core.nextUnread(path, core.readSetFor(loadStore(), slug));
     if (!next) return; // complete or empty
-    // Path-based route (see hadith.js routePath/parseRoute): /hadith/[collection]/[book]/[hadith].
-    location.href = '/hadith/' + next.collection + '/' + next.book + '/' + next.hadith;
+    location.href = routeFor(next);
   }
 
   function init() {
@@ -159,9 +166,8 @@
     var next = path.hadithRefs[n];
     var prevBtn = slot.querySelector('[data-path-prev]');
     var nextBtn = slot.querySelector('[data-path-next]');
-    // Path-based route (see hadith.js routePath/parseRoute): /hadith/[collection]/[book]/[hadith].
-    if (prevBtn) prevBtn.addEventListener('click', function () { if (prev) location.href = '/hadith/' + prev.collection + '/' + prev.book + '/' + prev.hadith; });
-    if (nextBtn) nextBtn.addEventListener('click', function () { if (next) location.href = '/hadith/' + next.collection + '/' + next.book + '/' + next.hadith; });
+    if (prevBtn) prevBtn.addEventListener('click', function () { if (prev) location.href = routeFor(prev); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { if (next) location.href = routeFor(next); });
   }
 
   window.II = window.II || {};
