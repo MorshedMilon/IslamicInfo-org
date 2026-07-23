@@ -146,6 +146,41 @@ async function singleHadith(slug, bookNum, num, env, origin, deps) {
   }
 }
 
+/* Flat whole-collection list (book-only, no chapter) + number resolver.
+   ?page=&limit= → paginated flat list (VERIFY §5.1 before relying on this for
+   listing; chapter-walk in the client does not depend on it).
+   ?hadithNumber= → single-record resolve to expose its real bookNumber (used by
+   the client to route a typed number into the deep view). */
+async function collectionFlat(slug, searchParams, env, origin, deps) {
+  if (!ALLOWED_SLUGS.has(slug)) return fail('bad_slug', `unknown collection: ${slug}`, origin, 400, false);
+  if (!env.HADITH_API_KEY) return fail('no_key', 'Hadith service temporarily unavailable', origin, 503, true);
+  const num = posInt(searchParams.get('hadithNumber'));
+  const page = posInt(searchParams.get('page')) || 1;
+  const limit = Math.min(posInt(searchParams.get('limit')) || 25, 200);
+  const param = num
+    ? { book: slug, hadithNumber: num, paginate: 1 }
+    : { book: slug, paginate: limit, page };
+  const key = num ? hKey('flatone', slug, num) : hKey('flatlist', slug, page);
+  try {
+    const { data, source } = await liveOrCache(
+      env.QURANLYAI_KV, key, TTL.DAY,
+      () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, param),
+      (raw) => {
+        const wrap = raw.hadiths || {};                       // hadithapi shape: hadiths.data
+        return {
+          hadiths: safeMap(wrap.data, (h) => normalizeHadith(h, {})),
+          page: num ? 1 : page, limit: num ? 1 : limit,
+          total: wrap.total ?? null, lastPage: wrap.last_page ?? null,
+        };
+      },
+      deps,
+    );
+    return ok(data, source, origin, source === 'live' ? TTL.DAY : 0);
+  } catch (_) {
+    return fail('upstream', 'Hadiths temporarily unavailable — try again', origin, 502, true);
+  }
+}
+
 async function search(searchParams, env, origin, deps) {
   const q = (searchParams.get('q') || '').trim();
   if (q.length < 2) return fail('bad_query', 'search query must be at least 2 characters', origin, 400, false);
@@ -207,6 +242,10 @@ export async function handleHadith(path, searchParams, env, origin, deps = {}) {
   // /api/hadith/collections/:slug/books
   if (seg[0] === 'collections' && seg.length === 3 && seg[2] === 'books') {
     return chapters(seg[1], env, origin, deps);
+  }
+  // /api/hadith/collections/:slug/hadiths  (flat list + number resolver)
+  if (seg[0] === 'collections' && seg.length === 3 && seg[2] === 'hadiths') {
+    return collectionFlat(seg[1], searchParams, env, origin, deps);
   }
   // /api/hadith/collections/:slug/books/:bookNum/hadiths
   if (seg[0] === 'collections' && seg.length === 5 && seg[2] === 'books' && seg[4] === 'hadiths') {

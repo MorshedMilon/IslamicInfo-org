@@ -156,3 +156,46 @@ test('narrators endpoint honestly reports unavailable', async () => {
   const b = await res.json();
   assert.equal(b.data.status, 'unavailable');
 });
+
+test('flat collection list returns a paginated envelope (book-only, no chapter)', async () => {
+  let calledUrl = '';
+  const spyFetcher = async (url) => { calledUrl = url; return {
+    ok: true, status: 200, json: async () => ({
+      hadiths: { data: [{ hadithNumber: '26', hadithArabic: 'ن', hadithEnglish: 'text',
+        englishNarrator: 'Anas', status: 'Sahih',
+        book: { bookSlug: 'sahih-bukhari', bookName: 'Sahih Bukhari' },
+        chapter: { chapterNumber: '2', chapterEnglish: 'Faith' } }], last_page: 5, total: 120 },
+    }) }; };
+  const res = await handleHadith('/api/hadith/collections/sahih-bukhari/hadiths',
+    new URLSearchParams('page=2&limit=25'), ENV(), ORIGIN, { fetcher: spyFetcher });
+  assert.equal(res.status, 200);
+  const b = await res.json();
+  assert.equal(b.ok, true);
+  assert.equal(b.data.hadiths.length, 1);
+  assert.equal(b.data.page, 2);
+  assert.equal(b.data.lastPage, 5);
+  assert.equal(b.data.total, 120);
+  assert.ok(!/chapter=/.test(calledUrl), 'flat list must NOT send a chapter param');
+  assert.ok(/book=sahih-bukhari/.test(calledUrl), 'flat list filters by book slug');
+});
+
+test('flat collection route resolves a hadith number to its record', async () => {
+  const res = await handleHadith('/api/hadith/collections/sahih-bukhari/hadiths',
+    new URLSearchParams('hadithNumber=26'), ENV(), ORIGIN, { fetcher: async () => ({
+      ok: true, status: 200, json: async () => ({
+        hadiths: { data: [{ hadithNumber: '26', hadithArabic: 'ن', hadithEnglish: 'text',
+          book: { bookSlug: 'sahih-bukhari', bookName: 'Sahih Bukhari' },
+          chapter: { chapterNumber: '2', chapterEnglish: 'Faith' } }], last_page: 1, total: 1 },
+      }) }) });
+  const b = await res.json();
+  assert.equal(b.ok, true);
+  assert.equal(b.data.hadiths[0].hadithNumber, 26);
+  assert.equal(b.data.hadiths[0].bookNumber, 2, 'resolver exposes the real book number');
+});
+
+test('flat collection route rejects a slug outside the allowlist', async () => {
+  const res = await handleHadith('/api/hadith/collections/evil/hadiths',
+    new URLSearchParams(), ENV(), ORIGIN, {});
+  assert.equal(res.status, 400);
+  assert.equal((await res.json()).error.retryable, false);
+});
