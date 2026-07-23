@@ -140,6 +140,28 @@ test('search returns normalized results', async () => {
   assert.equal(b.data.results[0].hadithNumber, 1);
 });
 
+test('search scoped by collection sends the book filter and keeps the query', async () => {
+  let calledUrl = '';
+  const spy = async (url) => { calledUrl = url; return { ok: true, status: 200, json: async () => ({
+    hadiths: { data: [{ hadithNumber: '5', hadithEnglish: 'patience is light',
+      book: { bookSlug: 'sahih-muslim', bookName: 'Sahih Muslim' },
+      chapter: { chapterNumber: '1' } }] },
+  }) }; };
+  const res = await handleHadith('/api/hadith/search',
+    new URLSearchParams('q=patience&collection=sahih-muslim'), ENV(), ORIGIN, { fetcher: spy });
+  assert.equal(res.status, 200);
+  const b = await res.json();
+  assert.equal(b.data.results.length, 1);
+  assert.ok(/book=sahih-muslim/.test(calledUrl), 'scoped search filters by book slug');
+  assert.ok(/hadithEnglish=patience/.test(calledUrl), 'scoped search keeps the text query');
+});
+
+test('search with an invalid collection is rejected', async () => {
+  const res = await handleHadith('/api/hadith/search',
+    new URLSearchParams('q=patience&collection=evil'), ENV(), ORIGIN, {});
+  assert.equal(res.status, 400);
+});
+
 test('daily falls back to the static hadith when upstream fails and cache is empty', async () => {
   const failing = async () => { throw new Error('down'); };
   const res = await handleHadith('/api/hadith/daily', new URLSearchParams(), ENV(), ORIGIN, { fetcher: failing });
@@ -155,4 +177,54 @@ test('narrators endpoint honestly reports unavailable', async () => {
   assert.equal(res.status, 200);
   const b = await res.json();
   assert.equal(b.data.status, 'unavailable');
+});
+
+test('flat collection list returns a paginated envelope (book-only, no chapter)', async () => {
+  let calledUrl = '';
+  const spyFetcher = async (url) => { calledUrl = url; return {
+    ok: true, status: 200, json: async () => ({
+      hadiths: { data: [{ hadithNumber: '26', hadithArabic: 'ن', hadithEnglish: 'text',
+        englishNarrator: 'Anas', status: 'Sahih',
+        book: { bookSlug: 'sahih-bukhari', bookName: 'Sahih Bukhari' },
+        chapter: { chapterNumber: '2', chapterEnglish: 'Faith' } }], last_page: 5, total: 120 },
+    }) }; };
+  const res = await handleHadith('/api/hadith/collections/sahih-bukhari/hadiths',
+    new URLSearchParams('page=2&limit=25'), ENV(), ORIGIN, { fetcher: spyFetcher });
+  assert.equal(res.status, 200);
+  const b = await res.json();
+  assert.equal(b.ok, true);
+  assert.equal(b.data.hadiths.length, 1);
+  assert.equal(b.data.page, 2);
+  assert.equal(b.data.lastPage, 5);
+  assert.equal(b.data.total, 120);
+  assert.ok(!/chapter=/.test(calledUrl), 'flat list must NOT send a chapter param');
+  assert.ok(/book=sahih-bukhari/.test(calledUrl), 'flat list filters by book slug');
+});
+
+test('flat collection route resolves a hadith number to its record', async () => {
+  const res = await handleHadith('/api/hadith/collections/sahih-bukhari/hadiths',
+    new URLSearchParams('hadithNumber=26'), ENV(), ORIGIN, { fetcher: async () => ({
+      ok: true, status: 200, json: async () => ({
+        hadiths: { data: [{ hadithNumber: '26', hadithArabic: 'ن', hadithEnglish: 'text',
+          book: { bookSlug: 'sahih-bukhari', bookName: 'Sahih Bukhari' },
+          chapter: { chapterNumber: '2', chapterEnglish: 'Faith' } }], last_page: 1, total: 1 },
+      }) }) });
+  const b = await res.json();
+  assert.equal(b.ok, true);
+  assert.equal(b.data.hadiths[0].hadithNumber, 26);
+  assert.equal(b.data.hadiths[0].bookNumber, 2, 'resolver exposes the real book number');
+});
+
+test('flat collection route rejects a slug outside the allowlist', async () => {
+  const res = await handleHadith('/api/hadith/collections/evil/hadiths',
+    new URLSearchParams(), ENV(), ORIGIN, {});
+  assert.equal(res.status, 400);
+  assert.equal((await res.json()).error.retryable, false);
+});
+
+test('flat collection route yields 503 when API key is missing', async () => {
+  const res = await handleHadith('/api/hadith/collections/sahih-bukhari/hadiths',
+    new URLSearchParams(), ENV({ HADITH_API_KEY: '' }), ORIGIN, {});
+  assert.equal(res.status, 503);
+  assert.equal((await res.json()).error.retryable, true);
 });

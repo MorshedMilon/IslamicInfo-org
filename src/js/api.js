@@ -346,8 +346,14 @@
   function fetchHadithOne(slug, book, num) {
     return _getHadith(`/api/hadith/${encodeURIComponent(slug)}/${book}/${num}`);
   }
-  function fetchHadithSearch(q, lang, page) {
-    return _getHadith(`/api/hadith/search?q=${encodeURIComponent(q)}&lang=${lang || 'en'}&page=${page || 1}`);
+  // Resolve a typed hadith number → its record (with real bookNumber) for hadithapi
+  // collections, so a number search can route into the deep view.
+  function fetchHadithByNumber(slug, num) {
+    return _getHadith(`/api/hadith/collections/${encodeURIComponent(slug)}/hadiths?hadithNumber=${encodeURIComponent(num)}`);
+  }
+  function fetchHadithSearch(q, lang, page, collection) {
+    var scope = collection ? ('&collection=' + encodeURIComponent(collection)) : '';
+    return _getHadith(`/api/hadith/search?q=${encodeURIComponent(q)}&lang=${lang || 'en'}&page=${page || 1}${scope}`);
   }
   function fetchHadithDaily() { return _getHadith('/api/hadith/daily'); }
 
@@ -538,6 +544,7 @@
     fetchHadithList,
     fetchHadithOne,
     fetchHadithSearch,
+    fetchHadithByNumber,
     fetchHadithDaily,
     fetchNarrator,
     fetchNarratorById,

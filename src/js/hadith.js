@@ -1376,22 +1376,22 @@
     }
   }
 
-  // Per-card actions. isnad toggles the chain panel (US-H05); full is still honestly
-  // deferred to a later module — no dead or lying onclick. bookmark/note/listen/share/copy
-  // are now live (Module 10) via the document-delegated wireCardActions() below, so they
-  // are absent from MSG here on purpose and simply no-op in this handler.
+  // Per-card actions. isnad toggles the chain panel (US-H05); full routes into the
+  // Tier-3b deep view. bookmark/note/listen/share/copy are live (Module 10) via the
+  // document-delegated wireCardActions() below, so they are absent here on purpose
+  // and simply no-op in this handler.
   function wireFeedActions() {
     var el = feedEl(); if (!el) return;
-    var MSG = {
-      full: 'Full hadith view arrives in a later stage',
-    };
     el.addEventListener('click', function (e) {
       var btn = e.target.closest && e.target.closest('[data-act]');
       if (!btn || !el.contains(btn)) return;
       var act = btn.getAttribute('data-act');
       if (act === 'isnad') { toggleIsnad(btn.closest('.hadith-card'), btn); return; }
-      var msg = MSG[act];
-      if (msg) ui.showToast(msg);
+      if (act === 'full') {
+        var card = btn.closest('.hadith-card'); var ref = card && card.getAttribute('data-ref');
+        if (ref) { var p = ref.split(':'); routeTo({ collection: p[0], book: p[1], hadith: p[2] }, true); }
+        return;
+      }
     });
   }
 
