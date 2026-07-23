@@ -122,10 +122,33 @@ window.showToast = showToast;
 
 
 /* ─────────────────────────────────────────────────────────────────
+   loadAnalytics() — inject the site-wide analytics layer (Module 18,
+   DoD-17) on every page: analytics-core.js (KPI allowlist + gating)
+   then analytics.js (II.track + GA4 loader + initial page_view).
+   async=false preserves execution order (core before analytics).
+   analytics.js is privacy-gated internally and self-activates once the
+   GA4 id + consent resolve; it fires the page_view for visitor/traffic/
+   geo reporting. Guarded against double-injection.
+   ───────────────────────────────────────────────────────────────── */
+function loadAnalytics() {
+  if (window.II && window.II.analytics) return;         // already loaded
+  if (document.getElementById('ii-analytics-core')) return;
+  ['src/js/analytics-core.js', 'src/js/analytics.js'].forEach(function (src, i) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.async = false;                                     // keep core → analytics order
+    if (i === 0) s.id = 'ii-analytics-core';
+    document.body.appendChild(s);
+  });
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
    Boot — runs on DOMContentLoaded
    ───────────────────────────────────────────────────────────────── */
 
 (function boot() {
   initHeaderScroll();
   initReveal();
+  loadAnalytics();
 })();

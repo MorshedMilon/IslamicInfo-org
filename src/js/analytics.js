@@ -17,12 +17,17 @@
 
   var CONSENT_KEY = 'islamicinfo-analytics-consent';
 
+  // IslamicInfo GA4 property (Module 18). Measurement IDs are public (they ship in the
+  // page), so hardcoding is fine; window.II_GA4_ID still overrides if ever needed.
+  var GA4_ID = 'G-JMH3Q4XTNY';
   function measurementId() {
-    return (typeof window.II_GA4_ID === 'string' && window.II_GA4_ID) || '';
+    return (typeof window.II_GA4_ID === 'string' && window.II_GA4_ID) || GA4_ID;
   }
   function consent() {
-    try { return window.localStorage.getItem(CONSENT_KEY) || 'unset'; }
-    catch (_) { return 'unset'; }
+    // On by default (product decision 2026-07-23: no consent banner). A future banner can
+    // still opt a visitor out via II.analytics.revokeConsent() → stored 'denied' wins.
+    try { return window.localStorage.getItem(CONSENT_KEY) || 'granted'; }
+    catch (_) { return 'granted'; }
   }
   function config() { return { measurementId: measurementId(), consent: consent() }; }
 
@@ -56,4 +61,12 @@
   window.II.analytics = { track: track, grantConsent: grantConsent, revokeConsent: revokeConsent, _config: config };
   // Convenience shorthand for call sites: `II.track && II.track('event', {...})`.
   window.II.track = track;
+
+  // Fire the initial GA4 page_view on load (gtag('config') auto-sends it) so site-wide
+  // visitor / traffic-source / geo reports populate on EVERY page — not only pages that
+  // emit a custom KPI event. No-op when disabled (no id / consent 'denied').
+  (function initPageView() {
+    var cfg = config();
+    if (core.isEnabled(cfg)) ensureGtag(cfg.measurementId);
+  })();
 })();
