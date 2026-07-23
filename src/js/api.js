@@ -320,11 +320,15 @@
       const merged = seedList.map(function (c) {
         const d = bySlug[c.collectionSlug];
         if (!d) return c;                                    // fawazahmed0/AhmedBaset → keep seed
+        // For collections we serve from a DIRECT source (in HADITH_ROUTES — e.g. Musnad Ahmad,
+        // which hadithapi returns 0 for), the seed count is authoritative; don't let the live
+        // hadithapi 0 override it. Only true hadithapi-provider collections take the live count.
+        var live = hadithProviderOf(c.collectionSlug) === 'hadithapi';
         return Object.assign({}, c, {                        // hadithapi → live count/name authoritative
           collectionName: d.collectionName || c.collectionName,
           collectionArabicName: d.collectionArabicName || c.collectionArabicName || null,
-          hadithCount: (typeof d.hadithCount === 'number') ? d.hadithCount : c.hadithCount,
-          chaptersCount: (typeof d.chaptersCount === 'number') ? d.chaptersCount : c.chaptersCount,
+          hadithCount: (live && typeof d.hadithCount === 'number') ? d.hadithCount : c.hadithCount,
+          chaptersCount: (live && typeof d.chaptersCount === 'number') ? d.chaptersCount : c.chaptersCount,
         });
       });
       live.data.forEach(function (d) {                       // defensive: live collection not in seed
@@ -392,6 +396,7 @@
     'shamail-muhammadiyah': { provider: 'ahmedbaset', path: 'other_books/shamail_muhammadiyah.json', characterization: 'Mixed Grades' },
     'muwatta-malik':        { provider: 'ahmedbaset', path: 'the_9_books/malik.json',                characterization: 'Sahih / Hasan' },
     'sunan-darimi':         { provider: 'ahmedbaset', path: 'the_9_books/darimi.json',               characterization: 'Mixed Grades' },
+    'musnad-ahmad':         { provider: 'ahmedbaset', path: 'the_9_books/ahmed.json',                characterization: 'Mixed Grades' },   // hadithapi returns 0 → served from AhmedBaset instead
     'forty-qudsi':          { provider: 'ahmedbaset', path: 'forties/qudsi40.json',                  characterization: 'Mixed (per source hadith)' },
     'forty-shah-waliullah': { provider: 'ahmedbaset', path: 'forties/shahwaliullah40.json',          characterization: 'Mixed' },
   };
