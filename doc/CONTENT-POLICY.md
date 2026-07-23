@@ -1,5 +1,6 @@
 # CONTENT-POLICY.md — Islamic Content Governance
-**Project-level content rules and review gate · v1.0 · 2026-06-03**
+**Project-level content rules and review gate · v1.1 · 2026-07-23**
+*(v1.1 — §5 approver changed to project owner Morshed Milon; ADR-044. Authenticity / no-fabrication rules unchanged.)*
 
 > This is the *governance layer*. It states project-wide content rules, the
 > separation of authenticated vs. speculative content, and the human review gate.
@@ -63,10 +64,40 @@ The following are hard-coded in the server-side system prompt and are **not over
 This is the single most important protection against a confident-but-wrong ruling
 reaching a user. It does not depend on the model getting it right.
 
-- **No Islamic content ships without sign-off by a qualified reviewer** (a person with recognized competence in the relevant area).
-- AI is a **drafting and verification aid**, not the authority.
-- Review order for any content task: **draft → hadith-verifier skill → human review → publish.**
-- The reviewer's sign-off is recorded (reviewer, date, source(s) checked) alongside the content.
+**Approver — updated 2026-07-23 (ADR-044).** The sole human approver before any Islamic
+content goes live is **Morshed Milon (project owner)**. A separate external-scholar
+sign-off is **no longer required**. This is safe *only because* the authenticity rules
+below are unchanged and non-negotiable: content is **sourced and cited, never generated**,
+so the owner is approving real, traceable material — not the AI's opinion. The AI never
+approves its own output, and the owner's approval does not license fabrication.
+
+**Authenticity rules — UNCHANGED and non-negotiable (this is what makes owner-only approval safe):**
+
+- Never invent Qur'an verses or hadith text.
+- Never invent, guess, or paraphrase a hadith grading (*sahih / hasan / da'if / mawdu'*)
+  from model memory. **Every grading must trace to a named source** (sunnah.com,
+  al-Albani, Ibn Hajar, or another cited scholar/database) via the **hadith-verifier**
+  data layer — never generated freehand by the AI.
+- Never invent narrator chains (isnad) or scholarly commentary.
+- If a grading or source cannot be found in the verified database, the system shows
+  **"not yet verified" / "not documented in available sources"** — never a fabricated,
+  plausible-sounding answer.
+- Weak or fabricated narrations stay clearly labeled as such.
+- (Full rules, also unchanged: `skills/islamic-authenticity/islamic-authenticity.md`.)
+
+**Workflow:**
+
+1. Content is pulled **only** from cited sources (sunnah.com API, hadith-verifier skill,
+   named-scholar gradings).
+2. Every claim displays its citation inline (collection, hadith number, grader).
+3. **Morshed reviews and approves each batch/item before it goes live** — no separate
+   scholar sign-off required.
+4. If sourcing is missing or ambiguous, **flag for Morshed's decision** rather than
+   generating content to fill the gap.
+
+- AI is a **drafting and verification aid**, not the authority. It never approves its own output.
+- Review order for any content task: **draft (from cited sources) → hadith-verifier skill → Morshed's approval → publish.**
+- The approval is recorded (approver = **Morshed Milon**, date, source(s) checked) alongside the content.
 - Corrections are made publicly and promptly — this is part of the "Honest" pillar.
 
 ## 6. Escalation & Ambiguity Rule
@@ -106,7 +137,7 @@ do not pick a position:
 - [ ] AI/speculative content visually distinct, labeled, attributed
 - [ ] Disclaimer/methodology strings hard-coded and unaltered
 - [ ] Disputed grades and madhhab differences surfaced, not resolved
-- [ ] Human reviewer signed off (reviewer + date + sources recorded)
+- [ ] Owner (Morshed Milon) approved before publish (approver + date + sources recorded) — ADR-044
 
 ---
 *Non-compliance risks spreading misinformation about the Deen and is treated as a
