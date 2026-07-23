@@ -44,12 +44,26 @@ test('seed: nawawi-40 is populated with the real 42 an-Nawawi refs, status ready
   });
 });
 
-test('seed: the 3 thematic paths remain curation-pending with empty refs (no fabricated selection)', () => {
-  for (const slug of ['kutub-sittah-basics', 'faith-foundations', 'prophetic-character']) {
-    const p = seed.paths.find((x) => x.slug === slug);
-    assert.equal(p.status, 'curation-pending');
-    assert.deepEqual(p.hadithRefs, []);
+test('seed: all 4 paths are populated to their targetCount, status ready, refs well-formed', () => {
+  for (const p of seed.paths) {
+    assert.equal(p.status, 'ready', p.slug + ' should be ready');
+    assert.equal(p.hadithRefs.length, p.targetCount, p.slug + ' ref count must equal targetCount');
+    p.hadithRefs.forEach((r) => {
+      assert.ok(typeof r.collection === 'string' && r.collection.length, p.slug + ' ref needs a collection');
+      assert.ok(typeof r.book === 'string' && r.book.length, p.slug + ' ref needs a book');
+      assert.ok(typeof r.hadith === 'string' && r.hadith.length, p.slug + ' ref needs a hadith');
+    });
   }
+});
+
+test('seed: thematic paths draw from the expected real collections', () => {
+  const bySlug = (s) => seed.paths.find((p) => p.slug === s);
+  const collectionsOf = (s) => new Set(bySlug(s).hadithRefs.map((r) => r.collection));
+  assert.deepEqual([...collectionsOf('faith-foundations')], ['forty-qudsi']);
+  assert.deepEqual([...collectionsOf('prophetic-character')], ['shamail-muhammadiyah']);
+  // Kutub al-Sittah draws only from the six canonical collections
+  const sittah = new Set(['sahih-bukhari', 'sahih-muslim', 'abu-dawood', 'al-tirmidhi', 'sunan-nasai', 'ibn-e-majah']);
+  for (const c of collectionsOf('kutub-sittah-basics')) assert.ok(sittah.has(c), c + ' is not a Kutub al-Sittah collection');
 });
 
 // ── ringGeometry (DoD §5: stroke-dashoffset correct at 0/50/100%) ────
