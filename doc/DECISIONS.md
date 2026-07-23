@@ -641,3 +641,32 @@ reload or navigation, matching its "focus for this one hadith" intent. This is t
 choice from ADR-039 by design; a future session must not collapse the two into one policy.
 **References.** `doc/tech-specs/IslamicInfo_HadithLibrary_TechSpec_v1_2.md` §data registry (line
 306); `docs/prd/IslamicInfo_HadithLibrary_PRD_v1_2_Final.md` (US-H20, US-H21).
+
+## ADR-042 · Reading Paths ship with deferred (empty) hadithRefs; curation is scholar-gated · Accepted · 2026-07-22 · Module 17 (Saved Reading Paths, US-H22)
+**Context.** US-H22 defines 4 built-in reading paths totalling 147 hadith — Start with 40 Nawawi
+(42), Kutub al-Sittah basics (50), Faith foundations (30), Prophetic Character (25); counts fixed
+by PRD FIX-2 / Hadith_Module_PRD §12.6.4, with the 5th "Daily Sunnah" path deferred post-v1. Two
+realities make bulk-seeding the references the wrong move: (1) the live data layer has **no Nawawi
+collection** — the 9 served collections (Bukhari, Muslim, Abu Dawud, Tirmidhi, Nasa'i, Ibn Majah,
+Musnad Ahmad, Mishkat, al-Silsila al-Sahiha) would each need per-hadith remapping + verification;
+and (2) three of the four paths are **editorial curations** — "which 30 hadith are the Faith
+Foundations?" is a scholarly selection judgment. The charter forbids scholarly-consensus claims
+without sourced references, and every prior module deferred curation to human/scholar review
+(Module 8 "zero citation data authored"; Module 11 "no curated data → honest unavailable").
+**Decision.** Build the full engineering (progress rings, deep-view strip, localStorage progress,
+completion state, ring-math unit tests) but ship all 4 paths with `hadithRefs: []` and
+`status: "curation-pending"`, rendering an honest muted **"Coming soon"** control per row. No hadith
+reference is authored or self-certified. Curation is a separate scholar-gated content task that
+only fills `hadithRefs`. The navigation/completion/strip logic is fully implemented and unit-tested
+against **mocked populated paths** — dormant against the live seed — mirroring the disputed-grade
+dead-code decision in the Module-2 content rules ([[hadith-module-decisions]]).
+**Consequences.** The DoD line "every seed hadith reference verified as real and correctly cited" is
+satisfied **vacuously and honestly** — zero references ship, so none can be mis-cited (the highest-
+visibility trust failure the PRD warns about). The 4-path seed lives at
+`src/data/hadith/reading-paths.json`; progress persists in `islamicinfo-hadith-paths`. A future
+curation session must run each candidate reference through the hadith-verifier skill and confirm it
+resolves to a live `/hadith/[collection]/[book]/[hadith]` route before populating `hadithRefs`; it
+must NOT add a 5th path without editorial sign-off. Consistent with the engineering-complete /
+content-deferred posture of Modules 14–16.
+**References.** `docs/superpowers/specs/2026-07-22-module-17-reading-paths-design.md`;
+`docs/prd/IslamicInfo_HadithLibrary_PRD_v1_2_Final.md` (US-H22, FIX-2).
