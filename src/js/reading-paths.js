@@ -127,6 +127,43 @@
     init();
   }
 
+  // ── deep-view reading-path strip ──────────────────────────────────
+  // Renders ONLY when the given hadith ref belongs to an active path.
+  // With the deferred seed no path has members, so this never mounts —
+  // built + core-tested (pathIndexOf) for the future curated data.
+  function findPathContaining(id) {
+    for (var i = 0; i < paths.length; i++) {
+      if (core.pathIndexOf(paths[i], id) != null) return paths[i];
+    }
+    return null;
+  }
+
+  // ref = { collection, book, hadith }; call from the deep-view painter.
+  function mountStrip(ref) {
+    var slot = document.getElementById('reading-path-strip-slot');
+    if (!slot) return;
+    var id = core.refId(ref);
+    var path = findPathContaining(id);
+    if (!path) { slot.innerHTML = ''; return; } // not in any path → hidden
+    var n = core.pathIndexOf(path, id);
+    slot.innerHTML =
+      '<div class="reading-path-strip fade-up">' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>' +
+        '<span>Reading: <strong>' + esc(path.name) + '</strong> · Hadith ' + n + ' of ' + path.targetCount + '</span>' +
+        '<div class="path-nav-btns">' +
+          '<button class="path-nav-btn" type="button" data-path-prev>← Previous</button>' +
+          '<button class="path-nav-btn" type="button" data-path-next>Next →</button>' +
+        '</div>' +
+      '</div>';
+    var prev = path.hadithRefs[n - 2];
+    var next = path.hadithRefs[n];
+    var prevBtn = slot.querySelector('[data-path-prev]');
+    var nextBtn = slot.querySelector('[data-path-next]');
+    // Path-based route (see hadith.js routePath/parseRoute): /hadith/[collection]/[book]/[hadith].
+    if (prevBtn) prevBtn.addEventListener('click', function () { if (prev) location.href = '/hadith/' + prev.collection + '/' + prev.book + '/' + prev.hadith; });
+    if (nextBtn) nextBtn.addEventListener('click', function () { if (next) location.href = '/hadith/' + next.collection + '/' + next.book + '/' + next.hadith; });
+  }
+
   window.II = window.II || {};
-  window.II.readingPathsDOM = { render: render, markRead: markRead };
+  window.II.readingPathsDOM = { render: render, markRead: markRead, mountStrip: mountStrip };
 })();
