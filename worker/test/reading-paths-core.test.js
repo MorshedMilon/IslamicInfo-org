@@ -156,3 +156,37 @@ test('isEmptyPath: empty refs regardless of status → true', () => {
 test('isEmptyPath: populated path → false', () => {
   assert.equal(core.isEmptyPath(MOCK_PATH), false);
 });
+
+// ── storage pure helpers (DOM layer owns actual localStorage) ────────
+test('parseStoredPaths: valid JSON object → same object', () => {
+  assert.deepEqual(core.parseStoredPaths('{"mock":["a","b"]}'), { mock: ['a', 'b'] });
+});
+
+test('parseStoredPaths: null / garbage / array → empty object (never throws)', () => {
+  assert.deepEqual(core.parseStoredPaths(null), {});
+  assert.deepEqual(core.parseStoredPaths('not json'), {});
+  assert.deepEqual(core.parseStoredPaths('[1,2,3]'), {});
+});
+
+test('mergeReadRefs: unions + dedupes, order-stable (existing first)', () => {
+  assert.deepEqual(core.mergeReadRefs(['a', 'b'], ['b', 'c', 'c']), ['a', 'b', 'c']);
+});
+
+test('mergeReadRefs: missing/empty inputs handled', () => {
+  assert.deepEqual(core.mergeReadRefs(undefined, ['a']), ['a']);
+  assert.deepEqual(core.mergeReadRefs(['a'], undefined), ['a']);
+});
+
+test('serializeStoredPaths: round-trips through parse', () => {
+  const obj = { mock: ['a', 'b'] };
+  assert.deepEqual(core.parseStoredPaths(core.serializeStoredPaths(obj)), obj);
+});
+
+test('readSetFor: builds a Set of ids for a given slug', () => {
+  const set = core.readSetFor({ mock: ['a', 'b'] }, 'mock');
+  assert.ok(set.has('a') && set.has('b') && set.size === 2);
+});
+
+test('readSetFor: unknown slug → empty Set', () => {
+  assert.equal(core.readSetFor({}, 'nope').size, 0);
+});

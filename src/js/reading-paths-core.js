@@ -93,6 +93,43 @@
     return !(path.hadithRefs && path.hadithRefs.length > 0);
   }
 
+  // ── storage pure helpers ──────────────────────────────────────────
+  // The DOM layer reads/writes localStorage['islamicinfo-hadith-paths'];
+  // these pure helpers do the parse/merge/serialize so all logic is
+  // testable. Shape: { [slug]: string[] } (arrays of refId strings).
+  function parseStoredPaths(raw) {
+    if (raw == null) return {};
+    try {
+      var obj = JSON.parse(raw);
+      if (obj && typeof obj === 'object' && !Array.isArray(obj)) return obj;
+      return {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function serializeStoredPaths(obj) {
+    return JSON.stringify(obj || {});
+  }
+
+  // Union two id arrays, dedupe, keep first-seen order (existing first).
+  function mergeReadRefs(existing, add) {
+    var seen = Object.create(null);
+    var out = [];
+    var lists = [existing || [], add || []];
+    for (var l = 0; l < lists.length; l++) {
+      for (var i = 0; i < lists[l].length; i++) {
+        var id = lists[l][i];
+        if (!seen[id]) { seen[id] = 1; out.push(id); }
+      }
+    }
+    return out;
+  }
+
+  function readSetFor(store, slug) {
+    return new Set((store && store[slug]) || []);
+  }
+
   var core = {
     ringGeometry: ringGeometry,
     _clampPercent: clampPercent,
@@ -101,6 +138,10 @@
     nextUnread: nextUnread,
     pathIndexOf: pathIndexOf,
     isEmptyPath: isEmptyPath,
+    parseStoredPaths: parseStoredPaths,
+    serializeStoredPaths: serializeStoredPaths,
+    mergeReadRefs: mergeReadRefs,
+    readSetFor: readSetFor,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }
