@@ -1,0 +1,41 @@
+{
+  "_note": "Built-in reading path definitions. hadithRefs deferred pending editorial + scholar curation (CONTENT-POLICY §5). Each ref, once curated, is {collection,book,hadith} resolving to a live /api/hadith route. Do not populate hadithRefs without scholar sign-off.",
+  "paths": [
+    {
+      "slug": "nawawi-40",
+      "name": "Start with 40 Nawawi",
+      "targetCount": 42,
+      "accent": "teal",
+      "status": "curation-pending",
+      "description": "A short, structured entry point into the Sunnah.",
+      "hadithRefs": []
+    },
+    {
+      "slug": "kutub-sittah-basics",
+      "name": "Kutub al-Sittah basics",
+      "targetCount": 50,
+      "accent": "teal",
+      "status": "curation-pending",
+      "description": "Foundational narrations across the six major collections.",
+      "hadithRefs": []
+    },
+    {
+      "slug": "faith-foundations",
+      "name": "Faith foundations",
+      "targetCount": 30,
+      "accent": "gold",
+      "status": "curation-pending",
+      "description": "Narrations on belief, worship, and the core of faith.",
+      "hadithRefs": []
+    },
+    {
+      "slug": "prophetic-character",
+      "name": "Prophetic Character",
+      "targetCount": 25,
+      "accent": "gold",
+      "status": "curation-pending",
+      "description": "Narrations on the manners and character of the Prophet ﷺ.",
+      "hadithRefs": []
+    }
+  ]
+}
