@@ -301,6 +301,13 @@ a { text-decoration: none; color: inherit; }
 }
 .path-ring svg { position: absolute; inset: 0; }
 .path-ring-text { font-size: 8px; font-weight: 700; color: var(--teal-700); z-index: 1; }
+.reading-path-meta { flex: 1; min-width: 0; }
+.reading-path-name { font-size: 12.5px; color: var(--ink-body); font-weight: 500; }
+.reading-path-count { font-size: 10.5px; color: var(--ink-subtle); }
+.path-continue { font-size: 11px; background: none; border: none; cursor: pointer; color: var(--teal-700); padding: 0; white-space: nowrap; }
+.path-continue--soon { color: var(--ink-subtle); cursor: default; font-style: italic; }
+.path-continue--done { color: var(--gold-700); cursor: default; }
+.reading-path-viewall { display: block; width: 100%; text-align: left; font-size: 11px; background: none; border: none; cursor: pointer; color: var(--teal-700); padding: 6px 20px 0; }
 
 .sidebar-cta {
   margin: 20px 16px 0;
@@ -1305,45 +1312,8 @@ html[data-theme="light"].reading-mode-hadith body { background-image: none; }
     <div class="sidebar-divider"></div>
     <!-- Stage 4: Reading Paths -->
     <div class="sidebar-section-label" data-i18n="hadith.sidebar.paths">Reading Paths</div>
-    <div class="reading-path-row">
-      <div class="path-ring">
-        <svg viewBox="0 0 28 28" fill="none" width="28" height="28">
-          <circle cx="14" cy="14" r="12" stroke="rgba(0,105,110,.15)" stroke-width="2.5"/>
-          <circle cx="14" cy="14" r="12" stroke="var(--teal-700)" stroke-width="2.5" stroke-dasharray="75.4" stroke-dashoffset="45" stroke-linecap="round" transform="rotate(-90 14 14)"/>
-        </svg>
-        <span class="path-ring-text">40%</span>
-      </div>
-      <div>
-        <div style="font-size:12.5px;color:var(--ink-body);font-weight:500;" data-i18n="hadith.sidebar.pathNawawi">Start with 40 Nawawi</div>
-        <div style="font-size:10.5px;color:var(--ink-subtle);">17 of 42 read</div>
-      </div>
-    </div>
-    <div class="reading-path-row">
-      <div class="path-ring">
-        <svg viewBox="0 0 28 28" fill="none" width="28" height="28">
-          <circle cx="14" cy="14" r="12" stroke="rgba(0,105,110,.15)" stroke-width="2.5"/>
-          <circle cx="14" cy="14" r="12" stroke="var(--teal-700)" stroke-width="2.5" stroke-dasharray="75.4" stroke-dashoffset="60" stroke-linecap="round" transform="rotate(-90 14 14)"/>
-        </svg>
-        <span class="path-ring-text">21%</span>
-      </div>
-      <div>
-        <div style="font-size:12.5px;color:var(--ink-body);font-weight:500;" data-i18n="hadith.sidebar.pathSittah">Kutub al-Sittah basics</div>
-        <div style="font-size:10.5px;color:var(--ink-subtle);">11 of 50 read</div>
-      </div>
-    </div>
-    <div class="reading-path-row">
-      <div class="path-ring">
-        <svg viewBox="0 0 28 28" fill="none" width="28" height="28">
-          <circle cx="14" cy="14" r="12" stroke="rgba(0,105,110,.15)" stroke-width="2.5"/>
-          <circle cx="14" cy="14" r="12" stroke="var(--gold-500)" stroke-width="2.5" stroke-dasharray="75.4" stroke-dashoffset="68" stroke-linecap="round" transform="rotate(-90 14 14)"/>
-        </svg>
-        <span class="path-ring-text">10%</span>
-      </div>
-      <div>
-        <div style="font-size:12.5px;color:var(--ink-body);font-weight:500;" data-i18n="hadith.sidebar.pathFaith">Faith topics</div>
-        <div style="font-size:10.5px;color:var(--ink-subtle);">3 of 30 read</div>
-      </div>
-    </div>
+    <!-- Reading Paths rows (US-H22) — populated by reading-paths.js -->
+    <div id="reading-paths-list"></div>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label" data-i18n="hadith.sidebar.browse">Browse</div>
     <a class="sidebar-item" href="#topic-index">
@@ -1844,15 +1814,8 @@ html[data-theme="light"].reading-mode-hadith body { background-image: none; }
     <!-- ──────── STAGE 4 — SIGNATURE FEATURES ──────── -->
     <div class="prd-divider"><span class="prd-divider-text">Stage 4 · Signature Features</span></div>
 
-    <!-- Reading Path Strip (Stage 4 §12.6.4) -->
-    <div class="reading-path-strip fade-up">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-      <span>Reading: <strong>Kutub al-Sittah basics</strong> · Hadith 12 of 50</span>
-      <div class="path-nav-btns">
-        <button class="path-nav-btn" data-i18n="hadith.path.prev">← Previous</button>
-        <button class="path-nav-btn" data-i18n="hadith.path.next">Next →</button>
-      </div>
-    </div>
+    <!-- Reading Path Strip (Stage 4 §12.6.4) — mounted by reading-paths.js only if hadith ∈ active path -->
+    <div id="reading-path-strip-slot"></div>
 
     <!-- Study Mode Banner (Stage 4 §12.6.3) -->
     <div class="study-mode-banner fade-up">
@@ -2117,6 +2080,8 @@ function showHadithToast(msg) {
 <script src="src/js/trace-view.js"></script>
 <script src="src/js/compare-view-core.js"></script>
 <script src="src/js/compare-view.js"></script>
+<script src="src/js/reading-paths-core.js"></script>
+<script src="src/js/reading-paths.js"></script>
 <script src="src/js/hadith.js"></script>
 <script src="src/js/hadith-ai-core.js"></script>
 <script src="src/js/hadith-ai.js"></script>
