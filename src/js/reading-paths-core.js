@@ -130,7 +130,30 @@
     return new Set((store && store[slug]) || []);
   }
 
+  // ── pathRowViewModel ──────────────────────────────────────────────
+  // One sidebar row's fully-resolved view model. continueState:
+  //   'coming-soon' → deferred/empty path (muted, non-interactive)
+  //   'complete'    → fully read (Path complete ✓, gold, non-action)
+  //   'continue'    → has an unread next hadith (Continue → link)
+  function pathRowViewModel(path, readSet) {
+    var prog = pathProgress(path, readSet);
+    var state;
+    if (isEmptyPath(path)) state = 'coming-soon';
+    else if (prog.complete) state = 'complete';
+    else state = 'continue';
+    return {
+      slug: path && path.slug,
+      name: (path && path.name) || '',
+      accent: (path && path.accent) || 'teal',
+      percent: prog.percent,
+      countLabel: prog.readCount + ' of ' + prog.targetCount + ' read',
+      ring: ringGeometry(prog.percent),
+      continueState: state,
+    };
+  }
+
   var core = {
+    pathRowViewModel: pathRowViewModel,
     ringGeometry: ringGeometry,
     _clampPercent: clampPercent,
     refId: refId,

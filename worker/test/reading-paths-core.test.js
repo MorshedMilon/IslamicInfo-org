@@ -190,3 +190,34 @@ test('readSetFor: builds a Set of ids for a given slug', () => {
 test('readSetFor: unknown slug → empty Set', () => {
   assert.equal(core.readSetFor({}, 'nope').size, 0);
 });
+
+// ── pathRowViewModel (pure VM the DOM renders verbatim) ──────────────
+test('pathRowViewModel: deferred/empty path → coming-soon, 0%, ring at full offset', () => {
+  const deferred = { slug: 'nawawi-40', name: 'Start with 40 Nawawi', targetCount: 42, accent: 'teal', status: 'curation-pending', hadithRefs: [] };
+  const vm = core.pathRowViewModel(deferred, new Set());
+  assert.equal(vm.continueState, 'coming-soon');
+  assert.equal(vm.percent, 0);
+  assert.equal(vm.countLabel, '0 of 42 read');
+  assert.equal(vm.accent, 'teal');
+  assert.ok(Math.abs(vm.ring.dashOffset - vm.ring.dashArray) < 1e-6);
+});
+
+test('pathRowViewModel: partially-read populated path → continue', () => {
+  const vm = core.pathRowViewModel(MOCK_PATH, new Set(['sahih-bukhari:1:1']));
+  assert.equal(vm.continueState, 'continue');
+  assert.equal(vm.percent, 25);
+  assert.equal(vm.countLabel, '1 of 4 read');
+});
+
+test('pathRowViewModel: fully-read path → complete (Path complete ✓ state)', () => {
+  const all = new Set(MOCK_PATH.hadithRefs.map(core.refId));
+  const vm = core.pathRowViewModel(MOCK_PATH, all);
+  assert.equal(vm.continueState, 'complete');
+  assert.equal(vm.percent, 100);
+});
+
+test('pathRowViewModel: exposes name + slug for rendering', () => {
+  const vm = core.pathRowViewModel(MOCK_PATH, new Set());
+  assert.equal(vm.slug, 'mock');
+  assert.equal(vm.name, 'Mock');
+});
