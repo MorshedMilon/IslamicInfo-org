@@ -75,6 +75,9 @@
 
   function rowHTML(path, readSet) {
     var vm = core.pathRowViewModel(path, readSet);
+    // Continue target is snapshotted at render (rows re-render on load / view-all).
+    // If progress advances without a re-render the href may point at an already-read
+    // hadith — harmless (still a valid in-path target; the strip's Prev/Next self-correct).
     var continueHref = vm.continueState === 'continue' ? routeFor(core.nextUnread(path, readSet)) : '';
     return (
       '<div class="reading-path-row" data-path-slug="' + esc(vm.slug) + '">' +
