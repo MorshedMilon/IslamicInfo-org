@@ -103,9 +103,9 @@
   var core = window.II && window.II.homeSearch;
 
   var HOME_TOPICS = [
-    { key: 'salah', label: 'Salah' }, { key: 'zakat', label: 'Zakat' },
-    { key: 'fasting', label: 'Fasting' }, { key: 'hajj', label: 'Hajj' },
-    { key: 'charity', label: 'Charity' }, { key: 'patience', label: 'Patience' },
+    { key: 'prayer', label: 'Prayer' }, { key: 'fast', label: 'Fasting' },
+    { key: 'charity', label: 'Charity' }, { key: 'hajj', label: 'Hajj' },
+    { key: 'faith', label: 'Faith' }, { key: 'supplication', label: 'Supplication' },
   ];
 
   function currentMode() {

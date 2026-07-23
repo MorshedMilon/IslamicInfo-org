@@ -38,11 +38,19 @@
     }).join(' ');
   }
 
+  // Accept either `ts` (deep-view writer) or `timestamp` (feed-scroll reading tracker).
+  function tsOf(rec) {
+    if (!rec) return -1;
+    if (typeof rec.ts === 'number') return rec.ts;
+    if (typeof rec.timestamp === 'number') return rec.timestamp;
+    return -1;
+  }
+
   // Choose the more-recent last-viewed record (hadith vs quran) by `ts`.
   // Returns { kind, url, label } or null when neither exists.
   function pickContinue(hadithRec, quranRec) {
-    var hTs = (hadithRec && typeof hadithRec.ts === 'number') ? hadithRec.ts : -1;
-    var qTs = (quranRec && typeof quranRec.ts === 'number') ? quranRec.ts : -1;
+    var hTs = tsOf(hadithRec);
+    var qTs = tsOf(quranRec);
     var hasH = !!hadithRec, hasQ = !!quranRec;
     if (!hasH && !hasQ) return null;
     var useH = hasH && (!hasQ || hTs >= qTs);

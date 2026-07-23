@@ -62,3 +62,11 @@ test('pickContinue: hadith label falls back to the slug when no name stored', ()
   var h = { collectionSlug: 'sahih-bukhari', bookNum: 1, hadithNum: 1, ts: 5 };
   assert.match(core.pickContinue(h, null).label, /Sahih Bukhari.*1/);
 });
+
+test('pickContinue: honors `timestamp` (feed-scroll writer) as a synonym for ts', () => {
+  var h = { collectionSlug: 'sahih-bukhari', bookNum: 1, hadithNum: 20, timestamp: 900 };  // no collectionName, no ts
+  var q = { surah: 2, ts: 100 };
+  var r = core.pickContinue(h, q);
+  assert.equal(r.kind, 'hadith');
+  assert.equal(r.url, '/hadith/sahih-bukhari/1/20');
+});
