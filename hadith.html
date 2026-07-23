@@ -293,7 +293,7 @@ a { text-decoration: none; color: inherit; }
 /* Reading Paths sidebar section */
 .reading-path-row {
   display: flex; align-items: center; gap: 10px; padding: 8px 20px;
-  cursor: pointer; color: var(--ink-muted); font-size: 13px; transition: all .18s;
+  cursor: pointer; color: var(--ink-muted); font-size: 13px; transition: all .18s var(--ease-reverent);
 }
 .reading-path-row:hover { background: rgba(0,105,110,.06); color: var(--ink-primary); }
 .path-ring {
@@ -315,7 +315,7 @@ a { text-decoration: none; color: inherit; }
   background: linear-gradient(135deg, rgba(0,105,110,.08), rgba(197,160,89,.06));
   border: 0.5px solid rgba(0,105,110,.15); border-radius: 14px; padding: 14px 16px;
   cursor: pointer; display: flex; align-items: center; gap: 10px;
-  color: var(--teal-700); font-size: 13px; font-weight: 500; transition: all .2s;
+  color: var(--teal-700); font-size: 13px; font-weight: 500; transition: all .2s var(--ease-premium);
 }
 .sidebar-cta:hover { background: linear-gradient(135deg, rgba(0,105,110,.12), rgba(197,160,89,.10)); box-shadow: var(--elev-2); transform: scale(1.02); }
 .sidebar-cta-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--teal-700); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0; }
@@ -374,7 +374,7 @@ a { text-decoration: none; color: inherit; }
 .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
 .section-title { font-family: var(--font-display); font-size: 26px; font-weight: 500; color: var(--ink-primary); letter-spacing: -.01em; }
 [data-theme="dark"] .section-title { color: #F5F8F8; }
-.section-action { font-size: 13px; color: var(--teal-700); font-weight: 500; transition: color .2s; }
+.section-action { font-size: 13px; color: var(--teal-700); font-weight: 500; transition: color .2s var(--ease-premium); }
 .section-action:hover { color: var(--gold-500); }
 .hadith-section-header { display: flex; align-items: center; gap: 12px; }
 .filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -748,7 +748,7 @@ a { text-decoration: none; color: inherit; }
 
 /* ─── BREADCRUMB (Stage 2) ─── */
 .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-muted); margin-bottom: 20px; }
-.breadcrumb a { color: var(--teal-700); font-weight: 500; transition: color .2s; }
+.breadcrumb a { color: var(--teal-700); font-weight: 500; transition: color .2s var(--ease-premium); }
 .breadcrumb a:hover { color: var(--gold-500); }
 .breadcrumb-sep { color: var(--ink-faint); }
 
@@ -764,7 +764,7 @@ a { text-decoration: none; color: inherit; }
   padding: 4px 12px; font-size: 12px; font-weight: 500;
   background: rgba(0,105,110,.08); border: 0.5px solid rgba(0,105,110,.2);
   border-radius: 16px; cursor: pointer; color: var(--teal-700); font-family: var(--font-body);
-  transition: all .2s; text-decoration: none;
+  transition: all .2s var(--ease-premium); text-decoration: none;
 }
 .path-nav-btn:hover { background: var(--teal-700); color: white; }
 
@@ -775,9 +775,9 @@ a { text-decoration: none; color: inherit; }
   display: flex; align-items: center; gap: 14px; color: rgba(255,255,255,.85); font-size: 13.5px;
 }
 .study-mode-indicator { display: flex; align-items: center; gap: 8px; }
-.study-mode-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ADE80; animation: pulse-dot 2s ease infinite; }
+.study-mode-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal-300); animation: pulse-dot 2s ease infinite; }
 @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.7);} }
-.exit-study { margin-left: auto; font-size: 12px; color: rgba(255,255,255,.5); cursor: pointer; border: 0.5px solid rgba(255,255,255,.2); border-radius: 14px; padding: 4px 12px; transition: all .2s; }
+.exit-study { margin-left: auto; font-size: 12px; color: rgba(255,255,255,.5); cursor: pointer; border: 0.5px solid rgba(255,255,255,.2); border-radius: 14px; padding: 4px 12px; transition: all .2s var(--ease-premium); }
 .exit-study:hover { color: white; border-color: rgba(255,255,255,.4); }
 /* Banner sub-elements emitted by hadith-display-mode-core.studyBannerHTML() */
 .study-mode-title { font-weight: 600; color: rgba(255,255,255,.9); }
@@ -919,7 +919,7 @@ html[data-theme="light"].reading-mode-hadith body { background-image: none; }
 .trace-bc{font-size:14px;color:var(--ink-subtle);}
 .trace-bc strong{color:var(--teal-700);}
 .trace-top-acts{display:flex;gap:8px;align-items:center;}
-.trace-act{width:34px;height:34px;border-radius:50%;border:.5px solid var(--ink-faint);background:transparent;color:var(--ink-subtle);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .18s;}
+.trace-act{width:34px;height:34px;border-radius:50%;border:.5px solid var(--ink-faint);background:transparent;color:var(--ink-subtle);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .18s var(--ease-premium);}
 .trace-act:hover{border-color:var(--teal-700);color:var(--teal-700);}
 .trace-exit{background:var(--teal-700);color:white;border:none;border-radius:12px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;margin-left:6px;}
 .trace-layout{flex:1;display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:20px;padding:20px 24px;overflow:hidden;}
@@ -1129,7 +1129,7 @@ html[data-theme="light"].reading-mode-hadith body { background-image: none; }
 .topic-index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
 .topic-card { display: flex; flex-direction: column; gap: 8px; padding: 18px; text-decoration: none;
   background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.14); border-radius: 14px;
-  box-shadow: var(--elev-1); transition: transform .18s, box-shadow .18s; }
+  box-shadow: var(--elev-1); transition: transform .18s var(--ease-reverent), box-shadow .18s var(--ease-reverent); }
 .topic-card:hover { transform: translateY(-2px); box-shadow: var(--elev-2); }
 .topic-card-icon { color: var(--teal-700); }
 .topic-card-name { font-weight: 600; font-size: 16px; color: var(--ink-body); }
