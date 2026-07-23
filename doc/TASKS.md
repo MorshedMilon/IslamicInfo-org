@@ -249,5 +249,55 @@ routes. The Knowledge Index ships entirely as static JSON — no database, no ne
 - [ ] `[data-theme="dark"]` is a sibling to `:root` — not merged
 
 ---
+
+## Module 18 — Full DoD & QA Pass (PRD §10, 18 items) — run 2026-07-23
+
+Verification-only audit of everything built in Modules 0–17 (read-only, code-level;
+no browser / screen-reader / live-model / Lighthouse tooling available this session).
+Full report: `docs/superpowers/specs/2026-07-23-module-18-dod-qa-report.md`.
+
+**Verdict tally:** 3 Pass · 11 Partial · 4 Fail/Not-Built. NOT ship-ready — blocked by
+the unmet scholarly-review gate (content) plus DoD-17 (analytics never built) and
+DoD-6/-7 (engineering fixes). The stale "Stage-1 unmerged" belief was corrected: all
+engineering IS on `main` (`feat/hadith-module-1-foundation` fully contained in main).
+
+| DoD | Status | Owner | Follow-up |
+|---|---|---|---|
+| 1 four stages signed off | Partial | QA + Scholarly | acceptance sign-off not recorded; AT/perf/content pending |
+| 2 deep-link/share/back-fwd | Pass | Eng | (compare shares via ?refs= not routePath — minor) |
+| 3 blueprint 9→18 deliberate | Pass | — | documented ADR-022/024 |
+| 4 dark-mode parity | Partial | Frontend/QA | code theme-aware; visual contrast needs browser |
+| 5 breakpoints 1100/900/760/700/440 | Partial | Frontend/QA | all present in CSS; real-device render unverified |
+| 6 hover easing tokens | **Fail** | **Eng** | ~8 new hadith components use default `ease` on hover — fix |
+| 7 no new colors; grade exc doc'd | Partial | **Eng** + Design | grade exc doc'd (ADR-025); **`#4ADE80` .study-mode-dot** new hex → tokenize |
+| 8 named grader every card | Fail-by-design | Data/Scholarly | grader always null → "not individually cited" (anti-fabrication, ADR-022) |
+| 9 narrator citations reviewed | Partial | **Scholarly** | zero data authored; list NOT reviewed |
+| 10 AI prompt/filter/attribution | Partial | AI + Reviewer | code Pass; ships DARK; live adversarial + sign-off pending |
+| 11 audio/copy/translation attribution | Partial | Frontend | copy Pass; audio honest-unavailable; edition-label dormant (single edition) |
+| 12 Verify/Ask CTAs + prefill | Pass | Eng | — |
+| 13 focus trap + VoiceOver/NVDA | Partial | Frontend/QA | trap wired (Trace/Bookmarks/Compare); **AT pass not runnable here** |
+| 14 6 error-fallback states tested | Partial | Frontend/Worker | 3 tested; **storage-quota handled but UNTESTED**; CDN-404 no hadith handler; canvas N/A |
+| 15 Lighthouse ≥90 ×4 | **Fail** | Perf/Infra | Perf last-known 62–65; ADR-043 (no-build ceiling); unmeasurable here |
+| 16 reading-path Continue | Partial | Scholarly/Product | logic built/tested; empty hadithRefs → live "Coming soon" (ADR-042) |
+| 17 GA4 10 KPI events | **NOT BUILT** | Unassigned | **zero analytics wiring anywhere**; 0/10 events |
+| 18 §24 enforcement per route | Partial | Design + Eng | hover(6) + stale Ecosystem/LearnSpeakAI §24 doc; hero/theme need runtime |
+
+**Religious-accuracy gate: UNMET.** No scholarly human review (CONTENT-POLICY §5) has
+occurred for any Islamic-content feature — narrator gradings, alternate gradings, topic
+summaries, trace-view commentary, reading-path refs are all honest-unavailable /
+curation-deferred / zero-content scaffold. Safe to ship the engineering/display layer;
+NOT cleared to present those as reviewed content.
+
+### Follow-up items surfaced by this pass
+- [ ] **DoD-6 (Eng):** switch ~8 hadith hover components to `var(--ease-reverent)`/`--ease-premium` (`.reading-path-row`, `.sidebar-cta`, `.section-action`, `.breadcrumb a`, `.path-nav-btn`, `.exit-study`, `.trace-act`, `.topic-card`).
+- [ ] **DoD-7 (Eng):** tokenize/remove new hex `#4ADE80` (`hadith.html` `.study-mode-dot`).
+- [ ] **DoD-14 (Eng):** add the missing storage-quota (`QuotaExceededError`) unit test the Module-10 plan required.
+- [ ] **DoD-17 (Product/Eng):** analytics never built — decide scope (GA4 gtag/dataLayer + 10 KPI events) or formally descope in PRD.
+- [ ] **DoD-18 (Design):** update DESIGN-SYSTEM §24/§26 — Ecosystem column/LearnSpeakAI item is stale vs the live 6-site footer.
+- [ ] **DoD-15 (QA/Infra):** run real Lighthouse on `/hadith/bukhari/1/1` (before/after Module-18 perf levers) to close or confirm the ADR-043 ceiling.
+- [ ] **DoD-4/5/13/18 (QA):** live-browser + real-device + VoiceOver/NVDA pass (the environmental gaps this session couldn't cover).
+- [ ] **Scholarly Review (blocking ship of content features):** narrator dataset, topic summaries, trace commentary, reading-path refs, alternate gradings — CONTENT-POLICY §5 human sign-off.
+
+---
 *Source: ARCHITECTURE §3 build stages + §15.3 CI checks + PROJECT_STRUCTURE build order.
 Keep statuses current — this file is only useful if it reflects reality.*
