@@ -1,0 +1,7 @@
+{
+  "_note": "Curated English→Itqan-narrator-id map (ADR-047). Keys are NORMALIZED English names (see narrator-match-core.normalizeName); include spelling variants as separate keys pointing at the same id. EVERY entry must be verified against the real Arabic Itqan profile (r3genesi5.github.io/Itqan/app/data/rijal/) before inclusion — never AI-guessed. v1 STARTER: only entries confirmable so far ship; expand to the ~150–300 common narrators post-ingestion by querying the data (the source files are >10MB each, so expansion is done against the ingested D1, not by hand-fetching). No map hit → 'not yet verified'.",
+  "map": {
+    "abu hurairah": 106,
+    "abu huraira": 106
+  }
+}
