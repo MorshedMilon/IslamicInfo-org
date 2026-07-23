@@ -674,7 +674,7 @@
 
     // 5) record last-read (Continue Reading source) when the hadith loaded
     if (h && host.ui && host.ui.safeLocalStorageSet) {
-      host.ui.safeLocalStorageSet('islamicinfo-hadith-last-read', { collectionSlug: slug, bookNum: book, hadithNum: num });
+      host.ui.safeLocalStorageSet('islamicinfo-hadith-last-read', { collectionSlug: slug, bookNum: book, hadithNum: num, collectionName: (c && c.nameEnglish) || null, ts: Date.now() });
     }
     if (h && window.II && II.track) II.track('tier3_pageview', { collection: slug, book: book, hadith: num });
 

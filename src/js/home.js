@@ -99,11 +99,111 @@
   }
 
 
+  /* ─── Hero search (real slice) ───────────────────────────────── */
+  var core = window.II && window.II.homeSearch;
+
+  var HOME_TOPICS = [
+    { key: 'prayer', label: 'Prayer' }, { key: 'fast', label: 'Fasting' },
+    { key: 'charity', label: 'Charity' }, { key: 'hajj', label: 'Hajj' },
+    { key: 'faith', label: 'Faith' }, { key: 'supplication', label: 'Supplication' },
+  ];
+
+  function currentMode() {
+    var active = document.querySelector('#home-scope-chips .chip.active');
+    return (active && active.getAttribute('data-scope')) || 'hadith';
+  }
+
+  function showNote(msg) {
+    var note = document.getElementById('home-search-note');
+    if (!note) return;
+    note.textContent = msg || '';
+    note.hidden = !msg;
+  }
+
+  function submitSearch() {
+    if (!core) return;
+    var input = document.getElementById('home-search-input');
+    var res = core.dispatchTarget(currentMode(), input ? input.value : '');
+    if (res.kind === 'navigate') { window.location.assign(res.url); }
+    else if (res.kind === 'note') { showNote(res.message); }
+    else if (input) { input.focus(); }   // noop → focus
+  }
+
+  function wireTabs() {
+    var chips = document.querySelectorAll('#home-scope-chips .chip');
+    var input = document.getElementById('home-search-input');
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        chips.forEach(function (c) { c.classList.remove('active'); c.setAttribute('aria-selected', 'false'); });
+        chip.classList.add('active'); chip.setAttribute('aria-selected', 'true');
+        showNote('');   // clear any coming-soon note on tab change
+        if (input && core) input.placeholder = core.placeholderFor(chip.getAttribute('data-scope'));
+      });
+    });
+  }
+
+  function wireForm() {
+    var form = document.getElementById('home-search-form');
+    if (form) form.addEventListener('submit', function (e) { e.preventDefault(); submitSearch(); });
+  }
+
+  function wireMic() {
+    var mic = document.getElementById('home-mic-btn'), input = document.getElementById('home-search-input');
+    if (!mic) return;
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { mic.addEventListener('click', function () { showNote('Voice search isn’t supported in this browser.'); }); return; }
+    mic.addEventListener('click', function () {
+      try {
+        var rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false; rec.maxAlternatives = 1;
+        mic.classList.add('listening');
+        rec.onresult = function (ev) { var txt = ev.results[0][0].transcript; if (input) { input.value = txt; submitSearch(); } };
+        rec.onerror = function () { showNote('Voice search didn’t catch that.'); };
+        rec.onend = function () { mic.classList.remove('listening'); };
+        rec.start();
+      } catch (_) { mic.classList.remove('listening'); }
+    });
+  }
+
+  function renderContinue() {
+    var el = document.getElementById('home-continue'); if (!el || !core) return;
+    var h = null, q = null;
+    try { h = JSON.parse(localStorage.getItem('islamicinfo-hadith-last-read') || 'null'); } catch (_) { h = null; }
+    var surah = null, qts = null;
+    try { surah = localStorage.getItem('ii-quran-last-surah'); qts = localStorage.getItem('ii-quran-last-surah-ts'); } catch (_) {}
+    if (surah) q = { surah: parseInt(surah, 10), ts: qts ? parseInt(qts, 10) : -1 };
+    var pick = core.pickContinue(h, q);
+    if (!pick) { el.hidden = true; return; }
+    el.innerHTML = '<a href="' + pick.url + '">Continue where you left off → ' + escapeHTML(pick.label) + '</a>';
+    el.hidden = false;
+  }
+
+  function renderTopics() {
+    var el = document.getElementById('home-topics'); if (!el) return;
+    var pills = HOME_TOPICS.map(function (t) {
+      return '<a href="/hadith/topics/' + encodeURIComponent(t.key) + '">' + escapeHTML(t.label) + '</a>';
+    }).join('');
+    el.innerHTML = pills + '<a class="home-topics-all" href="/hadith/topics">View all topics →</a>';
+  }
+
+  function escapeHTML(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function initHomeSearch() {
+    if (!core) { console.error('[home.js] home-search-core not loaded'); return; }
+    var input = document.getElementById('home-search-input');
+    if (input) input.placeholder = core.placeholderFor(currentMode());   // Hadith default
+    wireTabs(); wireForm(); wireMic(); renderContinue(); renderTopics();
+  }
+
+
   /* ─── Boot ────────────────────────────────────────────────────── */
 
   document.addEventListener('DOMContentLoaded', () => {
     loadVerse();
     loadHadith();
+    initHomeSearch();
     /* Re-render translated labels when the site language changes */
     document.addEventListener('ii:langchange', () => { loadVerse(); loadHadith(); });
   });

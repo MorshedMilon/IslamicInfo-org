@@ -156,6 +156,7 @@
   async function loadSurah(surahNumber) {
     currentSurah = surahNumber;
     localStorage.setItem('ii-quran-last-surah', surahNumber);
+    try { localStorage.setItem('ii-quran-last-surah-ts', String(Date.now())); } catch (_) {}
 
     const container = document.getElementById('verseList');
     if (container) container.innerHTML = '<p class="loading-msg" aria-live="polite">' + tr('js.quran.loading','Loading verses…') + '</p>';

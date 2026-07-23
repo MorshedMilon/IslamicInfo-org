@@ -1202,6 +1202,34 @@
     else setLoadMore('idle');
   }
 
+  // Global hadith search (US-H07 real): runs /api/hadith/search and renders results
+  // into the feed area with the existing card renderer. Shared by the hero search box
+  // and the homepage (hadith.html?q=). Never fabricates; honest empty/error states.
+  async function runGlobalHadithSearch(q) {
+    var el = feedEl(); if (!el || !feed) return;
+    q = (q || '').trim(); if (!q) return;
+    FEED.query = '';   // server search already matched; grade pills must filter by grade only, not literal substring
+    setLoadMore('hide');
+    ui.renderLoadingState(el, 3); feedStatus('Searching “' + q + '”…');
+    var res; try { res = await api.fetchHadithSearch(q, 'en', 1); } catch (_) { res = null; }
+    if (!res || !res.ok || !res.data || !Array.isArray(res.data.results)) {
+      ui.renderErrorState(el, 'Search temporarily unavailable — try again', function () { runGlobalHadithSearch(q); });
+      return;
+    }
+    var results = res.data.results;
+    FEED.byRef = {};
+    results.forEach(function (h) { var r = feed.refOf(h); if (r) FEED.byRef[r] = h; });
+    if (!results.length) {
+      el.innerHTML = '<div class="hadith-card"><div class="hadith-inner" style="text-align:center;padding:32px;color:var(--ink-muted);">No results for “' + esc(q) + '”.</div></div>';
+      feedStatus('No results for “' + q + '”.');
+      return;
+    }
+    el.innerHTML = results.map(feed.buildCardHTML).join('');
+    markCardStates(el);
+    applyGradeFilter();
+    feedStatus(results.length + ' result' + (results.length === 1 ? '' : 's') + ' for “' + q + '”');
+  }
+
   /* ── Grade filter deep-link (?grade=, TechSpec §5.1; preserves the current path + other params) ── */
   var GRADE_VALUES = { all: 1, sahih: 1, hasan: 1, daif: 1, mawdu: 1 };
   function readGradeFromUrl() {
@@ -1279,12 +1307,9 @@
      The real /api/hadith/search proxy (TechSpec §4.4) is a separate module (see TASKS.md). ── */
   function wireSearch() {
     var input = $('#hadith-search-input'), submit = $('#hadith-search-submit'), mic = $('#hadith-mic-btn');
-    if (input) {
-      var t = null;
-      input.addEventListener('input', function () { clearTimeout(t); t = setTimeout(function () { setSearchQuery(input.value); }, 200); });
-      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); setSearchQuery(input.value); scrollFeed(); } });
-    }
-    if (submit) submit.addEventListener('click', function () { if (input) setSearchQuery(input.value); scrollFeed(); });
+    function run() { if (input && input.value.trim()) { runGlobalHadithSearch(input.value); scrollFeed(); } }
+    if (input) input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); run(); } });
+    if (submit) submit.addEventListener('click', function () { run(); });
 
     // Voice input — Web Speech API when present; silent, never throws when absent.
     if (mic) {
@@ -1296,7 +1321,7 @@
           try {
             var rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false; rec.maxAlternatives = 1;
             mic.classList.add('listening');
-            rec.onresult = function (ev) { var txt = ev.results[0][0].transcript; if (input) { input.value = txt; setSearchQuery(txt); scrollFeed(); } };
+            rec.onresult = function (ev) { var txt = ev.results[0][0].transcript; if (input) { input.value = txt; run(); } };
             rec.onerror = function () { ui.showToast('Voice search didn’t catch that'); };
             rec.onend = function () { mic.classList.remove('listening'); };
             rec.start();
@@ -1463,7 +1488,17 @@
     wireTopics();
     loadHotD();
     initReadingObserver();
-    if (feed) { FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions(); wireCardActions(); wireCompareDrawer(); wireTranslationTabs(); loadHadithFeed(false); }
+    if (feed) {
+      FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions();
+      wireCardActions(); wireCompareDrawer(); wireTranslationTabs();
+      var q0; try { q0 = new URLSearchParams(location.search).get('q'); } catch (_) { q0 = null; }
+      if (q0 && q0.trim()) {
+        var si = $('#hadith-search-input'); if (si) si.value = q0;
+        runGlobalHadithSearch(q0);
+      } else {
+        loadHadithFeed(false);
+      }
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

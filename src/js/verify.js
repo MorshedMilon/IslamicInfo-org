@@ -199,9 +199,28 @@
   }
 
 
+  /* ─── Prefill from query string (homepage Verify tab handoff) ──── */
+  /* Reads ?claim= (preferred) or ?q= (fallback) and prefills the claim
+   * input. Does NOT auto-submit — the user must click Verify. */
+
+  function prefillFromQuery() {
+    var claim = null;
+    try {
+      var p = new URLSearchParams(location.search);
+      claim = p.get('claim') || p.get('q');
+    } catch (_) { claim = null; }
+    if (!claim) return;
+    var input = document.getElementById('verifyInput');
+    if (input) { input.value = claim; input.focus(); }
+  }
+
+
   /* ─── Boot ────────────────────────────────────────────────────── */
 
-  document.addEventListener('DOMContentLoaded', initForm);
+  document.addEventListener('DOMContentLoaded', function () {
+    initForm();
+    prefillFromQuery();
+  });
 
   /* Expose for future production wiring (e.g. real-time streaming swap) */
   window.II = window.II || {};
