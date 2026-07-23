@@ -72,9 +72,17 @@
   function updateListStatus() {
     var listEl = $('#ii-t3a-list'); if (!listEl) return;
     var cards = listEl.querySelectorAll('.hadith-card[data-ref]');
-    var shown = 0; cards.forEach(function (c) { if (c.style.display !== 'none') shown++; });
-    var status = $('#t3a-status');
-    if (status) status.textContent = 'Showing ' + shown + ' of ' + cards.length + ' loaded hadith' + (cards.length === 1 ? '' : 's');
+    var loaded = cards.length, shown = 0;
+    cards.forEach(function (c) { if (c.style.display !== 'none') shown++; });
+    var status = $('#t3a-status'); if (!status) return;
+    var where = (LIST.mode === 'book') ? ' in this book' : ' in this collection';
+    if (LIST.grade !== 'all') {
+      status.textContent = 'Showing ' + shown + ' of ' + loaded + ' loaded hadith' + (loaded === 1 ? '' : 's');
+    } else if (LIST.bookTotal != null) {
+      status.textContent = 'Loaded ' + loaded + ' of ' + LIST.bookTotal + where;
+    } else {
+      status.textContent = 'Loaded ' + loaded + ' hadith' + (loaded === 1 ? '' : 's');
+    }
   }
   function applyListGradeFilter(listEl, filter) {
     applyListGradeFilterTo(listEl.querySelectorAll('.hadith-card[data-ref]'), filter);
@@ -99,8 +107,17 @@
     if (mode === 'end') {
       btn.style.display = 'none';
       var n = document.createElement('div'); n.id = 'ii-t3a-lm-end';
-      n.style.cssText = 'font-size:12px;color:var(--ink-muted);';
-      n.textContent = 'You’ve reached the end of this collection.';
+      n.style.cssText = 'font-size:13px;color:var(--ink-muted);';
+      if (LIST.mode === 'book' && LIST.nextBook) {
+        // Bounded book view: offer the deliberate jump to the next book (SPA-routed <a>).
+        n.innerHTML = 'End of ' + esc(LIST.bookName || 'this book') + ' · ' +
+          '<a class="t3a-next-book" href="/hadith/' + encodeURIComponent(LIST.slug) + '/' + encodeURIComponent(LIST.nextBook.num) + '">' +
+          'Continue to ' + esc(LIST.nextBook.name) + ' →</a>';
+      } else if (LIST.mode === 'book') {
+        n.textContent = 'End of ' + (LIST.bookName || 'this book') + ' — the last book in this collection.';
+      } else {
+        n.textContent = 'You’ve reached the end of this collection.';
+      }
       wrap.appendChild(n); return;
     }
     btn.style.display = '';
@@ -109,13 +126,52 @@
     else { btn.disabled = false; if (lbl) lbl.textContent = 'Load more hadiths'; }
   }
 
-  // Tier-3a endless list state. `next` holds the target for the following Load More.
-  var LIST = { slug: null, provider: null, book: null, page: 0, lastPage: null,
-               bookOrder: null, next: null, refs: null, byRef: {}, grade: 'all',
-               loading: false, token: null };
+  // Tier-3a list state. `mode` is 'book' (hadithapi collections — bounded to one book,
+  // entered from the books grid) or 'flat' (direct-source bookless collections — one
+  // continuous sequence). `next` holds the target for the following Load More.
+  var LIST = { slug: null, collection: null, provider: null, mode: 'flat',
+               book: null, page: 0, lastPage: null, bookOrder: null, books: null,
+               bookName: null, bookTotal: null, nextBook: null,
+               next: null, refs: null, byRef: {}, grade: 'all', loading: false, token: null };
 
-  // Fetch one page for the current provider. hadithapi → per-book route (chapter-walk);
-  // direct sources → flat page. Returns the Worker envelope.
+  // Resolve the current book's name + total + the following book (for the "continue"
+  // link) from the books list. Book mode only; no-op for flat/direct-source collections.
+  function updateBookMeta() {
+    LIST.bookName = null; LIST.nextBook = null;
+    if (LIST.mode !== 'book' || !Array.isArray(LIST.books)) return;
+    var idx = -1;
+    for (var i = 0; i < LIST.books.length; i++) {
+      if (String(LIST.books[i].bookNumber) === String(LIST.book)) { idx = i; break; }
+    }
+    if (idx === -1) return;
+    var cur = LIST.books[idx];
+    LIST.bookName = cur.bookName || ('Book ' + LIST.book);
+    if (LIST.bookTotal == null && typeof cur.hadithCount === 'number' && cur.hadithCount > 0) LIST.bookTotal = cur.hadithCount;
+    if (idx < LIST.books.length - 1) {
+      var nx = LIST.books[idx + 1];
+      LIST.nextBook = { num: nx.bookNumber, name: nx.bookName || ('Book ' + nx.bookNumber) };
+    }
+  }
+
+  // Re-render the breadcrumb header with the resolved book name + true total.
+  function updateListHeader() {
+    var host2 = host.tier2El(); if (!host2 || !LIST.collection) return;
+    var header = host2.querySelector('.t3a-header'); if (!header) return;
+    var bookNum = (LIST.mode === 'book') ? LIST.book : null;
+    var name = (LIST.mode === 'book') ? (LIST.bookName || ('Book ' + LIST.book)) : LIST.collection.nameEnglish;
+    header.outerHTML = listHeaderHTML(LIST.collection, bookNum, name, LIST.bookTotal);
+  }
+
+  // In-book (or in-collection) position label — a navigation aid, NEVER a citation
+  // number. The canonical hadith number on the card is untouched.
+  function posLabelHTML(pos) {
+    var totalTxt = (LIST.bookTotal != null) ? (' of ' + LIST.bookTotal) : '';
+    var where = (LIST.mode === 'book') ? ' in this book' : ' in this collection';
+    return '<div class="t3a-inbook-pos">Position ' + pos + totalTxt + where + '</div>';
+  }
+
+  // Fetch one page for the current provider. hadithapi → that book's page (bounded);
+  // direct sources → flat page over the whole collection. Returns the Worker envelope.
   function fetchListPage(book, page) {
     if (LIST.provider === 'hadithapi') return host.api.fetchHadithList(LIST.slug, book, page, 25);
     return host.api.fetchHadithsByBook(LIST.slug, BOOKLESS_DEFAULT, page, 25);
@@ -145,25 +201,39 @@
     }
 
     var data = res.data;
+    if (data.total != null) LIST.bookTotal = data.total;     // authoritative book (or collection) total
+    var base = (Math.max(1, target.page) - 1) * 25;          // in-book ordinal of this page's first hadith
     var fresh = host.feed.dedupeByRef(LIST.refs, data.hadiths);
     fresh.forEach(function (h) { var r = host.feed.refOf(h); LIST.refs.add(r); LIST.byRef[r] = h; });
     var html = fresh.map(host.feed.buildCardHTML).join('');
+    var newCards;
     if (append) {
       var before = listEl.querySelectorAll('.hadith-card[data-ref]').length;
       if (html) listEl.insertAdjacentHTML('beforeend', html);
       if (host.observeFeed) host.observeFeed(listEl);          // IO.observe is idempotent
       var all = listEl.querySelectorAll('.hadith-card[data-ref]');
-      applyListGradeFilterTo(Array.prototype.slice.call(all, before), LIST.grade);  // only NEW cards
-      updateListStatus();
+      newCards = Array.prototype.slice.call(all, before);
+      applyListGradeFilterTo(newCards, LIST.grade);            // only NEW cards
     } else {
-      listEl.innerHTML = html || '<div class="books-empty"><div class="books-empty-title">No hadiths in this collection.</div></div>';
+      listEl.innerHTML = html || '<div class="books-empty"><div class="books-empty-title">No hadiths available here.</div></div>';
       if (host.observeFeed) host.observeFeed(listEl);
-      applyListGradeFilter(listEl, LIST.grade);
+      newCards = Array.prototype.slice.call(listEl.querySelectorAll('.hadith-card[data-ref]'), 0);
+      applyListGradeFilterTo(newCards, LIST.grade);
     }
+    // In-book position label on each freshly rendered card (nav aid, not a citation).
+    newCards.forEach(function (card, i) {
+      var inner = card.querySelector('.hadith-inner'); if (!inner) return;
+      inner.insertAdjacentHTML('afterbegin', posLabelHTML(base + i + 1));
+    });
+    updateListStatus();
+    if (!append) updateListHeader();                          // reflect the true total once known
 
     LIST.book = target.book; LIST.page = data.page || target.page; LIST.lastPage = data.lastPage;
+    // Book-scoped (and flat) paging: page within the current book/sequence only — no
+    // auto chapter-walk (bookOrder omitted). At the book's end a "Continue to next book"
+    // link is offered instead (see setListLoadMore).
     var adv = listCore.computeListAdvance({ provider: LIST.provider, book: LIST.book,
-      page: LIST.page, lastPage: LIST.lastPage, bookOrder: LIST.bookOrder });
+      page: LIST.page, lastPage: LIST.lastPage, bookOrder: null });
     LIST.next = adv.done ? null : { book: adv.book, page: adv.page };
 
     setListLoadMore(listCore.loadMoreMode({ freshCount: fresh.length, append: append, done: adv.done }));
@@ -233,6 +303,16 @@
   // Direct sources: the deep view finds the hadith by number itself (book segment ignored).
   function openHadithByNumber(c, num) {
     var status = $('#t3a-status');
+    // Fast path: if the number is already loaded in the current view, jump straight to it
+    // (works instantly, and even if the number-resolver API route is unavailable).
+    var refs = Object.keys(LIST.byRef);
+    for (var k = 0; k < refs.length; k++) {
+      var lh = LIST.byRef[refs[k]];
+      if (lh && String(lh.hadithNumber) === String(num)) {
+        host.routeTo({ collection: c.slug, book: (lh.bookNumber != null ? lh.bookNumber : LIST.book), hadith: num }, true);
+        return;
+      }
+    }
     if (LIST.provider !== 'hadithapi') {
       host.routeTo({ collection: c.slug, book: BOOKLESS_DEFAULT, hadith: num }, true);
       return;
@@ -308,8 +388,8 @@
     var input = $('#ii-t3a-search-input'); if (input) input.value = '';
     bumpListToken(); LIST.loading = false;                     // invalidate in-flight fetch; allow reload
     LIST.page = 0; LIST.lastPage = null; LIST.next = null; LIST.refs = new Set(); LIST.byRef = {};
-    LIST.book = (LIST.provider === 'hadithapi' && LIST.bookOrder && LIST.bookOrder.length) ? LIST.bookOrder[0]
-              : (LIST.provider === 'hadithapi' ? 1 : BOOKLESS_DEFAULT);
+    // Keep LIST.book — clearing a search returns to the SAME book/collection being browsed,
+    // not back to book 1.
     loadListPage(false);
   }
 
@@ -322,17 +402,23 @@
     var token = slug + ':' + Date.now();
     el.dataset.t3aToken = token;
 
-    LIST.slug = slug;
+    LIST.slug = slug; LIST.collection = c;
     LIST.provider = (host.api.hadithProviderOf ? host.api.hadithProviderOf(slug) : 'hadithapi');
-    LIST.page = 0; LIST.lastPage = null; LIST.bookOrder = null; LIST.next = null;
+    LIST.mode = (LIST.provider === 'hadithapi') ? 'book' : 'flat';   // hadithapi = bounded book; direct = flat
+    LIST.page = 0; LIST.lastPage = null; LIST.bookOrder = null; LIST.books = null; LIST.next = null;
+    LIST.bookName = null; LIST.bookTotal = null; LIST.nextBook = null;
     LIST.refs = new Set(); LIST.byRef = {}; LIST.grade = grade; LIST.loading = false;
     LIST.token = token;
-    LIST.book = (LIST.provider === 'hadithapi' && r.book != null && r.book !== '') ? r.book
-              : (LIST.provider === 'hadithapi' ? 1 : BOOKLESS_DEFAULT);
+    LIST.book = (LIST.mode === 'book' && r.book != null && r.book !== '') ? r.book
+              : (LIST.mode === 'book' ? 1 : BOOKLESS_DEFAULT);
 
     var skeleton = '';
     for (var i = 0; i < 4; i++) skeleton += '<div class="hadith-card" aria-hidden="true" style="opacity:.5;height:120px;"></div>';
-    el.innerHTML = listHeaderHTML(c, null, c.nameEnglish, null) + searchBarHTML() + gradePillsHTML(grade) +
+    // Initial header: "Book N" placeholder for book mode (real name arrives with the books list),
+    // collection name for flat mode.
+    var initName = (LIST.mode === 'book') ? null : c.nameEnglish;
+    var initBookNum = (LIST.mode === 'book') ? LIST.book : null;
+    el.innerHTML = listHeaderHTML(c, initBookNum, initName, null) + searchBarHTML() + gradePillsHTML(grade) +
       '<div id="t3a-status" class="ii-sr-live" aria-live="polite" style="font-size:12px;color:var(--ink-muted);margin:8px 0;"></div>' +
       '<div class="t3a-list" id="ii-t3a-list">' + skeleton + '</div>' + loadMoreHTML();
 
@@ -341,16 +427,19 @@
     wireListFullView(el);
     wireListSearch(el, c);
 
-    if (LIST.provider === 'hadithapi') {
+    if (LIST.mode === 'book') {
       try {
         var b = await host.api.fetchHadithBooks(slug);
         if (LIST.token !== token) return;
         if (b && b.ok && Array.isArray(b.data)) {
+          LIST.books = b.data;
           LIST.bookOrder = b.data.map(function (x) { return x.bookNumber; })
             .filter(function (n) { return n != null; });
           if ((r.book == null || r.book === '') && LIST.bookOrder.length) LIST.book = LIST.bookOrder[0];
+          updateBookMeta();       // resolve current book name + next-book link
+          updateListHeader();     // label the book (count fills in after the first page loads)
         }
-      } catch (_) { /* no book list → single-book fallback via computeListAdvance */ }
+      } catch (_) { /* no book list → header keeps the "Book N" label; still pages this book */ }
     }
     if (LIST.token !== token) return;
     loadListPage(false);
