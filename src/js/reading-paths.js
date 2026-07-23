@@ -64,7 +64,10 @@
   // so this is i18n-ready with zero behavior change until the locale files
   // gain the keys (the in-progress 10-language i18n pass owns that).
   function continueControl(vm, continueHref) {
-    if (vm.continueState === 'coming-soon') {
+    // 'continue' with no href = partially-curated path whose curated refs are all read
+    // but targetCount not yet reached (nextUnread null) → honest "Coming soon", not a
+    // dead <a href="">.
+    if (vm.continueState === 'coming-soon' || (vm.continueState === 'continue' && !continueHref)) {
       return '<span class="path-continue path-continue--soon" aria-disabled="true" data-i18n="hadith.paths.comingSoon">Coming soon</span>';
     }
     if (vm.continueState === 'complete') {
@@ -76,9 +79,11 @@
   function rowHTML(path, readSet) {
     var vm = core.pathRowViewModel(path, readSet);
     // Continue target is snapshotted at render (rows re-render on load / view-all).
-    // If progress advances without a re-render the href may point at an already-read
-    // hadith — harmless (still a valid in-path target; the strip's Prev/Next self-correct).
-    var continueHref = vm.continueState === 'continue' ? routeFor(core.nextUnread(path, readSet)) : '';
+    // nextUnread can be null even in the 'continue' state when a path is partially
+    // curated (hadithRefs.length < targetCount) and every curated ref is read — guard it,
+    // else routeFor(null) throws and the whole sidebar fails to render.
+    var nextRef = vm.continueState === 'continue' ? core.nextUnread(path, readSet) : null;
+    var continueHref = nextRef ? routeFor(nextRef) : '';
     return (
       '<div class="reading-path-row" data-path-slug="' + esc(vm.slug) + '">' +
         ringSVG(vm) +

@@ -236,3 +236,20 @@ test('pathRowViewModel: exposes name + slug for rendering', () => {
   assert.equal(vm.slug, 'mock');
   assert.equal(vm.name, 'Mock');
 });
+
+// ── partial-curation edge: 'continue' state can coexist with null nextUnread ──
+// (hadithRefs.length < targetCount, all curated refs read → not complete → 'continue',
+//  but nextUnread() is null. The DOM layer must guard routeFor(null); see reading-paths.js.)
+test('pathRowViewModel: partially-curated + all-curated-read → continue state, but nextUnread is null', () => {
+  const partial = {
+    slug: 'partial', name: 'Partial', targetCount: 20, status: 'ready',
+    hadithRefs: [
+      { collection: 'sahih-bukhari', book: '1', hadith: '1' },
+      { collection: 'sahih-bukhari', book: '1', hadith: '2' }
+    ]
+  };
+  const allCuratedRead = new Set(partial.hadithRefs.map(core.refId));
+  const vm = core.pathRowViewModel(partial, allCuratedRead);
+  assert.equal(vm.continueState, 'continue');       // read(2) < target(20) → not complete
+  assert.equal(core.nextUnread(partial, allCuratedRead), null); // nothing left to open
+});
