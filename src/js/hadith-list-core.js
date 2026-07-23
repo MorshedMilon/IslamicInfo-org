@@ -41,9 +41,9 @@
   //   'idle'  → more available
   function loadMoreMode(s) {
     s = s || {};
-    if (!s.append && !s.freshCount) return 'hide';
-    if (s.done) return 'end';
-    return 'idle';
+    if (!s.done) return 'idle';                 // more available (walk continues even if this page was empty)
+    if (!s.append && !s.freshCount) return 'hide';  // first load, empty, and nothing more → truly empty
+    return 'end';
   }
 
   var core = { parseSearchInput: parseSearchInput, computeListAdvance: computeListAdvance, loadMoreMode: loadMoreMode };

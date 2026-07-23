@@ -45,3 +45,7 @@ test('loadMoreMode maps fresh/append/end states', () => {
   assert.equal(core.loadMoreMode({ freshCount: 10, append: true, done: true }), 'end');
   assert.equal(core.loadMoreMode({ freshCount: 25, append: true, done: false }), 'idle');
 });
+
+test('loadMoreMode keeps the button when a fresh page is empty but the walk is not done', () => {
+  assert.equal(core.loadMoreMode({ freshCount: 0, append: false, done: false }), 'idle');
+});

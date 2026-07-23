@@ -63,16 +63,22 @@
       }).join('') + '</div>';
   }
 
-  function applyListGradeFilter(listEl, filter) {
-    var cards = listEl.querySelectorAll('.hadith-card[data-ref]');
-    var shown = 0;
+  function applyListGradeFilterTo(cards, filter) {
     cards.forEach(function (card) {
       var vis = (filter === 'all' || card.getAttribute('data-grade') === filter);
       card.style.display = vis ? '' : 'none';
-      if (vis) shown++;
     });
+  }
+  function updateListStatus() {
+    var listEl = $('#ii-t3a-list'); if (!listEl) return;
+    var cards = listEl.querySelectorAll('.hadith-card[data-ref]');
+    var shown = 0; cards.forEach(function (c) { if (c.style.display !== 'none') shown++; });
     var status = $('#t3a-status');
     if (status) status.textContent = 'Showing ' + shown + ' of ' + cards.length + ' loaded hadith' + (cards.length === 1 ? '' : 's');
+  }
+  function applyListGradeFilter(listEl, filter) {
+    applyListGradeFilterTo(listEl.querySelectorAll('.hadith-card[data-ref]'), filter);
+    updateListStatus();
   }
 
   // Endless Load-More button (replaces the old book Prev/Next). One button; a
@@ -106,7 +112,7 @@
   // Tier-3a endless list state. `next` holds the target for the following Load More.
   var LIST = { slug: null, provider: null, book: null, page: 0, lastPage: null,
                bookOrder: null, next: null, refs: null, byRef: {}, grade: 'all',
-               loading: false, token: null, ctx: null };
+               loading: false, token: null };
 
   // Fetch one page for the current provider. hadithapi → per-book route (chapter-walk);
   // direct sources → flat page. Returns the Worker envelope.
@@ -129,6 +135,7 @@
     if (!res || !res.ok || !res.data || !Array.isArray(res.data.hadiths)) {
       if (append) { setListLoadMore('error'); if (host.ui.showToast) host.ui.showToast('Could not load more — try again'); }
       else {
+        setListLoadMore('hide');
         listEl.innerHTML = '<div class="books-error"><div class="books-empty-title">Hadiths temporarily unavailable</div>' +
           '<div>We couldn’t load the hadiths for this collection.</div>' +
           '<button class="btn-glass" id="ii-t3a-retry" type="button" style="margin-top:14px;">Try again</button></div>';
@@ -141,16 +148,24 @@
     var fresh = host.feed.dedupeByRef(LIST.refs, data.hadiths);
     fresh.forEach(function (h) { var r = host.feed.refOf(h); LIST.refs.add(r); LIST.byRef[r] = h; });
     var html = fresh.map(host.feed.buildCardHTML).join('');
-    if (append) { if (html) listEl.insertAdjacentHTML('beforeend', html); }
-    else { listEl.innerHTML = html || '<div class="books-empty"><div class="books-empty-title">No hadiths in this collection.</div></div>'; }
-    if (host.observeFeed) host.observeFeed(listEl);
+    if (append) {
+      var before = listEl.querySelectorAll('.hadith-card[data-ref]').length;
+      if (html) listEl.insertAdjacentHTML('beforeend', html);
+      if (host.observeFeed) host.observeFeed(listEl);          // IO.observe is idempotent
+      var all = listEl.querySelectorAll('.hadith-card[data-ref]');
+      applyListGradeFilterTo(Array.prototype.slice.call(all, before), LIST.grade);  // only NEW cards
+      updateListStatus();
+    } else {
+      listEl.innerHTML = html || '<div class="books-empty"><div class="books-empty-title">No hadiths in this collection.</div></div>';
+      if (host.observeFeed) host.observeFeed(listEl);
+      applyListGradeFilter(listEl, LIST.grade);
+    }
 
     LIST.book = target.book; LIST.page = data.page || target.page; LIST.lastPage = data.lastPage;
     var adv = listCore.computeListAdvance({ provider: LIST.provider, book: LIST.book,
       page: LIST.page, lastPage: LIST.lastPage, bookOrder: LIST.bookOrder });
     LIST.next = adv.done ? null : { book: adv.book, page: adv.page };
 
-    applyListGradeFilter(listEl, LIST.grade);
     setListLoadMore(listCore.loadMoreMode({ freshCount: fresh.length, append: append, done: adv.done }));
   }
 
@@ -197,7 +212,7 @@
     LIST.provider = (host.api.hadithProviderOf ? host.api.hadithProviderOf(slug) : 'hadithapi');
     LIST.page = 0; LIST.lastPage = null; LIST.bookOrder = null; LIST.next = null;
     LIST.refs = new Set(); LIST.byRef = {}; LIST.grade = grade; LIST.loading = false;
-    LIST.token = token; LIST.ctx = { r: r, c: c };
+    LIST.token = token;
     LIST.book = (LIST.provider === 'hadithapi' && r.book != null && r.book !== '') ? r.book
               : (LIST.provider === 'hadithapi' ? 1 : BOOKLESS_DEFAULT);
 
