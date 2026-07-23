@@ -346,11 +346,6 @@
   function fetchHadithOne(slug, book, num) {
     return _getHadith(`/api/hadith/${encodeURIComponent(slug)}/${book}/${num}`);
   }
-  // Flat whole-collection page (hadithapi) — used by the chapter-walk's direct-source
-  // sibling and available if a caller wants the flat listing. Same envelope as the list.
-  function fetchHadithCollectionFlat(slug, page, limit) {
-    return _getHadith(`/api/hadith/collections/${encodeURIComponent(slug)}/hadiths?page=${page || 1}&limit=${limit || 25}`);
-  }
   // Resolve a typed hadith number → its record (with real bookNumber) for hadithapi
   // collections, so a number search can route into the deep view.
   function fetchHadithByNumber(slug, num) {
@@ -549,7 +544,6 @@
     fetchHadithList,
     fetchHadithOne,
     fetchHadithSearch,
-    fetchHadithCollectionFlat,
     fetchHadithByNumber,
     fetchHadithDaily,
     fetchNarrator,

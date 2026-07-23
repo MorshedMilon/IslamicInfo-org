@@ -203,6 +203,18 @@
       '<button type="submit">Search</button></form>';
   }
 
+  // Text used for client-side keyword matching against direct-source hadiths
+  // (the Worker's /api/hadith/search only accepts the 9 hadithapi ALLOWED_SLUGS).
+  function hadithSearchText(h) {
+    return [h && h.arabicMatn, h && h.translation && h.translation.text, h && h.reference,
+            h && h.narrator && h.narrator.name].filter(Boolean).join(' ');
+  }
+
+  // Bumps LIST.token to invalidate any in-flight loadListPage/search fetch that
+  // resolves after a mode switch (search ↔ endless list), so stale results can
+  // never be written into a list that's moved on.
+  function bumpListToken() { LIST.token = LIST.slug + ':' + Date.now(); return LIST.token; }
+
   function wireListSearch(el, c) {
     var form = $('#ii-t3a-search', el), input = $('#ii-t3a-search-input', el);
     if (!form || !input) return;
@@ -243,16 +255,24 @@
   function runKeywordSearch(c, q) {
     var listEl = $('#ii-t3a-list'), status = $('#t3a-status');
     if (!listEl) return;
-    var token = LIST.token;
+    var token = bumpListToken();          // switch to search mode; invalidate any in-flight load-more
+    LIST.loading = false;
     setListLoadMore('hide');
     listEl.innerHTML = '<div class="books-empty"><div class="books-empty-title">Searching “' + esc(q) + '”…</div></div>';
-    host.api.fetchHadithSearch(q, readLang(), 1, c.slug).then(function (res) {
-      if (token !== LIST.token) return;                       // navigated away → drop stale result
+    var p = (LIST.provider === 'hadithapi')
+      ? host.api.fetchHadithSearch(q, readLang(), 1, c.slug).then(function (res) {
+          return (res && res.ok && res.data && Array.isArray(res.data.results)) ? res.data.results : null;
+        })
+      : host.api.fetchHadithsByBook(c.slug, BOOKLESS_DEFAULT, 1, 1000000).then(function (res) {
+          if (!res || !res.ok || !res.data || !Array.isArray(res.data.hadiths)) return null;
+          var needle = q.toLowerCase();
+          return res.data.hadiths.filter(function (h) { return hadithSearchText(h).toLowerCase().indexOf(needle) !== -1; });
+        });
+    p.then(function (results) {
+      if (token !== LIST.token) return;                        // navigated/re-searched → drop stale
       var listEl2 = $('#ii-t3a-list'); if (!listEl2) return;
-      var results = res && res.ok && res.data && Array.isArray(res.data.results) ? res.data.results : null;
       if (!results) {
-        listEl2.innerHTML = '<div class="books-error"><div class="books-empty-title">Search unavailable</div>' +
-          '<div>Please try again in a moment.</div></div>';
+        listEl2.innerHTML = '<div class="books-error"><div class="books-empty-title">Search unavailable</div><div>Please try again in a moment.</div></div>';
         return;
       }
       results = results.filter(function (h) { return !h.collectionSlug || h.collectionSlug === c.slug; });
@@ -286,6 +306,7 @@
   function restoreFullList() {
     var clear = document.querySelector('.t3a-search-clear'); if (clear) clear.remove();
     var input = $('#ii-t3a-search-input'); if (input) input.value = '';
+    bumpListToken(); LIST.loading = false;                     // invalidate in-flight fetch; allow reload
     LIST.page = 0; LIST.lastPage = null; LIST.next = null; LIST.refs = new Set(); LIST.byRef = {};
     LIST.book = (LIST.provider === 'hadithapi' && LIST.bookOrder && LIST.bookOrder.length) ? LIST.bookOrder[0]
               : (LIST.provider === 'hadithapi' ? 1 : BOOKLESS_DEFAULT);
