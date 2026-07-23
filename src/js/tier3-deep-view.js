@@ -195,9 +195,97 @@
       host.routeTo({ collection: parts[0], book: parts[1], hadith: parts[2] }, true);
     });
   }
-  // Task 6 fills these in:
-  function searchBarHTML() { return ''; }
-  function wireListSearch(el, c) { /* Task 6 */ }
+  function searchBarHTML() {
+    return '<form class="t3a-search" id="ii-t3a-search" role="search" aria-label="Search this collection">' +
+      '<input id="ii-t3a-search-input" type="search" inputmode="text" ' +
+      'placeholder="Search this collection — hadith number or keyword" ' +
+      'aria-label="Search this collection by hadith number or keyword" autocomplete="off">' +
+      '<button type="submit">Search</button></form>';
+  }
+
+  function wireListSearch(el, c) {
+    var form = $('#ii-t3a-search', el), input = $('#ii-t3a-search-input', el);
+    if (!form || !input) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var parsed = listCore.parseSearchInput(input.value);
+      var status = $('#t3a-status');
+      if (parsed.kind === 'number') { openHadithByNumber(c, parsed.number); return; }
+      if (parsed.kind === 'keyword') { runKeywordSearch(c, parsed.query); return; }
+      if (parsed.kind === 'too-short') { if (status) status.textContent = 'Type at least 2 characters, or a hadith number.'; return; }
+      restoreFullList();   // empty → restore the full endless list
+    });
+  }
+
+  // Number jump. hadithapi: resolve the number → its book, then open the deep view.
+  // Direct sources: the deep view finds the hadith by number itself (book segment ignored).
+  function openHadithByNumber(c, num) {
+    var status = $('#t3a-status');
+    if (LIST.provider !== 'hadithapi') {
+      host.routeTo({ collection: c.slug, book: BOOKLESS_DEFAULT, hadith: num }, true);
+      return;
+    }
+    if (status) status.textContent = 'Finding hadith #' + num + '…';
+    host.api.fetchHadithByNumber(c.slug, num).then(function (res) {
+      var h = res && res.ok && res.data && Array.isArray(res.data.hadiths) ? res.data.hadiths[0] : null;
+      if (h && h.bookNumber != null) {
+        host.routeTo({ collection: c.slug, book: h.bookNumber, hadith: num }, true);
+      } else if (status) {
+        status.textContent = 'No hadith #' + num + ' found in ' + c.nameEnglish + '.';
+      }
+    }).catch(function () { if (status) status.textContent = 'Couldn’t look up hadith #' + num + ' — try again.'; });
+  }
+
+  // Keyword search, scoped to the current collection. Renders results in the list
+  // container and swaps Load More for a "clear search" control.
+  function runKeywordSearch(c, q) {
+    var listEl = $('#ii-t3a-list'), status = $('#t3a-status');
+    if (!listEl) return;
+    setListLoadMore('hide');
+    listEl.innerHTML = '<div class="books-empty"><div class="books-empty-title">Searching “' + esc(q) + '”…</div></div>';
+    host.api.fetchHadithSearch(q, readLang(), 1, c.slug).then(function (res) {
+      if (LIST.token == null) return;
+      var results = res && res.ok && res.data && Array.isArray(res.data.results) ? res.data.results : null;
+      if (!results) {
+        listEl.innerHTML = '<div class="books-error"><div class="books-empty-title">Search unavailable</div>' +
+          '<div>Please try again in a moment.</div></div>';
+        return;
+      }
+      results = results.filter(function (h) { return !h.collectionSlug || h.collectionSlug === c.slug; });
+      if (!results.length) {
+        listEl.innerHTML = '<div class="books-empty"><div class="books-empty-title">No matches for “' + esc(q) + '” in ' + esc(c.nameEnglish) + '.</div></div>';
+      } else {
+        results.forEach(function (h) { var r = host.feed.refOf(h); if (r) LIST.byRef[r] = h; });
+        listEl.innerHTML = results.map(host.feed.buildCardHTML).join('');
+        if (host.observeFeed) host.observeFeed(listEl);
+        applyListGradeFilter(listEl, LIST.grade);
+      }
+      renderSearchClear(q, results.length);
+    }).catch(function () {
+      listEl.innerHTML = '<div class="books-error"><div class="books-empty-title">Search unavailable</div><div>Please try again.</div></div>';
+    });
+  }
+
+  function renderSearchClear(q, count) {
+    var listEl = $('#ii-t3a-list'); if (!listEl) return;
+    var existing = document.querySelector('.t3a-search-clear'); if (existing) existing.remove();
+    var bar = document.createElement('div');
+    bar.className = 't3a-search-clear';
+    bar.innerHTML = count + ' result' + (count === 1 ? '' : 's') + ' for “' + esc(q) + '” · ' +
+      '<a href="#" id="ii-t3a-clear">Clear search — back to all hadith</a>';
+    listEl.parentNode.insertBefore(bar, listEl);
+    var link = $('#ii-t3a-clear');
+    if (link) link.addEventListener('click', function (e) { e.preventDefault(); restoreFullList(); });
+  }
+
+  function restoreFullList() {
+    var clear = document.querySelector('.t3a-search-clear'); if (clear) clear.remove();
+    var input = $('#ii-t3a-search-input'); if (input) input.value = '';
+    LIST.page = 0; LIST.lastPage = null; LIST.next = null; LIST.refs = new Set(); LIST.byRef = {};
+    LIST.book = (LIST.provider === 'hadithapi' && LIST.bookOrder && LIST.bookOrder.length) ? LIST.bookOrder[0]
+              : (LIST.provider === 'hadithapi' ? 1 : BOOKLESS_DEFAULT);
+    loadListPage(false);
+  }
 
   async function renderList(r, c) {
     host.setTier(2);
