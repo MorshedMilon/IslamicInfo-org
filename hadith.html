@@ -771,6 +771,95 @@ a { text-decoration: none; color: inherit; }
 @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.7);} }
 .exit-study { margin-left: auto; font-size: 12px; color: rgba(255,255,255,.5); cursor: pointer; border: 0.5px solid rgba(255,255,255,.2); border-radius: 14px; padding: 4px 12px; transition: all .2s; }
 .exit-study:hover { color: white; border-color: rgba(255,255,255,.4); }
+/* Banner sub-elements emitted by hadith-display-mode-core.studyBannerHTML() */
+.study-mode-title { font-weight: 600; color: rgba(255,255,255,.9); }
+.study-mode-sub { font-size: 12.5px; color: rgba(255,255,255,.55); }
+
+/* ═══ MODULE 16 — Display Modes (Study US-H20 / Reading US-H21) ═══ */
+/* Header toggle buttons (in .dv-header, emitted by modeButtonsHTML) */
+.dv-modes { display: flex; gap: 8px; }
+.dv-mode-btn {
+  font-size: 12px; font-weight: 600; color: var(--ink-muted);
+  background: var(--surface-card); border: 0.5px solid rgba(0,105,110,.18);
+  border-radius: var(--r-md); padding: 6px 12px; cursor: pointer; white-space: nowrap;
+  transition: color .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease);
+}
+.dv-mode-btn:hover { color: var(--teal-700); border-color: rgba(0,105,110,.35); }
+.dv-mode-btn[aria-pressed="true"] { color: var(--white); background: var(--teal-700); border-color: var(--teal-700); }
+/* Reading-mode floating exit (fixed top-right); created by the DOM layer */
+.reading-exit {
+  position: fixed; top: 84px; right: clamp(16px,4vw,40px); z-index: 60;
+  width: 40px; height: 40px; border-radius: 50%; display: none;
+  align-items: center; justify-content: center; font-size: 20px; line-height: 1;
+  background: var(--surface-card); color: var(--ink-body);
+  border: 0.5px solid rgba(0,105,110,.18); box-shadow: var(--elev-2); cursor: pointer;
+  transition: color .2s var(--ease), box-shadow .2s var(--ease);
+}
+.reading-exit:hover { color: var(--teal-700); box-shadow: var(--elev-3); }
+
+/* ── STUDY MODE — collapse chrome (all viewports) ── */
+html.study-mode-hadith #hadith-hero,
+html.study-mode-hadith .sidebar,
+html.study-mode-hadith #collections,
+html.study-mode-hadith .dv-translations,
+html.study-mode-hadith .dv-prevnext-slot,
+html.study-mode-hadith .dv-mode-btn[data-mode="reading"] { display: none !important; }
+html.study-mode-hadith .layout { display: block; }
+html.study-mode-hadith .dv { max-width: 1360px; }
+
+/* ── STUDY MODE — 4-quadrant grid (≥1440px, fits 1440×900 without page scroll) ── */
+@media (min-width: 1440px) {
+  html.study-mode-hadith .dv {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto minmax(0,1fr) minmax(0,1fr);
+    gap: 16px 24px;
+    height: calc(100vh - 128px);
+    align-items: stretch;
+    padding: 8px 0 16px;
+  }
+  html.study-mode-hadith .dv-header      { grid-column: 1 / -1; grid-row: 1; margin: 0; }
+  html.study-mode-hadith .study-mode-banner { grid-column: 1 / -1; grid-row: 2; margin: 0; }
+  html.study-mode-hadith .dv-body-card   { grid-column: 1; grid-row: 3; margin: 0; }   /* TL: Matn + translation */
+  html.study-mode-hadith .dv-isnad       { grid-column: 2; grid-row: 3; margin: 0; }   /* TR: Isnad chain */
+  html.study-mode-hadith .dv-gradings-block { grid-column: 1; grid-row: 4; margin: 0; } /* BL: Grading */
+  html.study-mode-hadith .dv-br-group    { grid-column: 2; grid-row: 4; }              /* BR: Topics + related */
+  html.study-mode-hadith .dv-br-group .dv-block { margin: 0 0 16px; }
+  html.study-mode-hadith .dv-br-group .dv-block:last-child { margin-bottom: 0; }
+  /* Each quadrant scrolls internally if one hadith is unusually long, so the
+     4-up layout itself never forces the page to scroll (DoD: 1440×900). */
+  html.study-mode-hadith .dv-body-card,
+  html.study-mode-hadith .dv-isnad,
+  html.study-mode-hadith .dv-gradings-block,
+  html.study-mode-hadith .dv-br-group { overflow-y: auto; min-height: 0; }
+  html.study-mode-hadith .hadith-card--deep .dv-arabic { font-size: 22px; line-height: 1.95; padding: 18px; }
+}
+
+/* ── READING MODE — single-column, distraction-free ── */
+html.reading-mode-hadith #hadith-hero,
+html.reading-mode-hadith .sidebar,
+html.reading-mode-hadith #collections,
+html.reading-mode-hadith #ii-footer,
+html.reading-mode-hadith .cta-band,
+html.reading-mode-hadith .dv-actions,
+html.reading-mode-hadith .dv-modes { display: none !important; }
+html.reading-mode-hadith .reading-exit { display: flex; }
+html.reading-mode-hadith .layout { display: block; }
+html.reading-mode-hadith .dv { max-width: 720px; }
+/* Arabic +2 steps (26→32), translation +1 step (17→19 / 16→18) */
+html.reading-mode-hadith .hadith-card--deep .dv-arabic { font-size: 32px; line-height: 2.2; }
+html.reading-mode-hadith .hadith-card--deep .dv-text { font-size: 19px; line-height: 1.95; }
+html.reading-mode-hadith .dv-tr-text { font-size: 18px; }
+/* Light-mode surface → gold-50 tint (reuses --gold-50 #FDF8EC; ADR-040). Dark unchanged. */
+html[data-theme="light"].reading-mode-hadith,
+html[data-theme="light"].reading-mode-hadith body { background: var(--gold-50); }
+html[data-theme="light"].reading-mode-hadith body { background-image: none; }
+
+/* prefers-reduced-motion: instant mode transitions, no animated dot/toggle */
+@media (prefers-reduced-motion: reduce) {
+  html.study-mode-hadith .dv, html.reading-mode-hadith .dv,
+  .dv-mode-btn, .reading-exit, .study-mode-dot { transition: none !important; animation: none !important; }
+}
 
 /* ─── TRACE VIEW (Module 14) ─── */
 .trace-overlay{position:fixed;inset:0;z-index:300;background:var(--surface-canvas);display:none;flex-direction:column;}
@@ -1154,7 +1243,7 @@ a { text-decoration: none; color: inherit; }
 <div class="page-shell">
 
 <!-- ══════════════════════════ HERO (Stage 1) ══════════════════════════ -->
-<div style="max-width:900px;margin:0 auto;padding:44px clamp(20px,5vw,56px) 0;text-align:center;">
+<div id="hadith-hero" style="max-width:900px;margin:0 auto;padding:44px clamp(20px,5vw,56px) 0;text-align:center;">
   <div class="bismillah-hero-top">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
   <div class="hijri-pill"><span class="dot"></span><span class="sep"></span><span data-i18n="hadith.hero.pillLib">Hadith Library</span><span class="sep"></span><span data-i18n="hadith.hero.pillTrad">Prophetic Traditions</span></div>
   <div class="page-eyebrow" data-i18n="hadith.hero.eyebrow">Prophetic Traditions</div>
@@ -2020,6 +2109,7 @@ function showHadithToast(msg) {
 <script src="src/js/reading-progress-core.js"></script>
 <script src="src/js/hadith-actions-core.js"></script>
 <script src="src/js/hadith-topics-core.js"></script>
+<script src="src/js/hadith-display-mode-core.js"></script>
 <script src="src/js/tier3-deep-view.js"></script>
 <script src="src/js/narrator-panel-core.js"></script>
 <script src="src/js/narrator-panel.js"></script>

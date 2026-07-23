@@ -358,6 +358,10 @@
 
   function renderRoute(r) {
     r = r || parseRoute();
+    // Module 16: drop any standing Study/Reading <html> classes on every route change;
+    // renderDeepView re-applies the mode synchronously for Tier-3b routes (no flash),
+    // so non-deep-view routes (feed / list / grid / topics) render with normal chrome.
+    if (II.tier3 && II.tier3.clearModeClasses) II.tier3.clearModeClasses();
     if (r.compare) {   // Module 15 — refs come from ?refs= (not the path), mirroring the grade-filter pattern
       var refsParam; try { refsParam = new URLSearchParams(location.search).get('refs'); } catch (_) { refsParam = ''; }
       var refs = compareCore() ? compareCore().parseRefs(refsParam) : [];

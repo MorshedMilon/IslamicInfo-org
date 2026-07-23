@@ -174,6 +174,12 @@
         writeLang(lang);
         return;
       }
+      // Module 16 — display-mode toggles (Study / Reading) live in the header
+      var mbtn = e.target.closest && e.target.closest('.dv-mode-btn[data-mode]');
+      if (mbtn && el.contains(mbtn)) { toggleMode(mbtn.getAttribute('data-mode')); return; }
+      var exitStudy = e.target.closest && e.target.closest('.exit-study');
+      if (exitStudy && el.contains(exitStudy)) { exitMode(); return; }
+
       // Module 10 wiring stub — honest toast, no dead onclick
       var act = e.target.closest && e.target.closest('.dv-action-btn[data-act]');
       if (act && el.contains(act) && host.ui && host.ui.showToast) {
@@ -182,8 +188,147 @@
     });
   }
 
+  /* ═══════════════ Module 16 — Study / Reading display modes ═══════════════
+     Pure decisions come from II.hadithDisplayMode; this layer only mutates the
+     <html> classList, the URL (?mode=reading), the storage mirror, and focus.
+     Modes are mutually exclusive (a single root class ever set). Reading is
+     persisted (URL primary + storage); Study is session-only (US-H20). */
+  var dm = II.hadithDisplayMode;
+  var currentMode = null;                 // null = not yet resolved from URL/storage
+  var modeWired = false;                  // global (document-level) wiring installed once
+  var readingExitBtn = null;
+
+  function resolveInitialMode() {
+    var stored = host && host.ui && host.ui.safeLocalStorageGet
+      ? host.ui.safeLocalStorageGet(dm.STORAGE_KEY, null) : null;
+    return dm.initialMode({ search: location.search, storageValue: stored });
+  }
+
+  // Persist Reading Mode: URL param is the source of truth (shareable, reload-
+  // safe); the storage key mirrors it so the preference survives in-app
+  // navigation that dropped the param. Study never persists.
+  function syncReadingPersistence(active) {
+    try {
+      var search = dm.setReadingParam(location.search, active);
+      history.replaceState(history.state, '', location.pathname + search + location.hash);
+    } catch (_) {}
+    try {
+      if (active) { if (host.ui && host.ui.safeLocalStorageSet) host.ui.safeLocalStorageSet(dm.STORAGE_KEY, '1'); }
+      else { localStorage.removeItem(dm.STORAGE_KEY); }
+    } catch (_) {}
+  }
+
+  function reduceMotion() {
+    return !!(root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  // Inject / remove the Study Mode banner inside the current deep-view article.
+  function syncStudyBanner(el, mode) {
+    if (!el) return;
+    var dv = el.querySelector('.dv');
+    var existing = el.querySelector('.study-mode-banner');
+    if (mode === dm.STUDY) {
+      if (!existing && dv) dv.insertAdjacentHTML('afterbegin', dm.studyBannerHTML());
+    } else if (existing && existing.parentNode) {
+      existing.parentNode.removeChild(existing);
+    }
+  }
+
+  // Reflect state onto the DOM. `persist` false during silent re-mounts so a
+  // per-view repaint doesn't rewrite the URL/storage that already match.
+  function applyMode(mode, persist) {
+    mode = dm.normalize(mode);
+    currentMode = mode;
+    var el = host.tier2El();
+    document.documentElement.classList.toggle(dm.STUDY_CLASS, mode === dm.STUDY);
+    document.documentElement.classList.toggle(dm.READING_CLASS, mode === dm.READING);
+    if (persist !== false) syncReadingPersistence(mode === dm.READING);
+    // button pressed states
+    if (el) el.querySelectorAll('.dv-mode-btn[data-mode]').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-mode') === mode ? 'true' : 'false');
+    });
+    syncStudyBanner(el, mode);
+  }
+
+  // Return focus to a sensible control after a mode change (US-H20/H21: focus
+  // returns to the deep-view page on exit).
+  function focusFor(mode, previous) {
+    var el = host.tier2El(); if (!el) return;
+    var target = null;
+    if (mode === dm.READING) target = readingExitBtn;
+    else if (mode === dm.STUDY) target = el.querySelector('.exit-study');
+    else target = el.querySelector('.dv-mode-btn[data-mode="' + (previous || dm.STUDY) + '"]')
+              || el.querySelector('.dv-mode-btn');
+    if (target && target.focus) { try { target.focus(); } catch (_) {} }
+  }
+
+  function toggleMode(targetMode) {
+    var prev = currentMode;
+    applyMode(dm.toggle(currentMode, targetMode), true);
+    focusFor(currentMode, targetMode);
+  }
+
+  function exitMode() {
+    var prev = currentMode;
+    if (prev === dm.NONE) return;
+    applyMode(dm.NONE, true);
+    focusFor(dm.NONE, prev);
+  }
+
+  function ensureGlobalModeWiring() {
+    if (modeWired) return;
+    modeWired = true;
+    // Fixed top-right Reading-Mode exit (× ); CSS shows it only in reading mode.
+    readingExitBtn = document.createElement('button');
+    readingExitBtn.type = 'button';
+    readingExitBtn.className = 'reading-exit';
+    readingExitBtn.setAttribute('aria-label', 'Exit Reading Mode');
+    readingExitBtn.textContent = '×';
+    readingExitBtn.addEventListener('click', exitMode);
+    document.body.appendChild(readingExitBtn);
+    // Escape exits whichever mode is active (Study or Reading).
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (currentMode && currentMode !== dm.NONE) { e.preventDefault(); exitMode(); }
+    });
+  }
+
+  // Sync (no banner/persistence/focus): restore the standing mode's <html>
+  // classes before the loading paint so hadith→hadith nav in a mode doesn't
+  // flash the chrome. Resolves the initial mode on first deep-view load.
+  function reapplyModeClasses() {
+    if (!dm) return;
+    if (currentMode === null) currentMode = resolveInitialMode();
+    document.documentElement.classList.toggle(dm.STUDY_CLASS, currentMode === dm.STUDY);
+    document.documentElement.classList.toggle(dm.READING_CLASS, currentMode === dm.READING);
+  }
+
+  // Remove the mode classes on route change. Reading Mode is a saved preference
+  // (currentMode + storage retained → re-applied when a deep view renders); Study
+  // Mode is a per-view focus toggle, so a route change drops it entirely.
+  function clearModeClasses() {
+    if (!dm) return;
+    document.documentElement.classList.remove(dm.STUDY_CLASS, dm.READING_CLASS);
+    if (currentMode === dm.STUDY) currentMode = dm.NONE;
+  }
+
+  // Called on every deep-view paint: install global wiring, inject the header
+  // toggle buttons, and silently re-apply the standing mode (banner + classes)
+  // without stealing focus or rewriting persistence.
+  function mountModeControls(el) {
+    if (!dm || !el) return;
+    ensureGlobalModeWiring();
+    if (currentMode === null) currentMode = resolveInitialMode();
+    var header = el.querySelector('.dv-header');
+    if (header && !header.querySelector('.dv-modes')) {
+      header.insertAdjacentHTML('beforeend', dm.modeButtonsHTML(currentMode));
+    }
+    applyMode(currentMode, false);
+  }
+
   async function renderDeepView(r, c) {
     host.setTier(2);
+    reapplyModeClasses();   // Module 16: restore standing display mode before loading paint (no flash)
     if (host.resetReadingProgress) host.resetReadingProgress();   // Module 9: cancel any pending dwell timer from the previous view
     var el = host.tier2El(); if (!el) return;
     var slug = c.slug;
@@ -204,6 +349,7 @@
     // 2) paint immediately with no neighbors yet (prev/next resolved after)
     el.innerHTML = t3.deepViewHTML(r, c, h, { activeLang: activeLang, neighbors: { prev: null, next: null }, book: book });
     wireDeepView(el);
+    mountModeControls(el);   // Module 16: header toggles + re-apply standing display mode
 
     // 3) deep-link scroll + shared gold pulse (TechSpec §3.5; pulse fn owns reduced-motion)
     var body = el.querySelector('.dv-body-card');
@@ -228,6 +374,7 @@
     }
   }
 
-  II.tier3 = { init: init, renderList: renderList, renderDeepView: renderDeepView };
+  II.tier3 = { init: init, renderList: renderList, renderDeepView: renderDeepView,
+               clearModeClasses: clearModeClasses };
 
 }(typeof globalThis !== 'undefined' ? globalThis : window));
