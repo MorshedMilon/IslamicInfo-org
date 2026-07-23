@@ -87,6 +87,21 @@ test('pathProgress: empty read set → 0 of targetCount, 0%, not complete', () =
   );
 });
 
+test('pathProgress: over-sized path (refs > targetCount) caps percent at 100, readCount stays honest', () => {
+  const oversized = {
+    slug: 'big', targetCount: 2, status: 'ready',
+    hadithRefs: [
+      { collection: 'c', book: '1', hadith: '1' },
+      { collection: 'c', book: '1', hadith: '2' },
+      { collection: 'c', book: '1', hadith: '3' }
+    ]
+  };
+  const p = core.pathProgress(oversized, new Set(['c:1:1', 'c:1:2', 'c:1:3']));
+  assert.equal(p.readCount, 3);
+  assert.equal(p.percent, 100);
+  assert.equal(p.complete, true);
+});
+
 test('pathProgress: partial read set → correct count + rounded percent', () => {
   const p = core.pathProgress(MOCK_PATH, new Set(['sahih-bukhari:1:1', 'sahih-bukhari:1:2']));
   assert.equal(p.readCount, 2);

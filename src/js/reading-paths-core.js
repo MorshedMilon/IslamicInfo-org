@@ -53,7 +53,10 @@
     for (var i = 0; i < refs.length; i++) {
       if (readSet && readSet.has(refId(refs[i]))) read++;
     }
-    var percent = target > 0 ? Math.round((read / target) * 100) : 0;
+    // Cap read at target for the percentage so the ring (which clamps to
+    // 100%) and percent never disagree if a future curated path is
+    // mis-sized (hadithRefs.length > targetCount). readCount stays honest.
+    var percent = target > 0 ? Math.round((Math.min(read, target) / target) * 100) : 0;
     return {
       readCount: read,
       targetCount: target,
