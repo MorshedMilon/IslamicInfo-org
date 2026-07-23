@@ -34,8 +34,34 @@
       .finally(function () { clearTimeout(t); });
   }
 
-  // Returns Promise<string[]> paragraphs. spa5k plain-text primary, quran.com HTML fallback.
-  // As-Sa'di is a bundled static per-surah file of verse-RANGE blocks.
+  // Returns Promise<string[]> paragraphs. Fallback chain: spa5k plain-text CDN →
+  // quran.com HTML → UmmahAPI (ADR-045 cross-check mirror of the same public-domain
+  // tafsir). As-Sa'di is a bundled static per-surah file of verse-RANGE blocks.
+  function fromSpa5k(src, surah, ayah) {
+    return fetchJson(core.spa5kUrl(src, surah, ayah)).then(function (j) {
+      var txt = j && j.text;
+      if (!txt) throw new Error('empty');
+      return core.formatTafsir(txt, false);
+    });
+  }
+  function fromQuranCom(src, surah, ayah) {
+    var qurl = core.quranUrl(src, surah, ayah);
+    if (!qurl) return Promise.reject(new Error('no-quran'));
+    return fetchJson(qurl).then(function (j) {
+      var txt = j && j.tafsir && j.tafsir.text;
+      if (!txt) throw new Error('empty');
+      return core.formatTafsir(txt, true);
+    });
+  }
+  function fromUmmah(src, surah, ayah) {
+    var uurl = core.ummahUrl(src, surah, ayah);
+    if (!uurl) return Promise.reject(new Error('no-ummah'));
+    return fetchJson(uurl).then(function (j) {
+      var txt = j && j.data && j.data.tafsir && j.data.tafsir.text;
+      if (!txt) throw new Error('empty');
+      return core.formatTafsir(txt, /<[a-z]/i.test(txt));   // UmmahAPI text may carry light HTML
+    });
+  }
   function fetchTafsir(src, surah, ayah) {
     if (src.staticBase) {
       return fetchJson(src.staticBase + surah + '.json').then(function (blocks) {
@@ -46,21 +72,9 @@
         return paras;
       });
     }
-    return fetchJson(core.spa5kUrl(src, surah, ayah))
-      .then(function (j) {
-        var txt = j && j.text;
-        if (!txt) throw new Error('empty');
-        return core.formatTafsir(txt, false);
-      })
-      .catch(function () {
-        var qurl = core.quranUrl(src, surah, ayah);
-        if (!qurl) throw new Error('unavailable');
-        return fetchJson(qurl).then(function (j) {
-          var txt = j && j.tafsir && j.tafsir.text;
-          if (!txt) throw new Error('empty');
-          return core.formatTafsir(txt, true);
-        });
-      });
+    return fromSpa5k(src, surah, ayah)
+      .catch(function () { return fromQuranCom(src, surah, ayah); })
+      .catch(function () { return fromUmmah(src, surah, ayah); });
   }
 
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }

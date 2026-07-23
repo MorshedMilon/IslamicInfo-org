@@ -10,8 +10,10 @@
 
   // Three confirmed-English tafsirs. spa5k CDN is primary (plain text, static);
   // quran.com is the fallback for the two it carries. (As-Sa'di added later.)
+  // `ummah` = UmmahAPI tafsir work key (ADR-045: secondary/cross-check mirror of the
+  // same public-domain tafsir; used only as a final fallback if spa5k + quran.com fail).
   var SOURCES = [
-    { key: 'ik', label: 'Ibn Kathir',        spa5k: 'en-tafisr-ibn-kathir',      quranId: 169, lang: 'en' },
+    { key: 'ik', label: 'Ibn Kathir',        spa5k: 'en-tafisr-ibn-kathir',      quranId: 169, ummah: 'ibn_kathir', lang: 'en' },
     { key: 'ma', label: "Ma'arif al-Qur'an", spa5k: 'en-tafsir-maarif-ul-quran', quranId: 168, lang: 'en' },
     { key: 'ja', label: 'Al-Jalalayn',       spa5k: 'tafsir-al-jalalayn',        quranId: null, lang: 'en' },
     // As-Sa'di: bundled static per-surah blocks (OCR-digitized from the archive.org
@@ -26,10 +28,15 @@
 
   var SPA5K = 'https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/';
   var QURAN = 'https://api.quran.com/api/v4/tafsirs/';
+  var UMMAH = 'https://ummahapi.com/api/tafsir/';
 
   function spa5kUrl(src, surah, ayah) { return SPA5K + src.spa5k + '/' + surah + '/' + ayah + '.json'; }
   function quranUrl(src, surah, ayah) {
     return src.quranId ? (QURAN + src.quranId + '/by_ayah/' + surah + ':' + ayah) : null;
+  }
+  // UmmahAPI: GET /api/tafsir/{work}/surah/{s}/ayah/{a} → { data: { tafsir: { text, author } } }
+  function ummahUrl(src, surah, ayah) {
+    return src.ummah ? (UMMAH + src.ummah + '/surah/' + surah + '/ayah/' + ayah) : null;
   }
 
   var ENT = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&nbsp;': ' ', '&apos;': "'" };
@@ -74,7 +81,7 @@
 
   return {
     sources: sources, sourceByKey: sourceByKey,
-    spa5kUrl: spa5kUrl, quranUrl: quranUrl, findBlock: findBlock,
+    spa5kUrl: spa5kUrl, quranUrl: quranUrl, ummahUrl: ummahUrl, findBlock: findBlock,
     decodeEntities: decodeEntities, formatTafsir: formatTafsir
   };
 });
