@@ -580,7 +580,10 @@
       { ref: ref, collectionSlug: r.slug, bookNum: r.book, hadithNum: r.num }, Date.now());
     setBookmarks(res.list);
     card.classList.toggle('has-bookmark', res.added);
-    if (res.added) { btn.classList.add('active'); showCategoryTooltip(btn, ref); }
+    if (res.added) {
+      btn.classList.add('active'); showCategoryTooltip(btn, ref);
+      if (window.II && II.track) II.track('bookmark_saved', { collection: r.slug, book: r.book, hadith: r.num });
+    }
     else { btn.classList.remove('active'); hideCategoryTooltip(); }
   }
 
@@ -613,6 +616,7 @@
       setNotes(list);
       card.classList.toggle('has-note', !!ta.value.trim());
       ui.showToast('Note saved');
+      if (window.II && II.track) { var nr = parseRefParts(ref); II.track('note_saved', { collection: nr.slug, book: nr.book, hadith: nr.num }); }
       if (ed.parentNode) ed.parentNode.removeChild(ed);
     });
   }
@@ -671,6 +675,7 @@
     var text = actions.buildCopyText(content);
     if (!text) { ui.showToast('Nothing to copy'); return; }   // never copy an unattributed hadith
     copyToClipboard(text, 'Copied with citation ✦');
+    if (window.II && II.track) { var cr = parseRefParts(ref); II.track('copy_with_citation', { collection: cr.slug, book: cr.book, hadith: cr.num }); }
   }
   // US-H16 Arabic-only copy: bare .hadith-arabic matn, no attribution (the attributed copy is
   // the main Copy button's job). Non-fabricating — equivalent to selecting the on-page Arabic.
@@ -1040,7 +1045,11 @@
       isnad.setAttribute('aria-disabled', 'true');
       isnad.setAttribute('title', 'Verified isnad data unavailable');
       isnad.style.opacity = '.55'; isnad.style.cursor = 'not-allowed';
-      isnad.onclick = function (e) { e.preventDefault(); e.stopPropagation(); ui.showToast('Verified isnad data unavailable'); };
+      isnad.onclick = function (e) {
+        e.preventDefault(); e.stopPropagation();
+        ui.showToast('Verified isnad data unavailable');
+        if (window.II && II.track) II.track('hotd_interacted', { action: 'view_isnad' });
+      };
     }
   }
 
@@ -1321,6 +1330,10 @@
     }
     var open = panel.classList.toggle('open');
     if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open && window.II && II.track) {
+      var ip = parseRefParts(ref);
+      II.track('isnad_opened', { collection: ip.slug, book: ip.book, hadith: ip.num });
+    }
   }
 
   // Per-card actions. isnad toggles the chain panel (US-H05); full is still honestly

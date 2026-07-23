@@ -372,6 +372,7 @@
     if (h && host.ui && host.ui.safeLocalStorageSet) {
       host.ui.safeLocalStorageSet('islamicinfo-hadith-last-read', { collectionSlug: slug, bookNum: book, hadithNum: num });
     }
+    if (h && window.II && II.track) II.track('tier3_pageview', { collection: slug, book: book, hadith: num });
   }
 
   II.tier3 = { init: init, renderList: renderList, renderDeepView: renderDeepView,

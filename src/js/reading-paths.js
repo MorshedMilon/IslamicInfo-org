@@ -40,6 +40,7 @@
     var store = loadStore();
     store[slug] = core.mergeReadRefs(store[slug], [id]);
     try { window.localStorage.setItem(STORAGE_KEY, core.serializeStoredPaths(store)); } catch (e) {}
+    if (window.II && II.track) II.track('reading_path_progress', { slug: slug });
   }
 
   function ringSVG(vm) {
