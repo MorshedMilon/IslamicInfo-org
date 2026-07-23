@@ -17,6 +17,15 @@ compatibility_date = "2026-06-01"
 binding = "QURANLYAI_KV"
 id = "3a39753a664948b097149eb09c02e3bc"
 
+# Itqan narrator-reliability D1 (ADR-046/047). Uncomment + fill database_id after:
+#   wrangler d1 create rijal
+# Then apply the schema + ingested data (see worker/scripts/ingest-itqan.mjs).
+# Until this binding exists, /api/narrator/:id returns { matched:false } (feature dark).
+# [[d1_databases]]
+# binding = "DB_RIJAL"
+# database_name = "rijal"
+# database_id = "<paste-id-from-wrangler-d1-create>"
+
 # Hadith Library source (public base URL only; HADITH_API_KEY is a Worker secret,
 # set via `npx wrangler secret put HADITH_API_KEY`, never committed).
 [vars]

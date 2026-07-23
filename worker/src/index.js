@@ -24,6 +24,7 @@ import { GEMINI_FLASH } from './lib/prompts.js';
 import { handleQuranlyAiAsk } from './quranlyai.js';
 import { handleHadith } from './hadith.js';
 import { handleExplain } from './explain.js';
+import { handleNarrator } from './narrator.js';
 
 /* ─── Upstream fetch with timeout ──────────────────────────────────── */
 async function upstream(url, timeoutMs = 8000) {
@@ -189,6 +190,12 @@ export default {
 
         if (path.startsWith('/api/hadith')) {
           const res = await handleHadith(path, url.searchParams, env, origin, {});
+          if (res.status === 200) await cache.put(request, res.clone());
+          return res;
+        }
+
+        if (path.startsWith('/api/narrator/')) {
+          const res = await handleNarrator(path, env, origin);
           if (res.status === 200) await cache.put(request, res.clone());
           return res;
         }

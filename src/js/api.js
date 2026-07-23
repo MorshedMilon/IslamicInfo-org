@@ -356,6 +356,18 @@
     return _get('ii-cache-narrator-' + safe, '/data/narrator/' + safe + '.json', TTL_7D, false);
   }
 
+  /* fetchNarratorById — Itqan reliability profile by NUMERIC id (ADR-046/047).
+     Client resolves an English narrator name → Itqan id (narrator-match-core), then
+     calls this. /api route (API_BASE-rebased). Returns { ok, matched, narrator } or,
+     when D1 isn't provisioned / no match, { ok:true, matched:false }. Never null-fabricates. */
+  function fetchNarratorById(id) {
+    var n = parseInt(id, 10);
+    if (!(n > 0)) return Promise.resolve({ ok: true, matched: false });
+    return _get('ii-cache-rijal-' + n, '/api/narrator/' + n, TTL_7D, false)
+      .then(function (r) { return r || { ok: true, matched: false }; })
+      .catch(function () { return { ok: true, matched: false }; });
+  }
+
   /* ═══════════════════════════════════════════════════════════════
      Hadith 3-provider routing (ADR-024) — 18 collections.
        · hadithapi (9): proxied via the Worker (/api/hadith/*) — key stays server-side.
@@ -523,6 +535,7 @@
     fetchHadithSearch,
     fetchHadithDaily,
     fetchNarrator,
+    fetchNarratorById,
     fetchHadithOfDay,
     fetchHadithsByBook,
     fetchSingleHadith,
