@@ -15,6 +15,7 @@
   var LANG_KEY = 'islamicinfo-hadith-lang';
   var BOOKLESS_DEFAULT = 1;                          // bookless collections use book segment 1
   var GRADES = { sahih: 1, hasan: 1, daif: 1, mawdu: 1 };
+  var listCore = II.hadithList;                      // pure logic (Task 4)
 
   function esc(s) { return (host && host.ui && host.ui.escapeHTML) ? host.ui.escapeHTML(s) : String(s == null ? '' : s); }
   function $(sel, ctx) { return (ctx || document).querySelector(sel); }
@@ -74,85 +75,156 @@
     if (status) status.textContent = 'Showing ' + shown + ' of ' + cards.length + ' loaded hadith' + (cards.length === 1 ? '' : 's');
   }
 
-  function bookNavHTML(slug, books, currentBook) {
-    if (!Array.isArray(books) || !books.length) return '';
-    var nums = books.map(function (b) { return b.bookNumber; }).filter(function (n) { return n != null; });
-    var i = nums.map(String).indexOf(String(currentBook));
-    function link(num, dir, label) {
-      if (num == null) return '<span class="dv-nav-btn dv-nav-' + dir + ' dv-nav-disabled" aria-disabled="true">' + label + '</span>';
-      return '<a class="dv-nav-btn dv-nav-' + dir + '" href="/hadith/' + encodeURIComponent(slug) + '/' + encodeURIComponent(num) + '">' + label + '</a>';
+  // Endless Load-More button (replaces the old book Prev/Next). One button; a
+  // state machine drives its label/visibility. Reuses the .load-more-btn styles.
+  function loadMoreHTML() {
+    return '<div class="t3a-load-more" id="ii-t3a-lm-wrap" style="text-align:center;margin:8px 0 24px;">' +
+      '<button class="load-more-btn" id="ii-t3a-lm" type="button">' +
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7 7 7-7"/></svg> ' +
+      '<span>Load more hadiths</span></button></div>';
+  }
+  function setListLoadMore(mode) {
+    var wrap = $('#ii-t3a-lm-wrap'), btn = $('#ii-t3a-lm');
+    if (!wrap || !btn) return;
+    var lbl = btn.querySelector('span');
+    var end = $('#ii-t3a-lm-end'); if (end) end.remove();
+    if (mode === 'hide') { wrap.style.display = 'none'; return; }
+    wrap.style.display = '';
+    if (mode === 'end') {
+      btn.style.display = 'none';
+      var n = document.createElement('div'); n.id = 'ii-t3a-lm-end';
+      n.style.cssText = 'font-size:12px;color:var(--ink-muted);';
+      n.textContent = 'You’ve reached the end of this collection.';
+      wrap.appendChild(n); return;
     }
-    var prev = (i > 0) ? nums[i - 1] : null, next = (i >= 0 && i < nums.length - 1) ? nums[i + 1] : null;
-    return '<nav class="dv-prevnext t3a-booknav" aria-label="Book navigation">' +
-      link(prev, 'prev', '← Previous book') + link(next, 'next', 'Next book →') + '</nav>';
+    btn.style.display = '';
+    if (mode === 'loading') { btn.disabled = true; if (lbl) lbl.textContent = 'Loading…'; }
+    else if (mode === 'error') { btn.disabled = false; if (lbl) lbl.textContent = 'Retry — load more'; }
+    else { btn.disabled = false; if (lbl) lbl.textContent = 'Load more hadiths'; }
   }
 
-  async function renderList(r, c) {
-    host.setTier(2);
-    if (host.resetReadingProgress) host.resetReadingProgress();   // Module 9: cancel any pending dwell timer from the previous view
-    var el = host.tier2El(); if (!el) return;
-    var slug = c.slug;
-    var book = (r.book != null && r.book !== '') ? r.book : BOOKLESS_DEFAULT;
-    var grade = readGradeParam();
-    var token = slug + ':' + book + ':' + Date.now();
-    el.dataset.t3aToken = token;
-    var skeleton = '';
-    for (var i = 0; i < 4; i++) skeleton += '<div class="hadith-card" aria-hidden="true" style="opacity:.5;height:120px;"></div>';
-    el.innerHTML = listHeaderHTML(c, book, null, null) + gradePillsHTML(grade) +
-      '<div id="t3a-status" class="ii-sr-live" aria-live="polite" style="font-size:12px;color:var(--ink-muted);margin:8px 0;"></div>' +
-      '<div class="t3a-list" id="ii-t3a-list">' + skeleton + '</div>' +
-      '<div id="ii-t3a-booknav"></div>';
+  // Tier-3a endless list state. `next` holds the target for the following Load More.
+  var LIST = { slug: null, provider: null, book: null, page: 0, lastPage: null,
+               bookOrder: null, next: null, refs: null, byRef: {}, grade: 'all',
+               loading: false, token: null, ctx: null };
 
-    // hadiths (provider-routed) — handles hadithapi + direct sources
-    var res;
-    try { res = await host.api.fetchHadithsByBook(slug, book, 1, 25); } catch (_) { res = null; }
-    var listEl = $('#ii-t3a-list'); if (!listEl) return;              // route changed mid-fetch
-    if (el.dataset.t3aToken !== token) return;                        // a newer renderList started during the await
+  // Fetch one page for the current provider. hadithapi → per-book route (chapter-walk);
+  // direct sources → flat page. Returns the Worker envelope.
+  function fetchListPage(book, page) {
+    if (LIST.provider === 'hadithapi') return host.api.fetchHadithList(LIST.slug, book, page, 25);
+    return host.api.fetchHadithsByBook(LIST.slug, BOOKLESS_DEFAULT, page, 25);
+  }
+
+  async function loadListPage(append) {
+    var listEl = $('#ii-t3a-list'); if (!listEl || LIST.loading) return;
+    LIST.loading = true;
+    var target = append ? (LIST.next || { book: LIST.book, page: LIST.page + 1 })
+                        : { book: LIST.book, page: 1 };
+    if (append) setListLoadMore('loading');
+    var token = LIST.token;
+    var res; try { res = await fetchListPage(target.book, target.page); } catch (_) { res = null; }
+    if (token !== LIST.token) { LIST.loading = false; return; }         // route changed mid-fetch
+    LIST.loading = false;
+
     if (!res || !res.ok || !res.data || !Array.isArray(res.data.hadiths)) {
-      listEl.innerHTML = '<div class="books-error"><div class="books-empty-title">Hadiths temporarily unavailable</div>' +
-        '<div>We couldn’t load the hadiths for this book.</div>' +
-        '<button class="btn-glass" id="ii-t3a-retry" type="button" style="margin-top:14px;">Try again</button></div>';
-      var retry = $('#ii-t3a-retry'); if (retry) retry.addEventListener('click', function () { renderList(r, c); });
+      if (append) { setListLoadMore('error'); if (host.ui.showToast) host.ui.showToast('Could not load more — try again'); }
+      else {
+        listEl.innerHTML = '<div class="books-error"><div class="books-empty-title">Hadiths temporarily unavailable</div>' +
+          '<div>We couldn’t load the hadiths for this collection.</div>' +
+          '<button class="btn-glass" id="ii-t3a-retry" type="button" style="margin-top:14px;">Try again</button></div>';
+        var retry = $('#ii-t3a-retry'); if (retry) retry.addEventListener('click', function () { loadListPage(false); });
+      }
       return;
     }
-    var hadiths = res.data.hadiths;
-    listEl.innerHTML = hadiths.length
-      ? hadiths.map(host.feed.buildCardHTML).join('')
-      : '<div class="books-empty"><div class="books-empty-title">No hadiths in this book.</div></div>';
-    if (host.observeFeed) host.observeFeed(listEl);   // Module 9: same tracker observes Tier-3a cards
 
-    // header count (now known) + status
-    var header = $('.t3a-header');
-    if (header && res.data.total != null) header.outerHTML = listHeaderHTML(c, book, null, res.data.total);
-    applyListGradeFilter(listEl, grade);
+    var data = res.data;
+    var fresh = host.feed.dedupeByRef(LIST.refs, data.hadiths);
+    fresh.forEach(function (h) { var r = host.feed.refOf(h); LIST.refs.add(r); LIST.byRef[r] = h; });
+    var html = fresh.map(host.feed.buildCardHTML).join('');
+    if (append) { if (html) listEl.insertAdjacentHTML('beforeend', html); }
+    else { listEl.innerHTML = html || '<div class="books-empty"><div class="books-empty-title">No hadiths in this collection.</div></div>'; }
+    if (host.observeFeed) host.observeFeed(listEl);
 
-    // grade pills
+    LIST.book = target.book; LIST.page = data.page || target.page; LIST.lastPage = data.lastPage;
+    var adv = listCore.computeListAdvance({ provider: LIST.provider, book: LIST.book,
+      page: LIST.page, lastPage: LIST.lastPage, bookOrder: LIST.bookOrder });
+    LIST.next = adv.done ? null : { book: adv.book, page: adv.page };
+
+    applyListGradeFilter(listEl, LIST.grade);
+    setListLoadMore(listCore.loadMoreMode({ freshCount: fresh.length, append: append, done: adv.done }));
+  }
+
+  function wireListGradePills(el) {
     el.querySelectorAll('.t3a-grade-filter .grade-filter-pill').forEach(function (pill) {
       pill.addEventListener('click', function () {
-        grade = pill.getAttribute('data-grade');
+        LIST.grade = pill.getAttribute('data-grade');
         el.querySelectorAll('.t3a-grade-filter .grade-filter-pill').forEach(function (p) {
           var on = p === pill; p.classList.toggle('on', on); p.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
-        applyListGradeFilter(listEl, grade);
+        applyListGradeFilter($('#ii-t3a-list'), LIST.grade);
       });
     });
-
-    // "Open Full View" (data-act="full") on each card → Tier 3b
-    listEl.addEventListener('click', function (e) {
+  }
+  function wireListLoadMore() {
+    var btn = $('#ii-t3a-lm'); if (btn) btn.addEventListener('click', function () { loadListPage(true); });
+  }
+  function wireListFullView(el) {
+    if (el.dataset.t3aFullWired) return;                 // #ii-tier2 persists across renders (only
+    el.dataset.t3aFullWired = '1';                        // its innerHTML is replaced) — wire once.
+    el.addEventListener('click', function (e) {
       var btn = e.target.closest && e.target.closest('[data-act="full"]');
-      if (!btn || !listEl.contains(btn)) return;
+      if (!btn || !el.contains(btn)) return;
       var card = btn.closest('.hadith-card'); if (!card) return;
       var ref = card.getAttribute('data-ref'); if (!ref) return;
-      var parts = ref.split(':');                                     // slug:book:num
+      var parts = ref.split(':');                                       // slug:book:num
       host.routeTo({ collection: parts[0], book: parts[1], hadith: parts[2] }, true);
     });
+  }
+  // Task 6 fills these in:
+  function searchBarHTML() { return ''; }
+  function wireListSearch(el, c) { /* Task 6 */ }
 
-    // book nav (deferred, non-blocking): needs the collection's book list
-    host.api.fetchHadithBooks(slug).then(function (b) {
-      if (el.dataset.t3aToken !== token) return;
-      var nav = $('#ii-t3a-booknav');
-      if (nav && b && b.ok && Array.isArray(b.data)) nav.innerHTML = bookNavHTML(slug, b.data, book);
-    }).catch(function () {});
+  async function renderList(r, c) {
+    host.setTier(2);
+    if (host.resetReadingProgress) host.resetReadingProgress();
+    var el = host.tier2El(); if (!el) return;
+    var slug = c.slug;
+    var grade = readGradeParam();
+    var token = slug + ':' + Date.now();
+    el.dataset.t3aToken = token;
+
+    LIST.slug = slug;
+    LIST.provider = (host.api.hadithProviderOf ? host.api.hadithProviderOf(slug) : 'hadithapi');
+    LIST.page = 0; LIST.lastPage = null; LIST.bookOrder = null; LIST.next = null;
+    LIST.refs = new Set(); LIST.byRef = {}; LIST.grade = grade; LIST.loading = false;
+    LIST.token = token; LIST.ctx = { r: r, c: c };
+    LIST.book = (LIST.provider === 'hadithapi' && r.book != null && r.book !== '') ? r.book
+              : (LIST.provider === 'hadithapi' ? 1 : BOOKLESS_DEFAULT);
+
+    var skeleton = '';
+    for (var i = 0; i < 4; i++) skeleton += '<div class="hadith-card" aria-hidden="true" style="opacity:.5;height:120px;"></div>';
+    el.innerHTML = listHeaderHTML(c, null, c.nameEnglish, null) + searchBarHTML() + gradePillsHTML(grade) +
+      '<div id="t3a-status" class="ii-sr-live" aria-live="polite" style="font-size:12px;color:var(--ink-muted);margin:8px 0;"></div>' +
+      '<div class="t3a-list" id="ii-t3a-list">' + skeleton + '</div>' + loadMoreHTML();
+
+    wireListGradePills(el);
+    wireListLoadMore();
+    wireListFullView(el);
+    wireListSearch(el, c);
+
+    if (LIST.provider === 'hadithapi') {
+      try {
+        var b = await host.api.fetchHadithBooks(slug);
+        if (LIST.token !== token) return;
+        if (b && b.ok && Array.isArray(b.data)) {
+          LIST.bookOrder = b.data.map(function (x) { return x.bookNumber; })
+            .filter(function (n) { return n != null; });
+          if ((r.book == null || r.book === '') && LIST.bookOrder.length) LIST.book = LIST.bookOrder[0];
+        }
+      } catch (_) { /* no book list → single-book fallback via computeListAdvance */ }
+    }
+    if (LIST.token !== token) return;
+    loadListPage(false);
   }
 
   /* ═══════════════ Tier 3b — deep-view ═══════════════ */
