@@ -58,14 +58,19 @@
     );
   }
 
+  // i18n: emit data-i18n keys with the English text as inline fallback.
+  // i18nApply() (below) translates in place if the key exists in the active
+  // locale; apply() leaves the English fallback untouched when it doesn't —
+  // so this is i18n-ready with zero behavior change until the locale files
+  // gain the keys (the in-progress 10-language i18n pass owns that).
   function continueControl(vm) {
     if (vm.continueState === 'coming-soon') {
-      return '<span class="path-continue path-continue--soon" aria-disabled="true">Coming soon</span>';
+      return '<span class="path-continue path-continue--soon" aria-disabled="true" data-i18n="hadith.paths.comingSoon">Coming soon</span>';
     }
     if (vm.continueState === 'complete') {
-      return '<span class="path-continue path-continue--done">Path complete ✓</span>';
+      return '<span class="path-continue path-continue--done" data-i18n="hadith.paths.complete">Path complete ✓</span>';
     }
-    return '<button class="path-continue" type="button" data-path-continue="' + esc(vm.slug) + '">Continue →</button>';
+    return '<button class="path-continue" type="button" data-path-continue="' + esc(vm.slug) + '" data-i18n="hadith.paths.continue">Continue →</button>';
   }
 
   function rowHTML(path, readSet) {
@@ -74,12 +79,20 @@
       '<div class="reading-path-row" data-path-slug="' + esc(vm.slug) + '">' +
         ringSVG(vm) +
         '<div class="reading-path-meta">' +
-          '<div class="reading-path-name">' + esc(vm.name) + '</div>' +
+          '<div class="reading-path-name" data-i18n="hadith.paths.name.' + esc(vm.slug) + '">' + esc(vm.name) + '</div>' +
           '<div class="reading-path-count">' + esc(vm.countLabel) + '</div>' +
         '</div>' +
         continueControl(vm) +
       '</div>'
     );
+  }
+
+  // Translate any data-i18n nodes just injected into `root` (the i18n boot
+  // pass only ran over static markup present at load).
+  function i18nApply(root) {
+    if (window.II && window.II.i18n && typeof window.II.i18n.apply === 'function') {
+      window.II.i18n.apply(root);
+    }
   }
 
   function render() {
@@ -91,9 +104,10 @@
       return rowHTML(p, core.readSetFor(store, p.slug));
     }).join('');
     if (!expanded && paths.length > VISIBLE) {
-      html += '<button class="reading-path-viewall" type="button" id="reading-paths-viewall">View all →</button>';
+      html += '<button class="reading-path-viewall" type="button" id="reading-paths-viewall" data-i18n="hadith.paths.viewAll">View all →</button>';
     }
     list.innerHTML = html;
+    i18nApply(list);
     var viewall = document.getElementById('reading-paths-viewall');
     if (viewall) viewall.addEventListener('click', function () { expanded = true; render(); });
     // Continue buttons are inert for the deferred seed (no rows emit them),
@@ -158,10 +172,11 @@
         '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>' +
         '<span>Reading: <strong>' + esc(path.name) + '</strong> · Hadith ' + n + ' of ' + path.targetCount + '</span>' +
         '<div class="path-nav-btns">' +
-          '<button class="path-nav-btn" type="button" data-path-prev>← Previous</button>' +
-          '<button class="path-nav-btn" type="button" data-path-next>Next →</button>' +
+          '<button class="path-nav-btn" type="button" data-path-prev data-i18n="hadith.path.prev">← Previous</button>' +
+          '<button class="path-nav-btn" type="button" data-path-next data-i18n="hadith.path.next">Next →</button>' +
         '</div>' +
       '</div>';
+    i18nApply(slot);
     var prev = path.hadithRefs[n - 2];
     var next = path.hadithRefs[n];
     var prevBtn = slot.querySelector('[data-path-prev]');
