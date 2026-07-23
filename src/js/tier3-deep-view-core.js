@@ -239,8 +239,9 @@
       '<div class="dv-block dv-gradings-block"><h2 class="dv-block-title">Grading</h2>' +
         (h ? gradingsTableHTML(h) : '<div class="dv-empty">—</div>') + '</div>' +
       translationBlockHTML(translationModel(h), opts.activeLang) +
-      topicsChipsHTML(h) +
-      relatedPlaceholderHTML() +
+      // Topics + related are wrapped so Study Mode (Module 16) can treat them
+      // as a single bottom-right quadrant; transparent in normal block flow.
+      '<div class="dv-br-group">' + topicsChipsHTML(h) + relatedPlaceholderHTML() + '</div>' +
       '<div class="dv-prevnext-slot">' + prevNextNavHTML(opts.neighbors, r.collection, book) + '</div>' +
     '</article>';
   }

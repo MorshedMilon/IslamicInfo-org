@@ -603,3 +603,41 @@ URLs are always self-contained and reproducible without depending on the visitin
 state. A future session must not add a `localStorage`/`sessionStorage` key for this selection
 without first re-deriving why the URL-only approach stopped being sufficient.
 **References.** `docs/superpowers/plans/2026-07-22-module-15-comparison-mode.md`.
+
+## ADR-040 · Reading Mode reuses `--gold-50` (#FDF8EC); the PRD's #FAF6EC is a near-duplicate, not a new color · Accepted · 2026-07-22 · Module 16 (Study & Reading Mode)
+**Context.** PRD US-H21 and the Module 16 ticket both specify the Reading-Mode light background
+as `#FAF6EC` ("gold-50 tint"). The design system already defines `--gold-50: #FDF8EC` — a
+2-hex-digit drift from the spec value, visually indistinguishable. Invariant §3: "No new colors.
+No raw hex inline."
+**Decision.** Reading Mode's light surface uses `var(--gold-50)` (#FDF8EC), not a new
+`--reading-surface` token holding #FAF6EC. The #FAF6EC in the PRD is treated as an unintentional
+near-duplicate of the existing gold-50 token, not a deliberate new brand color. Dark mode is left
+unchanged (the surface override is scoped to `html[data-theme="light"].reading-mode-hadith`, and
+dark's `--gold-50` rgba is never applied as a page background).
+**Consequences.** Zero new colors enter the palette; the "no new colors" invariant holds. Anyone
+diffing the running background against the literal PRD value will see a #FDF8EC↔#FAF6EC delta —
+this ADR is the record that the drift is intentional and sanctioned. A future session must not
+"fix" the background to #FAF6EC by adding a raw-hex token without first re-opening this decision.
+**References.** `docs/prd/IslamicInfo_HadithLibrary_PRD_v1_2_Final.md` (US-H21).
+
+## ADR-041 · Reading Mode persists via URL param (primary) + storage-key mirror; Study Mode does not persist · Accepted · 2026-07-22 · Module 16 (Study & Reading Mode)
+**Context.** Two deep-view display modes. Reading Mode (US-H21) must restore on reload and its
+DoD names `?mode=reading` explicitly; TechSpec v1.2 also registers a storage key
+`islamicinfo-hadith-reading-mode` (`'1'│absent`). Study Mode (US-H20) has no restore clause — it
+is a focus toggle. This intentionally differs from ADR-039 (Comparison Mode chose URL-only, no
+storage key), because a *persistent user preference* is a different problem from a *shareable
+selection*.
+**Decision.** Reading Mode is the source-of-truth pair: `?mode=reading` in the URL (shareable,
+reload-safe — satisfies the DoD) **and** a mirrored storage key `islamicinfo-hadith-reading-mode='1'`.
+On load, Reading restores if **either** is present (`initialMode`). Entering writes both; exiting
+clears both. In-app navigation that drops the URL param still restores Reading from storage.
+**Study Mode is session-only**: never written to URL or storage, and a route change drops it
+(`clearModeClasses` resets a standing Study mode to none; Reading survives via the module var +
+storage). Modes are mutually exclusive — only one `<html>` class (`study-mode-hadith` /
+`reading-mode-hadith`) is ever set (`toggle()` in `hadith-display-mode-core.js`).
+**Consequences.** A shared `?mode=reading` link opens in Reading Mode and also sets the visitor's
+storage key (expected — it becomes their preference). Study Mode deliberately does not survive
+reload or navigation, matching its "focus for this one hadith" intent. This is the opposite storage
+choice from ADR-039 by design; a future session must not collapse the two into one policy.
+**References.** `doc/tech-specs/IslamicInfo_HadithLibrary_TechSpec_v1_2.md` §data registry (line
+306); `docs/prd/IslamicInfo_HadithLibrary_PRD_v1_2_Final.md` (US-H20, US-H21).
