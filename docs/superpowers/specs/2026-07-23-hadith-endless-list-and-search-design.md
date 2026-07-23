@@ -63,7 +63,18 @@ deep-view stub path).
 
 ## 5. Architecture
 
-### 5.1 Backend — one new flat route (additive)
+> **Implementation refinement (added at plan time, 2026-07-23).** Endless pagination
+> for hadithapi collections is implemented as a **chapter-walk** (page through book 1,
+> then book 2, … using the *existing* per-book route + the cached book list) rather than
+> a chapter-less flat listing. Same user-facing behaviour (one endless list across book
+> boundaries), it makes the D3 books-grid anchoring trivial (start the walk at the chosen
+> book), and it removes the unverified "hadithapi serves a book-only listing" assumption
+> from the critical path. The new Worker route below is retained **only** as the
+> number→book resolver (`?hadithNumber=`, a proven filter); its flat-list mode is a
+> verified bonus, not required for pagination. Direct-source collections page a single
+> flat sequence as before.
+
+### 5.1 Backend — one new route (additive): number resolver (+ optional flat list)
 
 File: [`worker/src/hadith.js`](../../../worker/src/hadith.js)
 
