@@ -46,7 +46,11 @@
     return { id: id, confidence: 'high' };
   }
 
-  var api = { normalizeName: normalizeName, matchNarrator: matchNarrator };
+  // Feature flag — default OFF (Module-13 posture). The narrator panel calls the Itqan
+  // lookup ONLY when this is true; flip on after ingestion + owner data-sample review (ADR-047).
+  var ITQAN_NARRATOR_ENABLED = false;
+
+  var api = { normalizeName: normalizeName, matchNarrator: matchNarrator, ITQAN_NARRATOR_ENABLED: ITQAN_NARRATOR_ENABLED };
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; }
   else { root.II = root.II || {}; root.II.narratorMatch = api; }
 
