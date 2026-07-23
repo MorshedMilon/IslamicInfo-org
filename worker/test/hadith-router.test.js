@@ -199,3 +199,10 @@ test('flat collection route rejects a slug outside the allowlist', async () => {
   assert.equal(res.status, 400);
   assert.equal((await res.json()).error.retryable, false);
 });
+
+test('flat collection route yields 503 when API key is missing', async () => {
+  const res = await handleHadith('/api/hadith/collections/sahih-bukhari/hadiths',
+    new URLSearchParams(), ENV({ HADITH_API_KEY: '' }), ORIGIN, {});
+  assert.equal(res.status, 503);
+  assert.equal((await res.json()).error.retryable, true);
+});

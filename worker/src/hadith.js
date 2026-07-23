@@ -160,13 +160,13 @@ async function collectionFlat(slug, searchParams, env, origin, deps) {
   const param = num
     ? { book: slug, hadithNumber: num, paginate: 1 }
     : { book: slug, paginate: limit, page };
-  const key = num ? hKey('flatone', slug, num) : hKey('flatlist', slug, page);
+  const key = num ? hKey('flatone', slug, num) : hKey('flatlist', slug, page, limit);
   try {
     const { data, source } = await liveOrCache(
       env.QURANLYAI_KV, key, TTL.DAY,
       () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, param),
       (raw) => {
-        const wrap = raw.hadiths || {};                       // hadithapi shape: hadiths.data
+        const wrap = raw.hadiths || {};                       // VERIFIED 2026-07-19: hadithapi shape hadiths.data
         return {
           hadiths: safeMap(wrap.data, (h) => normalizeHadith(h, {})),
           page: num ? 1 : page, limit: num ? 1 : limit,
