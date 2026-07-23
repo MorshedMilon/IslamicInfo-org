@@ -373,6 +373,15 @@
       host.ui.safeLocalStorageSet('islamicinfo-hadith-last-read', { collectionSlug: slug, bookNum: book, hadithNum: num });
     }
     if (h && window.II && II.track) II.track('tier3_pageview', { collection: slug, book: book, hadith: num });
+
+    // 6) Reading paths (Module 17): if this hadith belongs to an active reading path,
+    //    show the in-path strip (prev/next) and mark it read so progress advances and
+    //    "Continue" opens the next unread. No-op when the hadith is in no path.
+    if (window.II && II.readingPathsDOM) {
+      var pathRef = { collection: slug, book: book, hadith: num };
+      II.readingPathsDOM.mountStrip(pathRef);
+      if (h) II.readingPathsDOM.markReadForRef(pathRef);
+    }
   }
 
   II.tier3 = { init: init, renderList: renderList, renderDeepView: renderDeepView,

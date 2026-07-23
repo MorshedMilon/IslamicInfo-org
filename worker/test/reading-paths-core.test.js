@@ -30,8 +30,23 @@ test('seed: no 5th "Daily Sunnah" path (deferred post-v1)', () => {
   assert.ok(!seed.paths.some((p) => /daily.?sunnah/i.test(p.slug + p.name)));
 });
 
-test('seed: every path ships with deferred (empty) hadithRefs — no unverified refs', () => {
-  for (const p of seed.paths) {
+// nawawi-40 is populated from the real an-Nawawi 40 collection (nawawi40, fawazahmed0
+// edition) — owner-approved, sourced, live-routable (ADR-044). The 3 thematic paths
+// stay curation-pending until their hadith are selected from cited sources.
+test('seed: nawawi-40 is populated with the real 42 an-Nawawi refs, status ready', () => {
+  const nawawi = seed.paths.find((p) => p.slug === 'nawawi-40');
+  assert.equal(nawawi.status, 'ready');
+  assert.equal(nawawi.hadithRefs.length, 42);
+  // every ref points at the real nawawi40 collection, numbered 1..42 in order
+  nawawi.hadithRefs.forEach((r, i) => {
+    assert.equal(r.collection, 'nawawi40');
+    assert.equal(r.hadith, String(i + 1));
+  });
+});
+
+test('seed: the 3 thematic paths remain curation-pending with empty refs (no fabricated selection)', () => {
+  for (const slug of ['kutub-sittah-basics', 'faith-foundations', 'prophetic-character']) {
+    const p = seed.paths.find((x) => x.slug === slug);
     assert.equal(p.status, 'curation-pending');
     assert.deepEqual(p.hadithRefs, []);
   }

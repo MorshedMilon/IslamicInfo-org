@@ -182,6 +182,17 @@
     i18nApply(slot);
   }
 
+  // Mark a just-viewed hadith as read in whatever path contains it (advances the
+  // progress ring + makes "Continue" open the next unread), then refresh the sidebar.
+  // No-op if the ref belongs to no path. Called from the deep-view painter.
+  function markReadForRef(ref) {
+    var id = core.refId(ref);
+    var path = findPathContaining(id);
+    if (!path) return;
+    markRead(path.slug, id);
+    render();
+  }
+
   window.II = window.II || {};
-  window.II.readingPathsDOM = { render: render, markRead: markRead, mountStrip: mountStrip };
+  window.II.readingPathsDOM = { render: render, markRead: markRead, mountStrip: mountStrip, markReadForRef: markReadForRef };
 })();
