@@ -40,7 +40,7 @@
     }
     var panel = document.createElement('div');
     panel.className = 'narrator-panel open';
-    panel.innerHTML = '<div class="narrator-empty">Loading…</div>';
+    panel.innerHTML = '<div class="dv-empty dv-empty--compact">Loading…</div>';
     row.appendChild(panel);
     row.setAttribute('aria-expanded', 'true');
 
@@ -48,7 +48,7 @@
     if (!panel.isConnected) return;                 // row/panel removed mid-fetch
     panel.innerHTML = data
       ? core.buildNarratorPanelHTML(data)
-      : '<div class="narrator-empty">Reliability data unavailable for this narrator</div>';
+      : '<div class="dv-empty dv-empty--compact" role="note">Reliability data unavailable for this narrator</div>';
   }
 
   // Delegated: a click on any isnad node carrying data-narrator-id toggles its
