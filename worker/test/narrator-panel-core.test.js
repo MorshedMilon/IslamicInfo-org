@@ -51,6 +51,20 @@ test('graderRowsHTML: empty citations → honest "No scholar citations", NEVER p
   assert.doesNotMatch(html, /scholar-grading-row/);
 });
 
+test('graderRowsHTML: empty citations use unified .dv-empty--compact + role="note"', () => {
+  const html = core.graderRowsHTML([]);
+  assert.match(html, /class="dv-empty dv-empty--compact"/);
+  assert.match(html, /role="note"/);
+  assert.doesNotMatch(html, /narrator-empty/);
+});
+
+test('buildNarratorPanelHTML: null uses unified .dv-empty--compact + role="note"', () => {
+  const html = core.buildNarratorPanelHTML(null);
+  assert.match(html, /class="dv-empty dv-empty--compact"/);
+  assert.match(html, /role="note"/);
+  assert.doesNotMatch(html, /narrator-empty/);
+});
+
 test('graderRowsHTML: escapes provider text (no raw HTML)', () => {
   const html = core.graderRowsHTML([{ scholar: '<script>x</script>', gradeText: 'y', source: 's', sourceRef: 'r' }]);
   assert.doesNotMatch(html, /<script>x<\/script>/);

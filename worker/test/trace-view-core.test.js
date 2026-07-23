@@ -71,6 +71,27 @@ test('grading column: no grade + characterization → collection-level honesty',
   assert.match(h, /collection-level characterization/);
 });
 
+test('trace empty notices carry role="note" (ARIA on honest-unavailable text)', () => {
+  // Force the empty branch in each exported column builder and assert EVERY emitted
+  // .dv-empty notice is a role="note" (not a live region). Matn col: Arabic-not-available
+  // + topics + qverses; isnad col: chain-unavailable; grading col: grading + 2 commentary
+  // + related. Covers all 7 notice sites across the 3 exported builders.
+  const matn = core.buildMatnColHTML({});               // no arabic, no topics, no qverses
+  const isnad = core.buildIsnadColHTML({});              // no narrators
+  const grading = core.buildGradingColHTML({});          // no grade, no characterization
+  [matn, isnad, grading].forEach((html) => {
+    // No bare <div class="dv-empty"> without role="note" may survive.
+    assert.doesNotMatch(html, /class="dv-empty"(?![^>]*role="note")/);
+  });
+  assert.match(matn, /class="dv-empty" role="note">Arabic text not available\./);
+  assert.match(matn, /class="dv-empty" role="note">Topics are being compiled/);
+  assert.match(isnad, /class="dv-empty" role="note">Chain of narration not available/);
+  assert.match(grading, /class="dv-empty" role="note">Scholarly grading not individually recorded/);
+  assert.match(grading, /class="dv-empty" role="note">Commentary not yet available\./);
+  // Live-region role must NOT be used for these static honest-unavailable notices.
+  assert.doesNotMatch(matn + isnad + grading, /class="dv-empty"[^>]*role="status"/);
+});
+
 test('buildCopyContent: maps hadith → the content shape buildCopyText expects', () => {
   const c = core.buildCopyContent(bukhari(), 'https://islamicinfo.org/hadith/sahih-bukhari/1/1');
   assert.equal(c.arabic, 'إنما الأعمال بالنيات');

@@ -33,13 +33,13 @@
     var narr = (h.narrator && h.narrator.name) || '';
     var topics = Array.isArray(h.topics) ? h.topics : [];
     var out = '<div class="trace-col trace-col-1"><div class="trace-col-label">Matn</div>';
-    out += ar ? '<div class="trace-matn font-arabic" dir="rtl" lang="ar">' + esc(ar) + '</div>' : '<div class="dv-empty">Arabic text not available.</div>';
+    out += ar ? '<div class="trace-matn font-arabic" dir="rtl" lang="ar">' + esc(ar) + '</div>' : '<div class="dv-empty" role="note">Arabic text not available.</div>';
     if (tr) out += '<div class="trace-trans">' + esc(tr) + '</div>';
     if (narr) out += '<div class="trace-narrator">Narrated by ' + esc(narr) + '</div>';
     out += '<div class="trace-topics">' + (topics.length
       ? topics.map(function (t) { return '<span class="topic-chip">' + esc(t) + '</span>'; }).join('')
-      : '<div class="dv-empty">' + UNAVAIL_TOPICS + '</div>') + '</div>';
-    out += '<div class="trace-qverses"><div class="trace-sub-label">Related Qur’anic Verses</div><div class="dv-empty">' + UNAVAIL_QVERSES + '</div></div>';
+      : '<div class="dv-empty" role="note">' + UNAVAIL_TOPICS + '</div>') + '</div>';
+    out += '<div class="trace-qverses"><div class="trace-sub-label">Related Qur’anic Verses</div><div class="dv-empty" role="note">' + UNAVAIL_QVERSES + '</div></div>';
     return out + '</div>';
   }
 
@@ -47,7 +47,7 @@
     h = h || {};
     var nodes = (h.isnad && Array.isArray(h.isnad.narrators)) ? h.isnad.narrators : [];
     var head = '<div class="trace-col trace-col-2"><div class="trace-col-label">Isnad Chain (Click narrators for reliability)</div>';
-    if (!nodes.length) return head + '<div class="dv-empty">' + UNAVAIL_ISNAD + '</div></div>';
+    if (!nodes.length) return head + '<div class="dv-empty" role="note">' + UNAVAIL_ISNAD + '</div></div>';
     var chain = nodes.map(function (n, i) {
       n = n || {};
       var nm = n.fullName || n.arabicName || ('Narrator ' + (i + 1));
@@ -71,11 +71,11 @@
       return '<div class="trace-grade grade-unknown"><span class="trace-grade-label">' + esc(h.gradeCharacterization) + '</span>' +
         '<span class="trace-grade-grader">collection-level characterization; per-hadith grade not individually recorded.</span></div>';
     }
-    return '<div class="dv-empty">Scholarly grading not individually recorded for this narration.</div>';
+    return '<div class="dv-empty" role="note">Scholarly grading not individually recorded for this narration.</div>';
   }
 
   function commentaryBoxHTML(scholar) {
-    return '<div class="trace-commentary"><div class="trace-sub-label">' + esc(scholar) + '</div><div class="dv-empty">' + UNAVAIL_COMMENTARY + '</div></div>';
+    return '<div class="trace-commentary"><div class="trace-sub-label">' + esc(scholar) + '</div><div class="dv-empty" role="note">' + UNAVAIL_COMMENTARY + '</div></div>';
   }
 
   function buildGradingColHTML(h) {
@@ -83,7 +83,7 @@
       gradeBlockHTML(h) +
       commentaryBoxHTML('Ibn Hajar al-ʿAsqalani') +
       commentaryBoxHTML('Imam an-Nawawi') +
-      '<div class="trace-related"><div class="trace-sub-label">Related Narrations</div><div class="dv-empty">' + UNAVAIL_RELATED + '</div></div>' +
+      '<div class="trace-related"><div class="trace-sub-label">Related Narrations</div><div class="dv-empty" role="note">' + UNAVAIL_RELATED + '</div></div>' +
       '</div>';
   }
 

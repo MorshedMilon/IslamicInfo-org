@@ -50,12 +50,12 @@
         (cite ? '<span class="sg-note">' + cite + '</span>' : '') +
       '</div>';
     }).filter(Boolean);
-    if (!rows.length) return '<div class="narrator-empty">No scholar citations available for this narrator</div>';
+    if (!rows.length) return '<div class="dv-empty dv-empty--compact" role="note">No scholar citations available for this narrator</div>';
     return '<div class="scholar-gradings">' + rows.join('') + '</div>';
   }
 
   function buildNarratorPanelHTML(n) {
-    if (!n) return '<div class="narrator-empty">Reliability data unavailable for this narrator</div>';
+    if (!n) return '<div class="dv-empty dv-empty--compact" role="note">Reliability data unavailable for this narrator</div>';
     var rel = reliabilityParts(n.reliabilityGrade);
     var face = n.arabicName ? String(n.arabicName).slice(0, 2)
              : (n.fullName ? String(n.fullName).trim().charAt(0) : '·');

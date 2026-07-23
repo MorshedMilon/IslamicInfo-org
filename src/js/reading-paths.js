@@ -63,18 +63,27 @@
   // locale; apply() leaves the English fallback untouched when it doesn't —
   // so this is i18n-ready with zero behavior change until the locale files
   // gain the keys (the in-progress 10-language i18n pass owns that).
-  function continueControl(vm) {
-    if (vm.continueState === 'coming-soon') {
+  function continueControl(vm, continueHref) {
+    // 'continue' with no href = partially-curated path whose curated refs are all read
+    // but targetCount not yet reached (nextUnread null) → honest "Coming soon", not a
+    // dead <a href="">.
+    if (vm.continueState === 'coming-soon' || (vm.continueState === 'continue' && !continueHref)) {
       return '<span class="path-continue path-continue--soon" aria-disabled="true" data-i18n="hadith.paths.comingSoon">Coming soon</span>';
     }
     if (vm.continueState === 'complete') {
       return '<span class="path-continue path-continue--done" data-i18n="hadith.paths.complete">Path complete ✓</span>';
     }
-    return '<button class="path-continue" type="button" data-path-continue="' + esc(vm.slug) + '" data-i18n="hadith.paths.continue">Continue →</button>';
+    return '<a class="path-continue" href="' + esc(continueHref) + '" data-i18n="hadith.paths.continue">Continue →</a>';
   }
 
   function rowHTML(path, readSet) {
     var vm = core.pathRowViewModel(path, readSet);
+    // Continue target is snapshotted at render (rows re-render on load / view-all).
+    // nextUnread can be null even in the 'continue' state when a path is partially
+    // curated (hadithRefs.length < targetCount) and every curated ref is read — guard it,
+    // else routeFor(null) throws and the whole sidebar fails to render.
+    var nextRef = vm.continueState === 'continue' ? core.nextUnread(path, readSet) : null;
+    var continueHref = nextRef ? routeFor(nextRef) : '';
     return (
       '<div class="reading-path-row" data-path-slug="' + esc(vm.slug) + '">' +
         ringSVG(vm) +
@@ -82,7 +91,7 @@
           '<div class="reading-path-name" data-i18n="hadith.paths.name.' + esc(vm.slug) + '">' + esc(vm.name) + '</div>' +
           '<div class="reading-path-count">' + esc(vm.countLabel) + '</div>' +
         '</div>' +
-        continueControl(vm) +
+        continueControl(vm, continueHref) +
       '</div>'
     );
   }
@@ -110,11 +119,6 @@
     i18nApply(list);
     var viewall = document.getElementById('reading-paths-viewall');
     if (viewall) viewall.addEventListener('click', function () { expanded = true; render(); });
-    // Continue buttons are inert for the deferred seed (no rows emit them),
-    // but wire them for the future curated data path.
-    list.querySelectorAll('[data-path-continue]').forEach(function (btn) {
-      btn.addEventListener('click', function () { openNextUnread(btn.getAttribute('data-path-continue')); });
-    });
   }
 
   // Path-based deep-view route (see hadith.js routePath/parseRoute):
@@ -123,14 +127,6 @@
   function routeFor(ref) {
     return '/hadith/' + encodeURIComponent(ref.collection) +
       '/' + encodeURIComponent(ref.book) + '/' + encodeURIComponent(ref.hadith);
-  }
-
-  function openNextUnread(slug) {
-    var path = paths.filter(function (p) { return p.slug === slug; })[0];
-    if (!path) return;
-    var next = core.nextUnread(path, core.readSetFor(loadStore(), slug));
-    if (!next) return; // complete or empty
-    location.href = routeFor(next);
   }
 
   function init() {
@@ -167,22 +163,22 @@
     var path = findPathContaining(id);
     if (!path) { slot.innerHTML = ''; return; } // not in any path → hidden
     var n = core.pathIndexOf(path, id);
+    var prev = path.hadithRefs[n - 2];
+    var next = path.hadithRefs[n];
+    function navBtn(key, label, ref) {
+      if (ref) return '<a class="path-nav-btn" href="' + esc(routeFor(ref)) + '" data-i18n="' + key + '">' + label + '</a>';
+      return '<span class="path-nav-btn" aria-disabled="true" data-i18n="' + key + '">' + label + '</span>';
+    }
     slot.innerHTML =
       '<div class="reading-path-strip fade-up">' +
         '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>' +
         '<span>Reading: <strong>' + esc(path.name) + '</strong> · Hadith ' + n + ' of ' + path.targetCount + '</span>' +
         '<div class="path-nav-btns">' +
-          '<button class="path-nav-btn" type="button" data-path-prev data-i18n="hadith.path.prev">← Previous</button>' +
-          '<button class="path-nav-btn" type="button" data-path-next data-i18n="hadith.path.next">Next →</button>' +
+          navBtn('hadith.path.prev', '← Previous', prev) +
+          navBtn('hadith.path.next', 'Next →', next) +
         '</div>' +
       '</div>';
     i18nApply(slot);
-    var prev = path.hadithRefs[n - 2];
-    var next = path.hadithRefs[n];
-    var prevBtn = slot.querySelector('[data-path-prev]');
-    var nextBtn = slot.querySelector('[data-path-next]');
-    if (prevBtn) prevBtn.addEventListener('click', function () { if (prev) location.href = routeFor(prev); });
-    if (nextBtn) nextBtn.addEventListener('click', function () { if (next) location.href = routeFor(next); });
   }
 
   window.II = window.II || {};

@@ -18,7 +18,8 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap"></noscript>
 <style>
 /* ════════════════════════════════════════════════════════════════
    ISLAMICINFO — DESIGN SYSTEM TOKENS (CLAUDE.md §1)
@@ -304,7 +305,7 @@ a { text-decoration: none; color: inherit; }
 .reading-path-meta { flex: 1; min-width: 0; }
 .reading-path-name { font-size: 12.5px; color: var(--ink-body); font-weight: 500; }
 .reading-path-count { font-size: 10.5px; color: var(--ink-subtle); }
-.path-continue { font-size: 11px; background: none; border: none; cursor: pointer; color: var(--teal-700); padding: 0; white-space: nowrap; }
+.path-continue { font-size: 11px; background: none; border: none; cursor: pointer; color: var(--teal-700); padding: 0; white-space: nowrap; text-decoration: none; }
 .path-continue--soon { color: var(--ink-subtle); cursor: default; font-style: italic; }
 .path-continue--done { color: var(--gold-700); cursor: default; }
 .reading-path-viewall { display: block; width: 100%; text-align: left; font-size: 11px; background: none; border: none; cursor: pointer; color: var(--teal-700); padding: 6px 20px 0; }
@@ -587,6 +588,7 @@ a { text-decoration: none; color: inherit; }
 .dv-block-title { font-family: var(--font-serif); font-size: 18px; color: var(--ink-primary); margin: 0 0 12px; }
 .dv-empty { color: var(--ink-muted); font-size: 14px; padding: 14px 16px; background: var(--surface);
   border-radius: var(--r-md); border: 1px solid var(--ink-faint); }
+.dv-empty--compact { font-size: 12.5px; background: none; padding: 4px 0; border: none; border-radius: 0; }
 
 /* Isnad (inline) */
 .dv-isnad-chain { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
@@ -743,7 +745,6 @@ a { text-decoration: none; color: inherit; }
   padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
   background: var(--surface); border: 0.5px solid var(--ink-faint); color: var(--ink-body);
 }
-.narrator-empty { font-size: 12.5px; color: var(--ink-muted); padding: 4px 0; }
 
 /* ─── BREADCRUMB (Stage 2) ─── */
 .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-muted); margin-bottom: 20px; }
@@ -763,7 +764,7 @@ a { text-decoration: none; color: inherit; }
   padding: 4px 12px; font-size: 12px; font-weight: 500;
   background: rgba(0,105,110,.08); border: 0.5px solid rgba(0,105,110,.2);
   border-radius: 16px; cursor: pointer; color: var(--teal-700); font-family: var(--font-body);
-  transition: all .2s;
+  transition: all .2s; text-decoration: none;
 }
 .path-nav-btn:hover { background: var(--teal-700); color: white; }
 
@@ -2083,11 +2084,28 @@ function showHadithToast(msg) {
 <script src="src/js/reading-paths-core.js"></script>
 <script src="src/js/reading-paths.js"></script>
 <script src="src/js/hadith.js"></script>
-<script src="src/js/hadith-ai-core.js"></script>
-<script src="src/js/hadith-ai.js"></script>
-<!-- QuranlyAI floating assistant (global, one-tag) -->
-<script src="src/js/quranlyai-widget.js?v=20260718c"></script>
-<script src="src/js/select-to-ask.js?v=20260719a"></script>
+<!-- QuranlyAI floating assistant (global, one-tag) + AI explain -->
+<script>
+  /* Module 18 perf: load post-interaction feature scripts after first paint —
+     none is a first-paint dependency (explain button, floating widget, text-selection). */
+  (function () {
+    var deferred = [
+      'src/js/hadith-ai-core.js',
+      'src/js/hadith-ai.js',
+      'src/js/quranlyai-widget.js?v=20260718c',
+      'src/js/select-to-ask.js?v=20260719a'
+    ];
+    function load() {
+      deferred.forEach(function (src) {
+        var s = document.createElement('script');
+        s.src = src; s.async = false; // preserve execution order
+        document.body.appendChild(s);
+      });
+    }
+    if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 3000 });
+    else window.addEventListener('load', load);
+  })();
+</script>
 <button id="ii-sheet-trigger" aria-label="Open collections" aria-haspopup="dialog" aria-expanded="false" style="display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:250;gap:8px;align-items:center;padding:11px 20px;border:none;border-radius:24px;cursor:pointer;background:linear-gradient(135deg,var(--teal-700),var(--teal-500));color:white;font-family:var(--font-body);font-size:13px;font-weight:600;box-shadow:0 6px 20px rgba(0,105,110,.35);">
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
   <span>Collections</span>
