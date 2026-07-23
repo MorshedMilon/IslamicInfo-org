@@ -41,3 +41,36 @@ test('api.js exposes fetchNarrator (Module 8) and it targets /data/narrator (not
   // /data/ path is NOT rebased by _apiUrl (only /api/ is) — stays same-origin static asset
   assert.equal(api._apiUrl('/data/narrator/x.json'), '/data/narrator/x.json');
 });
+
+/* ── DoD-14: storage-quota fallback (was handled but untested — Module-10 plan required it) ── */
+test('safeLocalStorageSet: success path writes and returns true', () => {
+  const store = {};
+  globalThis.localStorage = { setItem: (k, v) => { store[k] = v; }, getItem: (k) => (k in store ? store[k] : null) };
+  try {
+    assert.equal(ui.safeLocalStorageSet('k', { a: 1 }), true);
+    assert.equal(store.k, JSON.stringify({ a: 1 }));
+  } finally { delete globalThis.localStorage; }
+});
+
+test('safeLocalStorageSet: QuotaExceededError → returns false, never throws, prior value intact', () => {
+  const store = { existing: 'keep' };
+  globalThis.localStorage = {
+    setItem: () => { const e = new Error('quota'); e.name = 'QuotaExceededError'; throw e; },
+    getItem: (k) => (k in store ? store[k] : null),
+  };
+  try {
+    let result;
+    assert.doesNotThrow(() => { result = ui.safeLocalStorageSet('k', 'big'); });
+    assert.equal(result, false);           // caller can detect the write failed
+    assert.equal(store.existing, 'keep');  // untouched — no partial corruption
+  } finally { delete globalThis.localStorage; }
+});
+
+test('safeLocalStorageSet: any other storage error also caught → false (never throws)', () => {
+  globalThis.localStorage = { setItem: () => { throw new Error('SecurityError'); }, getItem: () => null };
+  try {
+    let result;
+    assert.doesNotThrow(() => { result = ui.safeLocalStorageSet('k', 'v'); });
+    assert.equal(result, false);
+  } finally { delete globalThis.localStorage; }
+});
