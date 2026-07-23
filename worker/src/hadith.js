@@ -185,13 +185,18 @@ async function search(searchParams, env, origin, deps) {
   const q = (searchParams.get('q') || '').trim();
   if (q.length < 2) return fail('bad_query', 'search query must be at least 2 characters', origin, 400, false);
   if (q.length > 100) return fail('bad_query', 'search query too long (max 100 chars)', origin, 400, false);
+  const collection = searchParams.get('collection');
+  if (collection && !ALLOWED_SLUGS.has(collection)) {
+    return fail('bad_slug', `unknown collection: ${collection}`, origin, 400, false);
+  }
   if (!env.HADITH_API_KEY) return fail('no_key', 'Hadith service temporarily unavailable', origin, 503, true);
   const page = posInt(searchParams.get('page')) || 1;
   const lang = searchParams.get('lang') === 'ar' ? 'ar' : 'en';
-  const param = lang === 'ar' ? { hadithArabic: q } : { hadithEnglish: q };
+  const base = lang === 'ar' ? { hadithArabic: q } : { hadithEnglish: q };
+  const param = collection ? { book: collection, ...base } : base;
   try {
     const { data, source } = await liveOrCache(
-      env.QURANLYAI_KV, hKey('search', lang, page, q), TTL.HOUR,
+      env.QURANLYAI_KV, hKey('search', lang, collection || 'all', page, q), TTL.HOUR,
       () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, { ...param, paginate: 25, page }),
       (raw) => ({ results: safeMap(raw.hadiths && raw.hadiths.data, (h) => normalizeHadith(h, { language: lang })),
                   page, query: q }),

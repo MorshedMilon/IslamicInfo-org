@@ -140,6 +140,28 @@ test('search returns normalized results', async () => {
   assert.equal(b.data.results[0].hadithNumber, 1);
 });
 
+test('search scoped by collection sends the book filter and keeps the query', async () => {
+  let calledUrl = '';
+  const spy = async (url) => { calledUrl = url; return { ok: true, status: 200, json: async () => ({
+    hadiths: { data: [{ hadithNumber: '5', hadithEnglish: 'patience is light',
+      book: { bookSlug: 'sahih-muslim', bookName: 'Sahih Muslim' },
+      chapter: { chapterNumber: '1' } }] },
+  }) }; };
+  const res = await handleHadith('/api/hadith/search',
+    new URLSearchParams('q=patience&collection=sahih-muslim'), ENV(), ORIGIN, { fetcher: spy });
+  assert.equal(res.status, 200);
+  const b = await res.json();
+  assert.equal(b.data.results.length, 1);
+  assert.ok(/book=sahih-muslim/.test(calledUrl), 'scoped search filters by book slug');
+  assert.ok(/hadithEnglish=patience/.test(calledUrl), 'scoped search keeps the text query');
+});
+
+test('search with an invalid collection is rejected', async () => {
+  const res = await handleHadith('/api/hadith/search',
+    new URLSearchParams('q=patience&collection=evil'), ENV(), ORIGIN, {});
+  assert.equal(res.status, 400);
+});
+
 test('daily falls back to the static hadith when upstream fails and cache is empty', async () => {
   const failing = async () => { throw new Error('down'); };
   const res = await handleHadith('/api/hadith/daily', new URLSearchParams(), ENV(), ORIGIN, { fetcher: failing });
