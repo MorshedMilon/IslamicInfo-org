@@ -1,7 +1,7 @@
 # Hadith Collection Browse — Endless List + In-Collection Search
 
 **Date:** 2026-07-23
-**Status:** Design approved (awaiting spec review → plan)
+**Status:** Implemented — merged to `main` + pushed (1a91b4e); live-browser sign-off pending
 **Scope:** Hadith Library, Tier-3a in-book list view + one additive Worker route
 
 ---
