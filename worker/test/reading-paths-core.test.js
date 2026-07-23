@@ -115,3 +115,44 @@ test('pathProgress: empty deferred path (targetCount>0, no refs) → 0%, not com
     { readCount: 0, targetCount: 42, percent: 0, complete: false }
   );
 });
+
+// ── nextUnread ───────────────────────────────────────────────────────
+test('nextUnread: none read → first ref', () => {
+  assert.equal(core.refId(core.nextUnread(MOCK_PATH, new Set())), 'sahih-bukhari:1:1');
+});
+
+test('nextUnread: some read → first not-yet-read in order', () => {
+  const r = core.nextUnread(MOCK_PATH, new Set(['sahih-bukhari:1:1']));
+  assert.equal(core.refId(r), 'sahih-bukhari:1:2');
+});
+
+test('nextUnread: all read → null (complete)', () => {
+  const all = new Set(MOCK_PATH.hadithRefs.map(core.refId));
+  assert.equal(core.nextUnread(MOCK_PATH, all), null);
+});
+
+test('nextUnread: empty deferred path → null', () => {
+  assert.equal(core.nextUnread({ hadithRefs: [], targetCount: 42 }, new Set()), null);
+});
+
+// ── pathIndexOf ──────────────────────────────────────────────────────
+test('pathIndexOf: member ref → 1-based position', () => {
+  assert.equal(core.pathIndexOf(MOCK_PATH, 'sahih-muslim:1:3'), 3);
+});
+
+test('pathIndexOf: non-member → null', () => {
+  assert.equal(core.pathIndexOf(MOCK_PATH, 'not:in:path'), null);
+});
+
+// ── isEmptyPath (drives "Coming soon" state) ─────────────────────────
+test('isEmptyPath: curation-pending status → true', () => {
+  assert.equal(core.isEmptyPath({ status: 'curation-pending', hadithRefs: [] }), true);
+});
+
+test('isEmptyPath: empty refs regardless of status → true', () => {
+  assert.equal(core.isEmptyPath({ status: 'ready', hadithRefs: [] }), true);
+});
+
+test('isEmptyPath: populated path → false', () => {
+  assert.equal(core.isEmptyPath(MOCK_PATH), false);
+});

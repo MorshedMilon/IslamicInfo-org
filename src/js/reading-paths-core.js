@@ -62,11 +62,45 @@
     };
   }
 
+  // ── nextUnread ────────────────────────────────────────────────────
+  // First hadithRef (in path order) whose id is not in readSet, else
+  // null (path complete OR empty/deferred).
+  function nextUnread(path, readSet) {
+    var refs = (path && path.hadithRefs) || [];
+    for (var i = 0; i < refs.length; i++) {
+      if (!readSet || !readSet.has(refId(refs[i]))) return refs[i];
+    }
+    return null;
+  }
+
+  // ── pathIndexOf ───────────────────────────────────────────────────
+  // 1-based position of a refId string within the path (for the strip's
+  // "Hadith N of M"); null if not a member.
+  function pathIndexOf(path, id) {
+    var refs = (path && path.hadithRefs) || [];
+    for (var i = 0; i < refs.length; i++) {
+      if (refId(refs[i]) === id) return i + 1;
+    }
+    return null;
+  }
+
+  // ── isEmptyPath ───────────────────────────────────────────────────
+  // True when the path has no curated refs yet (deferred). Drives the
+  // "Coming soon" muted control instead of Continue.
+  function isEmptyPath(path) {
+    if (!path) return true;
+    if (path.status === 'curation-pending') return true;
+    return !(path.hadithRefs && path.hadithRefs.length > 0);
+  }
+
   var core = {
     ringGeometry: ringGeometry,
     _clampPercent: clampPercent,
     refId: refId,
     pathProgress: pathProgress,
+    nextUnread: nextUnread,
+    pathIndexOf: pathIndexOf,
+    isEmptyPath: isEmptyPath,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }
