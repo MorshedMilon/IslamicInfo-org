@@ -176,7 +176,16 @@
 
   // Collections with no fixed book structure — Browse skips Tier 2, straight to Tier 3a (TechSpec §10).
   var BOOKLESS = { 'riyad-assalihin': 1, 'nawawi40': 1, 'musnad-ahmad': 1 };
-  function isBookless(slug) { return !!BOOKLESS[slug]; }
+  // Direct-source collections (fawazahmed0 / AhmedBaset CDNs — Bulugh al-Maram, Muwatta,
+  // al-Adab al-Mufrad, Shamail, Darimi, Forty Qudsi, Shah Waliullah, etc.) have no Tier-2
+  // books endpoint on the hadithapi Worker, so their books grid failed ("Books temporarily
+  // unavailable"). Treat every non-hadithapi collection as bookless → skip the grid and
+  // render the flat Tier-3a hadith list directly (fetchHadithsByBook returns the whole
+  // collection for direct sources). hadithapi collections keep their real books grid.
+  function isBookless(slug) {
+    if (BOOKLESS[slug]) return true;
+    return !!(api && typeof api.hadithProviderOf === 'function' && api.hadithProviderOf(slug) !== 'hadithapi');
+  }
   function collectionBySlug(slug) { return state.collections.filter(function (x) { return x.slug === slug; })[0] || null; }
 
   function parseRoute(path) {
