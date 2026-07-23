@@ -1208,7 +1208,7 @@
   async function runGlobalHadithSearch(q) {
     var el = feedEl(); if (!el || !feed) return;
     q = (q || '').trim(); if (!q) return;
-    FEED.query = q;
+    FEED.query = '';   // server search already matched; grade pills must filter by grade only, not literal substring
     setLoadMore('hide');
     ui.renderLoadingState(el, 3); feedStatus('Searching “' + q + '”…');
     var res; try { res = await api.fetchHadithSearch(q, 'en', 1); } catch (_) { res = null; }
@@ -1226,6 +1226,7 @@
     }
     el.innerHTML = results.map(feed.buildCardHTML).join('');
     markCardStates(el);
+    applyGradeFilter();
     feedStatus(results.length + ' result' + (results.length === 1 ? '' : 's') + ' for “' + q + '”');
   }
 
