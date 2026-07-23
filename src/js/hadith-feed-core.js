@@ -157,8 +157,13 @@
     editions = editions || [];
     if (!editions.length) return '';
     function byLine(e) { return e.translator ? '<div class="hadith-tr-by">Translated by ' + esc(e.translator) + '</div>' : ''; }
+    // DoD-11: always surface where the translation came from. `edition` holds the
+    // source/provider (e.g. "hadithapi.com"), not a named scholarly edition, so it is
+    // framed as a source — honest, and doubles as the "every claim carries a source"
+    // attribution. Multi-edition already shows names on the tabs, so this is single-only.
+    function edLabel(e) { return e.edition ? '<div class="hadith-tr-edition">Source · ' + esc(e.edition) + '</div>' : ''; }
     if (editions.length === 1) {
-      return '<div class="hadith-text">' + esc(editions[0].text) + '</div>' + byLine(editions[0]);
+      return '<div class="hadith-text">' + esc(editions[0].text) + '</div>' + edLabel(editions[0]) + byLine(editions[0]);
     }
     var hasPref = false, i;
     for (i = 0; i < editions.length; i++) { if (prefEdition && editions[i].edition === prefEdition) { hasPref = true; break; } }
