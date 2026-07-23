@@ -74,21 +74,30 @@ approves its own output, and the owner's approval does not license fabrication.
 **Authenticity rules — UNCHANGED and non-negotiable (this is what makes owner-only approval safe):**
 
 - Never invent Qur'an verses or hadith text.
-- Never invent, guess, or paraphrase a hadith grading (*sahih / hasan / da'if / mawdu'*)
-  from model memory. **Every grading must trace to a named source** (sunnah.com,
-  al-Albani, Ibn Hajar, or another cited scholar/database) via the **hadith-verifier**
-  data layer — never generated freehand by the AI.
-- Never invent narrator chains (isnad) or scholarly commentary.
-- If a grading or source cannot be found in the verified database, the system shows
-  **"not yet verified" / "not documented in available sources"** — never a fabricated,
-  plausible-sounding answer.
+- Never invent, guess, or paraphrase a hadith **grading** (*sahih / hasan / da'if /
+  mawdu'*) from model memory. **Every grading traces to a named source** — hadithapi.com,
+  fawazahmed0/hadith-api, or UmmahAPI (ADR-045) — via the **hadith-verifier** data layer,
+  never generated freehand.
+- Never invent **narrator reliability** verdicts (thiqah/saduq/da'if). Every narrator
+  verdict traces to the **Itqan Rijal Database** and names the classical text/scholar it
+  comes from (e.g. "Ibn Hajar, *Taqrib al-Tahdhib*"). No matching Itqan record → "not yet
+  verified".
+- Never invent narrator chains (isnad) or scholarly commentary. Commentary traces to a
+  named source (UmmahAPI tafsir — Ibn Kathir etc. — for Qur'an ayat; LK-Hadith-Corpus for
+  hadith), shown inline.
+- If a grading, narrator, or source cannot be found in the verified datasets, the system
+  shows **"not yet verified" / "not documented in available sources"** — never a
+  fabricated, plausible-sounding answer.
 - Weak or fabricated narrations stay clearly labeled as such.
-- (Full rules, also unchanged: `skills/islamic-authenticity/islamic-authenticity.md`.)
+- Source registry: `skills/islamic-authenticity/trusted-sources.md` (ADR-045). Sunnah.com
+  is an optional future cross-check, **not a blocker**.
+- (Full no-fabrication rules, unchanged: `skills/islamic-authenticity/islamic-authenticity.md`.)
 
 **Workflow:**
 
-1. Content is pulled **only** from cited sources (sunnah.com API, hadith-verifier skill,
-   named-scholar gradings).
+1. Content is pulled **only** from the cited datasets (ADR-045: hadithapi.com /
+   fawazahmed0 / UmmahAPI for hadith; Itqan for narrators; UmmahAPI tafsir / LK-corpus for
+   commentary) via the hadith-verifier skill.
 2. Every claim displays its citation inline (collection, hadith number, grader).
 3. **Morshed reviews and approves each batch/item before it goes live** — no separate
    scholar sign-off required.
