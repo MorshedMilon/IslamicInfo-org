@@ -285,6 +285,15 @@ test('renderTranslations: single edition → plain .hadith-text row, no tabs (vi
   assert.match(html, /<div class="hadith-text">/);
   assert.doesNotMatch(html, /dv-tabs/);
 });
+test('renderTranslations: single edition shows the translation source label (DoD-11)', () => {
+  const html = core.renderTranslations([{ text: 'X', edition: 'hadithapi.com' }]);
+  assert.match(html, /class="hadith-tr-edition"/);
+  assert.match(html, /hadithapi\.com/);
+});
+test('renderTranslations: single edition with no edition name → no source label (graceful, no fabrication)', () => {
+  const html = core.renderTranslations([{ text: 'X', edition: null }]);
+  assert.doesNotMatch(html, /hadith-tr-edition/);
+});
 test('renderTranslations: >1 edition → tablist with one panel each, only first tab on', () => {
   const html = core.renderTranslations([
     { text: 'A', edition: 'darussalam', primary: true }, { text: 'B', edition: 'usc-msa', primary: false },

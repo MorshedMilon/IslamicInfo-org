@@ -43,6 +43,7 @@
     panel.innerHTML = '<div class="dv-empty dv-empty--compact">Loading…</div>';
     row.appendChild(panel);
     row.setAttribute('aria-expanded', 'true');
+    if (window.II && II.track) II.track('narrator_panel_opened', { narrator_id: String(id) });
 
     var data = id ? await loadNarrator(id) : null;
     if (!panel.isConnected) return;                 // row/panel removed mid-fetch

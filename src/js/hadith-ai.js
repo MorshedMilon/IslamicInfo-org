@@ -125,6 +125,7 @@
     var el = ensureCard(card);
     el.classList.toggle('show');
     if (!el.classList.contains('show')) return;
+    if (window.II && II.track) II.track('ai_explain_opened', { ref: cardData.ref });
     if (!core.hasText(cardData)) {
       var body = el.querySelector('.ai-body'); body.textContent = 'Explanation unavailable for this hadith.';
       setFoot(el.querySelector('.ai-foot'), cardData.ref); return;

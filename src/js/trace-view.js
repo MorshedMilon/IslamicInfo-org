@@ -50,6 +50,7 @@
     if (hadith) renderInto(hadith);
     else { var l = el('trace-layout'); if (l) l.innerHTML = '<div class="dv-empty">This hadith could not be loaded. Please try again.</div>'; var bc = el('trace-breadcrumb'); if (bc) bc.textContent = ''; }
     ov.hidden = false; ov.classList.add('open');
+    if (window.II && II.track) II.track('trace_view_opened', hadith ? { collection: hadith.collectionSlug, book: hadith.bookNumber, hadith: hadith.hadithNumber } : {});
     var main = document.querySelector('.main'); if (main) main.setAttribute('aria-hidden', 'true');
     document.addEventListener('keydown', onKey);
     var first = el('trace-exit'); if (first) first.focus();

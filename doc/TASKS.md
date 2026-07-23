@@ -288,6 +288,19 @@ summaries, trace-view commentary, reading-path refs are all honest-unavailable /
 curation-deferred / zero-content scaffold. Safe to ship the engineering/display layer;
 NOT cleared to present those as reviewed content.
 
+### Fixes applied — 2026-07-23 (branch feat/hadith-module-18-dod-fixes)
+Engineering items from the follow-up list, now done (verified by the suite, 421 tests):
+- **DoD-6 → Pass:** 8 hadith hover components now use `var(--ease-reverent)`/`--ease-premium`.
+- **DoD-7 → Pass:** `.study-mode-dot` `#4ADE80` → `var(--teal-300)` (no raw hex).
+- **DoD-11 → Pass:** single-edition translations render a `.hadith-tr-edition` "Source · <edition>" label (honest source attribution; graceful when absent).
+- **DoD-14 → Pass:** `safeLocalStorageSet` quota fallback now unit-tested (success/QuotaExceeded/generic).
+- **DoD-17 → Partial (built, dormant):** analytics layer built — `analytics-core.js` (10-KPI allowlist + gating, 7 tests) + `analytics.js` (`II.track`, **privacy-gated**: loads NO gtag and sends nothing until `window.II_GA4_ID` set AND localStorage consent granted); all 10 KPI events wired at their handlers. **Remaining to reach full Pass (needs a human/product):** provide a GA4 measurement id, add a consent mechanism (banner → `II.analytics.grantConsent()`), and verify events fire in GA4 DebugView on a real deploy.
+- **DoD-18 → improved:** the DoD-6 hover portion is fixed; the stale Ecosystem/LearnSpeakAI §24 doc item remains a Product/Design call.
+
+KPI-semantics follow-ups (from final review — not bugs): `hotd_interacted` currently only fires on the HotD isnad button; `trace_view_opened` fires even on a failed hadith load; `narrator_panel_opened` counts first-open only. Revisit when analytics goes live.
+
+NOT fixable this session (unchanged): DoD-8/9/16 + religious gate (need human scholarly review — fabricating content is forbidden); DoD-15 (no Lighthouse tooling); DoD-13/4/5 visual/AT (no browser/screen-reader); DoD-10 live-model re-run.
+
 ### Follow-up items surfaced by this pass
 - [ ] **DoD-6 (Eng):** switch ~8 hadith hover components to `var(--ease-reverent)`/`--ease-premium` (`.reading-path-row`, `.sidebar-cta`, `.section-action`, `.breadcrumb a`, `.path-nav-btn`, `.exit-study`, `.trace-act`, `.topic-card`).
 - [ ] **DoD-7 (Eng):** tokenize/remove new hex `#4ADE80` (`hadith.html` `.study-mode-dot`).
