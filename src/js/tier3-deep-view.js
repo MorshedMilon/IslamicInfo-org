@@ -113,8 +113,11 @@
         n.innerHTML = 'End of ' + esc(LIST.bookName || 'this book') + ' · ' +
           '<a class="t3a-next-book" href="/hadith/' + encodeURIComponent(LIST.slug) + '/' + encodeURIComponent(LIST.nextBook.num) + '">' +
           'Continue to ' + esc(LIST.nextBook.name) + ' →</a>';
-      } else if (LIST.mode === 'book') {
+      } else if (LIST.mode === 'book' && LIST.isLastBook) {
+        // Only claim "last book" when the book list actually resolved and confirmed it.
         n.textContent = 'End of ' + (LIST.bookName || 'this book') + ' — the last book in this collection.';
+      } else if (LIST.mode === 'book') {
+        n.textContent = 'End of ' + (LIST.bookName || 'this book') + '.';   // next book unknown (list unavailable)
       } else {
         n.textContent = 'You’ve reached the end of this collection.';
       }
@@ -131,25 +134,27 @@
   // continuous sequence). `next` holds the target for the following Load More.
   var LIST = { slug: null, collection: null, provider: null, mode: 'flat',
                book: null, page: 0, lastPage: null, bookOrder: null, books: null,
-               bookName: null, bookTotal: null, nextBook: null,
+               bookName: null, bookTotal: null, nextBook: null, isLastBook: false,
                next: null, refs: null, byRef: {}, grade: 'all', loading: false, token: null };
 
   // Resolve the current book's name + total + the following book (for the "continue"
   // link) from the books list. Book mode only; no-op for flat/direct-source collections.
   function updateBookMeta() {
-    LIST.bookName = null; LIST.nextBook = null;
-    if (LIST.mode !== 'book' || !Array.isArray(LIST.books)) return;
+    LIST.bookName = null; LIST.nextBook = null; LIST.isLastBook = false;
+    if (LIST.mode !== 'book' || !Array.isArray(LIST.books)) return;   // books unresolved → stay "unknown"
     var idx = -1;
     for (var i = 0; i < LIST.books.length; i++) {
       if (String(LIST.books[i].bookNumber) === String(LIST.book)) { idx = i; break; }
     }
-    if (idx === -1) return;
+    if (idx === -1) return;                                           // current book not in list → "unknown"
     var cur = LIST.books[idx];
     LIST.bookName = cur.bookName || ('Book ' + LIST.book);
     if (LIST.bookTotal == null && typeof cur.hadithCount === 'number' && cur.hadithCount > 0) LIST.bookTotal = cur.hadithCount;
     if (idx < LIST.books.length - 1) {
       var nx = LIST.books[idx + 1];
       LIST.nextBook = { num: nx.bookNumber, name: nx.bookName || ('Book ' + nx.bookNumber) };
+    } else {
+      LIST.isLastBook = true;                                         // confirmed last book in the resolved list
     }
   }
 
@@ -203,6 +208,13 @@
     var data = res.data;
     if (data.total != null) LIST.bookTotal = data.total;     // authoritative book (or collection) total
     var base = (Math.max(1, target.page) - 1) * 25;          // in-book ordinal of this page's first hadith
+    // Position map keyed off the RAW page order (before dedupe), so a dropped malformed
+    // /duplicate record or a short page can't shift the labels of the cards that follow.
+    var posByRef = {};
+    (data.hadiths || []).forEach(function (h, j) {
+      var rr = host.feed.refOf(h);
+      if (rr && posByRef[rr] == null) posByRef[rr] = base + j + 1;
+    });
     var fresh = host.feed.dedupeByRef(LIST.refs, data.hadiths);
     fresh.forEach(function (h) { var r = host.feed.refOf(h); LIST.refs.add(r); LIST.byRef[r] = h; });
     var html = fresh.map(host.feed.buildCardHTML).join('');
@@ -220,10 +232,12 @@
       newCards = Array.prototype.slice.call(listEl.querySelectorAll('.hadith-card[data-ref]'), 0);
       applyListGradeFilterTo(newCards, LIST.grade);
     }
-    // In-book position label on each freshly rendered card (nav aid, not a citation).
-    newCards.forEach(function (card, i) {
-      var inner = card.querySelector('.hadith-inner'); if (!inner) return;
-      inner.insertAdjacentHTML('afterbegin', posLabelHTML(base + i + 1));
+    // In-book position label (nav aid, not a citation) — placed right after the hadith
+    // header so screen readers announce the canonical number first.
+    newCards.forEach(function (card) {
+      var pos = posByRef[card.getAttribute('data-ref')];
+      var hdr = card.querySelector('.hadith-header');
+      if (pos != null && hdr) hdr.insertAdjacentHTML('afterend', posLabelHTML(pos));
     });
     updateListStatus();
     if (!append) updateListHeader();                          // reflect the true total once known
