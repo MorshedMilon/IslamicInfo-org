@@ -109,9 +109,7 @@
 
   function sidebarRowHTML(c) {
     var count = c.hadithCount != null ? core.formatInt(c.hadithCount) : '';
-    var badge = REFERENCE_LINKED[c.slug]
-      ? ' <span class="count-badge">↗ ref</span>'                                    // reference-linked → not a hadith count
-      : (count ? ' <span class="count-badge">' + esc(count) + '</span>' : '');
+    var badge = count ? ' <span class="count-badge">' + esc(count) + '</span>' : '';
     return '<a class="sidebar-item" href="/hadith/' + encodeURIComponent(c.slug) + '" data-browse="' + esc(c.slug) + '">' + esc(c.nameEnglish) + badge + '</a>';
   }
 
@@ -189,19 +187,6 @@
     return !!(api && typeof api.hadithProviderOf === 'function' && api.hadithProviderOf(slug) !== 'hadithapi');
   }
 
-  // Collections with NO clean structured (API/JSON) source → shown as honest reference
-  // links to authoritative sources, never bulk-ingested or OCR-scraped. Al-Silsila
-  // as-Sahiha (al-Albani): English selection on Archive.org + per-number verification
-  // on al-hadees.com. (Owner-sourced 2026-07-23; PDF dumps deliberately excluded.)
-  var REFERENCE_LINKED = {
-    'al-silsila-sahiha': {
-      note: "Al-Albani's Silsila as-Sahiha isn't available as structured data, so it isn't browsable hadith-by-hadith here. Read the selected English translation on Archive.org, and verify each narration by its number at al-hadees.com.",
-      links: [
-        { label: 'English selection · Archive.org', url: 'https://archive.org/details/SelectedAhadeethFromSilsilahAsSaheeha' },
-        { label: 'Verify by number · al-hadees.com', url: 'https://al-hadees.com/silsila-sahih' }
-      ]
-    }
-  };
   function collectionBySlug(slug) { return state.collections.filter(function (x) { return x.slug === slug; })[0] || null; }
 
   function parseRoute(path) {
@@ -283,20 +268,6 @@
     var grid = $('#ii-books-grid'); if (!grid) return;                      // route changed mid-fetch
     if (!res || !res.ok || !Array.isArray(res.data) || !res.data.length) { renderBooksError(c); return; }
     grid.innerHTML = res.data.map(function (b) { return bookCardHTML(c, b); }).join('');
-  }
-  // Reference-linked collection view: honest "no structured data → verify at these sources".
-  function renderReferenceCard(c, ref) {
-    setTier(2);
-    var el = tier2El(); if (!el) return;
-    var links = ref.links.map(function (l) {
-      return '<a class="ref-link" href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">' + esc(l.label) + ' ↗</a>';
-    }).join('');
-    el.innerHTML = collectionHeaderHTML(c) +
-      '<div class="ref-collection">' +
-        '<div class="ref-collection-note">' + esc(ref.note) + '</div>' +
-        '<div class="ref-collection-links">' + links + '</div>' +
-        '<div class="ref-collection-disclaimer">Reference-linked collection — not bulk-ingested or auto-extracted. Confirm each narration against the linked sources.</div>' +
-      '</div>';
   }
   /* ── Module 11: topic index / landing ── */
   var TOPIC_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>';
@@ -429,7 +400,6 @@
     if (r.collection === 'topics') { renderTopics(r.book); return; }   // Module 11
     var c = collectionBySlug(r.collection);
     if (!c) { setTier(1); applyFilter(); try { history.replaceState(null, '', '/hadith.html'); } catch (_) {} return; } // invalid → Tier 1 (TechSpec §10)
-    if (REFERENCE_LINKED[r.collection]) { renderReferenceCard(c, REFERENCE_LINKED[r.collection]); return; }   // no structured data → honest reference links
     if (r.hadith) { if (II.tier3) II.tier3.renderDeepView(r, c); else renderTier3Placeholder(r, c); return; }   // Tier 3b
     if (r.book || isBookless(r.collection)) { if (II.tier3) II.tier3.renderList(r, c); else renderTier3Placeholder(r, c); return; }   // Tier 3a
     loadBooksGrid(c);
