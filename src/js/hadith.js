@@ -109,9 +109,7 @@
 
   function sidebarRowHTML(c) {
     var count = c.hadithCount != null ? core.formatInt(c.hadithCount) : '';
-    var badge = REFERENCE_LINKED[c.slug]
-      ? ' <span class="count-badge">↗ ref</span>'                                    // reference-linked → not a hadith count
-      : (count ? ' <span class="count-badge">' + esc(count) + '</span>' : '');
+    var badge = count ? ' <span class="count-badge">' + esc(count) + '</span>' : '';
     return '<a class="sidebar-item" href="/hadith/' + encodeURIComponent(c.slug) + '" data-browse="' + esc(c.slug) + '">' + esc(c.nameEnglish) + badge + '</a>';
   }
 
@@ -189,19 +187,6 @@
     return !!(api && typeof api.hadithProviderOf === 'function' && api.hadithProviderOf(slug) !== 'hadithapi');
   }
 
-  // Collections with NO clean structured (API/JSON) source → shown as honest reference
-  // links to authoritative sources, never bulk-ingested or OCR-scraped. Al-Silsila
-  // as-Sahiha (al-Albani): English selection on Archive.org + per-number verification
-  // on al-hadees.com. (Owner-sourced 2026-07-23; PDF dumps deliberately excluded.)
-  var REFERENCE_LINKED = {
-    'al-silsila-sahiha': {
-      note: "Al-Albani's Silsila as-Sahiha isn't available as structured data, so it isn't browsable hadith-by-hadith here. Read the selected English translation on Archive.org, and verify each narration by its number at al-hadees.com.",
-      links: [
-        { label: 'English selection · Archive.org', url: 'https://archive.org/details/SelectedAhadeethFromSilsilahAsSaheeha' },
-        { label: 'Verify by number · al-hadees.com', url: 'https://al-hadees.com/silsila-sahih' }
-      ]
-    }
-  };
   function collectionBySlug(slug) { return state.collections.filter(function (x) { return x.slug === slug; })[0] || null; }
 
   function parseRoute(path) {
@@ -284,19 +269,60 @@
     if (!res || !res.ok || !Array.isArray(res.data) || !res.data.length) { renderBooksError(c); return; }
     grid.innerHTML = res.data.map(function (b) { return bookCardHTML(c, b); }).join('');
   }
-  // Reference-linked collection view: honest "no structured data → verify at these sources".
-  function renderReferenceCard(c, ref) {
+  // Al-Silsila as-Sahiha has no structured browse endpoint → live Arabic keyword
+  // search against the Worker's Dorar.net proxy (/api/hadith/dorar/search), rendered
+  // with the pure II.dorarCard renderer. Never a static reference-link list (superseded).
+  var SILSILA = { q: '', page: 1, items: [] };
+  function renderSilsilaSearch(c) {
     setTier(2);
     var el = tier2El(); if (!el) return;
-    var links = ref.links.map(function (l) {
-      return '<a class="ref-link" href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">' + esc(l.label) + ' ↗</a>';
-    }).join('');
     el.innerHTML = collectionHeaderHTML(c) +
-      '<div class="ref-collection">' +
-        '<div class="ref-collection-note">' + esc(ref.note) + '</div>' +
-        '<div class="ref-collection-links">' + links + '</div>' +
-        '<div class="ref-collection-disclaimer">Reference-linked collection — not bulk-ingested or auto-extracted. Confirm each narration against the linked sources.</div>' +
-      '</div>';
+      '<form class="dorar-search" id="ii-dorar-form" role="search">' +
+        '<input id="ii-dorar-q" type="search" dir="rtl" lang="ar" placeholder="ابحث في السلسلة الصحيحة…" aria-label="Search Silsila as-Sahiha (Arabic)">' +
+        '<button class="btn-glass" type="submit">بحث</button>' +
+      '</form>' +
+      '<p class="dorar-help">Search Arabic keywords across al-Albani\'s Silsila as-Sahiha. Grading data from the Hadith Encyclopedia, Dorar.net (الدرر السنية).</p>' +
+      '<div id="ii-dorar-results" aria-live="polite"></div>';
+    var form = document.getElementById('ii-dorar-form');
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      SILSILA.q = (document.getElementById('ii-dorar-q').value || '').trim();
+      SILSILA.page = 1; SILSILA.items = [];
+      if (SILSILA.q) runSilsilaSearch(true);
+    });
+  }
+  async function runSilsilaSearch(reset) {
+    var out = document.getElementById('ii-dorar-results'); if (!out) return;
+    if (reset) out.innerHTML = '<div class="dorar-loading">Searching…</div>';
+    var res; try { res = await api.fetchDorarSilsila(SILSILA.q, SILSILA.page); } catch (_) { res = null; }
+    out = document.getElementById('ii-dorar-results'); if (!out) return;   // route may have changed mid-fetch
+    if (!res || !res.ok) {
+      var code = res && res.error && res.error.code;
+      var msg = code === 'quota' ? 'Daily search limit reached — try again tomorrow.'
+              : 'Search temporarily unavailable — try again.';
+      if (!reset && SILSILA.items.length) {
+        // Load-more failure: keep the results already shown, roll the page back to the last
+        // successful one, and offer a retry — never wipe good cards on a transient error.
+        SILSILA.page = Math.max(1, SILSILA.page - 1);
+        var kept = SILSILA.items.map(function (it) { return II.dorarCard.buildDorarCardHTML(it); }).join('');
+        out.innerHTML = '<div class="dorar-results-list">' + kept + '</div>' +
+          '<div class="books-error"><div class="books-empty-title">' + msg + '</div>' +
+          '<button class="btn-glass" id="ii-dorar-more" type="button" style="margin-top:12px;">Try again</button></div>';
+        var retry = document.getElementById('ii-dorar-more');
+        if (retry) retry.addEventListener('click', function () { SILSILA.page += 1; runSilsilaSearch(false); });
+        return;
+      }
+      out.innerHTML = '<div class="books-error"><div class="books-empty-title">' + msg + '</div></div>';
+      return;
+    }
+    var items = (res.data && res.data.items) || [];
+    if (reset && !items.length) { out.innerHTML = '<div class="books-empty"><div class="books-empty-title">No narrations matched.</div></div>'; return; }
+    SILSILA.items = SILSILA.items.concat(items);
+    var cards = SILSILA.items.map(function (it) { return II.dorarCard.buildDorarCardHTML(it); }).join('');
+    var more = items.length ? '<button class="btn-glass" id="ii-dorar-more" type="button" style="margin-top:16px;">Load more</button>' : '';
+    out.innerHTML = '<div class="dorar-results-list">' + cards + '</div>' + more;
+    var moreBtn = document.getElementById('ii-dorar-more');
+    if (moreBtn) moreBtn.addEventListener('click', function () { SILSILA.page += 1; runSilsilaSearch(false); });
   }
   /* ── Module 11: topic index / landing ── */
   var TOPIC_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>';
@@ -429,7 +455,7 @@
     if (r.collection === 'topics') { renderTopics(r.book); return; }   // Module 11
     var c = collectionBySlug(r.collection);
     if (!c) { setTier(1); applyFilter(); try { history.replaceState(null, '', '/hadith.html'); } catch (_) {} return; } // invalid → Tier 1 (TechSpec §10)
-    if (REFERENCE_LINKED[r.collection]) { renderReferenceCard(c, REFERENCE_LINKED[r.collection]); return; }   // no structured data → honest reference links
+    if (r.collection === 'al-silsila-sahiha') { renderSilsilaSearch(c); return; }   // no structured browse data → live Dorar search
     if (r.hadith) { if (II.tier3) II.tier3.renderDeepView(r, c); else renderTier3Placeholder(r, c); return; }   // Tier 3b
     if (r.book || isBookless(r.collection)) { if (II.tier3) II.tier3.renderList(r, c); else renderTier3Placeholder(r, c); return; }   // Tier 3a
     loadBooksGrid(c);
@@ -725,6 +751,19 @@
     if (!text) { ui.showToast('No Arabic text for this hadith'); return; }
     copyToClipboard(text, 'Copied Arabic text ✦');
   }
+  // Silsila Dorar card "Ask QuranlyAI" — the card shows Arabic matn only (no on-page
+  // translation), so route it into QuranlyAI's real hadith context + 'explain' action
+  // (window.QuranlyAI.setContext/open — confirmed against quranly-ai.js/quranly-ai-panel.js
+  // and doc/quranly-ai-integration.md's own hadith-page example). Guarded no-op if the
+  // globally deferred-loaded widget (quranlyai-widget.js) hasn't booted yet.
+  function onAskQai(card) {
+    var matnEl = card.querySelector('.dorar-matn');
+    var matn = matnEl ? matnEl.textContent.trim() : '';
+    var ref = card.getAttribute('data-ref') || '';
+    if (!window.QuranlyAI || typeof window.QuranlyAI.setContext !== 'function' || typeof window.QuranlyAI.open !== 'function') return;
+    window.QuranlyAI.setContext({ type: 'hadith', hadithBook: ref, language: 'ar', rawText: matn });
+    window.QuranlyAI.open('explain');
+  }
   function onShare(card, ref) {
     var content = readCardContent(card);
     content.sourceUrl = sourceUrlFor(ref);   // canonical Source line in the shared text
@@ -847,7 +886,8 @@
       if (btn.classList.contains('dv-action-btn')) return;   // Tier-3b deep-view actions stay deferred (their own handler)
       var act = btn.getAttribute('data-act');
       if (act !== 'bookmark' && act !== 'note' && act !== 'listen' && act !== 'share' &&
-          act !== 'copy' && act !== 'copy-arabic' && act !== 'trace' && act !== 'compare-add') return;
+          act !== 'copy' && act !== 'copy-arabic' && act !== 'trace' && act !== 'compare-add' &&
+          act !== 'ask-qai') return;
       var card = btn.closest('.hadith-card'); if (!card) return;
       var ref = card.getAttribute('data-ref'); if (!ref) return;
       e.preventDefault();
@@ -859,6 +899,7 @@
       else if (act === 'copy-arabic') onCopyArabic(card);
       else if (act === 'trace') { if (II.traceView) II.traceView.open(ref, { viaRoute: false }); }
       else if (act === 'compare-add') { addToCompare(ref); }
+      else if (act === 'ask-qai') onAskQai(card);
     });
   }
 

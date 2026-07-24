@@ -667,13 +667,22 @@ a { text-decoration: none; color: inherit; }
 .book-card:hover .book-browse { color: var(--gold-700); }
 .books-empty, .books-error { grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--ink-muted); }
 .books-empty-title { font-family: var(--font-display); font-size: 22px; color: var(--ink-primary); margin-bottom: 8px; }
-/* Reference-linked collection (no structured data → honest source links) */
-.ref-collection { max-width: 640px; margin: 8px 0 44px; }
-.ref-collection-note { font-size: 15px; line-height: 1.7; color: var(--ink-body); margin-bottom: 20px; }
-.ref-collection-links { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-.ref-link { display: inline-block; padding: 10px 16px; background: var(--surface-base); border: 0.5px solid rgba(0,105,110,.15); border-radius: var(--r-md); color: var(--teal-700); font-weight: 500; font-size: 13.5px; text-decoration: none; transition: all .2s var(--ease-premium); }
-.ref-link:hover { background: rgba(0,105,110,.06); box-shadow: var(--elev-1); }
-.ref-collection-disclaimer { font-size: 12px; color: var(--ink-subtle); font-style: italic; }
+/* Silsila as-Sahiha — live Dorar.net Arabic search (superseded the reference-linked card) */
+.dorar-search { display: flex; gap: 10px; margin: 8px 0 12px; }
+.dorar-search input { flex: 1; min-width: 0; padding: 12px 16px; border: 0.5px solid rgba(0,105,110,.18); border-radius: var(--r-md); background: var(--surface-base); color: var(--ink-primary); font-family: var(--font-arabic); font-size: 16px; }
+.dorar-search input:focus { outline: none; border-color: var(--teal-500); box-shadow: 0 0 0 3px rgba(0,105,110,.12); }
+.dorar-search .btn-glass { padding: 0 22px; border: 0.5px solid rgba(0,105,110,.25); border-radius: var(--r-md); background: var(--teal-700); color: white; font-weight: 600; font-size: 14px; cursor: pointer; transition: background .2s var(--ease-premium); }
+.dorar-search .btn-glass:hover { background: var(--teal-500); }
+.dorar-help { font-size: 12.5px; line-height: 1.6; color: var(--ink-muted); margin: 0 0 22px; }
+.dorar-results-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+.dorar-loading { text-align: center; padding: 40px 20px; color: var(--ink-muted); }
+.dorar-matn { font-size: 20px; line-height: 2.1; }
+.dorar-ruling { margin: 0 0 14px; padding: 12px 14px; background: rgba(197,160,89,.06); border: 0.5px solid rgba(197,160,89,.22); border-radius: var(--r-sm); }
+[data-theme="dark"] .dorar-ruling { background: rgba(197,160,89,.09); border-color: rgba(197,160,89,.3); }
+.dorar-ruling-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; color: var(--gold-700); margin-bottom: 6px; }
+.dorar-ruling-text { font-family: var(--font-arabic); font-size: 16px; direction: rtl; text-align: right; line-height: 1.9; color: var(--ink-body); }
+.dorar-src { color: var(--ink-subtle); }
+@media (max-width: 560px) { .dorar-search { flex-direction: column; } .dorar-search .btn-glass { padding: 12px; } }
 
 /* ─── ISNAD PREVIEW ─── */
 .isnad-preview {
@@ -2090,6 +2099,7 @@ function showHadithToast(msg) {
 <script src="src/js/api.js"></script>
 <script src="src/js/ui-utils.js"></script>
 <script src="src/js/hadith-citation-core.js"></script>
+<script src="src/js/dorar-card-core.js"></script>
 <script src="src/js/hadith-collections-core.js"></script>
 <script src="src/js/hadith-feed-core.js"></script>
 <script src="src/js/hadith-list-core.js"></script>

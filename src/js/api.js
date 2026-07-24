@@ -357,6 +357,16 @@
   }
   function fetchHadithDaily() { return _getHadith('/api/hadith/daily'); }
 
+  /* fetchDorarSilsila — Dorar.net (Silsila as-Sahihah/Da'ifah) keyword search,
+     proxied via the Worker (/api/hadith/dorar/search). _dorarUrl is exposed
+     separately so callers/tests can inspect the built URL without firing a request. */
+  function _dorarUrl(q, page) {
+    return _apiUrl(`/api/hadith/dorar/search?q=${encodeURIComponent(q || '')}&page=${parseInt(page, 10) || 1}`);
+  }
+  function fetchDorarSilsila(q, page) {
+    return _getHadith(`/api/hadith/dorar/search?q=${encodeURIComponent(q || '')}&page=${parseInt(page, 10) || 1}`);
+  }
+
   /* Narrator reliability data (Module 8, TechSpec §4.3) — self-hosted static
      JSON, cache-first 7d, lazy on panel open. Returns the narrator object or
      null (honest "unavailable"). NOT an /api route → API_BASE-exempt. */
@@ -559,6 +569,8 @@
     fetchHadithSearch,
     fetchHadithByNumber,
     fetchHadithDaily,
+    fetchDorarSilsila,
+    _dorarUrl,
     fetchNarrator,
     fetchNarratorById,
     fetchHadithOfDay,

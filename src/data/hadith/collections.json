@@ -132,10 +132,11 @@
       "compiledPeriod": "1914–1999 CE",
       "hadithCount": null,
       "hadithCountApproximate": true,
-      "hadithCountNote": "Multi-volume; count from live API at runtime — not asserted here.",
+      "hadithCountNote": "Search-only (Dorar.net Hadith Encyclopedia) — no by-number catalogue exists, so no count is asserted.",
       "gradeCharacterization": "Sahih (by definition of the series)",
       "perHadithGrade": true,
       "source": "hadithapi",
+      "search": "dorar",
       "category": "selected",
       "featured": false
     },
