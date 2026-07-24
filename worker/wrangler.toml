@@ -34,4 +34,4 @@ HADITH_API_BASE_URL = "https://hadithapi.com"
 # Silsila as-Sahiha Dorar.net search (see doc/DECISIONS.md ADR + doc/API-SPEC.md
 # GET /api/hadith/dorar/search). Default OFF pending owner review of Dorar's
 # terms/attribution + a Worker-reachability check (dorar.net may 403 bots).
-HADITH_SILSILA_DORAR_ENABLED = "false"
+HADITH_SILSILA_DORAR_ENABLED = "true"
