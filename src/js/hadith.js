@@ -307,7 +307,7 @@
         var kept = SILSILA.items.map(function (it) { return II.dorarCard.buildDorarCardHTML(it); }).join('');
         out.innerHTML = '<div class="dorar-results-list">' + kept + '</div>' +
           '<div class="books-error"><div class="books-empty-title">' + msg + '</div>' +
-          '<button class="btn-glass" id="ii-dorar-more" type="button" style="margin-top:12px;">Try again</button></div>';
+          '<button class="dorar-more" id="ii-dorar-more" type="button">Try again</button></div>';
         var retry = document.getElementById('ii-dorar-more');
         if (retry) retry.addEventListener('click', function () { SILSILA.page += 1; runSilsilaSearch(false); });
         return;
@@ -319,7 +319,7 @@
     if (reset && !items.length) { out.innerHTML = '<div class="books-empty"><div class="books-empty-title">No narrations matched.</div></div>'; return; }
     SILSILA.items = SILSILA.items.concat(items);
     var cards = SILSILA.items.map(function (it) { return II.dorarCard.buildDorarCardHTML(it); }).join('');
-    var more = items.length ? '<button class="btn-glass" id="ii-dorar-more" type="button" style="margin-top:16px;">Load more</button>' : '';
+    var more = items.length ? '<button class="dorar-more" id="ii-dorar-more" type="button">Load more</button>' : '';
     out.innerHTML = '<div class="dorar-results-list">' + cards + '</div>' + more;
     var moreBtn = document.getElementById('ii-dorar-more');
     if (moreBtn) moreBtn.addEventListener('click', function () { SILSILA.page += 1; runSilsilaSearch(false); });

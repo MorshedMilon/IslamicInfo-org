@@ -682,7 +682,14 @@ a { text-decoration: none; color: inherit; }
 .dorar-ruling-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; color: var(--gold-700); margin-bottom: 6px; }
 .dorar-ruling-text { font-family: var(--font-arabic); font-size: 16px; direction: rtl; text-align: right; line-height: 1.9; color: var(--ink-body); }
 .dorar-src { color: var(--ink-subtle); }
-@media (max-width: 560px) { .dorar-search { flex-direction: column; } .dorar-search .btn-glass { padding: 12px; } }
+.dorar-src a { color: var(--teal-700); text-decoration: none; }
+.dorar-src a:hover { text-decoration: underline; }
+/* Load-more / Try-again: explicit high-contrast button (hadith.html has no base .btn-glass). */
+.dorar-more { display: block; margin: 20px auto 8px; padding: 13px 30px; border: 0.5px solid var(--teal-700);
+  border-radius: var(--r-md); background: var(--teal-700); color: white; font-size: 15px; font-weight: 600;
+  line-height: 1.2; cursor: pointer; transition: background .2s var(--ease-premium); }
+.dorar-more:hover { background: var(--teal-500); }
+@media (max-width: 560px) { .dorar-search { flex-direction: column; } .dorar-search .btn-glass { padding: 12px; } .dorar-more { width: 100%; } }
 
 /* ─── ISNAD PREVIEW ─── */
 .isnad-preview {
