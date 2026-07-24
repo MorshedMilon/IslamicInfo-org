@@ -130,7 +130,12 @@ test('buildCardHTML: renders locked card anatomy with a stable data-ref', () => 
   assert.ok(html.includes('data-ref="sahih-bukhari:1:1"'));
   assert.ok(html.includes('hadith-teal-bar'));
   assert.ok(html.includes('Hadith #1'));
-  assert.ok(html.includes('Sahih al-Bukhari · Book 1 · Hadith 1'));
+  // Citation is COMPUTED "[Collection] [Number]" (hadith number only), not the
+  // pre-baked h.reference — the fixture deliberately carries the old dotted
+  // format to prove the display recomputes (cache-safe) and drops the book number.
+  assert.ok(html.includes('Sahih al-Bukhari 1'));
+  assert.ok(!html.includes('· Book'));
+  assert.ok(!html.includes('· Hadith'));
 });
 
 test('buildCardHTML: grade badge uses the exact locked class + grader fallback', () => {
@@ -285,14 +290,16 @@ test('renderTranslations: single edition → plain .hadith-text row, no tabs (vi
   assert.match(html, /<div class="hadith-text">/);
   assert.doesNotMatch(html, /dv-tabs/);
 });
-test('renderTranslations: single edition shows the translation source label (DoD-11)', () => {
+test('renderTranslations: NEVER renders a backend vendor "Source · …" line, even when edition is set', () => {
   const html = core.renderTranslations([{ text: 'X', edition: 'hadithapi.com' }]);
-  assert.match(html, /class="hadith-tr-edition"/);
-  assert.match(html, /hadithapi\.com/);
-});
-test('renderTranslations: single edition with no edition name → no source label (graceful, no fabrication)', () => {
-  const html = core.renderTranslations([{ text: 'X', edition: null }]);
   assert.doesNotMatch(html, /hadith-tr-edition/);
+  assert.doesNotMatch(html, /hadithapi\.com/);
+  assert.doesNotMatch(html, /Source ·/);
+});
+test('buildCardHTML: card carries no backend vendor name (hadithapi.com / AhmedBaset / fawazahmed0)', () => {
+  const html = core.buildCardHTML(bukhari({ translation: { text: 'T', edition: 'fawazahmed0', translator: null } }));
+  assert.doesNotMatch(html, /hadithapi\.com|AhmedBaset|fawazahmed0/i);
+  assert.doesNotMatch(html, /Source ·/);
 });
 test('renderTranslations: >1 edition → tablist with one panel each, only first tab on', () => {
   const html = core.renderTranslations([

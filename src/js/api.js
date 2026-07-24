@@ -448,20 +448,33 @@
      collection-level gradeCharacterization badge, never a fabricated grade, never
      "Grade Unknown". */
   function _directHadith(slug, provider, num, book, arabic, text, narrator, characterization) {
+    // Scholarly citation "[Collection] [Number]" via the shared table, so
+    // direct-source collections read "Riyad as-Saliheen 1" (a proper name),
+    // never the raw slug and never the backend vendor. `provider` is retained
+    // in `source` for internal/admin only. buildRef is a no-op safe fallback if
+    // the citation core is not on the page.
+    var cite = (root.II && root.II.hadithCitation) || null;
+    var collectionName = (cite && cite.COLLECTION_NAMES[slug]) || null;
+    var hadithNumber = (typeof num === 'number' ? num : null);
+    var reference = cite
+      ? cite.buildReference({ collectionSlug: slug, collectionName: collectionName, hadithNumber: hadithNumber })
+      : (collectionName && hadithNumber != null ? collectionName + ' ' + hadithNumber : null);
     return {
       id: (slug && num != null) ? (slug + ':' + (book != null ? book : 0) + ':' + num) : null,
       source: provider,
       sourceId: null,
       collectionSlug: slug,
-      collectionName: null,
+      collectionName: collectionName,
       collectionArabicName: null,
       bookNumber: (book != null ? book : null),
       bookName: null,
       bookArabicName: null,
-      hadithNumber: (typeof num === 'number' ? num : null),
-      reference: (slug && num != null) ? (slug + ' · Hadith ' + num) : null,
+      hadithNumber: hadithNumber,
+      reference: reference,
       arabicMatn: arabic || '',
-      translation: { text: text || '', language: 'en', edition: provider, translator: null },
+      // `edition` null: it previously carried the backend vendor (provider id),
+      // which must never be shown to users as a "source".
+      translation: { text: text || '', language: 'en', edition: null, translator: null },
       narrator: { id: null, name: narrator || null, arabicName: null },
       grade: null,
       gradeCharacterization: characterization || null,

@@ -8,6 +8,11 @@
    ═══════════════════════════════════════════════════════════════════ */
 (function (root) {
   'use strict';
+  // Shared citation builder — "[Collection] [Number]" from structured fields
+  // (cache-safe), never a book number or backend vendor name.
+  var citation = (typeof require !== 'undefined')
+    ? require('./hadith-citation-core.js')
+    : (root.II && root.II.hadithCitation);
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 
   var UNAVAIL_ISNAD = 'Chain of narration not available for this hadith.';
@@ -95,7 +100,7 @@
       arabic: h.arabicMatn || '',
       translation: (h.translation && h.translation.text) || '',
       narrator: (h.narrator && h.narrator.name) || '',
-      reference: h.reference || '',
+      reference: (citation && citation.buildReference(h)) || h.reference || '',
       grade: (h.grade && h.grade.label) || (h.gradeCharacterization || ''),
       sourceUrl: sourceUrl || '',
     };

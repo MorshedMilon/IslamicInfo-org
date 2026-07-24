@@ -117,6 +117,12 @@ test('bodyCardHTML: enlarged variant class + shared grade badge + arabic', () =>
   assert.match(html, /grader not individually cited/);
   assert.match(html, /reward of deeds/);
 });
+test('bodyCardHTML: citation computed "[Collection] [Number]" (no book number, no vendor), not the stale baked reference', () => {
+  const html = core.bodyCardHTML(bukhari());
+  assert.match(html, /Sahih al-Bukhari 1/);
+  assert.doesNotMatch(html, /· Book|· Hadith/);
+  assert.doesNotMatch(html, /hadithapi\.com|AhmedBaset|fawazahmed0|Source ·/i);
+});
 test('bodyCardHTML: null hadith → "Hadith temporarily unavailable", never throws', () => {
   const html = core.bodyCardHTML(null);
   assert.match(html, /Hadith temporarily unavailable/);

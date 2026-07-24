@@ -43,6 +43,12 @@ test('normalizeHadith fills required fields and marks enrichment unavailable', (
   assert.equal(h.isnad.status, 'unavailable');
   assert.equal(h.audio.status, 'unavailable');
   assert.ok(h.sourceMetadata.contentHash.length > 0);
+  // Citation: canonical name from the shared table wins over the upstream book
+  // name ("Sahih Bukhari"), format is "[Collection] [Number]" (hadith number
+  // only — no book number), and there is NO backend vendor edition.
+  assert.equal(h.collectionName, 'Sahih al-Bukhari');
+  assert.equal(h.reference, 'Sahih al-Bukhari 1');
+  assert.equal(h.translation.edition, null);
 });
 
 test('normalizeHadith with no status still renders an unknown badge', () => {
