@@ -201,7 +201,9 @@ async function search(searchParams, env, origin, deps) {
       env.QURANLYAI_KV, hKey('search', lang, collection || 'all', page, q), TTL.HOUR,
       () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, { ...param, paginate: 25, page }),
       (raw) => ({ results: safeMap(raw.hadiths && raw.hadiths.data, (h) => normalizeHadith(h, { language: lang })),
-                  page, query: q }),
+                  page, query: q,
+                  total: (raw.hadiths && raw.hadiths.total) ?? null,
+                  lastPage: (raw.hadiths && raw.hadiths.last_page) ?? null }),
       deps,
     );
     return ok(data, source, origin, source === 'live' ? TTL.HOUR : 0);
