@@ -7,6 +7,8 @@ import { json } from './lib/cors.js';
 import { ALLOWED_SLUGS, booksUrl, chaptersUrl, hadithsUrl, fetchJson } from './lib/hadith-source.js';
 import { normalizeBook, normalizeChapter, normalizeHadith } from './lib/hadith-adapter.js';
 import { hKey, getJson, putJson, TTL } from './lib/hadith-cache.js';
+import { fetchDorarResult } from './lib/dorar-source.js';
+import { parseDorarResult } from './lib/dorar-parse.js';
 
 // Static fallback for /api/hadith/daily — the Intentions hadith (Bukhari #1).
 // Verified: Sahih al-Bukhari, Book of Revelation, Hadith 1. Graded Sahih.
@@ -229,6 +231,54 @@ async function daily(env, origin, deps) {
   return ok(DAILY_FALLBACK, 'fallback', origin, 0);
 }
 
+const DORAR_QUOTA_PER_DAY = 100;
+const DORAR_CACHE_TTL = 60 * 60 * 24 * 7; // 7 days
+
+function dorarEnabled(env) { return String(env.HADITH_SILSILA_DORAR_ENABLED) === 'true'; }
+
+async function dorarQuotaOk(env, ip) {
+  const day = new Date().toISOString().slice(0, 10);
+  const key = `dorar:quota:${day}:${ip || 'anon'}`;
+  const n = parseInt((await env.QURANLYAI_KV.get(key)) || '0', 10);
+  if (n >= DORAR_QUOTA_PER_DAY) return false;
+  await env.QURANLYAI_KV.put(key, String(n + 1), { expirationTtl: 60 * 60 * 25 });
+  return true;
+}
+
+/* Dorar.net Silsila search — flag-gated, KV-cached, per-IP daily quota.
+   Fail-closed: any upstream/parse problem returns an `upstream` error and
+   NEVER emits partial or fabricated items. */
+export async function handleDorarSearch({ query, page = 1, ip } = {}, env, { fetcher = fetch, origin } = {}) {
+  if (!dorarEnabled(env)) {
+    return json({ ok: false, error: { code: 'disabled', message: 'Silsila search is not enabled', retryable: false }, source: 'fallback' }, origin, { status: 404 });
+  }
+  const q = String(query == null ? '' : query).trim().slice(0, 120);
+  if (!q) {
+    return json({ ok: false, error: { code: 'bad_query', message: 'Enter an Arabic search term', retryable: false }, source: 'fallback' }, origin, { status: 400 });
+  }
+  const pg = Math.max(1, parseInt(page, 10) || 1);
+
+  const cacheKey = `dorar:search:${pg}:${q}`;
+  const cached = await env.QURANLYAI_KV.get(cacheKey);
+  if (cached) return json({ ok: true, data: JSON.parse(cached), source: 'cache' }, origin, { maxAge: 3600 });
+
+  if (!(await dorarQuotaOk(env, ip))) {
+    return json({ ok: false, error: { code: 'quota', message: 'Daily search limit reached — try again tomorrow', retryable: false }, source: 'fallback' }, origin, { status: 429 });
+  }
+
+  let items;
+  try {
+    const html = await fetchDorarResult(q, pg, { fetcher });
+    items = parseDorarResult(html); // each item already carries `reference` + `ruling`
+  } catch (e) {
+    return json({ ok: false, error: { code: 'upstream', message: 'Search temporarily unavailable — try again', retryable: true }, source: 'fallback' }, origin, { status: 502 });
+  }
+
+  const data = { items, page: pg, query: q };
+  await env.QURANLYAI_KV.put(cacheKey, JSON.stringify(data), { expirationTtl: DORAR_CACHE_TTL });
+  return json({ ok: true, data, source: 'live' }, origin, { maxAge: 3600 });
+}
+
 function narratorStub(origin) {
   // No curator store exists yet (design D4) — report honestly, never fabricate.
   return ok({ status: 'unavailable', message: 'No verified narrator data available for this narration.' }, 'fallback', origin, 0);
@@ -243,6 +293,13 @@ export async function handleHadith(path, searchParams, env, origin, deps = {}) {
   if (seg[0] === 'search' && seg.length === 1) return search(searchParams, env, origin, deps);
   if (seg[0] === 'daily' && seg.length === 1) return daily(env, origin, deps);
   if (seg[0] === 'narrators' && seg.length === 2) return narratorStub(origin);
+  // /api/hadith/dorar/search?q=&page= — Silsila search (flag-gated)
+  if (seg[0] === 'dorar' && seg[1] === 'search' && seg.length === 2) {
+    return handleDorarSearch(
+      { query: searchParams.get('q'), page: searchParams.get('page') || 1, ip: deps.ip },
+      env, { fetcher: deps.fetcher, origin },
+    );
+  }
 
   // /api/hadith/collections/:slug/books
   if (seg[0] === 'collections' && seg.length === 3 && seg[2] === 'books') {

@@ -189,7 +189,8 @@ export default {
         }
 
         if (path.startsWith('/api/hadith')) {
-          const res = await handleHadith(path, url.searchParams, env, origin, {});
+          const ip = request.headers.get('CF-Connecting-IP') || '';
+          const res = await handleHadith(path, url.searchParams, env, origin, { ip });
           if (res.status === 200) await cache.put(request, res.clone());
           return res;
         }
