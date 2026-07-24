@@ -17,12 +17,23 @@ al-Albani's *Silsila as-Sahiha*. Dorar is a *search* engine, not a by-number
 catalogue — it cannot enumerate "Silsila #1..N in order" — so a search-driven
 model is the honest fit for what the source actually provides.
 
-Each matching narration renders with its Arabic text, narrator, and **Dorar's
-own structured grading** (real sourced grading, cited to the grader — e.g.
-al-Albani — the same way we cite al-Albani/Ibn Hajar elsewhere; NOT
-footnote-scraped, NOT AI-generated). No English translation is shipped; a
+Each matching narration renders with its Arabic text, narrator, and
+**al-Albani's ruling exactly as Dorar returns it** — cited to the grader and
+to Dorar.net, the same way we cite al-Albani/Ibn Hajar elsewhere; NOT
+footnote-scraped, NOT AI-generated. No English translation is shipped; a
 per-card **"Ask QuranlyAI"** button covers translation/explanation for
 non-Arabic readers.
+
+**Grading reality (verified against live Dorar data, 2026-07-23 — see
+`worker/test/fixtures/dorar-silsila-api.json`):** Silsila entries do NOT carry
+a clean one-word grade (`درجة الحديث`). They carry `خلاصة حكم المحدث` —
+al-Albani's *paragraph-length* ruling, e.g.
+"رجاله ثقات رجال مسلم إلا أنه منقطع لكن قد روي موصولا [بإسناد فيه] ابن مجبر ضعيف".
+We therefore display that ruling **verbatim** and never reduce it to a
+Sahih/Da'if badge — keyword-mapping a nuanced ruling (which may flag a broken
+chain or a weak narrator) to a one-word verdict would misrepresent it, which
+the charter forbids. Likewise `الصفحة أو الرقم` is page-style (e.g. "6/778"),
+not a clean sequential number, so citations show it verbatim (see §5).
 
 ### Non-goals (YAGNI)
 - No by-number browse / endless list for Silsila (Dorar can't support it).
@@ -90,26 +101,23 @@ hadith router (`worker/src/hadith.js`).
 ### 3.2 Normalized item shape
 ```js
 {
-  arabicMatn: string,            // Dorar hadith text (Arabic)
+  arabicMatn: string,            // Dorar hadith text (Arabic), highlight tags stripped
   narrator: string | null,       // rawi
-  grade: {                       // from Dorar; grader never fabricated
-    value: 'sahih'|'hasan'|'daif'|'mawdu'|'unknown',
-    label: string,               // display label (site vocab)
-    rawArabic: string,           // Dorar's original grade text (e.g. "صحيح")
-    grader: string | null,       // mohdith (e.g. "الألباني" / al-Albani)
-    source: 'Dorar.net',
-    explanation: string | null,  // explainGrade, when present
-  },
+  ruling: string,                // خلاصة حكم المحدث VERBATIM (fallback: درجة الحديث
+                                 //   if only that label is present). Never derived.
+  grader: string | null,         // mohdith (e.g. "الألباني"); passed through, never fabricated
+  rulingSource: 'Dorar.net',
   collectionSlug: 'al-silsila-sahiha',
   collectionName: 'Al-Silsilah al-Sahihah',
-  silsilaNumber: number | null,  // from numberOrPage when a bare integer
-  dorarHadithId: string | null,  // Dorar internal id (fallback ref only)
+  numberOrPage: string | null,   // Dorar's ref VERBATIM (e.g. "6/778"); null if absent
   reference: string,             // see §5
 }
 ```
-Grade mapping: Dorar Arabic grade → site vocab via a small explicit map
-(صحيح→sahih, حسن→hasan, ضعيف→daif, موضوع→mawdu, else→unknown). Unknown grade
-renders honestly; grader is passed through verbatim or null.
+**No grade vocab, no badge, no keyword mapping.** Fields are keyed by their
+Arabic label (not by position, which varies): الراوي→narrator, المحدث→grader,
+المصدر→book (scope filter), الصفحة أو الرقم→numberOrPage, and
+خلاصة حكم المحدث→ruling (falling back to درجة الحديث only if that is the sole
+ruling label present). `ruling` and `grader` are passed through verbatim.
 
 ### 3.3 Frontend — Silsila route becomes a search view
 In `src/js/hadith.js`, the route branch for `al-silsila-sahiha` renders a
@@ -123,16 +131,16 @@ In `src/js/hadith.js`, the route branch for `al-silsila-sahiha` renders a
 - **No English translation** rendered.
 
 Rendering logic lives in a pure core `src/js/dorar-card-core.js` (UMD, like
-the other `-core` files): `buildDorarCardHTML(item)` returns the card string;
-citation via the existing `hadith-citation-core.buildReference`. Escapes all
-Arabic/narrator/grade text (XSS). DOM glue (search box, fetch, events, Ask
-wiring) stays in `hadith.js`.
+the other `-core` files): `buildDorarCardHTML(item)` returns the card string.
+Escapes all Arabic/narrator/ruling text (XSS). DOM glue (search box, fetch,
+events, Ask wiring) stays in `hadith.js`.
 
 Card anatomy:
 - Arabic matn (RTL, `dir="rtl" lang="ar"`), narrator line.
-- Grade badge: `<grade> · <grader>` (e.g. `صحيح · الألباني`), reusing existing
-  grade-badge classes/vocab; falls back to honest "grade not cited" if grader
-  null (per existing decisions).
+- **Ruling block** (NOT a badge): a labelled block showing al-Albani's ruling
+  **verbatim** in RTL — label `<grader> · via Dorar.net` (e.g.
+  `الألباني · via Dorar.net`; falls back to `Grader's ruling · via Dorar.net`
+  when grader is null), then the `ruling` text unchanged.
 - Citation line (§5) + `Source · Dorar.net`.
 - `✦ Ask QuranlyAI` button.
 - `data-ai-selectable="hadith"` retained so global Select-&-Ask still works.
@@ -161,13 +169,15 @@ Reuses the existing QuranlyAI panel + its mandated footer. If
 
 ## 5. Citation
 
-Consistent with the site-wide standard ("[Collection] [Number]",
-`hadith-citation-core`):
-- When `silsilaNumber` is a clean integer → `Al-Silsilah al-Sahihah <N>`.
-- When Dorar gives a page-style ref (no clean number) → show
-  `Al-Silsilah al-Sahihah` + an honest `Dorar ref <hadithId>` (or no number),
-  **never a fabricated number**.
-Grade is shown inline on the card, sourced to the grader via Dorar.net.
+Silsila's `الصفحة أو الرقم` is page-style (e.g. "6/778"), not a clean
+sequential hadith number, so this collection does NOT use the site-wide
+`[Collection] [Number]` format (`hadith-citation-core`). Instead:
+- When Dorar returns a ref → `Al-Silsilah al-Sahihah — <numberOrPage verbatim>`
+  (e.g. `Al-Silsilah al-Sahihah — 6/778`).
+- When Dorar returns no ref → `Al-Silsilah al-Sahihah` (no invented number).
+Built by a small dedicated helper `buildSilsilaReference(numberOrPage)`; the
+verbatim string is never parsed into or coerced to an integer. The ruling is
+shown in its own block on the card, sourced to the grader via Dorar.net.
 
 ## 6. Attribution & launch gate
 
@@ -200,13 +210,15 @@ No path renders a fabricated or partial narration.
 
 ## 8. Testing
 
-- **`dorar-parse.js` (pure):** HTML fixtures → items; grade mapping for each
-  Arabic grade; `silsilaNumber` extraction (integer vs page-style → null);
-  missing narrator/grade → honest null (no fabrication); XSS escaping of
-  matn/narrator/grade.
-- **`dorar-card-core.js` (pure):** card HTML anatomy, grade badge + grader
-  fallback, citation format (number vs honest-omit), `Source · Dorar.net`
-  present, Ask button present, all fields escaped.
+- **`dorar-parse.js` (pure):** real captured fixture + inline fixtures → items;
+  label-keyed extraction (order-independent); `ruling` = خلاصة حكم المحدث
+  verbatim (fallback درجة الحديث); `numberOrPage` verbatim (page-style kept as
+  a string, never coerced); missing matn/ruling or non-Silsila book → dropped
+  (fail-closed); XSS escaping happens at render, parser keeps text raw.
+- **`dorar-card-core.js` (pure):** card HTML anatomy, ruling block + grader
+  label fallback, citation via `buildSilsilaReference` (with/without ref),
+  `Source · Dorar.net` present, Ask button present, no grade badge/vocab, all
+  fields escaped.
 - **Endpoint:** envelope shape; cache hit/miss (`source`); quota exhaustion;
   bad_query; upstream failure fail-closed — all with an injected fetcher (no
   network), mirroring existing worker tests (`node --test`).

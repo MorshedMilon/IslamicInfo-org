@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the static "reference-linked" Silsila as-Sahiha page with an Arabic keyword-search interface into Dorar.net (scoped to al-Albani's Silsila), rendering each narration's Arabic text + Dorar's sourced grading + a per-card "Ask QuranlyAI" button, shipped behind a default-OFF flag.
+**Goal:** Replace the static "reference-linked" Silsila as-Sahiha page with an Arabic keyword-search interface into Dorar.net (scoped to al-Albani's Silsila), rendering each narration's Arabic text + al-Albani's ruling (خلاصة حكم المحدث) shown VERBATIM + a per-card "Ask QuranlyAI" button, shipped behind a default-OFF flag.
 
 **Architecture:** A new Cloudflare Worker endpoint `GET /api/hadith/dorar/search` calls dorar.net's public `dorar_api.json` endpoint server-side (filtered to Silsila book id 561), parses the returned HTML fragment into normalized items with a pure parser, caches in KV, and applies a per-IP quota. The frontend Silsila route becomes a search view rendering Dorar cards via a pure `dorar-card-core.js`. Everything is gated by `HADITH_SILSILA_DORAR_ENABLED` (default OFF) so the current reference card keeps shipping until the terms/reachability gates clear.
 
@@ -15,8 +15,9 @@
 **Reference constants (verified from the MIT wrapper `AhmedElTabarani/dorar-hadith-api`, ported logic credited in code):**
 - API endpoint: `https://dorar.net/dorar_api.json?skey={q}` (JSONish: `{ ahadith: { result: "<html fragment>" } }`)
 - Silsila as-Sahiha book filter: `s[]=561` (from the wrapper's `data/book.json`, `{key:"561", value:"السلسلة الصحيحة"}`)
-- Result HTML: each hadith text node is the `previousElementSibling` of a `.hadith-info` block; inside `.hadith-info`, `.info-subtitle` labels precede values in order `[rawi, mohdith, book, numberOrPage, grade]`.
-- Arabic labels: الراوي / المحدث / المصدر / الصفحة أو الرقم / درجة الحديث.
+- Result HTML: each `<div class="hadith">` matn node is immediately followed by a `<div class="hadith-info">` block; inside it, `.info-subtitle` labels precede their values. Parse by LABEL, not position (labels vary).
+- Arabic labels: الراوي (narrator) / المحدث (grader) / المصدر (book) / الصفحة أو الرقم (page/number) / **خلاصة حكم المحدث (ruling — the field Silsila actually uses)** / درجة الحديث (one-word grade — usually ABSENT for Silsila).
+- **Verified (Task 0 live fixture):** Silsila entries carry خلاصة حكم المحدث (paragraph ruling), never درجة الحديث; `numberOrPage` is page-style (e.g. "6/778"). Ruling is shown verbatim, never mapped to a grade badge (owner decision 2026-07-23).
 
 ---
 
@@ -24,7 +25,7 @@
 
 **Create:**
 - `worker/src/lib/dorar-source.js` — pure URL builder + fetch of the Dorar API (injectable fetcher). One job: talk to dorar.net, return the raw HTML result string.
-- `worker/src/lib/dorar-parse.js` — pure parser: HTML fragment → normalized Silsila items (+ grade map, number extraction, book post-filter, fail-closed drop). No network, no DOM API.
+- `worker/src/lib/dorar-parse.js` — pure parser: HTML fragment → normalized Silsila items (label-keyed extraction, ruling verbatim, `buildSilsilaReference`, book post-filter, fail-closed drop). No network, no DOM API.
 - `src/js/dorar-card-core.js` — pure UMD: `buildDorarCardHTML(item)` → card string (Arabic RTL, grade badge, citation, Source·Dorar.net, Ask button). Escapes all text.
 - `worker/test/dorar-source.test.js`, `worker/test/dorar-parse.test.js`, `worker/test/dorar-card-core.test.js`, `worker/test/dorar-endpoint.test.js`
 - `worker/test/fixtures/dorar-silsila-api.json` — a REAL captured Dorar response (Task 0).
@@ -190,78 +191,88 @@ git commit -m "feat(dorar): Silsila source client (URL builder + injectable fetc
 - Create: `worker/src/lib/dorar-parse.js`
 - Test: `worker/test/dorar-parse.test.js`
 
-Parser strategy (Workers have no DOM/cheerio; keep it dependency-free and fail-closed): split the fragment on `hadith-info` boundaries, and for each block pull the hadith text (the markup before the block) and the five `.info-subtitle` values in order. Drop any block that doesn't yield an Arabic matn AND a grade AND book === Silsila. **A dropped block is correct behaviour — never emit a half-parsed narration.**
+Parser strategy (Workers have no DOM/cheerio; keep it dependency-free and fail-closed): a global regex pairs each `<div class="hadith">…</div>` (matn) with the immediately-following `<div class="hadith-info">…</div>` (info). Fields are keyed **by Arabic label** (order varies — the grade label may be absent), not by position. The ruling is `خلاصة حكم المحدث` **verbatim** (fallback `درجة الحديث` only if that's the sole ruling label). `numberOrPage` is kept **verbatim** (page-style like "6/778", never coerced to an integer). Drop any pair without an Arabic matn AND a ruling AND book === Silsila. **A dropped block is correct behaviour — never emit a half-parsed narration, never derive a grade badge.**
 
-- [ ] **Step 1: Write the failing test (uses a small inline fixture mirroring the real structure captured in Task 0)**
+- [ ] **Step 1: Write the failing test (inline fixtures mirror the real Task-0 structure)**
 
 ```js
 // worker/test/dorar-parse.test.js
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
-import { parseDorarResult, mapGrade, extractNumber } from '../src/lib/dorar-parse.js';
+import { parseDorarResult, buildSilsilaReference } from '../src/lib/dorar-parse.js';
 
-// Minimal structural fixture (matches dorar_api.json result: a text node then a
-// .hadith-info block with ordered .info-subtitle labels). Task 0 confirms the real
-// wrapping; adjust ONLY if the captured fixture differs, keeping assertions intact.
+// Mirrors the real dorar_api.json result: a `.hadith` matn div then a `.hadith-info`
+// block of `.info-subtitle` labels. Silsila entries use خلاصة حكم المحدث (a paragraph),
+// NOT درجة الحديث. Task 0's captured fixture is the ground truth for the wrapping.
 const BLOCK = (over = {}) => `
-  <div class="hadith">1 - ${over.matn ?? 'إنما الأعمال بالنيات'}</div>
+  <div class="hadith" style="text-align:justify;">1 -   ${'matn' in over ? over.matn : 'إنما الأعمال بالنيات'}</div>
   <div class="hadith-info">
-    <span class="info-subtitle">الراوي:</span> ${over.rawi ?? 'عمر بن الخطاب'}
+    <span class="info-subtitle">الراوي:</span> ${over.rawi ?? 'عائشة أم المؤمنين'}</span>
     <span class="info-subtitle">المحدث:</span> ${over.mohdith ?? 'الألباني'}
-    <span class="info-subtitle">المصدر:</span> ${over.book ?? 'السلسلة الصحيحة'}
-    <span class="info-subtitle">الصفحة أو الرقم:</span> ${over.num ?? '52'}
-    <span class="info-subtitle">درجة الحديث:</span> ${over.grade ?? 'صحيح'}
+    <span class="info-subtitle">المصدر:</span>  ${over.book ?? 'السلسلة الصحيحة'}
+    <span class="info-subtitle">الصفحة أو الرقم:</span>  ${'num' in over ? over.num : '6/778'}
+    <span class="info-subtitle">خلاصة حكم المحدث:</span>  <span >${'ruling' in over ? over.ruling : 'رجاله ثقات رجال مسلم إلا أنه منقطع'}</span>
   </div>`;
 
-test('mapGrade maps Dorar Arabic grades to the site vocab', () => {
-  assert.deepEqual(mapGrade('صحيح'), { value: 'sahih', label: 'Sahih' });
-  assert.deepEqual(mapGrade('حسن'), { value: 'hasan', label: 'Hasan' });
-  assert.deepEqual(mapGrade('ضعيف'), { value: 'daif', label: "Da'if" });
-  assert.deepEqual(mapGrade('موضوع'), { value: 'mawdu', label: "Mawdu'" });
-  assert.deepEqual(mapGrade('كلام غامض'), { value: 'unknown', label: 'Grade Unknown' });
+test('buildSilsilaReference: verbatim ref when present, collection-only when absent', () => {
+  assert.equal(buildSilsilaReference('6/778'), 'Al-Silsilah al-Sahihah — 6/778');
+  assert.equal(buildSilsilaReference('52'), 'Al-Silsilah al-Sahihah — 52');
+  assert.equal(buildSilsilaReference(''), 'Al-Silsilah al-Sahihah');
+  assert.equal(buildSilsilaReference(null), 'Al-Silsilah al-Sahihah');
 });
 
-test('extractNumber returns an integer only for a clean numeric ref, else null', () => {
-  assert.equal(extractNumber('52'), 52);
-  assert.equal(extractNumber('  52 '), 52);
-  assert.equal(extractNumber('2/145'), null);   // page-style → honest null
-  assert.equal(extractNumber(''), null);
-});
-
-test('parseDorarResult returns one normalized Silsila item', () => {
+test('parseDorarResult returns one normalized Silsila item (ruling verbatim, page-style ref)', () => {
   const items = parseDorarResult(BLOCK());
   assert.equal(items.length, 1);
   const it = items[0];
   assert.match(it.arabicMatn, /إنما الأعمال بالنيات/);
   assert.ok(!/^\s*1\s*-/.test(it.arabicMatn));      // leading "1 -" stripped
-  assert.equal(it.narrator, 'عمر بن الخطاب');
-  assert.equal(it.grade.value, 'sahih');
-  assert.equal(it.grade.grader, 'الألباني');
-  assert.equal(it.grade.source, 'Dorar.net');
+  assert.equal(it.narrator, 'عائشة أم المؤمنين');
+  assert.equal(it.ruling, 'رجاله ثقات رجال مسلم إلا أنه منقطع'); // VERBATIM, unmapped
+  assert.equal(it.grader, 'الألباني');
+  assert.equal(it.rulingSource, 'Dorar.net');
   assert.equal(it.collectionSlug, 'al-silsila-sahiha');
-  assert.equal(it.collectionName, 'Al-Silsilah al-Sahihah');
-  assert.equal(it.silsilaNumber, 52);
+  assert.equal(it.numberOrPage, '6/778');           // verbatim page-style, not coerced
+  assert.equal(it.reference, 'Al-Silsilah al-Sahihah — 6/778');
+  assert.equal(it.grade, undefined);                // NO grade vocab/badge field
+});
+
+test('parseDorarResult: falls back to درجة الحديث when it is the only ruling label', () => {
+  const html = `
+    <div class="hadith">1 - متن</div>
+    <div class="hadith-info">
+      <span class="info-subtitle">المحدث:</span> الألباني
+      <span class="info-subtitle">المصدر:</span> السلسلة الصحيحة
+      <span class="info-subtitle">درجة الحديث:</span> صحيح
+    </div>`;
+  const it = parseDorarResult(html)[0];
+  assert.equal(it.ruling, 'صحيح');                  // used verbatim, still not badge-mapped
+});
+
+test('parseDorarResult: no number at all → reference is collection-only', () => {
+  const items = parseDorarResult(BLOCK({ num: '' }));
+  assert.equal(items[0].numberOrPage, null);
+  assert.equal(items[0].reference, 'Al-Silsilah al-Sahihah');
 });
 
 test('parseDorarResult drops a block whose book is not Silsila (scope safety net)', () => {
   assert.equal(parseDorarResult(BLOCK({ book: 'صحيح البخاري' })).length, 0);
 });
 
-test('parseDorarResult drops a block with no matn or no grade (never half-parsed)', () => {
+test('parseDorarResult drops a block with no matn or no ruling (never half-parsed)', () => {
   assert.equal(parseDorarResult(BLOCK({ matn: '' })).length, 0);
-  assert.equal(parseDorarResult(BLOCK({ grade: '' })).length, 0);
+  assert.equal(parseDorarResult(BLOCK({ ruling: '' })).length, 0);
 });
 
-test('parseDorarResult handles the real captured fixture without throwing', () => {
+test('parseDorarResult handles the real captured fixture: 1 item, ruling + reference set', () => {
   const d = JSON.parse(readFileSync(new URL('./fixtures/dorar-silsila-api.json', import.meta.url)));
   const items = parseDorarResult(d.ahadith.result);
-  assert.ok(Array.isArray(items));
-  for (const it of items) {
-    assert.ok(it.arabicMatn && it.arabicMatn.length > 0);
-    assert.equal(it.collectionSlug, 'al-silsila-sahiha');
-    assert.ok(['sahih', 'hasan', 'daif', 'mawdu', 'unknown'].includes(it.grade.value));
-  }
+  assert.equal(items.length, 1);
+  assert.equal(items[0].grader, 'الألباني');
+  assert.match(items[0].ruling, /رجاله ثقات/);
+  assert.equal(items[0].numberOrPage, '6/778');
+  assert.equal(items[0].reference, 'Al-Silsilah al-Sahihah — 6/778');
 });
 ```
 
@@ -275,34 +286,27 @@ Expected: FAIL (module not found).
 ```js
 // worker/src/lib/dorar-parse.js
 /* Pure parser: Dorar dorar_api.json HTML `result` fragment → normalized Silsila
-   items. NO network, NO DOM API (runs in a Worker). Field/label structure ported
-   from the MIT-licensed github.com/AhmedElTabarani/dorar-hadith-api (mapApiHadithInfo):
-   each hadith text precedes a `.hadith-info` block whose ordered `.info-subtitle`
-   labels are [rawi, mohdith, book, numberOrPage, grade].
+   items. NO network, NO DOM API (runs in a Worker). Structure ported from the
+   MIT-licensed github.com/AhmedElTabarani/dorar-hadith-api: each hadith text
+   (`<div class="hadith">`) precedes a `<div class="hadith-info">` block whose
+   `.info-subtitle` labels are the Arabic field names. We key by LABEL (order
+   varies), not by position.
 
-   Fail-closed: a block that does not yield an Arabic matn AND a grade AND
-   book === Silsila is DROPPED — we never emit a half-parsed / mis-scoped narration.
-   Grades/graders are passed through verbatim, never fabricated. */
+   Silsila entries carry خلاصة حكم المحدث (al-Albani's paragraph ruling), NOT a
+   clean درجة الحديث grade (verified against live data 2026-07-23). We keep the
+   ruling VERBATIM and never derive a one-word grade — reducing a nuanced ruling
+   to a badge would misrepresent it. Fail-closed: a pair without an Arabic matn
+   AND a ruling AND book === Silsila is DROPPED. */
 
 const SILSILA_BOOK = 'السلسلة الصحيحة';
-
-const GRADE_MAP = [
-  [/موضوع/, { value: 'mawdu', label: "Mawdu'" }],
-  [/(ضعيف|منكر|باطل)/, { value: 'daif', label: "Da'if" }],
-  [/حسن/, { value: 'hasan', label: 'Hasan' }],
-  [/صحيح/, { value: 'sahih', label: 'Sahih' }],
-];
-
-export function mapGrade(raw) {
-  const s = String(raw || '');
-  for (const [re, out] of GRADE_MAP) if (re.test(s)) return { ...out };
-  return { value: 'unknown', label: 'Grade Unknown' };
-}
-
-export function extractNumber(raw) {
-  const s = String(raw == null ? '' : raw).trim();
-  return /^\d+$/.test(s) ? parseInt(s, 10) : null;
-}
+const L = {
+  narrator: 'الراوي',
+  grader: 'المحدث',
+  book: 'المصدر',
+  numberOrPage: 'الصفحة أو الرقم',
+  ruling: 'خلاصة حكم المحدث',
+  grade: 'درجة الحديث', // fallback ruling label (rare for Silsila)
+};
 
 // Strip tags → plain text, collapse whitespace, decode the few entities Dorar emits.
 function textOf(html) {
@@ -313,52 +317,57 @@ function textOf(html) {
     .replace(/\s+/g, ' ').trim();
 }
 
-// From one `.hadith-info` inner HTML, pull the 5 ordered values that follow each
-// `.info-subtitle` label. Returns [rawi, mohdith, book, numberOrPage, grade].
-function infoValues(infoHtml) {
-  // Split on the label spans; each following chunk (up to the next label/tag) is a value.
-  const parts = infoHtml.split(/<span[^>]*class="[^"]*info-subtitle[^"]*"[^>]*>/i);
-  // parts[0] is before the first label; parts[1..] each start with "<label text></span> VALUE ..."
-  return parts.slice(1).map((chunk) => {
-    const afterLabel = chunk.replace(/^[\s\S]*?<\/span>/i, ''); // drop the label text + its </span>
-    return textOf(afterLabel.split(/<span[^>]*class="[^"]*info-subtitle/i)[0]);
-  });
+// "Al-Silsilah al-Sahihah — <ref>" (ref VERBATIM, e.g. "6/778"), or collection-only.
+export function buildSilsilaReference(numberOrPage) {
+  const ref = String(numberOrPage == null ? '' : numberOrPage).trim();
+  return ref ? 'Al-Silsilah al-Sahihah — ' + ref : 'Al-Silsilah al-Sahihah';
+}
+
+// Parse one `.hadith-info` inner HTML into { arabicLabel -> value }, keyed by the
+// text of each `.info-subtitle` (order-independent). Value = text after the label's
+// closing </span> up to the next `.info-subtitle`.
+function parseInfo(infoHtml) {
+  const out = {};
+  const parts = String(infoHtml).split(/<span[^>]*class="[^"]*info-subtitle[^"]*"[^>]*>/i);
+  for (let i = 1; i < parts.length; i++) {
+    const chunk = parts[i];
+    const close = chunk.indexOf('</span>');
+    if (close === -1) continue;
+    const label = textOf(chunk.slice(0, close)).replace(/:\s*$/, '').trim();
+    if (label) out[label] = textOf(chunk.slice(close + '</span>'.length));
+  }
+  return out;
 }
 
 export function parseDorarResult(resultHtml) {
   const html = String(resultHtml || '');
-  // Each result = markup up to a `.hadith-info` open tag, then the block body.
-  // Split so every segment (except the first) is "<...matn...> <div class=hadith-info ...>BODY".
-  const segments = html.split(/(?=<[^>]*class="[^"]*hadith-info)/i);
+  // Pair each matn div with the immediately-following hadith-info div. `class="hadith"`
+  // (optionally with more classes) must NOT match `class="hadith-info"` — the
+  // `(?:\s[^"]*)?"` guard requires a quote or space after "hadith", excluding "hadith-info".
+  const re = /<div\s+class="hadith(?:\s[^"]*)?"[^>]*>([\s\S]*?)<\/div>\s*<div\s+class="hadith-info(?:\s[^"]*)?"[^>]*>([\s\S]*?)<\/div>/gi;
   const items = [];
-  for (const seg of segments) {
-    const m = seg.match(/<([a-z]+)[^>]*class="[^"]*hadith-info[^"]*"[^>]*>([\s\S]*?)<\/\1>/i);
-    if (!m) continue;
-    const infoHtml = m[2];
-    const matn = textOf(seg.slice(0, m.index)).replace(/^\d+\s*-\s*/, '').trim();
-    const [rawi, mohdith, book, numberOrPage, grade] = infoValues(infoHtml);
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const matn = textOf(m[1]).replace(/^\d+\s*-\s*/, '').trim();
+    const info = parseInfo(m[2]);
+    const book = info[L.book] || '';
+    const ruling = info[L.ruling] || info[L.grade] || '';     // paragraph verbatim; درجة fallback
+    const numberOrPage = info[L.numberOrPage] || null;
 
-    if (!matn) continue;                          // no text → drop
-    if (!grade) continue;                         // no grade → drop (never unattributed)
-    if (!book || book.indexOf(SILSILA_BOOK) === -1) continue; // scope safety net
+    if (!matn) continue;                                      // no text → drop
+    if (!ruling) continue;                                    // no ruling → drop (never unattributed)
+    if (book.indexOf(SILSILA_BOOK) === -1) continue;          // scope safety net
 
-    const g = mapGrade(grade);
     items.push({
       arabicMatn: matn,
-      narrator: rawi || null,
-      grade: {
-        value: g.value,
-        label: g.label,
-        rawArabic: String(grade).trim(),
-        grader: mohdith || null,
-        source: 'Dorar.net',
-        explanation: null,
-      },
+      narrator: info[L.narrator] || null,
+      ruling: ruling,                                         // VERBATIM — never badge-mapped
+      grader: info[L.grader] || null,
+      rulingSource: 'Dorar.net',
       collectionSlug: 'al-silsila-sahiha',
       collectionName: 'Al-Silsilah al-Sahihah',
-      silsilaNumber: extractNumber(numberOrPage),
-      dorarHadithId: null,
-      reference: null, // filled by the endpoint via hadith-citation-core (Task 4)
+      numberOrPage: numberOrPage,                             // verbatim page-style string or null
+      reference: buildSilsilaReference(numberOrPage),
     });
   }
   return items;
@@ -368,52 +377,24 @@ export function parseDorarResult(resultHtml) {
 - [ ] **Step 4: Run tests; iterate the regex against the REAL fixture if needed**
 
 Run: `cd worker && node --test test/dorar-parse.test.js`
-Expected: PASS. If the "real captured fixture" test fails, open `worker/test/fixtures/dorar-silsila-api.json`, compare the actual tag/attribute wrapping to the `infoValues`/segment regexes, and adjust the regexes to match the real markup — keeping every assertion unchanged. (This is expected TDD iteration against an undocumented HTML source, not a rewrite.)
+Expected: PASS (7/7). If the "real captured fixture" test fails, open `worker/test/fixtures/dorar-silsila-api.json`, compare the actual tag/attribute wrapping to the pairing regex / `parseInfo`, and adjust the regex to match the real markup — keeping every assertion unchanged. (Expected TDD iteration against an undocumented HTML source, not a rewrite.)
 
 - [ ] **Step 5: Commit**
 
 ```bash
 git add worker/src/lib/dorar-parse.js worker/test/dorar-parse.test.js
-git commit -m "feat(dorar): pure parser for Silsila results (grade map, number, fail-closed drop)"
+git commit -m "feat(dorar): pure parser for Silsila (label-keyed, ruling verbatim, fail-closed)"
 ```
 
 ---
 
-## Task 3: Citation wiring (reuse `hadith-citation-core`)
+## Task 3: Citation (Silsila-specific — NOT `hadith-citation-core`)
 
-`hadith-citation-core.COLLECTION_NAMES` already maps `'al-silsila-sahiha' → 'Al-Silsilah al-Sahihah'`, and `buildReference({collectionSlug, collectionName, hadithNumber})` already yields "[Collection] [Number]". A Dorar item exposes `collectionName` + `silsilaNumber`; the endpoint sets `hadithNumber = silsilaNumber` before calling `buildReference`. This task just locks that behaviour with a test.
-
-**Files:**
-- Test: add to `worker/test/hadith-citation-core.test.js`
-
-- [ ] **Step 1: Add the failing test**
-
-```js
-test('buildReference: Silsila item with a clean number → "Al-Silsilah al-Sahihah <N>"', () => {
-  assert.equal(
-    core.buildReference({ collectionSlug: 'al-silsila-sahiha', collectionName: 'Al-Silsilah al-Sahihah', hadithNumber: 52 }),
-    'Al-Silsilah al-Sahihah 52'
-  );
-});
-test('buildReference: Silsila item with no number → null (honest, no fabricated number)', () => {
-  assert.equal(
-    core.buildReference({ collectionSlug: 'al-silsila-sahiha', collectionName: 'Al-Silsilah al-Sahihah', hadithNumber: null }),
-    null
-  );
-});
-```
-
-- [ ] **Step 2: Run; verify PASS immediately** (no code change — this confirms reuse)
-
-Run: `cd worker && node --test test/hadith-citation-core.test.js`
-Expected: PASS. If the null case fails, it's a real bug in `buildReference` — fix it there so a missing number yields null.
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add worker/test/hadith-citation-core.test.js
-git commit -m "test(dorar): lock Silsila citation format via hadith-citation-core"
-```
+**No work here.** Silsila's ref is page-style (e.g. "6/778"), so it does NOT use
+the site-wide `[Collection] [Number]` format. Citation is built by
+`buildSilsilaReference(numberOrPage)` in `dorar-parse.js`, already implemented and
+tested in Task 2 (`"Al-Silsilah al-Sahihah — 6/778"` / `"Al-Silsilah al-Sahihah"`).
+`hadith-citation-core.js` is left untouched. Skip to Task 4.
 
 ---
 
@@ -447,8 +428,8 @@ const RESULT = { ahadith: { result:
   '<span class="info-subtitle">الراوي:</span> عمر' +
   '<span class="info-subtitle">المحدث:</span> الألباني' +
   '<span class="info-subtitle">المصدر:</span> السلسلة الصحيحة' +
-  '<span class="info-subtitle">الصفحة أو الرقم:</span> 52' +
-  '<span class="info-subtitle">درجة الحديث:</span> صحيح</div>' } };
+  '<span class="info-subtitle">الصفحة أو الرقم:</span> 6/778' +
+  '<span class="info-subtitle">خلاصة حكم المحدث:</span> رجاله ثقات</div>' } };
 const ENV = (over = {}) => ({ QURANLYAI_KV: fakeKV(), HADITH_SILSILA_DORAR_ENABLED: 'true', ...over });
 const okFetcher = async () => ({ ok: true, json: async () => RESULT });
 
@@ -477,8 +458,10 @@ test('happy path → normalized items with reference set', async () => {
   const body = await res.json();
   assert.equal(body.ok, true);
   assert.equal(body.data.items.length, 1);
-  assert.equal(body.data.items[0].reference, 'Al-Silsilah al-Sahihah 52');
-  assert.equal(body.data.items[0].grade.grader, 'الألباني');
+  assert.equal(body.data.items[0].reference, 'Al-Silsilah al-Sahihah — 6/778');
+  assert.equal(body.data.items[0].grader, 'الألباني');
+  assert.match(body.data.items[0].ruling, /رجاله ثقات/);
+  assert.equal(body.data.items[0].grade, undefined); // no grade badge/vocab
   assert.equal(body.source, 'live');
 });
 
@@ -522,9 +505,8 @@ Add imports at the top:
 ```js
 import { fetchDorarResult } from './lib/dorar-source.js';
 import { parseDorarResult } from './lib/dorar-parse.js';
-import citation from '../../src/js/hadith-citation-core.js';
 ```
-If that cross-package import fails under the Worker build, instead inline a tiny `silsilaReference(n)` helper: `n == null ? null : 'Al-Silsilah al-Sahihah ' + n` (verify against Task 3's format) — do NOT block on the import.
+(No citation import — `parseDorarResult` already sets each item's `reference` via `buildSilsilaReference`.)
 
 Add the handler (uses the existing `json(...)` envelope helper; mirror the QuranlyAI KV quota):
 ```js
@@ -557,12 +539,7 @@ export async function handleDorarSearch({ query, page = 1, ip } = {}, env, { fet
   let items;
   try {
     const html = await fetchDorarResult(q, pg, { fetcher });
-    items = parseDorarResult(html).map((it) => ({
-      ...it,
-      reference: (citation && citation.buildReference)
-        ? citation.buildReference({ collectionSlug: it.collectionSlug, collectionName: it.collectionName, hadithNumber: it.silsilaNumber })
-        : (it.silsilaNumber == null ? null : 'Al-Silsilah al-Sahihah ' + it.silsilaNumber),
-    }));
+    items = parseDorarResult(html); // each item already carries `reference` + `ruling`
   } catch (e) {
     return json({ ok: false, error: { code: 'upstream', message: 'Search temporarily unavailable — try again', retryable: true }, source: 'fallback' }, origin, { status: 502 });
   }
@@ -603,43 +580,48 @@ import assert from 'node:assert';
 import core from '../../src/js/dorar-card-core.js';
 
 const item = (over = {}) => Object.assign({
-  arabicMatn: 'إنما الأعمال بالنيات', narrator: 'عمر بن الخطاب',
-  grade: { value: 'sahih', label: 'Sahih', rawArabic: 'صحيح', grader: 'الألباني', source: 'Dorar.net', explanation: null },
+  arabicMatn: 'إنما الأعمال بالنيات', narrator: 'عائشة أم المؤمنين',
+  ruling: 'رجاله ثقات رجال مسلم إلا أنه منقطع', grader: 'الألباني', rulingSource: 'Dorar.net',
   collectionSlug: 'al-silsila-sahiha', collectionName: 'Al-Silsilah al-Sahihah',
-  silsilaNumber: 52, reference: 'Al-Silsilah al-Sahihah 52',
+  numberOrPage: '6/778', reference: 'Al-Silsilah al-Sahihah — 6/778',
 }, over);
 
-test('buildDorarCardHTML renders RTL matn, narrator, grade+grader, citation, Dorar source, Ask button', () => {
+test('buildDorarCardHTML renders RTL matn, narrator, verbatim ruling labelled to grader + Dorar, citation, Ask button', () => {
   const html = core.buildDorarCardHTML(item());
   assert.match(html, /dir="rtl"/);
   assert.match(html, /إنما الأعمال بالنيات/);
-  assert.match(html, /عمر بن الخطاب/);
-  assert.match(html, /Sahih/);
-  assert.match(html, /الألباني/);
-  assert.match(html, /Al-Silsilah al-Sahihah 52/);
-  assert.match(html, /Dorar\.net/);
+  assert.match(html, /عائشة أم المؤمنين/);
+  assert.match(html, /رجاله ثقات رجال مسلم إلا أنه منقطع/); // ruling VERBATIM
+  assert.match(html, /الألباني/);                           // grader in the ruling label
+  assert.match(html, /via Dorar\.net/);
+  assert.match(html, /Al-Silsilah al-Sahihah — 6\/778/);
   assert.match(html, /data-act="ask-qai"/);
   assert.match(html, /data-ai-selectable="hadith"/);
 });
 
-test('buildDorarCardHTML: no number → citation shows collection name, never a fake number', () => {
-  const html = core.buildDorarCardHTML(item({ silsilaNumber: null, reference: null }));
+test('buildDorarCardHTML: emits NO grade badge / grade vocab (ruling is never badge-mapped)', () => {
+  const html = core.buildDorarCardHTML(item());
+  assert.doesNotMatch(html, /grade-badge|grade-sahih|grade-daif|>Sahih<|Da'if/);
+});
+
+test('buildDorarCardHTML: grader null → honest "Grader\'s ruling" label, never fabricated', () => {
+  const html = core.buildDorarCardHTML(item({ grader: null }));
+  assert.match(html, /Grader's ruling · via Dorar\.net/);
+});
+
+test('buildDorarCardHTML: no number → citation is collection-only (no em-dash ref)', () => {
+  const html = core.buildDorarCardHTML(item({ numberOrPage: null, reference: 'Al-Silsilah al-Sahihah' }));
   assert.match(html, /Al-Silsilah al-Sahihah/);
-  assert.doesNotMatch(html, /Al-Silsilah al-Sahihah \d/);
+  assert.doesNotMatch(html, /Al-Silsilah al-Sahihah —/);
 });
 
-test('buildDorarCardHTML: grader null → honest fallback, never fabricated', () => {
-  const html = core.buildDorarCardHTML(item({ grade: { value: 'sahih', label: 'Sahih', rawArabic: 'صحيح', grader: null, source: 'Dorar.net' } }));
-  assert.match(html, /grader not individually cited/);
-});
-
-test('buildDorarCardHTML escapes matn/narrator/grader (no raw HTML injection)', () => {
-  const html = core.buildDorarCardHTML(item({ arabicMatn: '<script>alert(1)</script>', narrator: '<img src=x onerror=alert(2)>' }));
+test('buildDorarCardHTML escapes matn/narrator/ruling (no raw HTML injection)', () => {
+  const html = core.buildDorarCardHTML(item({ arabicMatn: '<script>alert(1)</script>', ruling: '<img src=x onerror=alert(2)>' }));
   assert.doesNotMatch(html, /<script>alert\(1\)<\/script>/);
   assert.doesNotMatch(html, /<img src=x onerror/);
 });
 
-test('buildDorarCardHTML: no vendor backend name leaks (only Dorar.net cited)', () => {
+test('buildDorarCardHTML: only Dorar.net is cited (no backend vendor names)', () => {
   const html = core.buildDorarCardHTML(item());
   assert.doesNotMatch(html, /hadithapi|AhmedBaset|fawazahmed0/i);
 });
@@ -656,14 +638,12 @@ Expected: FAIL (module not found).
 // src/js/dorar-card-core.js
 /* Pure renderer for a Dorar-sourced Silsila as-Sahiha result card. UMD:
    window.II.dorarCard in the browser, module.exports in tests. NO DOM, NO network.
-   Arabic-only (translation is the "Ask QuranlyAI" button's job). Grading is shown
-   verbatim from Dorar and sourced to the grader + Dorar.net; never fabricated. */
+   Arabic-only (translation is the "Ask QuranlyAI" button's job). al-Albani's ruling
+   (خلاصة حكم المحدث) is shown VERBATIM, sourced to the grader + Dorar.net — never
+   reduced to a one-word grade badge, never fabricated. Citation is the page-style
+   reference the item already carries (built by dorar-parse's buildSilsilaReference). */
 (function (root) {
   'use strict';
-  var citation = (typeof require !== 'undefined')
-    ? require('./hadith-citation-core.js')
-    : (root.II && root.II.hadithCitation);
-
   function esc(s) {
     return String(s == null ? '' : s)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -672,26 +652,27 @@ Expected: FAIL (module not found).
 
   var SVG_QAI = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4z"/></svg>';
 
-  function gradeBadge(g) {
-    g = g || {};
-    var cls = 'grade-' + (g.value || 'unknown');
-    var grader = g.grader ? (' · ' + esc(g.grader)) : ' · grader not individually cited';
-    return '<div class="grade-badge ' + cls + '"><span class="grade-dot"></span>' + esc(g.label || 'Grade Unknown') + grader + '</div>';
+  // al-Albani's ruling, verbatim, labelled to the grader + Dorar.net. NEVER a badge.
+  function rulingBlock(item) {
+    if (!item.ruling) return '';
+    var who = item.grader ? esc(item.grader) : "Grader's ruling";
+    return '<div class="dorar-ruling">' +
+      '<div class="dorar-ruling-label">' + who + ' · via Dorar.net</div>' +
+      '<div class="dorar-ruling-text" dir="rtl" lang="ar">' + esc(item.ruling) + '</div>' +
+    '</div>';
   }
 
   function buildDorarCardHTML(item) {
     item = item || {};
-    var ref = item.reference ||
-      (citation && citation.buildReference ? citation.buildReference({ collectionSlug: item.collectionSlug, collectionName: item.collectionName, hadithNumber: item.silsilaNumber }) : null) ||
-      esc(item.collectionName || 'Al-Silsilah al-Sahihah');
+    var ref = item.reference || item.collectionName || 'Al-Silsilah al-Sahihah'; // raw; escaped at use
     var matn = item.arabicMatn ? '<div class="hadith-arabic dorar-matn" dir="rtl" lang="ar">' + esc(item.arabicMatn) + '</div>' : '';
     var narr = item.narrator ? '<div class="hadith-narrator" dir="rtl" lang="ar">' + esc(item.narrator) + '</div>' : '';
     return '' +
-      '<div class="hadith-card dorar-card" data-ai-selectable="hadith" data-ref="' + esc(ref) + '" data-grade="' + esc((item.grade && item.grade.value) || 'unknown') + '">' +
+      '<div class="hadith-card dorar-card" data-ai-selectable="hadith" data-ref="' + esc(ref) + '">' +
         '<div class="hadith-teal-bar"></div>' +
         '<div class="hadith-inner">' +
-          '<div class="hadith-header"><div class="hadith-meta">' + gradeBadge(item.grade) + '</div></div>' +
           matn + narr +
+          rulingBlock(item) +
           '<div class="hadith-footer">' +
             '<div class="hadith-ref"><span class="hadith-ref-icon">📖</span>' + esc(ref) + '<span class="dorar-src"> · Source · Dorar.net</span></div>' +
             '<div class="hadith-footer-actions">' +
@@ -871,7 +852,7 @@ Commit: `git commit -am "feat(hadith): Silsila Dorar search view + result cards 
 
 - [ ] **Step 4: Minimal CSS**
 
-Add styles for `.dorar-search`, `.dorar-help`, `.dorar-results-list`, `.dorar-matn` (RTL, larger Arabic line-height), `.dorar-src` (muted), reusing existing tokens (no raw hex). Put them with the other hadith styles in `hadith.html`. Remove now-unused `.ref-collection*` rules.
+Add styles for `.dorar-search`, `.dorar-help`, `.dorar-results-list`, `.dorar-matn` (RTL, larger Arabic line-height), `.dorar-ruling` (a bordered/muted block), `.dorar-ruling-label` (small, muted, the grader · via Dorar.net line), `.dorar-ruling-text` (RTL Arabic), and `.dorar-src` (muted), reusing existing tokens (no raw hex). Put them with the other hadith styles in `hadith.html`. Remove now-unused `.ref-collection*` rules.
 Commit: `git commit -am "style(hadith): Dorar search view styles; drop dead reference-card CSS"`
 
 ---
@@ -927,6 +908,6 @@ These are explicit human gates from the spec; the feature is fully built but shi
 
 ## Self-review notes (author)
 
-- **Spec coverage:** §3.1 endpoint→Task 4; §3.2 item shape→Task 2; §3.3 search view/card→Tasks 5,7; §3.4 Ask→Task 7; §4 removals→Task 7; §5 citation→Tasks 2,3; §6 attribution+flag gates→Tasks 8,10; §7 error table→Task 4 tests; §8 testing→Tasks 1,2,4,5,6.
-- **Types consistent:** item fields (`arabicMatn`, `narrator`, `grade{value,label,rawArabic,grader,source,explanation}`, `collectionSlug`, `collectionName`, `silsilaNumber`, `dorarHadithId`, `reference`) identical across parser, endpoint, card, and tests.
-- **Live-probe honesty:** the only genuinely unknown detail (exact inner HTML wrapping) is captured as a real fixture in Task 0 and the Task 2 regex is iterated against it — not a placeholder.
+- **Spec coverage:** §3.1 endpoint→Task 4; §3.2 item shape→Task 2; §3.3 search view/card→Tasks 5,7; §3.4 Ask→Task 7; §4 removals→Task 7; §5 citation→Task 2 (`buildSilsilaReference`); §6 attribution+flag gates→Tasks 8,10; §7 error table→Task 4 tests; §8 testing→Tasks 1,2,4,5,6.
+- **Types consistent:** item fields (`arabicMatn`, `narrator`, `ruling`, `grader`, `rulingSource`, `collectionSlug`, `collectionName`, `numberOrPage`, `reference`) identical across parser, endpoint, card, and tests. NO `grade` object / grade vocab anywhere (owner decision 2026-07-23: ruling shown verbatim, never badge-mapped).
+- **Live-probe honesty:** the real fixture (Task 0) confirmed Silsila has no clean grade field — only خلاصة حكم المحدث — which drove the ruling-verbatim design. The exact inner-HTML wrapping is captured in that fixture and the Task 2 regex is iterated against it — not a placeholder.
