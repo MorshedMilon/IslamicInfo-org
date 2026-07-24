@@ -27,6 +27,10 @@
   function buildDorarCardHTML(item) {
     item = item || {};
     var ref = item.reference || item.collectionName || 'Al-Silsilah al-Sahihah'; // raw; escaped at use
+    // Clickable attribution back to the source (citation-transparency standard). Prefer the
+    // query-specific Dorar search the item carries; fall back to Dorar's site if absent.
+    var dorarUrl = item.dorarUrl || 'https://www.dorar.net';
+    var srcLink = '<a href="' + esc(dorarUrl) + '" target="_blank" rel="noopener noreferrer">Dorar.net</a>';
     var matn = item.arabicMatn ? '<div class="hadith-arabic dorar-matn" dir="rtl" lang="ar">' + esc(item.arabicMatn) + '</div>' : '';
     var narr = item.narrator ? '<div class="hadith-narrator" dir="rtl" lang="ar">' + esc(item.narrator) + '</div>' : '';
     return '' +
@@ -36,7 +40,7 @@
           matn + narr +
           rulingBlock(item) +
           '<div class="hadith-footer">' +
-            '<div class="hadith-ref"><span class="hadith-ref-icon">📖</span>' + esc(ref) + '<span class="dorar-src"> · Source · Dorar.net</span></div>' +
+            '<div class="hadith-ref"><span class="hadith-ref-icon">📖</span>' + esc(ref) + '<span class="dorar-src"> · Source · ' + srcLink + '</span></div>' +
             '<div class="hadith-footer-actions">' +
               '<button class="footer-action-btn primary" type="button" data-act="ask-qai">' + SVG_QAI + ' <span>Ask QuranlyAI</span></button>' +
             '</div>' +

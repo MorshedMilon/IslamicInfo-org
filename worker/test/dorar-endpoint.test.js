@@ -46,6 +46,7 @@ test('happy path → normalized items with reference + ruling set', async () => 
   assert.equal(body.data.items[0].grader, 'الألباني');
   assert.match(body.data.items[0].ruling, /رجاله ثقات/);
   assert.equal(body.data.items[0].grade, undefined);
+  assert.match(body.data.items[0].dorarUrl, /dorar\.net\/hadith\/search\?q=/);
   assert.equal(body.source, 'live');
 });
 

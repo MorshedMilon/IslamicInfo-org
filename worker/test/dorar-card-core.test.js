@@ -7,6 +7,7 @@ const item = (over = {}) => Object.assign({
   ruling: 'رجاله ثقات رجال مسلم إلا أنه منقطع', grader: 'الألباني', rulingSource: 'Dorar.net',
   collectionSlug: 'al-silsila-sahiha', collectionName: 'Al-Silsilah al-Sahihah',
   numberOrPage: '6/778', reference: 'Al-Silsilah al-Sahihah — 6/778',
+  dorarUrl: 'https://www.dorar.net/hadith/search?q=x',
 }, over);
 
 test('buildDorarCardHTML renders RTL matn, narrator, verbatim ruling labelled to grader + Dorar, citation, Ask button', () => {
@@ -47,4 +48,14 @@ test('buildDorarCardHTML escapes matn/narrator/ruling (no raw HTML injection)', 
 test('buildDorarCardHTML: only Dorar.net is cited (no backend vendor names)', () => {
   const html = core.buildDorarCardHTML(item());
   assert.doesNotMatch(html, /hadithapi|AhmedBaset|fawazahmed0/i);
+});
+
+test('buildDorarCardHTML: Source attribution is a clickable link to the item\'s Dorar URL', () => {
+  const html = core.buildDorarCardHTML(item({ dorarUrl: 'https://www.dorar.net/hadith/search?q=abc' }));
+  assert.match(html, /<a href="https:\/\/www\.dorar\.net\/hadith\/search\?q=abc" target="_blank" rel="noopener noreferrer">Dorar\.net<\/a>/);
+});
+
+test('buildDorarCardHTML: Source link falls back to dorar.net when no dorarUrl', () => {
+  const html = core.buildDorarCardHTML(item({ dorarUrl: undefined }));
+  assert.match(html, /<a href="https:\/\/www\.dorar\.net" target="_blank" rel="noopener noreferrer">Dorar\.net<\/a>/);
 });

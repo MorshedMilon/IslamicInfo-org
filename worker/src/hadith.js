@@ -269,7 +269,10 @@ export async function handleDorarSearch({ query, page = 1, ip } = {}, env, { fet
   let items;
   try {
     const html = await fetchDorarResult(q, pg, { fetcher });
-    items = parseDorarResult(html); // each item already carries `reference` + `ruling`
+    // Attach a clickable "back to the source" link — Dorar's own search for this query
+    // (per-hadith deep links aren't available from the API endpoint we use).
+    const dorarUrl = 'https://www.dorar.net/hadith/search?q=' + encodeURIComponent(q);
+    items = parseDorarResult(html).map((it) => ({ ...it, dorarUrl })); // items also carry `reference` + `ruling`
   } catch (e) {
     return json({ ok: false, error: { code: 'upstream', message: 'Search temporarily unavailable — try again', retryable: true }, source: 'fallback' }, origin, { status: 502 });
   }
