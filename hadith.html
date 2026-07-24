@@ -446,6 +446,25 @@ a { text-decoration: none; color: inherit; }
 [data-theme="dark"] .topic-chip { background: rgba(0,105,110,.08); border-color: rgba(0,105,110,.25); color: #5BC1C7; }
 [data-theme="dark"] .topic-chip.featured-topic { background: var(--teal-700); color: white; }
 
+/* Checked pill = the existing featured-topic visual; keyboard focus ring for a11y */
+.topic-chip[aria-checked="true"] { background: var(--teal-700); color: white; border-color: transparent; }
+.topic-chip:focus-visible { outline: 2px solid var(--teal-700); outline-offset: 2px; }
+
+/* Topic filter status line (filtered-by + live count + clear + keyword note) */
+.topic-status { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px;
+  margin: -32px 0 28px; font-size: 13px; color: var(--ink-muted); }
+.topic-status__label { color: var(--ink-body); font-weight: 500; }
+.topic-status__count { color: var(--ink-body); }
+.topic-status__note  { flex-basis: 100%; font-size: 12px; color: var(--ink-muted); }
+.topic-status__clear { background: none; border: 0; padding: 0; cursor: pointer;
+  color: var(--teal-700); font: inherit; text-decoration: underline; }
+.topic-status__clear:focus-visible { outline: 2px solid var(--teal-700); outline-offset: 2px; }
+
+/* Genuine empty result — a calm note, deliberately NOT styled like the error card */
+.topic-empty { text-align: center; padding: 40px 24px; }
+.topic-empty__title { font-family: var(--font-serif); font-size: 18px; color: var(--ink-body); margin-bottom: 6px; }
+.topic-empty__hint  { font-size: 13px; color: var(--ink-muted); }
+
 /* ─── GRADE FILTER ─── */
 .grade-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
 .grade-filter-pill {
@@ -1533,22 +1552,24 @@ html[data-theme="light"].reading-mode-hadith body { background-image: none; }
       <h2 class="section-title" data-i18n="hadith.topics.title">Browse by Topic</h2>
       <a class="section-action" href="/hadith/topics" data-i18n="hadith.topics.viewAll">View all topics →</a>
     </div>
-    <div class="topics-grid fade-up" id="topic-index">
-      <span class="topic-chip featured-topic" role="button" tabindex="0" data-topic="faith" data-i18n="hadith.topics.faith">Faith & Belief</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="prayer" data-i18n="hadith.topics.prayer">Prayer (Salah)</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="charity" data-i18n="hadith.topics.zakat">Charity (Zakat)</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="fast" data-i18n="hadith.topics.fasting">Fasting (Sawm)</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="hajj" data-i18n="hadith.topics.hajj">Hajj & 'Umrah</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="purification" data-i18n="hadith.topics.purification">Purification</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="knowledge" data-i18n="hadith.topics.knowledge">Knowledge & Wisdom</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="character" data-i18n="hadith.topics.ethics">Ethics & Character</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="marriage" data-i18n="hadith.topics.family">Family & Marriage</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="supplication" data-i18n="hadith.topics.dua">Supplications</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="hereafter" data-i18n="hadith.topics.afterlife">Afterlife & Judgment</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="trade" data-i18n="hadith.topics.trade">Trade & Finance</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="death" data-i18n="hadith.topics.death">Death & Burial</span>
-      <span class="topic-chip" role="button" tabindex="0" data-topic="justice" data-i18n="hadith.topics.governance">Governance & Justice</span>
+    <div class="topics-grid fade-up" id="topic-index" role="radiogroup"
+         aria-label="Browse hadith by topic" data-i18n-attr="aria-label:hadith.topics.ariaLabel">
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="0"  data-topic="faith"        data-i18n="hadith.topics.faith">Faith &amp; Belief</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="prayer"       data-i18n="hadith.topics.prayer">Prayer (Salah)</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="charity"      data-i18n="hadith.topics.zakat">Charity (Zakat)</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="fast"         data-i18n="hadith.topics.fasting">Fasting (Sawm)</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="hajj"         data-i18n="hadith.topics.hajj">Hajj &amp; 'Umrah</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="purification" data-i18n="hadith.topics.purification">Purification</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="knowledge"    data-i18n="hadith.topics.knowledge">Knowledge &amp; Wisdom</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="character"    data-i18n="hadith.topics.ethics">Ethics &amp; Character</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="marriage"     data-i18n="hadith.topics.family">Family &amp; Marriage</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="supplication" data-i18n="hadith.topics.dua">Supplications</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="hereafter"    data-i18n="hadith.topics.afterlife">Afterlife &amp; Judgment</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="trade"        data-i18n="hadith.topics.trade">Trade &amp; Finance</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="death"        data-i18n="hadith.topics.death">Death &amp; Burial</span>
+      <span class="topic-chip" role="radio" aria-checked="false" tabindex="-1" data-topic="justice"      data-i18n="hadith.topics.governance">Governance &amp; Justice</span>
     </div>
+    <div id="ii-topic-status" class="topic-status" role="status" aria-live="polite" hidden></div>
 
     <!-- Hadith Feed — Bukhari Preview -->
     <div class="section-header fade-up">
