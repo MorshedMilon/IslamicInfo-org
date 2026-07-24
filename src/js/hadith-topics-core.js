@@ -59,9 +59,43 @@
     return out;
   }
 
+  // Topic key → the English keyword used for the corpus search (topics have no
+  // curated taxonomy; keyword is the honest proxy). Unknown key → null.
+  function topicSearchQuery(key) {
+    var t = topicByKey(key);
+    return t ? t.keyword : null;
+  }
+
+  // Which live-count copy to show. Number ≥ 0 → 'zero' | 'one' | 'many';
+  // null/undefined/negative → 'more' (total unavailable → page-scoped "25+" fallback).
+  function countKind(n) {
+    if (n == null) return 'more';
+    n = Number(n);
+    if (!isFinite(n) || n < 0) return 'more';
+    if (n === 0) return 'zero';
+    if (n === 1) return 'one';
+    return 'many';
+  }
+
+  // Derive radiogroup state for the pills. `keys` = topic keys in DOM order,
+  // `activeKey` = selected key or null. The checked pill is the roving tab stop;
+  // when nothing is checked (initial / unknown active), the FIRST pill is the tab stop.
+  function radioState(keys, activeKey) {
+    keys = Array.isArray(keys) ? keys : [];
+    var hasActive = keys.indexOf(activeKey) !== -1;
+    var checked = {}, tabindex = {};
+    keys.forEach(function (k, i) {
+      var on = hasActive && k === activeKey;
+      checked[k] = on;
+      tabindex[k] = (on || (!hasActive && i === 0)) ? 0 : -1;
+    });
+    return { checked: checked, tabindex: tabindex };
+  }
+
   var core = {
     TOPICS: TOPICS, topicByKey: topicByKey, isTopicKey: isTopicKey,
     coOccurringTopics: coOccurringTopics,
+    topicSearchQuery: topicSearchQuery, countKind: countKind, radioState: radioState,
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = core; }

@@ -140,6 +140,15 @@ test('search returns normalized results', async () => {
   assert.equal(b.data.results[0].hadithNumber, 1);
 });
 
+test('search passes upstream total/lastPage through the envelope', async () => {
+  const res = await handleHadith('/api/hadith/search', new URLSearchParams('q=intention'),
+    ENV(), ORIGIN, { fetcher: listFetcher });
+  const b = await res.json();
+  assert.equal(b.ok, true);
+  assert.equal(b.data.total, 1);
+  assert.equal(b.data.lastPage, 1);
+});
+
 test('search scoped by collection sends the book filter and keeps the query', async () => {
   let calledUrl = '';
   const spy = async (url) => { calledUrl = url; return { ok: true, status: 200, json: async () => ({
