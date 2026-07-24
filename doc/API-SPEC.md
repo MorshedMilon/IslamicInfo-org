@@ -83,9 +83,48 @@ Hadith of the day, or a hadith for a collection/book.
 | `/api/hadith/search?q=&scope=&lang=&page=` | GET | KV 1h | `q` trimmed ≥2 chars |
 | `/api/hadith/daily` | GET | KV to UTC midnight | static Bukhari #1 fallback |
 | `/api/hadith/narrators/:id` | GET | — | **stub** → `{status:'unavailable'}` (no curator store yet) |
+| `/api/hadith/dorar/search?q=&page=` | GET | KV 7d | Al-Silsilah al-Sahihah only, Dorar.net-backed — see below. **Flagged, default OFF.** |
 
 Allowed slugs: `sahih-bukhari, sahih-muslim, al-tirmidhi, abu-dawood, ibn-e-majah, sunan-nasai, mishkat, musnad-ahmad, al-silsila-sahiha`.
 Content: grade + grader always present (missing → "Grade Unknown"); isnad/narrator/audio render `unavailable` until curated.
+
+## GET `/api/hadith/dorar/search?q=&page=`  *(Al-Silsilah al-Sahihah — Dorar.net search, added 2026-07-23)*
+Arabic keyword search into **Dorar.net's Hadith Encyclopedia** (الموسوعة الحديثية), scoped to
+al-Albani's *Silsila as-Sahiha* via Dorar's book filter. Dorar is a search engine, not a
+by-number catalogue, so this collection has no browsable book/number grid — the collection
+page (`al-silsila-sahiha`) renders an Arabic search box instead. Reverses the earlier
+"reference-linked" (Archive.org / al-hadees.com) approach from commit `35bcc19` — see
+`doc/DECISIONS.md` ADR-048.
+
+- **Query:** `q` (Arabic string, required — empty/whitespace → 400, no upstream call made), `page` (int, optional, default `1`, coerced to a positive int)
+- **Response:** `{ ok, data: { items: [...], page, query }, error?, source: 'live'|'cache' }`
+- **Item shape:**
+  ```
+  {
+    arabicMatn: string,            // Dorar hadith text (Arabic), highlight tags stripped
+    narrator: string | null,       // الراوي, verbatim, null if absent — never fabricated
+    ruling: string,                // خلاصة حكم المحدث VERBATIM (fallback: درجة الحديث if that
+                                    //   is the only label present). Never reduced to a
+                                    //   Sahih/Da'if badge — Silsila's ruling is paragraph-
+                                    //   length, not a one-word grade.
+    grader: string | null,         // المحدث (e.g. "الألباني"), verbatim, null if absent
+    rulingSource: 'Dorar.net',
+    collectionSlug: 'al-silsila-sahiha',
+    collectionName: 'Al-Silsilah al-Sahihah',
+    numberOrPage: string | null,   // الصفحة أو الرقم, Dorar's page-style ref VERBATIM
+                                    //   (e.g. "6/778"); kept as a string, never coerced
+                                    //   to an integer; null if absent
+    reference: string,             // "Al-Silsilah al-Sahihah — {numberOrPage}", or just
+                                    //   "Al-Silsilah al-Sahihah" when numberOrPage is null
+                                    //   (NOT the site-wide [Collection] [Number] format —
+                                    //   Silsila has no clean sequential number)
+  }
+  ```
+- **Cache:** server `hadith:dorar:search:{q}:{page}` KV, 7-day TTL (see `DATA.md` §5); `source:'cache'` on hit.
+- **Quota:** 100 searches / IP / day, `dorar:quota:{ip}:{utcDate}` KV counter, TTL to UTC midnight (mirrors the QuranlyAI quota pattern).
+- **Feature flag:** gated by Worker env var `HADITH_SILSILA_DORAR_ENABLED` (`worker/wrangler.toml`, default `"false"`). While OFF the route returns `disabled` (see Errors) and the Silsila collection page keeps its prior reference-linked card — no user-visible regression until launch gates clear (owner review of Dorar's terms/attribution + a Worker-reachability check; see `doc/DECISIONS.md` ADR-048).
+- **Errors handled:** `disabled` → 404 (flag OFF); `bad_query` → 400 (empty/whitespace `q`); `quota` → 429 (IP over daily limit); `upstream` → 502 (Dorar non-200/timeout/empty-parse). **Fail-closed** — no path renders a partial or fabricated narration; 0 usable items after parsing returns `{ ok:true, data:{items:[]} }` (honest "no narrations matched" in UI, not an error).
+- **Content note:** every item's `ruling`/`grader` is sourced to Dorar.net + the named grader, shown **verbatim** — never AI-generated, never keyword-mapped to a grade badge. No English translation is served for this endpoint; a per-card "Ask QuranlyAI" button covers translation/explanation, clearly separated per CONTENT-POLICY §3/§8.
 
 ## GET `/api/geocode`
 Reverse-geocode coordinates to a city label (prayer-time UX).

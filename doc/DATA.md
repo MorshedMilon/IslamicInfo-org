@@ -218,6 +218,14 @@ hadith:{collection}:{book}:{date} → book hadiths            TTL 24h
 | `hadith:one:{slug}:{book}:{num}` | 24h |
 | `hadith:daily:{YYYY-MM-DD}` | to UTC midnight |
 | `hadith:search:{lang}:{page}:{q}` | 1h |
+| `hadith:dorar:search:{q}:{page}` | 7d |
+
+> **Dorar search scope (ADR-048, 2026-07-23).** `hadith:dorar:search:*` is a separate provider path —
+> Dorar.net (not HadithAPI.com), scoped to `al-silsila-sahiha` only (collection flagged
+> `"search":"dorar"` in `src/data/hadith/collections.json`). Gated by Worker env var
+> `HADITH_SILSILA_DORAR_ENABLED` (default off); also KV-quota'd 100 searches/IP/day under a
+> separate `dorar:quota:{ip}:{utcDate}` key (same TTL-to-midnight pattern as the QuranlyAI quota
+> counter in §5 above). No new localStorage key — the search is live-only, not client-cached.
 
 > **Provider scope (ADR-024, 2026-07-20).** These `hadith:*` KV keys apply **only to the 9 HadithAPI.com collections** (proxied through the Worker, key server-side). The 1 fawazahmed0 (40 Nawawi) + 8 AhmedBaset collections are **keyless direct client fetches** — no Worker, no KV — cached client-side under `islamicinfo-hadith-collections` / `islamicinfo-hadith-fawaz-*` / `islamicinfo-hadith-ab-*` (see §2 localStorage table), with AhmedBaset pinned to release tag `v1.2.0`.
 
