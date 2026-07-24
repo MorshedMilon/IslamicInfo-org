@@ -1234,6 +1234,7 @@
       return;
     }
 
+    if (!append && TOPIC.active) return;   // a topic filter took over while this neutral fetch was in flight
     var data = res.data;
     var fresh = feed.dedupeByRef(FEED.refs, data.hadiths || []);
     fresh.forEach(function (h) { var r = feed.refOf(h); FEED.refs.add(r); FEED.byRef[r] = h; });
