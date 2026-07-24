@@ -10,6 +10,24 @@ const GRADE_MAP = {
   "da'if": 'daif', 'zaeef': 'daif', 'maudu': 'mawdu', 'mawdu': 'mawdu',
 };
 
+// slug → full display name, for the collections this Worker serves (hadithapi).
+// Mirror of nameEnglish in src/data/hadith/collections.json — the SAME names
+// the sidebar/collection header render, so a hadith card's citation matches the
+// rest of the page rather than whatever raw string the upstream API happens to
+// return. Browser paths (direct-source collections) use the parallel table in
+// src/js/hadith-citation-core.js; keep both in sync with collections.json.
+const COLLECTION_NAMES = {
+  'sahih-bukhari': 'Sahih al-Bukhari',
+  'sahih-muslim': 'Sahih Muslim',
+  'abu-dawood': 'Sunan Abu Dawud',
+  'al-tirmidhi': "Jami' at-Tirmidhi",
+  'sunan-nasai': "Sunan an-Nasa'i",
+  'ibn-e-majah': 'Sunan Ibn Majah',
+  'musnad-ahmad': 'Musnad Ahmad',
+  'mishkat': 'Mishkat al-Masabih',
+  'al-silsila-sahiha': 'Al-Silsilah al-Sahihah',
+};
+
 function toInt(v) {
   const n = parseInt(String(v ?? '').replace(/[^0-9]/g, ''), 10);
   return Number.isFinite(n) ? n : null;
@@ -64,14 +82,19 @@ export function normalizeHadith(raw = {}, { language = 'en' } = {}) {
   const text = raw.hadithEnglish || '';                     // VERIFIED 2026-07-19
   const slug = book.bookSlug || raw.bookSlug || null;
   const hadithNumber = toInt(raw.hadithNumber);
-  const reference = slug && hadithNumber ? `${book.bookName || slug} · Hadith ${hadithNumber}` : null;
+  // Canonical display name: prefer the shared table (matches the sidebar/header),
+  // then the upstream book name, then null.
+  const collectionName = COLLECTION_NAMES[slug] || book.bookName || null;
+  // Scholarly citation "[Collection] [Number]" — hadith number ONLY (rationale in
+  // src/js/hadith-citation-core.js). No backend vendor name, no book/chapter number.
+  const reference = collectionName && hadithNumber ? `${collectionName} ${hadithNumber}` : null;
 
   return {
     id: slug && hadithNumber ? `${slug}:${toInt(chapter.chapterNumber) ?? 0}:${hadithNumber}` : null,
     source: 'hadithapi',
     sourceId: raw.id ?? null,
     collectionSlug: slug,
-    collectionName: book.bookName || null,
+    collectionName,
     collectionArabicName: book.bookNameArabic || null,
     bookNumber: toInt(chapter.chapterNumber),
     bookName: chapter.chapterEnglish || null,
@@ -79,7 +102,10 @@ export function normalizeHadith(raw = {}, { language = 'en' } = {}) {
     hadithNumber,
     reference,
     arabicMatn,
-    translation: { text, language, edition: 'hadithapi.com', translator: null },
+    // `edition` intentionally null: it previously carried the backend vendor
+    // ('hadithapi.com'), which must never surface as a user-facing "source".
+    // Provenance lives in `source` above + sourceMetadata below (internal/admin).
+    translation: { text, language, edition: null, translator: null },
     narrator: { id: null, name: raw.englishNarrator || null, arabicName: null },
     grade: normalizeGrade(raw.status),
     isnad: { status: 'unavailable', narrators: [] },

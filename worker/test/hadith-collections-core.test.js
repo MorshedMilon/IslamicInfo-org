@@ -85,7 +85,9 @@ test('hotdFields: grade always present, missing → Grade Unknown', () => {
   assert.equal(good.gradeLabel, 'Sahih');
   assert.equal(good.grader, 'Imam al-Bukhari');
   assert.equal(good.narrator, 'Umar');
-  assert.match(good.reference, /Sahih al-Bukhari/);
+  // Citation "[Collection] [Number]" — hadith number only, no book number, no dot separator.
+  assert.equal(good.reference, 'Sahih al-Bukhari 1');
+  assert.ok(!/Book|·/.test(good.reference));
 
   const noGrade = core.hotdFields({ collectionSlug: 'x', collectionName: 'X', hadithNumber: 5,
     arabicMatn: 'a', translation: { text: 'b' }, narrator: { name: null }, grade: null });

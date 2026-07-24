@@ -16,6 +16,15 @@
 (function (root) {
   'use strict';
 
+  // Shared citation builder (window.II.hadithCitation in the browser; required
+  // in Node tests). The footer citation is COMPUTED from structured fields via
+  // this, not read from a pre-baked h.reference string — so a hadith cached in
+  // KV under an older reference format still renders the current "[Collection]
+  // [Number]" citation. Never a backend vendor name.
+  var citation = (typeof require !== 'undefined')
+    ? require('./hadith-citation-core.js')
+    : (root.II && root.II.hadithCitation);
+
   // Self-contained escape (keeps this module dependency-free & unit-testable
   // without ui.js). Matches ui-utils.escapeHTML output exactly.
   function esc(s) {
@@ -157,13 +166,12 @@
     editions = editions || [];
     if (!editions.length) return '';
     function byLine(e) { return e.translator ? '<div class="hadith-tr-by">Translated by ' + esc(e.translator) + '</div>' : ''; }
-    // DoD-11: always surface where the translation came from. `edition` holds the
-    // source/provider (e.g. "hadithapi.com"), not a named scholarly edition, so it is
-    // framed as a source — honest, and doubles as the "every claim carries a source"
-    // attribution. Multi-edition already shows names on the tabs, so this is single-only.
-    function edLabel(e) { return e.edition ? '<div class="hadith-tr-edition">Source · ' + esc(e.edition) + '</div>' : ''; }
+    // NOTE: no vendor "Source · …" line. The backend that mirrored the text
+    // (hadithapi.com / AhmedBaset / fawazahmed0) is an implementation detail, not
+    // a citation. Attribution is the scholarly reference in the card footer
+    // ("[Collection] [Number]"); the translator, when known, is shown by byLine.
     if (editions.length === 1) {
-      return '<div class="hadith-text">' + esc(editions[0].text) + '</div>' + edLabel(editions[0]) + byLine(editions[0]);
+      return '<div class="hadith-text">' + esc(editions[0].text) + '</div>' + byLine(editions[0]);
     }
     var hasPref = false, i;
     for (i = 0; i < editions.length; i++) { if (prefEdition && editions[i].edition === prefEdition) { hasPref = true; break; } }
@@ -191,9 +199,12 @@
     var p = gradeParts(h);
     var arabic = h.arabicMatn || '';
     var narratorName = (h.narrator && h.narrator.name) || '';
-    var reference = h.reference || [h.collectionName || h.collectionSlug,
-        h.bookNumber != null ? ('Book ' + h.bookNumber) : null,
-        h.hadithNumber != null ? ('Hadith ' + h.hadithNumber) : null].filter(Boolean).join(' · ');
+    // Scholarly citation "[Collection] [Number]", computed fresh from structured
+    // fields (cache-safe). Falls back to a baked h.reference, then a minimal
+    // name+number join — never a book number, never a vendor name.
+    var reference = (citation && citation.buildReference(h)) || h.reference ||
+        ((h.collectionName || h.collectionSlug) && h.hadithNumber != null
+           ? (h.collectionName || h.collectionSlug) + ' ' + h.hadithNumber : '');
 
     var narratorHTML = narratorName ? ('<div class="hadith-narrator">' + esc(narratorName) + '</div>') : '';
     var arabicHTML = arabic ? ('<div class="hadith-arabic" dir="rtl" lang="ar">' + esc(arabic) + '</div>') : '';

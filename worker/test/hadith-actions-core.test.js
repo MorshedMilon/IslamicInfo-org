@@ -106,10 +106,10 @@ test('buildAskUrl: Tier 1 (no hadith in route) → empty verify.html', () => {
 test('buildAskUrl: Tier 3 with matn → prefilled q/ref/mode=claim', () => {
   const url = core.buildAskUrl(
     { collection: 'sahih-bukhari', book: 1, hadith: 1 },
-    { translation: { text: 'The reward of deeds...' }, reference: 'Sahih al-Bukhari · Book 1 · Hadith 1' });
+    { translation: { text: 'The reward of deeds...' }, reference: 'Sahih al-Bukhari 1' });
   assert.ok(url.indexOf('verify.html?') === 0);
   assert.ok(url.indexOf('q=' + encodeURIComponent('The reward of deeds...')) !== -1);
-  assert.ok(url.indexOf('ref=' + encodeURIComponent('Sahih al-Bukhari · Book 1 · Hadith 1')) !== -1);
+  assert.ok(url.indexOf('ref=' + encodeURIComponent('Sahih al-Bukhari 1')) !== -1);
   assert.ok(url.indexOf('mode=claim') !== -1);
 });
 
@@ -126,17 +126,17 @@ test('buildCopyText: single-string citation matches M12 template character-for-c
   const t = core.buildCopyText({
     translation: 'The reward of deeds depends upon the intentions',
     narrator: "Narrated 'Umar:",
-    reference: 'Sahih al-Bukhari · Book 1 · Hadith 1',
+    reference: 'Sahih al-Bukhari 1',
     grade: 'Sahih',
     sourceUrl: 'https://islamicinfo.org/hadith/sahih-bukhari/1/1',
   });
   assert.equal(t,
     '"The reward of deeds depends upon the intentions" — Narrated \'Umar. ' +
-    'Sahih al-Bukhari · Book 1 · Hadith 1. Grade: Sahih. ' +
+    'Sahih al-Bukhari 1. Grade: Sahih. ' +
     'Source: https://islamicinfo.org/hadith/sahih-bukhari/1/1');
 });
 test('buildCopyText: main copy excludes Arabic matn (that is the Arabic-only button)', () => {
-  const t = core.buildCopyText({ arabic: 'نص عربي', translation: 'x', reference: 'Sahih Muslim · Hadith 1' });
+  const t = core.buildCopyText({ arabic: 'نص عربي', translation: 'x', reference: 'Sahih Muslim 1' });
   assert.equal(t.indexOf('نص عربي'), -1);
 });
 test('buildCopyText: narrator de-doubling — no "Narrated by Narrated"', () => {
@@ -161,6 +161,6 @@ test('buildCopyText: returns empty string when no reference (never copy an unatt
   assert.equal(core.buildCopyText({ arabic: 'نص', translation: 'x' }), '');
 });
 test('buildCopyText: works with translation-only (no narrator/grade/url)', () => {
-  const t = core.buildCopyText({ translation: 'x', reference: 'Sunan Abi Dawud · Hadith 5' });
-  assert.equal(t, '"x" Sunan Abi Dawud · Hadith 5.');
+  const t = core.buildCopyText({ translation: 'x', reference: 'Sunan Abu Dawud 5' });
+  assert.equal(t, '"x" Sunan Abu Dawud 5.');
 });

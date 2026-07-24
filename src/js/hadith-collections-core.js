@@ -9,6 +9,13 @@
 (function (root) {
   'use strict';
 
+  // Shared citation builder (window.II.hadithCitation in the browser; required
+  // in Node tests). Used so the Hadith-of-the-Day citation matches every other
+  // hadith card: "[Collection] [Number]", no book number, no vendor.
+  var citation = (typeof require !== 'undefined')
+    ? require('./hadith-citation-core.js')
+    : (root.II && root.II.hadithCitation);
+
   var CATEGORIES = {
     sittah:   ['sahih-bukhari', 'sahih-muslim', 'abu-dawood', 'al-tirmidhi', 'sunan-nasai', 'ibn-e-majah'],
     musnad:   ['musnad-ahmad'],
@@ -69,10 +76,10 @@
     d = d || {};
     var grade = d.grade || {};
     var hasGrade = grade.value && grade.value !== 'unknown';
-    var ref = [d.collectionName || d.collectionSlug,
-               d.bookNumber != null ? ('Book ' + d.bookNumber) : null,
-               d.hadithNumber != null ? ('Hadith ' + d.hadithNumber) : null]
-              .filter(Boolean).join(' · ');
+    var ref = (citation && citation.buildReference(d)) ||
+              ((d.collectionName || d.collectionSlug) && d.hadithNumber != null
+                 ? (d.collectionName || d.collectionSlug) + ' ' + d.hadithNumber
+                 : '');
     return {
       arabic: d.arabicMatn || '',
       translation: (d.translation && d.translation.text) || '',

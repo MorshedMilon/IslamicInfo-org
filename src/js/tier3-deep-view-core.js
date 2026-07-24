@@ -20,6 +20,12 @@
     ? require('./hadith-feed-core.js')
     : (root.II && root.II.hadithFeed);
 
+  // Shared citation builder — compute "[Collection] [Number]" from structured
+  // fields (cache-safe), never a book number or backend vendor name.
+  var citation = (typeof require !== 'undefined')
+    ? require('./hadith-citation-core.js')
+    : (root.II && root.II.hadithCitation);
+
   function esc(s) {
     if (feed && typeof feed._esc === 'function') return feed._esc(s);
     return String(s == null ? '' : s)
@@ -119,7 +125,7 @@
     var arabic = h.arabicMatn ? '<div class="hadith-arabic dv-arabic" dir="rtl" lang="ar">' + esc(h.arabicMatn) + '</div>' : '';
     var narrator = (h.narrator && h.narrator.name) ? '<div class="hadith-narrator">' + esc(h.narrator.name) + '</div>' : '';
     var text = (h.translation && h.translation.text) ? '<div class="hadith-text dv-text">' + esc(h.translation.text) + '</div>' : '';
-    var ref = h.reference || '';
+    var ref = (citation && citation.buildReference(h)) || h.reference || '';
     return '<div class="hadith-card hadith-card--deep dv-body-card" data-ref="' + esc(feed.refOf(h) || '') + '" data-grade="' + esc(p.value) + '">' +
       '<div class="hadith-teal-bar"></div><div class="hadith-inner">' +
         '<div class="hadith-header"><div class="hadith-meta">' +
