@@ -300,6 +300,18 @@
       var code = res && res.error && res.error.code;
       var msg = code === 'quota' ? 'Daily search limit reached — try again tomorrow.'
               : 'Search temporarily unavailable — try again.';
+      if (!reset && SILSILA.items.length) {
+        // Load-more failure: keep the results already shown, roll the page back to the last
+        // successful one, and offer a retry — never wipe good cards on a transient error.
+        SILSILA.page = Math.max(1, SILSILA.page - 1);
+        var kept = SILSILA.items.map(function (it) { return II.dorarCard.buildDorarCardHTML(it); }).join('');
+        out.innerHTML = '<div class="dorar-results-list">' + kept + '</div>' +
+          '<div class="books-error"><div class="books-empty-title">' + msg + '</div>' +
+          '<button class="btn-glass" id="ii-dorar-more" type="button" style="margin-top:12px;">Try again</button></div>';
+        var retry = document.getElementById('ii-dorar-more');
+        if (retry) retry.addEventListener('click', function () { SILSILA.page += 1; runSilsilaSearch(false); });
+        return;
+      }
       out.innerHTML = '<div class="books-error"><div class="books-empty-title">' + msg + '</div></div>';
       return;
     }

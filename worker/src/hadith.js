@@ -275,7 +275,11 @@ export async function handleDorarSearch({ query, page = 1, ip } = {}, env, { fet
   }
 
   const data = { items, page: pg, query: q };
-  await env.QURANLYAI_KV.put(cacheKey, JSON.stringify(data), { expirationTtl: DORAR_CACHE_TTL });
+  // Cache real hits for 7d, but keep an empty result SHORT-lived: an empty parse can also
+  // mean Dorar changed its HTML (fail-closed → items:[]), and we must not serve that as a
+  // confident "no matches" for a week. 10 min bounds any silent-breakage window.
+  const ttl = items.length ? DORAR_CACHE_TTL : 600;
+  await env.QURANLYAI_KV.put(cacheKey, JSON.stringify(data), { expirationTtl: ttl });
   return json({ ok: true, data, source: 'live' }, origin, { maxAge: 3600 });
 }
 
