@@ -14,6 +14,8 @@
   var RP = II.readingProgress;
   var actions = II.hadithActions;
   var topics = II.hadithTopics;
+  var TOPIC = { active: null, ready: false, _lastCount: null };   // in-place Browse-by-Topic filter state
+  var _topicTimer = null;
   function feedHadithText(h) {
     if (!h) return '';
     return [h.arabicMatn, h.translation && h.translation.text, h.reference,
@@ -451,7 +453,17 @@
     if (II.traceView && II.traceView.isOpen && II.traceView.isOpen()) { II.traceView.close({ skipNav: true }); }
     reflectActiveRoute(r.collection);
     updateContinueReading(r.collection);
-    if (!r.collection) { setTier(1); applyFilter(); return; }
+    if (!r.collection) {
+      setTier(1);
+      var tk = readTopicFromUrl();
+      if (TOPIC.ready && tk && topics && topics.isTopicKey(tk)) {   // popstate → topic state
+        if (TOPIC.active !== tk) selectTopic(tk, false, 0);
+        return;
+      }
+      if (TOPIC.ready && !tk && TOPIC.active) { clearTopicFilter(false); return; }  // popstate → neutral
+      applyFilter();
+      return;
+    }
     if (r.collection === 'topics') { renderTopics(r.book); return; }   // Module 11
     var c = collectionBySlug(r.collection);
     if (!c) { setTier(1); applyFilter(); try { history.replaceState(null, '', '/hadith.html'); } catch (_) {} return; } // invalid → Tier 1 (TechSpec §10)
@@ -1383,17 +1395,164 @@
     });
   }
 
-  /* ── Topics strip (US-H06/H14) — Module 11: chips ROUTE (Stage 3) to
-     /hadith/topics/[topic]; the Module 5 in-place keyword filter is removed. ── */
+  /* ── Browse by Topic (US-H06/H14) — Module 11 route-away pills are now an IN-PLACE,
+     WHOLE-CORPUS keyword filter. A pill maps to a keyword; selecting it runs the corpus
+     search (/api/hadith/search, NO collection= → all collections) and renders into
+     #hadith-feed with ?topic= URL state, a truthful live count, and honest empty/error
+     states. This is SEPARATE from per-collection book-scoped browsing (sidebar → book →
+     chapter walk); the two filtering models are independent and must not be conflated.
+     No curated topic taxonomy exists — keyword match is the honest proxy, disclosed in UI. ── */
+  function topicChips() { return document.querySelectorAll('.topics-grid .topic-chip'); }
+  function topicKeys() {
+    return Array.prototype.map.call(topicChips(), function (c) { return c.getAttribute('data-topic'); });
+  }
+  function topicPill(key) { return document.querySelector('.topics-grid .topic-chip[data-topic="' + key + '"]'); }
+  function topicLabelText(key) { var p = topicPill(key); return p ? (p.textContent || '').trim() : key; }
+  function readTopicFromUrl() {
+    try { return new URLSearchParams(location.search).get('topic'); } catch (_) { return null; }
+  }
+  function pushTopicUrl(key) {
+    try { history.pushState({ topic: key || null }, '',
+      location.pathname + (key ? ('?topic=' + encodeURIComponent(key)) : '')); } catch (_) {}
+  }
+
+  function applyRadioState(activeKey) {
+    if (!topics) return;
+    var st = topics.radioState(topicKeys(), activeKey);
+    topicChips().forEach(function (c) {
+      var k = c.getAttribute('data-topic'), on = !!st.checked[k];
+      c.setAttribute('aria-checked', on ? 'true' : 'false');
+      c.classList.toggle('featured-topic', on);
+      c.setAttribute('tabindex', String(st.tabindex[k]));
+    });
+  }
+
+  function hideTopicStatus() { var s = $('#ii-topic-status'); if (s) { s.hidden = true; s.innerHTML = ''; } }
+  // opts: { key, label, count(number|null|undefined), loading?, error? }
+  function topicStatus(opts) {
+    var s = $('#ii-topic-status'); if (!s) return;
+    var label = II.t('hadith.topics.filteredBy', 'Filtered by {topic}', { topic: opts.label });
+    var count = '';
+    if (!opts.loading && !opts.error) {
+      var kind = topics.countKind(opts.count);
+      if (kind === 'one')  count = II.t('hadith.topics.countOne', '{n} hadith', { n: opts.count });
+      else if (kind === 'many') count = II.t('hadith.topics.countMany', '{n} hadiths', { n: opts.count });
+      else if (kind === 'more') count = II.t('hadith.topics.countMore', '25+ — scroll for more');
+      // kind === 'zero' → no count chip; the empty state carries the message
+    }
+    var note = II.t('hadith.topics.keywordNote', 'Matched by keyword across all collections');
+    var clear = II.t('hadith.topics.clear', 'Clear');
+    // Reveal the region BEFORE writing its content so the innerHTML mutation is announced
+    // by assistive tech (a live region populated while still hidden can be missed by VoiceOver).
+    s.hidden = false;
+    s.innerHTML =
+      '<span class="topic-status__label">' + esc(label) + '</span>' +
+      (count ? '<span class="topic-status__count">· ' + esc(count) + '</span>' : '') +
+      '<button type="button" class="topic-status__clear" id="ii-topic-clear">' + esc(clear) + '</button>' +
+      '<span class="topic-status__note">' + esc(note) + '</span>';
+    var btn = $('#ii-topic-clear');
+    if (btn) btn.addEventListener('click', function () { clearTopicFilter(true); });
+  }
+
+  function topicEmptyHTML() {
+    return '<div class="topic-empty" role="note">' +
+      '<p class="topic-empty__title">' + esc(II.t('hadith.topics.empty', 'No hadith found for this topic yet')) + '</p>' +
+      '<p class="topic-empty__hint">' + esc(II.t('hadith.topics.keywordNote', 'Matched by keyword across all collections')) + '</p>' +
+      '</div>';
+  }
+
+  // Runs the corpus search for a topic keyword and renders results / empty / error.
+  // lang is fixed 'en': topic keywords are English words matched against English text,
+  // regardless of the UI language.
+  async function runTopicFilter(key) {
+    var el = feedEl(); if (!el || !feed || !topics) return;
+    var kw = topics.topicSearchQuery(key);
+    if (!kw) { clearTopicFilter(false); return; }
+    var label = topicLabelText(key);
+    FEED.query = '';
+    setLoadMore('hide');
+    ui.renderLoadingState(el, 3);            // skeleton while the query is in flight
+    topicStatus({ key: key, label: label, loading: true });
+    var res; try { res = await api.fetchHadithSearch(kw, 'en', 1); } catch (_) { res = null; }
+    if (TOPIC.active !== key) return;        // selection changed mid-flight → drop stale response
+    if (!res || !res.ok || !res.data || !Array.isArray(res.data.results)) {
+      ui.renderErrorState(el, II.t('hadith.topics.error', 'Search temporarily unavailable — try again'),
+        function () { runTopicFilter(key); });
+      topicStatus({ key: key, label: label, error: true });
+      return;
+    }
+    var results = res.data.results;
+    FEED.byRef = {};
+    results.forEach(function (h) { var r = feed.refOf(h); if (r) FEED.byRef[r] = h; });
+    if (!results.length) {                   // genuine zero — NOT an error
+      TOPIC._lastCount = 0;
+      el.innerHTML = topicEmptyHTML();
+      topicStatus({ key: key, label: label, count: 0 });
+      return;
+    }
+    el.innerHTML = results.map(feed.buildCardHTML).join('');
+    markCardStates(el);
+    applyGradeFilter();
+    var total = (typeof res.data.total === 'number') ? res.data.total : null;
+    TOPIC._lastCount = total;
+    topicStatus({ key: key, label: label, count: total });
+  }
+
+  function scheduleTopicFilter(key, delay) {
+    if (_topicTimer) { clearTimeout(_topicTimer); _topicTimer = null; }
+    if (!delay) { runTopicFilter(key); return; }
+    _topicTimer = setTimeout(function () {
+      _topicTimer = null; if (TOPIC.active === key) runTopicFilter(key);
+    }, delay);
+  }
+
+  function selectTopic(key, push, delay) {
+    if (!topics || !topics.isTopicKey(key)) return;
+    if (push) pushTopicUrl(key);
+    TOPIC.active = key;
+    applyRadioState(key);
+    scheduleTopicFilter(key, delay || 0);
+  }
+
+  function clearTopicFilter(push) {
+    if (_topicTimer) { clearTimeout(_topicTimer); _topicTimer = null; }
+    if (push) pushTopicUrl(null);
+    TOPIC.active = null;
+    TOPIC._lastCount = null;
+    applyRadioState(null);
+    hideTopicStatus();
+    loadHadithFeed(false);                   // restore the neutral default feed
+  }
+
   function wireTopics() {
-    var chips = document.querySelectorAll('.topics-grid .topic-chip');
-    chips.forEach(function (chip) {
-      function act() {
+    var chips = topicChips();
+    applyRadioState(null);                    // no preselected default
+    chips.forEach(function (chip, idx) {
+      function activate() {
         var key = chip.getAttribute('data-topic');
-        if (key) routeTo({ collection: 'topics', book: key }, true);
+        if (!key) return;
+        if (TOPIC.active === key) clearTopicFilter(true);   // toggle the active pill → neutral
+        else selectTopic(key, true, 0);
       }
-      chip.addEventListener('click', act);
-      chip.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(); } });
+      chip.addEventListener('click', activate);
+      chip.addEventListener('keydown', function (e) {
+        var k = e.key;
+        if (k === 'Enter' || k === ' ' || k === 'Spacebar') { e.preventDefault(); activate(); return; }
+        var dir = (k === 'ArrowRight' || k === 'ArrowDown') ? 1
+                : (k === 'ArrowLeft'  || k === 'ArrowUp')   ? -1 : 0;
+        var jump = (k === 'Home') ? 'first' : (k === 'End') ? 'last' : null;
+        if (!dir && !jump) return;
+        e.preventDefault();
+        var n = chips.length;
+        var next = jump === 'first' ? 0 : jump === 'last' ? n - 1 : (idx + dir + n) % n;
+        var nextChip = chips[next], nextKey = nextChip.getAttribute('data-topic');
+        selectTopic(nextKey, true, 300);      // radiogroup: arrow moves+selects; debounce the fetch
+        nextChip.focus();
+      });
+    });
+    // Re-render the status line (dynamic {topic}/{n} strings) when the language changes.
+    document.addEventListener('ii:langchange', function () {
+      if (TOPIC.active) topicStatus({ key: TOPIC.active, label: topicLabelText(TOPIC.active), count: TOPIC._lastCount });
     });
   }
 
@@ -1533,12 +1692,16 @@
       FEED.filter = readGradeFromUrl(); wireGradeFilter(); wireLoadMore(); wireFeedActions();
       wireCardActions(); wireCompareDrawer(); wireTranslationTabs();
       var q0; try { q0 = new URLSearchParams(location.search).get('q'); } catch (_) { q0 = null; }
-      if (q0 && q0.trim()) {
+      var t0 = readTopicFromUrl();
+      if (q0 && q0.trim()) {                       // ?q= (hero search) wins over ?topic=
         var si = $('#hadith-search-input'); if (si) si.value = q0;
         runGlobalHadithSearch(q0);
+      } else if (t0 && topics && topics.isTopicKey(t0)) {   // deep-link ?topic=<key>
+        selectTopic(t0, false, 0);
       } else {
         loadHadithFeed(false);
       }
+      TOPIC.ready = true;
     }
   }
 
