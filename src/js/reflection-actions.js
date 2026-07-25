@@ -226,6 +226,8 @@
         '<button class="refl-native" type="button">Share</button>' +
         '<button class="refl-copy" type="button">Copy text</button>' +
         '<button class="refl-wa" type="button">WhatsApp</button>' +
+        '<button class="refl-fb" type="button">Facebook</button>' +
+        '<button class="refl-msgr" type="button">Messenger</button>' +
       '</div></div>';
     document.body.appendChild(modal);
     canvas = modal.querySelector('#reflShareCanvas');
@@ -243,7 +245,40 @@
     modal.querySelector('.refl-wa').addEventListener('click', function () {
       window.open(shareCore.waHref(core.buildShareText(shareState.model, SITE)), '_blank');
     });
+    modal.querySelector('.refl-fb').addEventListener('click', shareFacebook);
+    modal.querySelector('.refl-msgr').addEventListener('click', shareMessenger);
   }
+
+  // Facebook/Messenger can't carry the PNG or custom text through a share link — so we
+  // copy the text (already contains the site link) + download the PNG (attach-ready) +
+  // open the platform dialog with the link. Ordering matters: copy while the document
+  // still has focus, then open the window synchronously (an async gap first would let the
+  // popup blocker kill it), then run the async PNG download.
+  function isMobileUA() {
+    try {
+      var uad = navigator.userAgentData;
+      if (uad && typeof uad.mobile === 'boolean') return uad.mobile;
+      return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+    } catch (e) { return false; }
+  }
+  function copyShareText(text) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).catch(function () {}); return; }
+      var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(t);
+    } catch (e) {}
+  }
+  function shareToPlatform(href) {
+    if (!shareState.model) return;
+    var text = core.buildShareText(shareState.model, SITE);
+    copyShareText(text);                       // 1. copy (with link) while focused
+    window.open(href, '_blank', 'noopener');   // 2. open dialog in-gesture (no popup block)
+    downloadPNG();                             // 3. save attach-ready image (async)
+    toast('Image saved & text copied — attach the image in your post ✦');
+  }
+  function shareFacebook() { shareToPlatform(shareCore.fbSharerHref(SITE)); }
+  function shareMessenger() { shareToPlatform(shareCore.messengerHref(SITE, isMobileUA())); }
 
   function render() {
     if (!shareState.model) return;

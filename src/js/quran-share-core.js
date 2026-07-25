@@ -53,7 +53,23 @@
   function waHref(text) { return 'https://wa.me/?text=' + encodeURIComponent(String(text || '')); }
   function smsHref(text) { return 'sms:?&body=' + encodeURIComponent(String(text || '')); }
 
+  // Facebook/Messenger share endpoints carry a LINK only (no image, no custom text):
+  // Facebook scrapes its own preview from the linked page's Open Graph tags; Messenger's
+  // web Send dialog needs a registered App ID we don't have, so only the mobile app deep
+  // link is usable. The image + text are delivered by the caller (download PNG + copy text).
+  function fbSharerHref(url) {
+    return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(String(url || ''));
+  }
+  // mobile → open the Messenger app with the link; desktop → land on messenger.com (no
+  // pre-fill possible), where the user picks a chat/group and pastes the copied text.
+  function messengerHref(url, mobile) {
+    return mobile
+      ? 'fb-messenger://share?link=' + encodeURIComponent(String(url || ''))
+      : 'https://www.messenger.com/';
+  }
+
   return { dims: dims, slug: slug, slugFilename: slugFilename, stripQuotes: stripQuotes,
            editionFromAttr: editionFromAttr, wrapText: wrapText, TOKENS: TOKENS,
-           buildShareText: buildShareText, waHref: waHref, smsHref: smsHref };
+           buildShareText: buildShareText, waHref: waHref, smsHref: smsHref,
+           fbSharerHref: fbSharerHref, messengerHref: messengerHref };
 });
