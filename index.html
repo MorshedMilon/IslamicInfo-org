@@ -2247,10 +2247,18 @@ html {
     if (e.key === 'Escape') searchPopup.classList.remove('open');
   });
 
-  searchPopup.querySelector('.search-popup-btn').addEventListener('click', () => {
+  function runPopupSearch() {
     const q = searchInput.value.trim();
-    if (q) console.log('Search:', q); // hook your search logic here
+    if (!q) return;                              // empty → no-op
+    const target = (window.II && II.homeSearch)
+      ? II.homeSearch.dispatchTarget('hadith', q)
+      : { kind: 'navigate', url: 'hadith.html?q=' + encodeURIComponent(q) };
     searchPopup.classList.remove('open');
+    if (target.kind === 'navigate') window.location.assign(target.url);
+  }
+  searchPopup.querySelector('.search-popup-btn').addEventListener('click', runPopupSearch);
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); runPopupSearch(); }
   });
 
 </script>
