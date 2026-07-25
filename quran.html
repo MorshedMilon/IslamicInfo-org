@@ -14,7 +14,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -23,7 +23,7 @@
   --teal-800:#004E55;--teal-900:#0A3A3D;--teal-950:#062628;
   --gold-50:#FDF8EC;--gold-100:#F7E9C2;--gold-200:#EFD48A;--gold-300:#E5C570;
   --gold-400:#D9B358;--gold-500:#C5A059;--gold-700:#9A7C3F;
-  --ink-primary:#0F2A2C;--ink-body:#243738;--ink-muted:#6D797A;
+  --ink-primary:#0F2A2C;--ink-body:#111111;--ink-muted:#3A4A4B;
   --ink-subtle:#9DA8A9;--ink-faint:#BCC9C9;
   --surface:#F4F7F7;--surface-card:#FAFBFB;
   --elev-1:0 1px 3px rgba(15,42,44,.06);
@@ -32,9 +32,9 @@
   --elev-4:0 24px 56px rgba(0,105,110,.13),0 8px 18px rgba(0,105,110,.07);
   --gold-aura:0 0 0 1px rgba(197,160,89,.22),0 8px 32px rgba(197,160,89,.18);
   --font-display:'Cormorant Garamond',Georgia,serif;
-  --font-body:'Inter',-apple-system,sans-serif;
+  --font-body:'Libre Baskerville',Georgia,serif;--font-sans:'Libre Baskerville',Georgia,serif;
   --font-arabic:'Amiri','Cormorant Garamond',serif;
-  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --font-mono:'Shippori Mincho',ui-monospace,'SF Mono',monospace;
   --ease-reverent:cubic-bezier(.22,1,.36,1);
   --ease-premium:cubic-bezier(0.25,0.46,0.45,0.94);
   --r-sm:10px;--r-md:14px;--r-lg:18px;--r-xl:24px;
@@ -48,7 +48,7 @@
   --teal-50:rgba(0,105,110,.15);--teal-100:rgba(0,105,110,.25);
   --gold-50:rgba(197,160,89,.10);
 }
-html{font-family:var(--font-body);font-size:15px;line-height:1.65;background:var(--surface);color:var(--ink-body);scroll-behavior:smooth;transition:background .4s,color .4s;}
+html{font-family:var(--font-body);font-size:16.5px;line-height:1.65;background:var(--surface);color:var(--ink-body);scroll-behavior:smooth;transition:background .4s,color .4s;}
 body{background-color:var(--surface);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%2300696E' stroke-width='0.4' opacity='0.04'%3E%3Cpolygon points='60,6 72,32 100,32 78,50 86,76 60,60 34,76 42,50 20,32 48,32'/%3E%3Ccircle cx='60' cy='60' r='52'/%3E%3C/g%3E%3C/svg%3E");overflow-x:hidden;}
 a{text-decoration:none;color:inherit;}
 .ambient{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 60% at 15% 10%,rgba(0,105,110,.07),transparent 55%),radial-gradient(ellipse 60% 50% at 85% 15%,rgba(197,160,89,.06),transparent 50%);}
@@ -650,7 +650,7 @@ a{text-decoration:none;color:inherit;}
 .btn-cta-ghost{background:rgba(255,255,255,.10);color:rgba(255,255,255,.85);border:.5px solid rgba(255,255,255,.24);border-radius:28px;padding:14px 30px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font-body);transition:all .3s;display:inline-flex;align-items:center;gap:8px;}
 .btn-cta-ghost:hover{background:rgba(255,255,255,.18);transform:translateY(-2px) scale(1.04);}
 /* ══ GLOBAL FOOTER (CLAUDE.md §7) ══ */
-#ii-footer{background:#062628;color:rgba(255,255,255,.62);font-family:'Inter',sans-serif;}
+#ii-footer{background:#062628;color:rgba(255,255,255,.62);font-family:'Libre Baskerville',Georgia,serif;}
 .ft-top{padding:clamp(52px,7vw,80px) clamp(20px,5vw,64px) clamp(32px,4vw,48px);display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:clamp(24px,3vw,52px);border-bottom:.5px solid rgba(255,255,255,.07);}
 @media(max-width:1100px){.ft-top{grid-template-columns:1.4fr 1fr 1fr;}}
 @media(max-width:700px){.ft-top{grid-template-columns:1fr 1fr;}.ft-brand{grid-column:1/-1;}}
