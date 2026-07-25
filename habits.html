@@ -14,7 +14,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
 <style>
 
 /* ═══════════════════════════════════════════════════
@@ -28,7 +28,7 @@
   --gold-50:#FDF8EC;  --gold-100:#F7E9C2; --gold-200:#EFD48A;
   --gold-300:#E5C570; --gold-400:#D9B358; --gold-500:#C5A059;
   --gold-700:#9A7C3F; --gold-900:#5A4420;
-  --ink-primary:#0F2A2C; --ink-body:#243738; --ink-muted:#6D797A;
+  --ink-primary:#0F2A2C; --ink-body:#111111; --ink-muted:#3A4A4B;
   --ink-subtle:#9DA8A9; --ink-faint:#BCC9C9;
   --surface:#F4F7F7; --surface-card:#FAFBFB; --white:#FFFFFF;
   --elev-1:0 1px 3px rgba(15,42,44,.06);
@@ -38,7 +38,7 @@
   --inner-light:inset 0 1px 0 rgba(255,255,255,.7);
   --gold-aura:0 0 0 1px rgba(197,160,89,.22),0 8px 32px rgba(197,160,89,.18);
   --font-display:'Cormorant Garamond',Georgia,serif;
-  --font-body:'Inter',-apple-system,sans-serif;
+  --font-body:'Libre Baskerville',Georgia,serif;--font-sans:'Libre Baskerville',Georgia,serif;--font-mono:'Shippori Mincho',ui-monospace,'SF Mono',monospace;
   --font-arabic:'Amiri','Cormorant Garamond',serif;
   --ease-reverent:cubic-bezier(.22,1,.36,1);
   --ease-premium:cubic-bezier(.25,.46,.45,.94);
@@ -52,7 +52,7 @@
   --ink5:#9DA8A9; --ink6:#BCC9C9;
   --surf:#F4F7F7; --card:#FAFBFB;
   --font-serif:'Cormorant Garamond',Georgia,serif;
-  --font-sans:'Inter',-apple-system,sans-serif;
+  
   --e2:var(--elev-2); --e3:var(--elev-3); --e4:var(--elev-4);
   --r-lg:18px;
 }
@@ -73,7 +73,7 @@
    §3 — BASE
 ═══════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-family:var(--font-body);font-size:15px;line-height:1.65;
+html{font-family:var(--font-body);font-size:16.5px;line-height:1.65;
   background:var(--surface);color:var(--ink-body);scroll-behavior:smooth;
   transition:background .4s ease,color .4s ease;}
 body{background-color:var(--surface);
@@ -527,7 +527,7 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
 /* ═══════════════════════════════════════════════════
    FOOTER (CLAUDE.md §7 exact)
 ═══════════════════════════════════════════════════ */
-#ii-footer{background:#062628;color:rgba(255,255,255,.62);font-family:'Inter',sans-serif;}
+#ii-footer{background:#062628;color:rgba(255,255,255,.62);font-family:'Libre Baskerville',Georgia,serif;}
 .ii-footer-top{padding:clamp(52px,7vw,80px) clamp(20px,5vw,64px) clamp(32px,4vw,48px);
   display:grid;grid-template-columns:1.9fr 1fr 1fr 0.7fr 0.7fr;
   gap:clamp(24px,3vw,52px);border-bottom:0.5px solid rgba(255,255,255,.07);}
@@ -689,7 +689,7 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--teal-700),var(--teal-
   inset 0 0 30px rgba(197,160,89,.12) !important;}
 
 /* ═══ GLOBAL FOOTER CSS (CLAUDE.md §7.1 verbatim) ═══ */
-#ii-footer{background:#062628;color:rgba(255,255,255,.62);font-family:'Inter',sans-serif;}
+#ii-footer{background:#062628;color:rgba(255,255,255,.62);font-family:'Libre Baskerville',Georgia,serif;}
 .ft-top{padding:clamp(52px,7vw,80px) clamp(20px,5vw,64px) clamp(32px,4vw,48px);display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:clamp(24px,3vw,52px);border-bottom:0.5px solid rgba(255,255,255,.07);}
 @media(max-width:1100px){.ft-top{grid-template-columns:1.4fr 1fr 1fr;}}
 @media(max-width:700px){.ft-top{grid-template-columns:1fr 1fr;}.ft-brand{grid-column:1/-1;}}

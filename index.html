@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 
@@ -49,8 +49,8 @@
   --gold-900: #5A4420;
 
   --ink-primary: #0F2A2C;
-  --ink-body:    #243738;
-  --ink-muted:   #6D797A;
+  --ink-body:#111111;
+  --ink-muted:#3A4A4B;
   --ink-subtle:  #9DA8A9;
   --ink-faint:   #BCC9C9;
   --ink-100:     #F5F8F8;
@@ -73,10 +73,10 @@
   --grade-mawdu: #B33A3A;
 
   --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'Inter', -apple-system, sans-serif;
+  --font-body:'Libre Baskerville',Georgia,serif;--font-sans:'Libre Baskerville',Georgia,serif;
   --font-arabic:  'Amiri', 'Cormorant Garamond', serif;
   --font-serif:   'Cormorant Garamond', Georgia, serif;
-  --font-mono:    ui-monospace, 'SF Mono', monospace;
+  --font-mono:'Shippori Mincho',ui-monospace,'SF Mono',monospace;
 
   --ease-reverent: cubic-bezier(.22,1,.36,1);
   --ease: cubic-bezier(.22,1,.36,1);
@@ -111,8 +111,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html {
   font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.65;
+  font-size:16.5px;line-height:1.65;
   background: var(--surface);
   color: var(--ink-body);
   scroll-behavior: smooth;
@@ -557,9 +556,9 @@ img { max-width: 100%; }
 .gold-it { font-style:italic; background:linear-gradient(90deg,#E2C896,#C5A059); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
 .cta-sub { font-size:16px; color:rgba(255,255,255,.58); line-height:1.72; max-width:480px; margin:0 auto 36px; position:relative; z-index:1; }
 .cta-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
-.btn-gold { background:#C5A059; color:white; border:none; border-radius:28px; padding:14px 30px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 20px rgba(197,160,89,.38); text-decoration:none; transition:all .25s var(--ease-premium); }
+.btn-gold { background:#C5A059; color:white; border:none; border-radius:28px; padding:14px 30px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Libre Baskerville',Georgia,serif; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 20px rgba(197,160,89,.38); text-decoration:none; transition:all .25s var(--ease-premium); }
 .btn-gold:hover { background:#b8953f; transform:translateY(-2px) scale(1.04); box-shadow:0 8px 32px rgba(197,160,89,.5); }
-.btn-white-ghost { background:rgba(255,255,255,.10); color:rgba(255,255,255,.85); border:0.5px solid rgba(255,255,255,.24); border-radius:28px; padding:14px 30px; font-size:14px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; display:inline-flex; align-items:center; gap:8px; text-decoration:none; transition:all .25s var(--ease-premium); }
+.btn-white-ghost { background:rgba(255,255,255,.10); color:rgba(255,255,255,.85); border:0.5px solid rgba(255,255,255,.24); border-radius:28px; padding:14px 30px; font-size:14px; font-weight:500; cursor:pointer; font-family:'Libre Baskerville',Georgia,serif; display:inline-flex; align-items:center; gap:8px; text-decoration:none; transition:all .25s var(--ease-premium); }
 .btn-white-ghost:hover { background:rgba(255,255,255,.18); border-color:rgba(255,255,255,.45); transform:translateY(-2px) scale(1.04); }
 
 /* ============ ABOUT SECTION ============ */
@@ -708,7 +707,7 @@ img { max-width: 100%; }
 #ii-footer {
   background: #062628;
   color: rgba(255,255,255,.62);
-  font-family: 'Inter', sans-serif;
+  font-family:'Libre Baskerville',Georgia,serif;
 }
 .ii-footer-top {
   padding: clamp(52px,7vw,80px) clamp(20px,5vw,64px) clamp(32px,4vw,48px);
@@ -745,7 +744,7 @@ img { max-width: 100%; }
   background: linear-gradient(135deg, #00696E, #2CA4AB);
   color: white; border: none; border-radius: 28px;
   padding: 12px 26px; font-size: 13.5px; font-weight: 600;
-  font-family: 'Inter', sans-serif; cursor: pointer; text-decoration: none;
+  font-family:'Libre Baskerville',Georgia,serif; cursor: pointer; text-decoration: none;
   transition: all .3s cubic-bezier(0.25,0.46,0.45,0.94);
   box-shadow: 0 4px 18px rgba(0,105,110,.35);
 }

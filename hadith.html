@@ -18,8 +18,8 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript></noscript>
 <style>
 /* ════════════════════════════════════════════════════════════════
    ISLAMICINFO — DESIGN SYSTEM TOKENS (CLAUDE.md §1)
@@ -35,7 +35,7 @@
   --gold-50:  #FDF8EC; --gold-100: #F7E9C2; --gold-200: #EFD48A;
   --gold-300: #E5C570; --gold-400: #D9B358; --gold-500: #C5A059;
   --gold-700: #9A7C3F; --gold-900: #5A4420;
-  --ink-primary: #0F2A2C; --ink-body: #243738; --ink-muted: #6D797A;
+  --ink-primary: #0F2A2C; --ink-body:#111111; --ink-muted:#3A4A4B;
   --ink-subtle: #9DA8A9; --ink-faint: #BCC9C9;
   --ink-100: #F5F8F8; --ink-900: #0A1314;
   --surface: #F4F7F7; --surface-card: #FAFBFB; --white: #FFFFFF;
@@ -49,10 +49,10 @@
   --grade-sahih: #0F6E56; --grade-hasan: #4A7030;
   --grade-daif: #8A5228; --grade-mawdu: #B33A3A;
   --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-body:'Libre Baskerville',Georgia,serif;--font-sans:'Libre Baskerville',Georgia,serif;
   --font-arabic: 'Amiri', 'Cormorant Garamond', serif;
   --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-mono:'Shippori Mincho',ui-monospace,'SF Mono',monospace;
   --ease-reverent: cubic-bezier(.22,1,.36,1);
   --ease: cubic-bezier(.22,1,.36,1);
   --ease-premium: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -71,7 +71,7 @@
 }
 
 html {
-  font-family: var(--font-body); font-size: 15px; line-height: 1.65;
+  font-family: var(--font-body); font-size:16.5px;line-height:1.65;
   background: var(--surface-canvas); color: var(--ink-body);
   scroll-behavior: smooth; transition: background .4s ease, color .4s ease;
 }
@@ -1030,7 +1030,7 @@ html[data-theme="light"].reading-mode-hadith body { background-image: none; }
 .btn-cta-ghost:hover { background:rgba(255,255,255,.18); border-color:rgba(255,255,255,.45); transform:translateY(-2px) scale(1.04); box-shadow:0 6px 20px rgba(255,255,255,.08); }
 
 /* ═══ GLOBAL FOOTER (CLAUDE.md §7.1) ═══ */
-#ii-footer{background:#062628;color:rgba(255,255,255,.62);font-family:'Inter',sans-serif;}
+#ii-footer{background:#062628;color:rgba(255,255,255,.62);font-family:'Libre Baskerville',Georgia,serif;}
 .ft-top{padding:clamp(52px,7vw,80px) clamp(20px,5vw,64px) clamp(32px,4vw,48px);display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:clamp(24px,3vw,52px);border-bottom:0.5px solid rgba(255,255,255,.07);}
 @media(max-width:1100px){.ft-top{grid-template-columns:1.4fr 1fr 1fr;}}
 @media(max-width:700px){.ft-top{grid-template-columns:1fr 1fr;}.ft-brand{grid-column:1/-1;}}
