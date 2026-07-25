@@ -167,6 +167,9 @@
     r2.addColorStop(0, T.glowGold); r2.addColorStop(1, T.glowGold0); ctx.fillStyle = r2; ctx.fillRect(0, 0, W, H);
 
     ctx.textAlign = 'center'; ctx.direction = 'ltr';
+    // brand wordmark (top): bold + bright so the domain is seen first, not skipped at the bottom
+    ctx.fillStyle = T.white95; ctx.font = '700 ' + Math.round(W * 0.031) + 'px ' + T.fontDisplay;
+    ctx.fillText('I S L A M I C I N F O . O R G', cx, H * 0.072);
     // header: TODAY'S REFLECTION · date
     ctx.fillStyle = T.white40; ctx.font = '600 ' + Math.round(W * 0.023) + 'px ' + T.fontMono;
     ctx.fillText(('TODAY’S REFLECTION' + (m.dateStr ? '  ·  ' + m.dateStr : '')).toUpperCase(), cx, H * 0.115);
@@ -200,14 +203,12 @@
     var refLine = m.ref + (m.grade ? '  ·  ' + String(m.grade).replace(/^✓\s*/, '') : '');
     ctx.fillStyle = T.white80; ctx.font = Math.round(W * 0.024) + 'px ' + T.fontMono;
     ctx.fillText(refLine, cx, H * 0.86);
-    // wordmark (bottom)
-    ctx.fillStyle = T.white40; ctx.font = '600 ' + Math.round(W * 0.026) + 'px ' + T.fontDisplay;
-    ctx.fillText('I S L A M I C I N F O . O R G', cx, H * 0.925);
+    // (wordmark moved to the top — see brand wordmark above)
   }
 
   function ensureFonts() {
     if (!document.fonts || !document.fonts.load) return Promise.resolve();
-    var fams = ['20px Amiri', 'italic 20px "Cormorant Garamond"', '600 20px "Cormorant Garamond"', '20px "JetBrains Mono"'];
+    var fams = ['20px Amiri', 'italic 20px "Cormorant Garamond"', '600 20px "Cormorant Garamond"', '700 20px "Cormorant Garamond"', '20px "JetBrains Mono"'];
     return Promise.all(fams.map(function (f) { try { return document.fonts.load(f); } catch (_) { return Promise.resolve(); } })).catch(function () {});
   }
 
