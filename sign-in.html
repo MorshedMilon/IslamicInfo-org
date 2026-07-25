@@ -328,7 +328,7 @@
       var params=new URLSearchParams(location.search);
       var strip=document.getElementById('verifyStrip'), msg=document.getElementById('verifyMsg');
       function showStrip(html,ok){ msg.innerHTML=html; strip.classList.add('show'); if(ok) strip.classList.add('ok'); }
-      if(params.get('check'))    showStrip('<b>Check your inbox.</b> We sent a verification link — confirm it before saving trips.',false);
+      if(params.get('check'))    showStrip('<b>Check your inbox.</b> We sent a verification link — confirm it before signing in.',false);
       else if(params.get('verified')) showStrip('<b>Email verified.</b> Sign in to continue.',true);
       else if(params.get('reset'))    showStrip('<b>Password updated.</b> Sign in with your new password.',true);
 
