@@ -42,3 +42,17 @@ test('waHref / smsHref encode the text', () => {
   assert.equal(core.waHref('a b\nc'), 'https://wa.me/?text=a%20b%0Ac');
   assert.equal(core.smsHref('a b\nc'), 'sms:?&body=a%20b%0Ac');
 });
+test('fbSharerHref points to the sharer with an encoded url', () => {
+  assert.equal(core.fbSharerHref('https://islamicinfo.org'),
+    'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fislamicinfo.org');
+  assert.equal(core.fbSharerHref('https://x/?a=1&b=2'),
+    'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fx%2F%3Fa%3D1%26b%3D2');
+  assert.equal(core.fbSharerHref(), 'https://www.facebook.com/sharer/sharer.php?u=');
+});
+test('messengerHref: mobile deep link vs desktop landing', () => {
+  assert.equal(core.messengerHref('https://islamicinfo.org', true),
+    'fb-messenger://share?link=https%3A%2F%2Fislamicinfo.org');
+  assert.equal(core.messengerHref('https://islamicinfo.org', false), 'https://www.messenger.com/');
+  assert.equal(core.messengerHref('https://islamicinfo.org'), 'https://www.messenger.com/'); // default desktop
+  assert.equal(core.messengerHref('', true), 'fb-messenger://share?link=');
+});
