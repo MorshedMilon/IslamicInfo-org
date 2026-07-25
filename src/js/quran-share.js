@@ -34,6 +34,29 @@
     if ($('shareModal')) $('shareModal').classList.add('open');
   };
 
+  // Mixed-case, two-tone brand wordmark centered at (W/2, y). Mixed case + no letter-spacing
+  // keeps the word silhouette readable; the colour break falls on the word break (Islamic|Info).
+  function drawWordmark(ctx, W, y) {
+    var segs = [
+      { t: 'Islamic', c: T.white95 },
+      { t: 'Info',    c: T.gold },
+      { t: '.org',    c: T.white80 }
+    ];
+    ctx.font = '700 ' + Math.round(W * 0.033) + 'px ' + T.fontDisplay;
+    ctx.direction = 'ltr';
+    var total = 0, i;
+    for (i = 0; i < segs.length; i++) total += ctx.measureText(segs[i].t).width;
+    var prevAlign = ctx.textAlign;
+    ctx.textAlign = 'left';
+    var x = W / 2 - total / 2;
+    for (i = 0; i < segs.length; i++) {
+      ctx.fillStyle = segs[i].c;
+      ctx.fillText(segs[i].t, x, y);
+      x += ctx.measureText(segs[i].t).width;
+    }
+    ctx.textAlign = prevAlign;
+  }
+
   // ---- canvas draw (recording-stub testable) ----
   function drawShareCard(ctx, m, d) {
     var W = d.w, H = d.h, cx = W / 2, pad = W * 0.11, maxW = W - pad * 2;
@@ -50,10 +73,8 @@
 
     ctx.textAlign = 'center';
 
-    // brand wordmark (top): bold + bright so the domain is seen first
-    ctx.direction = 'ltr'; ctx.fillStyle = T.white95;
-    ctx.font = '700 ' + Math.round(W * 0.031) + 'px ' + T.fontDisplay;
-    ctx.fillText('I S L A M I C I N F O . O R G', cx, H * 0.11);
+    // brand wordmark (top): seen first
+    drawWordmark(ctx, W, H * 0.11);
 
     var arSize = Math.round(W * 0.062), arLH = arSize * 1.9;
     var enSize = Math.round(W * 0.038), enLH = enSize * 1.65;
