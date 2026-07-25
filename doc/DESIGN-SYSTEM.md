@@ -58,10 +58,10 @@ Every page begins with `<html lang="en" data-theme="light">` and this exact `:ro
   --gold-700: #9A7C3F;
   --gold-900: #5A4420;
 
-  /* ── Ink (text) ── */
+  /* ── Ink (text) ── light values updated 2026-07-25 (owner-authorized override) ── */
   --ink-primary: #0F2A2C;
-  --ink-body:    #243738;
-  --ink-muted:   #6D797A;
+  --ink-body:    #111111;   /* was #243738 → near-black for stronger body contrast (≈17-19:1) */
+  --ink-muted:   #3A4A4B;   /* was #6D797A → darker so nav/labels/captions read clearly */
   --ink-subtle:  #9DA8A9;
   --ink-faint:   #BCC9C9;
   --ink-100:     #F5F8F8;
@@ -88,12 +88,17 @@ Every page begins with `<html lang="en" data-theme="light">` and this exact `:ro
   /* Dark-theme grade overrides — REQUIRED on any page that renders a grade badge; add inside
      [data-theme="dark"]:  --grade-sahih:#1FA882; --grade-hasan:#7AB84E; --grade-daif:#D4884A; --grade-mawdu:#E05555; */
 
-  /* ── Typography ── */
+  /* ── Typography ── three-font system, updated 2026-07-25 (owner-authorized override).
+     Roles: serif=headings/titles/wordmark/em; sans=body/nav/buttons/labels/inputs/tables
+     (base 16.5px / 400); mono=numbers & machine text (KPIs, counts, timestamps, pills,
+     chips, code). Note: --font-sans and --font-mono are role labels — both are serifs;
+     Shippori Mincho is not monospaced (add font-variant-numeric:tabular-nums for columns). */
   --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'Inter', -apple-system, sans-serif;
-  --font-arabic:  'Amiri', 'Cormorant Garamond', serif;
   --font-serif:   'Cormorant Garamond', Georgia, serif;
-  --font-mono:    ui-monospace, 'SF Mono', monospace;
+  --font-body:    'Libre Baskerville', Georgia, serif;   /* was 'Inter' */
+  --font-sans:    'Libre Baskerville', Georgia, serif;   /* body/UI role */
+  --font-arabic:  'Amiri', 'Cormorant Garamond', serif;  /* Arabic script — unchanged */
+  --font-mono:    'Shippori Mincho', ui-monospace, 'SF Mono', monospace;  /* was ui-monospace */
 
   /* ── Easing ── PREMIUM CURVE for all hovers/transitions */
   --ease-reverent: cubic-bezier(.22,1,.36,1);
@@ -143,7 +148,7 @@ Every page follows this skeleton exactly:
   <title>{Page Title} — IslamicInfo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=Amiri&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     /* :root + dark mode block from Section 1 */
     /* base reset + body background pattern (Section 3) */
@@ -178,7 +183,7 @@ Every page follows this skeleton exactly:
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 16.5px;   /* updated 2026-07-25 (was 15px) */
   line-height: 1.65;
   background: var(--surface);
   color: var(--ink-body);

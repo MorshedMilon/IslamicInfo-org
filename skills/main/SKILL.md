@@ -31,6 +31,8 @@ This skill gives Claude the complete IslamicInfo brand, design system, and platf
 - Disclaimer text is hard-coded — never replaced by API output
 - `hello@islamicinfo.org` must reach a monitored inbox
 - Design system is **locked** — no new colors, no new fonts, no raw hex inline
+  (exception: 2026-07-25 owner-authorized override — light body ink → #111111 and the
+  three-font system Cormorant / Libre Baskerville / Shippori Mincho; see Typography below)
 
 ---
 
@@ -69,7 +71,7 @@ This nav is identical across all 10 pages. Never reorder. Never omit.
 ## 3. Global Header — Identical on Every Page
 
 ```
-[Logo] | [10 nav links, 12.5px Inter] | [Search] [EN] [Theme] [Admin] [Hamburger≤760px]
+[Logo] | [10 nav links, 12.5px Libre Baskerville] | [Search] [EN] [Theme] [Admin] [Hamburger≤760px]
 ```
 
 - Height: `60px`. `position:sticky; top:0; z-index:100`
@@ -116,26 +118,30 @@ Never use raw hex inline. Always use these tokens. Dark mode is a **sibling** `[
 --grade-daif:  #A86932  /* content pages only */
 --grade-mawdu: #B33A3A  /* content pages only */
 
---ink-primary: #0F2A2C  --ink-muted:  #6D797A
---ink-subtle:  #9DA8A9  --ink-faint:  #C4CCCC
+--ink-primary: #0F2A2C  --ink-body:   #111111   /* light body text (was #243738), 2026-07-25 */
+--ink-muted:   #3A4A4B  /* was #6D797A */        --ink-subtle:  #9DA8A9  --ink-faint:  #C4CCCC
 
 --white:        #FFFFFF   --surface-card: #FAFBFB
 --surface-alt:  #F3F5F5
 ```
 
-### Typography
+### Typography  (three-font system — updated 2026-07-25, owner-authorized override)
 ```css
---font-display: 'Cormorant Garamond'  /* H1, stats, logo */
---font-body:    'Inter'               /* nav, buttons, labels, UI */
---font-arabic:  'Amiri'              /* ALL Arabic text */
---font-serif:   'Cormorant Garamond' /* prose, summaries, translations */
+--font-serif:   'Cormorant Garamond' /* H1-H3, titles, .r-title, .oc-topic, wordmark, em accents */
+--font-display: 'Cormorant Garamond' /* alias of serif — H1, stats, logo */
+--font-sans:    'Libre Baskerville'  /* body, nav, buttons, labels, inputs, tables — base 16.5px/400 */
+--font-body:    'Libre Baskerville'  /* alias of sans (was 'Inter') */
+--font-mono:    'Shippori Mincho'    /* numbers & machine text: KPIs, counts, timestamps, pills, code */
+--font-arabic:  'Amiri'              /* ALL Arabic text — unchanged */
 ```
+Note: `--font-sans`/`--font-mono` are role labels; both are serifs. Shippori Mincho is not
+monospaced — add `font-variant-numeric: tabular-nums` where numeric columns must align.
 
 **Font import (required, this exact order):**
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 ```
 
 ### Easing
@@ -521,7 +527,7 @@ If any of these appear in code or content, they are bugs. No exceptions.
 | AI-issued ruling in Verify or any AI panel | Hard editorial constraint |
 | Replacing the disclaimer with API output | Disclaimer is always hard-coded HTML |
 | `href="about.html"` for methodology link | Must be `about.html#methodology` |
-| New font families | 3 fonts only: Cormorant Garamond, Inter, Amiri |
+| New font families | Only these families: Cormorant Garamond, Libre Baskerville, Shippori Mincho, Amiri |
 | `contact.html` before it's built | 404 risk — use `mailto:` until page exists |
 
 ---
@@ -531,7 +537,7 @@ If any of these appear in code or content, they are bugs. No exceptions.
 Run before writing any code:
 
 - [ ] CLAUDE.md v3.0 tokens imported — no modifications
-- [ ] Three fonts preconnected and loaded in exact order
+- [ ] Fonts preconnected and loaded in exact order (Cormorant, Libre Baskerville, Shippori Mincho, Amiri)
 - [ ] `applyTheme()` runs inline in `<head>` before first paint
 - [ ] `[data-theme="dark"]` is a sibling to `:root` — never merged
 - [ ] 10 nav links in exact order; correct page has `.active`
