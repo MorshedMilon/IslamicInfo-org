@@ -29,6 +29,7 @@
   --teal-500:#2CA4AB;--teal-400:#3FBFC7;--teal-300:#6AD7DE;--teal-100:#C8EEF1;--teal-50:#F0FAFB;
   --gold-700:#9A7C3F;--gold-500:#C5A059;--gold-400:#D9B358;--gold-300:#E5C570;--gold-200:#EFD48A;
   --ink-primary:#0F2A2C;--ink-body:#111111;--ink-muted:#3A4A4B;--ink-subtle:#9DA8A9;--ink-faint:#BCC9C9;
+  --font-mono:'Shippori Mincho',ui-monospace,'SF Mono',monospace;
   --surface:#F4F7F7;--surface-card:#FAFBFB;--white:#FFFFFF;
   --e1:0 1px 3px rgba(15,42,44,.06);
   --e2:0 4px 14px rgba(15,42,44,.08),0 1px 3px rgba(15,42,44,.04);
@@ -273,7 +274,7 @@ a{text-decoration:none;color:inherit;}
 .lesson-item:last-child{border-bottom:none;}
 .lesson-item:hover{background:rgba(0,105,110,.04);padding-left:16px;}
 .lesson-item.current:hover{background:rgba(0,105,110,.08);}
-.lesson-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.lesson-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;font-family:var(--font-mono);}
 .ln-done{background:var(--teal-700);color:white;}
 .ln-current{background:rgba(0,105,110,.12);color:var(--teal-700);border:1.5px dashed var(--teal-700);}
 .ln-next{background:rgba(0,105,110,.06);color:var(--ink-muted);border:0.5px solid rgba(0,105,110,.2);}
@@ -318,7 +319,7 @@ a{text-decoration:none;color:inherit;}
 .quiz-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(197,160,89,.5);}
 .quiz-stats{display:flex;flex-direction:column;gap:10px;flex-shrink:0;}
 .qs-item{text-align:center;background:rgba(255,255,255,.07);border:0.5px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 20px;}
-.qs-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:#E5C893;line-height:1;}
+.qs-num{font-family:var(--font-mono);font-size:28px;font-weight:600;color:#E5C893;line-height:1;font-variant-numeric:tabular-nums;}
 .qs-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-top:4px;}
 
 /* ══════════════════════════════════════════
@@ -342,7 +343,7 @@ a{text-decoration:none;color:inherit;}
 .hc-pill-body{}
 .hc-pill-name{font-size:12.5px;font-weight:600;color:var(--ink-primary);margin-bottom:1px;}
 [data-theme="dark"] .hc-pill-name{color:#F5F8F8;}
-.hc-pill-count{font-size:10.5px;color:var(--teal-700);}
+.hc-pill-count{font-size:10.5px;color:var(--teal-700);font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
 [data-theme="dark"] .hc-pill-count{color:var(--teal-300);}
 @media(max-width:560px){.handoff-clusters{grid-template-columns:1fr;}}
 
