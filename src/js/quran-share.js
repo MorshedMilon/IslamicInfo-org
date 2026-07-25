@@ -50,10 +50,10 @@
 
     ctx.textAlign = 'center';
 
-    // logo (top)
-    ctx.direction = 'ltr'; ctx.fillStyle = T.white40;
-    ctx.font = '600 ' + Math.round(W * 0.026) + 'px ' + T.fontDisplay;
-    ctx.fillText('I S L A M I C I N F O . O R G', cx, H * 0.15);
+    // brand wordmark (top): bold + bright so the domain is seen first
+    ctx.direction = 'ltr'; ctx.fillStyle = T.white95;
+    ctx.font = '700 ' + Math.round(W * 0.031) + 'px ' + T.fontDisplay;
+    ctx.fillText('I S L A M I C I N F O . O R G', cx, H * 0.11);
 
     var arSize = Math.round(W * 0.062), arLH = arSize * 1.9;
     var enSize = Math.round(W * 0.038), enLH = enSize * 1.65;
@@ -88,7 +88,7 @@
 
   function ensureFonts() {
     if (!document.fonts || !document.fonts.load) return Promise.resolve();
-    var fams = ['20px Amiri', 'italic 20px "Cormorant Garamond"', '600 20px "Cormorant Garamond"', '20px "JetBrains Mono"'];
+    var fams = ['20px Amiri', 'italic 20px "Cormorant Garamond"', '600 20px "Cormorant Garamond"', '700 20px "Cormorant Garamond"', '20px "JetBrains Mono"'];
     return Promise.all(fams.map(function (f) { try { return document.fonts.load(f); } catch (_) { return Promise.resolve(); } })).catch(function () {});
   }
 
