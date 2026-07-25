@@ -38,6 +38,24 @@ function initHeaderScroll() {
 
 
 /* ─────────────────────────────────────────────────────────────────
+   initAccountLink()
+   Routes the header person/account button to the sign-in page.
+   Each page's header button carries data-account; there is no
+   session system yet, so it always goes to sign-in.html.
+   ───────────────────────────────────────────────────────────────── */
+
+function initAccountLink() {
+  var btns = document.querySelectorAll('[data-account]');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].style.cursor = 'pointer';
+    btns[i].addEventListener('click', function () {
+      window.location.assign('sign-in.html');
+    });
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
    openMM() / closeMM()
    Mobile menu overlay toggle. Must stay on window because the
    hamburger and close button call them via onclick="openMM()".
@@ -149,6 +167,7 @@ function loadAnalytics() {
 
 (function boot() {
   initHeaderScroll();
+  initAccountLink();
   initReveal();
   loadAnalytics();
 })();
