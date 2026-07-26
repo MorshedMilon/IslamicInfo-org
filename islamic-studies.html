@@ -76,6 +76,17 @@ a{text-decoration:none;color:inherit;}
 .nav-link.active{color:var(--teal-700);font-weight:500;}
 .nav-link.active::after{content:'';position:absolute;bottom:-1px;left:6px;right:6px;height:2px;background:linear-gradient(90deg,var(--teal-700),var(--gold-500));border-radius:2px;}
 .header-tools{display:flex;gap:6px;align-items:center;margin-left:auto;flex-shrink:0;}
+/* Search popup (added for header consistency with the rest of the site) */
+.search-popup-wrapper{position:relative;}
+.search-popup{position:absolute;top:44px;right:0;width:340px;z-index:200;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:12px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.search-popup.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .search-popup{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.search-popup input{width:100%;border:1px solid rgba(0,105,110,.2);outline:none;background:transparent;font:inherit;font-size:14px;color:var(--ink-primary);padding:10px 14px;border-radius:10px;transition:border-color .2s,box-shadow .2s;}
+.search-popup input:focus{border-color:var(--teal-500);box-shadow:0 0 0 4px rgba(44,164,171,.15);}
+.search-popup input::placeholder{color:var(--ink-subtle);}
+.search-popup-btn{display:flex;align-items:center;justify-content:center;margin-top:8px;width:100%;padding:10px;background:linear-gradient(135deg,var(--teal-600),var(--teal-500));color:white;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;gap:6px;font-family:var(--font-body);transition:all .25s var(--ease-premium);}
+.search-popup-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,105,110,.35);}
+[dir="rtl"] .search-popup{right:auto;left:0;}
 .icon-btn{width:34px;height:34px;border-radius:50%;border:none;background:transparent;cursor:pointer;color:var(--ink-muted);display:flex;align-items:center;justify-content:center;transition:all .25s var(--ease-p);}
 .icon-btn:hover{background:rgba(0,105,110,.08);color:var(--teal-700);transform:scale(1.08);box-shadow:0 0 12px rgba(0,105,110,.2);}
 [data-theme="dark"] .icon-btn{color:#6E7E80;}
@@ -501,9 +512,17 @@ a{text-decoration:none;color:inherit;}
       <a class="nav-link" href="about.html" data-i18n="chrome.nav.about">About</a>
     </nav>
     <div class="header-tools">
-      <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme" style="border:none;">
-        <svg id="themeIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-      </button>
+      <div class="search-popup-wrapper">
+        <button class="icon-btn search-trigger" aria-label="Search" id="searchTrigger">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+        <div class="search-popup" id="searchPopup" role="search">
+          <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput" data-i18n-attr="placeholder:chrome.search.placeholder;aria-label:chrome.search.inputAria"/>
+          <button class="search-popup-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span data-i18n="chrome.search.button">Search</span>
+          </button>
+        </div>
+      </div>
       <div class="lang-wrapper">
         <button class="lang-trigger" id="langBtn" aria-label="Select language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -512,6 +531,9 @@ a{text-decoration:none;color:inherit;}
         </button>
         <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
       </div>
+      <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme" style="border:none;">
+        <svg id="themeIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
       <button class="icon-btn" title="Sign in" aria-label="Sign in" data-account style="border:none;cursor:pointer;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
       <button class="hamburger" onclick="openMM()" style="border:0.5px solid rgba(0,105,110,.2);background:transparent;cursor:pointer;"><span></span><span></span><span></span></button>
     </div>
@@ -1054,6 +1076,24 @@ const hdr=document.getElementById('siteHeader');
 window.addEventListener('scroll',()=>hdr.classList.toggle('scrolled',window.scrollY>16),{passive:true});
 
 /* Mobile menu open/close + dismissal shared via global.js (window.openMM/closeMM). */
+
+/* Search popup — consistent with other pages; routes to the site search page */
+(function(){
+  var sTrigger=document.getElementById('searchTrigger');
+  var sPopup=document.getElementById('searchPopup');
+  var sInput=document.getElementById('searchPopupInput');
+  if(!sTrigger||!sPopup||!sInput) return;
+  function runSearch(){
+    sPopup.classList.remove('open');
+    var q=sInput.value.trim();
+    if(q) window.location.href='search-results.html?q='+encodeURIComponent(q);
+  }
+  sTrigger.addEventListener('click',function(e){e.stopPropagation();var o=sPopup.classList.toggle('open');if(o)setTimeout(function(){sInput.focus();},50);});
+  document.addEventListener('click',function(e){if(!sPopup.contains(e.target)&&!sTrigger.contains(e.target))sPopup.classList.remove('open');});
+  sPopup.addEventListener('keydown',function(e){if(e.key==='Escape')sPopup.classList.remove('open');});
+  sPopup.querySelector('.search-popup-btn').addEventListener('click',runSearch);
+  sInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();runSearch();}});
+})();
 
 /* Reveal */
 const ro=new IntersectionObserver(entries=>{
