@@ -7,22 +7,39 @@
 (function (root) {
   'use strict';
 
+  // Shared scope/claim-detection core (search-results-core.js). UMD-resolved:
+  // require() in tests, window.II.searchResults in the browser (loaded first
+  // on index.html).
+  var SR = (typeof require !== 'undefined') ? require('./search-results-core.js') : (root.II && root.II.searchResults) || {};
+
   var COMING_SOON = {
     quran: 'Qur’an search is coming soon — the Hadith tab is live now.',
-    dua:   'Dua search is coming soon — the Hadith tab is live now.',
+    dua:   'Dua search is coming soon.',
     all:   'Full search across all types is coming soon — the Hadith tab is live now.',
   };
 
   // Where a submitted query should go, by active tab.
   //   { kind:'navigate', url }   — go to a page
   //   { kind:'note', message }   — show an honest coming-soon note (no results)
+  //   { kind:'panel', query }    — open the QuranlyAI verify panel
   //   { kind:'noop' }            — empty query
   function dispatchTarget(mode, rawQuery) {
     var q = String(rawQuery == null ? '' : rawQuery).trim();
     if (!q) return { kind: 'noop' };
-    if (mode === 'hadith') return { kind: 'navigate', url: 'hadith.html?q=' + encodeURIComponent(q) };
-    if (mode === 'verify') return { kind: 'navigate', url: 'verify.html?claim=' + encodeURIComponent(q) };
-    return { kind: 'note', message: COMING_SOON[mode] || COMING_SOON.all };
+    var enc = encodeURIComponent(q);
+    if (mode === 'hadith') return { kind: 'navigate', url: 'search-results.html?scope=hadith&q=' + enc };
+    if (mode === 'quran')  return { kind: 'navigate', url: 'search-results.html?scope=quran&q=' + enc };
+    if (mode === 'all')    return { kind: 'navigate', url: 'search-results.html?scope=all&q=' + enc };
+    if (mode === 'dua') {
+      if (SR.DUA_SEARCH_PUBLIC) return { kind: 'navigate', url: 'search-results.html?scope=dua&q=' + enc };
+      return { kind: 'note', message: COMING_SOON.dua };
+    }
+    if (mode === 'verify') {
+      var isClaim = SR.detectClaim ? SR.detectClaim(q) === 'claim' : false;
+      if (isClaim) return { kind: 'panel', query: q };
+      return { kind: 'navigate', url: 'search-results.html?scope=hadith&q=' + enc };
+    }
+    return { kind: 'navigate', url: 'search-results.html?scope=all&q=' + enc };
   }
 
   function placeholderFor(mode) {
