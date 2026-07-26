@@ -355,6 +355,8 @@
     var scope = collection ? ('&collection=' + encodeURIComponent(collection)) : '';
     return _getHadith(`/api/hadith/search?q=${encodeURIComponent(q)}&lang=${lang || 'en'}&page=${page || 1}${scope}`);
   }
+  function fetchQuranSearch(q, page, limit) { return _getHadith(`/api/quran/search?q=${encodeURIComponent(q)}&page=${page||1}&limit=${limit||20}`); }
+  function fetchDuaSearch(q, page, limit)   { return _getHadith(`/api/dua/search?q=${encodeURIComponent(q)}&page=${page||1}&limit=${limit||20}`); }
   function fetchHadithDaily() { return _getHadith('/api/hadith/daily'); }
 
   /* fetchDorarSilsila — Dorar.net (Silsila as-Sahihah/Da'ifah) keyword search,
@@ -567,6 +569,8 @@
     fetchHadithList,
     fetchHadithOne,
     fetchHadithSearch,
+    fetchQuranSearch,
+    fetchDuaSearch,
     fetchHadithByNumber,
     fetchHadithDaily,
     fetchDorarSilsila,
