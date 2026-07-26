@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Search | IslamicInfo</title>
+  <meta name="description" content="Search the Qur'an and Hadith on IslamicInfo.org." />
+  <script>
+    /* i18n FOUC guard: set lang/dir before first paint */
+    (function(){
+      var l = localStorage.getItem('islamicinfo-lang') || 'en';
+      document.documentElement.setAttribute('lang', l);
+      if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+:root{
+  --teal-50:#F0FAFB;--teal-100:#C8EEF1;--teal-200:#8DD8DE;--teal-300:#6AD7DE;
+  --teal-400:#3FBFC7;--teal-500:#2CA4AB;--teal-600:#0297A1;--teal-650:#028890;
+  --teal-700:#00696E;--teal-750:#005A5F;--teal-800:#004E55;--teal-900:#0A3A3D;
+  --gold-50:#FDF8EC;--gold-100:#F7E9C2;--gold-200:#EFD48A;--gold-300:#E5C570;
+  --gold-400:#D9B358;--gold-500:#C5A059;--gold-700:#9A7C3F;--gold-900:#5A4420;
+  --ink-primary:#0F2A2C;--ink-body:#111111;--ink-muted:#3A4A4B;
+  --ink-subtle:#9DA8A9;--ink-faint:#BCC9C9;
+  --surface:#F4F7F7;--surface-card:#FAFBFB;--surface-base:#FAFBFB;--white:#FFFFFF;
+  --elev-1:0 1px 3px rgba(15,42,44,.06);
+  --elev-2:0 4px 14px rgba(15,42,44,.08),0 1px 3px rgba(15,42,44,.04);
+  --elev-3:0 12px 32px rgba(0,105,110,.10),0 4px 10px rgba(0,105,110,.06);
+  --elev-4:0 24px 56px rgba(0,105,110,.13),0 8px 18px rgba(0,105,110,.07);
+  --inner-light:inset 0 1px 0 rgba(255,255,255,.7);
+  --gold-aura:0 0 0 1px rgba(197,160,89,.22),0 8px 32px rgba(197,160,89,.18);
+  --grade-sahih:#0F6E56;--grade-hasan:#4A7030;--grade-daif:#8A5228;--grade-mawdu:#B33A3A;
+  --font-display:'Cormorant Garamond',Georgia,serif;
+  --font-body:'Libre Baskerville',Georgia,serif;--font-sans:'Libre Baskerville',Georgia,serif;--font-mono:'Shippori Mincho',ui-monospace,'SF Mono',monospace;
+  --font-arabic:'Amiri','Cormorant Garamond',serif;
+  --font-serif:'Cormorant Garamond',Georgia,serif;
+  --ease-reverent:cubic-bezier(.22,1,.36,1);
+  --ease-premium:cubic-bezier(0.25,0.46,0.45,0.94);
+  --r-sm:10px;--r-md:14px;--r-lg:18px;--r-xl:24px;--r-2xl:32px;
+}
+[data-theme="dark"]{
+  --surface:#0A1314;--surface-card:#0F1B1D;--surface-base:#0F1B1D;--white:#152527;
+  --grade-sahih:#1FA882;--grade-hasan:#7AB84E;--grade-daif:#D4884A;--grade-mawdu:#E05555;
+  --ink-primary:#F5F8F8;--ink-body:#D4DCDD;--ink-muted:#9AAAAB;
+  --ink-subtle:#6E7E80;--ink-faint:#2A3638;
+  --teal-700:#1A8A91;--teal-500:#5BC1C7;--teal-300:#88E0E5;
+  --teal-50:rgba(0,105,110,.15);--teal-100:rgba(0,105,110,.25);
+  --gold-50:rgba(197,160,89,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-family:var(--font-body);font-size:16.5px;line-height:1.65;background:var(--surface);color:var(--ink-body);scroll-behavior:smooth;transition:background .4s ease,color .4s ease;}
+body{background-color:var(--surface);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%2300696E' stroke-width='0.4' opacity='0.04'%3E%3Cpolygon points='60,6 72,32 100,32 78,50 86,76 60,60 34,76 42,50 20,32 48,32'/%3E%3Ccircle cx='60' cy='60' r='52'/%3E%3C/g%3E%3C/svg%3E");overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 60% at 15% 10%,rgba(0,105,110,.07),transparent 55%),radial-gradient(ellipse 60% 50% at 85% 15%,rgba(197,160,89,.06),transparent 50%);}
+.shell{position:relative;z-index:1;min-height:100vh;}
+.container{max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,56px);}
+
+/* NAV */
+.site-header{position:sticky;top:0;z-index:100;background:rgba(250,251,251,.92);backdrop-filter:blur(24px) saturate(1.6);border-bottom:0.5px solid rgba(0,105,110,.10);transition:background .3s,box-shadow .3s;}
+[data-theme="dark"] .site-header{background:rgba(10,19,20,.92);border-bottom-color:rgba(0,105,110,.2);}
+.site-header.scrolled{box-shadow:0 1px 0 rgba(0,105,110,.10),var(--elev-1);}
+.site-header .container{padding-left:clamp(16px,4vw,48px);padding-right:clamp(16px,4vw,48px);max-width:100%;}
+.header-inner{display:flex;align-items:center;height:60px;width:100%;gap:0;}
+.brand{display:flex;align-items:center;gap:8px;flex-shrink:0;font-family:var(--font-display);font-size:20px;font-weight:600;letter-spacing:-.02em;color:var(--ink-primary);white-space:nowrap;text-decoration:none;}
+.brand-mark{width:34px;height:34px;transition:transform .5s var(--ease-reverent);}
+.brand:hover .brand-mark{transform:scale(1.06);}
+.brand:hover .star{animation:star-spin .8s var(--ease-reverent) forwards;}
+.brand:hover .halo{animation:halo-pulse .9s ease infinite;}
+@keyframes star-spin{0%{transform:rotate(0);}100%{transform:rotate(45deg) scale(1.15);}}
+@keyframes halo-pulse{0%,100%{opacity:.25;}50%{opacity:.7;}}
+.brand-text .info{color:var(--gold-500);}
+[data-theme="dark"] .brand-text .info{color:#C5A059;}
+[data-theme="dark"] .brand-text{color:#5BC1C7;}
+.nav{flex:1;display:flex;align-items:center;flex-wrap:nowrap;justify-content:center;gap:2px;overflow:hidden;}
+.nav-link{font-size:12.5px;color:var(--ink-muted);padding:5px 8px;border-radius:8px;white-space:nowrap;flex-shrink:0;transition:all .25s var(--ease-premium);position:relative;text-decoration:none;display:inline-block;}
+.nav-link:hover{color:var(--teal-700);background:linear-gradient(135deg,rgba(0,105,110,.08),rgba(0,105,110,.04));transform:scale(1.05);box-shadow:0 0 0 1px rgba(0,105,110,.12),0 4px 12px rgba(0,105,110,.1);}
+[data-theme="dark"] .nav-link:hover{color:var(--teal-300);background:linear-gradient(135deg,rgba(0,105,110,.18),rgba(0,105,110,.08));box-shadow:0 0 12px rgba(88,193,199,.2),0 0 0 1px rgba(0,105,110,.25);}
+.nav-link.active{color:var(--teal-700);font-weight:500;}
+.nav-link.active::after{content:'';position:absolute;bottom:-1px;left:6px;right:6px;height:2px;background:linear-gradient(90deg,var(--teal-700),var(--gold-500));border-radius:2px;}
+[data-theme="dark"] .nav-link.active{color:var(--teal-300);}
+.header-tools{display:flex;gap:6px;align-items:center;margin-left:auto;flex-shrink:0;}
+.icon-btn{width:34px;height:34px;border-radius:50%;border:none;background:transparent;cursor:pointer;color:var(--ink-muted);display:flex;align-items:center;justify-content:center;transition:all .25s var(--ease-premium);}
+.icon-btn:hover{background:rgba(0,105,110,.08);color:var(--teal-700);transform:scale(1.05);box-shadow:0 0 12px rgba(0,105,110,.2);}
+[data-theme="dark"] .icon-btn{color:#6E7E80;}
+[data-theme="dark"] .icon-btn:hover{background:rgba(0,105,110,.15);color:var(--teal-300);box-shadow:0 0 12px rgba(88,193,199,.25);}
+.search-popup-wrapper{position:relative;}
+.search-popup{position:absolute;top:44px;right:0;width:340px;z-index:200;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:12px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.search-popup.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .search-popup{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.search-popup input{width:100%;border:1px solid rgba(0,105,110,.2);outline:none;background:transparent;font:inherit;font-size:14px;color:var(--ink-primary);padding:10px 14px;border-radius:10px;transition:border-color .2s,box-shadow .2s;}
+.search-popup input:focus{border-color:var(--teal-500);box-shadow:0 0 0 4px rgba(44,164,171,.15);}
+.search-popup input::placeholder{color:var(--ink-subtle);}
+.search-popup-btn{display:flex;align-items:center;justify-content:center;margin-top:8px;width:100%;padding:10px;background:linear-gradient(135deg,var(--teal-600),var(--teal-500));color:white;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;gap:6px;font-family:var(--font-body);transition:all .25s var(--ease-premium);}
+.search-popup-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,105,110,.35);}
+@media(max-width:1100px){.nav-link{font-size:11.5px;padding:5px 5px;}}
+@media(max-width:900px){.nav-link{font-size:10.5px;padding:5px 3px;}.brand{font-size:16px;}.brand-mark{width:28px;height:28px;}}
+@media(max-width:760px){.nav{display:none;}}
+
+/* ── Language dropdown ── */
+.lang-wrapper{position:relative;}
+.lang-trigger{display:flex;align-items:center;gap:5px;padding:5px 10px 5px 8px;border:1.5px solid rgba(0,105,110,.4);border-radius:20px;background:transparent;cursor:pointer;font-family:var(--font-body);font-size:12.5px;font-weight:600;color:var(--teal-700);transition:background .18s,border-color .18s;white-space:nowrap;}
+.lang-trigger:hover{background:rgba(0,105,110,.07);}
+.lang-trigger .lang-chevron{transition:transform .25s;}
+.lang-trigger[aria-expanded="true"] .lang-chevron{transform:rotate(180deg);}
+[data-theme="dark"] .lang-trigger{color:var(--teal-300);border-color:rgba(0,105,110,.45);}
+[data-theme="dark"] .lang-trigger:hover{background:rgba(0,105,110,.15);}
+.lang-menu{position:absolute;top:calc(100% + 6px);right:0;width:200px;z-index:210;max-height:min(60vh,420px);overflow-y:auto;background:var(--surface-card);border:0.5px solid rgba(0,105,110,.18);border-radius:var(--r-lg);box-shadow:var(--elev-4);backdrop-filter:blur(20px);padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transition:opacity .3s var(--ease-premium),transform .3s var(--ease-premium);}
+.lang-menu.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+[data-theme="dark"] .lang-menu{background:rgba(15,27,29,.97);border-color:rgba(0,105,110,.3);}
+.lang-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;background:transparent;border-radius:8px;cursor:pointer;font:inherit;font-size:13px;color:var(--ink-body);text-align:left;transition:background .2s,color .2s;}
+.lang-item:hover{background:rgba(0,105,110,.08);}
+[data-theme="dark"] .lang-item:hover{background:rgba(0,105,110,.15);}
+.lang-item.on{color:var(--teal-700);font-weight:600;background:rgba(0,105,110,.06);}
+[data-theme="dark"] .lang-item.on{color:var(--teal-300);}
+.lang-code{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ink-subtle);width:24px;flex-shrink:0;}
+
+/* ── Hamburger — CLAUDE.md §4.7 ── */
+.hamburger{display:none;flex-direction:column;gap:5px;width:34px;height:34px;border-radius:8px;border:0.5px solid var(--ink-faint);background:transparent;cursor:pointer;align-items:center;justify-content:center;}
+.hamburger span{width:16px;height:1.5px;background:var(--ink-muted);border-radius:2px;display:block;}
+@media(max-width:760px){.hamburger{display:flex;}}
+
+/* ── Mobile menu — CLAUDE.md §4.7 ── */
+.mobile-menu{display:none;position:fixed;inset:0;z-index:300;background:rgba(6,38,40,.97);backdrop-filter:blur(20px);flex-direction:column;padding:24px 28px;gap:4px;}
+.mobile-menu.open{display:flex;animation:mmFade .3s var(--ease-reverent) both;}
+@keyframes mmFade{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:none;}}
+.mm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+.mm-link{font-size:18px;color:rgba(255,255,255,.7);padding:12px 0;border-bottom:0.5px solid rgba(255,255,255,.06);transition:color .2s,padding-left .2s;text-decoration:none;display:block;}
+.mm-link:hover,.mm-link.active{color:#5BC1C7;padding-left:8px;}
+
+/* ── Global Footer ft- classes — CLAUDE.md §7.1 ── */
+#ii-footer{background:#062628;color:rgba(255,255,255,.62);font-family:'Libre Baskerville',Georgia,serif;}
+.ft-top{padding:clamp(52px,7vw,80px) clamp(20px,5vw,64px) clamp(32px,4vw,48px);display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:clamp(24px,3vw,52px);border-bottom:0.5px solid rgba(255,255,255,.07);}
+@media(max-width:1100px){.ft-top{grid-template-columns:1.4fr 1fr 1fr;}}
+@media(max-width:700px){.ft-top{grid-template-columns:1fr 1fr;}.ft-brand{grid-column:1/-1;}}
+@media(max-width:440px){.ft-top{grid-template-columns:1fr;}}
+.ft-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:-.02em;}
+.ft-logo .ti{color:#5BC1C7;}.ft-logo .fo{color:#C5A059;}
+.ft-tag{font-size:13px;line-height:1.72;color:rgba(255,255,255,.38);max-width:240px;margin-bottom:20px;}
+.ft-verse{font-size:11px;color:rgba(255,255,255,.22);font-style:italic;font-family:'Cormorant Garamond',serif;}
+.ft-col-h{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:16px;}
+.ft-link{display:block;font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 0;margin-bottom:2px;border-left:2px solid transparent;padding-left:0;transition:color .18s,transform .18s,border-color .18s,padding-left .18s;}
+.ft-link:hover{color:#88E0E5;transform:translateX(4px);border-left-color:rgba(88,193,199,.4);padding-left:6px;}
+.ft-link-ext::after{content:' ↗';font-size:10px;opacity:.5;}
+.ft-bot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:20px clamp(20px,5vw,64px);}
+.ft-copy{font-size:12px;color:rgba(255,255,255,.24);}
+.ft-copy a{color:#C5A059;text-decoration:none;}
+.ft-copy a:hover{color:#D7B675;}
+.ft-note{font-size:11.5px;color:rgba(255,255,255,.18);font-style:italic;font-family:'Cormorant Garamond',serif;}
+
+/* ── RTL patches ── */
+[dir="rtl"] .lang-menu{right:auto;left:0;}
+[dir="rtl"] .lang-item{text-align:right;}
+[dir="rtl"] .search-popup{right:auto;left:0;}
+[dir="rtl"] .header-tools{margin-left:0;margin-right:auto;}
+[dir="rtl"] .ft-link:hover{transform:translateX(-4px);}
+[dir="rtl"] .mobile-menu{direction:rtl;}
+[dir="rtl"] .mm-link:hover,[dir="rtl"] .mm-link.active{padding-left:0;padding-right:8px;}
+
+/* ══════════════ SEARCH RESULTS PAGE ══════════════ */
+.sr-wrap{padding:44px clamp(20px,5vw,56px) 88px;}
+.sr-searchcol{max-width:640px;margin:0 auto 30px;}
+.sr-scopes{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;}
+.sr-chip{font-size:12.5px;font-weight:500;padding:7px 16px;border-radius:20px;border:0.5px solid rgba(0,105,110,.18);color:var(--ink-muted);background:rgba(0,105,110,.05);cursor:pointer;transition:all .25s var(--ease-premium);font-family:var(--font-body);}
+.sr-chip:hover,.sr-chip.active{background:var(--teal-700);color:var(--white);border-color:transparent;box-shadow:0 4px 12px rgba(0,105,110,.25);transform:scale(1.05);}
+.searchbar{position:relative;display:flex;align-items:center;gap:10px;background:var(--surface-card);border:1px solid rgba(188,201,201,.35);border-radius:999px;padding:8px 8px 8px 22px;box-shadow:var(--elev-2),inset 0 1px 0 rgba(255,255,255,.6);margin:0 auto;transition:box-shadow .3s,border-color .3s;}
+.searchbar:focus-within{border-color:var(--gold-400);box-shadow:0 0 0 6px rgba(197,160,89,.12),var(--elev-3);}
+.searchbar input{flex:1;border:none;outline:none;background:transparent;font:inherit;font-size:15px;color:var(--ink-primary);padding:8px 0;}
+.searchbar input::placeholder{color:var(--ink-subtle);}
+.search-go{width:40px;height:40px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--teal-600),var(--teal-700));color:white;border-radius:999px;border:none;box-shadow:var(--elev-2);transition:transform .25s var(--ease-reverent);cursor:pointer;}
+.search-go:hover{transform:scale(1.06) rotate(8deg);background:linear-gradient(135deg,var(--teal-500),var(--gold-500));}
+.sr-mic.listening{color:var(--teal-700);}
+.sr-note{max-width:640px;margin:0 auto 22px;text-align:center;font-size:13.5px;color:var(--ink-muted);padding:12px 20px;background:rgba(0,105,110,.05);border:0.5px solid rgba(0,105,110,.1);border-radius:12px;}
+.sr-results{max-width:820px;margin:0 auto;}
+.sr-prompt{text-align:center;padding:60px 20px;color:var(--ink-muted);font-size:15px;}
+.sr-heading{font-family:var(--font-display);font-size:21px;font-weight:600;color:var(--ink-primary);margin-bottom:18px;}
+.sr-cards{display:flex;flex-direction:column;gap:16px;}
+.sr-loading{text-align:center;padding:60px 0;}
+.sr-spinner{width:34px;height:34px;border-radius:50%;border:3px solid rgba(0,105,110,.15);border-top-color:var(--teal-600);margin:0 auto;animation:sr-spin .8s linear infinite;}
+@keyframes sr-spin{to{transform:rotate(360deg);}}
+.sr-more{display:block;margin:22px auto 0;padding:11px 28px;border-radius:24px;border:0.5px solid rgba(0,105,110,.22);background:rgba(0,105,110,.06);color:var(--teal-700);font-family:var(--font-body);font-size:13.5px;font-weight:600;cursor:pointer;transition:all .2s var(--ease-premium);}
+.sr-more:hover{background:rgba(0,105,110,.12);}
+.sr-more[disabled]{opacity:.6;cursor:wait;}
+[data-theme="dark"] .sr-more{color:var(--teal-300);}
+
+/* Section grouping for scope=all */
+.sr-section{margin-bottom:40px;}
+.sr-section:last-child{margin-bottom:0;}
+.sr-section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px;padding-bottom:8px;border-bottom:0.5px solid rgba(0,105,110,.12);}
+.sr-section-head h2{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--ink-primary);}
+.sr-section-count{font-size:12px;color:var(--ink-muted);white-space:nowrap;}
+.sr-section-more{display:inline-block;margin-top:12px;font-size:13px;color:var(--teal-700);font-weight:600;}
+.sr-section-more:hover{text-decoration:underline;}
+[data-theme="dark"] .sr-section-more{color:var(--teal-300);}
+
+/* Qur'an / Dua result cards */
+.sr-card{background:var(--surface-card);border:0.5px solid rgba(0,105,110,.10);border-radius:var(--r-lg);box-shadow:var(--elev-1);padding:24px 26px;transition:transform .3s var(--ease-premium),box-shadow .3s var(--ease-premium);}
+.sr-card:hover{transform:translateY(-3px);box-shadow:var(--elev-2);}
+[data-theme="dark"] .sr-card{border-color:rgba(0,105,110,.2);}
+.sr-arabic{direction:rtl;font-family:var(--font-arabic);font-size:1.4em;line-height:2;color:var(--ink-body);margin-bottom:10px;}
+.sr-translation{font-size:15px;color:var(--ink-body);line-height:1.7;margin-bottom:8px;}
+.sr-transliteration{color:var(--ink-muted);font-style:italic;font-size:.92em;margin-bottom:8px;}
+.sr-citation{font-size:12px;color:var(--teal-700);font-weight:600;letter-spacing:.03em;margin-bottom:6px;}
+[data-theme="dark"] .sr-citation{color:var(--teal-300);}
+.sr-category{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-700);margin-bottom:10px;}
+.sr-attrib{font-size:.8em;color:var(--ink-muted);margin-top:2px;}
+.sr-context-link{display:inline-block;margin-top:10px;font-size:12.5px;color:var(--teal-700);font-weight:600;}
+.sr-context-link:hover{text-decoration:underline;}
+[data-theme="dark"] .sr-context-link{color:var(--teal-300);}
+
+/* ─── HADITH CARDS (reused from hadith.html — see design spec §"reuse hadith card style") ─── */
+.hadith-card{background:var(--surface-card);border:0.5px solid rgba(0,105,110,.10);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--elev-1);display:flex;transition:all .3s var(--ease-premium);}
+.hadith-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,105,110,.14),0 0 0 1px rgba(0,105,110,.15);}
+[data-theme="dark"] .hadith-card{border-color:rgba(0,105,110,.2);}
+[data-theme="dark"] .hadith-card:hover{box-shadow:0 12px 32px rgba(0,105,110,.2),0 0 0 1px rgba(88,193,199,.18);}
+.hadith-teal-bar{width:4px;flex-shrink:0;background:linear-gradient(to bottom,var(--teal-700),var(--teal-500));}
+.hadith-inner{flex:1;padding:22px 24px;min-width:0;}
+.hadith-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.hadith-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hadith-num{font-family:var(--font-mono);font-size:11px;font-weight:400;color:var(--teal-700);background:rgba(0,105,110,.08);border:0.5px solid rgba(0,105,110,.15);padding:2px 9px;border-radius:8px;}
+[data-theme="dark"] .hadith-num{color:var(--teal-300);}
+.grade-badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;}
+.grade-badge.grade-sahih{color:var(--grade-sahih);background:rgba(15,110,86,.1);border:0.5px solid rgba(15,110,86,.25);}
+.grade-badge.grade-hasan{color:var(--grade-hasan);background:rgba(93,138,58,.1);border:0.5px solid rgba(93,138,58,.25);}
+.grade-badge.grade-daif{color:var(--grade-daif);background:rgba(168,105,50,.1);border:0.5px solid rgba(168,105,50,.25);}
+.grade-badge.grade-mawdu{color:var(--grade-mawdu);background:rgba(179,58,58,.1);border:0.5px solid rgba(179,58,58,.25);}
+.grade-badge.grade-unknown{color:var(--ink-muted);background:rgba(90,102,104,.1);border:0.5px solid rgba(90,102,104,.22);}
+.grade-badge.grade-disputed{color:var(--grade-mawdu);background:rgba(179,58,58,.08);border:0.5px solid rgba(179,58,58,.28);}
+.grade-disputed-detail{font-size:11px;color:var(--ink-muted);font-weight:500;}
+[data-theme="dark"] .grade-badge.grade-unknown{color:#9AA6A8;background:rgba(154,166,168,.12);border-color:rgba(154,166,168,.28);}
+[data-theme="dark"] .grade-badge.grade-disputed{color:#E05555;background:rgba(224,85,85,.1);border-color:rgba(224,85,85,.3);}
+[data-theme="dark"] .grade-badge.grade-sahih{color:#1FA882;background:rgba(31,168,130,.12);border-color:rgba(31,168,130,.3);}
+[data-theme="dark"] .grade-badge.grade-hasan{color:#7AB84E;background:rgba(122,184,78,.12);border-color:rgba(122,184,78,.3);}
+[data-theme="dark"] .grade-badge.grade-daif{color:#D4884A;background:rgba(212,136,74,.12);border-color:rgba(212,136,74,.3);}
+[data-theme="dark"] .grade-badge.grade-mawdu{color:#E05555;background:rgba(224,85,85,.12);border-color:rgba(224,85,85,.3);}
+.grade-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.grader-label{font-weight:400;opacity:.7;}
+.hadith-actions{display:flex;gap:4px;}
+.hadith-action-btn{width:30px;height:30px;border-radius:50%;border:none;background:transparent;cursor:pointer;color:var(--ink-muted);display:flex;align-items:center;justify-content:center;transition:all .2s var(--ease-premium);}
+.hadith-action-btn:hover{background:rgba(0,105,110,.08);color:var(--teal-700);transform:scale(1.1);box-shadow:0 0 8px rgba(0,105,110,.15);}
+.hadith-arabic{font-family:var(--font-arabic);font-size:19px;direction:rtl;text-align:right;line-height:2.0;color:var(--ink-body);background:rgba(0,105,110,.04);border:0.5px solid rgba(0,105,110,.08);border-radius:var(--r-sm);padding:14px 16px;margin-bottom:14px;}
+[data-theme="dark"] .hadith-arabic{color:#D4DCDD;background:rgba(0,105,110,.06);border-color:rgba(0,105,110,.15);}
+.hadith-translation{margin-bottom:16px;}
+.hadith-narrator{font-size:12px;color:var(--ink-muted);margin-bottom:6px;font-style:italic;}
+.hadith-text{font-size:14.5px;color:var(--ink-body);line-height:1.75;border-left:3px solid var(--teal-500);padding-left:14px;}
+[data-theme="dark"] .hadith-text{color:#D4DCDD;}
+[data-theme="dark"] .hadith-translation{border-left-color:var(--teal-700);}
+.hadith-footer{display:flex;align-items:center;justify-content:space-between;border-top:0.5px solid rgba(0,105,110,.10);padding-top:14px;flex-wrap:wrap;gap:10px;}
+[data-theme="dark"] .hadith-footer{border-top-color:rgba(0,105,110,.15);}
+.hadith-ref{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-muted);}
+.hadith-ref-icon{font-size:13px;}
+.hadith-footer-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.footer-action-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;font-size:12px;font-weight:500;color:var(--ink-muted);border:0.5px solid rgba(0,105,110,.15);border-radius:20px;background:transparent;cursor:pointer;transition:all .2s var(--ease-premium);font-family:var(--font-body);}
+.footer-action-btn:hover{border-color:var(--teal-500);color:var(--teal-700);background:rgba(0,105,110,.06);transform:scale(1.05);}
+.footer-action-btn.primary{background:rgba(0,105,110,.08);border-color:rgba(0,105,110,.22);color:var(--teal-700);font-weight:600;}
+.footer-action-btn.primary:hover{background:rgba(0,105,110,.15);}
+[data-theme="dark"] .footer-action-btn.primary{color:var(--teal-300);}
+  </style>
+<body>
+<div class="ambient"></div>
+<div class="shell">
+
+<!-- ══ GLOBAL HEADER — CLAUDE.md §4.3 — all 10 nav items ══ -->
+<header class="site-header" id="siteHeader" data-screen-label="Header">
+  <div class="container">
+    <div class="header-inner">
+      <!-- Logo (Left) -->
+      <a href="index.html" class="brand" aria-label="IslamicInfo home">
+        <svg class="brand-mark" viewBox="0 0 72 72" fill="none">
+          <defs>
+            <linearGradient id="lp" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#00696e"/><stop offset="100%" stop-color="#1A8A91"/></linearGradient>
+            <linearGradient id="rp" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#1A8A91"/><stop offset="100%" stop-color="#00696e"/></linearGradient>
+            <linearGradient id="gl" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#E5C893" stop-opacity=".6"/><stop offset="100%" stop-color="#C5A059" stop-opacity="0"/></linearGradient>
+          </defs>
+          <path d="M36 18 Q36 18,22 22 Q14 24,12 28 L12 50 Q14 46,22 44 Q30 42,36 44 Z" fill="url(#lp)"/>
+          <path d="M36 18 Q36 18,50 22 Q58 24,60 28 L60 50 Q58 46,50 44 Q42 42,36 44 Z" fill="url(#rp)"/>
+          <path d="M36 18 L36 44" stroke="#C5A059" stroke-width=".8" stroke-linecap="round"/>
+          <path d="M22 28 L30 28 M20 32 L32 32 M22 36 L30 36" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
+          <path d="M42 28 L50 28 M40 32 L52 32 M42 36 L50 36" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
+          <path d="M30 18 Q33 8,36 4 Q39 8,42 18 Z" fill="url(#gl)" opacity=".7"/>
+          <g class="star" transform="translate(36 14)"><path d="M0 -6 L1.5 -1.5 L6 0 L1.5 1.5 L0 6 L-1.5 1.5 L-6 0 L-1.5 -1.5 Z" fill="#C5A059"/><circle cx="0" cy="0" r="1.5" fill="white"/></g>
+          <circle class="halo" cx="36" cy="14" r="11" stroke="rgba(197,160,89,.25)" stroke-width=".5" fill="none"/>
+          <circle class="halo" cx="36" cy="14" r="14" stroke="rgba(197,160,89,.12)" stroke-width=".5" fill="none"/>
+        </svg>
+        <span class="brand-text"><span>Islamic</span><span class="info">Info</span></span>
+      </a>
+
+      <!-- Nav (Center) — all 10 items — CLAUDE.md §4.1 -->
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="nav-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+        <a class="nav-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+        <a class="nav-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+        <a class="nav-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+        <a class="nav-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+        <a class="nav-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+        <a class="nav-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+        <a class="nav-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+        <a class="nav-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+        <a class="nav-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+      </nav>
+
+      <!-- Tools (Right) — CLAUDE.md §4.2 -->
+      <div class="header-tools">
+        <div class="search-popup-wrapper">
+          <button class="icon-btn search-trigger" aria-label="Search" id="searchTrigger">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          </button>
+          <div class="search-popup" id="searchPopup" role="search">
+            <input type="text" placeholder="Search verses, hadiths, topics…" aria-label="Site search" id="searchPopupInput" data-i18n-attr="placeholder:chrome.search.placeholder;aria-label:chrome.search.inputAria"/>
+            <button class="search-popup-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <span data-i18n="chrome.search.button">Search</span>
+            </button>
+          </div>
+        </div>
+        <div class="lang-wrapper">
+          <button class="lang-trigger" id="langBtn" aria-label="Select language" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label:chrome.lang.aria">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span id="langBtnLabel">EN</span>
+            <svg class="lang-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language menu"></div>
+        </div>
+        <button class="icon-btn theme-toggle" aria-label="Toggle theme" id="themeBtn"></button>
+        <button class="icon-btn" aria-label="Sign in" data-account><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg></button>
+        <!-- Hamburger — visible only ≤ 760px -->
+        <button class="hamburger icon-btn" aria-label="Open menu" onclick="openMM()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ MOBILE MENU — CLAUDE.md §4.7 — all 10 items ══ -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mm-header">
+    <span style="font-family:var(--font-display);font-size:18px;color:#5BC1C7;">Islamic<span style="color:#C5A059;">Info</span></span>
+    <button class="icon-btn mm-close" onclick="closeMM()" aria-label="Close menu" style="color:rgba(255,255,255,.6);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <a class="mm-link" href="index.html" data-i18n="chrome.nav.home">Home</a>
+  <a class="mm-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+  <a class="mm-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+  <a class="mm-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+  <a class="mm-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+  <a class="mm-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+  <a class="mm-link" href="tools.html" data-i18n="chrome.nav.tools">Tools</a>
+  <a class="mm-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+  <a class="mm-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
+  <a class="mm-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+</div>
+
+<main>
+<section class="sr-wrap container">
+
+  <div class="sr-searchcol">
+    <div class="sr-scopes" id="sr-scopes" role="tablist" aria-label="Search type">
+      <button type="button" class="sr-chip" data-scope="all" role="tab" aria-selected="false">All</button>
+      <button type="button" class="sr-chip" data-scope="hadith" role="tab" aria-selected="false">Hadith</button>
+      <button type="button" class="sr-chip" data-scope="quran" role="tab" aria-selected="false">Qur'an</button>
+      <button type="button" class="sr-chip" data-scope="dua" role="tab" aria-selected="false">Dua</button>
+      <button type="button" class="sr-chip" data-scope="verify" role="tab" aria-selected="false">Verify</button>
+    </div>
+    <form class="searchbar" id="sr-form">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="color:var(--ink-muted)"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="text" id="sr-input" placeholder="Search hadiths, verses, topics, or paste a claim…" aria-label="Search" />
+      <button type="button" class="icon-btn sr-mic" id="sr-mic" aria-label="Voice search" style="width:38px;height:38px;border:none;background:transparent;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3"/></svg>
+      </button>
+      <button type="submit" class="search-go" aria-label="Search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
+    </form>
+  </div>
+
+  <div id="sr-note" class="sr-note" role="status" aria-live="polite" hidden></div>
+  <div id="sr-results" class="sr-results"></div>
+
+</section>
+</main>
+
+<!-- ══ GLOBAL FOOTER — CLAUDE.md §7.1–7.4 ══ -->
+<footer id="ii-footer">
+  <div class="ft-top">
+
+    <!-- Brand col -->
+    <div class="ft-brand">
+      <a class="ft-logo" href="index.html">
+        <svg width="28" height="28" viewBox="0 0 72 72" fill="none">
+          <defs><linearGradient id="ft-gl" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#004E55"/><stop offset="100%" stop-color="#2CA4AB"/></linearGradient></defs>
+          <path d="M36 20 Q22 24 12 30 L12 52 Q22 46 36 46 Z" fill="url(#ft-gl)"/>
+          <path d="M36 20 Q50 24 60 30 L60 52 Q50 46 36 46 Z" fill="url(#ft-gl)" opacity=".8"/>
+          <path d="M36 20 L36 46" stroke="#C5A059" stroke-width="1" stroke-linecap="round"/>
+          <g transform="translate(36 16)"><path d="M0 -7 L1.8 -1.8 L7 0 L1.8 1.8 L0 7 L-1.8 1.8 L-7 0 L-1.8 -1.8 Z" fill="#C5A059"/><circle r="2" fill="white" opacity=".9"/></g>
+        </svg>
+        <span><span class="ti">Islamic</span><span class="fo">Info</span></span>
+      </a>
+      <p class="ft-tag" data-i18n="chrome.footer.tagline">A digital sanctuary for authentic Islamic knowledge — Qur'an, Hadith, Dua, and verified scholarship. Source-cited. Always free.</p>
+      <p class="ft-verse">وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ — Hud · 11:88</p>
+    </div>
+
+    <!-- Col 1 — page-specific: Search -->
+    <div>
+      <div class="ft-col-h">Search</div>
+      <a class="ft-link" href="search-results.html?scope=hadith">Search Hadith</a>
+      <a class="ft-link" href="search-results.html?scope=quran">Search Qur'an</a>
+      <a class="ft-link" href="hadith.html">Browse Hadith Library</a>
+      <a class="ft-link" href="quran.html">Explore Qur'an</a>
+      <a class="ft-link" href="verify.html">Verify a Claim</a>
+    </div>
+
+    <!-- Col 2 — Quick Access (identical every page, all 8 including Knowledge Hub) -->
+    <div>
+      <div class="ft-col-h" data-i18n="chrome.footer.quickAccess">Quick Access</div>
+      <a class="ft-link" href="quran.html" data-i18n="chrome.nav.quran">Quran Explorer</a>
+      <a class="ft-link" href="hadith.html" data-i18n="chrome.nav.hadith">Hadith Library</a>
+      <a class="ft-link" href="islamic-studies.html" data-i18n="chrome.nav.studies">Islamic Studies</a>
+      <a class="ft-link" href="knowledge-hub.html" data-i18n="chrome.nav.hub">Knowledge Hub</a>
+      <a class="ft-link" href="dua.html" data-i18n="chrome.nav.dua">Daily Duas</a>
+      <a class="ft-link" href="tools.html" data-i18n="chrome.footer.linkTools">Islamic Tools</a>
+      <a class="ft-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
+      <a class="ft-link" href="verify.html" data-i18n="chrome.footer.linkVerify">Verify a Claim</a>
+    </div>
+
+    <!-- Col 3 — Our Ecosystem §7.4 verbatim — exact URLs -->
+    <div>
+      <div class="ft-col-h" data-i18n="chrome.footer.ecosystem">Our Ecosystem</div>
+      <a class="ft-link" href="https://islamickids.org" target="_blank" rel="noopener">IslamicKids.org ↗</a>
+      <a class="ft-link" href="https://quranlyai.com" target="_blank" rel="noopener">QuranlyAI ↗</a>
+      <a class="ft-link" href="https://hadithiq.com" target="_blank" rel="noopener">HadithIQ ↗</a>
+      <a class="ft-link" href="https://deentrackai.com" target="_blank" rel="noopener">DeenTrackAi ↗</a>
+      <a class="ft-link" href="https://mosquefinder.net" target="_blank" rel="noopener">MosqueFinder ↗</a>
+      <a class="ft-link" href="https://travellyai.com" target="_blank" rel="noopener">TravellyAi ↗</a>
+    </div>
+
+    <!-- Col 4 — Company + Legal -->
+    <div>
+      <div class="ft-col-h" data-i18n="chrome.footer.company">Company</div>
+      <a class="ft-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+      <a class="ft-link" href="contact.html" data-i18n="chrome.footer.contact">Contact</a>
+      <div class="ft-col-h" style="margin-top:16px;" data-i18n="chrome.footer.legal">Legal</div>
+      <a class="ft-link" href="privacy.html" data-i18n="chrome.footer.privacy">Privacy Policy</a>
+      <a class="ft-link" href="terms.html" data-i18n="chrome.footer.terms">Terms of Use</a>
+    </div>
+
+  </div>
+  <div class="ft-bot">
+    <div class="ft-copy" data-i18n="chrome.footer.copy" data-i18n-html>© 2026 <a href="index.html">Islamicinfo.org</a> — No ads. No fatwas. No fabricated sources.</div>
+    <div class="ft-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
+  </div>
+</footer>
+
+</div>
+<script>
+// Header scroll
+const _h=document.getElementById('siteHeader');
+window.addEventListener('scroll',()=>_h.classList.toggle('scrolled',window.scrollY>16),{passive:true});
+
+// Theme
+const themeBtn=document.getElementById('themeBtn');
+const root=document.documentElement;
+function applyTheme(t){
+  root.setAttribute('data-theme',t);localStorage.setItem('islamicinfo-theme',t);
+  themeBtn.innerHTML=t==='dark'
+    ?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>'
+    :'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+}
+applyTheme(localStorage.getItem('islamicinfo-theme')||'light');
+themeBtn.addEventListener('click',()=>applyTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
+
+// Search popup — CLAUDE.md §8
+const sTrigger=document.getElementById('searchTrigger');
+const sPopup=document.getElementById('searchPopup');
+const sInput=document.getElementById('searchPopupInput');
+sTrigger.addEventListener('click',e=>{e.stopPropagation();const o=sPopup.classList.toggle('open');if(o)setTimeout(()=>sInput.focus(),50);});
+document.addEventListener('click',e=>{if(!sPopup.contains(e.target)&&e.target!==sTrigger)sPopup.classList.remove('open');});
+sPopup.querySelector('.search-popup-btn').addEventListener('click',()=>{
+  const q=sInput.value.trim();
+  sPopup.classList.remove('open');
+  if(q) window.location.assign('search-results.html?scope=all&q='+encodeURIComponent(q));
+});
+
+// Mobile menu — CLAUDE.md §8
+function openMM(){document.getElementById('mobileMenu').classList.add('open');}
+function closeMM(){document.getElementById('mobileMenu').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMM();sPopup.classList.remove('open');}});
+</script>
+<script src="src/js/i18n.js"></script>
+<script src="src/js/global.js"></script>
+<script src="src/js/api.js"></script>
+<script src="src/js/search-results-core.js"></script>
+<script src="src/js/hadith-citation-core.js"></script>
+<script src="src/js/hadith-feed-core.js"></script>
+<script src="src/js/search-results.js"></script>
+<!-- QuranlyAI floating assistant (global, one-tag) -->
+<script src="src/js/quranlyai-widget.js?v=20260718c"></script>
+<script src="src/js/select-to-ask.js?v=20260719a"></script>
+</body>
+</html>
