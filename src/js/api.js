@@ -438,7 +438,7 @@
       collectionArabicName: c.nameArabic || null,
       compiler: c.compiler || null,
       hadithCount: (typeof c.hadithCount === 'number') ? c.hadithCount : null,
-      chaptersCount: null,
+      chaptersCount: (typeof c.chaptersCount === 'number') ? c.chaptersCount : null,
       source: c.source || null,
       perHadithGrade: c.perHadithGrade === true,
       gradeCharacterization: c.gradeCharacterization || null,
