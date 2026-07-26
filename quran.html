@@ -383,6 +383,14 @@ a{text-decoration:none;color:inherit;}
 .ap-btn{width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.10);color:rgba(255,255,255,.75);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;}
 .ap-btn:hover{background:rgba(255,255,255,.20);color:white;}
 .ap-play{width:40px;height:40px;background:var(--gold-500);color:white;box-shadow:0 4px 14px rgba(197,160,89,.38);}
+/* ── Touch targets ≥40–48px on touch devices (responsiveness audit) ── */
+@media(pointer:coarse){
+  .ayah-btn{width:40px;height:40px;}
+  .ayah-actions{gap:4px;}
+  .ap-btn{width:44px;height:44px;}
+  .ap-play{width:48px;height:48px;}
+  .zoom-ctrl button{min-width:40px;min-height:40px;}
+}
 .ap-play:hover{background:#b8953f;transform:scale(1.06);}
 .ap-progress-wrap{flex:1;display:flex;align-items:center;gap:8px;min-width:100px;max-width:280px;}
 .ap-time{font-family:var(--font-mono);font-size:9.5px;color:rgba(255,255,255,.40);flex-shrink:0;}
@@ -2226,10 +2234,7 @@ if(_sTrigger && _sPopup) {
   if(_spBtn) _spBtn.addEventListener('click', () => { _sPopup.classList.remove('open'); });
 }
 
-/* Mobile menu */
-function openMM()  { const m=document.getElementById('mobileMenu'); if(m) m.classList.add('open'); }
-function closeMM() { const m=document.getElementById('mobileMenu'); if(m) m.classList.remove('open'); }
-document.addEventListener('keydown', e => { if(e.key === 'Escape') { closeMM(); } });
+/* Mobile menu open/close + dismissal shared via global.js (window.openMM/closeMM). */
 
 /* ════ TOAST ════ */
 var _tt;

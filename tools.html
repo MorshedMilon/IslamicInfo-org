@@ -197,7 +197,7 @@ a{text-decoration:none;color:inherit;}
 .pw-extra-btn:hover{background:rgba(255,255,255,.13);color:white;}
 
 /* TOOLS GRID */
-.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:20px;}
 .tool-card{padding:26px 24px;cursor:pointer;text-decoration:none;display:block;position:relative;overflow:hidden;transform-style:preserve-3d;}
 .tool-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;}
 .tool-icon{width:50px;height:50px;border-radius:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .3s var(--ease-reverent),box-shadow .3s;}
@@ -320,6 +320,13 @@ a{text-decoration:none;color:inherit;}
 .tb-goal{font-size:11px;color:rgba(255,255,255,.55);margin-top:3px;display:block;}
 .tasbeeh-ctrls{display:flex;gap:8px;justify-content:center;margin-bottom:14px;}
 .tb-ctrl{font-size:11.5px;font-weight:500;padding:6px 16px;border-radius:18px;border:0.5px solid rgba(0,105,110,.18);color:var(--ink-muted);background:transparent;cursor:pointer;transition:all .2s;font-family:var(--font-body);}
+/* ── Touch targets on touch devices (responsiveness audit) ── */
+@media(pointer:coarse){
+  .tool-tab{padding-top:11px;padding-bottom:11px;}
+  .dhikr-chip,.tb-ctrl{padding-top:10px;padding-bottom:10px;}
+  .hc-nav-btn{width:40px;height:40px;}
+  .pw-extra-btn,.pw-loc-btn{padding-top:9px;padding-bottom:9px;}
+}
 .tb-ctrl:hover{background:rgba(0,105,110,.08);color:var(--teal-700);}
 .tasbeeh-session{display:flex;gap:0;background:rgba(0,105,110,.04);border:0.5px solid rgba(0,105,110,.09);border-radius:12px;overflow:hidden;}
 .tsess-item{flex:1;text-align:center;padding:10px 6px;}
@@ -1142,9 +1149,8 @@ document.addEventListener('click',e=>{if(!sPopup.contains(e.target)&&e.target!==
 sPopup.addEventListener('keydown',e=>{if(e.key==='Escape')sPopup.classList.remove('open');});
 sPopup.querySelector('.search-popup-btn').addEventListener('click',()=>sPopup.classList.remove('open'));
 
-// Mobile menu — CLAUDE.md §8
-function openMM(){document.getElementById('mobileMenu').classList.add('open');}
-function closeMM(){document.getElementById('mobileMenu').classList.remove('open');}
+// Mobile menu open/close now shared via global.js (window.openMM/closeMM).
+// Keep this Escape handler for the page-local search popup (sPopup).
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMM();sPopup.classList.remove('open');}});
 
 // Reveal
