@@ -141,11 +141,16 @@
 
   function renderSingleResults(s, data) {
     var results = Array.isArray(data.results) ? data.results : [];
-    var total = typeof data.total === 'number' ? data.total : results.length;
+    var totalKnown = typeof data.total === 'number';
+    var total = totalKnown ? data.total : results.length;
     if (!results.length || total === 0) { renderZero(s); return; }
     var build = cardBuilder(s);
+    // Hadith search can return total:null (worker/src/hadith.js `wrap.total ?? null`).
+    // Never fabricate a count in that case — show a plain heading instead of
+    // silently under-reporting via results.length as if it were authoritative.
+    var heading = totalKnown ? core.resultsHeading(s, q, total) : ('Results for "' + core.escapeHTML(q) + '"');
     resultsEl.innerHTML =
-      '<p class="sr-heading">' + core.resultsHeading(s, q, total) + '</p>' +
+      '<p class="sr-heading">' + heading + '</p>' +
       '<div class="sr-cards">' + results.map(build).join('') + '</div>';
     renderLoadMore(s, data);
   }
@@ -175,17 +180,26 @@
         if (!res || res.ok === false) { anyFailed = true; return; }
         var data = res.data || {};
         var results = Array.isArray(data.results) ? data.results : [];
-        var total = typeof data.total === 'number' ? data.total : results.length;
+        var totalKnown = typeof data.total === 'number';
+        var total = totalKnown ? data.total : results.length;
         if (!results.length || total === 0) return;   // silently omit empty sections
         var build = cardBuilder(sec.key);
         var top5 = results.slice(0, 5);
-        var moreLink = total > 5
-          ? '<a class="sr-section-more" href="search-results.html?scope=' + sec.key + '&q=' + encodeURIComponent(q) + '">See all ' + total + ' in ' + core.escapeHTML(sec.label) + ' →</a>'
+        // Hadith search can return total:null — don't gate "See all" on a possibly-
+        // fabricated total>5; a live next-page (hasMorePages) also proves there's more.
+        var showMore = hasMorePages(sec.key, data) || total > 5;
+        var moreLabel = totalKnown
+          ? ('See all ' + total + ' in ' + core.escapeHTML(sec.label) + ' →')
+          : ('See more in ' + core.escapeHTML(sec.label) + ' →');
+        var moreLink = showMore
+          ? '<a class="sr-section-more" href="search-results.html?scope=' + sec.key + '&q=' + encodeURIComponent(q) + '">' + moreLabel + '</a>'
           : '';
+        // Only show a count badge when the total is actually known — never
+        // present results.length as if it were the authoritative total.
+        var countHTML = totalKnown ? ('<span class="sr-section-count">' + total + ' result' + (total === 1 ? '' : 's') + '</span>') : '';
         sectionsHTML += '' +
           '<section class="sr-section">' +
-            '<div class="sr-section-head"><h2>' + core.escapeHTML(sec.label) + '</h2>' +
-              '<span class="sr-section-count">' + total + ' result' + (total === 1 ? '' : 's') + '</span></div>' +
+            '<div class="sr-section-head"><h2>' + core.escapeHTML(sec.label) + '</h2>' + countHTML + '</div>' +
             '<div class="sr-cards">' + top5.map(build).join('') + '</div>' +
             moreLink +
           '</section>';
@@ -199,6 +213,28 @@
     });
   }
 
+  // quranlyai-widget.js injects window.QuranlyAI ASYNCHRONOUSLY (it appends
+  // quranly-ai-core.js to <head> and loads it over the network), so at
+  // DOMContentLoaded time it is usually not ready yet. A one-shot guarded call
+  // silently drops the claim on a cold load. Poll briefly (~6s budget) instead.
+  function askQuranlyAI(qq) {
+    if (window.QuranlyAI && typeof window.QuranlyAI.ask === 'function') {
+      try {
+        if (typeof window.QuranlyAI.setContext === 'function') {
+          window.QuranlyAI.setContext({ type: 'claim', rawText: qq, language: (window.II && window.II.i18n && window.II.i18n.lang) || 'en' });
+        }
+      } catch (_) { /* non-fatal */ }
+      window.QuranlyAI.ask('custom', qq);
+      return true;
+    }
+    return false;
+  }
+
+  function askQuranlyAIWhenReady(qq, attempt) {
+    if (askQuranlyAI(qq)) return;
+    if ((attempt || 0) < 40) { setTimeout(function () { askQuranlyAIWhenReady(qq, (attempt || 0) + 1); }, 150); }
+  }
+
   function runVerify() {
     var isClaim = core.detectClaim(q) === 'claim';
     if (!isClaim) {
@@ -207,14 +243,7 @@
     }
     resultsEl.innerHTML = '';
     setNote('Verify uses the AI assistant — see the panel.');
-    try {
-      if (window.QuranlyAI && typeof window.QuranlyAI.setContext === 'function') {
-        window.QuranlyAI.setContext({ type: 'claim', rawText: q, language: (window.II && window.II.i18n && window.II.i18n.lang) || 'en' });
-      }
-      if (window.QuranlyAI && typeof window.QuranlyAI.ask === 'function') {
-        window.QuranlyAI.ask('custom', q);
-      }
-    } catch (_) { /* non-fatal — panel is a progressive enhancement */ }
+    askQuranlyAIWhenReady(q, 0);
   }
 
   /* ─── boot / dispatch ────────────────────────────────────────── */

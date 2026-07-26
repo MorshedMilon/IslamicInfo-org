@@ -120,18 +120,32 @@
     note.hidden = !msg;
   }
 
+  // quranlyai-widget.js injects window.QuranlyAI ASYNCHRONOUSLY (it appends
+  // quranly-ai-core.js to <head> and loads it over the network), so a claim
+  // submitted right after page load can race it. Poll briefly (~6s budget)
+  // instead of dropping the claim on a one-shot guarded call.
+  function askQuranlyAI(query) {
+    if (window.QuranlyAI && typeof window.QuranlyAI.ask === 'function') {
+      try { window.QuranlyAI.setContext({ type: 'claim', rawText: query, language: (window.II && II.i18n && II.i18n.lang) || 'en' }); } catch (_) {}
+      window.QuranlyAI.ask('custom', query);
+      return true;
+    }
+    return false;
+  }
+
+  function askQuranlyAIWhenReady(query, attempt) {
+    if (askQuranlyAI(query)) return;
+    if ((attempt || 0) < 40) { setTimeout(function () { askQuranlyAIWhenReady(query, (attempt || 0) + 1); }, 150); }
+    else { showNote('The assistant is still loading — please try again in a moment.'); }
+  }
+
   function submitSearch() {
     if (!core) return;
     var input = document.getElementById('home-search-input');
     var res = core.dispatchTarget(currentMode(), input ? input.value : '');
     if (res.kind === 'navigate') { window.location.assign(res.url); }
     else if (res.kind === 'note') { showNote(res.message); }
-    else if (res.kind === 'panel') {
-      if (window.QuranlyAI && typeof window.QuranlyAI.ask === 'function') {
-        try { window.QuranlyAI.setContext({ type: 'claim', rawText: res.query, language: (window.II && II.i18n && II.i18n.lang) || 'en' }); } catch (_) {}
-        window.QuranlyAI.ask('custom', res.query);
-      } else { showNote('The assistant is still loading — please try again in a moment.'); }
-    }
+    else if (res.kind === 'panel') { askQuranlyAIWhenReady(res.query, 0); }
     else if (input) { input.focus(); }   // noop → focus
   }
 
