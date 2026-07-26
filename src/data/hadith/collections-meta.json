@@ -8,5 +8,14 @@
   "ibn-e-majah":       { "arabicName": "سنن ابن ماجه",  "lifespan": "824–887 CE",  "motif": "📜", "category": "sittah",   "featured": false, "authLabel": "Mixed Grades",             "authTone": "hasan" },
   "musnad-ahmad":      { "arabicName": "مسند أحمد",     "lifespan": "780–855 CE",  "motif": "📚", "category": "musnad",   "featured": false, "authLabel": "Mixed Grades",             "authTone": "hasan" },
   "mishkat":           { "arabicName": "مشكاة المصابيح", "lifespan": "d. ~741 AH",  "motif": "🔦", "category": "selected", "featured": false, "authLabel": "Mixed Grades",             "authTone": "hasan" },
-  "al-silsila-sahiha": { "arabicName": "السلسلة الصحيحة", "lifespan": "1914–1999 CE", "motif": "✨", "category": "selected", "featured": false, "authLabel": "Sahih",                    "authTone": "sahih" }
+  "al-silsila-sahiha": { "arabicName": "السلسلة الصحيحة", "lifespan": "1914–1999 CE", "motif": "✨", "category": "selected", "featured": false, "authLabel": "Sahih",                    "authTone": "sahih" },
+  "nawawi40":             { "arabicName": "الأربعون النووية",   "lifespan": "1233–1277 CE",     "motif": "⭐", "category": "selected", "featured": false, "authLabel": "Sahih / Hasan",  "authTone": "hasan" },
+  "riyad-assalihin":      { "arabicName": "رياض الصالحين",     "lifespan": "1233–1277 CE",     "motif": "🌷", "category": "selected", "featured": false, "authLabel": "Sahih / Hasan",  "authTone": "hasan" },
+  "bulugh-almaram":       { "arabicName": "بلوغ المرام",       "lifespan": "1372–1449 CE",     "motif": "⚖️", "category": "selected", "featured": false, "authLabel": "Mixed Grades",   "authTone": "hasan" },
+  "muwatta-malik":        { "arabicName": "موطأ مالك",         "lifespan": "711–795 CE",       "motif": "🛤️", "category": "selected", "featured": false, "authLabel": "Sahih / Hasan",  "authTone": "hasan" },
+  "aladab-almufrad":      { "arabicName": "الأدب المفرد",      "lifespan": "810–870 CE",       "motif": "💛", "category": "selected", "featured": false, "authLabel": "Mixed Grades",   "authTone": "hasan" },
+  "shamail-muhammadiyah": { "arabicName": "الشمائل المحمدية",  "lifespan": "824–892 CE",       "motif": "🌹", "category": "selected", "featured": false, "authLabel": "Mixed Grades",   "authTone": "hasan" },
+  "sunan-darimi":         { "arabicName": "سنن الدارمي",       "lifespan": "797–869 CE",       "motif": "📕", "category": "selected", "featured": false, "authLabel": "Mixed Grades",   "authTone": "hasan" },
+  "forty-qudsi":          { "arabicName": "الأربعون القدسية",  "lifespan": "compiled 20th c. CE", "motif": "🌟", "category": "selected", "featured": false, "authLabel": "Mixed Grades",   "authTone": "hasan" },
+  "forty-shah-waliullah": { "arabicName": "أربعون ولي الله الدهلوي", "lifespan": "1703–1762 CE", "motif": "🌖", "category": "selected", "featured": false, "authLabel": "Mixed Grades",   "authTone": "hasan" }
 }
