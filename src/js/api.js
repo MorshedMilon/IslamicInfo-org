@@ -403,7 +403,7 @@
   const HADITH_SEED_URL = 'src/data/hadith/collections.json';
   const HADITH_DIRECT_BASE = {
     fawazahmed0: 'https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/',
-    ahmedbaset:  'https://raw.githubusercontent.com/AhmedBaset/hadith-json/v1.2.0/db/by_book/',
+    ahmedbaset:  'https://cdn.jsdelivr.net/gh/AhmedBaset/hadith-json@v1.2.0/db/by_book/',
   };
   // slug → direct-source route for the 9 non-hadithapi collections. Endpoints verified 2026-07-20.
   const HADITH_ROUTES = {

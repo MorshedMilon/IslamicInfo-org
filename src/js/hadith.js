@@ -1243,7 +1243,7 @@
     else { FEED.refs = new Set(); FEED.byRef = {}; ui.renderLoadingState(el, 3); setLoadMore('hide'); feedStatus('Loading hadiths…'); }
 
     var res;
-    try { res = await api.fetchHadithList(FEED.slug, FEED.book, nextPage, 25); }
+    try { res = await api.fetchHadithsByBook(FEED.slug, FEED.book, nextPage, 25); }
     catch (_) { res = null; }
     FEED.loading = false;
 
