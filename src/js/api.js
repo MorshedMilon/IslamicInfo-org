@@ -425,9 +425,13 @@
     return r ? r.provider : 'hadithapi';
   }
 
-  /* Static 18-collection seed (7d cache). */
+  /* Static 18-collection seed (7d cache).
+     The cache key carries a schema version (`-v2`). Bump it whenever the SHAPE of
+     collections.json changes so returning visitors don't keep serving a stale seed
+     from localStorage for up to 7 days. `-v2` retires the pre-chaptersCount seed that
+     made direct-source cards show "Unavailable" under BOOKS even after the fix shipped. */
   async function _hadithSeed() {
-    const s = await _get('islamicinfo-hadith-collections', HADITH_SEED_URL, TTL_7D, false);
+    const s = await _get('islamicinfo-hadith-collections-v2', HADITH_SEED_URL, TTL_7D, false);
     return (s && Array.isArray(s.collections)) ? s.collections : [];
   }
   /* Seed row → Worker-shaped collection item (so core.mergeCollection consumes it uniformly). */

@@ -49,3 +49,25 @@ test('loadMoreMode maps fresh/append/end states', () => {
 test('loadMoreMode keeps the button when a fresh page is empty but the walk is not done', () => {
   assert.equal(core.loadMoreMode({ freshCount: 0, append: false, done: false }), 'idle');
 });
+
+test('searchKeywordCandidates: drops stopwords/short words, orders longest-first', () => {
+  assert.deepEqual(core.searchKeywordCandidates('how do I pray'), ['pray']);
+  assert.deepEqual(core.searchKeywordCandidates('kindness to parents'), ['kindness', 'parents']);
+  assert.deepEqual(core.searchKeywordCandidates('what does Islam say about seeking knowledge'),
+    ['knowledge', 'seeking', 'islam']);   // 'what/does/say/about' dropped; longest-first, capped at 3
+});
+
+test('searchKeywordCandidates: never invents words; empty when only stopwords', () => {
+  assert.deepEqual(core.searchKeywordCandidates('how do I'), []);
+  assert.deepEqual(core.searchKeywordCandidates(''), []);
+  assert.deepEqual(core.searchKeywordCandidates('   '), []);
+  // every candidate is a substring of the (lowercased) input — no fabrication
+  core.searchKeywordCandidates('Charity and Patience').forEach(function (k) {
+    assert.ok('charity and patience'.indexOf(k) !== -1);
+  });
+});
+
+test('searchKeywordCandidates: de-duplicates repeated words and respects the cap', () => {
+  assert.deepEqual(core.searchKeywordCandidates('prayer prayer prayer'), ['prayer']);
+  assert.equal(core.searchKeywordCandidates('mercy kindness patience charity fasting', 2).length, 2);
+});

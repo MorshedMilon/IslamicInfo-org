@@ -171,6 +171,31 @@ test('search with an invalid collection is rejected', async () => {
   assert.equal(res.status, 400);
 });
 
+// hadithapi.com returns HTTP 404 { message: "Hadiths not found." } when a query
+// matches nothing. That is NOT an outage — it is an empty result set. The proxy must
+// surface a clean ok:true empty envelope (so the UI shows "No results"), never a 502.
+test('search maps upstream 404 (no matches) to an empty ok result, not an error', async () => {
+  const notFound = async () => ({ ok: false, status: 404,
+    json: async () => ({ status: 404, message: 'Hadiths not found.' }) });
+  const res = await handleHadith('/api/hadith/search', new URLSearchParams('q=xqwkezzz'),
+    ENV(), ORIGIN, { fetcher: notFound });
+  assert.equal(res.status, 200);
+  const b = await res.json();
+  assert.equal(b.ok, true);
+  assert.deepEqual(b.data.results, []);
+  assert.equal(b.data.total, 0);
+});
+
+// A genuine upstream failure (5xx / network) must still be a retryable 502 — a 404
+// "no matches" special-case must not swallow real outages.
+test('search still returns a 502 on a real upstream failure', async () => {
+  const failing = async () => { throw new Error('network down'); };
+  const res = await handleHadith('/api/hadith/search', new URLSearchParams('q=intention'),
+    ENV(), ORIGIN, { fetcher: failing });
+  assert.equal(res.status, 502);
+  assert.equal((await res.json()).error.retryable, true);
+});
+
 test('daily falls back to the static hadith when upstream fails and cache is empty', async () => {
   const failing = async () => { throw new Error('down'); };
   const res = await handleHadith('/api/hadith/daily', new URLSearchParams(), ENV(), ORIGIN, { fetcher: failing });

@@ -53,11 +53,13 @@ function safeMap(arr, fn) {
   return out;
 }
 
-/* Fetch → normalize → cache; on any failure serve cache, else signal caller. */
-async function liveOrCache(kv, key, ttl, buildUrl, normalize, deps) {
+/* Fetch → normalize → cache; on any failure serve cache, else signal caller.
+   `opts` (optional) is forwarded to fetchJson — e.g. { allow404: true } lets search
+   treat hadithapi's "Hadiths not found" 404 as an empty result rather than an error. */
+async function liveOrCache(kv, key, ttl, buildUrl, normalize, deps, opts) {
   const fetcher = deps.fetcher || fetch;
   try {
-    const raw = await fetchJson(buildUrl(), { fetcher });
+    const raw = await fetchJson(buildUrl(), { fetcher, ...(opts || {}) });
     const data = normalize(raw);
     await putJson(kv, key, data, ttl);
     return { data, source: 'live' };
@@ -200,11 +202,16 @@ async function search(searchParams, env, origin, deps) {
     const { data, source } = await liveOrCache(
       env.QURANLYAI_KV, hKey('search', lang, collection || 'all', page, q), TTL.HOUR,
       () => hadithsUrl(env.HADITH_API_BASE_URL, env.HADITH_API_KEY, { ...param, paginate: 25, page }),
-      (raw) => ({ results: safeMap(raw.hadiths && raw.hadiths.data, (h) => normalizeHadith(h, { language: lang })),
-                  page, query: q,
-                  total: (raw.hadiths && raw.hadiths.total) ?? null,
-                  lastPage: (raw.hadiths && raw.hadiths.last_page) ?? null }),
-      deps,
+      (raw) => {
+        // A zero-match query (hadithapi 404, passed through by allow404) has no `hadiths`
+        // field → an honest empty result: 0 total, 1 page. Never a fabricated total.
+        const arr = raw && raw.hadiths && raw.hadiths.data;
+        const results = safeMap(arr, (h) => normalizeHadith(h, { language: lang }));
+        return { results, page, query: q,
+                 total: (raw && raw.hadiths && raw.hadiths.total != null) ? raw.hadiths.total : results.length,
+                 lastPage: (raw && raw.hadiths && raw.hadiths.last_page) ?? 1 };
+      },
+      deps, { allow404: true },
     );
     return ok(data, source, origin, source === 'live' ? TTL.HOUR : 0);
   } catch (_) {

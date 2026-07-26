@@ -31,7 +31,7 @@
 | `islamicinfo-hadith-translation-pref` | string — preferred translation **edition** id for the Tier-1 feed-card compare row (US-H23, Module 12); written on `.dv-tab` edition click, read on card render to restore the active tab. Distinct from `islamicinfo-hadith-lang` (that is the Tier-3b deep-view *language* selector). Dormant until provider data exposes >1 edition per hadith — today the adapter returns a single edition, so no compare tabs render. | Hadith Library (Module 12) | Until user changes |
 | `islamicinfo-hadith-paths` | `{ [slug]: string[] }` — reading-path progress (US-H22, Module 17). Per-path array of read hadith-ref ids in `"collection:book:hadith"` form. Written by `src/js/reading-paths.js` via core `mergeReadRefs` (deduped, existing-first). Slugs: `nawawi-40`, `kutub-sittah-basics`, `faith-foundations`, `prophetic-character`. Dormant against the deferred seed — every path ships with empty `hadithRefs` (`status: curation-pending`, ADR-042), so no rows record progress until curated hadith references ship. | Hadith Library (Module 17) | Permanent |
 | `islamicinfo-hadith-{collection}-{book}-{date}` | cached API response (JSON) | Hadith Library | 1 day |
-| `islamicinfo-hadith-collections` | merged 18-collection index seed (JSON) — ADR-024 | Hadith Library | 7 days |
+| `islamicinfo-hadith-collections-v2` | merged 18-collection index seed (JSON) — ADR-024. Key carries a schema version (`-vN`); bump on any collections.json shape change to invalidate stale client caches (v2 = adds `chaptersCount`). | Hadith Library | 7 days |
 | `islamicinfo-hadith-fawaz-{edition}` | fawazahmed0 edition file, e.g. `eng-nawawi` / `ara-nawawi` (JSON), keyless direct fetch — ADR-024 | Hadith Library | 7 days |
 | `islamicinfo-hadith-ab-{path}` | AhmedBaset v1.2.0 collection file (JSON), keyless direct fetch pinned to release tag — ADR-024 | Hadith Library | 7 days |
 | `islamicinfo-is-progress` | `ISProgress` (see §3) | Islamic Studies | Permanent |
@@ -227,7 +227,7 @@ hadith:{collection}:{book}:{date} → book hadiths            TTL 24h
 > separate `dorar:quota:{utcDate}:{ip}` key (same TTL-to-midnight pattern as the QuranlyAI quota
 > counter in §5 above). No new localStorage key — the search is live-only, not client-cached.
 
-> **Provider scope (ADR-024, 2026-07-20).** These `hadith:*` KV keys apply **only to the 9 HadithAPI.com collections** (proxied through the Worker, key server-side). The 1 fawazahmed0 (40 Nawawi) + 8 AhmedBaset collections are **keyless direct client fetches** — no Worker, no KV — cached client-side under `islamicinfo-hadith-collections` / `islamicinfo-hadith-fawaz-*` / `islamicinfo-hadith-ab-*` (see §2 localStorage table), with AhmedBaset pinned to release tag `v1.2.0`.
+> **Provider scope (ADR-024, 2026-07-20).** These `hadith:*` KV keys apply **only to the 9 HadithAPI.com collections** (proxied through the Worker, key server-side). The 1 fawazahmed0 (40 Nawawi) + 8 AhmedBaset collections are **keyless direct client fetches** — no Worker, no KV — cached client-side under `islamicinfo-hadith-collections-v2` / `islamicinfo-hadith-fawaz-*` / `islamicinfo-hadith-ab-*` (see §2 localStorage table), with AhmedBaset pinned to release tag `v1.2.0`.
 
 > **Grade/grader canonical shape (ADR-022 + 2026-07-20 refinement).** `grade` and `grader` are populated
 > only for the **9 graded collections (9 HadithAPI.com)**. For the **9 characterization-only collections**
