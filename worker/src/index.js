@@ -26,6 +26,7 @@ import { handleHadith } from './hadith.js';
 import { handleExplain } from './explain.js';
 import { handleNarrator } from './narrator.js';
 import { handleQuranSearch } from './quran-search.js';
+import { handleDuaSearch } from './dua-search.js';
 
 /* ─── Upstream fetch with timeout ──────────────────────────────────── */
 async function upstream(url, timeoutMs = 8000) {
@@ -208,6 +209,12 @@ export default {
           return res;
         }
 
+        if (path === '/api/dua/search') {
+          const res = await handleDuaSearch(url.searchParams, env, origin);
+          if (res.status === 200) await cache.put(request, res.clone());
+          return res;
+        }
+
         let res = null;
         if (path === '/api/verse') res = await handleVerse(origin);
         else if (path === '/api/prayer') res = await handlePrayer(url.searchParams, origin);
@@ -237,7 +244,7 @@ export default {
       if (path === '/' || path === '/api') {
         return json({
           service: 'IslamicInfo.org API proxy',
-          live: ['/api/verse', '/api/prayer', '/api/quran/search'],
+          live: ['/api/verse', '/api/prayer', '/api/quran/search', '/api/dua/search'],
           pending: PENDING.concat('/api/quran/[surah]'),
         }, origin);
       }
