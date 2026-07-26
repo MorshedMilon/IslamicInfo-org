@@ -11,7 +11,7 @@
   var VALID_SCOPES = ['all', 'hadith', 'quran', 'dua', 'verify'];
 
   // Single source of truth for the Dua-search go-public gate (ADR-051).
-  var DUA_SEARCH_PUBLIC = false;
+  var DUA_SEARCH_PUBLIC = true;
 
   function validateScope(s) {
     return VALID_SCOPES.indexOf(s) !== -1 ? s : 'all';

@@ -17,10 +17,9 @@ test('dispatchTarget: all navigates to the dedicated results page', () => {
     { kind: 'navigate', url: 'search-results.html?scope=all&q=zakat' });
 });
 
-test('dispatchTarget: dua is held (DUA_SEARCH_PUBLIC=false) and returns an honest note', () => {
-  var r = core.dispatchTarget('dua', 'sleep');
-  assert.equal(r.kind, 'note');
-  assert.match(r.message, /coming soon/i);
+test('dispatchTarget: dua is public (DUA_SEARCH_PUBLIC=true) and navigates to the results page', () => {
+  assert.deepEqual(core.dispatchTarget('dua', 'sleep'),
+    { kind: 'navigate', url: 'search-results.html?scope=dua&q=sleep' });
 });
 
 test('dispatchTarget: verify keyword navigates to hadith results page', () => {
