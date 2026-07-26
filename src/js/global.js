@@ -97,6 +97,29 @@ function initMobileMenu() {
 
 
 /* ─────────────────────────────────────────────────────────────────
+   injectMobileChrome()
+   Keeps the header compact on phones so the hamburger always fits.
+   i18n.js expands the language label to the full name ("English"),
+   which on narrow screens pushes the theme toggle + hamburger off
+   the right edge. On mobile we hide the label + chevron (the globe
+   icon still opens the language menu). Injected once here so every
+   page gets it without editing 15 duplicated stylesheets.
+   ───────────────────────────────────────────────────────────────── */
+
+function injectMobileChrome() {
+  if (document.getElementById('ii-mobile-chrome-css')) return;
+  const s = document.createElement('style');
+  s.id = 'ii-mobile-chrome-css';
+  s.textContent =
+    '@media(max-width:600px){' +
+    '#langBtnLabel{display:none!important;}' +
+    '.lang-chevron{display:none!important;}' +
+    '}';
+  (document.head || document.documentElement).appendChild(s);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
    Global Escape handler
    Closes both the mobile menu and search popup on Esc.
    ───────────────────────────────────────────────────────────────── */
@@ -191,5 +214,6 @@ function loadAnalytics() {
   initAccountLink();
   initReveal();
   initMobileMenu();
+  injectMobileChrome();
   loadAnalytics();
 })();

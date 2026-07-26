@@ -243,6 +243,8 @@ img{max-width:100%;}
 [dir="rtl"] .lang-menu{right:auto;left:0;}
 [dir="rtl"] .lang-item{text-align:right;}
 [dir="rtl"] .search-popup{right:auto;left:0;}
+/* Mobile: center the search popup instead of anchoring it to the right (responsiveness audit) */
+@media(max-width:480px){.search-popup{position:fixed;top:60px;left:12px;right:12px;width:auto;}[dir="rtl"] .search-popup{left:12px;right:12px;}}
 [dir="rtl"] .header-tools{margin-left:0;margin-right:auto;}
 [dir="rtl"] .ft-link:hover{transform:translateX(-4px);}
 [dir="rtl"] .mobile-menu{direction:rtl;}
