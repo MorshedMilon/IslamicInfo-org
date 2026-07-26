@@ -147,6 +147,8 @@ a{text-decoration:none;color:inherit;}
 .hs-btn:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(0,105,110,.35);}
 .hero-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;animation:fadeUp .7s var(--ease) .4s both;}
 .hero-tag{font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px;border:.5px solid rgba(0,105,110,.18);color:var(--ink-muted);background:rgba(0,105,110,.04);cursor:pointer;transition:all .22s var(--ease-premium);}
+/* ── Touch targets on touch devices (responsiveness audit) ── */
+@media(pointer:coarse){ .hero-tag{padding-top:9px;padding-bottom:9px;} }
 .hero-tag:hover{background:var(--teal-700);color:white;border-color:transparent;transform:scale(1.05);}
 
 /* ═══ LIVE TICKER ═══ */
@@ -1425,10 +1427,7 @@ sPopup.querySelector('.search-popup-btn').addEventListener('click', () => {
   }
 });
 
-/* ── Mobile menu ── */
-function openMM() { document.getElementById('mobileMenu').classList.add('open'); }
-function closeMM() { document.getElementById('mobileMenu').classList.remove('open'); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMM(); });
+/* Mobile menu open/close + dismissal shared via global.js (window.openMM/closeMM). */
 
 /* ── Reveal on scroll ── */
 const _ro = new IntersectionObserver(entries => {

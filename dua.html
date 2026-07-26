@@ -333,6 +333,13 @@ img{max-width:100%;}
 [data-theme="dark"] .dua-tag{color:var(--teal-300);}
 .dua-card-actions-top{display:flex;gap:4px;flex-shrink:0;}
 .dua-icon-btn{width:28px;height:28px;border-radius:8px;border:none;background:transparent;color:var(--ink-subtle);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+/* ── Touch targets ≥40–44px on touch devices (responsiveness audit) ── */
+@media(pointer:coarse){
+  .dua-icon-btn{width:40px;height:40px;}
+  .fd-action-btn{width:44px;height:44px;}
+  .cat-chip{padding-top:10px;padding-bottom:10px;}
+  .dua-btn{padding-top:9px;padding-bottom:9px;}
+}
 .dua-icon-btn:hover{background:rgba(0,105,110,.08);color:var(--teal-700);}
 .dua-icon-btn.saved{color:var(--gold-500);}
 .dua-arabic{font-family:var(--font-arabic);font-size:22px;direction:rtl;text-align:right;color:var(--ink-primary);line-height:2.0;margin-bottom:12px;padding:12px 14px;background:rgba(0,105,110,.03);border-radius:10px;border:0.5px solid rgba(0,105,110,.07);}
@@ -855,10 +862,7 @@ img{max-width:100%;}
     }
   });
 
-  /* ── Mobile menu ── */
-  function openMM()  { document.getElementById('mobileMenu').classList.add('open'); }
-  function closeMM() { document.getElementById('mobileMenu').classList.remove('open'); }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMM(); });
+  /* Mobile menu open/close + dismissal shared via global.js (window.openMM/closeMM). */
 
   /* ── Reveal on scroll ── */
   const _ro = new IntersectionObserver(entries => {

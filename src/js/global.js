@@ -76,6 +76,27 @@ window.closeMM = closeMM;
 
 
 /* ─────────────────────────────────────────────────────────────────
+   initMobileMenu()
+   Shared drawer dismissal wired once for every page's #mobileMenu
+   (the full-screen .mobile-menu overlay). Replaces the per-page
+   inline copies that used to live in each ii-nav page:
+     • tapping any nav link inside the drawer closes it
+     • tapping the empty backdrop area (the overlay itself, i.e.
+       "outside" the stacked links) closes it
+   The hamburger owns opening via onclick="openMM()"; Escape closes
+   via the global keydown handler below.
+   ───────────────────────────────────────────────────────────────── */
+
+function initMobileMenu() {
+  const mm = document.getElementById('mobileMenu');
+  if (!mm) return;
+  mm.addEventListener('click', e => {
+    if (e.target.closest('.mm-link') || e.target === mm) closeMM();
+  });
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
    Global Escape handler
    Closes both the mobile menu and search popup on Esc.
    ───────────────────────────────────────────────────────────────── */
@@ -169,5 +190,6 @@ function loadAnalytics() {
   initHeaderScroll();
   initAccountLink();
   initReveal();
+  initMobileMenu();
   loadAnalytics();
 })();

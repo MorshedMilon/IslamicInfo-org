@@ -239,6 +239,11 @@ a{text-decoration:none;color:inherit;}
 .grader-label{font-weight:400;opacity:.7;}
 .hadith-actions{display:flex;gap:4px;}
 .hadith-action-btn{width:30px;height:30px;border-radius:50%;border:none;background:transparent;cursor:pointer;color:var(--ink-muted);display:flex;align-items:center;justify-content:center;transition:all .2s var(--ease-premium);}
+/* ── Touch targets on touch devices (responsiveness audit) ── */
+@media(pointer:coarse){
+  .hadith-action-btn{width:44px;height:44px;}
+  .sr-chip{padding-top:11px;padding-bottom:11px;}
+}
 .hadith-action-btn:hover{background:rgba(0,105,110,.08);color:var(--teal-700);transform:scale(1.1);box-shadow:0 0 8px rgba(0,105,110,.15);}
 .hadith-arabic{font-family:var(--font-arabic);font-size:19px;direction:rtl;text-align:right;line-height:2.0;color:var(--ink-body);background:rgba(0,105,110,.04);border:0.5px solid rgba(0,105,110,.08);border-radius:var(--r-sm);padding:14px 16px;margin-bottom:14px;}
 [data-theme="dark"] .hadith-arabic{color:#D4DCDD;background:rgba(0,105,110,.06);border-color:rgba(0,105,110,.15);}
@@ -484,9 +489,8 @@ sPopup.querySelector('.search-popup-btn').addEventListener('click',()=>{
   if(q) window.location.assign('search-results.html?scope=all&q='+encodeURIComponent(q));
 });
 
-// Mobile menu — CLAUDE.md §8
-function openMM(){document.getElementById('mobileMenu').classList.add('open');}
-function closeMM(){document.getElementById('mobileMenu').classList.remove('open');}
+// Mobile menu open/close now shared via global.js (window.openMM/closeMM).
+// Keep this Escape handler for the page-local search popup (sPopup).
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMM();sPopup.classList.remove('open');}});
 </script>
 <script src="src/js/i18n.js"></script>

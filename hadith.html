@@ -325,8 +325,31 @@ a { text-decoration: none; color: inherit; }
 
 /* ─── MAIN ─── */
 .main { flex: 1; padding: 0 48px 0 48px; min-width: 0; }
-@media(max-width: 900px) { .main { padding: 0 24px; } }
-@media(max-width: 760px) { .sidebar { display: none; } .main { padding: 0 16px; } }
+@media(max-width: 900px) { .sidebar { display: none; } .main { padding: 0 24px; } }
+@media(max-width: 760px) { .main { padding: 0 16px; } }
+
+/* ── Mobile: internal overflow & wrap fixes (responsiveness audit) ── */
+.dv-gradings{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+@media(max-width:560px){
+  .isnad-chain{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
+  .isnad-chain::before{display:none;}
+  .isnad-link{flex:0 0 auto;min-width:66px;}
+}
+@media(max-width:520px){
+  .scholar-grading-row,.itqan-src-row{flex-wrap:wrap;}
+  .sg-scholar{min-width:0;flex-basis:100%;}
+}
+@media(max-width:480px){
+  .dv-prevnext{flex-wrap:wrap;}
+  .dv-nav-btn{flex:1 1 100%;text-align:center;}
+  .dv-nav-next{margin-left:0;}
+  .reading-path-strip{flex-wrap:wrap;}
+  .reading-path-strip .path-nav-btns{margin-left:0;}
+}
+/* ── Touch targets on touch devices (responsiveness audit) ── */
+@media(pointer:coarse){
+  .hadith-action-btn{width:44px;height:44px;}
+}
 
 /* ─── STATS STRIP ─── */
 .stats-strip {
@@ -517,7 +540,7 @@ a { text-decoration: none; color: inherit; }
 [data-theme="dark"] .grade-badge.grade-hasan { color:#7AB84E; background:rgba(122,184,78,.12); border-color:rgba(122,184,78,.3); }
 [data-theme="dark"] .grade-badge.grade-daif  { color:#D4884A; background:rgba(212,136,74,.12); border-color:rgba(212,136,74,.3); }
 [data-theme="dark"] .grade-badge.grade-mawdu { color:#E05555; background:rgba(224,85,85,.12); border-color:rgba(224,85,85,.3); }
-@media (max-width:760px){ #ii-sheet-trigger{ display:inline-flex !important; } }
+@media (max-width:900px){ #ii-sheet-trigger{ display:inline-flex !important; } }
 .grade-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .grader-label { font-weight: 400; opacity: .7; }
 .hadith-actions { display: flex; gap: 4px; }
@@ -2047,10 +2070,7 @@ html[data-theme="light"].reading-mode-hadith body { background-image: none; }
   }
 }());
 
-/* ── Mobile menu ── */
-function openMM()  { document.getElementById('mobileMenu').classList.add('open'); }
-function closeMM() { document.getElementById('mobileMenu').classList.remove('open'); }
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMM(); });
+/* Mobile menu open/close + dismissal shared via global.js (window.openMM/closeMM). */
 
 /* ── Isnad Toggle ── */
 function toggleIsnad(btn) {
