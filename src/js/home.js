@@ -126,6 +126,12 @@
     var res = core.dispatchTarget(currentMode(), input ? input.value : '');
     if (res.kind === 'navigate') { window.location.assign(res.url); }
     else if (res.kind === 'note') { showNote(res.message); }
+    else if (res.kind === 'panel') {
+      if (window.QuranlyAI && typeof window.QuranlyAI.ask === 'function') {
+        try { window.QuranlyAI.setContext({ type: 'claim', rawText: res.query, language: (window.II && II.i18n && II.i18n.lang) || 'en' }); } catch (_) {}
+        window.QuranlyAI.ask('custom', res.query);
+      } else { showNote('The assistant is still loading — please try again in a moment.'); }
+    }
     else if (input) { input.focus(); }   // noop → focus
   }
 

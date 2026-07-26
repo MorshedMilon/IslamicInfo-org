@@ -2,22 +2,35 @@ import { test } from 'node:test';
 import assert from 'node:assert';
 import core from '../../src/js/home-search-core.js';
 
-test('dispatchTarget: hadith navigates to hadith.html?q=', () => {
+test('dispatchTarget: hadith navigates to the dedicated results page', () => {
   assert.deepEqual(core.dispatchTarget('hadith', ' patience '),
-    { kind: 'navigate', url: 'hadith.html?q=patience' });
+    { kind: 'navigate', url: 'search-results.html?scope=hadith&q=patience' });
 });
 
-test('dispatchTarget: verify navigates to verify.html?claim=', () => {
-  assert.deepEqual(core.dispatchTarget('verify', 'the prophet said X'),
-    { kind: 'navigate', url: 'verify.html?claim=the%20prophet%20said%20X' });
+test('dispatchTarget: quran navigates to the dedicated results page', () => {
+  assert.deepEqual(core.dispatchTarget('quran', 'mercy'),
+    { kind: 'navigate', url: 'search-results.html?scope=quran&q=mercy' });
 });
 
-test('dispatchTarget: coming-soon modes return an honest note (no navigation)', () => {
-  ['quran', 'dua', 'all'].forEach(function (m) {
-    var r = core.dispatchTarget(m, 'zakat');
-    assert.equal(r.kind, 'note');
-    assert.match(r.message, /coming soon/i);
-  });
+test('dispatchTarget: all navigates to the dedicated results page', () => {
+  assert.deepEqual(core.dispatchTarget('all', 'zakat'),
+    { kind: 'navigate', url: 'search-results.html?scope=all&q=zakat' });
+});
+
+test('dispatchTarget: dua is held (DUA_SEARCH_PUBLIC=false) and returns an honest note', () => {
+  var r = core.dispatchTarget('dua', 'sleep');
+  assert.equal(r.kind, 'note');
+  assert.match(r.message, /coming soon/i);
+});
+
+test('dispatchTarget: verify keyword navigates to hadith results page', () => {
+  assert.deepEqual(core.dispatchTarget('verify', 'ablution'),
+    { kind: 'navigate', url: 'search-results.html?scope=hadith&q=ablution' });
+});
+
+test('dispatchTarget: verify claim routes to the QuranlyAI panel', () => {
+  assert.deepEqual(core.dispatchTarget('verify', 'The Prophet said charity purifies wealth'),
+    { kind: 'panel', query: 'The Prophet said charity purifies wealth' });
 });
 
 test('dispatchTarget: empty query is a noop for any mode', () => {
