@@ -36,13 +36,13 @@
 
   // Mixed-case, two-tone brand wordmark centered at (W/2, y). Mixed case + no letter-spacing
   // keeps the word silhouette readable; the colour break falls on the word break (Islamic|Info).
-  function drawWordmark(ctx, W, y) {
+  function drawWordmark(ctx, W, y, size) {
     var segs = [
       { t: 'Islamic', c: T.white95 },
       { t: 'Info',    c: T.gold },
       { t: '.org',    c: T.white80 }
     ];
-    ctx.font = '700 ' + Math.round(W * 0.033) + 'px ' + T.fontDisplay;
+    ctx.font = '700 ' + Math.round(size || W * 0.033) + 'px ' + T.fontDisplay;
     ctx.direction = 'ltr';
     var total = 0, i;
     for (i = 0; i < segs.length; i++) total += ctx.measureText(segs[i].t).width;
@@ -73,38 +73,54 @@
 
     ctx.textAlign = 'center';
 
-    // brand wordmark (top): seen first
-    drawWordmark(ctx, W, H * 0.11);
+    // ── One vertically-centered stack, auto-fit to the canvas (see reflection-actions.js).
+    // wordmark → Arabic → divider → translation → reference, centered as one group so the
+    // brand + citation stay visible when a tall card is center-cropped in a feed preview;
+    // scaled down uniformly if the group would overflow (long verse), never overlapping.
+    var arMult = 1.9, enMult = 1.65;
+    var wmSize = W * 0.049, refSize = W * 0.026;
+    var arSize = W * 0.062, enSize = W * 0.038, divGap = W * 0.05;
+    var gWM = W * 0.060, gEn = W * 0.066;
 
-    var arSize = Math.round(W * 0.062), arLH = arSize * 1.9;
-    var enSize = Math.round(W * 0.038), enLH = enSize * 1.65;
-    var divGap = W * 0.05, divH = 2;
-
-    ctx.font = arSize + 'px ' + T.fontArabic;
+    ctx.font = Math.round(arSize) + 'px ' + T.fontArabic;
     var arLines = core.wrapText(m.ar, maxW, function (s) { return ctx.measureText(s).width; });
-    ctx.font = 'italic ' + enSize + 'px ' + T.fontDisplay;
+    ctx.font = 'italic ' + Math.round(enSize) + 'px ' + T.fontDisplay;
     var enLines = core.wrapText('“' + m.en + '”', maxW, function (s) { return ctx.measureText(s).width; });
+    var refText = m.ref + (m.edition ? ' · ' + m.edition : '');
 
-    var blockH = arLines.length * arLH + divGap * 2 + divH + enLines.length * enLH;
-    var y = (H - blockH) / 2 + arSize;
+    function groupHeight() {
+      return wmSize + gWM + arSize + arLines.length * arSize * arMult + divGap * 2
+        + enSize + enLines.length * enSize * enMult + gEn + refSize;
+    }
+    var fit = (H * 0.90) / groupHeight();
+    if (fit < 1) {
+      wmSize *= fit; refSize *= fit; arSize *= fit; enSize *= fit;
+      divGap *= fit; gWM *= fit; gEn *= fit;
+    }
+    wmSize = Math.round(wmSize); refSize = Math.round(refSize);
+    arSize = Math.round(arSize); enSize = Math.round(enSize);
+    var arLH = arSize * arMult, enLH = enSize * enMult;
 
+    var y = Math.max(H * 0.05, (H - groupHeight()) / 2);
+    // brand wordmark (first / top of the group)
+    y += wmSize;
+    drawWordmark(ctx, W, y, wmSize);
     // arabic
+    y += gWM + arSize;
     ctx.direction = 'rtl'; ctx.fillStyle = T.white95; ctx.font = arSize + 'px ' + T.fontArabic;
-    for (var i = 0; i < arLines.length; i++) { ctx.fillText(arLines[i], cx, y); y += arLH; }
-
+    for (var i = 0; i < arLines.length; i++) { ctx.fillText(arLines[i], cx, y); if (i < arLines.length - 1) y += arLH; }
     // divider
-    y += divGap;
-    ctx.strokeStyle = T.gold; ctx.lineWidth = divH;
+    y += arLH + divGap;
+    ctx.strokeStyle = T.gold; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(cx - W * 0.028, y); ctx.lineTo(cx + W * 0.028, y); ctx.stroke();
-    y += divGap + enSize;
-
     // translation
+    y += divGap + enSize;
     ctx.direction = 'ltr'; ctx.fillStyle = T.white80; ctx.font = 'italic ' + enSize + 'px ' + T.fontDisplay;
-    for (var j = 0; j < enLines.length; j++) { ctx.fillText(enLines[j], cx, y); y += enLH; }
-
-    // ref (bottom)
-    ctx.fillStyle = T.white40; ctx.font = Math.round(W * 0.024) + 'px ' + T.fontMono;
-    ctx.fillText(m.ref + (m.edition ? ' · ' + m.edition : ''), cx, H * 0.9);
+    for (var j = 0; j < enLines.length; j++) { ctx.fillText(enLines[j], cx, y); if (j < enLines.length - 1) y += enLH; }
+    // reference
+    y += enLH + gEn + refSize;
+    ctx.fillStyle = T.white80; ctx.font = refSize + 'px ' + T.fontMono; ctx.direction = 'ltr';
+    ctx.fillText(refText, cx, y);
   }
 
   function ensureFonts() {

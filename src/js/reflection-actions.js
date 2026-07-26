@@ -160,13 +160,13 @@
   // Mixed-case, two-tone brand wordmark centered at (W/2, y). Mixed case + no letter-spacing
   // keeps the word silhouette readable; the colour break falls on the word break (Islamic|Info)
   // to reinforce the two-word read and draw the eye to the brand.
-  function drawWordmark(ctx, T, W, y) {
+  function drawWordmark(ctx, T, W, y, size) {
     var segs = [
       { t: 'Islamic', c: T.white95 },
       { t: 'Info',    c: T.gold },
       { t: '.org',    c: T.white80 }
     ];
-    ctx.font = '700 ' + Math.round(W * 0.033) + 'px ' + T.fontDisplay;
+    ctx.font = '700 ' + Math.round(size || W * 0.033) + 'px ' + T.fontDisplay;
     ctx.direction = 'ltr';
     var total = 0, i;
     for (i = 0; i < segs.length; i++) total += ctx.measureText(segs[i].t).width;
@@ -190,42 +190,69 @@
     r2.addColorStop(0, T.glowGold); r2.addColorStop(1, T.glowGold0); ctx.fillStyle = r2; ctx.fillRect(0, 0, W, H);
 
     ctx.textAlign = 'center'; ctx.direction = 'ltr';
-    // brand wordmark (top): seen first, not skipped at the bottom
-    drawWordmark(ctx, T, W, H * 0.072);
-    // header: TODAY'S REFLECTION · date
-    ctx.fillStyle = T.white40; ctx.font = '600 ' + Math.round(W * 0.023) + 'px ' + T.fontMono;
-    ctx.fillText(('TODAY’S REFLECTION' + (m.dateStr ? '  ·  ' + m.dateStr : '')).toUpperCase(), cx, H * 0.115);
-    // type label (gold)
-    ctx.fillStyle = T.gold; ctx.font = '600 ' + Math.round(W * 0.036) + 'px ' + T.fontDisplay;
-    ctx.fillText(m.label, cx, H * 0.115 + W * 0.058);
 
-    var arSize = Math.round(W * 0.058), arLH = arSize * 1.92;
-    var enSize = Math.round(W * 0.036), enLH = enSize * 1.62;
-    var divGap = W * 0.048, divH = 2;
-    ctx.font = arSize + 'px ' + T.fontArabic;
+    // ── One vertically-centered stack, auto-fit to the canvas ──────────────────
+    // wordmark → eyebrow → label → Arabic → divider → translation → reference are
+    // laid out as ONE group centered in the card. On the tall Story card this fills
+    // the former empty bands and pulls the brand wordmark + citation toward the
+    // middle (so both survive a social preview's center-crop); the wordmark is still
+    // drawn first / on top. If the group is taller than the canvas (long text on the
+    // square card), every measure is scaled down by one factor so nothing overflows
+    // or overlaps and the citation is never cut off.
+    var arMult = 1.92, enMult = 1.62;
+    var wmSize = W * 0.049, hdrSize = W * 0.023, lblSize = W * 0.037, refSize = W * 0.026;
+    var arSize = W * 0.058, enSize = W * 0.036, divGap = W * 0.045;
+    var gWM = W * 0.040, gHdr = W * 0.044, gLbl = W * 0.066, gEn = W * 0.066;
+
+    ctx.font = Math.round(arSize) + 'px ' + T.fontArabic;
     var arLines = shareCore.wrapText(m.arabic, maxW, function (s) { return ctx.measureText(s).width; });
-    ctx.font = 'italic ' + enSize + 'px ' + T.fontDisplay;
+    ctx.font = 'italic ' + Math.round(enSize) + 'px ' + T.fontDisplay;
     var enText = '“' + shareCore.stripQuotes(m.text) + '”';
     var enLines = shareCore.wrapText(enText, maxW, function (s) { return ctx.measureText(s).width; });
-
-    var blockH = arLines.length * arLH + divGap * 2 + divH + enLines.length * enLH;
-    var y = (H - blockH) / 2 + arSize + H * 0.02;
-    // arabic
-    ctx.direction = 'rtl'; ctx.fillStyle = T.white95; ctx.font = arSize + 'px ' + T.fontArabic;
-    arLines.forEach(function (ln) { ctx.fillText(ln, cx, y); y += arLH; });
-    // divider
-    y += divGap; ctx.strokeStyle = T.gold; ctx.lineWidth = divH;
-    ctx.beginPath(); ctx.moveTo(cx - W * 0.028, y); ctx.lineTo(cx + W * 0.028, y); ctx.stroke();
-    y += divGap + enSize;
-    // translation
-    ctx.direction = 'ltr'; ctx.fillStyle = T.white80; ctx.font = 'italic ' + enSize + 'px ' + T.fontDisplay;
-    enLines.forEach(function (ln) { ctx.fillText(ln, cx, y); y += enLH; });
-
-    // reference (+ grade for hadith)
     var refLine = m.ref + (m.grade ? '  ·  ' + String(m.grade).replace(/^✓\s*/, '') : '');
-    ctx.fillStyle = T.white80; ctx.font = Math.round(W * 0.024) + 'px ' + T.fontMono;
-    ctx.fillText(refLine, cx, H * 0.86);
-    // (wordmark moved to the top — see brand wordmark above)
+
+    function groupHeight() {
+      return wmSize + gWM + hdrSize + gHdr + lblSize + gLbl + arSize
+        + arLines.length * arSize * arMult + divGap * 2 + enSize
+        + enLines.length * enSize * enMult + gEn + refSize;
+    }
+    var fit = (H * 0.90) / groupHeight();
+    if (fit < 1) {   // scale the whole stack down uniformly so it fits (long text)
+      wmSize *= fit; hdrSize *= fit; lblSize *= fit; refSize *= fit;
+      arSize *= fit; enSize *= fit; divGap *= fit;
+      gWM *= fit; gHdr *= fit; gLbl *= fit; gEn *= fit;
+    }
+    wmSize = Math.round(wmSize); hdrSize = Math.round(hdrSize); lblSize = Math.round(lblSize);
+    refSize = Math.round(refSize); arSize = Math.round(arSize); enSize = Math.round(enSize);
+    var arLH = arSize * arMult, enLH = enSize * enMult;
+
+    var y = Math.max(H * 0.05, (H - groupHeight()) / 2);
+    // brand wordmark (first / top of the group)
+    y += wmSize;
+    drawWordmark(ctx, T, W, y, wmSize);
+    // eyebrow: TODAY'S REFLECTION · date
+    y += gWM + hdrSize;
+    ctx.fillStyle = T.white40; ctx.font = '600 ' + hdrSize + 'px ' + T.fontMono; ctx.direction = 'ltr';
+    ctx.fillText(('TODAY’S REFLECTION' + (m.dateStr ? '  ·  ' + m.dateStr : '')).toUpperCase(), cx, y);
+    // type label (gold)
+    y += gHdr + lblSize;
+    ctx.fillStyle = T.gold; ctx.font = '600 ' + lblSize + 'px ' + T.fontDisplay;
+    ctx.fillText(m.label, cx, y);
+    // arabic
+    y += gLbl + arSize;
+    ctx.direction = 'rtl'; ctx.fillStyle = T.white95; ctx.font = arSize + 'px ' + T.fontArabic;
+    arLines.forEach(function (ln, i) { ctx.fillText(ln, cx, y); if (i < arLines.length - 1) y += arLH; });
+    // divider
+    y += arLH + divGap; ctx.strokeStyle = T.gold; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx - W * 0.028, y); ctx.lineTo(cx + W * 0.028, y); ctx.stroke();
+    // translation
+    y += divGap + enSize;
+    ctx.direction = 'ltr'; ctx.fillStyle = T.white80; ctx.font = 'italic ' + enSize + 'px ' + T.fontDisplay;
+    enLines.forEach(function (ln, i) { ctx.fillText(ln, cx, y); if (i < enLines.length - 1) y += enLH; });
+    // reference (+ grade for hadith)
+    y += enLH + gEn + refSize;
+    ctx.fillStyle = T.white80; ctx.font = refSize + 'px ' + T.fontMono; ctx.direction = 'ltr';
+    ctx.fillText(refLine, cx, y);
   }
 
   function ensureFonts() {
