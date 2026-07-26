@@ -11,6 +11,7 @@
 
   var II = window.II || {};
   var api = II.api, ui = II.ui, core = II.hadithCollections, feed = II.hadithFeed;
+  var list = II.hadithList;   // pure list/search helpers (searchKeywordCandidates)
   var RP = II.readingProgress;
   var actions = II.hadithActions;
   var topics = II.hadithTopics;
@@ -1278,29 +1279,59 @@
   // Global hadith search (US-H07 real): runs /api/hadith/search and renders results
   // into the feed area with the existing card renderer. Shared by the hero search box
   // and the homepage (hadith.html?q=). Never fabricates; honest empty/error states.
+  // Render a result set into the feed. `note` (optional) is a short line shown above the
+  // cards (used by the keyword fallback: "No exact match for X — showing results for Y").
+  function renderSearchResults(results, q, note) {
+    var el = feedEl(); if (!el) return;
+    FEED.byRef = {};
+    results.forEach(function (h) { var r = feed.refOf(h); if (r) FEED.byRef[r] = h; });
+    var noteHTML = note ? ('<div class="search-fallback-note" role="note" style="margin:0 0 16px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2,rgba(0,105,110,.04));color:var(--ink-muted);font-size:.92em;">' + esc(note) + '</div>') : '';
+    el.innerHTML = noteHTML + results.map(feed.buildCardHTML).join('');
+    markCardStates(el);
+    applyGradeFilter();
+  }
+
+  // Hero search with a keyword fallback (US-H07). The upstream is a LITERAL substring
+  // match on translation text, so natural-language phrases ("how do I pray") match nothing
+  // as a whole. When the full query returns zero results, retry with its significant
+  // keywords (stopwords dropped, longest-first) and surface the substitution honestly.
   async function runGlobalHadithSearch(q) {
     var el = feedEl(); if (!el || !feed) return;
     q = (q || '').trim(); if (!q) return;
     FEED.query = '';   // server search already matched; grade pills must filter by grade only, not literal substring
     setLoadMore('hide');
     ui.renderLoadingState(el, 3); feedStatus('Searching “' + q + '”…');
+
     var res; try { res = await api.fetchHadithSearch(q, 'en', 1); } catch (_) { res = null; }
     if (!res || !res.ok || !res.data || !Array.isArray(res.data.results)) {
       ui.renderErrorState(el, 'Search temporarily unavailable — try again', function () { runGlobalHadithSearch(q); });
       return;
     }
-    var results = res.data.results;
-    FEED.byRef = {};
-    results.forEach(function (h) { var r = feed.refOf(h); if (r) FEED.byRef[r] = h; });
-    if (!results.length) {
-      el.innerHTML = '<div class="hadith-card"><div class="hadith-inner" style="text-align:center;padding:32px;color:var(--ink-muted);">No results for “' + esc(q) + '”.</div></div>';
-      feedStatus('No results for “' + q + '”.');
+    if (res.data.results.length) {
+      renderSearchResults(res.data.results, q);
+      feedStatus(res.data.results.length + ' result' + (res.data.results.length === 1 ? '' : 's') + ' for “' + q + '”');
       return;
     }
-    el.innerHTML = results.map(feed.buildCardHTML).join('');
-    markCardStates(el);
-    applyGradeFilter();
-    feedStatus(results.length + ' result' + (results.length === 1 ? '' : 's') + ' for “' + q + '”');
+
+    // Zero exact matches → try up to 2 significant keywords, in order, until one hits.
+    var candidates = (list && list.searchKeywordCandidates) ? list.searchKeywordCandidates(q, 2) : [];
+    var qLower = q.toLowerCase();
+    for (var i = 0; i < candidates.length; i++) {
+      var kw = candidates[i];
+      if (kw === qLower) continue;                       // same as full query — already tried
+      feedStatus('Searching “' + kw + '”…');
+      var r2; try { r2 = await api.fetchHadithSearch(kw, 'en', 1); } catch (_) { r2 = null; }
+      if (r2 && r2.ok && r2.data && Array.isArray(r2.data.results) && r2.data.results.length) {
+        var note = 'No exact match for “' + q + '” — showing results for “' + kw + '”.';
+        renderSearchResults(r2.data.results, kw, note);
+        feedStatus(r2.data.results.length + ' result' + (r2.data.results.length === 1 ? '' : 's') + ' for “' + kw + '” (from “' + q + '”)');
+        return;
+      }
+    }
+
+    // Nothing matched the phrase or its keywords.
+    el.innerHTML = '<div class="hadith-card"><div class="hadith-inner" style="text-align:center;padding:32px;color:var(--ink-muted);">No results for “' + esc(q) + '”. Try a keyword like <em>prayer</em>, <em>patience</em>, or <em>charity</em>.</div></div>';
+    feedStatus('No results for “' + q + '”.');
   }
 
   /* ── Grade filter deep-link (?grade=, TechSpec §5.1; preserves the current path + other params) ── */
