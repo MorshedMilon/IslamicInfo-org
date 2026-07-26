@@ -110,11 +110,32 @@ function injectMobileChrome() {
   if (document.getElementById('ii-mobile-chrome-css')) return;
   const s = document.createElement('style');
   s.id = 'ii-mobile-chrome-css';
-  s.textContent =
-    '@media(max-width:600px){' +
-    '#langBtnLabel{display:none!important;}' +
-    '.lang-chevron{display:none!important;}' +
-    '}';
+  s.textContent = [
+    /* Keep the login/account icon visible on phones + small tablets on
+       every page (both header systems), so header actions are consistent.
+       820px covers the homepage, whose nav collapses later than the rest. */
+    '@media(max-width:820px){',
+      '.header-tools [data-account],.ii-nav-icons [data-account]{display:flex!important;}',
+    '}',
+    /* Make every mobile drawer cover the sticky header uniformly (some pages
+       shipped z-index:300, letting the header sit over the drawer's close X). */
+    '.mobile-menu{z-index:3000!important;}',
+    '@media(max-width:600px){',
+      /* Compact language selector (globe only) so the whole icon row fits. */
+      '#langBtnLabel{display:none!important;}',
+      '.lang-chevron{display:none!important;}',
+      /* Tighten icon spacing so search+lang+theme+account+hamburger all fit. */
+      '.header-tools,.ii-nav-icons{gap:3px!important;}',
+      /* Center the search popup evenly (like the homepage) instead of
+         anchoring it to the right edge. Covers both header systems. */
+      '.search-popup,.ii-search-popup{',
+        'position:fixed!important;top:60px!important;',
+        'left:0!important;right:0!important;',
+        'margin-left:auto!important;margin-right:auto!important;',
+        'width:calc(100% - 24px)!important;max-width:420px!important;',
+      '}',
+    '}'
+  ].join('');
   (document.head || document.documentElement).appendChild(s);
 }
 
