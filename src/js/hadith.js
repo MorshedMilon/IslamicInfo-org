@@ -53,8 +53,9 @@
      collections-meta.json). 64×64 viewBox, currentColor stroke (themed teal via .card-motif-svg)
      + a single var(--gold-500) accent, no fills beyond the gold accent — readable at 32px.
      These are trusted code literals (not user/JSON data), so they are injected as raw HTML.
-     Slugs not in this map fall back to the meta emoji. The other ~9 PRD collections are
-     deferred until they exist as real collections (same gap as Module 1/2/11). */
+     Slugs not in this map fall back to the meta emoji. All 18 seeded collections now have
+     a motif here; content-serving for the AhmedBaset/fawazahmed0 "selected" collections is
+     tracked separately (backend slug support). */
   var MS_OPEN = '<svg class="card-motif-svg" width="44" height="44" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
   var MOTIF_SVG = {
     // 8-pointed star (square + diamond) with gold center — premier authenticity
@@ -75,6 +76,24 @@
     'mishkat': MS_OPEN + '<path d="M16 53 V29 C16 20 23 12 32 12 C41 12 48 20 48 29 V53"/><path d="M32 21 V29"/><path d="M26 35 H38 L35 45 H29 Z"/><path d="M32 27 C34 30 34 33 32 35 C30 33 30 30 32 27 Z" fill="var(--gold-500)" stroke="none"/></svg>',
     // Chain links (silsila) with a gold end link
     'al-silsila-sahiha': MS_OPEN + '<rect x="9" y="27" width="20" height="10" rx="5"/><rect x="25" y="27" width="20" height="10" rx="5"/><rect x="41" y="27" width="14" height="10" rx="5" stroke="var(--gold-500)"/></svg>',
+    // 40 Nawawi — a framed selection with a gold star (foundational forty)
+    'nawawi40': MS_OPEN + '<rect x="12" y="12" width="40" height="40" rx="5"/><path d="M32 21 L34.7 29.3 L43.4 29.3 L36.4 34.4 L39 42.7 L32 37.6 L25 42.7 L27.6 34.4 L20.6 29.3 L29.3 29.3 Z" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Riyad as-Salihin (gardens of the righteous) — a plant with a gold bud
+    'riyad-assalihin': MS_OPEN + '<path d="M32 52 V26"/><path d="M32 34 C22 34 18 24 22 16 C30 18 34 26 32 34"/><path d="M32 34 C42 34 46 24 42 16 C34 18 30 26 32 34"/><circle cx="32" cy="16" r="3" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Bulugh al-Maram (legal hadith) — balance scales with a gold beam
+    'bulugh-almaram': MS_OPEN + '<path d="M32 14 V50"/><path d="M16 22 H48" stroke="var(--gold-500)"/><path d="M16 22 L10 35 A8 8 0 0 0 22 35 Z"/><path d="M48 22 L42 35 A8 8 0 0 0 54 35 Z"/><path d="M24 50 H40"/><circle cx="32" cy="14" r="2.6" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Muwatta Malik (the well-trodden path) — a winding path with a gold waypoint
+    'muwatta-malik': MS_OPEN + '<path d="M20 52 C20 40 44 42 44 30 C44 18 24 20 24 10"/><circle cx="24" cy="10" r="3" fill="var(--gold-500)" stroke="none"/><circle cx="20" cy="52" r="2.6"/></svg>',
+    // Al-Adab al-Mufrad (manners) — a heart with a gold center
+    'aladab-almufrad': MS_OPEN + '<path d="M32 49 C10 35 15 15 32 25 C49 15 54 35 32 49 Z"/><circle cx="32" cy="31" r="3" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Shamail Muhammadiyah (noble characteristics) — a five-petal bloom, gold heart
+    'shamail-muhammadiyah': MS_OPEN + '<circle cx="32" cy="19" r="6.5"/><circle cx="44" cy="28" r="6.5"/><circle cx="39" cy="42" r="6.5"/><circle cx="25" cy="42" r="6.5"/><circle cx="20" cy="28" r="6.5"/><circle cx="32" cy="32" r="5.5" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Sunan al-Darimi — a bound codex with a gold clasp
+    'sunan-darimi': MS_OPEN + '<rect x="17" y="12" width="28" height="40" rx="2.5"/><path d="M24 12 V52"/><path d="M30 23 H40 M30 31 H40 M30 39 H40"/><rect x="42" y="27" width="6" height="10" rx="1.5" fill="var(--gold-500)" stroke="none"/></svg>',
+    // Forty Hadith Qudsi (divine sayings) — radiant light with a gold core
+    'forty-qudsi': MS_OPEN + '<circle cx="32" cy="34" r="10"/><circle cx="32" cy="34" r="3.6" fill="var(--gold-500)" stroke="none"/><path d="M32 18 V10 M46 24 L51 19 M18 24 L13 19 M50 34 H58 M6 34 H14"/></svg>',
+    // Forty Hadith of Shah Waliullah — an open book with a gold crescent
+    'forty-shah-waliullah': MS_OPEN + '<path d="M32 20 C26 16 16 16 10 18 V48 C16 46 26 46 32 50"/><path d="M32 20 C38 16 48 16 54 18 V48 C48 46 38 46 32 50"/><path d="M41 27 A6 6 0 1 0 41 39 A4.6 4.6 0 1 1 41 27 Z" fill="var(--gold-500)" stroke="none"/></svg>',
   };
   function motifHTML(c) {
     var svg = c && MOTIF_SVG[c.slug];
