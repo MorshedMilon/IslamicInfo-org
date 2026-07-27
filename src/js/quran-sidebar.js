@@ -277,6 +277,10 @@
     // it). Reset the scroll-direction tracker so the render's scroll-to-top isn't read
     // as an upward gesture (which would pop the header open on every select).
     document.documentElement.classList.remove('header-peek');
+    // Start immersive: reader toolbar hidden + audio bar slid away (both are ≤900px
+    // CSS-only, so this is inert on desktop). Only visibility — no control state.
+    document.documentElement.classList.remove('toolbar-open');
+    document.documentElement.classList.add('audiobar-hidden');
     var versesArea = document.getElementById('versesArea');
     if (versesArea) versesArea._lastScrollY = 0;
     // Also jump to the reader — a harmless no-op in focus mode (hero already hidden),
@@ -339,8 +343,8 @@
       if (!window.matchMedia('(max-width:900px)').matches) return;
       var y = area.scrollTop;
       var last = (typeof area._lastScrollY === 'number') ? area._lastScrollY : 0;
-      if (y < last - 4) root.classList.add('header-peek');          // scrolled up → reveal
-      else if (y > last + 4) root.classList.remove('header-peek');  // scrolled down → hide
+      if (y < last - 4) { root.classList.add('header-peek'); root.classList.add('toolbar-open'); }            // scrolled up → reveal site header + reader toolbar (exit immersive)
+      else if (y > last + 4) { root.classList.remove('header-peek'); root.classList.remove('toolbar-open'); }  // scrolled down → back to immersive
       area._lastScrollY = y;
     }, { passive: true });
   })();
@@ -373,19 +377,24 @@
       if (isMobile()) root.classList.toggle('toolbar-open');
     });
 
-    // Audio-bar auto-hide + reveal-on-idle.
+    // Audio-bar: fully hidden while reading. It reveals only when the reader nears the
+    // bottom of the content OR the user taps the bottom edge, then auto-hides again
+    // after ~2.5s idle. (The previous pass revealed it on scroll-idle; that is removed —
+    // in immersive mode the bar must stay hidden by default.)
     var idleTimer = null;
-    function summonAudio() { root.classList.remove('audiobar-hidden'); }
-    function scheduleReveal() {
+    function scheduleHide() {
       if (idleTimer) clearTimeout(idleTimer);
-      idleTimer = setTimeout(summonAudio, 2500);   // ~2.5s scroll-idle → controls reappear
+      idleTimer = setTimeout(function () { root.classList.add('audiobar-hidden'); }, 2500);
+    }
+    function summonAudio() { root.classList.remove('audiobar-hidden'); scheduleHide(); }
+    function nearBottom() {
+      return (area.scrollTop + area.clientHeight) >= (area.scrollHeight - area.clientHeight * 0.15);
     }
     if (area) area.addEventListener('scroll', function () {
       if (!isMobile()) return;
-      root.classList.add('audiobar-hidden');         // reading / scrolling → hide the bar
-      root.classList.remove('toolbar-open');          // and re-collapse the controls
       measureAudioBar();
-      scheduleReveal();
+      if (nearBottom()) summonAudio();                // reached the bottom → surface controls
+      else root.classList.add('audiobar-hidden');     // still reading / scrolled up → keep hidden
     }, { passive: true });
 
     // Tap/click in the bottom ~15% of the viewport → summon the bar (video-player style).
@@ -396,6 +405,16 @@
     }
     document.addEventListener('touchstart', bottomTap, { passive: true });
     document.addEventListener('click', bottomTap);
+
+    // Tap the Bismillah → reveal / collapse the full reader toolbar (exit immersive).
+    // Delegated so it survives a per-surah re-render; Mushaf mode hides the Bismillah,
+    // so scrolling up is the reveal path there.
+    document.addEventListener('click', function (e) {
+      if (!isMobile()) return;
+      if (e.target.closest && e.target.closest('.bismillah-banner')) {
+        root.classList.toggle('toolbar-open');
+      }
+    });
   })();
 
   // expose for Task 6 to extend + for tests/manual
