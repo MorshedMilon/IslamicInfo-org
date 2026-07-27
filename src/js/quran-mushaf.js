@@ -109,10 +109,14 @@
       } else if (line.type === 'basmallah') {
         row.innerHTML = '<span class="m-basmala">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</span>';
       } else {
-        // One concatenated glyph run per line — preserves the QCF font's natural
-        // inter-word spacing and shaping (per-word spans + CSS justify distorted it).
+        // Per-word spans carrying verse_key + position so recitation sync can highlight
+        // the current ayah/word. In QCF v2 each word is a single PUA glyph code, so
+        // wrapping each in an unstyled inline span is a zero-layout-change op (the old
+        // distortion came from CSS justify, which is gone — we measure-and-scale instead).
         row.style.fontFamily = "'" + fam + "', 'Amiri', serif";
-        row.innerHTML = line.words.map(function (w) { return w.code; }).join('');
+        row.innerHTML = line.words.map(function (w) {
+          return '<span class="m-word" data-vk="' + w.verseKey + '" data-wp="' + w.position + '">' + w.code + '</span>';
+        }).join('');
       }
       pageEl.appendChild(row);
     });
@@ -156,11 +160,46 @@
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   }
 
+  // ── Recitation highlight on the QCF page ──────────────────────────────────
+  // Driven by quran-audio.js (markPlaying/onTime) when Mushaf mode is active. Ayah
+  // spans carry data-vk (verse_key) + data-wp (1-based word position). The audio
+  // segment word index is 0-based over words, so the active word is data-wp = idx+1.
+  var lastSyncAyah = null;
+  function clearMushafHighlight() {
+    var h = host(); if (!h) return;
+    Array.prototype.forEach.call(h.querySelectorAll('.m-word.m-ayah-active, .m-word.word-active'),
+      function (s) { s.classList.remove('m-ayah-active', 'word-active'); });
+    lastSyncAyah = null;
+  }
+  // Highlight the given ayah (and its current word) on the page. Returns false if the
+  // ayah isn't on the currently-rendered page (caller may leave the page as-is).
+  function mushafSync(verseKey, wordIdx0) {
+    var h = host(); if (!h) return false;
+    var ayahSpans = h.querySelectorAll('.m-word[data-vk="' + verseKey + '"]');
+    if (!ayahSpans.length) { if (lastSyncAyah !== null) clearMushafHighlight(); return false; }
+    if (verseKey !== lastSyncAyah) {
+      clearMushafHighlight();
+      Array.prototype.forEach.call(ayahSpans, function (s) { s.classList.add('m-ayah-active'); });
+      lastSyncAyah = verseKey;
+      try { ayahSpans[0].scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+    } else {
+      Array.prototype.forEach.call(h.querySelectorAll('.m-word.word-active'),
+        function (s) { s.classList.remove('word-active'); });
+    }
+    if (typeof wordIdx0 === 'number' && wordIdx0 >= 0) {
+      var span = h.querySelector('.m-word[data-vk="' + verseKey + '"][data-wp="' + (wordIdx0 + 1) + '"]');
+      if (span) span.classList.add('word-active');
+    }
+    return true;
+  }
+
   window.II = window.II || {};
   window.II.mushaf = {
     current: function () { return state.page; },
     isActive: function () { return state.active; },
-    _setActive: function (b) { state.active = !!b; },
+    sync: mushafSync,
+    clearHighlight: clearMushafHighlight,
+    _setActive: function (b) { state.active = !!b; if (!state.active) clearMushafHighlight(); },
     _variant: function () { return state.variant; },
     zoom: function () { return state.zoom; },
     // Scale the mushaf page; mirrored from the reader's A−/A+ control. Persisted.

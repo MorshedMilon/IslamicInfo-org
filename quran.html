@@ -1094,6 +1094,11 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 .mushaf-page .mushaf-word { cursor: default; }
 .mushaf-page .mushaf-word.word-active { color: var(--gold-600); }
 .mushaf-page .m-line.ayah-playing { background: rgba(197,160,89,.08); border-radius: 6px; }
+/* Recitation sync on the QCF page (per-word spans; set by quran-mushaf.js sync()). */
+.mushaf-page .m-word.m-ayah-active { background: rgba(197,160,89,.12); border-radius: 4px; }
+.mushaf-page .m-word.word-active   { background: rgba(197,160,89,.30); color: var(--gold-700); border-radius: 4px; }
+[data-theme="dark"] .mushaf-page .m-word.m-ayah-active { background: rgba(197,160,89,.16); }
+[data-theme="dark"] .mushaf-page .m-word.word-active   { background: rgba(197,160,89,.34); color: #D7B675; }
 .mushaf-foot {
   margin-top: 14px; text-align: center;
   font-family: var(--font-mono); font-size: 11px; color: var(--ink-subtle); letter-spacing: .04em;
