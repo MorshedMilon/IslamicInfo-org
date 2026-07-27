@@ -690,6 +690,9 @@ a { text-decoration: none; color: inherit; }
 .main[data-tier="2"] > *:not(#ii-tier2) { display: none !important; }
 #ii-tier2 { display: none; }
 .main[data-tier="2"] > #ii-tier2 { display: block; }
+/* Sidebar/book navigation scrolls here; offset for the 60px sticky #ii-header so
+   the content top isn't hidden behind the nav (scroll-margin-top = header + gap). */
+#ii-tier2, #hadith-feed, #collections { scroll-margin-top: 72px; }
 .collection-header { padding: 12px 0 24px; }
 .collection-header .back-btn { display: inline-block; font-size: 12px; font-weight: 600; color: var(--teal-700); text-decoration: none; margin-bottom: 14px; }
 .collection-header .back-btn:hover { color: var(--gold-700); }

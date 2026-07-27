@@ -492,11 +492,21 @@
     if (r.book || isBookless(r.collection)) { if (II.tier3) II.tier3.renderList(r, c); else renderTier3Placeholder(r, c); return; }   // Tier 3a
     loadBooksGrid(c);
   }
+  // Jump to the Tier-2 content area (books/feed), skipping the hero. scroll-margin-top
+  // on #ii-tier2 (hadith.html) clears the 60px sticky header. Falls back to #hadith-feed.
+  function scrollToContent() {
+    var el = document.getElementById('ii-tier2') || document.getElementById('hadith-feed');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
   function routeTo(r, push) {
     r = r || { collection: null };
     if (push) { try { history.pushState(r, '', routePath(r)); } catch (_) {} }
     renderRoute(r);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Selecting a collection/book (sidebar or card) → jump to the content, skipping the
+    // hero. Fresh Tier-1 navigation (All Collections / home) still lands at the top so the
+    // hero stays available for users who arrive that way.
+    if (r && r.collection) scrollToContent();
+    else window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function wireRouting() {
@@ -1131,6 +1141,9 @@
     renderStats(state.collections);
     renderContinueReading();
     renderRoute(parseRoute());
+    // Direct deep-link load (/hadith/[collection]…): the browser lands at scroll 0 with the
+    // hero on screen, so jump to the content once it's rendered. rAF lets the skeleton lay out.
+    if (parseRoute().collection) requestAnimationFrame(scrollToContent);
   }
 
   /* ── Hadith of the Day ── */
