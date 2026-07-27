@@ -850,6 +850,69 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   .now-playing-badge{display:none;}
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE READING FOCUS (≤900px) — a clean, distraction-free reading window.
+   Collapsed header shows only: hamburger (left) + surah name (center) + the
+   sticky progress bar (.vp-bar, already below the topbar). Everything else —
+   font-size stepper, now-playing, top play button, and the whole secondary
+   controls row — is hidden by DEFAULT and revealed by tapping the surah name
+   (html.toolbar-open). The bottom audio bar auto-hides during reading/scroll
+   and returns on a bottom tap or a short scroll-idle. Desktop (≥901px) is
+   completely unaffected. NOTE: controls are only VISUALLY hidden — their JS
+   state (Word-by-word, Study mode, etc.) is never changed, so an already-on
+   toggle stays active while its button is out of view.
+   ══════════════════════════════════════════════════════════════════════════ */
+@media(max-width:900px){
+  /* Surah name is the reveal toggle */
+  .rtb-row1 .surah-bc{flex:1 1 auto;min-width:0;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .rtb-row1 .surah-bc .bc-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rtb-row1 .surah-bc .bc-title::after{content:"\25BE";font-size:.62em;margin-inline-start:7px;color:var(--ink-subtle);
+    display:inline-block;transition:transform .25s var(--ease-reverent);vertical-align:middle;}
+
+  /* Collapsed by default: hide the row-1 extras + the whole controls row */
+  .rtb-row1 .zoom-ctrl,
+  .rtb-row1 .now-playing-badge,
+  .rtb-row1 .play-surah-btn{
+    max-width:0;overflow:hidden;opacity:0;padding-left:0;padding-right:0;margin:0;
+    pointer-events:none;transition:opacity .2s,max-width .28s var(--ease-reverent);
+  }
+  .rtb-row2{
+    max-height:0;opacity:0;overflow:hidden;padding-top:0;padding-bottom:0;border-width:0;
+    transition:max-height .3s var(--ease-reverent),opacity .22s,padding .3s;
+  }
+
+  /* Revealed state (tap the surah name) */
+  html.toolbar-open .rtb-row1 .zoom-ctrl,
+  html.toolbar-open .rtb-row1 .now-playing-badge{max-width:220px;opacity:1;pointer-events:auto;}
+  html.toolbar-open .rtb-row1 .play-surah-btn{max-width:220px;opacity:1;pointer-events:auto;padding-left:18px;padding-right:18px;}
+  html.toolbar-open .rtb-row2{max-height:60px;opacity:1;padding:8px 12px;overflow:visible;}
+  html.toolbar-open .rtb-row1 .surah-bc .bc-title::after{transform:rotate(180deg);}
+
+  /* Auto-hiding bottom audio bar: pin it to the viewport bottom so it can slide out
+     cleanly (translateY) without leaving a flow gap and without depending on the
+     reader-shell's scroll/pin state. It stays a descendant of the sticky reader-shell
+     (a stacking context), so an open sidebar/tafsir drawer (z-index:60) still covers
+     it. The verses pane pads its bottom by the bar's measured height so no verse is
+     ever hidden behind it. */
+  .audio-player{
+    position:fixed;left:0;right:0;bottom:0;z-index:40;
+    transition:transform .34s var(--ease-reverent),opacity .28s;will-change:transform;
+  }
+  .verses-area{padding-bottom:calc(var(--audiobar-h,72px) + 6px);}
+  html.audiobar-hidden .audio-player{transform:translateY(100%);opacity:0;pointer-events:none;}
+
+  /* Fix "Today's Reflection scrolls in front of the reader": the reader-shell was
+     position:sticky, so it stayed pinned full-screen while the sections below it
+     (Today's Reflection, features) scrolled OVER the pinned reader. Reading already
+     uses the verses pane's own inner scroll, so the outer-page pin isn't needed —
+     make the shell position:relative so scrolling past the reader reveals the content
+     below it cleanly, with no overlap. It stays positioned, so the off-canvas
+     sidebar/tafsir drawers still anchor to it. The site header (position:fixed in
+     focus mode) still peeks in as an overlay on scroll-up. */
+  .reader-shell{position:relative;top:0;}
+  html.reader-focus.header-peek .reader-shell{top:0;}
+}
+
 /* ════════════════════════════════════════════════════════
    ENHANCEMENT PACK v2 — Gradient Glow · Load Animations
    Scroll Counters · Universal Hover Glow System
