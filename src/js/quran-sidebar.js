@@ -254,6 +254,14 @@
     }
     if (typeof window.showToast === 'function') window.showToast('Loading ' + name + '…');
     window.loadSurah(id);
+
+    // Jump to the reader (skip the hero) whenever a surah is explicitly selected —
+    // sidebar click, ?surah= deep-link, or history nav. Mirrors the hadith page.
+    // Fresh /quran.html loads render the default surah via loadSurah() directly (not
+    // selectSurah), so the hero stays available for users who arrive that way.
+    // scroll-margin-top:60px on .reader-shell clears the sticky site header.
+    var shell = document.getElementById('readerShell');
+    if (shell) shell.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   function selectSurahBySlug(slug) {
