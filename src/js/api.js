@@ -124,6 +124,48 @@
     }
   }
 
+  /* ─── Internal: direct-source fetch (IN-MEMORY cache, NOT localStorage) ───
+     The AhmedBaset/fawazahmed0 "direct-source" datasets are multi-MB JSON files
+     (riyad ~3.3MB, musnad-ahmad ~3.1MB, bulugh ~2.8MB). Persisting them in
+     localStorage exhausts the ~10MB per-origin quota after only a few collections,
+     which then makes EVERY other write on the site fail silently (bookmarks, notes,
+     progress, the collections seed) and freezes already-cached entries stale for 7
+     days (refresh-writes fail too) — the "books stopped loading" regression. So we
+     cache them in a module-scoped Map for the session only. jsdelivr serves them
+     immutably (pinned @v1.2.0) with long-lived HTTP caching, so a reload re-fetch is
+     served from the browser's HTTP cache, not the network — no perf cost, no quota
+     pressure, no silent staleness. */
+  const _directMemo = new Map();   // absolute CDN url → parsed JSON (session lifetime)
+  async function _getDirect(url) {
+    if (_directMemo.has(url)) return _directMemo.get(url);
+    try {
+      const res = await fetch(url);   // absolute CDN URL (_apiUrl is a no-op for it)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      _directMemo.set(url, data);
+      return data;
+    } catch (err) {
+      console.warn('[II/api] direct-source fetch failed:', url, err && err.message);
+      return null;   // honest "unavailable" upstream — callers degrade, never fabricate
+    }
+  }
+
+  /* One-time cleanup: older builds cached the multi-MB direct-source datasets in
+     localStorage (islamicinfo-hadith-ab-* / -fawaz-*), which could fill the quota
+     and wedge the app for returning visitors. Purge any such legacy keys on load so
+     they recover immediately — safe, since the data now re-fetches from the CDN on
+     demand into the in-memory cache above. */
+  (function _purgeLegacyDirectCache() {
+    try {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const k = localStorage.key(i);
+        if (k && (k.indexOf('islamicinfo-hadith-ab-') === 0 || k.indexOf('islamicinfo-hadith-fawaz-') === 0)) {
+          localStorage.removeItem(k);
+        }
+      }
+    } catch (_) { /* localStorage unavailable — nothing to purge */ }
+  })();
+
 
   /* ═══════════════════════════════════════════════════════════════
      PUBLIC API
@@ -449,13 +491,14 @@
     };
   }
 
-  /* Direct keyless fetchers — NO apiKey param (none exists for these public sources). */
+  /* Direct keyless fetchers — NO apiKey param (none exists for these public sources).
+     These use the IN-MEMORY session cache (_getDirect), never localStorage: the payloads
+     are multi-MB and would exhaust the localStorage quota — see _getDirect above. */
   function _fetchFawaz(edition) {
-    return _get('islamicinfo-hadith-fawaz-' + edition, HADITH_DIRECT_BASE.fawazahmed0 + edition + '.json', TTL_7D, false);
+    return _getDirect(HADITH_DIRECT_BASE.fawazahmed0 + edition + '.json');
   }
   function _fetchAhmedBaset(path) {
-    const key = 'islamicinfo-hadith-ab-' + path.replace(/[^a-z0-9]+/gi, '-');
-    return _get(key, HADITH_DIRECT_BASE.ahmedbaset + path, TTL_7D, false);
+    return _getDirect(HADITH_DIRECT_BASE.ahmedbaset + path);
   }
 
   /* Normalize a direct-source hadith into the SAME internal shape the Worker emits
