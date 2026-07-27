@@ -686,6 +686,67 @@ html.reading-mode .reader-topbar:hover .rtb-row2{opacity:1;}
 .reading-mode-exit{display:none;position:fixed;top:14px;right:14px;z-index:500;background:var(--teal-700);color:white;border:none;border-radius:12px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-body);}
 html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
 
+/* ══ FOCUS READING MODE — auto-enabled when a surah is selected (html.reader-focus) ══
+   Maximizes the reader: compact overlay sidebar (expands on hover, no reflow),
+   auto-hiding site header (peeks in when the cursor hits the top edge), and a
+   full-height reader with the controls raised. Desktop + mouse only; touch/narrow
+   screens keep the drawer layout untouched. This is separate from the deeper manual
+   'Reading Mode' (html.reading-mode), which fully removes the header + sidebar. */
+@media (hover:hover) and (min-width:901px){
+  /* Drop the landing chrome so the reader fills the screen (header + audio kept). */
+  html.reader-focus .hero,
+  html.reader-focus .trio-section,
+  html.reader-focus .feat-section,
+  html.reader-focus .cta-band,
+  html.reader-focus footer{ display:none !important; }
+
+  /* Auto-hiding site header — slides up out of view; peeks back on top-edge hover
+     (JS toggles .header-peek) or when it gains keyboard focus. */
+  html.reader-focus .site-header{
+    position:fixed; top:0; left:0; right:0; z-index:1200;
+    animation:none;                              /* cancel headerSlideIn's fill-forwards transform */
+    transform:translateY(-100%) !important;      /* beat the animated value + reduced-motion reset */
+    transition:transform .3s var(--ease-reverent);
+  }
+  html.reader-focus.header-peek .site-header,
+  html.reader-focus .site-header:focus-within{ transform:translateY(0) !important; }
+
+  /* Reader fills the viewport; slides down to make room when the header peeks in. */
+  html.reader-focus .reader-shell{
+    position:relative;
+    height:100vh; min-height:0; max-height:none; margin-top:0;
+    padding-left:168px;   /* reserve the compact sidebar's slot (overlay lives here) */
+    transition:height .32s var(--ease-reverent), margin-top .32s var(--ease-reverent);
+  }
+  html.reader-focus.header-peek .reader-shell{ margin-top:60px; height:calc(100vh - 60px); }
+
+  /* Compact sidebar — sits in the reserved slot; expands over the reading column on
+     hover (no reflow, so the verses never shift), collapses back on leave. */
+  html.reader-focus .sidebar{
+    position:absolute; left:0; top:0; bottom:0; width:168px; z-index:45;
+    transition:width .28s var(--ease-reverent), box-shadow .28s;
+  }
+  html.reader-focus .sidebar:hover{
+    width:clamp(220px,22vw,268px);
+    box-shadow:12px 0 48px rgba(0,0,0,.22);
+  }
+  /* Compact = number + name + Makki/Madani only; hide Arabic name + ayah count and
+     the secondary chrome. All of it returns automatically on hover (:not(:hover)). */
+  html.reader-focus .sidebar:not(:hover) .surah-ar,
+  html.reader-focus .sidebar:not(:hover) .surah-ayahs,
+  html.reader-focus .sidebar:not(:hover) .sb-streak,
+  html.reader-focus .sidebar:not(:hover) .sb-search,
+  html.reader-focus .sidebar:not(:hover) .sb-filters,
+  html.reader-focus .sidebar:not(:hover) .sb-progress-wrap,
+  html.reader-focus .sidebar:not(:hover) .topic-item,
+  html.reader-focus .sidebar:not(:hover) .sb-list .sb-divider,
+  html.reader-focus .sidebar:not(:hover) .sb-list .sb-section-label{ display:none !important; }
+
+  /* Raise the controls — trim the toolbar padding for more verse space. */
+  html.reader-focus .rtb-row1{ padding-top:7px; padding-bottom:7px; }
+  html.reader-focus .rtb-row2{ padding-top:5px; padding-bottom:5px; }
+}
+
 /* ══ Zoom control (Task 1) — A− / A / A+ text-size stepper in the reader topbar ══ */
 .zoom-ctrl{display:inline-flex;align-items:center;gap:2px;border:.5px solid var(--ink-faint);border-radius:20px;padding:2px;background:transparent;flex-shrink:0;}
 .zoom-ctrl button{border:none;background:transparent;cursor:pointer;color:var(--ink-muted);font-family:var(--font-body);

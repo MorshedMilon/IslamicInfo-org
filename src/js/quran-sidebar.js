@@ -255,11 +255,14 @@
     if (typeof window.showToast === 'function') window.showToast('Loading ' + name + '…');
     window.loadSurah(id);
 
-    // Jump to the reader (skip the hero) whenever a surah is explicitly selected —
-    // sidebar click, ?surah= deep-link, or history nav. Mirrors the hadith page.
-    // Fresh /quran.html loads render the default surah via loadSurah() directly (not
-    // selectSurah), so the hero stays available for users who arrive that way.
-    // scroll-margin-top:60px on .reader-shell clears the sticky site header.
+    // Selecting a surah enters "focus reading" mode (compact overlay sidebar +
+    // auto-hiding header + full-height reader — see html.reader-focus CSS). Added
+    // before the scroll so the layout switches first. Fresh /quran.html loads render
+    // the default surah via loadSurah() directly (not selectSurah), so the landing
+    // hero stays available for users who arrive that way (decision: focus on select).
+    document.documentElement.classList.add('reader-focus');
+    // Also jump to the reader — a harmless no-op in focus mode (hero already hidden),
+    // still correct when the focus CSS is inactive (touch / narrow screens).
     var shell = document.getElementById('readerShell');
     if (shell) shell.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -284,8 +287,26 @@
   window.addEventListener('popstate', function () {
     var params = new URLSearchParams(window.location.search);
     var slug = params.get('surah');
-    if (slug) selectSurahBySlug(slug);
+    if (slug) { selectSurahBySlug(slug); }
+    else { document.documentElement.classList.remove('reader-focus', 'header-peek'); }  // back to landing → restore hero + header
   });
+
+  /* Auto-hiding header peek (focus mode): reveal the site header when the cursor
+     reaches the very top of the viewport; hide it again once the cursor drops below
+     the header band (unless it's still over the header, e.g. an open dropdown).
+     Guarded to focus mode; inert otherwise. Mouse-only — touch devices never match
+     the hover-gated focus CSS, so nothing changes for them. */
+  var PEEK_IN = 8, PEEK_OUT = 88;
+  document.addEventListener('mousemove', function (e) {
+    var root = document.documentElement;
+    if (!root.classList.contains('reader-focus')) return;
+    if (e.clientY <= PEEK_IN) {
+      root.classList.add('header-peek');
+    } else if (e.clientY > PEEK_OUT && root.classList.contains('header-peek') &&
+               !(e.target.closest && e.target.closest('.site-header'))) {
+      root.classList.remove('header-peek');
+    }
+  }, { passive: true });
 
   // expose for Task 6 to extend + for tests/manual
   window.II = window.II || {};
