@@ -158,9 +158,11 @@
     }).catch(function (e) { if (myGen !== gen) return; console.warn('[quran] audio fetch failed:', e && e.message); toast('Audio unavailable — try again'); });
   }
 
+  function mushafActive() { return !!(window.II && window.II.mushaf && window.II.mushaf.isActive()); }
   function clearHighlights() {
     Array.prototype.forEach.call(document.querySelectorAll('.ayah-card.ayah-playing'), function (c) { c.classList.remove('ayah-playing'); });
     Array.prototype.forEach.call(document.querySelectorAll('.word-active'), function (w) { w.classList.remove('word-active'); });
+    if (window.II && window.II.mushaf && window.II.mushaf.clearHighlight) window.II.mushaf.clearHighlight();
   }
   function markPlaying() {
     clearHighlights();
@@ -168,8 +170,12 @@
     var card = cardFor(ay.verse_key);
     if (card) {
       card.classList.add('ayah-playing');
-      var r = card.getBoundingClientRect();
-      if (r.top < 80 || r.bottom > (window.innerHeight || 800)) { try { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} }
+      // In Mushaf mode the study card is hidden — highlight/scroll the QCF page instead.
+      if (mushafActive()) { window.II.mushaf.sync(ay.verse_key, 0); }
+      else {
+        var r = card.getBoundingClientRect();
+        if (r.top < 80 || r.bottom > (window.innerHeight || 800)) { try { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} }
+      }
     }
     var bc = document.getElementById('bcTitle'); if (bc) setText('#apSurah', bc.textContent);
     setText('#apReciterName', reciterStyled(reciterId));
@@ -182,6 +188,7 @@
     setText('#apTime', core.formatTime(audio.currentTime));
     var ay = ayahs[idx]; if (!ay || !ay.segments || !ay.segments.length) return;
     var w = core.activeWordAt(ay.segments, audio.currentTime * 1000);
+    if (mushafActive()) { window.II.mushaf.sync(ay.verse_key, w); return; }   // QCF page word-sync
     var card = cardFor(ay.verse_key); if (!card) return;
     var marks = card.querySelectorAll('[data-wi]');
     Array.prototype.forEach.call(marks, function (el) { el.classList.toggle('word-active', Number(el.getAttribute('data-wi')) === w); });
