@@ -11,12 +11,12 @@ test('sanitizeTranslation strips sup footnotes and tags', () => {
   assert.equal(core.sanitizeTranslation('<i>x</i> y'), 'x y');
 });
 
-test('wbwWords keeps words, drops end markers, maps ar/en', () => {
+test('wbwWords keeps words, drops end markers, maps ar/en/tj', () => {
   const out = core.wbwWords([
-    { char_type_name: 'word', text_uthmani: 'بِسْمِ', translation: { text: 'In (the) name' } },
+    { char_type_name: 'word', text_uthmani: 'بِسْمِ', text_uthmani_tajweed: 'بِسۡمِ', translation: { text: 'In (the) name' } },
     { char_type_name: 'end',  text_uthmani: '١',      translation: { text: '(1)' } }
   ]);
-  assert.deepEqual(out, [{ ar: 'بِسْمِ', en: 'In (the) name' }]);
+  assert.deepEqual(out, [{ ar: 'بِسْمِ', en: 'In (the) name', tj: 'بِسۡمِ' }]);
 });
 
 test('pickTranslation selects by resource_id, falls back to first', () => {
@@ -31,13 +31,15 @@ test('normalizeVerse shape', () => {
     verse_key: '1:2', verse_number: 2, text_uthmani: 'ٱلْحَمْدُ',
     text_uthmani_tajweed: '<tajweed class=ghunnah>ٱلْحَمْدُ</tajweed>',
     translations: [{ resource_id: 20, text: 'All praise<sup foot_note=1>x</sup>' }],
-    words: [{ char_type_name: 'word', text_uthmani: 'ٱلْحَمْدُ', translation: { text: 'All praises' } }]
+    words: [{ char_type_name: 'word', text_uthmani: 'ٱلْحَمْدُ',
+              text_uthmani_tajweed: '<rule class=ghunnah>ٱلْحَمْدُ</rule>',
+              translation: { text: 'All praises' } }]
   }, 20);
   assert.equal(v.verse_key, '1:2');
   assert.equal(v.text_uthmani, 'ٱلْحَمْدُ');
   assert.equal(v.text_uthmani_tajweed, '<tajweed class=ghunnah>ٱلْحَمْدُ</tajweed>');
   assert.equal(v.translation, 'All praise');
-  assert.deepEqual(v.words, [{ ar: 'ٱلْحَمْدُ', en: 'All praises' }]);
+  assert.deepEqual(v.words, [{ ar: 'ٱلْحَمْدُ', en: 'All praises', tj: '<rule class=ghunnah>ٱلْحَمْدُ</rule>' }]);
 });
 
 test('showBismillah true except Surah 9', () => {

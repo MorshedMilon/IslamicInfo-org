@@ -20,9 +20,15 @@
     document.querySelectorAll('.ayah-card').forEach(function (card) {
       var plain = card.querySelector('.ayah-arabic');
       var tj = card.querySelector('.ayah-tajweed');
-      if (!tj) return;
-      if (on) { if (plain) plain.style.display = 'none'; tj.style.display = ''; }
-      else    { if (plain) plain.style.display = '';     tj.style.display = 'none'; }
+      if (tj) {
+        if (on) { if (plain) plain.style.display = 'none'; tj.style.display = ''; }
+        else    { if (plain) plain.style.display = '';     tj.style.display = 'none'; }
+      }
+      // Per-word Tajweed inside the word-by-word row (data-tj = colorized HTML).
+      card.querySelectorAll('.wbw-ar[data-tj]').forEach(function (arEl) {
+        if (on) arEl.innerHTML = arEl.getAttribute('data-tj');
+        else arEl.textContent = arEl.getAttribute('data-plain') || arEl.textContent;
+      });
     });
   }
 
