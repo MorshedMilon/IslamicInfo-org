@@ -901,6 +901,18 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   .verses-area{padding-bottom:calc(var(--audiobar-h,72px) + 6px);}
   html.audiobar-hidden .audio-player{transform:translateY(100%);opacity:0;pointer-events:none;}
 
+  /* ── Immersive on surah-select: hide the whole reader header/toolbar so ONLY the
+     Bismillah + verses show. Because .reader-main is a column flex and .verses-area is
+     flex:1, removing the topbar makes the verses pane grow to the full reader height.
+     Instant toggle — a transitioned mobile header-hide stalled in the prior pass. The
+     full toolbar returns by tapping the Bismillah or scrolling up (html.toolbar-open).
+     Visibility only — no control STATE (WBW / Study / Tajweed / audio position) changes. ── */
+  html.reader-focus .reader-topbar{display:none;}
+  html.reader-focus.toolbar-open .reader-topbar{display:block;}
+  html.reader-focus .bismillah-banner{padding-top:16px;padding-bottom:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  html.reader-focus .bismillah-banner::after{content:"\25BE";display:block;margin-top:9px;font-size:10px;line-height:1;color:var(--ink-subtle);opacity:.55;transition:transform .25s var(--ease-reverent);}
+  html.reader-focus.toolbar-open .bismillah-banner::after{transform:rotate(180deg);}
+
   /* Fix "Today's Reflection scrolls in front of the reader": the reader-shell was
      position:sticky, so it stayed pinned full-screen while the sections below it
      (Today's Reflection, features) scrolled OVER the pinned reader. Reading already
