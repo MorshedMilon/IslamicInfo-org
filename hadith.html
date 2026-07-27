@@ -1083,6 +1083,7 @@ html[data-theme="light"].reading-mode-hadith body { background-image: none; }
 .prd-divider { display: flex; align-items: center; gap: 16px; margin: 40px 0 24px; }
 .prd-divider::before, .prd-divider::after { content: ''; flex: 1; height: 0.5px; background: linear-gradient(to right, transparent, rgba(0,105,110,.2), transparent); }
 .prd-divider-text { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-subtle); white-space: nowrap; }
+@media(max-width:600px){.prd-divider-text{white-space:normal;text-align:center;}}
 
 /* ─── LOAD MORE ─── */
 .load-more-btn {

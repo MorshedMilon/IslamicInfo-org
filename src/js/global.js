@@ -111,6 +111,11 @@ function injectMobileChrome() {
   const s = document.createElement('style');
   s.id = 'ii-mobile-chrome-css';
   s.textContent = [
+    /* Universal guard against horizontal scroll from decorative bleed
+       (background blobs, off-canvas panels, marquees). overflow-x:clip
+       does NOT create a scroll container, so the sticky header and the
+       full-screen mobile drawer keep working (unlike overflow:hidden). */
+    'html,body{overflow-x:clip;}',
     /* Keep the login/account icon visible on phones + small tablets on
        every page (both header systems), so header actions are consistent.
        820px covers the homepage, whose nav collapses later than the rest. */
