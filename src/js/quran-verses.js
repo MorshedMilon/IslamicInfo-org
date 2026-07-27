@@ -55,7 +55,7 @@
   }
 
   function fetchPage(id, ed, page) {
-    var url = API + id + '?language=en&words=true&word_fields=text_uthmani,translation' +
+    var url = API + id + '?language=en&words=true&word_fields=text_uthmani,text_uthmani_tajweed,translation' +
               '&fields=text_uthmani,text_uthmani_tajweed&translations=' + ed + '&per_page=50&page=' + page;
     var ctrl = new AbortController();
     var t = setTimeout(function () { ctrl.abort(); }, 8000);
@@ -151,7 +151,12 @@
     v.words.forEach(function (w, i) {
       var word = el('div', 'wbw-word');
       word.setAttribute('data-wi', String(i + 1));
-      word.appendChild(el('div', 'wbw-ar', w.ar));
+      var arEl = el('div', 'wbw-ar', w.ar);
+      // Per-word Tajweed: stash the colorized HTML; quran-tajweed.js swaps it in when
+      // Tajweed Mode is on (and restores the plain word when off). Skipped if no tj data.
+      var tjHtml = (w.tj && window.II && window.II.tajweed) ? window.II.tajweed.colorize(w.tj) : '';
+      if (tjHtml) { arEl.setAttribute('data-tj', tjHtml); arEl.setAttribute('data-plain', w.ar); }
+      word.appendChild(arEl);
       word.appendChild(el('div', 'wbw-en', w.en));
       wbw.appendChild(word);
     });

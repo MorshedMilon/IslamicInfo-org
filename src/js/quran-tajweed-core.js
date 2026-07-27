@@ -19,11 +19,13 @@
   };
   function mapClass(cls) { return MAP[String(cls || '').trim()] || ''; }
 
-  // Rewrite <tajweed class="X">...</tajweed> -> <span class="tj-*">...</span> (or plain text if neutral).
+  // Rewrite tajweed markup -> <span class="tj-*">...</span> (or plain text if neutral).
+  // Quran.com uses <tajweed class="X">…</tajweed> at verse level and <rule class=X>…</rule>
+  // at word level (word_fields=text_uthmani_tajweed) — handle both, matching close via \1.
   function colorize(html) {
     return String(html == null ? '' : html).replace(
-      /<tajweed\s+class=(?:"([^"]*)"|'([^']*)'|([^\s>]+))\s*>([\s\S]*?)<\/tajweed>/gi,
-      function (_, a, b, c, inner) {
+      /<(tajweed|rule)\s+class=(?:"([^"]*)"|'([^']*)'|([^\s>]+))\s*>([\s\S]*?)<\/\1>/gi,
+      function (_, tag, a, b, c, inner) {
         var fam = mapClass(a || b || c);
         return fam ? '<span class="' + fam + '">' + inner + '</span>' : inner;
       });

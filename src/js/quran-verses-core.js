@@ -146,7 +146,8 @@
     return (apiWords || [])
       .filter(function (w) { return w && w.char_type_name === 'word'; })
       .map(function (w) {
-        return { ar: w.text_uthmani || '', en: (w.translation && w.translation.text) || '' };
+        return { ar: w.text_uthmani || '', en: (w.translation && w.translation.text) || '',
+                 tj: w.text_uthmani_tajweed || '' };
       });
   }
 

@@ -255,12 +255,30 @@
     if (typeof window.showToast === 'function') window.showToast('Loading ' + name + '…');
     window.loadSurah(id);
 
+    // In Mushaf mode, loadSurah() only refreshes the hidden Study feed — also
+    // navigate the visible QCF page view to this surah's first page. Mirrors the
+    // resolveStartPage → mushafGoToPage path used when Mushaf mode is entered.
+    if (id && window.II && window.II.mushaf && window.II.mushaf.isActive() &&
+        window.II.mushafCore && typeof window.mushafGoToPage === 'function') {
+      var mChapters = null;
+      try { mChapters = JSON.parse(localStorage.getItem('ii-quran-chapters') || 'null'); } catch (e) {}
+      window.II.mushafCore.resolveStartPage(id, mChapters)
+        .then(function (start) { window.mushafGoToPage(start); })
+        .catch(function () {});
+    }
+
     // Selecting a surah enters "focus reading" mode (compact overlay sidebar +
     // auto-hiding header + full-height reader — see html.reader-focus CSS). Added
     // before the scroll so the layout switches first. Fresh /quran.html loads render
     // the default surah via loadSurah() directly (not selectSurah), so the landing
     // hero stays available for users who arrive that way (decision: focus on select).
     document.documentElement.classList.add('reader-focus');
+    // Mobile focus: start immersive with the site header hidden (scroll up re-reveals
+    // it). Reset the scroll-direction tracker so the render's scroll-to-top isn't read
+    // as an upward gesture (which would pop the header open on every select).
+    document.documentElement.classList.remove('header-peek');
+    var versesArea = document.getElementById('versesArea');
+    if (versesArea) versesArea._lastScrollY = 0;
     // Also jump to the reader — a harmless no-op in focus mode (hero already hidden),
     // still correct when the focus CSS is inactive (touch / narrow screens).
     var shell = document.getElementById('readerShell');
@@ -307,6 +325,25 @@
       root.classList.remove('header-peek');
     }
   }, { passive: true });
+
+  /* Mobile focus (≤900px): reveal the header on an upward scroll gesture inside the
+     verses area, hide it again on a downward scroll. Direction is tracked via
+     versesArea._lastScrollY (reset to 0 on surah select so the programmatic
+     scroll-to-top isn't mistaken for scrolling up). Desktop keeps the edge-peek above. */
+  (function () {
+    var area = document.getElementById('versesArea');
+    if (!area) return;
+    area.addEventListener('scroll', function () {
+      var root = document.documentElement;
+      if (!root.classList.contains('reader-focus')) return;
+      if (!window.matchMedia('(max-width:900px)').matches) return;
+      var y = area.scrollTop;
+      var last = (typeof area._lastScrollY === 'number') ? area._lastScrollY : 0;
+      if (y < last - 4) root.classList.add('header-peek');          // scrolled up → reveal
+      else if (y > last + 4) root.classList.remove('header-peek');  // scrolled down → hide
+      area._lastScrollY = y;
+    }, { passive: true });
+  })();
 
   // expose for Task 6 to extend + for tests/manual
   window.II = window.II || {};
