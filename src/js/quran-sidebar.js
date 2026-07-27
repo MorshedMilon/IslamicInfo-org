@@ -345,6 +345,59 @@
     }, { passive: true });
   })();
 
+  /* Mobile reading focus (≤900px): collapse the secondary toolbar to a clean header
+     and auto-hide the bottom audio bar during reading — like a native Qur'an app.
+     - Tap the surah name (.surah-bc) → toggle the controls toolbar (html.toolbar-open).
+     - Scrolling the verses → re-collapse the toolbar + slide the audio bar away.
+     - Pausing scroll ~2.5s, or tapping the bottom ~15% of the screen → summon the bar.
+     All ≤900px-gated; desktop is untouched. Only CSS visibility changes here — no
+     button/toggle STATE is ever mutated, so Word-by-word / Study mode stay active
+     while their buttons are hidden. */
+  (function () {
+    var root = document.documentElement;
+    var area = document.getElementById('versesArea');
+    var isMobile = function () { return window.matchMedia('(max-width:900px)').matches; };
+
+    // Keep the verses' bottom padding matched to the (variable-height) audio bar so
+    // nothing is ever hidden behind it. Measured on load, resize, and orientation.
+    function measureAudioBar() {
+      var bar = document.querySelector('.audio-player');
+      if (bar && bar.offsetHeight) root.style.setProperty('--audiobar-h', bar.offsetHeight + 'px');
+    }
+    measureAudioBar();
+    window.addEventListener('resize', measureAudioBar, { passive: true });
+
+    // Tap the surah name → reveal / collapse the controls toolbar.
+    var bc = document.querySelector('.surah-bc');
+    if (bc) bc.addEventListener('click', function () {
+      if (isMobile()) root.classList.toggle('toolbar-open');
+    });
+
+    // Audio-bar auto-hide + reveal-on-idle.
+    var idleTimer = null;
+    function summonAudio() { root.classList.remove('audiobar-hidden'); }
+    function scheduleReveal() {
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(summonAudio, 2500);   // ~2.5s scroll-idle → controls reappear
+    }
+    if (area) area.addEventListener('scroll', function () {
+      if (!isMobile()) return;
+      root.classList.add('audiobar-hidden');         // reading / scrolling → hide the bar
+      root.classList.remove('toolbar-open');          // and re-collapse the controls
+      measureAudioBar();
+      scheduleReveal();
+    }, { passive: true });
+
+    // Tap/click in the bottom ~15% of the viewport → summon the bar (video-player style).
+    function bottomTap(e) {
+      if (!isMobile() || !root.classList.contains('audiobar-hidden')) return;
+      var y = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
+      if (typeof y === 'number' && y > window.innerHeight * 0.85) summonAudio();
+    }
+    document.addEventListener('touchstart', bottomTap, { passive: true });
+    document.addEventListener('click', bottomTap);
+  })();
+
   // expose for Task 6 to extend + for tests/manual
   window.II = window.II || {};
   window.II.quranSidebar = {
