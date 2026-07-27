@@ -431,6 +431,31 @@ a{text-decoration:none;color:inherit;}
 .tp-text{font-size:var(--tafsir-sz,12.5px);color:var(--ink-muted);line-height:1.72;margin-bottom:10px;}
 .tp-text strong{color:var(--ink-primary);font-weight:500;}
 .tp-attr{font-size:10px;color:var(--ink-subtle);font-family:var(--font-mono);padding-top:12px;border-top:.5px solid rgba(0,105,110,.08);}
+
+/* ══ Reader UX: consistent, discoverable scrollbars for the 3 reading panes ══
+   Each pane scrolls independently (nested scroll containers). A faint thumb is
+   always shown so users can see which pane they're in; it darkens on hover. */
+.sb-list,.verses-area,.tp-body{scrollbar-width:thin;scrollbar-color:var(--teal-100) transparent;}
+.sb-list:hover,.verses-area:hover,.tp-body:hover{scrollbar-color:var(--teal-400) transparent;}
+.sb-list::-webkit-scrollbar,.verses-area::-webkit-scrollbar,.tp-body::-webkit-scrollbar{width:9px;height:9px;}
+.sb-list::-webkit-scrollbar-track,.verses-area::-webkit-scrollbar-track,.tp-body::-webkit-scrollbar-track{background:transparent;}
+.sb-list::-webkit-scrollbar-thumb,.verses-area::-webkit-scrollbar-thumb,.tp-body::-webkit-scrollbar-thumb{background:var(--teal-100);border-radius:9px;border:2.5px solid transparent;background-clip:padding-box;transition:background .2s;}
+.sb-list:hover::-webkit-scrollbar-thumb,.verses-area:hover::-webkit-scrollbar-thumb,.tp-body:hover::-webkit-scrollbar-thumb{background:var(--teal-400);background-clip:padding-box;}
+
+/* ══ Reader UX: sticky "Ayah X of Y" progress bar at the top of the verses pane ══ */
+#readerMain{position:relative;}
+.vp-bar{position:sticky;top:0;z-index:6;display:flex;align-items:center;gap:12px;padding:7px 22px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:.5px solid rgba(0,105,110,.08);}
+[data-theme="dark"] .vp-bar{background:rgba(15,27,29,.94);border-bottom-color:rgba(0,105,110,.2);}
+.vp-bar-label{font-size:10.5px;font-weight:600;letter-spacing:.02em;color:var(--ink-subtle);white-space:nowrap;font-variant-numeric:tabular-nums;flex-shrink:0;}
+.vp-bar-track{flex:1;height:3px;background:rgba(0,105,110,.10);border-radius:2px;overflow:hidden;}
+.vp-bar-fill{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal-700),var(--teal-400));border-radius:2px;transition:width .25s var(--ease-reverent);}
+
+/* ══ Reader UX: floating jump-to-top/bottom button ══ */
+.vp-jump{position:absolute;right:18px;bottom:88px;z-index:8;width:40px;height:40px;border-radius:50%;border:.5px solid var(--ink-faint);background:var(--surface-card);color:var(--teal-700);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--elev-2);transition:transform .2s,box-shadow .2s,background .2s,color .2s;opacity:.92;}
+.vp-jump:hover{background:var(--teal-700);color:#fff;transform:translateY(-2px);box-shadow:var(--elev-3);opacity:1;}
+[data-theme="dark"] .vp-jump{background:var(--white);border-color:rgba(0,105,110,.3);color:var(--teal-300);}
+/* Progress bar + jump don't belong in the Mushaf page view */
+.mushaf-mode-active .vp-bar,.mushaf-mode-active .vp-jump{display:none;}
 /* SETTINGS */
 .settings-panel{position:fixed;top:60px;right:0;bottom:0;width:288px;background:var(--surface-card);border-left:.5px solid rgba(0,105,110,.18);box-shadow:var(--elev-4);z-index:250;transform:translateX(100%);transition:transform .35s var(--ease-reverent);overflow-y:auto;}
 .settings-panel.open{transform:translateX(0);}

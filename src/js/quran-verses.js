@@ -249,6 +249,12 @@
     if (verses[0] && window.II && window.II.tafsir) {
       window.II.tafsir.setVerse(verses[0].verse_key, ctxSurahName);
     }
+    // Reading-progress bar + scroll-synced tafsir + jump button (reader UX).
+    ctxTotal = verses.length;
+    lastSyncKey = verses[0] ? verses[0].verse_key : null;   // matches the preload above; avoids an immediate re-sync
+    ensureReaderExtras();
+    var _va = document.getElementById('versesArea'); if (_va) _va.scrollTop = 0;   // start each surah at ayah 1
+    updateProgress();
     if (pending.length > 0) {
       var sentinel = el('div', 'verses-sentinel'); sentinel.setAttribute('aria-hidden', 'true');
       sentinel.style.height = '1px';
@@ -325,6 +331,84 @@
       }
     } catch (e) { done(); }
   };
+
+  /* ─────────────────────────────────────────────────────────────────
+     Reading-progress bar + scroll-synced tafsir + jump-to-top/bottom.
+     The verses pane scrolls independently, so on scroll we find the
+     top-most visible .ayah-card and: update "Ayah X of Y", flip the
+     jump button, and — only when the tafsir panel is open — debounce-
+     load that verse's tafsir so it follows what you're reading.
+     ───────────────────────────────────────────────────────────────── */
+  var ctxTotal = 0, lastSyncKey = null, tafSyncTimer = null;
+
+  function jumpDownSvg(){ return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>'; }
+  function jumpUpSvg(){ return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>'; }
+
+  function ensureReaderExtras() {
+    var area = document.getElementById('versesArea');
+    if (!area || area._vpWired) return;
+    area._vpWired = true;
+
+    var bar = document.createElement('div');
+    bar.className = 'vp-bar'; bar.id = 'vpBar';
+    bar.innerHTML = '<span class="vp-bar-label" id="vpLabel">Ayah 1</span>' +
+                    '<span class="vp-bar-track"><span class="vp-bar-fill" id="vpFill"></span></span>';
+    area.insertBefore(bar, area.firstChild);
+
+    var main = document.getElementById('readerMain');
+    if (main && !document.getElementById('vpJump')) {
+      var jump = document.createElement('button');
+      jump.className = 'vp-jump'; jump.id = 'vpJump'; jump.type = 'button';
+      jump.setAttribute('aria-label', 'Jump to bottom');
+      jump.innerHTML = jumpDownSvg();
+      jump.addEventListener('click', function () {
+        if (area.scrollTop > 40) area.scrollTo({ top: 0, behavior: 'smooth' });
+        else area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
+      });
+      main.appendChild(jump);
+    }
+
+    var ticking = false;
+    area.addEventListener('scroll', function () {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function () { ticking = false; updateProgress(); });
+    }, { passive: true });
+  }
+
+  function updateProgress() {
+    var area = document.getElementById('versesArea'); if (!area) return;
+    var cards = area.querySelectorAll('.ayah-card:not(.verses-skeleton)');
+    var label = document.getElementById('vpLabel'), fill = document.getElementById('vpFill'), jump = document.getElementById('vpJump');
+    if (!cards.length) { if (label) label.textContent = ''; if (fill) fill.style.width = '0'; return; }
+    var areaTop = area.getBoundingClientRect().top;
+    var active = null;
+    for (var i = 0; i < cards.length; i++) {
+      var r = cards[i].getBoundingClientRect();
+      if (r.bottom > areaTop + 56) { active = cards[i]; break; }   // first card still visible below the sticky bar
+    }
+    active = active || cards[cards.length - 1];
+    if (!active || !active.offsetParent) return;                   // hidden (e.g. Mushaf mode) → skip
+    var key = active.dataset.key || '';
+    var ayah = key.indexOf(':') >= 0 ? parseInt(key.split(':')[1], 10) : 1;
+    var total = ctxTotal || cards.length;
+    if (label) label.textContent = 'Ayah ' + ayah + ' of ' + total;
+    if (fill) fill.style.width = Math.max(2, Math.min(100, (ayah / total) * 100)) + '%';
+    if (jump) {
+      var scrolled = area.scrollTop > 40;
+      jump.innerHTML = scrolled ? jumpUpSvg() : jumpDownSvg();
+      jump.setAttribute('aria-label', scrolled ? 'Jump to top' : 'Jump to bottom');
+    }
+    // Scroll-synced tafsir: follow the verse being read (panel open only, debounced).
+    var panel = document.querySelector('.tafsir-panel');
+    if (panel && !panel.classList.contains('closed') && key && key !== lastSyncKey) {
+      clearTimeout(tafSyncTimer);
+      var k = key;
+      tafSyncTimer = setTimeout(function () {
+        lastSyncKey = k;
+        if (window.II && window.II.tafsir) window.II.tafsir.setVerse(k, ctxSurahName);
+      }, 380);
+    }
+  }
 
   window.II = window.II || {};
   window.II.quranVerses = { loadSurah: window.loadSurah, _byKey: function () { return byKey; },
