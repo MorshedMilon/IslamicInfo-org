@@ -693,12 +693,10 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
    screens keep the drawer layout untouched. This is separate from the deeper manual
    'Reading Mode' (html.reading-mode), which fully removes the header + sidebar. */
 @media (hover:hover) and (min-width:901px){
-  /* Drop the landing chrome so the reader fills the screen (header + audio kept). */
-  html.reader-focus .hero,
-  html.reader-focus .trio-section,
-  html.reader-focus .feat-section,
-  html.reader-focus .cta-band,
-  html.reader-focus footer{ display:none !important; }
+  /* NOTE: the hero and the sections below the reader are intentionally NOT hidden —
+     the page must stay scrollable so the user can scroll UP to the hero (search) and
+     DOWN past the reader to the rest of the page, like the hadith page. Focus mode
+     only compacts the sidebar, auto-hides the header, and raises the controls. */
 
   /* Auto-hiding site header — slides up out of view; peeks back on top-edge hover
      (JS toggles .header-peek) or when it gains keyboard focus. */
@@ -715,7 +713,8 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   html.reader-focus .reader-shell{
     position:relative;
     height:100vh; min-height:0; max-height:none; margin-top:0;
-    padding-left:168px;   /* reserve the compact sidebar's slot (overlay lives here) */
+    scroll-margin-top:0;   /* header is hidden → land the reader at the very top on select */
+    padding-left:168px;    /* reserve the compact sidebar's slot (overlay lives here) */
     transition:height .32s var(--ease-reverent), margin-top .32s var(--ease-reverent);
   }
   html.reader-focus.header-peek .reader-shell{ margin-top:60px; height:calc(100vh - 60px); }
