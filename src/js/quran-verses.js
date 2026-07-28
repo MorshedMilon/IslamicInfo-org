@@ -98,7 +98,12 @@
     note: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
     ai:   '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>',
     taf:  '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/></svg>',
-    trace:'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83"/></svg>'
+    trace:'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83"/></svg>',
+    more: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>',
+    mplay:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20"/></svg>',
+    mbook:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+    mcopy:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+    mshare:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>'
   };
   function btn(cls, html) {
     var b = document.createElement('button'); b.type = 'button';
@@ -112,6 +117,7 @@
   function buildCard(v) {
     var k = v.verse_key.replace(':', '-');
     var card = el('div', 'ayah-card'); card.id = 'a-' + k; card.dataset.key = v.verse_key;
+    card.dataset.surah = ctxSurahName;   // for the mobile per-verse sheet (Trace/Share need the name)
     card.setAttribute('data-ai-selectable', 'ayah'); card.setAttribute('data-ai-key', v.verse_key);
     card.addEventListener('click', function () { window.setActiveVerse(card); });
 
@@ -185,6 +191,27 @@
     var tr = btn('trace-btn', SVG.trace + 'Trace View →'); tr.addEventListener('click', function () { if (window.openTrace) window.openTrace(ctxSurahName + ' ' + v.verse_key, v.text_uthmani, v.translation); });
     footer.appendChild(taf); footer.appendChild(rel); footer.appendChild(relH); footer.appendChild(relK); footer.appendChild(tr);
     card.appendChild(footer);
+
+    // ── Mobile per-verse action row (Option B): hidden until the verse is tapped
+    //    (html.reader-focus .ayah-card.acts-open). Compact Play/Bookmark/Copy/Share
+    //    + a ⋯ that opens the per-verse sheet. Reuses the same window handlers as the
+    //    desktop header actions. Mobile-only via CSS; inert on desktop. ──
+    var mrow = el('div', 'ayah-mrow');
+    var mPlay = btn('am-btn am-play', SVG.mplay);  mPlay.setAttribute('aria-label','Play verse'); mPlay.title='Play verse';
+    mPlay.addEventListener('click', function (e) { e.stopPropagation(); window.toggleAyahPlay(mPlay, e); });
+    var mBook = btn('am-btn am-book', SVG.mbook);  mBook.setAttribute('aria-label','Bookmark'); mBook.title='Bookmark';
+    mBook.addEventListener('click', function (e) { e.stopPropagation(); window.toggleBookmark(mBook, e); });
+    var mCopy = btn('am-btn am-copy', SVG.mcopy);  mCopy.setAttribute('aria-label','Copy'); mCopy.title='Copy';
+    mCopy.addEventListener('click', function (e) { e.stopPropagation(); window.copyVerse(e, v.verse_key); });
+    var mShare= btn('am-btn am-share', SVG.mshare);mShare.setAttribute('aria-label','Share'); mShare.title='Share';
+    mShare.addEventListener('click', function (e) { e.stopPropagation(); window.openShareModal(v.text_uthmani, v.translation, ctxSurahName + ' ' + v.verse_key); });
+    var mMore = btn('am-btn am-more', SVG.more);   mMore.setAttribute('aria-label','More'); mMore.title='More';
+    mMore.addEventListener('click', function (e) { e.stopPropagation(); if (window.openVerseSheet) window.openVerseSheet(card); });
+    [mPlay, mBook, mCopy, mShare, mMore].forEach(function (x) { mrow.appendChild(x); });
+    mrow.appendChild(el('span', 'am-key', v.verse_key));
+    card.appendChild(mrow);
+    // Subtle "tap for actions" hint on collapsed verses (mobile clean reading only).
+    card.appendChild(el('div', 'ayah-taphint', 'tap for actions'));
     return card;
   }
 
@@ -356,9 +383,15 @@
 
     var bar = document.createElement('div');
     bar.className = 'vp-bar'; bar.id = 'vpBar';
-    bar.innerHTML = '<span class="vp-bar-label" id="vpLabel">Ayah 1</span>' +
+    // Persistent back-to-surah-list button (mobile only, always visible in the sticky
+    // bar) + the surah/ayah label + progress track. The back button is the always-there
+    // exit path so the reader is never a dead end.
+    bar.innerHTML = '<button class="vp-back" id="vpBack" type="button" aria-label="Back to surah list" title="Surah list"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>' +
+                    '<span class="vp-bar-label" id="vpLabel">Ayah 1</span>' +
                     '<span class="vp-bar-track"><span class="vp-bar-fill" id="vpFill"></span></span>';
     area.insertBefore(bar, area.firstChild);
+    var vpBack = bar.querySelector('#vpBack');
+    if (vpBack) vpBack.addEventListener('click', function (e) { e.stopPropagation(); if (window.openSurahList) window.openSurahList(); });
 
     var main = document.getElementById('readerMain');
     if (main && !document.getElementById('vpJump')) {
