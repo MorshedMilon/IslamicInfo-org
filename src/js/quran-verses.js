@@ -141,6 +141,12 @@
       span.className = 'al-word';
       span.setAttribute('data-wi', String(i + 1));
       span.textContent = w.ar;
+      // Stash per-word Tajweed HTML so Tajweed Mode can colorize this word IN PLACE
+      // (keeping the visible .al-word[data-wi] span) — the recitation highlight then
+      // still lands on the visible word. (The old behavior hid .ayah-arabic and showed
+      // an unindexed colored blob, which killed the highlight while Tajweed was on.)
+      var tjH = (w.tj && window.II && window.II.tajweed) ? window.II.tajweed.colorize(w.tj) : '';
+      if (tjH) { span.setAttribute('data-tj', tjH); span.setAttribute('data-plain', w.ar); }
       arabic.appendChild(span);
     });
     card.appendChild(arabic);
