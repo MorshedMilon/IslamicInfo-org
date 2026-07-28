@@ -396,7 +396,7 @@
     var key = active.dataset.key || '';
     var ayah = key.indexOf(':') >= 0 ? parseInt(key.split(':')[1], 10) : 1;
     var total = ctxTotal || cards.length;
-    if (label) label.textContent = 'Ayah ' + ayah + ' of ' + total;
+    if (label) label.textContent = (ctxSurahName ? ctxSurahName + ' · ' : '') + 'Ayah ' + ayah + ' of ' + total;
     if (fill) fill.style.width = Math.max(2, Math.min(100, (ayah / total) * 100)) + '%';
     if (jump) {
       var scrolled = area.scrollTop > 40;

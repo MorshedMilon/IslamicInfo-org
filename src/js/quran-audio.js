@@ -337,7 +337,7 @@
   // Close the floating picker on an outside click. Opts stopPropagation; the trigger buttons re-toggle themselves.
   document.addEventListener('click', function (e) {
     if (!floatPicker || floatPicker.style.display !== 'block') return;
-    if (e.target && e.target.closest && (e.target.closest('#reciterFloatPicker') || e.target.closest('#reciterBtn, #reciterBtnTop'))) return;
+    if (e.target && e.target.closest && (e.target.closest('#reciterFloatPicker') || e.target.closest('#reciterBtn, #reciterBtnTop') || e.target.closest('.js-reciter-trigger'))) return;
     hideFloatPicker();
   });
 

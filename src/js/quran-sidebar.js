@@ -330,22 +330,16 @@
     }
   }, { passive: true });
 
-  /* Mobile focus (≤900px): reveal the header on an upward scroll gesture inside the
-     verses area, hide it again on a downward scroll. Direction is tracked via
-     versesArea._lastScrollY (reset to 0 on surah select so the programmatic
-     scroll-to-top isn't mistaken for scrolling up). Desktop keeps the edge-peek above. */
+  /* Mobile focus (≤900px): the options toolbar is revealed DELIBERATELY only —
+     tapping the Bismillah, the surah name, or the sticky progress bar. Scrolling
+     never auto-reveals it (that used to pop the whole header + toolbar open on the
+     slightest upward drag, eating half the screen). We only track scroll position
+     here so other handlers can read direction. */
   (function () {
     var area = document.getElementById('versesArea');
     if (!area) return;
     area.addEventListener('scroll', function () {
-      var root = document.documentElement;
-      if (!root.classList.contains('reader-focus')) return;
-      if (!window.matchMedia('(max-width:900px)').matches) return;
-      var y = area.scrollTop;
-      var last = (typeof area._lastScrollY === 'number') ? area._lastScrollY : 0;
-      if (y < last - 4) { root.classList.add('header-peek'); root.classList.add('toolbar-open'); }            // scrolled up → reveal site header + reader toolbar (exit immersive)
-      else if (y > last + 4) { root.classList.remove('header-peek'); root.classList.remove('toolbar-open'); }  // scrolled down → back to immersive
-      area._lastScrollY = y;
+      area._lastScrollY = area.scrollTop;
     }, { passive: true });
   })();
 
@@ -377,6 +371,18 @@
       if (isMobile()) root.classList.toggle('toolbar-open');
     });
 
+    // Tap the sticky "Ayah X of Y" progress bar → reveal / collapse the options
+    // toolbar. This is the always-visible reveal handle while reading (the
+    // Bismillah scrolls out of reach). Delegated because .vp-bar is created by
+    // quran-verses.js AFTER this init runs. Ignore taps on interactive children.
+    document.addEventListener('click', function (e) {
+      if (!isMobile()) return;
+      var bar = e.target.closest && e.target.closest('.vp-bar');
+      if (!bar) return;
+      if (e.target.closest('a,button,input')) return;
+      root.classList.toggle('toolbar-open');
+    });
+
     // Audio-bar: fully hidden while reading. It reveals only when the reader nears the
     // bottom of the content OR the user taps the bottom edge, then auto-hides again
     // after ~2.5s idle. (The previous pass revealed it on scroll-idle; that is removed —
@@ -401,7 +407,7 @@
     function bottomTap(e) {
       if (!isMobile() || !root.classList.contains('audiobar-hidden')) return;
       var y = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
-      if (typeof y === 'number' && y > window.innerHeight * 0.85) summonAudio();
+      if (typeof y === 'number' && y > window.innerHeight * 0.90) summonAudio();   // bottom ~10%
     }
     document.addEventListener('touchstart', bottomTap, { passive: true });
     document.addEventListener('click', bottomTap);
