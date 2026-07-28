@@ -15,12 +15,23 @@
     var m = document.getElementById('mushafTjLegend'); if (m) m.classList.toggle('show', show && mushaf);
   }
 
-  // Study view: swap between the per-word .ayah-arabic layer and the colored .ayah-tajweed layer.
+  // Study view: colorize the main Arabic PER WORD, in place, so .ayah-arabic (and its
+  // .al-word[data-wi] spans) stays visible and the recitation highlight keeps working
+  // while Tajweed is on. Falls back to the whole-verse .ayah-tajweed blob only for verses
+  // that lack per-word data (colored, but without follow-along highlight).
   function applyFlow() {
     document.querySelectorAll('.ayah-card').forEach(function (card) {
       var plain = card.querySelector('.ayah-arabic');
       var tj = card.querySelector('.ayah-tajweed');
-      if (tj) {
+      var words = card.querySelectorAll('.ayah-arabic .al-word[data-tj]');
+      if (words.length) {
+        words.forEach(function (sp) {
+          if (on) sp.innerHTML = sp.getAttribute('data-tj');
+          else sp.textContent = sp.getAttribute('data-plain') || sp.textContent;
+        });
+        if (plain) plain.style.display = '';      // keep the indexed words visible
+        if (tj) tj.style.display = 'none';
+      } else if (tj) {                            // no per-word data → blob fallback
         if (on) { if (plain) plain.style.display = 'none'; tj.style.display = ''; }
         else    { if (plain) plain.style.display = '';     tj.style.display = 'none'; }
       }

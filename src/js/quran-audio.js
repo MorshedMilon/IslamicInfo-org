@@ -173,8 +173,21 @@
       // In Mushaf mode the study card is hidden — highlight/scroll the QCF page instead.
       if (mushafActive()) { window.II.mushaf.sync(ay.verse_key, 0); }
       else {
+        // Follow-along: scroll the verses pane INTERNALLY (not the window). card.scrollIntoView
+        // scrolls every scrollable ancestor including the window, which dragged the reader —
+        // and the always-visible toolbar above it — off-screen during playback ("dead end").
+        // Scrolling only #versesArea keeps the toolbar fixed at the top.
+        var area = document.getElementById('versesArea');
         var r = card.getBoundingClientRect();
-        if (r.top < 80 || r.bottom > (window.innerHeight || 800)) { try { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} }
+        if (area && area.contains(card)) {
+          var ar = area.getBoundingClientRect();
+          if (r.top < ar.top + 56 || r.bottom > ar.bottom - 40) {
+            var delta = (r.top - ar.top) - (area.clientHeight / 2 - r.height / 2);
+            try { area.scrollBy({ top: delta, behavior: 'smooth' }); } catch (e) { area.scrollTop += delta; }
+          }
+        } else if (r.top < 80 || r.bottom > (window.innerHeight || 800)) {
+          try { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+        }
       }
     }
     var bc = document.getElementById('bcTitle'); if (bc) setText('#apSurah', bc.textContent);
