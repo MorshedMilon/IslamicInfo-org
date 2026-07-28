@@ -788,7 +788,7 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   html.reader-focus.header-peek .site-header{ transform:translateY(0) !important; }
   /* Header is gone → the reader takes the whole viewport (overrides the top:61px sticky);
      when the header peeks back on scroll-up, slide the reader down to sit below it. */
-  html.reader-focus .reader-shell{ top:0; height:100dvh; }
+  html.reader-focus .reader-shell{ top:0; height:100dvh; scroll-margin-top:0; }
   html.reader-focus.header-peek .reader-shell{ top:61px; height:calc(100dvh - 61px); }
 }
 
