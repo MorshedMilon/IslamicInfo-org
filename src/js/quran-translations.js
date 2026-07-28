@@ -20,6 +20,16 @@
   // ---- state ----
   var translations = [DEFAULT_TR];    // normalized records; replaced by live/seed list
   var editionId = DEFAULT_ID;
+  var transOff = false;               // "None" selected → hide translation text (Arabic only)
+
+  // Toggle the Arabic-only ("None") translation state. Purely visual — html.trans-off
+  // hides .ayah-translation/.ayah-trans-attr via CSS, so no verse re-fetch is needed.
+  function applyTransOff(off, persist) {
+    transOff = !!off;
+    document.documentElement.classList.toggle('trans-off', transOff);
+    if (persist) { try { localStorage.setItem('ii-quran-trans-off', transOff ? '1' : '0'); } catch (e) {} }
+    syncLabel();
+  }
 
   function toast(m) { if (window.showToast) window.showToast(m); }
   function record(id) {
@@ -66,11 +76,22 @@
 
   function makeOpt(tr) {
     var opt = document.createElement('div');
-    opt.className = 'reciter-opt' + (tr.id === editionId ? ' on' : '');
+    opt.className = 'reciter-opt' + ((!transOff && tr.id === editionId) ? ' on' : '');
     if (tr.dir === 'rtl') opt.setAttribute('dir', 'rtl');
     var dot = document.createElement('div'); dot.className = 'reciter-opt-dot'; opt.appendChild(dot);
     opt.appendChild(document.createTextNode(tr.name));
     opt.addEventListener('click', function (e) { if (e && e.stopPropagation) e.stopPropagation(); window.selectTranslation(tr.id); });
+    return opt;
+  }
+
+  // "None (Arabic only)" — the first row of the picker. Selecting it hides all
+  // translation text and returns to a pure Arabic, line-by-line reading view.
+  function makeNoneOpt() {
+    var opt = document.createElement('div');
+    opt.className = 'reciter-opt tp-none-opt' + (transOff ? ' on' : '');
+    var dot = document.createElement('div'); dot.className = 'reciter-opt-dot'; opt.appendChild(dot);
+    opt.appendChild(document.createTextNode('None (Arabic only)'));
+    opt.addEventListener('click', function (e) { if (e && e.stopPropagation) e.stopPropagation(); window.selectTranslationNone(); });
     return opt;
   }
 
@@ -131,6 +152,7 @@
     getFloatPicker();
     collapseSub();
     listWrap.innerHTML = '';
+    listWrap.appendChild(makeNoneOpt());   // "None (Arabic only)" always first
     var q = (searchInput.value || '').trim();
     if (q) {
       // flat filtered translator list, "Name · Language"
@@ -190,28 +212,55 @@
     if (!(tid > 0)) return;
     editionId = tid;
     try { localStorage.setItem('ii-quran-translation', String(tid)); } catch (e) {}
-    syncLabel();
+    var wasOff = transOff;
+    applyTransOff(false, true);        // choosing a translation turns "None" off
     hideFloatPicker();
     toast('Translation: ' + shortLabel(tid));
-    if (window.loadSurah) window.loadSurah(window.currentSurahId || 1);   // re-fetch verses in the chosen edition
+    // Re-fetch verses in the chosen edition. If we were showing None the verses may
+    // already hold this edition's text (hidden by CSS), but re-loading guarantees it.
+    if (window.loadSurah) window.loadSurah(window.currentSurahId || 1);
+    return wasOff;
+  };
+
+  // "None" — Arabic-only. No re-fetch; html.trans-off just hides the text via CSS.
+  window.selectTranslationNone = function () {
+    applyTransOff(true, true);
+    hideFloatPicker();
+    toast('Translation: None');
   };
 
   function syncLabel() {
     var el = document.getElementById('translationLabelTop');
-    if (el) el.textContent = shortLabel(editionId);
+    if (el) el.textContent = transOff ? 'None' : shortLabel(editionId);
+    var btn = document.getElementById('translationBtnTop');
+    if (btn) btn.classList.toggle('on', !transOff);   // dim the toolbar button when None
+    // Mobile compact toolbar: gold dot on the translation icon when a translation is active.
+    var mIco = document.getElementById('mTransIco');
+    if (mIco) {
+      var dot = mIco.querySelector('.m-dot');
+      if (transOff) { if (dot) dot.parentNode.removeChild(dot); }
+      else if (!dot) { var d = document.createElement('span'); d.className = 'm-dot'; mIco.appendChild(d); }
+    }
   }
 
   // Close on outside click. Trigger button re-toggles itself; search stops propagation.
   document.addEventListener('click', function (e) {
     if (!floatPicker || floatPicker.style.display !== 'block') return;
     if (e.target && e.target.closest && (e.target.closest('#translationFloatPicker') ||
-        e.target.closest('#translationBtnTop'))) return;
+        e.target.closest('#translationBtnTop') || e.target.closest('.js-trans-trigger'))) return;
     hideFloatPicker();
   });
 
   function init() {
     if (!core) return;
     try { var saved = Number(localStorage.getItem('ii-quran-translation')); if (saved > 0) editionId = saved; } catch (e) {}
+    // Translation default: mobile (≤900px) opens Arabic-only (None) unless the user
+    // has explicitly chosen before; desktop keeps a translation shown. A saved choice
+    // (either direction) always wins. The mobile default is soft (not persisted).
+    var savedOff = null; try { savedOff = localStorage.getItem('ii-quran-trans-off'); } catch (e) {}
+    var mob = window.matchMedia('(max-width:900px)').matches;
+    var off = savedOff === '1' ? true : savedOff === '0' ? false : mob;
+    applyTransOff(off, false);
     syncLabel();
     loadList().then(function (list) {
       if (list && list.length) translations = list;

@@ -811,7 +811,7 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   /* Sticky just below the (61px) site header so the reader topbar — title, zoom,
      play — never tucks under it; also the containing block for the drawers. */
   .reader-shell{position:sticky;top:61px;height:calc(100dvh - 61px);min-height:0;max-height:none;}
-  .reader-main{width:100%;flex:1 1 100%;}
+  .reader-main{width:100%;flex:1 1 100%;position:relative;}   /* anchor for the absolute audio bar */
   /* Surah list → left drawer */
   .sidebar{position:absolute;top:0;bottom:0;left:0;width:min(86vw,340px);transform:translateX(-100%);
     z-index:60;box-shadow:10px 0 40px rgba(0,0,0,.30);transition:transform .32s var(--ease-reverent);}
@@ -911,8 +911,16 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
      (a stacking context), so an open sidebar/tafsir drawer (z-index:60) still covers
      it. The verses pane pads its bottom by the bar's measured height so no verse is
      ever hidden behind it. */
+  /* Anchored to the reader (reader-main is position:relative + overflow:hidden),
+     NOT position:fixed to the viewport. This is the fix for "Today's Reflection
+     overlaps the audio bar": a viewport-fixed bar stayed pinned to the screen and
+     floated over whatever you scrolled to (the Reflection section below the
+     reader). Anchored to the reader, it sits at the reader's bottom while the
+     reader is on screen and scrolls away WITH the reader — so it can never cover
+     Reflection or any section below. translateY(100%) slides it out under the
+     reader's overflow:hidden clip when hidden. */
   .audio-player{
-    position:fixed;left:0;right:0;bottom:0;z-index:40;
+    position:absolute;left:0;right:0;bottom:0;z-index:40;
     transition:transform .34s var(--ease-reverent),opacity .28s;will-change:transform;
   }
   .verses-area{padding-bottom:calc(var(--audiobar-h,72px) + 6px);}
@@ -950,6 +958,95 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   .reader-shell{position:relative;top:0;}
   html.reader-focus.header-peek .reader-shell{top:0;}
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE ARABIC-ONLY DEFAULT (≤900px) — a surah opens to Bismillah + Arabic
+   lines and NOTHING else. Translation, Word-by-word, Tajweed and Tafsir each
+   render ONLY when explicitly turned on (their toolbar toggles). Per-ayah tools
+   (action icons + footer chips) stay hidden during pure reading and appear when
+   the options toolbar is revealed. Desktop (≥901px) is completely unaffected —
+   every rule here is inside a ≤900px media query or is scoped to a state class
+   that is only ever set on mobile. Toggle STATE is never mutated by CSS.
+   ══════════════════════════════════════════════════════════════════════════ */
+/* Translation off (None): set by the picker's "None" option and the mobile
+   default. Hides the rendered translation text + its attribution line. Robust
+   for lazily-appended verse cards (class on <html>, so it covers future cards). */
+html.trans-off .ayah-translation,
+html.trans-off .ayah-trans-attr,
+html.trans-off .bsm-tr{display:none!important;}   /* None = Arabic only, incl. the Bismillah subtitle */
+/* Word-by-word off: toggleWBW() keeps this class in sync with wbwOn. Covers
+   future cards the inline display toggle would miss. */
+html.wbw-off .wbw-row{display:none!important;}
+
+@media(max-width:900px){
+  /* Pure reading = Bismillah + Arabic lines + verse number only. The per-ayah
+     action icons and the Tafsir/Related/Key Terms/Trace footer are hidden until
+     the options toolbar is opened (tap the Bismillah / progress bar). */
+  html.reader-focus:not(.toolbar-open) .ayah-actions,
+  html.reader-focus:not(.toolbar-open) .ayah-footer{display:none!important;}
+  /* With the action row hidden, let the ayah number sit on its own tidy line. */
+  html.reader-focus:not(.toolbar-open) .ayah-header{margin-bottom:10px;}
+
+  /* The sticky "Ayah X of Y" bar is the always-visible tap handle to reveal the
+     options toolbar while reading (the Bismillah scrolls out of reach). */
+  html.reader-focus .vp-bar{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  html.reader-focus .vp-bar::after{content:"\25BE";margin-inline-start:auto;font-size:11px;
+    color:var(--ink-subtle);opacity:.6;transition:transform .25s var(--ease-reverent);}
+  html.reader-focus.toolbar-open .vp-bar::after{transform:rotate(180deg);}
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE COMPACT TOOLBAR (≤900px) — one icon row replaces the desktop's two-row
+   toolbar when revealed. ~48px tall, icon-only, each control one tap from a
+   popover or an instant toggle. Left-packed + horizontally swipeable, so there
+   is never a dead gap. Desktop (≥901px) keeps its two rows; .m-toolbar is hidden
+   there. All icons reuse the existing handlers — no control is dropped.
+   ══════════════════════════════════════════════════════════════════════════ */
+.m-toolbar{display:none;}
+@media(max-width:900px){
+  /* Swap the two desktop rows for the compact icon row. */
+  .reader-topbar .rtb-row1,
+  .reader-topbar .rtb-row2{display:none!important;}
+  .m-toolbar{display:flex;align-items:center;gap:1px;padding:6px 5px;
+    overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x;}
+  .m-toolbar::-webkit-scrollbar{display:none;}
+  .m-ico{position:relative;flex:0 0 auto;width:40px;height:40px;border-radius:11px;border:none;
+    background:transparent;color:var(--ink-muted);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,color .15s;}
+  .m-ico:active{background:var(--teal-50);color:var(--teal-700);}
+  .m-ico.on{background:rgba(0,105,110,.12);color:var(--teal-700);box-shadow:inset 0 0 0 1px rgba(0,105,110,.4);}
+  .m-ico.m-tajw.on{color:#2E7D32;background:rgba(46,125,50,.10);box-shadow:inset 0 0 0 1px rgba(46,125,50,.4);}
+  [data-theme="dark"] .m-ico{color:#6E7E80;}
+  [data-theme="dark"] .m-ico:active,[data-theme="dark"] .m-ico.on{color:#5BC1C7;background:rgba(0,105,110,.2);box-shadow:inset 0 0 0 1px rgba(91,193,199,.45);}
+  [data-theme="dark"] .m-ico.m-tajw.on{color:#66BB6A;background:rgba(46,125,50,.16);box-shadow:inset 0 0 0 1px rgba(102,187,106,.5);}
+  .m-ico .m-caret{position:absolute;right:4px;bottom:5px;width:0;height:0;
+    border-left:3px solid transparent;border-right:3px solid transparent;border-top:4px solid currentColor;opacity:.5;}
+  .m-ico .m-dot{position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;
+    background:var(--gold-500);border:1.5px solid var(--surface-card);}
+  .m-fontA{font-weight:700;font-size:17px;font-family:var(--font-body);line-height:1;}
+  .m-fontA small{font-size:10px;vertical-align:super;}
+  .m-sep{flex:0 0 auto;width:1px;height:22px;background:var(--ink-faint);margin:0 1px;opacity:.7;}
+}
+/* Popovers for the compact toolbar (Text size stepper, More menu). Fixed-position,
+   appended to <body> in JS and positioned under their trigger — outside any clip. */
+.m-pop{position:fixed;z-index:9999;background:var(--surface-card);border:.5px solid rgba(0,105,110,.18);
+  border-radius:14px;box-shadow:var(--elev-3);padding:6px;display:none;min-width:180px;font-family:var(--font-body);}
+.m-pop.show{display:block;animation:mPop .16s var(--ease-reverent) both;}
+@keyframes mPop{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:none;}}
+[data-theme="dark"] .m-pop{background:rgba(15,27,29,.98);border-color:rgba(0,105,110,.3);}
+.m-pop-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-subtle);padding:7px 11px 5px;}
+.m-pop-row{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:9px;cursor:pointer;
+  color:var(--ink-body);font-size:14px;white-space:nowrap;}
+.m-pop-row:active,.m-pop-row:hover{background:var(--teal-50);color:var(--teal-700);}
+.m-pop-row.on{color:var(--teal-700);font-weight:600;}
+.m-pop-row svg{flex:0 0 auto;color:var(--ink-subtle);}
+.m-pop-row:hover svg,.m-pop-row.on svg{color:var(--teal-700);}
+.m-stepper{display:flex;gap:5px;padding:5px;}
+.m-stepper button{flex:1;border:.5px solid var(--ink-faint);background:transparent;color:var(--ink-body);
+  border-radius:9px;padding:11px 0;cursor:pointer;font-family:var(--font-body);font-weight:700;min-width:46px;}
+.m-stepper button:nth-child(1){font-size:13px;}.m-stepper button:nth-child(2){font-size:16px;}.m-stepper button:nth-child(3){font-size:18px;}
+.m-stepper button:active,.m-stepper button:hover{background:var(--teal-50);border-color:var(--teal-300);color:var(--teal-700);}
 
 /* ════════════════════════════════════════════════════════
    ENHANCEMENT PACK v2 — Gradient Glow · Load Animations
@@ -1933,6 +2030,22 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
           </button>
         </div>
       </div>
+      <!-- ══ MOBILE COMPACT TOOLBAR (≤900px only) — single icon row that replaces the
+           desktop two-row layout when the reader toolbar is revealed. Every icon reuses
+           an existing handler; labels are tooltips (title=). Hidden ≥901px. ══ -->
+      <div class="m-toolbar" id="mToolbar" role="toolbar" aria-label="Reader options">
+        <button class="m-ico" type="button" onclick="openSurahList()" title="Surah list" aria-label="Back to surah list"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="m-sep"></span>
+        <button class="m-ico js-reciter-trigger" type="button" onclick="toggleReciterPicker(this)" title="Reciter" aria-label="Reciter"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span class="m-caret"></span></button>
+        <button class="m-ico js-trans-trigger" id="mTransIco" type="button" onclick="toggleTranslationPicker(this)" title="Translation" aria-label="Translation"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg><span class="m-caret"></span></button>
+        <button class="m-ico" id="mWbwIco" type="button" onclick="mReaderToggle('wbw',this)" title="Word-by-word" aria-label="Word-by-word"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h8M4 18h4"/></svg></button>
+        <button class="m-ico m-tajw" id="mTajweedIco" type="button" onclick="mReaderToggle('tajweed',this)" title="Tajweed" aria-label="Tajweed"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.5"/><path d="M12 3v2M12 19v2M4.2 4.2l1.5 1.5M18.3 18.3l1.5 1.5M3 12h2M19 12h2M4.2 19.8l1.5-1.5M18.3 5.7l1.5-1.5"/></svg></button>
+        <button class="m-ico" id="mTafsirIco" type="button" onclick="mReaderToggle('tafsir',this)" title="Tafsir" aria-label="Tafsir"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></button>
+        <span class="m-sep"></span>
+        <button class="m-ico" id="mFontIco" type="button" onclick="mReaderFont(this)" title="Text size" aria-label="Text size"><span class="m-fontA">A<small>±</small></span></button>
+        <button class="m-ico" type="button" onclick="masterPlayPause()" title="Play surah" aria-label="Play surah"><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="6 4 20 12 6 20 6 4"/></svg></button>
+        <button class="m-ico" id="mMoreIco" type="button" onclick="mReaderMore(this)" title="More" aria-label="More options"><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></button>
+      </div>
       <!-- ROW 2 — PRD §11.12 button order -->
       <div class="rtb-row2">
         <button class="ctrl-btn on" id="reciterBtnTop" style="position:relative;" onclick="toggleReciterPicker(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> <span id="reciterLabelTop">Al-Hussary</span> <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg><div class="reciter-picker" id="reciterPickerTop"></div></button>
@@ -2508,8 +2621,114 @@ var wbwOn=true;
 function toggleWBW(btn){
   wbwOn=!wbwOn;
   if(btn)btn.classList.toggle('on',wbwOn);
+  /* Keep html.wbw-off in sync so lazily-appended verse cards (which the inline
+     display toggle below never touches) also honour the current state. */
+  document.documentElement.classList.toggle('wbw-off',!wbwOn);
   document.querySelectorAll('.wbw-row').forEach(function(r){r.style.display=wbwOn?'flex':'none';});
+  var mWbw=document.getElementById('mWbwIco'); if(mWbw)mWbw.classList.toggle('on',wbwOn);   // mobile toolbar icon
+  try{localStorage.setItem('ii-quran-wbw',wbwOn?'1':'0');}catch(e){}
 }
+/* Reader feature defaults — mobile (≤900px) opens Arabic-only, so Word-by-word is
+   OFF by default there (desktop keeps it on). A saved user preference always wins.
+   Runs once at load; the html.wbw-off class carries the state to every verse card,
+   present and future. Desktop is untouched. */
+(function initReaderFeatureDefaults(){
+  function apply(){
+    var mob=window.matchMedia('(max-width:900px)').matches;
+    var saved=null; try{saved=localStorage.getItem('ii-quran-wbw');}catch(e){}
+    var want = saved==='1' ? true : saved==='0' ? false : !mob;   // default: off on mobile, on elsewhere
+    if(want!==wbwOn){ toggleWBW(document.getElementById('wbwBtn')); }
+    else{ document.documentElement.classList.toggle('wbw-off',!wbwOn);
+          var b=document.getElementById('wbwBtn'); if(b)b.classList.toggle('on',wbwOn); }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else apply();
+})();
+
+/* ════ MOBILE COMPACT TOOLBAR CONTROLLER (≤900px) ════
+   The icon buttons reuse the existing handlers; here we only reflect each control's
+   active state onto its icon and drive the two custom popovers (Text-size stepper +
+   More menu). The reciter/translation pickers are the existing body-anchored float
+   pickers, opened straight from the icons. Inert on desktop (icons are display:none). */
+(function(){
+  function q(id){return document.getElementById(id);}
+  function syncMToolbar(){
+    var wbw=q('mWbwIco'); if(wbw) wbw.classList.toggle('on', !!window.wbwOn);
+    var tj=q('mTajweedIco'), tjb=q('tajweedBtn');
+    if(tj) tj.classList.toggle('on', !!(tjb && tjb.classList.contains('tajweed-active')));
+    var tf=q('mTafsirIco'), tp=q('tafsirPanel');
+    if(tf) tf.classList.toggle('on', !!(tp && !tp.classList.contains('closed')));
+  }
+  window.syncMToolbar=syncMToolbar;
+
+  window.mReaderToggle=function(kind){
+    if(kind==='wbw'){ if(window.toggleWBW) window.toggleWBW(q('wbwBtn')); }
+    else if(kind==='tajweed'){ if(window.toggleTajweed) window.toggleTajweed(q('tajweedBtn')); }
+    else if(kind==='tafsir'){ if(window.toggleTafsir) window.toggleTafsir(); }
+    syncMToolbar();
+  };
+
+  var openPop=null;
+  function closePop(){ if(openPop){ openPop.classList.remove('show'); openPop=null; } }
+  function place(pop,ico){
+    if(pop.parentNode!==document.body) document.body.appendChild(pop);
+    pop.classList.add('show');
+    var r=ico.getBoundingClientRect(), pw=pop.offsetWidth||180, vw=window.innerWidth||360;
+    pop.style.left=Math.max(8,Math.min(r.left, vw-pw-8))+'px';
+    pop.style.top=(r.bottom+6)+'px';
+    openPop=pop;
+  }
+  window.mReaderFont=function(ico){
+    if(openPop && openPop.id==='mFontPop'){ closePop(); return; } closePop();
+    var pop=q('mFontPop');
+    if(!pop){
+      pop=document.createElement('div'); pop.className='m-pop'; pop.id='mFontPop';
+      pop.innerHTML='<div class="m-pop-label">Text size</div><div class="m-stepper">'+
+        '<button type="button" aria-label="Smaller text">A−</button>'+
+        '<button type="button" aria-label="Reset text size">A</button>'+
+        '<button type="button" aria-label="Larger text">A+</button></div>';
+      var b=pop.querySelectorAll('button');
+      b[0].addEventListener('click',function(){ if(window.zoomReader)window.zoomReader(-1); });
+      b[1].addEventListener('click',function(){ if(window.zoomReader)window.zoomReader(0); });
+      b[2].addEventListener('click',function(){ if(window.zoomReader)window.zoomReader(1); });
+    }
+    place(pop,ico);
+  };
+  window.mReaderMore=function(ico){
+    if(openPop && openPop.id==='mMorePop'){ closePop(); return; } closePop();
+    var pop=q('mMorePop');
+    if(!pop){
+      pop=document.createElement('div'); pop.className='m-pop'; pop.id='mMorePop';
+      var lab=document.createElement('div'); lab.className='m-pop-label'; lab.textContent='More'; pop.appendChild(lab);
+      var items=[
+        ['Study / Mushaf view', function(){ var s=q('studyModeBtn');
+          if(s && s.classList.contains('on')){ if(window.switchToMushafMode)window.switchToMushafMode(q('mushafModeBtn')); }
+          else { if(window.switchToStudyMode)window.switchToStudyMode(q('studyModeBtn')); } }],
+        ['Compare translations', function(){ if(window.toggleCompare)window.toggleCompare(q('compareBtn')); }],
+        ['Reading mode (hide all)', function(){ if(window.toggleReadingMode)window.toggleReadingMode(); }],
+        ['Bookmarks', function(){ if(window.toggleBookmarks)window.toggleBookmarks(); }],
+        ['Settings', function(){ if(window.toggleSettings)window.toggleSettings(); }]
+      ];
+      items.forEach(function(it){ var row=document.createElement('div'); row.className='m-pop-row'; row.textContent=it[0];
+        row.addEventListener('click',function(){ closePop(); it[1](); }); pop.appendChild(row); });
+    }
+    place(pop,ico);
+  };
+
+  // Outside tap closes the custom popovers (float pickers manage their own).
+  document.addEventListener('click',function(e){
+    if(!openPop) return;
+    if(e.target.closest && (e.target.closest('#mFontPop')||e.target.closest('#mMorePop')||
+       e.target.closest('#mFontIco')||e.target.closest('#mMoreIco'))) return;
+    closePop();
+  });
+  // Close popovers if the whole toolbar collapses back to immersive reading.
+  window.addEventListener('resize',closePop,{passive:true});
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncMToolbar);else syncMToolbar();
+  // Re-sync after all other init has run (the mobile tafsir drawer is closed at
+  // DOMContentLoaded by a later handler, so the first sync can read it as open).
+  window.addEventListener('load',syncMToolbar);
+})();
 function toggleGrammarTags(){
   document.querySelectorAll('.wbw-pos').forEach(function(p){
     p.style.display=p.style.display==='none'?'':'none';
