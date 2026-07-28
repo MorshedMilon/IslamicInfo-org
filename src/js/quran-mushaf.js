@@ -15,6 +15,9 @@
   var failed = {};           // family -> true (font failed to load)
   var state = { active: false, page: 1, variant: 'v2', zoom: 1 };
   try { var _z = parseFloat(localStorage.getItem('ii-quran-mushaf-zoom')); if (_z > 0) state.zoom = _z; } catch (e) {}
+  // Recitation auto page-turn state (see mushafSync): while playing, when the reciting
+  // ayah is not on the rendered page we turn to the next page and re-highlight once it loads.
+  var navInFlight = false, pendingSyncKey = null, pendingSyncWord = 0;
 
   function isFirefox() { return /firefox/i.test(navigator.userAgent); }
   function theme() { return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
@@ -65,8 +68,13 @@
   function sizeToWidth(sheet) {
     var pageEl = sheet.querySelector('.mushaf-page');
     if (!pageEl) return;
-    var contentW = pageEl.clientWidth;                 // inside padding
-    if (!contentW) return;
+    // clientWidth INCLUDES the page's horizontal padding, but the text lays out inside
+    // it — so subtract the padding to get the real text box. (Using clientWidth directly
+    // oversized the font by ~2×padding, overflowing the box and clipping letters on the
+    // left/right, most visibly on narrow mobile pages.)
+    var cs = getComputedStyle(pageEl);
+    var contentW = pageEl.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0);
+    if (!contentW || contentW <= 0) return;
     var ayah = pageEl.querySelectorAll('.m-line--ayah');
     if (!ayah.length) { pageEl.style.fontSize = Math.max(24, Math.min(48, contentW / 24)) + 'px'; return; }
     var REF = 80;                                       // measure at a reference size (lines are nowrap)
@@ -146,8 +154,11 @@
         renderModel(res[0], variant); updateNav(page);
         try { localStorage.setItem('ii-quran-mushaf-page', String(page)); } catch (e) {}
         if (page < core.PAGE_MAX) ensureFont(page + 1, variant).catch(function () {}); // prefetch next
+        // Auto page-turn follow-up: re-highlight the reciting ayah on the freshly rendered page.
+        navInFlight = false;
+        if (pendingSyncKey) { var _k = pendingSyncKey, _w = pendingSyncWord; pendingSyncKey = null; mushafSync(_k, _w); }
       })
-      .catch(function (e) { console.warn('[mushaf] page ' + page + ' failed:', e && e.message); showError(); });
+      .catch(function (e) { navInFlight = false; pendingSyncKey = null; console.warn('[mushaf] page ' + page + ' failed:', e && e.message); showError(); });
   };
 
   window.mushafChangePage = function (dir) { window.mushafGoToPage(state.page + dir); };
@@ -171,17 +182,41 @@
       function (s) { s.classList.remove('m-ayah-active', 'word-active'); });
     lastSyncAyah = null;
   }
-  // Highlight the given ayah (and its current word) on the page. Returns false if the
-  // ayah isn't on the currently-rendered page (caller may leave the page as-is).
+  // Center the ayah in the reader's OWN scroll container — never element.scrollIntoView(),
+  // which also scrolls the window and pushes the always-visible toolbar off the top.
+  function scrollAncestorIntoView(el) {
+    var p = el && el.parentElement;
+    while (p && p !== document.body && p !== document.documentElement) {
+      var oy = getComputedStyle(p).overflowY;
+      if ((oy === 'auto' || oy === 'scroll') && p.scrollHeight > p.clientHeight + 2) {
+        var pr = p.getBoundingClientRect(), er = el.getBoundingClientRect();
+        var delta = (er.top - pr.top) - (p.clientHeight / 2 - er.height / 2);
+        try { p.scrollBy({ top: delta, behavior: 'smooth' }); } catch (e) { p.scrollTop += delta; }
+        return;
+      }
+      p = p.parentElement;
+    }
+  }
+  // Highlight the given ayah (and its current word) on the page. When the ayah isn't on
+  // the rendered page, auto-advance to the next page (recitation is sequential) so the
+  // Mushaf follows along by itself. Returns false if the ayah isn't on the current page.
   function mushafSync(verseKey, wordIdx0) {
     var h = host(); if (!h) return false;
     var ayahSpans = h.querySelectorAll('.m-word[data-vk="' + verseKey + '"]');
-    if (!ayahSpans.length) { if (lastSyncAyah !== null) clearMushafHighlight(); return false; }
+    if (!ayahSpans.length) {
+      if (!navInFlight && state.active && state.page < core.PAGE_MAX) {
+        navInFlight = true; pendingSyncKey = verseKey;
+        pendingSyncWord = (typeof wordIdx0 === 'number' ? wordIdx0 : 0);
+        window.mushafGoToPage(state.page + 1);      // turn the page; re-sync fires after render
+      }
+      if (lastSyncAyah !== null) clearMushafHighlight();
+      return false;
+    }
     if (verseKey !== lastSyncAyah) {
       clearMushafHighlight();
       Array.prototype.forEach.call(ayahSpans, function (s) { s.classList.add('m-ayah-active'); });
       lastSyncAyah = verseKey;
-      try { ayahSpans[0].scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+      scrollAncestorIntoView(ayahSpans[0]);
     } else {
       Array.prototype.forEach.call(h.querySelectorAll('.m-word.word-active'),
         function (s) { s.classList.remove('word-active'); });
