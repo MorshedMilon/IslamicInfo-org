@@ -383,15 +383,11 @@
 
     var bar = document.createElement('div');
     bar.className = 'vp-bar'; bar.id = 'vpBar';
-    // Persistent back-to-surah-list button (mobile only, always visible in the sticky
-    // bar) + the surah/ayah label + progress track. The back button is the always-there
-    // exit path so the reader is never a dead end.
-    bar.innerHTML = '<button class="vp-back" id="vpBack" type="button" aria-label="Back to surah list" title="Surah list"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>' +
-                    '<span class="vp-bar-label" id="vpLabel">Ayah 1</span>' +
+    // Surah/ayah label + progress track. Surah-list navigation lives in the always-
+    // visible toolbar's ‹ icon now, so the bar no longer carries its own back button.
+    bar.innerHTML = '<span class="vp-bar-label" id="vpLabel">Ayah 1</span>' +
                     '<span class="vp-bar-track"><span class="vp-bar-fill" id="vpFill"></span></span>';
     area.insertBefore(bar, area.firstChild);
-    var vpBack = bar.querySelector('#vpBack');
-    if (vpBack) vpBack.addEventListener('click', function (e) { e.stopPropagation(); if (window.openSurahList) window.openSurahList(); });
 
     var main = document.getElementById('readerMain');
     if (main && !document.getElementById('vpJump')) {
