@@ -380,23 +380,9 @@
     measureAudioBar();
     window.addEventListener('resize', measureAudioBar, { passive: true });
 
-    // Tap the surah name → reveal / collapse the controls toolbar.
-    var bc = document.querySelector('.surah-bc');
-    if (bc) bc.addEventListener('click', function () {
-      if (isMobile()) root.classList.toggle('toolbar-open');
-    });
-
-    // Tap the sticky "Ayah X of Y" progress bar → reveal / collapse the options
-    // toolbar. This is the always-visible reveal handle while reading (the
-    // Bismillah scrolls out of reach). Delegated because .vp-bar is created by
-    // quran-verses.js AFTER this init runs. Ignore taps on interactive children.
-    document.addEventListener('click', function (e) {
-      if (!isMobile()) return;
-      var bar = e.target.closest && e.target.closest('.vp-bar');
-      if (!bar) return;
-      if (e.target.closest('a,button,input')) return;
-      root.classList.toggle('toolbar-open');
-    });
+    // NOTE: the reader toolbar is now ALWAYS visible (final model), so there is no
+    // tap-to-reveal — the old surah-name / progress-bar / Bismillah reveal handlers
+    // were removed. Only the audio-bar auto-hide behavior remains below.
 
     // Audio-bar: fully hidden while reading. It reveals only when the reader nears the
     // bottom of the content OR the user taps the bottom edge, then auto-hides again
@@ -426,16 +412,6 @@
     }
     document.addEventListener('touchstart', bottomTap, { passive: true });
     document.addEventListener('click', bottomTap);
-
-    // Tap the Bismillah → reveal / collapse the full reader toolbar (exit immersive).
-    // Delegated so it survives a per-surah re-render; Mushaf mode hides the Bismillah,
-    // so scrolling up is the reveal path there.
-    document.addEventListener('click', function (e) {
-      if (!isMobile()) return;
-      if (e.target.closest && e.target.closest('.bismillah-banner')) {
-        root.classList.toggle('toolbar-open');
-      }
-    });
   })();
 
   // expose for Task 6 to extend + for tests/manual

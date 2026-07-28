@@ -926,26 +926,18 @@ html.reading-mode .reading-mode-exit{display:flex;align-items:center;gap:6px;}
   .verses-area{padding-bottom:calc(var(--audiobar-h,72px) + 6px);}
   html.audiobar-hidden .audio-player{transform:translateY(100%);opacity:0;pointer-events:none;}
 
-  /* ── Immersive on surah-select: the reader header/toolbar becomes a slide-down
-     OVERLAY (position:absolute + transform) instead of display:none. Out of normal
-     flow, so the verses pane (flex:1) still fills the full reader height and only the
-     Bismillah shows on top — BUT it animates smoothly and, crucially, revealing it no
-     longer reflows/scrolls the verses (the display:none version shoved the verses down
-     and made the toolbar flicker away before it could be tapped). Hidden by default;
-     tapping the Bismillah, or scrolling up, slides it down (html.toolbar-open) and it
-     stays until you scroll down or tap the Bismillah again. Its own opaque background +
-     blur already exist (.reader-topbar). Visibility only — no control STATE
-     (WBW / Study / Tajweed / audio position) is ever touched. ── */
+  /* ── FINAL MODEL (locked): the reader toolbar (compact icon row) is ALWAYS visible
+     at the top of the reader — a normal static row, never an overlay, never hidden,
+     no tap-to-reveal. It sits above the internally-scrolling verses pane, so it stays
+     put while you read. flex-shrink:0 + its natural height keep the 40px icons fully
+     visible at all times — including while audio plays (the old animated overlay could
+     squeeze the row and clip the icons; that is gone). ── */
   html.reader-focus .reader-main{position:relative;}
   html.reader-focus .reader-topbar{
-    position:absolute;top:0;left:0;right:0;z-index:45;
-    transform:translateY(-100%);opacity:0;pointer-events:none;
-    transition:transform .32s var(--ease-reverent),opacity .26s;will-change:transform;
+    position:relative;top:auto;left:auto;right:auto;z-index:45;
+    transform:none;opacity:1;pointer-events:auto;flex-shrink:0;
   }
-  html.reader-focus.toolbar-open .reader-topbar{transform:translateY(0);opacity:1;pointer-events:auto;}
-  html.reader-focus .bismillah-banner{padding-top:16px;padding-bottom:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-  html.reader-focus .bismillah-banner::after{content:"\25BE";display:block;margin-top:9px;font-size:10px;line-height:1;color:var(--ink-subtle);opacity:.55;transition:transform .25s var(--ease-reverent);}
-  html.reader-focus.toolbar-open .bismillah-banner::after{transform:rotate(180deg);}
+  html.reader-focus .bismillah-banner{padding-top:16px;padding-bottom:14px;}
 
   /* Fix "Today's Reflection scrolls in front of the reader": the reader-shell was
      position:sticky, so it stayed pinned full-screen while the sections below it
@@ -1015,13 +1007,10 @@ html.wbw-off .wbw-row{display:none!important;}
   html.reader-focus .vp-back:active{background:var(--teal-50);}
   [data-theme="dark"] html.reader-focus .vp-back{color:#5BC1C7;}
 
-  /* The sticky bar still toggles the global compact toolbar on tap (its ▾). */
-  html.reader-focus .vp-bar{cursor:pointer;-webkit-tap-highlight-color:transparent;}
-  html.reader-focus .vp-bar::after{content:"\25BE";margin-inline-start:auto;font-size:11px;
-    color:var(--ink-subtle);opacity:.6;transition:transform .25s var(--ease-reverent);}
-  html.reader-focus.toolbar-open .vp-bar::after{transform:rotate(180deg);}
+  /* Progress bar is just a label now — the toolbar (with its ‹ surah-list icon) is
+     always visible, so the bar no longer needs a tap-to-reveal affordance. */
 }
-.vp-back{display:none;}   /* desktop: sidebar is always visible → no back button needed */
+.vp-back{display:none;}   /* the toolbar's ‹ icon is the surah-list button now */
 .ayah-mrow,.ayah-taphint{display:none;}   /* per-verse row + tap hint are mobile-only (shown ≤900px) */
 
 /* Per-verse Translation / Word-by-word overrides (from the ⋯ sheet): reveal that one
@@ -1065,6 +1054,7 @@ html.wbw-off .wbw-row{display:none!important;}
   .reader-topbar .rtb-row1,
   .reader-topbar .rtb-row2{display:none!important;}
   .m-toolbar{display:flex;align-items:center;gap:1px;padding:6px 5px;
+    min-height:52px;flex-shrink:0;box-sizing:border-box;   /* reserve full icon height — never clip */
     overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
     scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x;}
   .m-toolbar::-webkit-scrollbar{display:none;}
@@ -2095,7 +2085,6 @@ html.wbw-off .wbw-row{display:none!important;}
         <span class="m-sep"></span>
         <button class="m-ico js-reciter-trigger" type="button" onclick="toggleReciterPicker(this)" title="Reciter" aria-label="Reciter"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span class="m-caret"></span></button>
         <button class="m-ico js-trans-trigger" id="mTransIco" type="button" onclick="toggleTranslationPicker(this)" title="Translation" aria-label="Translation"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg><span class="m-caret"></span></button>
-        <button class="m-ico" id="mWbwIco" type="button" onclick="mReaderToggle('wbw',this)" title="Word-by-word" aria-label="Word-by-word"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h8M4 18h4"/></svg></button>
         <button class="m-ico m-tajw" id="mTajweedIco" type="button" onclick="mReaderToggle('tajweed',this)" title="Tajweed" aria-label="Tajweed"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.5"/><path d="M12 3v2M12 19v2M4.2 4.2l1.5 1.5M18.3 18.3l1.5 1.5M3 12h2M19 12h2M4.2 19.8l1.5-1.5M18.3 5.7l1.5-1.5"/></svg></button>
         <button class="m-ico" id="mTafsirIco" type="button" onclick="mReaderToggle('tafsir',this)" title="Tafsir" aria-label="Tafsir"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></button>
         <span class="m-sep"></span>
@@ -2757,6 +2746,7 @@ function toggleWBW(btn){
       pop=document.createElement('div'); pop.className='m-pop'; pop.id='mMorePop';
       var lab=document.createElement('div'); lab.className='m-pop-label'; lab.textContent='More'; pop.appendChild(lab);
       var items=[
+        ['Word-by-word', function(){ if(window.toggleWBW)window.toggleWBW(q('wbwBtn')); }, 'wbw'],
         ['Study / Mushaf view', function(){ var s=q('studyModeBtn');
           if(s && s.classList.contains('on')){ if(window.switchToMushafMode)window.switchToMushafMode(q('mushafModeBtn')); }
           else { if(window.switchToStudyMode)window.switchToStudyMode(q('studyModeBtn')); } }],
@@ -2766,8 +2756,12 @@ function toggleWBW(btn){
         ['Settings', function(){ if(window.toggleSettings)window.toggleSettings(); }]
       ];
       items.forEach(function(it){ var row=document.createElement('div'); row.className='m-pop-row'; row.textContent=it[0];
+        if(it[2])row.setAttribute('data-k',it[2]);
         row.addEventListener('click',function(){ closePop(); it[1](); }); pop.appendChild(row); });
     }
+    // Reflect the current Word-by-word state each time the menu opens.
+    var wrow=pop.querySelector('[data-k="wbw"]');
+    if(wrow) wrow.textContent='Word-by-word'+(window.wbwOn?'   ✓':'');
     place(pop,ico);
   };
 
@@ -3892,33 +3886,33 @@ function mushafChangePage(dir) {
 <script src="src/js/i18n.js"></script>
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
-<script src="src/js/quran-sidebar-core.js?v=20260728a"></script>
-<script src="src/js/quran-sidebar.js?v=20260728a"></script>
-<script src="src/js/quran-verses-core.js?v=20260728a"></script>
-<script src="src/js/quran-verses.js?v=20260728a"></script>
-<script src="src/js/quran-audio-core.js?v=20260728a"></script>
-<script src="src/js/quran-qul-core.js?v=20260728a"></script>
-<script src="src/js/quran-audio.js?v=20260728a"></script>
-<script src="src/js/quran-translations.js?v=20260728a"></script>
-<script src="src/js/quran-compare.js?v=20260728a"></script>
-<script src="src/js/quran-marks-core.js?v=20260728a"></script>
-<script src="src/js/quran-marks.js?v=20260728a"></script>
-<script src="src/js/quran-ai-core.js?v=20260728a"></script>
-<script src="src/js/quran-ai.js?v=20260728a"></script>
-<script src="src/js/quran-share-core.js?v=20260728a"></script>
-<script src="src/js/quran-share.js?v=20260728a"></script>
-<script src="src/js/quran-mushaf-core.js?v=20260728a"></script>
-<script src="src/js/quran-tajweed-core.js?v=20260728a"></script>
-<script src="src/js/quran-mushaf.js?v=20260728a"></script>
-<script src="src/js/quran-tajweed.js?v=20260728a"></script>
+<script src="src/js/quran-sidebar-core.js?v=20260728b"></script>
+<script src="src/js/quran-sidebar.js?v=20260728b"></script>
+<script src="src/js/quran-verses-core.js?v=20260728b"></script>
+<script src="src/js/quran-verses.js?v=20260728b"></script>
+<script src="src/js/quran-audio-core.js?v=20260728b"></script>
+<script src="src/js/quran-qul-core.js?v=20260728b"></script>
+<script src="src/js/quran-audio.js?v=20260728b"></script>
+<script src="src/js/quran-translations.js?v=20260728b"></script>
+<script src="src/js/quran-compare.js?v=20260728b"></script>
+<script src="src/js/quran-marks-core.js?v=20260728b"></script>
+<script src="src/js/quran-marks.js?v=20260728b"></script>
+<script src="src/js/quran-ai-core.js?v=20260728b"></script>
+<script src="src/js/quran-ai.js?v=20260728b"></script>
+<script src="src/js/quran-share-core.js?v=20260728b"></script>
+<script src="src/js/quran-share.js?v=20260728b"></script>
+<script src="src/js/quran-mushaf-core.js?v=20260728b"></script>
+<script src="src/js/quran-tajweed-core.js?v=20260728b"></script>
+<script src="src/js/quran-mushaf.js?v=20260728b"></script>
+<script src="src/js/quran-tajweed.js?v=20260728b"></script>
 <script src="src/js/quran-tafsir-core.js?v=20260716b"></script>
 <script src="src/js/quran-tafsir.js?v=20260716b"></script>
-<script src="src/js/quran-related-core.js?v=20260728a"></script>
-<script src="src/js/quran-related.js?v=20260728a"></script>
-<script src="src/js/quran-related-hadith-core.js?v=20260728a"></script>
-<script src="src/js/quran-related-hadith.js?v=20260728a"></script>
-<script src="src/js/quran-vocab-core.js?v=20260728a"></script>
-<script src="src/js/quran-vocab.js?v=20260728a"></script>
+<script src="src/js/quran-related-core.js?v=20260728b"></script>
+<script src="src/js/quran-related.js?v=20260728b"></script>
+<script src="src/js/quran-related-hadith-core.js?v=20260728b"></script>
+<script src="src/js/quran-related-hadith.js?v=20260728b"></script>
+<script src="src/js/quran-vocab-core.js?v=20260728b"></script>
+<script src="src/js/quran-vocab.js?v=20260728b"></script>
 <script src="src/js/reflection-core.js?v=20260716b"></script>
 <script src="src/js/reflection.js?v=20260716b"></script>
 <script src="src/js/reflection-actions-core.js?v=20260717b"></script>
