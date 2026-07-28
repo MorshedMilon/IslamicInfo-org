@@ -304,6 +304,21 @@
     var first = document.querySelector('.surah-row[data-id="1"]');
     if (first) { activeId = 1; first.classList.add('active'); }
     if (typeof window.loadSurah === 'function') window.loadSurah(1); // Module 2: render default surah
+    // Mobile: the immersive per-verse reader is gated on html.reader-focus, which is
+    // otherwise added only when a surah is TAPPED. On a fresh mobile visit (default
+    // surah, no tap) that left the reader non-immersive — header + expanded actions
+    // showing and the verse-tap actions inert. Enter focus here too so mobile always
+    // gets the clean reader, and land the user in it. Desktop keeps the landing hero
+    // (focus-on-select) untouched.
+    if (window.matchMedia('(max-width:900px)').matches) {
+      var root = document.documentElement;
+      root.classList.add('reader-focus');
+      root.classList.remove('header-peek', 'toolbar-open');
+      root.classList.add('audiobar-hidden');
+      var va = document.getElementById('versesArea'); if (va) va._lastScrollY = 0;
+      var shell = document.getElementById('readerShell');
+      if (shell) shell.scrollIntoView({ block: 'start' });
+    }
   }
 
   window.addEventListener('popstate', function () {
