@@ -40,7 +40,11 @@
   /* Source line — only ever states what the record carries. */
   function sourceLine(d) {
     if (d.verseRef) return "Qur'an · " + d.verseRef;
-    if (d.hadithCitation) return String(d.hadithCitation);
+    var c = d.hadithCitation;
+    if (c && typeof c === 'object') {          // Phase-2 entries store a citation object
+      return c.book + ' ' + c.number + (c.narrator ? ' · ' + c.narrator : '');
+    }
+    if (c) return String(c);
     return 'Hisn al-Muslim';
   }
 
@@ -92,6 +96,23 @@
     return c.indexOf(String(cat).replace(/-/g, ' ')) !== -1;
   }
 
+  /* Other narrations of the same core supplication. Every one keeps its own full
+     text and citation — this only collapses the browse view. */
+  function variantBlock(d) {
+    var sibs = all.filter(function (x) {
+      return x.variantGroup === d.variantGroup && x.variantRole === 'variant';
+    });
+    if (!sibs.length) return '';
+    var items = sibs.map(function (v) {
+      return '<li><p>' + esc(v.translation) + '</p><cite>' + esc(sourceLine(v)) + '</cite></li>';
+    }).join('');
+    return '<details class="dua-variants">' +
+      '<summary>' + sibs.length + ' further narration' + (sibs.length === 1 ? '' : 's') +
+      ' of this supplication</summary>' +
+      (d.variantNote ? '<p class="dv-note">' + esc(d.variantNote) + '</p>' : '') +
+      '<ul>' + items + '</ul></details>';
+  }
+
   /* ---------- rendering ---------- */
   function cardHTML(d) {
     var cat = d.category || '';
@@ -102,6 +123,9 @@
     var note = d.contextNote
       ? '<div class="dua-context-note"><span class="dcn-label">⚠ ' +
         esc(d.contextLabel || 'Context') + '</span>' + esc(d.contextNote) + '</div>' : '';
+    // The lead card of a variant group carries its other narrations, so the grid
+    // shows one supplication instead of a run of near-identical cards.
+    var variants = d.variantLead ? variantBlock(d) : '';
     return '' +
       '<div data-ai-selectable="dua" class="card dua-card' + (d.entryType === 'contextual' ? ' is-contextual' : '') + '" data-id="' + esc(d.id) + '">' +
         '<div class="dua-card-header">' +
@@ -116,6 +140,7 @@
         '<div class="dua-arabic">' + esc(d.arabic) + '</div>' +
         translit +
         '<p class="dua-translation">' + esc(d.translation) + '</p>' +
+        variants +
         '<div class="dua-footer">' +
           '<div class="dua-source"><span class="dua-source-dot"></span>' + esc(sourceLine(d)) + '</div>' +
           '<div class="dua-actions">' +
@@ -153,6 +178,9 @@
     var ql = qa ? '' : normLatin(q);
     view = all.filter(function (d) {
       if (!matchesCat(d, activeCat)) return false;
+      // Browsing shows one card per supplication; a search is intent-driven, so
+      // variant narrations become findable again.
+      if (!q && d.variantRole === 'variant') return false;
       if (!q) return true;
       if (qa) return normArabic(d.arabic).indexOf(qa) !== -1;
       var hay = normLatin((d.translation || '') + ' ' + (d.category || '') + ' ' + (d.transliteration || '') + ' ' + sourceLine(d));

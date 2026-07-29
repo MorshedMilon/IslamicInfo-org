@@ -327,6 +327,16 @@ img{max-width:100%;}
 @media(max-width:900px){.dua-sidebar{display:none;}.dua-main{padding-left:0;}}
 
 /* Dua cards */
+.dua-variants{margin:0 0 13px;border-top:0.5px solid rgba(0,105,110,.14);padding-top:10px;}
+.dua-variants summary{cursor:pointer;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--teal-700);list-style:none;}
+.dua-variants summary::-webkit-details-marker{display:none;}
+.dua-variants summary::before{content:"▸ ";}
+.dua-variants[open] summary::before{content:"▾ ";}
+.dua-variants .dv-note{font-size:11px;line-height:1.55;color:var(--ink-muted);margin:8px 0 6px;}
+.dua-variants ul{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:9px;}
+.dua-variants li{border-left:2px solid rgba(197,160,89,.35);padding-left:10px;}
+.dua-variants li p{font-size:12px;line-height:1.6;color:var(--ink-body);margin:0 0 3px;}
+.dua-variants li cite{font-size:10px;font-style:normal;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);}
 .dua-context-note{font-size:11.5px;line-height:1.55;color:var(--ink-muted);background:rgba(197,160,89,.10);border:0.5px solid rgba(197,160,89,.30);border-radius:10px;padding:9px 12px;margin:0 0 13px;}
 .dua-context-note .dcn-label{display:block;font-weight:700;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:4px;}
 .dua-card.is-contextual .dua-arabic{opacity:.88;}
