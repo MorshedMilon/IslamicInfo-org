@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /sign-in.html
+Disallow: /sign-up.html
+Disallow: /forgot-password.html
+Disallow: /search-results.html
+
+Sitemap: https://islamicinfo.org/sitemap.xml
