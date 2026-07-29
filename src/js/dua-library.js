@@ -290,7 +290,11 @@
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function (doc) {
         var list = (doc && doc.duas) || [];
-        all = list.filter(function (d) { return d && d.translation && String(d.translation).trim(); });
+        // entryType 'guidance' = narration about practice or virtue with no
+        // supplication text; kept in the data, never shown as a dua to recite.
+        all = list.filter(function (d) {
+          return d && d.translation && String(d.translation).trim() && d.entryType !== 'guidance';
+        });
         if (!all.length) return fail('Dua library is unavailable right now.');
         paintCounts();
         document.querySelectorAll('.cat-chip').forEach(function (x) {
