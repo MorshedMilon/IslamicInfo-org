@@ -1,0 +1,1342 @@
+{
+ "meta": {
+  "purpose": "Hadith-based duas whose English could not be safely matched to a free-licensed source; translation set to null pending sourcing.",
+  "generated_from": "src/data/dua/search-corpus.json",
+  "sources_checked": [
+   "reflection-dua.json / dua-dhikr (fitrahive) full dataset"
+  ],
+  "count": 209,
+  "schema": 1
+ },
+ "entries": [
+  {
+   "id": "27:77",
+   "category": "Words of remembrance for morning and evening",
+   "arabic": "((أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيرَ مَا بَعْدَهُ ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ)). [ وإذا أمسى قال: أمسينا وأمسى الملك للَّه] [وإذا أمسى قال: رب أسألك خير ما في هذه الليلة، وخير ما بعدها، وأعوذ بك من شر ما في هذه الليلة، وشر ما بعدها.]",
+   "transliteration": "Asbahna wa-asbahal-mulku lillah walhamdu lillah la ilaha illal-lah, wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shayin qadeer, rabbi as-aluka khayra ma fee hathihil-laylah, wakhayra ma baAAdaha, wa-aAAoothu bika min sharri hathihil-laylah, washarri ma baAAdaha, rabbi aAAoothu bika minal-kasal, wasoo-il kibar, rabbi aAAoothu bika min AAathabin fin-nar, waAAathabin fil-qabr.‘We have reached the morning and at this very time unto Allah belongs all sovereignty, and all praise is for Allah. None has the right to be worshipped except Allah, alone, without partner, to Him belongs all sovereignty and praise and He is over all things omnipotent. My Lord, I ask You for the good of this night and the good of what follows it and I take refuge in You from the evil of this night and the evil of what follows it. My Lord, I take refuge in You from laziness and senility. My Lord, I take refuge in You from torment in the Fire and punishment in the grave.’…likewise, one says in the morning:Amsayna wa-amsal-mulku lillah….‘We have reached the evening and at this very time unto Allah belongs all sovereignty…’",
+   "suggestedMatch": {
+    "title": "Upon Entering The Morning by Asking for Protection from Allah",
+    "source": "HR. Muslim No. 2723 (75), Abu Dawud No. 5071, and at-Tirmidzi 3390, sahih from Abdullah Ibn Mas'ud",
+    "note": "close variant found in dua-dhikr (\"Upon Entering The Morning by Asking for Protection from Allah\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "27:78",
+   "category": "Words of remembrance for morning and evening",
+   "arabic": "((اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا ، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ)). [وإذا أمسى قال: اللَّهم بك أمسينا، وبك أصبحنا، وبك نحيا، وبك نموت، وإليك المصير.]",
+   "transliteration": "(Allahumma bika asbahna wabika amsayna, wabika nahya ,wabika namootu wa-ilaykan-nushoor.)[In the evening:] (Allahumma bika amsayna, wabika asbahna, wabika nahya wabika namootu wa-ilaykal-maseer.)",
+   "suggestedMatch": {
+    "title": "Entering the Evening by Seeking Allah's Mercy",
+    "source": "HR. al-Bukhari in al-Adab al-Mufrad No. 1199, this wording is the wording of al-Bukhari at-Tirmidzi No. 3391, Abu Dawud No. 5068, Ahmad 11/354, Ibn Majah No. 3868",
+    "note": "close variant found in dua-dhikr (\"Entering the Evening by Seeking Allah's Mercy\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "27:80",
+   "category": "Words of remembrance for morning and evening",
+   "arabic": "((اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ، وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلاَئِكَتِكَ، وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلاَّ أَنْتَ وَحْدَكَ لاَ شَرِيكَ لَكَ، وَأَنَّ مُحَمَّداً عَبْدُكَ وَرَسُولُكَ)) (أربعَ مَرَّاتٍ).[ وإذا أمسى قال: اللَّهم إني أمسيت...]",
+   "transliteration": "(Allahumma innee asbahtu oshhiduk, wa-oshhidu hamalata AAarshik, wamala-ikatak, wajameeAAa khalqik, annaka antal-lahu la ilaha illa ant, wahdaka la shareeka lak, wa-anna Muhammadan AAabduka warasooluk .) (four times in the morning & evening)(Note: for the evening, one reads (amsaytu) instead of (asbahtu).)"
+  },
+  {
+   "id": "27:81",
+   "category": "Words of remembrance for morning and evening",
+   "arabic": "((اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لاَ شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ)). [وإذا أمسى قال: اللَّهم ما أمسى بي...]",
+   "transliteration": "(Allahumma ma asbaha bee min niAAmatin, aw bi-ahadin min khalqik, faminka wahdaka la shareeka lak, falakal-hamdu walakash-shukr.)(Note: for the evening, one reads (amsa) instead of (asbaha).)"
+  },
+  {
+   "id": "27:83",
+   "category": "Words of remembrance for morning and evening",
+   "arabic": "((حَسْبِيَ اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ عَلَيهِ تَوَكَّلتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ)) (سَبْعَ مَرّاتٍ).",
+   "transliteration": "(Hasbiyal-lahu la ilaha illa huwa, AAalayhi tawakkalt, wahuwa rabbul-AAarshil-AAatheem (Recite seven times in Arabic.)"
+  },
+  {
+   "id": "27:89",
+   "category": "Words of remembrance for morning and evening",
+   "arabic": "((أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُـمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذَا الْيَوْمِ:فَتْحَهُ، وَنَصْرَهُ، وَنورَهُ، وَبَرَكَتَهُ، وَهُدَاهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهِ وَشَرِّ مَا بَعْدَهُ)). [وإذا أمسى قال: أمسينا وأمسى الملك للَّه ربّ العالمين اللَّهم إني أسألك خير هذه الليلة: فتحها، ونصرها، ونورها، وبركتها، وهداها، وأعوذ بك من شر ما فيها، وشر ما بعدها.]",
+   "transliteration": "(Asbahna wa-asbahal-mulku lillahi rabbil-AAalameen, allahumma innee as-aluka khayra hathal-yawm, fat-hahu, wanasrahu, wanoorahu, wabarakatahu, wahudahu, wa-aAAoothu bika min sharri ma feehi, washarri ma baAAdah.)[For the evening, the supplication is read as follows: ](Amsayna wa-amsal-mulku lillahi rabbil-AAalameen, allahumma innee as-aluka khayra hathihil-laylah, fat-haha, wanasraha, wanooraha, wabarakataha, wahudaha, wa-aAAoothu bika min sharri ma feeha washarri ma baAAdaha.)"
+  },
+  {
+   "id": "27:98",
+   "category": "Words of remembrance for morning and evening",
+   "arabic": "((اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبَيِّنَا مُحَمَّدٍ)) (عشرَ مرَّاتٍ).",
+   "transliteration": "Allaahumma salli wa sallim 'alaa Nabiyyinaa Muhammadin[ten times]"
+  },
+  {
+   "id": "28:102",
+   "category": "What to say before sleeping",
+   "arabic": "((بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، فَإِن أَمْسَكْتَ نَفْسِي فارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا، بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ)).",
+   "transliteration": "(Bismika rabbee wadaAAtu janbee wabika arfaAAuh, fa-in amsakta nafsee farhamha, wa-in arsaltaha fahfathha bima tahfathu bihi AAibadakas-saliheen.)"
+  },
+  {
+   "id": "28:103",
+   "category": "What to say before sleeping",
+   "arabic": "((اللَّهُمَّ إِنَّكَ خَلَقْتَ نَفْسِي وَأَنْتَ تَوَفَّاهَا، لَكَ مَمَاتُهَا وَمَحْياهَا، إِنْ أَحْيَيْتَهَا فَاحْفَظْهَا، وَإِنْ أَمَتَّهَا فَاغْفِرْ لَهَا. اللَّهُمَّ إِنِّي أَسْأَلُكَ العَافِيَةَ)).",
+   "transliteration": "(Allahumma innaka khalaqta nafsee wa-anta tawaffaha, laka mamatuha wamahyaha in ahyaytaha fahfathha, wa-in amattaha faghfir laha. Allahumma innee as-alukal-AAafiyah.)"
+  },
+  {
+   "id": "28:104",
+   "category": "What to say before sleeping",
+   "arabic": "((اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ)).",
+   "transliteration": "(Allahumma qinee AAathabaka yawma tabAAathu AAibadak.)"
+  },
+  {
+   "id": "28:106",
+   "category": "What to say before sleeping",
+   "arabic": "((سُبْحَانَ اللَّهِ (ثلاثاً وثلاثين) وَالْحَمْدُ لِلَّهِ (ثلاثاً وثلاثين) وَاللَّهُ أَكْبَرُ (أربعاً وثلاثينَ))).",
+   "transliteration": "(Subhanal-lah. (thirty-three times) Alhamdu lillah. (thirty-three times) Allahu akbar. (thirty-four times))"
+  },
+  {
+   "id": "28:107",
+   "category": "What to say before sleeping",
+   "arabic": "((اللَّهُمَّ رَبَّ السَّمَوَاتِ السَّبْعِ وَرَبَّ الأَرْضِ، وَرَبَّ الْعَرْشِ الْعَظِيمِ، رَبَّنَا وَرَبَّ كُلِّ شَيْءٍ، فَالِقَ الْحَبِّ وَالنَّوَى، وَمُنْزِلَ التَّوْرَاةِ وَالْإِنْجِيلِ، وَالْفُرْقَانِ، أَعُوذُ بِكَ مِنْ شَرِّ كُلِّ شَيْءٍ أَنْتَ آخِذٌ بِنَاصِيَتِهِ. اللَّهُمَّ أَنْتَ الأَوَّلُ فَلَيْسَ قَبْلَكَ شَيْءٌ، وَأَنْتَ الآخِرُ فَلَيسَ بَعْدَكَ شَيْءٌ، وَأَنْتَ الظَّاهِرُ فَلَيْسَ فَوْقَكَ شَيْءٌ، وَأَنْتَ الْبَاطِنُ فَلَيْسَ دُونَكَ شَيْءٌ، اقْضِ عَنَّا الدَّيْنَ وَأَغْنِنَا مِنَ الْفَقْرِ)).",
+   "transliteration": "(Allahumma rabbas-samawatis-sabAA, warabbal-AAarshil-AAatheem, rabbana warabba kulli shay/, faliqal-habbi wannawa, wamunazzilat-tawra, wal-injeel, walfurqan, aAAoothu bika min sharri kulli shayin anta akhithun binasiyatih. Allahumma antal-awwal, falaysa qablaka shay/, wa-antal-akhir, falaysa baAAdaka shay/, wa-antath-thahir falaysa fawqaka shay/, waantal-batin, falaysa doonaka shay/, iqdi AAannad-dayna wa-aghnina minal-faqr.)"
+  },
+  {
+   "id": "28:108",
+   "category": "What to say before sleeping",
+   "arabic": "((الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا، وَكَفَانَا، وَآوَانَا، فَكَمْ مِمَّنْ لاَ كَافِيَ لَهُ وَلاَ مُؤْوِيَ)).",
+   "transliteration": "(Alhamdu lillahil-lathee atAAamana wasaqana, wakafana, wa-awana, fakam mimman la kafiya lahu wala mu'wee.)"
+  },
+  {
+   "id": "28:111",
+   "category": "What to say before sleeping",
+   "arabic": "((اللَّهُمَّ أَسْلَمْتُ نَفْسِي إِلَيْكَ، وَفَوَّضْتُ أَمْرِي إِلَيْكَ، وَوَجَّهْتُ وَجْهِي إِلَيْكَ، وَأَلْجَأْتُ ظَهْرِي إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لاَ مَلْجَأَ وَلاَ مَنْجَا مِنْكَ إِلاَّ إِلَيْكَ، آمَنْتُ بِكِتَابِكَ الَّذِي أَنْزَلْتَ، وَبِنَبِيِّكَ الَّذِي أَرْسَلْتَ)).",
+   "transliteration": "(Allahumma aslamtu nafsee ilayk, wafawwadtu amree ilayk, wawajjahtu wajhee ilayk, wa-alja/tu thahree ilayk, raghbatan warahbatan ilayk, la maljaa wala manja minka illa ilayk, amantu bikitabikal-lathee anzalt, wabinabiyyikal-lathee arsalt.)"
+  },
+  {
+   "id": "1:2",
+   "category": "supplications for when you wake up",
+   "arabic": "لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَريكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، سُبْحَانَ اللَّهِ، وَالْحَمْدُ للَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكبَرُ، وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ الْعَلِيِّ الْعَظِيمِ، رَبِّ اغْفرْ لِي",
+   "transliteration": "(La ilaha illal-lahu wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shay-in qadeer, subhanal-lah, walhamdu lillah, wala ilaha illal-lah wallahu akbar, wala hawla wala quwwata illa billahil-AAaliyyil AAatheem. Rabbigh-fir lee)",
+   "suggestedMatch": {
+    "title": "There is No Partner for Allah, and To Him Belongs All Things",
+    "source": "Sharh Shahih Muslim, 5: 84",
+    "note": "close variant found in dua-dhikr (\"There is No Partner for Allah, and To Him Belongs All Things\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "1:3",
+   "category": "supplications for when you wake up",
+   "arabic": "( الْحَمْدُ لِلَّهِ الَّذِي عَافَانِي فِي جَسَدِي، وَرَدَّ عَلَيَّ رُوحِي، وَأَذِنَ لي بِذِكْرِهِ )",
+   "transliteration": "(Alhamdu lillahil-lathee AAafanee fee jasadee waradda AAalayya roohee wa-athina lee bithikrih.)"
+  },
+  {
+   "id": "6:10",
+   "category": "Invocation for entering the restroom",
+   "arabic": "([بِسْمِ اللَّهِ] اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبْثِ وَالْخَبائِث).",
+   "transliteration": "((Bismil-lah) allahumma innee aAAoothu bika minal-khubthi wal-khaba-ith.)",
+   "suggestedMatch": {
+    "title": "Supplication Entering the Bathroom",
+    "source": "HR. al-Bukhari and Muslim",
+    "note": "close variant found in dua-dhikr (\"Supplication Entering the Bathroom\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "9:13",
+   "category": "What to say upon completing ablution",
+   "arabic": "(أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ وَأَشْهَدُ أَنَّ مُحَمَّداً عَبْدُهُ وَرَسُولُهُ..).",
+   "transliteration": "(Ashhadu an la ilaha illal-lahu wahdahu la shareeka lah, wa-ashhadu anna Muhammadan AAabduhu warasooluh.)",
+   "suggestedMatch": {
+    "title": "Supplication After Performing Ablution",
+    "source": "HR. Muslim, at-Tirmidzi and an-Nasa'i",
+    "note": "close variant found in dua-dhikr (\"Supplication After Performing Ablution\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "9:14",
+   "category": "What to say upon completing ablution",
+   "arabic": "(اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ)",
+   "transliteration": "(Allahummaj-AAalnee minat-tawwabeena wajAAalnee minal-mutatahhireen.)"
+  },
+  {
+   "id": "9:15",
+   "category": "What to say upon completing ablution",
+   "arabic": "(سُبْحانَكَ اللَّهُمَّ وَبِحَمْدِكَ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَسْتَغْفِرُكَ وَأَتوبُ إِلَيْكَ).",
+   "transliteration": "(Subhanakal-lahumma wabihamdika ashhadu an la ilaha illa anta astaghfiruka wa-atoobu ilayk.)"
+  },
+  {
+   "id": "11:18",
+   "category": "What to say when entering the home",
+   "arabic": "(بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا، ثُمَّ لِيُسَلِّمْ عَلَى أَهْلِهِ).",
+   "transliteration": "(Bismil-lahi walajna, wabismil-lahi kharajna, waAAala rabbina tawakkalna.)"
+  },
+  {
+   "id": "12:19",
+   "category": "Invocation for going to the mosque",
+   "arabic": "اللّهُـمَّ اجْعَـلْ فِي قَلْبـي نُوراً ، وَفي لِسَـانِي نُوراً، وَفِي سَمْعِي نُوراً, وَفِي بَصَرِيِ نُوراً, وَمِنْ فََوْقِي نُوراً , وَ مِنْ تَحْتِي نُوراً, وَ عَنْ يَمِينيِ نُوراَ, وعَنْ شِمَالِي نُوراً, وَمْن أَماَمِي نُوراً, وَمِنْ خَلْفيِ نُوراَ, واجْعَلْ فِي نَفْسِي نُوراً, وأَعْظِمْ لِي نُوراً, وَعظِّمْ لِي نُوراً, وَاجْعَلْ لِي نُوراً, واجْعَلنِي نُوراً, أللَّهُمَّ أَعْطِنِي نُوراً, واجْعَلْ فِي عَصَبِي نُوراً, وَفِي لَحْمِي نُوراً, وَفِي دَمِي نُوراً وَفِي شَعْرِي نُوراً, وفِي بَشَرِي نُوراً (أَللَّهُمَّ اجِعَلْ لِي نُوراً فِي قّبْرِي وَ نُوراَ فِي عِظاَمِي) (وَزِدْنِي نُوراً, وَزِدْنِي نُوراَ , وَزِدْنِي نُوراً) (وَهَبْ لِي نُوراً عَلَى نُوراً )",
+   "transliteration": "Allaahummaj 'al fee qalbee nooran, wa fee lisaanee nooran, wa fee sam'ee nooran, wa fee basaree nooran, wa min fawqee nooran, wa min tahtee nooran, wa 'an yameenee nooran, wa 'an shimaalee nooran, wa min 'amaamee nooran, wa min khalfee nooran. Wa j'al fee nafsee nooran, wa 'a'dhim lee nooran, wa 'a'dhim lee nooran. Waj'al lee nooran, waj'alnee nooran. Allaahumma a'tineje nooran, waj'al fee 'asabee nooran, wa fee lahmee nooran, wa fee damee nooran, wa fee sha'ree nooran, wa fee basharee nooran.[Allaahummaj'al lee nooran fee qabree, wa nooran fee 'idhaamee.][Wa zidnee nooran, wa zidnee nooran, wa zidnee nooran.][Wa hab lee nooran 'alaa noor.]"
+  },
+  {
+   "id": "13:20",
+   "category": "Invocation for entering the mosque",
+   "arabic": "(يَبْدَأُ بِرِجْلِهِ الْيُمْنَى) ، وَيَقُولُ: ((أَعُوذُ بِاللَّهِ العَظِيمِ، وَبِوَجْهِهِ الْكَرِيمِ، وَسُلْطَانِهِ الْقَدِيمِ، مِنَ الشَّيْطَانِ الرَّجِيمِ)) [بِسْمِ اللَّهِ، وَالصَّلَاةُ] [وَالسَّلَامُ عَلَى رَسُولِ اللَّهِ] ((اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ)).",
+   "transliteration": "(aAAoothu billahil-AAatheem wabiwajhihil-kareem wasultanihil-qadeem minash-shaytanir-rajeem, [bismil-lah, wassalatu] [wassalamu AAala rasoolil-lah] , allahumma iftah lee abwaba rahmatik.)"
+  },
+  {
+   "id": "14:21",
+   "category": "Invocation for leaving the mosque",
+   "arabic": "((يَبْدَأُ بِرِجْلِهِ الْيُسْرَى)) وَيَقُولُ: ((بِسْمِ اللَّهِ وَالصّلَاةُ وَالسَّلَامُ عَلَى رَسُولِ اللَّهِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِك، اللَّهُمَّ اعْصِمْنِي مِنَ الشَّيْطَانِ الرَّجِيمِ)).",
+   "transliteration": "(Bismil-lah wassalatu wassalamu AAala rasoolil-lah, allahumma innee as-aluka min fadlik, allahumma iAAsimnee minash-shaytanir-rajeem.)"
+  },
+  {
+   "id": "15:22",
+   "category": "What to say upon hearing the Athan (call to prayer)",
+   "arabic": "يَقُولُ مِثْلَ مَا يَقُولُ المُؤَذِّنُ إِلاَّ فِي ((حَيَّ عَلَى الصَّلَاةِ وَحَيَّ عَلَى الْفَلَاحِ)) فَيقُولُ: ((لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ)).",
+   "transliteration": null
+  },
+  {
+   "id": "15:23",
+   "category": "What to say upon hearing the Athan (call to prayer)",
+   "arabic": "يَقُولُ: ((وَأَنَا أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ وَأَنَّ مُحَمَّداً عَبْدُهُ وَرَسُولُهُ، رَضِيتُ بِاللَّهِ رَبَّاً، وَبِمُحَمَّدٍ رَسُولاً، وَبِالْإِسْلاَمِ دِينَاً)) ((يَقُولُ ذَلِكَ عَقِبَ تَشَهُّدِ الْمُؤَذِّنِ)).",
+   "transliteration": "Immediately following the declaration of faith called by the mu-aththin, one says:Wa-ana ashhadu an la ilaha illal-lahu wahdahu la shareeka lah, wa-anna Muhammadan AAabduhu warasooluh, radeetu billahi rabban wabimuhammadin rasoolan wabil-islami deena."
+  },
+  {
+   "id": "15:24",
+   "category": "What to say upon hearing the Athan (call to prayer)",
+   "arabic": "((يُصَلِّي عَلَى النَّبِيِّ صلى الله عليه وسلم بَعْدَ فَرَاغِهِ مِنْ إِجَابَةِ الْمُؤَذِّنِ)).",
+   "transliteration": null
+  },
+  {
+   "id": "15:25",
+   "category": "What to say upon hearing the Athan (call to prayer)",
+   "arabic": "يَقُولُ: ((اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلاَةِ الْقَائِمَةِ، آتِ مُحَمَّداً الْوَسِيلَةَ وَالْفَضِيلَةَ، وَابْعَثْهُ مَقَامَاً مَحمُوداً الَّذِي وَعَدْتَهُ، [إِنَّكَ لَا تُخْلِفُ الْمِيعَادَ])).",
+   "transliteration": "Allahumma rabba hathihid-daAAwatit-tammah, wassalatil-qa-imah ati Muhammadan alwaseelata wal-fadeelah, wabAAath-hu maqaman mahmoodan allathee waAAadtah, innaka la tukhliful-meeAAad.",
+   "suggestedMatch": {
+    "title": "Prayer After the Adhan",
+    "source": "Narrated by Abu Dawud (529), at-Tirmidhi (211), an-Nasa'i (2:26), Ibn Majah (722)",
+    "note": "close variant found in dua-dhikr (\"Prayer After the Adhan\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "15:26",
+   "category": "What to say upon hearing the Athan (call to prayer)",
+   "arabic": "((يَدْعُو لِنَفسِهِ بَيْنَ الْأَذَانِ وَالْإِقَامَةِ فَإِنَّ الدُّعَاءَ حِينَئِذٍ لاَ يُرَدُّ)).",
+   "transliteration": null
+  },
+  {
+   "id": "4:7",
+   "category": "Invocations for someone who has put on new clothes",
+   "arabic": "(تُبْلِي وَيُخْلِفُ اللَّهُ تَعَالَى)",
+   "transliteration": "(Tublee wayukhliful-lahu taAAala.)"
+  },
+  {
+   "id": "4:8",
+   "category": "Invocations for someone who has put on new clothes",
+   "arabic": "(اِلْبَسْ جَدِيداً وَعِشْ حَمِيداً وَمُتْ شَهِيداً).",
+   "transliteration": "(Ilbas jadeedan waAAish hameedan wamut shaheedan.)"
+  },
+  {
+   "id": "16:27",
+   "category": "Invocations for the beginning of the prayer",
+   "arabic": "((اللَّهُمَّ بَاعِدْ بَيْنِي وَبَيْنَ خَطَايَايَ كَمَا بَاعَدْتَ بَيْنَ الْمَشْرِقِ وَالْمَغْرِبِ، اللَّهُمَّ نَقِّنِي مِنْ خَطَايَايَ كَمَا يُنَقَّى الثَّوْبُ الْأَبْيَضُ مِنَ الدَّنَسِ، اللَّهُمَّ اغْسِلْني مِنْ خَطَايَايَ، بِالثَّلْجِ وَالْماءِ وَالْبَرَدِ)).",
+   "transliteration": "(Allahumma baAAid baynee wabayna khatayaya kama baAAadta baynal-mashriqi walmaghrib, allahumma naqqinee min khatayaya kama yunaqqath-thawbul-abyadu minad-danas, allahummagh-silnee min khatayaya biththalji walma/i walbarad.)"
+  },
+  {
+   "id": "16:28",
+   "category": "Invocations for the beginning of the prayer",
+   "arabic": "((سُبْحانَكَ اللَّهُمَّ وَبِحَمْدِكَ، وَتَبارَكَ اسْمُكَ، وَتَعَالَى جَدُّكَ، وَلاَ إِلَهَ غَيْرُكَ)).",
+   "transliteration": "(Subhanakal-lahumma wabihamdika watabarakas-muka wataAAala jadduka wala ilaha ghayruk.)"
+  },
+  {
+   "id": "16:29",
+   "category": "Invocations for the beginning of the prayer",
+   "arabic": "((وَجَّهْتُ وَجْهِيَ لِلَّذِي فَطَرَ السَّمَوَاتِ وَالأَرْضَ حَنِيفَاً وَمَا أَنَا مِنَ الْمُشْرِكِينَ، إِنَّ صَلاَتِي، وَنُسُكِي، وَمَحْيَايَ، وَمَمَاتِي لِلَّهِ رَبِّ الْعَالَمِينَ، لاَ شَرِيكَ لَهُ وَبِذَلِكَ أُمِرْتُ وَأَنَا مِنَ الْمُسْلِمِينَ. اللَّهُمَّ أَنْتَ المَلِكُ لاَ إِلَهَ إِلاَّ أَنْتَ، أَنْتَ رَبِّي وَأَنَا عَبْدُكَ، ظَلَمْتُ نَفْسِي وَاعْتَرَفْتُ بِذَنْبِي فَاغْفِرْ لِي ذُنُوبي جَمِيعَاً إِنَّهُ لاَ يَغْفِرُ الذُّنوبَ إِلاَّ أَنْتَ. وَاهْدِنِي لِأَحْسَنِ الأَخْلاقِ لاَ يَهْدِي لِأَحْسَنِها إِلاَّ أَنْتَ، وَاصْرِفْ عَنِّي سَيِّئَهَا، لاَ يَصْرِفُ عَنِّي سَيِّئَهَا إِلاَّ أَنْتَ، لَبَّيْكَ وَسَعْدَيْكَ، وَالخَيْرُ كُلُّهُ بِيَـــــــدَيْكَ، وَالشَّـــــرُّ لَيْسَ إِلَيْــــــكَ، أَنَا بِكَ وَإِلَيْكَ، تَبارَكْتَ وَتَعَالَيْتَ، أَسْتَغْفِرُكَ وَأَتوبُ إِلَيْكَ)).",
+   "transliteration": "(Wajjahtu wajhiya lillathee fataras-samawati wal-arda haneefan wama ana minal-mushrikeen, inna salatee wanusukee wamahyaya wamamatee lillahi rabbil-AAalameen, la shareeka lahu wabithalika omirtu wa-ana minal-muslimeen. Allahumma antal-maliku la ilaha illa ant. anta rabbee wa-ana AAabduk, thalamtu nafsee waAAtaraftu bithanbee faghfir lee thunoobee jameeAAan innahu la yaghfiruth-thunooba illa ant.wahdinee li-ahsanil-akhlaqi la yahdee li-ahsaniha illa ant, wasrif AAannee sayyi-aha la yasrifu AAannee sayyi-aha illa ant, labbayka wasaAAdayk,walkhayru kulluhu biyadayk, washsharru laysa ilayk, ana bika wa-ilayk, tabarakta wataAAalayt, astaghfiruka wa-atoobu ilayk.)"
+  },
+  {
+   "id": "16:30",
+   "category": "Invocations for the beginning of the prayer",
+   "arabic": "((اللَّهُمَّ رَبَّ جِبْرَائِيلَ، وَمِيْكَائِيلَ، وَإِسْرَافِيلَ، فَاطِرَ السَّمَوَاتِ وَالأَرْضِ، عَالِمَ الغَيْبِ وَالشَّهَادَةِ أَنْتَ تَحْكُمُ بَيْنَ عِبَادِكَ فِيمَا كَانُوا فِيهِ يَخْتَلِفُونَ. اهْدِنِي لِمَا اخْتُلِفَ فِيهِ مِنَ الْحَقِّ بِإِذْنِكَ إِنَّكَ تَهْدِي مَنْ تَشَاءُ إِلَى صِرَاطٍ مُسْتَقيمٍ)).",
+   "transliteration": "(Allahumma rabba jibra-eel, wameeka-eel, wa-israfeel fatiras-samawati walard, AAalimal-ghaybi washshahadah, anta tahkumu bayna AAibadika feema kanoo feehi yakhtalifoon. ihdinee limakh-tulifa feehi minal-haqqi bi-ithnik, innaka tahdee man tasha-o ila siratin mustaqeem.)"
+  },
+  {
+   "id": "16:31",
+   "category": "Invocations for the beginning of the prayer",
+   "arabic": "((اللَّهُ أَكْبَرُ كَبِيرَاً، اللَّهُ أَكْبَرُ كَبِيراً، اللَّهُ أَكْبَرُ كَبِيراً، وَالْحَمْدُ لِلَّهِ كَثيراً، وَالْحَمْدُ لِلَّهِ كَثيراً، وَالْحَمْدُ لِلَّهِ كَثيراً، وَسُبْحَانَ اللَّهِ بُكْرَةً وَأَصِيلاً)) ثَلاثاً ((أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ: مِنْ نَفْخِهِ، وَنَفْثِهِ، وَهَمْزِهِ)).",
+   "transliteration": "(Allahu akbaru kabeera, Allahu akbaru kabeera, Allahu akbaru kabeera, walhamdu lillahi katheera, walhamdu lillahi katheera, walhamdu lillahi katheera, wasubhanal-lahi bukratan wa-aseela.)(aAAoothu billahi minash-shaytani min nafkhihi wanafthihi wahamzih.)"
+  },
+  {
+   "id": "16:32",
+   "category": "Invocations for the beginning of the prayer",
+   "arabic": "((اللَّهُمَّ لَكَ الْحَمْدُ، أَنْتَ نُورُ السَّمَوَاتِ وَالأَرْضِ وَمَنْ فِيهِنَّ، وَلَكَ الْحَمْدُ أَنْتَ قَيِّمُ السَّمَوَاتِ وَالأَرْضِ وَمَنْ فِيهِنَّ، [وَلَكَ الْحَمْدُ أَنْتَ رَبُّ السَّمَواتِ وَالأَرْضِ وَمَنْ فِيهِنَّ] [وَلَكَ الْحَمْدُ لَكَ مُلْكُ السَّمَوَاتِ وَالأَرْضِ وَمَنْ فِيهِنَّ] [وَلَكَ الْحَمْدُ أَنْتَ مَلِكُ السَّمَوَاتِ وَالأَرْضِ] [وَلَكَ الْحَمْدُ] [أَنْتَ الْحَقُّ، وَوَعْدُكَ الْحَقُّ، وَقَوْلُكَ الْحَقُّ، وَلِقاؤُكَ الْحَقُّ، وَالْجَنَّةُ حَقٌّ، وَالنَّارُ حَقٌّ، وَالنَّبِيُّونَ حَقٌّ، وَمحَمَّدٌ صلى الله عليه وسلم حَقٌّ، وَالسّاعَةُ حَقٌّ] [اللَّهُمَّ لَكَ أَسْلَمتُ، وَعَلَيْكَ تَوَكَّلْتُ، وَبِكَ آمَنْتُ، وَإِلَيْكَ أَنَبْتُ، وَبِكَ خاصَمْتُ، وَإِلَيْكَ حاكَمْتُ. فَاغْفِرْ لِي مَا قَدَّمْتُ، وَمَا أَخَّرْتُ، وَمَا أَسْرَرْتُ، وَمَا أَعْلَنْتُ] [وَمَا أَنْتَ أَعْلَمُ بِهِ مِنِّي] [أَنْتَ المُقَدِّمُ، وَأَنْتَ المُؤَخِّرُ لاَ إِلَهَ إِلاَّ أَنْتَ] [أَنْتَ إِلَهِي لاَ إِلَهَ إِلاَّ أَنْتَ] [وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ])).",
+   "transliteration": "(Allahumma lakal-hamd anta noorus-samawati wal-ardi waman feehin, walakal-hamd, anta qayyimus-samawati walardi waman feehin, [walakal-hamd, anta rabbus-samawati walardi waman feehin], [walakal-hamd, laka mulkus-samawati walardi waman feehin] [walakal-hamd, anta malikus-samawati walard] [walakal-hamd] [antal-haq, wawaAAdukal-haq, waqawlukal-haq, waliqa-okal-haq, waljannatu haq wannaru haq, wannabiyyoona haq, wa Muhammadun haq, wassaAAatu haq] [allahumma laka aslamt, waAAalayka tawakkalt, wabika amant, wa-ilayka anabt, wabika khasamt, wa-ilayka hakamt, faghfir lee ma qaddamt, wama akhkhart, wama asrart, wama aAAlant] [antal-muqaddim, wa-antal-mu-akhkhir, la ilaha illa ant] [anta ilahee la ilaha illa ant .)"
+  },
+  {
+   "id": "17:33",
+   "category": "Invocations during Ruki' (bowing in prayer)",
+   "arabic": "((سُبْحانَ رَبِّيَ الْعَظِيمِ)). ثلاث مرَّاتٍ.",
+   "transliteration": "(Subhana rabbiyal-AAatheem (three times))"
+  },
+  {
+   "id": "17:34",
+   "category": "Invocations during Ruki' (bowing in prayer)",
+   "arabic": "((سُبْحَانَكَ اللَّهُمَّ رَبَّنَا وَبِحَمْدِكَ، اللَّهُمَّ اغْفِرْ لِي)).",
+   "transliteration": "(Subhanakal-lahumma rabbana wabihamdik, allahummagh-fir lee)"
+  },
+  {
+   "id": "17:35",
+   "category": "Invocations during Ruki' (bowing in prayer)",
+   "arabic": "((سُبُّوُحٌ، قُدُّوسٌ، رَبُّ المَلاَئِكَةِ وَالرُّوحِ)).",
+   "transliteration": "(Subboohun quddoos, rabbul-mala-ikati warrooh.)"
+  },
+  {
+   "id": "17:36",
+   "category": "Invocations during Ruki' (bowing in prayer)",
+   "arabic": "((اللَّهُمَّ لَكَ رَكَعْتُ، وَبِكَ آمَنْتُ، وَلَكَ أَسْلَمْتُ، خَشَعَ لَكَ سَمْعِي، وَبَصَرِي، وَمُخِّي، وَعَــــظْمِي، وَعَصَبِي، [وَمَا استَقَلَّتْ بِهِ قَدَمِي])).",
+   "transliteration": "(Allahumma laka rakaAAt, wabika amant, walaka aslamt, khashaAAa laka samAAee, wabasaree, wamukhkhee, waAAathmee, waAAasabee, wamas-taqalla bihi qadamee.)"
+  },
+  {
+   "id": "17:37",
+   "category": "Invocations during Ruki' (bowing in prayer)",
+   "arabic": "((سُبْحَانَ ذِي الْجَبَرُوتِ، وَالْمَلَكُوتِ، وَالْكِبْرِيَاءِ، وَالْعَظَمَةِ)).",
+   "transliteration": "(Subhana thil-jabaroot, walmalakoot, walkibriya/, walAAathamah.)"
+  },
+  {
+   "id": "18:38",
+   "category": "Invocations for rising from the Ruki'",
+   "arabic": "((سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ)).",
+   "transliteration": "(SamiAAal-lahu liman hamidah)"
+  },
+  {
+   "id": "18:39",
+   "category": "Invocations for rising from the Ruki'",
+   "arabic": "((رَبَّنَا وَلَكَ الْحَمْدُ، حَمْداً كَثيراً طَيِّباً مُبارَكاً فِيهِ)).",
+   "transliteration": "(Rabbana walakal-hamdu hamdan katheeran tayyiban mubarakan feeh.)"
+  },
+  {
+   "id": "18:40",
+   "category": "Invocations for rising from the Ruki'",
+   "arabic": "((مِلْءَ السَّمَوَاتِ وَمِلْءَ الأَرْضِ، وَمَا بَيْنَهُمَا، وَمِلْءَ مَا شِئْتَ مِنْ شَيءٍ بَعْدُ. أَهلَ الثَّناءِ وَالْمَجْدِ، أَحَقُّ مَا قَالَ الْعَبْدُ، وَكُلُّنَا لَكَ عَبْدٌ. اللَّهُمَّ لاَ مَانِعَ لِمَا أَعْطَيْتَ، وَلاَ مُعْطِيَ لِمَا مَنَعْتَ، وَلاَ يَنْفَعُ ذَا الجَدِّ مِنْكَ الجَدُّ)).",
+   "transliteration": "(Mil-as-samawati wamil-al-ard, wama baynahuma, wamil/a ma shi/ta min shay-in baAAd, ahlath-thana-i walmajd, ahaqqu ma qalal-AAabd, wakulluna laka AAabd. Allahumma la maniAAa lima aAAtayt, wala muAAtiya lima manaAAt, wala yanfaAAu thal-jaddi minkal-jad.)"
+  },
+  {
+   "id": "19:41",
+   "category": "Invocations during Sujood",
+   "arabic": "((سُبْحَانَ رَبِّيَ الأَعْلَى)) ثلاث مرَّاتٍ.",
+   "transliteration": "(Subhana rabbiyal-aAAla. (three times)))"
+  },
+  {
+   "id": "19:42",
+   "category": "Invocations during Sujood",
+   "arabic": "((سُبْحَانَكَ اللَّهُمَّ رَبَّنَا وَبِحَمْدِكَ، اللَّهُمَّ اغْفِرْ لِي)).",
+   "transliteration": "(Subhanakal-lahumma rabbana wabihamdik, allahummagh- fir lee.)"
+  },
+  {
+   "id": "19:43",
+   "category": "Invocations during Sujood",
+   "arabic": "((سُبوحٌ، قُدُّوسٌ، رَبُّ الْمَلَائِكَةِ وَالرُّوحِ)).",
+   "transliteration": "(Subbohoon quddos, rabbul-mala-ikati warrooh.)"
+  },
+  {
+   "id": "19:44",
+   "category": "Invocations during Sujood",
+   "arabic": "((اللَّهُمَّ لَكَ سَجَدْتُ وَبِكَ آمَنْتُ، وَلَكَ أَسْلَمْتُ، سَجَدَ وَجْهِيَ لِلَّذِي خَلَقَهُ، وَصَوَّرَهُ، وَشَقَّ سَمْعَهُ وَبَصَرَهُ، تَبَارَكَ اللَّهُ أَحْسنُ الْخَالِقينَ)).",
+   "transliteration": "(Allahumma laka sajadt, wabika amant, walaka aslamt, sajada wajhee lillathee khalaqahu wasawwarahu washaqqa samAAahu wabasarahu, tabarakal-lahu ahsanul-khaliqeen.)"
+  },
+  {
+   "id": "19:45",
+   "category": "Invocations during Sujood",
+   "arabic": "((سُبْحَانَ ذِي الْجَبَرُوتِ، وَالْمَلَكُوتِ، وَالْكِبْرِيَاءِ، وَالْعَظَمَةِ)).",
+   "transliteration": "(Subhana thil-jabaroot, walmalakoot, walkibriya/, walAAathamah.)"
+  },
+  {
+   "id": "19:46",
+   "category": "Invocations during Sujood",
+   "arabic": "((اللَّهُمَّ اغْفِرْ لِي ذَنْبِي كُلَّهُ: دِقَّهُ وَجِلَّهُ، وَأَوَّلَهُ وَآخِرَهُ، وَعَلاَنِيَّتَهُ وَسِرَّهُ)).",
+   "transliteration": "(Allahummagh-fir lee thanbee kullah, diqqahu wajillah, wa-awwalahu wa-akhirah, wa- AAalaniyyatahu wa-sirrah.)"
+  },
+  {
+   "id": "19:47",
+   "category": "Invocations during Sujood",
+   "arabic": "((اللَّهُمَّ إِنِّي أَعُوذُ بِرِضَاكَ مِنْ سَخَطِكَ، وَبِمُعَافَاتِكَ مِنْ عُقوبَتِكَ، وَأَعُوذُ بِكَ مِنْكَ، لاَ أُحْصِي ثَنَاءً عَلَيْكَ، أَنْتَ كَمَا أَثْنَيْتَ عَلَى نَفْسِكَ)).",
+   "transliteration": "(Allahumma innee aAAoothu biridaka min sakhatik, wa-bimuAAafatika min AAuqoobatik, wa-aAAoothu bika mink, la ohsee thana-an AAalayk, anta kama athnayta AAala nafsik.)"
+  },
+  {
+   "id": "20:48",
+   "category": "Invocations for sitting between two prostrations",
+   "arabic": "((رَبِّ اغْفِرْ لِي، رَبِّ اغْفِرْ لِي)).",
+   "transliteration": "(Rabbigh-fir lee, rabbigh-fir lee.)"
+  },
+  {
+   "id": "20:49",
+   "category": "Invocations for sitting between two prostrations",
+   "arabic": "((اللَّهُمَّ اغْفِرْ لِي، وَارْحَمْنِي، وَاهْدِنِي، وَاجْبُرْنِي، وَعَافِنِي، وَارْزُقْنِي، وَارْفَعْنِي)).",
+   "transliteration": "(Allahummagh-fir lee, warhamnee, wahdinee, wajburnee, waAAafinee, warzuqnee warfaAAnee.)"
+  },
+  {
+   "id": "21:51",
+   "category": "Supplications for prostrating due to recitation of the Qur'an",
+   "arabic": "((اللَّهُمَّ اكْتُبْ لِي بِهَا عِنْدَكَ أَجْراً، وَضَعْ عَنِّي بِهَا وِزْراً، وَاجْعَلْهَا لِي عِنْدَكَ ذُخْراً، وَتَقَبَّلْهَا مِنِّي كَمَا تَقَبَّلْتَهَا مِنْ عَبْدِكَ دَاوُدَ)).",
+   "transliteration": "(Allahummak-tub lee biha AAindaka ajra, wadaAA AAannee biha wizra, wajAAalha lee AAindaka thukhra, wataqabbalha minnee kama taqabbaltaha min AAabdika Dawood.)"
+  },
+  {
+   "id": "22:52",
+   "category": "Invocation for At-Tashahhud (sitting in prayer)",
+   "arabic": "((التَّحِيَّاتُ لِلَّهِ، وَالصَّلَواتُ، وَالطَّيِّباتُ، السَّلاَمُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلاَمُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ. أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّداً عَبْدُهُ وَرَسولُهُ)).",
+   "transliteration": "(Attahiyyatu lillahi wassalawatu wattayyibat, assalamu AAalayka ayyuhan-nabiyyu warahmatul-lahi wabarakatuh, assalamu AAalayna waAAala AAibadil-lahis-saliheen. Ash-hadu an la ilaha illal-lah, wa-ashhadu anna Muhammadan AAabduhu warasooluh.)"
+  },
+  {
+   "id": "23:53",
+   "category": "How to recite blessings on the Prophet after the Tashahhud",
+   "arabic": "((اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ، وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيتَ عَلَى إِبْرَاهِيمَ، وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ)).",
+   "transliteration": "(Allahumma salli AAala Muhammad, wa-AAala ali Muhammad, kama sallayta AAala Ibraheema wa-AAala ali Ibraheem, innaka Hameedun Majeed, allahumma barik AAala Muhammad, wa-AAala ali Muhammad, kama barakta AAala Ibraheema wa-AAala ali Ibraheem, innaka Hameedun Majeed.)"
+  },
+  {
+   "id": "23:54",
+   "category": "How to recite blessings on the Prophet after the Tashahhud",
+   "arabic": "((اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى أَزْوَاجِهِ وَذُرِّيَّتِهِ، كَمَا صَلَّيْتَ عَلَى آلِ إِبْرَاهِيمَ. وَبَارِكْ عَلَى مُحَمَّدٍ وَعَلَى أَزْواجِهِ وَذُرِّيَّتِهِ، كَمَا بَارَكْتَ عَلَى آلِ إِبْرَاهِيمَ. إِنَّكَ حَمِيدٌ مَجِيدٌ)).",
+   "transliteration": "(Allahumma salli AAala Muhammad wa-AAala azwajihi wathurriyyatihi kama sallayta AAala ali Ibraheem, wabarik AAala Muhammad, wa-AAala azwajihi wathurriyyatih, kama barakta AAala ali Ibraheem. innaka Hameedun Majeed.)"
+  },
+  {
+   "id": "24:55",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُــمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، وَمِنْ عَذَابِ جَهَنَّمَ، وَمِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ، وَمِنْ شَرِّ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ)).",
+   "transliteration": "(Allahumma innee aAAoothu bika min AAathabil-qabr, wamin AAathabi jahannam, wamin fitnatil-mahya walmamat, wamin shari fitnatil-maseehid-dajjal.)"
+  },
+  {
+   "id": "24:56",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُمَّ إِنِّي أَعوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، وَأَعوذُ بِكَ مِنْ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ، وَأَعوذُ بِكَ مِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ. اللَّهُمَّ إِنِّي أَعوذُ بِكَ مِنَ الْمَأْثَمِ وَالْمَغْرَمِ)).",
+   "transliteration": "(Allahumma innee aAAoothu bika min AAathabil-qabr, wa-aAAoothu bika min fitnatil-maseehid-dajjal, wa-aAAoothu bika min fitnatil-mahya walmamat. Allahumma innee aAAoothu bika minal-ma/thami walmaghram.)"
+  },
+  {
+   "id": "24:57",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي ظُلْماً كَثِيراً، وَلاَ يَغْفِرُ الذُّنوبَ إِلاَّ أَنْتَ، فَاغْفِرْ لِي مَغْفِرَةً مِنْ عِنْدِكَ وَارْحَمْنِي، إِنَّكَ أَنْتَ الغَفورُ الرَّحيمُ)).",
+   "transliteration": "(Allahumma innee thalamtu nafsee thulman katheeran wala yaghfiruth-thunooba illa ant, faghfir lee maghfiratan min AAindik warhamnee, innaka antal-Ghafoorur-Raheem.)"
+  },
+  {
+   "id": "24:58",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُمَّ اغْفِرْ لِي مَا قَدَّمْتُ، وَمَا أَخَّرْتُ، وَمَا أَسْرَرْتُ، وَمَا أَعْلَنْتُ، وَمَا أَسْرَفْتُ، وَمَا أَنْتَ أَعْلَمُ بِهِ مِنِّي. أَنْتَ الْمُقَدِّمُ، وَأَنْتَ الْمُؤَخِّرُ لاَ إِلَهَ إِلاَّ أَنْتَ)).",
+   "transliteration": "(Allahummagh-fir lee ma qaddamtu, wama akhkhart, wama asrartu wama aAAlant, wama asraftt, wama anta aAAlamu bihi minnee, antal-muqaddimu wa-antal-mu-akhkhiru la ilaha illa ant.)"
+  },
+  {
+   "id": "24:59",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ، وَشُكْرِكَ، وَحُسْنِ عِبادَتِكَ)).",
+   "transliteration": "(Allahumma aAAinnee AAala thikrik, washukrik, wahusni AAibadatik.)"
+  },
+  {
+   "id": "24:60",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْبُخْلِ، وَأَعوذُ بِكَ مِنَ الْجُبْنِ، وَأَعُوذُ بِكَ مِنْ أَنْ أُرَدَّ إِلَى أَرْذَلِ الْعُمُرِ، وَأَعُوذُ بِكَ مِنْ فِتْنَةِ الدُّنْيَا وَعَذَابِ الْقَبْرِ)).",
+   "transliteration": "(Allahumma innee aAAoothu bika minal-bukhl, wa-aAAoothu bika minal-jubn, wa-aAAoothu bika min an oradda ila arthalil- AAumur, wa-aAAoothu bika min fitnatid-dunya waAAathabil-qabr.)"
+  },
+  {
+   "id": "24:61",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ)).",
+   "transliteration": "(Allahumma innee as-alukal-jannah, wa-aAAoothu bika minan-nar.)",
+   "suggestedMatch": {
+    "title": "Supplication During Strong Wind",
+    "source": "HR. Abu Dawud and Ibn Majah",
+    "note": "close variant found in dua-dhikr (\"Supplication During Strong Wind\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "24:62",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُمَّ بِعِلْمِكَ الغَيْبَ وَقُدْرَتِكَ عَلَى الْخَلقِ أَحْيِنِي مَا عَلِمْتَ الْحَيَاةَ خَيْراً لِي، وَتَوَفَّنِي إِذَا عَلِمْتَ الْوَفَاةَ خَيْراً لِي، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَشْيَتَكَ فِي الْغَيْبِ وَالشَّهَادَةِ، وَأَسْأَلُكَ كَلِمَةَ الْحَقِّ فِي الرِّضَا وَالْغَضَبِ، وَأَسْأَلُكَ الْقَصْدَ فِي الْغِنَى وَالْفَقْرِ، وَأَسْأَلُكَ نَعِيماً لاَ يَنْفَدُ، وَأَسْأَلُكَ قُرَّةَ عَيْنٍ لاَ تَنْقَطِعُ، وَأَسْأَلُكَ الرِّضَا بَعْدَ الْقَضَاءِ، وَأَسْــــأَلُكَ بَرْدَ الْعَيْشِ بَعْدَ الْمَوْتِ، وَأَسْأَلُكَ لَذَّةَ النَّظَرِ إِلَى وَجْهِكَ، وَالشَّوْقَ إِلَى لِقائِكَ فِي غَيرِ ضَرَّاءَ مُضِرَّةٍ، وَلاَ فِتْنَةٍ مُضِلَّةٍ، اللَّهُمَّ زَيِّنَا بِزِينَةِ الإِيمَانِ، وَاجْعَلْنَا هُدَاةً مُهْتَدِينَ)).",
+   "transliteration": "(Allahumma biAAilmikal-ghayb, waqudratika AAalal-khalq, ahyinee ma AAalimtal-hayata khayran lee watawaffanee itha AAalimtal-wafata khayran lee, allahumma innee as-aluka khashyataka fil-ghaybi washshahadah, wa-as-aluka kalimatal-haqqi fir-rida walghadab, wa-as-alukal-qasda fil-ghina walfaqr, wa-as-aluka naAAeeman la yanfad, wa-as-aluka qurrata AAaynin la tanqatiAA, wa-as-alukar-rida baAAdal-qada/, wa-as-aluka bardal-AAayshi baAAdal-mawt, wa-as-aluka laththatan-nathari ila wajhik, washshawqa ila liqa-ik fee ghayri darraa mudirrah, wala fitnatin mudillah, allahumma zayyinna bizeenatil-eeman wajAAalna hudatan muhtadeen.)"
+  },
+  {
+   "id": "24:63",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُمَّ إِنِّي أَسْأَلُكَ يَا أَللَّهُ بِأَنَّكَ الْوَاحِدُ الْأَحَدُ الصَّمَدُ الَّذِي لَمْ يَلِدْ وَلَمْ يولَدْ، وَلَمْ يَكنْ لَهُ كُفُواً أَحَدٌ، أَنْ تَغْفِرَ لِي ذُنُوبِي إِنَّكَ أَنْتَ الْغَفُورُ الرَّحِّيمُ)).",
+   "transliteration": "(Allahumma innee as-aluka ya Allah bi-annakal-wahidul-ahadus-samad, allathee lam yalid walam yoolad, walam yakun lahu kufuwan ahad, an taghfira lee thunoobee innaka antal-Ghafoorur-Raheem.)"
+  },
+  {
+   "id": "24:64",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَنَّ لَكَ الْحَمْدَ لَا إِلَهَ إِلاَّ أَنْتَ وَحْدَكَ لاَ شَرِيكَ لَكَ، الْمَنَّانُ، يَا بَدِيعَ السَّمَوَاتِ وَالْأَرْضِ يَا ذَا الْجَلاَلِ وَالْإِكْرَامِ، يَا حَيُّ يَا قَيُّومُ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ)).",
+   "transliteration": "(Allahumma innee as-aluka bianna lakal-hamd, la ilaha illa ant wahdaka la shareeka lak, almannan, ya badeeAAas-samawati wal-ard, ya thal-jalali wal-ikram, ya hayyu ya qayyoom, innee as-alukal-jannah, wa-aAAoothu bika minan-nar.)"
+  },
+  {
+   "id": "24:65",
+   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
+   "arabic": "((اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَنَّي أَشْهَدُ أَنَّكَ أَنْتَ اللَّهُ لاَ إِلَهَ إِلاَّ أَنْتَ الْأَحَدُ الصَّمَدُ الَّذِي لَمْ يَلِدْ وَلَمْ يُولَدْ وَلَمْ يَكُنْ لَهُ كُفُواً أَحَدٌ)) .",
+   "transliteration": "(Allahumma inne as-aluka biannee ashhadu annaka antal-lah, la ilaha illa ant, al-ahadus-samad, allathee lam yalid walam yoolad walam yakun lahu kufuwan ahad.)"
+  },
+  {
+   "id": "25:66",
+   "category": "What to say after completing the prayer",
+   "arabic": "((أَسْتَغْفِرُ اللَّهَ (ثَلاَثَاً) اللَّهُمَّ أَنْتَ السَّلاَمُ، وَمِنْكَ السَّلاَمُ، تَبَارَكْتَ يَا ذَا الْجَلاَلِ وَالْإِكْرَامِ)).",
+   "transliteration": "(Astaghfirul-lah (three times) (Allahumma antas-salam waminkas-salam, tabarakta ya thal-jalali wal-ikram.))",
+   "suggestedMatch": {
+    "title": "Allah, The Giver of Peace",
+    "source": "HR. Muslim No. 591",
+    "note": "close variant found in dua-dhikr (\"Allah, The Giver of Peace\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "25:69",
+   "category": "What to say after completing the prayer",
+   "arabic": "((سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَاللَّهُ أَكْبَرُ (ثلاثاً وثلاثين) لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ)).",
+   "transliteration": "(Subhanal-lah walhamdu lillah, wallahu akbar (thirty-three times). (La ilaha illal-lahu wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shayin qadeer.))",
+   "suggestedMatch": {
+    "title": "There is No Partner for Allah, and To Him Belongs All Things",
+    "source": "Sharh Shahih Muslim, 5: 84",
+    "note": "close variant found in dua-dhikr (\"There is No Partner for Allah, and To Him Belongs All Things\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "25:72",
+   "category": "What to say after completing the prayer",
+   "arabic": "((لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ)) عَشْرَ مَرّاتٍ بَعْدَ صَلاةِ الْمَغْرِبِ وَالصُّبْحِ.",
+   "transliteration": "(La ilaha illal-lahu wahdahu la shareeka lah, lahul-mulku walahul-hamd, yuhyee wayumeet, wahuwa AAala kulli shayin qadeer.(ten times after the maghrib & fajr prayers))",
+   "suggestedMatch": {
+    "title": "There is No Partner for Allah, and To Him Belongs All Things",
+    "source": "Sharh Shahih Muslim, 5: 84",
+    "note": "close variant found in dua-dhikr (\"There is No Partner for Allah, and To Him Belongs All Things\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "29:112",
+   "category": "Invocation to say if you stir in the night",
+   "arabic": "((لاَ إِلَهَ إِلاَّ اللَّهُ الْوَاحِدُ الْقَهّارُ، رَبُّ السَّمَوَاتِ وَالْأَرْضِ وَمَا بَيْنَهُمَا الْعَزيزُ الْغَفَّارُ)).",
+   "transliteration": "(La ilaha illal-lahul-wahidul-qahhar, rabbus-samawati wama baynahuma, alAAazeezul-ghaffar.)"
+  },
+  {
+   "id": "30:113",
+   "category": "What to say if you are afraid to go to sleep or feel lonely and depressed",
+   "arabic": "((أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ غَضَبِهِ وَعِقَابِهِ، وَشَرِّ عِبَادِهِ، وَمِنْ هَمَزَاتِ الشَّياطِينِ وَأَنْ يَحْضُرُونِ)).",
+   "transliteration": "(aAAoothu bikalimatil-lahit-tammat min ghadabih,waAAiqabih, washarri AAibadih, wamin hamazatish-shayateen, wa-an yahduroon.)"
+  },
+  {
+   "id": "31:114",
+   "category": "What to do if you have a bad dream or nightmare",
+   "arabic": "((يَنْفُثُ عَنْ يَسَارِهِ)) (ثلاثاً).",
+   "transliteration": null
+  },
+  {
+   "id": "31:115",
+   "category": "What to do if you have a bad dream or nightmare",
+   "arabic": "((ويَقُومُ يُصَلِّي إِنْ أَرَادَ ذَلِكَ)).",
+   "transliteration": null
+  },
+  {
+   "id": "32:116",
+   "category": "Invocations for Qunut in the Witr prayer",
+   "arabic": "((اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ، وَعَافِنِي فِيمَنْ عَافَيْتَ، وَتَوَلَّنِي فِيمَنْ تَوَلَّيْتَ، وَبَارِكْ لِي فِيمَا أَعْطَيْتَ، وَقِنِي شَرَّ مَا قَضَيْتَ؛ فَإِنَّكَ تَقْضِي وَلاَ يُقْضَى عَلَيْكَ، إِنَّهُ لاَ يَذِلُّ مَنْ وَالَيْتَ، [وَلاَ يَعِزُّ مَنْ عَادَيْتَ]، تَبارَكْتَ رَبَّنا وَتَعَالَيْتَ)).",
+   "transliteration": "(Allahummah-dinee feeman hadayt, waAAafinee feeman AAafayt, watawallanee feeman tawallayt, wabarik lee feema aAAtayt, waqinee sharra ma qadayt, fa-innaka taqdee wala yuqda AAalayk, innahu la yathillu man walayt, [wala yaAAizzu man AAadayt], tabarakta rabbana wataAAalayt.)"
+  },
+  {
+   "id": "32:117",
+   "category": "Invocations for Qunut in the Witr prayer",
+   "arabic": "((اللَّهُمَّ إِنِّي أَعُوذُ بِرِضَاكَ مِنْ سَخَطِكَ، وَبِمُعَافَاتِكَ مِنْ عُقُوبَتِكَ، وَأَعُــــوذُ بِكَ مِنْكَ، لاَ أُحْصِي ثَنَاءً عَلَيْكَ، أَنْتَ كَمَا أَثْنَيْتَ عَلَى نَفْسِكَ)).",
+   "transliteration": "(Allahumma innee aAAoothu biridaka min sakhatik, wabimuAAafatika min AAuqoobatik, wa-aAAoothu bika mink, la ohsee thana-an AAalayk, anta kama athnayta AAala nafsik.)"
+  },
+  {
+   "id": "32:118",
+   "category": "Invocations for Qunut in the Witr prayer",
+   "arabic": "((اللَّهُمَّ إِيَّاكَ نعْبُدُ، وَلَكَ نُصَلِّي وَنَسْجُدُ، وَإِلَيْكَ نَسْعَى وَنَحْفِدُ، نَرْجُو رَحْمَتَكَ، وَنَخْشَى عَذَابَكَ، إِنَّ عَذَابَكَ بِالكَافِرِينَ مُلْحَقٌ. اللَّهُمَّ إِنَّا نَسْتَعينُكَ، وَنَسْتَغْفِرُكَ، وَنُثْنِي عَلَيْكَ الْخَيْرَ، وَلاَ نَكْفُرُكَ، وَنُؤْمِنُ بِكَ، وَنَخْضَعُ لَكَ، وَنَخْلَعُ مَنْ يَكْفرُكَ)).",
+   "transliteration": "(Allahumma iyyaka naAAbud, walaka nusallee wanasjud, wa-ilayka nasAAa wanahfid, narjoo rahmatak, wanakhsha AAathabak, inna AAathabaka bilkafireena mulhaq. Allahumma inna nastaAAeenuk, wanastaghfiruk, wanuthnee AAalaykal- khayr, wala nakfuruk, wanu/minu bik, wanakhdaAAu lak wanakhlaAAu man yakfuruk.)"
+  },
+  {
+   "id": "33:119",
+   "category": "What to say immediately following the Witr prayer",
+   "arabic": "((سُبْحَانَ المَلِكِ القُدُّوسِ)) ثلاثَ مرَّاتٍ والثَّالِثَةُ يَجْهَرُ بها ويَمُدُّ بها صَوتَهُ يقولُ: [رَبِّ الْمَلاَئِكَةِ وَالرُّوحِ])).",
+   "transliteration": "(Subhanal-malikil-quddoos.(three times).on the third time he would raise his voice, elongate it and add: (Rabbil-mala-ikati warrooh.))"
+  },
+  {
+   "id": "34:120",
+   "category": "Invocations in times of worry and grief",
+   "arabic": "((اللَّهُمَّ إِنِّي عَبْدُكَ، ابْنُ عَبْدِكَ، ابْنُ أَمَتِكَ، نَاصِيَتِي بِيَدِكَ، مَاضٍ فِيَّ حُكْمُكَ، عَدْلٌ فِيَّ قَضَاؤُكَ، أَسْأَلُكَ بِكُــــلِّ اسْمٍ هُوَ لَكَ، سَمَّيْتَ بِهِ نَفْسَكَ، أَوْ أَنْزَلْتَهُ فِي كِتَابِكَ، أَوْ عَلَّمْتَهُ أَحَداً مِنْ خَلْقِكَ، أَوِ اسْتَأْثَرْتَ بِهِ فِي عِلْمِ الغَيْبِ عِنْدَكَ، أَنْ تَجْعَلَ القُرْآنَ رَبِيعَ قَلْبِي، وَنُورَ صَدْرِي، وَجَلاَءَ حُزْنِي، وَذَهَابَ هَمِّي)).",
+   "transliteration": "(Allahumma innee AAabduk, ibnu AAabdik, ibnu amatik, nasiyatee biyadik, madin fiyya hukmuk, AAadlun fiyya qada-ok, as-aluka bikulli ismin huwa lak, sammayta bihi nafsak, aw anzaltahu fee kitabik, aw AAallamtahu ahadan min khalqik awis-ta/tharta bihi fee AAilmil-ghaybi AAindak, an tajAAalal-Qurana rabeeAAa qalbee, wanoora sadree, wajalaa huznee wathahaba hammee.)"
+  },
+  {
+   "id": "34:121",
+   "category": "Invocations in times of worry and grief",
+   "arabic": "((اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ)).",
+   "transliteration": "(Allahumma innee aAAoothu bika minal-hammi walhuzn, walAAajzi walkasali walbukhli waljubn, wadalAAid-dayni waghalabatir-rijal.)"
+  },
+  {
+   "id": "35:122",
+   "category": "Invocations for anguish",
+   "arabic": "((لاَ إِلَهَ إِلاَّ اللَّهُ الْعَظِيمُ الْحَلِيمُ، لاَ إِلَهَ إِلاَّ اللَّهُ رَبُّ الْعَرْشِ الْعَظِيمِ، لاَ إِلَهَ إِلاَّ اللَّهُ رَبُّ السَّمَوَاتِ وَرَبُّ الْأَرْضِ وَرَبُّ الْعَرْشِ الْكَرِيمِ)).",
+   "transliteration": "(La ilaha illal-lahul-AAatheemul-haleem, la ilaha illal-lahu rabbul-AAarshil-AAatheem, la ilaha illal-lahu rabbus-samawati warabbul-ardi warabbul-AAarshil-kareem.)"
+  },
+  {
+   "id": "35:123",
+   "category": "Invocations for anguish",
+   "arabic": "((اللَّهُمَّ رَحْمَتَكَ أَرْجُو، فَلاَ تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ، وَأَصْلِحْ لِي شَأْنِي كُلَّهُ، لاَ إِلَهَ إِلاَّ أَنْتَ)).",
+   "transliteration": "(Allahumma rahmataka arjoo fala takilnee ila nafsee tarfata AAayn, wa-aslih lee sha/nee kullah, la ilaha illa ant.)"
+  },
+  {
+   "id": "35:124",
+   "category": "Invocations for anguish",
+   "arabic": "((لاَ إِلَهَ إِلاَّ أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظّالِمِينَ)).",
+   "transliteration": "(La ilaha illa anta subhanaka innee kuntu minath-thalimeen.)"
+  },
+  {
+   "id": "35:125",
+   "category": "Invocations for anguish",
+   "arabic": "((اللَّهُ اللَّهُ رَبِّي لاَ أُشْرِكُ بِهِ شَيْئاً)).",
+   "transliteration": "(None has the right to be worshipped except You. How perfect You are, verily I was among the wrong-doers.)"
+  },
+  {
+   "id": "36:126",
+   "category": "Invocations for when you meet an adversary or a powerful ruler.",
+   "arabic": "((اللَّهُمَّ إِنَّا نَجْعَلُكَ فِي نُحُورِهِم، وَنَعُوذُ بِكَ مِنْ شُرُورِهِمْ)).",
+   "transliteration": "(Allahumma inna najAAaluka fee nuhoorihim wanaAAoothu bika min shuroorihim.)"
+  },
+  {
+   "id": "36:127",
+   "category": "Invocations for when you meet an adversary or a powerful ruler.",
+   "arabic": "((اللَّهُمَّ أَنْتَ عَضُدِي، وَأَنْتَ نَصِيرِي، بِكَ أَحُولُ وَبِكَ أَصُولُ، وَبِكَ أُقاتِلُ)).",
+   "transliteration": "(Allahumma anta AAadudee, wa-anta naseeree, bika ajoolu wabika asoolu wabika oqatil)"
+  },
+  {
+   "id": "36:128",
+   "category": "Invocations for when you meet an adversary or a powerful ruler.",
+   "arabic": "((حَسْبُنا اللَّهُ وَنِعْمَ الْوَكِيلُ)).",
+   "transliteration": "(Hasbunal-lahu waniAAmal-wakeel.)"
+  },
+  {
+   "id": "37:129",
+   "category": "Invocations against the oppression of rulers",
+   "arabic": "((اللَّهُمَّ ربَّ السَّمَوَاتِ السَّبْعِ، وَرَبَّ الْعَرْشِ الْعَظِيمِ، كُنْ لِي جَاراً مِنْ فُلاَنِ بْنِ فُلاَنٍ، وَأَحْزَابِهِ مِنْ خَلاَئِقِكَ، أَنْ يَفْرُطَ عَلَيَّ أَحَدٌ مِنْهُمْ أَوْ يَطْغَى، عَزَّ جَارُكَ، وَجَلَّ ثَنَاؤُكَ، وَلاَ إِلَهَ إِلاَّ أَنْتَ)).",
+   "transliteration": "Allaahumma rabbas-samaawaatis-sab'i, wa Rabbal-'Arshil-'Adheem, Kun lee jaaran min (here you mention the person's name) wa 'ahzabihi min khalaa'iqika, 'an yafruta 'alayya 'ahadun minhum 'aw yatghaa,'Azza jaaruka, wa jalla thanaa'uka, wa laa 'ilaaha 'illaa 'Anta."
+  },
+  {
+   "id": "37:130",
+   "category": "Invocations against the oppression of rulers",
+   "arabic": "((اللَّهُ أَكْبَرُ، اللَّهُ أَعَزُّ مِنْ خَلْقِهِ جَمِيعاً، اللَّهُ أَعَزُّ مِمَّا أَخَافُ وَأَحْذَرُ، أَعُوذُ بِاللَّهِ الَّذِي لاَ إِلَهَ إِلاَّ هُوَ، الْمُمْسِكِ السَّمَوَاتِ السَّبْعِ أَنْ يَقَعْنَ عَلَى الْأَرْضِ إِلاَّ بِإِذْنِهِ، مِنْ شَرِّ عَبْدِكَ فُلاَنٍ، وَجُنُودِهِ وَأَتْبَاعِهِ وَأَشْيَاعِهِ، مِنْ الْجِنِّ وَالإِنْسِ، اللَّهُمَّ كُنْ لِي جَاراً مِنْ شَرِّهِمْ، جَلَّ ثَنَاؤُكَ وَعَزَّ جَارُكَ، وَتَبَارَكَ اسْمُكَ، وَلاَ إِلَهَ غَيْرُكَ)) (ثلاثَ مرَّاتٍ).",
+   "transliteration": "Allaahu Akbar, Allaahu 'a'azzu min khalqihi jamee'an, Allaahu 'a'azzu mimmaa 'akhaafu wa 'ahdharu, 'a'oothu billaahil-lathee laa ilaaha illaa huwa, almumsikis-samaawaatis-sab'i 'an yaqa'na 'alaal-'ardhi 'illaa bi'ithnihi, min sharri 'abdika (name of the person) wa junoodihi wa 'atbaa'ihi wa ashyaa'ihi minal-jinni wal'insi, Allaahumma kun lee jaaran min sharrihim, Jalla thanaa'uka wa 'azza aaruka, wa tabaarakasmuka, wa laa ilaaha ghayruka."
+  },
+  {
+   "id": "38:131",
+   "category": "Invocation against an enemy",
+   "arabic": "((اللَّهُمَّ مُنْزِلَ الْكِتَابِ، سَرِيعَ الْحِسَابِ، اهْزِمِ الأَحْزَابَ، اللَّهُمَّ اهزِمْهُمْ وَزَلْزِلْهُمْ)).",
+   "transliteration": "(Allahumma munzilal-kitab, sareeAAal-hisab, ihzimil-ahzab, allahummah-zimhum wazalzilhum.)"
+  },
+  {
+   "id": "39:132",
+   "category": "What to say if you fear people may harm you",
+   "arabic": "((اللَّهُمَّ اكْفِنِيهِمْ بِمَا شِئْتَ)).",
+   "transliteration": "(Allahummak-fineehim bima shi/.)"
+  },
+  {
+   "id": "40:133",
+   "category": "Invocations for if you are stricken by in your faith",
+   "arabic": "((يَسْتَعِيذُ بِاللَّهِ و يَنْتَهِي عَمَّا شك فِيهِ)).",
+   "transliteration": "(Say:) I seek refuge in Allah. (Then you should desist from doing what you are in doubt about.)"
+  },
+  {
+   "id": "40:134",
+   "category": "Invocations for if you are stricken by in your faith",
+   "arabic": "((يَقُولُ: ((آمَنْتُ بِاللَّهِ وَرُسُلِهِ)).",
+   "transliteration": "(He should say: ( Amantu billahi warusulih.))"
+  },
+  {
+   "id": "41:137",
+   "category": "Invocations for the setting of a debt",
+   "arabic": "((اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ)).",
+   "transliteration": "(Allahumma innee aAAoothu bika minal-hammi walhuzn, walAAajzi walkasal, walbukhl, waljubn, wadalAAid-dayni waghalabatir-rijal)"
+  },
+  {
+   "id": "42:138",
+   "category": "Invocation against the distractions of Satan during the prayer and recitation of the Quran",
+   "arabic": "((أَعُوذُ بِاللَّهِ مِنَ الشَّيطَانِ الرَّجِيمِ، وَاتْفُلْ عَلَى يَسَارِكَ (ثلاثاً))).",
+   "transliteration": null
+  },
+  {
+   "id": "44:140",
+   "category": "What to say and do if you commit a sin",
+   "arabic": "((مَا مِنْ عَبْدٍ يُذنِبُ ذَنْباً فَيُحْسِنُ الطُّهُورَ، ثُمَّ يَقُومُ فَيُصَلِّي رَكْعَتَيْنِ، ثُمَّ يَسْتَغْفِرُ اللَّهَ إِلاَّ غَفَرَ اللَّهُ لَهُ)).",
+   "transliteration": null
+  },
+  {
+   "id": "45:141",
+   "category": "Invocations against the Devil and his promptings",
+   "arabic": "((الْاسْتِعَاذَةُ بِاللَّهِ مِنْهُ)).",
+   "transliteration": null
+  },
+  {
+   "id": "45:142",
+   "category": "Invocations against the Devil and his promptings",
+   "arabic": "الْأَذَانُ",
+   "transliteration": null
+  },
+  {
+   "id": "45:143",
+   "category": "Invocations against the Devil and his promptings",
+   "arabic": "((الْأَذْكَارُ وَقِرَاءَةُ الْقُرْآنِ)).",
+   "transliteration": null
+  },
+  {
+   "id": "46:144",
+   "category": "Invocation for when something you dislike happens, or for when you fail to achieve what you attempt to do",
+   "arabic": "((قَدَرُ اللَّهُ وَمَا شَاءَ فَعَلَ)).",
+   "transliteration": "(Qaddaral-lah, wama shaa faAAal.)"
+  },
+  {
+   "id": "47:145",
+   "category": "Congratulations for new parents and how they should respond",
+   "arabic": "((بَارَكَ اللَّهُ لَكَ فِي الْمَوْهُوبِ لَكَ، وَشَكَرْتَ الْوَاهِبَ، وَبَلَغَ أَشُدَّهُ، وَرُزِقْتَ بِرَّهُ)). وَيَرُدُّ عَلَيْهِ الْمُهَــــــنَّأُ فَيَقُولُ: ((بَارَكَ اللَّهُ لَكَ وَبَارَكَ عَلَيْكَ، وَجَزَاكَ اللَّهُ خَيْراً، وَرَزَقَكَ اللَّهُ مِثْلَهُ، وَأَجْزَلَ ثَوَابَكَ)).",
+   "transliteration": "Baarakallaahu laka fil-mawhoobi laka, wa shakartal-waahiba, wa balagha 'ashuddahu, wa ruzigta birrahu. The reply of the person being congratulated is to say: Baarakallahu laka wa baaraka 'alayka, wa jazaakallaahu khayran, wa razaqakallaahu mithlahu, wa 'ajzala thawaabaka."
+  },
+  {
+   "id": "48:146",
+   "category": "How to seek Allah's protection for children",
+   "arabic": "كَانَ رَسُولُ اللَّهِ صلى الله عليه وسلم يُعَوِّذُ الحَسَنَ وَالحُسَينَ رضي الله عنهما ((أُعِيذُكُمَا بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ، وَمِنْ كُلِّ عَيْنٍ لاَمَّةٍ)).",
+   "transliteration": "(Ibn AAabbas related that the Messenger of Allah used to commend Al-Hasan and Al-Husayn to Allah’s protection, saying:(OAAeethukuma bikalimatil-lahit-tammah, min kulli shaytanin wahammah, wamin kulli AAaynin lammah.))"
+  },
+  {
+   "id": "49:147",
+   "category": "Invocations for visiting the sick",
+   "arabic": "((لاَ بأْسَ طَهُورٌ إِنْ شَاءَ اللَّهُ)).",
+   "transliteration": "(La ba'sa tahoorun in shaal-lah.)"
+  },
+  {
+   "id": "49:148",
+   "category": "Invocations for visiting the sick",
+   "arabic": "((أَسْأَلُ اللَّهَ الْعَظيمَ رَبَّ الْعَرْشِ الْعَظِيمِ أَنْ يَشْفيَكَ)) (سبع مرات).",
+   "transliteration": "(Asalul-lahal-AAatheem rabbal-AAarshil-AAatheem an yashfeek (7times).)"
+  },
+  {
+   "id": "50:149",
+   "category": "The reward for visiting the sick",
+   "arabic": "قَالَ النَّبِيُّ صلى الله عليه وسلم: ((إِذَا عَادَ الرَّجُلُ أَخَاهُ الْمُسْلِمَ مَشَى فِي خِرَافَةِ الْجَنَّةِ حَتَّى يَجْلِسَ، فَإِذَا جَلَسَ غَمَرَتْهُ الرَّحْمَةُ، فَإِنْ كَانَ غُدْوَةً صَلَّى عَلَيْهِ سَبْعُونَ أَلْفَ مَلَكٍ حَتَّى يُمْسِيَ، وَإِنْ كَانَ مَسَاءً صَلَّى عَلَيْهِ سَبْعُونَ أَلْفَ مَلَكٍ حَتَّى يُصْبِحَ)).",
+   "transliteration": null
+  },
+  {
+   "id": "51:150",
+   "category": "Invocations of the terminal ill",
+   "arabic": "((اللَّهُمَّ اغْفِرْ لِي، وَارْحَمْنِي، وَأَلْحِقْنِي بِالرَّفِيقِ الْأَعْلَى)).",
+   "transliteration": "(Allahummagh-fir lee, warhamnee wa-alhiqnee birrafeeqil-aAAla.)"
+  },
+  {
+   "id": "51:151",
+   "category": "Invocations of the terminal ill",
+   "arabic": "((جَعَلَ النَّبِيُّ صلى الله عليه وسلم عِنْدَ مَوْتِهِ يُدْخِلُ يَدَيْهِ فِي الْمَاءِ فَيَمْسَحُ بِهِمَا وَجْهَهُ، وَيَقُولُ: لاَ إِلَهَ إِلاَّ اللَّهُ إِنَّ لِلْمَوْتِ سَكَرَاتٍ)).",
+   "transliteration": "'Aa.ishah (radhi-yAllaahu 'anhaa) related that The Prophet (sal-Allaahu 'alayhe wa sallam) [during his illness in which he passed away] would dip his hands in water and then he would wipe his face and say:[La ilaha illal-lah, inna lilmawti lasakarat.] ‘None has the right to be worshipped except Allaah, death does indeed contain agony.’"
+  },
+  {
+   "id": "51:152",
+   "category": "Invocations of the terminal ill",
+   "arabic": "((لاَ إِلَهَ إِلاَّ اللَّهُ وَاللَّهُ أَكْبَرُ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لاَ إِلَهَ إِلاَّ اللَّهُ لَهُ المُلْكُ وَلَهُ الْحَمْدُ، لاَ إِلَهَ إِلاَّ اللَّهُ وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ)).",
+   "transliteration": "(La ilaha illal-lah, wallahu akbar, la ilaha illal-lahu wahdah, la shareeka lah, la ilaha illal-lahu lahul-mulku walahul-hamd, la ilaha illal-lah, wala hawla wala quwwata illa billah.)"
+  },
+  {
+   "id": "52:153",
+   "category": "What to encourage the dying person to say",
+   "arabic": "((مَنْ كَانَ آخِرُ كَلاَمِهِ لاَ إِلَهَ إِلاَّ اللَّهُ دَخَلَ الْجَنَّةَ)).",
+   "transliteration": "i.e. those around the sick should instruct and encourage him to say the shahadah. (He whose last words are: (La ilaha illal-lah.) will enter Paradise.)"
+  },
+  {
+   "id": "54:155",
+   "category": "Invocation for closing the eyes of the dead",
+   "arabic": "((اللَّهُمَّ اغْفِرْ لِفُلاَنٍ (بِاسْمِهِ) وَارْفَعْ دَرَجَتَهُ فِي الْمَهْدِيِّينَ، وَاخْلُفْهُ فِي عَقِبِهِ فِي الْغَابِرِينَ، وَاغْفِرْ لَنَا وَلَهُ يَا رَبَّ الْعَالَمِينَ، وَافْسَحْ لَهُ فِي قَبْرِهِ، وَنَوِّرْ لَهُ فِيهِ)).",
+   "transliteration": "(Allahummagh-fir li-name the dead- warfaAA darajatahu fil-mahdiyyeen, wakhlufhu fee AAaqibihi fil-ghabireen, waghfir lana walahu ya rabbal-AAalameen wafsah lahu fee qabrih, wanawwir lahu feeh.)"
+  },
+  {
+   "id": "55:156",
+   "category": "Invocations for the dead in the Funeral prayer",
+   "arabic": "((اللَّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ، وَعَافِهِ، وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ، وَوَسِّعْ مُدْخَلَهُ، وَاغْسِلْهُ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ، وَنَقِّهِ مِنَ الْخَطَايَا كَمَا نَقَّيْتَ الثَّوْبَ الأَبْيَضَ مِنَ الدَّنَسِ، وَأَبْدِلْهُ دَاراً خَيْراً مِنْ دَارِهِ، وَأَهْلاً خَيْراً مِنْ أَهْلِهِ، وَزَوْجَاً خَيْراً مِنْ زَوْجِهِ، وَأَدْخِلْهُ الْجَنَّةَ، وَأَعِذْهُ مِنْ عَذَابِ القَبْرِ [وَعَذَابِ النَّارِ])).",
+   "transliteration": "(Allahummagh-fir lahu warhamh, waAAafihi, waAAfu AAanh, wa-akrim nuzulah, wawassiAA mudkhalah, waghsilhu bilma-i waththalji walbarad, wanaqqihi minal-khataya kama naqqaytath-thawbal-abyada minad-danas, wa-abdilhu daran khayran min darih, wa-ahlan khayran min ahlih wazawjan khayran min zawjih, wa-adkhilhul-jannah, wa-aAAithhu min AAathabil-qabr, waAAathabin-nar)"
+  },
+  {
+   "id": "55:157",
+   "category": "Invocations for the dead in the Funeral prayer",
+   "arabic": "((اللَّهُمَّ اغْفِرْ لِحَيِّنَا وَمَيِّتِنَا، وَشَاهِدِنَا وَغَائِبِنَا، وَصَغِيرِنَا وَكَبيرِنَا، وَذَكَرِنَا وَأُنْثَانَا. اللَّهُمَّ مَنْ أَحْيَيْتَهُ مِنَّا فَأَحْيِهِ عَلَى الْإِسْلاَمِ، وَمَنْ تَوَفَّيْتَهُ مِنَّا فَتَوَفَّهُ عَلَى الإِيمَانِ، اللَّهُمَّ لاَ تَحْرِمْنَا أَجْرَهُ، وَلاَ تُضِلَّنَا بَعْدَهُ)).",
+   "transliteration": "(Allahummagh-fir lihayyina wamayyitina washahidina, wagha-ibina, wasagheerina wakabeerina, wathakarina wa-onthana. Allahumma man ahyaytahu minna fa-ahyihi AAalal-islam, waman tawaffaytahu minna fatawaffahu AAalal-eeman, allahumma la tahrimna ajrah, wala tudillana baAAdah.)"
+  },
+  {
+   "id": "55:158",
+   "category": "Invocations for the dead in the Funeral prayer",
+   "arabic": "((اللَّهُمَّ إِنَّ فُلاَنَ بْنَ فُلاَنٍ فِي ذِمَّتِكَ، وَحَبْلِ جِوَارِكَ، فَقِهِ مِنْ فِتْنَةِ الْقَبْرِ، وَعَذَابِ النَّارِ، وَأَنْتَ أَهْلُ الْوَفَاءِ وَالْحَقِّ، فَاغْفِرْ لَهُ وَارْحَمْهُ إِنَّكَ أَنْتَ الغَفُورُ الرَّحيمُ)).",
+   "transliteration": "(Allahumma inna -name the dead- fee thimmatik, wahabli jiwarik, faqihi min fitnatil-qabr waAAathabin-nar, wa-anta ahlul-wafa/, walhaq, faghfir lahu warhamh, innaka antal-ghafoorur-raheem.)"
+  },
+  {
+   "id": "55:159",
+   "category": "Invocations for the dead in the Funeral prayer",
+   "arabic": "((اللَّهُمَّ عَبْدُكَ وَابْنُ أَمَتِكَ احْتَاجَ إِلَى رَحْمَتِكَ، وَأَنْتَ غَنِيٌّ عَنْ عَذَابِهِ، إِنْ كَانَ مُحْسِناً فَزِدْ فِي حَسَنَاتِهِ، وَإِنْ كَانَ مُسِيئاً فَتَجَاوَزْ عَنْهُ)).",
+   "transliteration": "(Allahumma AAabduka wabnu amatik, ihtaja ila rahmatik, wa-anta ghaniyyun AAan AAathabih, in kana muhsinan fazid fee hasanatih, wa-in kana museean fatajawaz AAanh.)"
+  },
+  {
+   "id": "56:160",
+   "category": "Invocations for a child in the Funeral prayer",
+   "arabic": "((اللَّهُمَّ أَعِذْهُ مِنْ عَذَابِ القَبْرِ)) وإن قال: ((اللَّهُمَّ اجْعَلْهُ فَرَطاً وَذُخْراً لِوَالِدَيْهِ، وَشَفِيعاً مُجَاباً، اللَّهُمَّ ثَقِّلْ بِهِ مَوَازِينَهُمَا، وَأَعْظِمْ بِهِ أُجورَهُمَا، وَأَلْحِقْهُ بِصَالِحِ الْمُؤْمِنِينَ، وَاجْعَلْهُ فِي كَفَالَةِ إِبْرَاهِيمَ، وَقِهِ بِرَحْمَتِكَ عَذَابَ الْجَحِيمِ، وَأَبْدِلْهُ دَاراً خَيْراً مِنْ دَارِهِ، وَأَهْلاً خَيْراً مِنْ أَهْلِهِ، اللَّهُمَّ اغْفِرْ لِأَسْلاَفِنَا، وَأَفْرَاطِنَا، وَمَنْ سَبَقَنَا بِالْإِيمَانِ)) إن قال ذلك فَحَسَنٌ.",
+   "transliteration": "(Allaahumma 'a'ith-hu min 'athaabil-qabri.) [or say:](Allahummaj-AAalhu faratan, wathukhran liwalidayh, washafeeAAan mujaban. Allahumma thaqqil bihi mawazeenahuma wa-aAAthim bihi ojoorahuma, wa-alhiqhu bisalihil-mu'mineen, wajAAalhu fee kafalati Ibraheem, waqihi birahmatika AAathabal-jaheem, wa 'abdilhu daaran khayran min daarihi, wa 'ahlan khayran min 'ahlihi, Allaahum-maghfir li'aslaafinaa, wa afraatinaa wa man sabaqanaa bil'eemaan)"
+  },
+  {
+   "id": "56:161",
+   "category": "Invocations for a child in the Funeral prayer",
+   "arabic": "((اللَّهُمَّ اجْعَلْهُ لَنَا فَرَطاً، وَسَلَفاً، وَأَجْراً)).",
+   "transliteration": "(Allahummaj-AAalhu lana farata, wasalafan wa-ajra.)"
+  },
+  {
+   "id": "57:162",
+   "category": "Invocation for the bereaved",
+   "arabic": "((إِنَّ للَّهِ مَا أَخَذَ، وَلَهُ مَا أَعْطَى، وَكُلُّ شَيْءٍ عِنْدَهُ بِأَجَلٍ مُسَمَّى... فَلْتَصْبِرْ وَلْتَحْتَسِبْ)). وَإِنْ قَالَ: ((أَعْظَمَ اللَّهُ أَجْرَكَ، وَأَحْسَنَ عَزَاءَكَ، وَغَفَرَ لِمَيِّتِكَ)) فَحَسَنٌ.",
+   "transliteration": "(Inna lillahi ma akhath, walahu ma aAAta, wakullu shayin AAindahu bi-ajalin musamma…faltasbir waltahtasib.)"
+  },
+  {
+   "id": "58:163",
+   "category": "Invocation to be recited when placing the dead in his grave",
+   "arabic": "((بِسْمِ اللَّهِ وَعَلَى سُنَّةِ رَسُولِ اللَّهِ)).",
+   "transliteration": "(Bismil-lahi waAAala sunnati rasoolil-lah.)"
+  },
+  {
+   "id": "59:164",
+   "category": "Invocation to be recited after burying the dead",
+   "arabic": "((اللَّهُمَّ اغْفِرْ لَهُ، اللَّهُمَّ ثَبِّتْهُ)).",
+   "transliteration": "Allaahum-maghfir lahu Allaahumma thabbithu"
+  },
+  {
+   "id": "60:165",
+   "category": "Invocation for visiting the graves",
+   "arabic": "((السَّلاَمُ عَلَيْكُمْ أَهْلَ الدِّيَارِ، مِنَ الْمُؤْمِنِينَ وَالْمُسْلِمِينَ، وَإِنَّا إِنْ شَاءَ اللَّهُ بِكُمْ لاَحِقُونَ، [وَيَرْحَمُ اللَّهُ الْمُسْتَقدِمِينَ مِنَّا وَالْمُسْتأْخِرِينَ] أَسْاَلُ اللَّهَ لَنَا وَلَكُمُ الْعَافِيَةَ)).",
+   "transliteration": "(Assalamu AAalaykum ahlad-diyari minal-mu/mineena walmuslimeen, wa-inna in shaal-lahu bikum lahiqoon, nas-alul-laha lana walakumul-AAafiyah.)"
+  },
+  {
+   "id": "61:167",
+   "category": "Invocations for when the wind blows",
+   "arabic": "((اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَهَا، وَخَيْرَ مَا فِيهَا، وَخَيْرَ مَا أُرْسِلَتْ بِهِ، وَأَعُوذُ بِكَ مِنْ شَرِّهَا، وَشَرِّ مَا فِيهَا، وَشَرِّ مَا أُرْسِلَتْ بِهِ)).",
+   "transliteration": "(Allahumma innee as-aluka khayraha wakhayra ma feeha, wakhayra ma orsilat bih, wa-aAAoothu bika min sharriha, washarri ma feeha washarri ma orsilat bih.)",
+   "suggestedMatch": {
+    "title": "Supplication During Strong Wind",
+    "source": "HR. Abu Dawud and Ibn Majah",
+    "note": "close variant found in dua-dhikr (\"Supplication During Strong Wind\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "62:168",
+   "category": "Invocation for when it thunder",
+   "arabic": "((سُبْحَانَ الَّذِي يُسَبِّحُ الرَّعْدُ بِحَمْدِهِ وَالْمَلاَئِكةُ مِنْ خِيفَتِهِ)).",
+   "transliteration": "(Subhanal-lathee yusabbihur-raAAdu bihamdih, walmala-ikatu min kheefatih.)"
+  },
+  {
+   "id": "63:169",
+   "category": "Some invocations for rain",
+   "arabic": "((اللَّهُمَّ اسْقِنَا غَيْثاً مُغِيثاً مَرِيئاً مَرِيعاً، نَافِعاً غَيْرَ ضَارٍّ، عَاجِلاً غَيْرَ آجِلٍ)).",
+   "transliteration": "(Allahummas-qina ghaythan mugheethan maree-an mureeAAan, nafiAAan, ghayra dar, AAajilan ghayra ajil.)"
+  },
+  {
+   "id": "63:170",
+   "category": "Some invocations for rain",
+   "arabic": "((اللَّهُمَّ أَغِثْنَا، اللَّهُمَّ أَغِثْنَا، اللَّهُمَّ أَغِثْنَا)).",
+   "transliteration": "(Allahumma aghithna, allahumma aghithna, allahumma aghithna.)"
+  },
+  {
+   "id": "63:171",
+   "category": "Some invocations for rain",
+   "arabic": "((اللَّهُمَّ اسْقِ عِبَادَكَ، وَبَهَائِمَكَ، وَانْشُرْ رَحْمَتَكَ، وَأَحْيِي بَلَدَكَ الْمَيِّتَ)).",
+   "transliteration": "(Allahummas-qi AAibadak, wabaha-imak, wanshur rahmatak, wa-ahyi baladakal-mayyit.)"
+  },
+  {
+   "id": "67:175",
+   "category": "Invocation for sighting the new moon",
+   "arabic": "((اللَّهُ أَكْبَرُ، اللَّهُمَّ أَهِلَّهُ عَلَيْنَا بِالْأَمْنِ وَالْإِيمَانِ، وَالسَّلاَمَةِ وَالْإِسْلاَمِ، وَالتَّوْفِيقِ لِمَا تُحِبُّ رَبَّنَا وَتَرْضَى، رَبُّنَا وَرَبُّكَ اللَّهُ)).",
+   "transliteration": "(Allahu akbar, allahumma ahillahu AAalayna bil-amni wal-eeman, wassalamati wal-islam, wattawfeeiqi lima tuhibbu watarda, rabbuna warabbukal-lah.)"
+  },
+  {
+   "id": "68:177",
+   "category": "Invocations for breaking the fast",
+   "arabic": "((اللَّهُمَّ إِنِّي أَسْأَلُكَ بِرَحْمَتِكَ الَّتِي وَسِعَتْ كُلَّ شَيْءٍ أَنْ تَغْفِرَ لِي)).",
+   "transliteration": "(Allahumma inne as-aluka birahmatikal-latee wasiAAat kulla shay, an taghfira lee.)"
+  },
+  {
+   "id": "69:178",
+   "category": "Invocations before eating",
+   "arabic": "((إِذَا أَكَلَ أَحَدُكُمْ طَعَاماً فَلْيَقُلْ بِسْمِ اللَّهِ، فَإِنْ نَسِيَ فِي أَوَّلِهِ فَلْيَقُلْ بسمِ اللَّهِ فِي أَوَّلِهِ وَآخِرِهِ)).",
+   "transliteration": "(When you are about to eat, you should say:(Bismil-lah.)and if you forget to say it before starting, then you should say (when you remember):Bismil-lahi fee awwalihi wa-akhirih.)"
+  },
+  {
+   "id": "69:179",
+   "category": "Invocations before eating",
+   "arabic": "((مَنْ أَطْعَمَهُ اللَّهُ الطَّعَامَ فَلْيَقُلْ: اللَّهُمَّ بَارِكْ لَنَا فِيهِ وَأَطْعِمْنَا خَيْراً مِنْهُ، وَمَنْ سَقَاهُ اللَّهُ لَبَناً فَلْيَقُلْ اللَّهُمَّ بَارِكْ لَنَا فِيهِ وَزِدْنَا مِنْهُ)).",
+   "transliteration": "(Whomever Allah feeds, should say:(Allahumma barik lana feehi wa-atAAimna khayran minh.) and whomever Allah gives milk to drink should say:(Allahumma barik lana feehi wazidna minh.))"
+  },
+  {
+   "id": "70:181",
+   "category": "Invocations after eating",
+   "arabic": "((الْحَمْدُ لِلَّهِ حَمْداً كَثِيراً طَيِّباً مُبَارَكاً فِيهِ، غَيْرَ [مَكْفِيٍّ وَلاَ ] مُوَدَّعٍ، وَلاَ مُسْتَغْنَىً عَنْهُ رَبَّنَا)).",
+   "transliteration": "(Alhamdu lillahi hamdan katheeran tayyiban mubarakan feeh, ghayra makfiyyin wala muwaddaAAin, wala mustaghnan AAanhu rabbuna.)"
+  },
+  {
+   "id": "71:182",
+   "category": "A dinner guest's invocation for his host",
+   "arabic": "((اللَّهُمَّ بَارِكْ لَهُمْ فِيمَا رَزَقْتَهُم، وَاغْفِرْ لَهُمْ وَارْحَمْهُمْ)).",
+   "transliteration": "(Allahumma barik lahum feema razaqtahum, waghfir lahum warhamhum.)"
+  },
+  {
+   "id": "72:183",
+   "category": "Invocation for someone who gives you drink or offers it to you",
+   "arabic": "((اللَّهُمَّ أَطْعِمْ مَنْ أَطْعَمَنِي، وَاسْقِ مَنْ سَقَانِي)).",
+   "transliteration": "(Allahumma atAAim man atAAamanee wasqi man saqanee.)"
+  },
+  {
+   "id": "73:184",
+   "category": "Invocation for a family who invites you to break your fast with them",
+   "arabic": "((أَفْطَرَ عِنْدَكُمُ الصَّائِمُونَ، وَأَكَلَ طَعَامَكُمُ الْأَبْرَارُ، وَصَلَّتْ عَلَيْكُمُ الْمَلاَئِكَةُ)).",
+   "transliteration": "(Aftara AAindakumus-sa-imoon, wa-akala taAAamakumul-abrar, wasallat AAalaykumul-mala-ikah.)"
+  },
+  {
+   "id": "74:185",
+   "category": "Invocation for someone who offers you food when you are fasting, which you decline",
+   "arabic": "((إِذَا دُعِيَ أَحَدُكُمْ فَلْيُجِبْ، فَإِنْ كَانَ صَائِماً فَلْيُصَلِّ، وَإِنْ كَانَ مُفْطِراً فَلْيَطْعَمْ)) ، وَمَعْنَى فَلْيُصَلِّ أَيْ فَلْيَدْعُ.",
+   "transliteration": "(If you are not invited (to a meal) then answer. If you happen to be fasting, then supplicate (for those present) and if you are not fasting, then eat.)"
+  },
+  {
+   "id": "75:186",
+   "category": "What to say when you are fasting and someone is rude to you",
+   "arabic": "((إِنِّي صَائِمٌ، إِنِّي صَائِمٌ)).",
+   "transliteration": "(Innee sa-im, innee sa-im.)"
+  },
+  {
+   "id": "76:187",
+   "category": "Invocation for when you see the first dates of the season",
+   "arabic": "((اللَّهُمَّ بَارِكْ لَنَا فِي ثَمَرِنَا، وَبَارِكْ لَنَا فِي مَدِينَتِنَا، وَبَارِكْ لَنَا فِي صَاعِنَا، وَبَارِكْ لَنَا فِي مُدِّنَا)).",
+   "transliteration": "(Allahumma barik lana fee thamarina, wabarik lana fee madeenatina, wabarik lana fee saAAina wabarik lana fee muddina.)"
+  },
+  {
+   "id": "77:188",
+   "category": "Invocation for sneezing",
+   "arabic": "((إِذَا عَطَسَ أَحَدُكُم فَلْيَقُلِ الْحَمْدُ لِلَّهِ، وَلْيَقُلْ لَهُ أَخُوهُ أَوْ صَاحِبُهُ: يَرْحَمُكَ اللَّهُ، فَإِذَا قَالَ لَهُ: يَرحَمُكَ اللَّهُ، فَلْيَقُلْ: يَهْدِيكُمُ اللَّهُ وَيُصْلِحُ بَالَكُمْ)).",
+   "transliteration": "(When one of you sneezes he should say:(Alhamdu lillah.) and his brother or companion should say to him: (Yarhamukal-lah.) and he (i.e. the one who sneezed) replies back to him:(Yahdeekumul-lahu wayuslihu balakum.))"
+  },
+  {
+   "id": "79:190",
+   "category": "Invocation for the groom",
+   "arabic": "((بَارَكَ اللَّهُ لَكَ، وَبَارَكَ عَلَيْكَ، وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ)).",
+   "transliteration": "(Barakal-lahu lak, wabaraka AAalayk, wajamaAAa baynakuma fee khayr.)"
+  },
+  {
+   "id": "80:191",
+   "category": "The groom’s supplication on the wedding night or when buying an animal",
+   "arabic": "إِذَا تَزَوَّجَ أَحَدُكُمُ امْرَأَةً، أَوْ إِذَا اشْتَرَى خَادِماً فَلْيَقُلْ: ((اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَهَا، وَخَيْرَ مَا جَبَلْتَهَا عَلَيْهِ، وَأَعُوذُ بِكَ مِنْ شَرِّهَا، وَشَرِّ مَا جَبَلْتَهَا عَلَيْهِ، وَإِذَا اشْتَرَى بَعِيراً فَلْيَأْخُذْ بِذِرْوَةِ سَنَامِهِ وَلْيَقُلْ مِثْلَ ذَلِكَ)).",
+   "transliteration": "(when you marry a woman or buy a maidservant, you should say: (Allahumma innee as-aluka khayraha wakhayra ma jabaltaha AAalayh, wa-aAAoothu bika min sharriha washarri ma jabaltaha AAalayh.))(and if you buy a camel, then you should take hold of it’s hump and say likewise.)"
+  },
+  {
+   "id": "81:192",
+   "category": "Invocation to be recited before intercourse",
+   "arabic": "((بِسْمِ اللَّهِ، اللَّهُمَّ جَنِّبْنَا الشَّيْطَانَ، وَجَنِّبِ الشَّيْطَانَ مَا رَزَقْتَنَا)).",
+   "transliteration": "(Bismil-lah, allahumma jannibnash-shaytan, wajannibish-shaytana ma razaqtana.)"
+  },
+  {
+   "id": "82:193",
+   "category": "Invocation for anger",
+   "arabic": "((أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ)).",
+   "transliteration": "(aAAoothu billahi minash-shaytanir-rajeem.)"
+  },
+  {
+   "id": "83:194",
+   "category": "What to say if you see someone afflicted by misfortune",
+   "arabic": "((الْحَمْدُ لِلَّهِ الَّذِي عَافَانِي مِمَّا ابْتَلاَكَ بِهِ، وَفَضَّلَنِي عَلَى كَثِيرٍ مِمَّنْ خَلَقَ تَفْضِيلاً)).",
+   "transliteration": "(Alhamdu lillahil-lathee AAafanee mimmab-talaka bih, wafaddalanee AAala katheerin mimman khalaqa tafdeela.)"
+  },
+  {
+   "id": "84:195",
+   "category": "What to say while sitting in an assembly",
+   "arabic": "((عَنِ ابْنِ عُمَرَ رضي الله عنه قَاَلَ: كَانَ يُعَدُّ لِرَسُولِ اللَّهِ صلى الله عليه وسلم فِي الْمَجْلِسِ الوَاحِدِ مِائَةُ مَرَّةٍ مِنْ قَبْلِ أَنْ يَقُومَ: ((رَبِّ اغْفِرْ لِي، وَتُبْ عَلَيَّ، إِنَّكَ أَنْتَ التَّوَّابُ الغَفُورُ)).",
+   "transliteration": "(Ibn AAumar said: It would be counted that the Messenger of Allah would say one hundred times at any one sitting before getting up: (Rabbigh-fir lee watub AAalay, innaka antat-tawwabul-ghafoor.))"
+  },
+  {
+   "id": "85:196",
+   "category": "The Expiation of Assembly - Kaffaratul-Majlis",
+   "arabic": "((سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَسْتَغْفِرُكَ وَأَتُوبُ إِلَيْكَ)).",
+   "transliteration": "(Subhanakal-lahumma wabihamdik, ashhadu an la ilaha illa ant, astaghfiruka wa-atoobu ilayk.)"
+  },
+  {
+   "id": "86:197",
+   "category": "vocation for someone who says: May Allah forgive you",
+   "arabic": "((وَلَكَ)).",
+   "transliteration": "(AAabdullah Ibn Sarjis said: ‘I went to see the Prophet and ate from his food and then said to him:(Ghafaral-lahu laka ya rasoolal-lah.) he replied: (wa-lak))"
+  },
+  {
+   "id": "87:198",
+   "category": "Invocation for someone who does good to you",
+   "arabic": "((جَزَاكَ اللَّهُ خَيْراً)).",
+   "transliteration": "(If someone does you a favour and you say: (Jazakal-lahu khayran.) then you have indeed excelled in praising him.)"
+  },
+  {
+   "id": "88:199",
+   "category": "Invocation for Allah's protection from the False Messiah",
+   "arabic": "((مَنْ حَفِظَ عَشْرَ آيَاتٍ مِنْ أَوَّلِ سُورَةِ الْكَهْفِ عُصِمَ مِنَ الدَّجَّالِ)) ، وَالْاسْتِعَاذَةُ بِاللَّهِ مِنْ فِتْنَتِهِ عَقِبَ التَّشَهُّدِ الْأَخِيرِ مِنْ كُلِّ صَلاَةٍ.",
+   "transliteration": null
+  },
+  {
+   "id": "89:200",
+   "category": "Invocation for someone who tells you I love you for the sake of Allah",
+   "arabic": "((أَحَبَّكَ الَّذِي أَحْبَبْتَنِي لَهُ)).",
+   "transliteration": "(Ahabbakal-lathee ahbabtanee lah.)"
+  },
+  {
+   "id": "90:201",
+   "category": "Invocation for someone who offers you a share of his wealth",
+   "arabic": "((بَارَكَ اللَّهُ لَكَ فِي أَهْلِكَ وَمَالِكَ)).",
+   "transliteration": "(Barakal-lahu laka fee ahlika wamalik.)"
+  },
+  {
+   "id": "91:202",
+   "category": "Invocation (upon receipt of the loan) for someone who lends you money",
+   "arabic": "((بارَكَ اللَّهُ لَكَ فِي أَهْلِكَ وَمَالِكَ، إِنَّمَا جَزَاءُ السَّلَفِ الْحَمْدُ وَالأَدَاءُ)).",
+   "transliteration": "(Barakal-lahu laka fee ahlika wamalik, innama jaza-os-salafil-hamdu wal-ada'.)"
+  },
+  {
+   "id": "92:203",
+   "category": "Invocation for fear of Shirk",
+   "arabic": "((اللَّهُمَّ إِنِّي أَعُوذُ بِكَ أَنْ أُشْرِكَ بِكَ وَأَنَا أَعْلَمُ، وَأَسْتَغْفِرُكَ لِمَا لاَ أَعْلَمُ)).",
+   "transliteration": "(shirk: to associate others with Allah in those things which are specific to Him. This can occur in (1) belief, e.g. to believe that other than Allah has the power to benefit or harm, (2) speech, e.g. to swear by other than Allah and (3) action, e.g. to bow or prostrate to other than Allah.)(Allahumma innee aAAoothu bika an oshrika bika wa-ana aAAlam, wa-astaghfiruka lima la aAAlam.)"
+  },
+  {
+   "id": "93:204",
+   "category": "Invocation for someone who tells you: May Allah bless you",
+   "arabic": "((وَفِيكَ بَارَكَ اللَّهُ)).",
+   "transliteration": "(Aaishah reported that the Messenger of Allah was given a sheep and he ordered for it’s distribution. When the servant would come back (from distributing it), AAaishah would ask: ‘What did they say?’, he replied: They would supplicate: (Barakal-lahu feekum.) AAaishah would then say: (Wafeehim barakal-lah.))(we return their supplication in a similar way and our reward remains with us.)"
+  },
+  {
+   "id": "94:205",
+   "category": "Invocation against evil portent",
+   "arabic": "((اللَّهُمَّ لاَ طَيْرَ إِلاَّ طَيْرُكَ، وَلاَ خَيْرَ إِلاَّ خَيْرُكَ، وَلاَ إِلَهَ غَيْرُكَ)).",
+   "transliteration": "(This supplication is used whenever one initially thinks a casual event or occurrence to foretell good or evil, using it as a basis to determine which action he should undertake, but he then denounces such a link, relies on Allah and then says this supplication as an expiation for this act, since it falls under the category of shirk.)(Allahumma la tayra illa tayruk, wala khayra illa khayruk, wala ilaha ghayruk.)"
+  },
+  {
+   "id": "97:208",
+   "category": "Invocation for entering a town or city",
+   "arabic": "((اللَّهُمَّ رَبَّ السَّمَوَاتِ السَّبْعِ وَمَا أَظْلَلْنَ، وَرَبَّ الأَرَضِينَ السَّبْعِ وَمَا أَقْلَلْنَ، وَرَبَّ الشَّياطِينِ وَمَا أَضْلَلْنَ، وَرَبَّ الرِّيَاحِ وَمَا ذَرَيْنَ، أَسْأَلُكَ خَيْرَ هَذِهِ الْقَرْيَةِ، وَخَيْرَ أَهْلِهَا، وَخَيْرَ مَا فِيهَا، وَأَعُوذُ بِكَ مِنْ شَرِّهَا، وَشَرِّ أَهْلِهَا، وَشَرِّ مَا فِيهَا)).",
+   "transliteration": "(Allahumma rabbas-samawatis-sabAAi wama athlaln, warabbal-aradeenas-sabAAi wama aqlaln, warabbash-shayateeni wama adlaln, warabbar-riyahi wama tharayn, as-aluka khayra hathihil-qaryah, wakhayra ahlilha wakhayra ma feeha, wa-aAAoothu bika min sharriha washarri ahliha, washarri ma feeha.)"
+  },
+  {
+   "id": "98:209",
+   "category": "Invocation for entering a market",
+   "arabic": "((لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، يُحْيِي وَيُمِيتُ، وَهُوَ حَيٌّ لاِ يَمُوتُ، بِيَدِهِ الْخَيْرُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ)).",
+   "transliteration": "(La ilaha illal-lah, wahdahu la shareeka lah, lahul-mulku walahul-hamd, yuhyee wayumeetu wahuwa hayyun la yamoot, biyadihil-khayru wahuwa AAala kulli shayin qadeer.)",
+   "suggestedMatch": {
+    "title": "There is No Partner for Allah, and To Him Belongs All Things",
+    "source": "Sharh Shahih Muslim, 5: 84",
+    "note": "close variant found in dua-dhikr (\"There is No Partner for Allah, and To Him Belongs All Things\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "100:211",
+   "category": "The traveler's invocation for the one he leaves behind",
+   "arabic": "((أَسْتَوْدِعُكُمُ اللَّهَ الَّذِي لاَ تَضِيعُ وَدَائِعُهُ)).",
+   "transliteration": "(AstawdiAAukumul-lah, allathee la tadeeAAu wada-iAAuh.)"
+  },
+  {
+   "id": "102:214",
+   "category": "Glorifying and magnifying Allah on the journey",
+   "arabic": "قَالَ جَابِرٌ رضي الله عنه: ((كُنَّا إِذَا صَعَدْنَا كَبَّرْنَا، وَإِذَا نَزَلْنَا سَبَّحْنَا)).",
+   "transliteration": null
+  },
+  {
+   "id": "103:215",
+   "category": "The traveler's invocation at dawn",
+   "arabic": "((سَمَّعَ سَامِعٌ بِحَمْدِ اللَّهِ، وَحُسْنِ بَلاَئِهِ عَلَيْنَا، رَبَّنَا صاحِبْنَا، وَأَفْضِلْ عَلَيْنَا، عَائِذاً بِاللَّهِ مِنَ النَّارِ)).",
+   "transliteration": "(SamiAAa samiAAun bihamdil-lahi wahusni bala-ihi AAalayna. Rabbana sahibna wa-afdil AAalayna AAa-ithan billahi minan-nar.)"
+  },
+  {
+   "id": "105:217",
+   "category": "What to say upon returning from a Journey",
+   "arabic": "((يُكَبِّرُ عَلَى كُلِّ شَرَفٍ ثَلاَثَ تَكْبِيرَاتٍ ثُمَّ يَقُولُ: لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، آيِبُونَ، تَائِبُونَ، عَابِدُونَ، لِرَبِّنا حَامِدُونَ، صَدَقَ اللَّهُ وَعْدَهُ، وَنَصَرَ عَبْدَهُ، وَهَزَمَ الْأَحْزابَ وَحْدَهُ)).",
+   "transliteration": "(Ibn AAumar reported that the Messenger of Allah on return from a battle or from performing the pilgrimage would say at every high point: (Allahu akbar, Allahu akbar, Allahu akbar.) and then he would say: (La ilaha illal-lahu wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shay-in qadeer, ayiboona ta-iboon, AAabidoon, lirabbina hamidoon, sadaqal-lahu waAAdah, wanasara AAabdah, wahazamal-ahzaba wahdah.))"
+  },
+  {
+   "id": "106:218",
+   "category": "What to say if something happens to please you or to displease you",
+   "arabic": "كَانَ النَّبِيُّ صلى الله عليه وسلم إِذَا أَتَاهُ الْأَمْرُ يَسُرُّهُ قَالَ: ((الْحَمْدُ لِلَّهِ الَّذِي بِنِعْمَتِهِ تَتِمُّ الصَّالِحَاتُ)) وَإِذَا أَتَاهُ الْأَمْرُ يَكْرَهُهُ قَالَ: ((الْحَمْدُ لِلَّهِ عَلَى كُلِّ حَالٍ)).",
+   "transliteration": "When something happened that pleased him, the Prophet used to say:((Alhamdu lillaahil-lathee bini'matihi tatimmuus-saalihaat)).And if something happened that displeased him, he used to say:((Alhamdulillaahi 'alaa kulli haal))."
+  },
+  {
+   "id": "107:219",
+   "category": "The excellence of asking for Allah's blessings upon the Prophet pbuh",
+   "arabic": "قَالَ النَّبِيُّ صلى الله عليه وسلم: ((مَنْ صَلَّى عَلَيَّ صَلاَةً صَلَّى اللَّهُ عَلَيْهِ بِهَا عَشْراً)).",
+   "transliteration": null
+  },
+  {
+   "id": "107:220",
+   "category": "The excellence of asking for Allah's blessings upon the Prophet pbuh",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((لاَ تَجْعَلُوا قَبْرِي عِيداً وَصَلُّوا عَلَيَّ؛ فَإِنَّ صَلاَتَكُم تَبْلُغُنِي حَيْثُ كُنْتُمْ)).",
+   "transliteration": null
+  },
+  {
+   "id": "107:221",
+   "category": "The excellence of asking for Allah's blessings upon the Prophet pbuh",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((الْبَخِيلُ مَنْ ذُكِرْتُ عِنْدَهُ فَلَمْ يُصَلِّ عَلَيَّ)).",
+   "transliteration": null
+  },
+  {
+   "id": "107:222",
+   "category": "The excellence of asking for Allah's blessings upon the Prophet pbuh",
+   "arabic": "وَقَالَ صلى الله عليه وسلم:((إِنَّ لِلَّهِ مَلاَئِكَةً سَيَّاحِينَ فِي الْأَرْضِ يُبَلِّغُونِي مِنْ أُمَّتِي السَّلاَمَ)).",
+   "transliteration": null
+  },
+  {
+   "id": "107:223",
+   "category": "The excellence of asking for Allah's blessings upon the Prophet pbuh",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((مَا مِنْ أَحَدٍ يُسَلِّمُ عَلَيَّ إِلاَّ رَدَّ اللَّهُ عَلَيَّ رُوحِيَ حَتَّى أَرُدَّ عَلَيْهِ السَّلاَمَ)).",
+   "transliteration": null
+  },
+  {
+   "id": "108:224",
+   "category": "spreading the greetings of Salam (Peace)",
+   "arabic": "قَالَ رَسُولُ اللَّهِ صلى الله عليه وسلم: ((لاَ تَدْخُلُوا الْجَنَّةَ حَتَّى تُؤْمِنُوا، وَلاَ تُؤْمِنُوا حَتَّى تَحَابُّوا، أَوَلاَ أَدُلُّكُم عَلَى شَيْءٍ إِذَا فَعَلْتُمُوهُ تَحَابَبْتُم، أَفْشُوا السَّلاَمَ بَيْنَكُمْ)).",
+   "transliteration": null
+  },
+  {
+   "id": "108:225",
+   "category": "spreading the greetings of Salam (Peace)",
+   "arabic": "((ثَلاَثٌ مَنْ جَمَعَهُنَّ فَقَدْ جَمَعَ الْإِيمَانَ: الْإِنْصَافُ مِنْ نَفْسِكَ، وَبَذْلُ السَّلاَمِ لِلْعَالَمِ، وَالْإِنْفَاقُ مِنَ الإِقْتَارِ)).",
+   "transliteration": null
+  },
+  {
+   "id": "108:226",
+   "category": "spreading the greetings of Salam (Peace)",
+   "arabic": "وَعَنْ عَبْدِ اللَّهِ بْنِ عُمَرَ رَضِيَ اللَّهُ عَنْهُمَا: أنَّ رَجُلاً سَأَلَ النَّبِيَّ صلى الله عليه وسلم أيُّ الْإِسْلاَمِ خَيْرٌ قَالَ: ((تُطْعِمُ الطَّعَامَ، وَتَقْرأُ السَّلاَمَ عَلَى مَنْ عَرَفْتَ وَمَنْ لَمْ تَعْرِفْ)).",
+   "transliteration": null
+  },
+  {
+   "id": "109:227",
+   "category": "How to reply to a disbeliever if he says Salam to you",
+   "arabic": "((إذَا سَلَّمَ عَلَيْكُمْ أَهْلُ الْكِتَابِ فَقُولُوا: وَعَلَيْكُمْ)).",
+   "transliteration": null
+  },
+  {
+   "id": "110:228",
+   "category": "Invocation upon hearing the cock's crow or the bray of a donkey",
+   "arabic": "((إِذَا سَمِعْتُمْ صِيَاحَ الدِّيَكَةِ فَاسْأَلُوا اللَّهَ مِنْ فَضْلِهِ؛ فَإِنَّهَا رَأَتْ مَلَكاً وَإِذَا سَمِعْتُمْ نَهِيقَ الْحِمَارِ فَتَعَوَّذُوا بِاللَّهِ مِنَ الشَّيطَانِ؛ فَإِنَّهُ رَأَى شَيْطَاناً)).",
+   "transliteration": null
+  },
+  {
+   "id": "111:229",
+   "category": "Invocation upon hearing a dog barking in the night",
+   "arabic": "((إِذَا سَمِعْتُمْ نُبَاحَ الْكِلاَبِ وَنَهِيقَ الْحَمِيرِ بِاللَّيْلِ فَتَعَوَّذُوا بِاللَّهِ مِنْهُنَّ؛ فَإِنَّهُنَّ يَرَيْنَ مَا لاَ تَرَوْنَ)).",
+   "transliteration": null
+  },
+  {
+   "id": "112:230",
+   "category": "Invocation for someone you have spoken ill to",
+   "arabic": "قَالَ النَّبِيُّ صلى الله عليه وسلم: ((اللَّهُمَّ فَأَيُّمَا مُؤْمِنٍ سَبَبْتُهُ فَاجْعَلْ ذَلِكَ لَهُ قُرْبَةً إِلَيْكَ يَوْمَ الْقِيَامَةِ)).",
+   "transliteration": "(Allahumma fa-ayyuma mu/minin sababtuhu fajAAal thalika lahu qurbatan ilayka yawmal-qiyamah.)"
+  },
+  {
+   "id": "113:231",
+   "category": "How a Muslim should praise another Muslim",
+   "arabic": "قَالَ النَّبِيُّ صلى الله عليه وسلم: ((إِذَا كَانَ أَحَدُكُم مَادِحاً صَاحِبَهُ لاَ مَحَالَةَ فَلْيَقُلْ: أَحْسِبُ فُلاَناً وَاللَّهُ حَسِيبُهُ، وَلاَ أُزَكِّي عَلَى اللَّهِ أَحَداً، أَحْسِبُهُ – إِنْ كَانَ يَعْلَمُ ذَاكَ – كَذَا وَكَذَا)).",
+   "transliteration": null
+  },
+  {
+   "id": "114:232",
+   "category": "What a Muslim should say when he is praised",
+   "arabic": "((اللَّهُمَّ لاَ تُؤَاخِذْنِي بِمَا يَقُولُونَ، وَاغْفِرْ لِي مَا لاَ يَعْلَمُونَ، [وَاجْعَلْنِي خَيْراً مِمَّا يَظُّنُّونَ])).",
+   "transliteration": "Allaahumma laa tu'aakhithnee bimaa yaqooloona, waghfir lee maa laa ya'lamoona [waj'alnee khayram-mimmaa yadhunnoon]"
+  },
+  {
+   "id": "115:233",
+   "category": "The pilgrim's announcement of his arrival for Hajj or Umrah",
+   "arabic": "((لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ، وَالنِّعْمَةَ، لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ)).",
+   "transliteration": "(Labbaykal-lahumma labbayk, labbayka la shareeka laka labbayk, innal-hamda wanniAAmata laka walmulk, la shareeka lak.)"
+  },
+  {
+   "id": "116:234",
+   "category": "Saying Allahu Akbar when passing the Black Stone",
+   "arabic": "((طَافَ النَّبيُّ صلى الله عليه وسلم بِالْبَيْتِ عَلَى بَعِيرٍ كُلَّمَا أَتَى الرُّكْنَ أَشَارَ إِلَيْهِ بِشَيْءٍ عِنْدَهُ وَكَبَّرَ)).",
+   "transliteration": "(The Prophet circled the KaAAbah on a camel, every time he reached the black stone he would point to it with his staff and say: (Allahu akbar))"
+  },
+  {
+   "id": "119:237",
+   "category": "Invocation to be recited on the Day of Arafat",
+   "arabic": "قَالَ النَّبِيُّ صلى الله عليه وسلم: ((خَيْرُ الدُّعَاءِ دُعَاءُ يَوْمِ عَرَفَةَ، وَخَيْرُ مَا قُلْتُ أَنَا وَالنَّبيُّونَ مِنْ قَبْلِي: لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ)).",
+   "transliteration": "(The best of supplications is the supplication on the day of AAarafah and the best which I and the Prophets before me have said (is): (La ilaha illal-lahu wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shayin qadeer.))"
+  },
+  {
+   "id": "120:238",
+   "category": "Supplication to be recited at the sacred area of Muzdalifah",
+   "arabic": "رَكِبَ النَّبِيُّ صلى الله عليه وسلم الْقَصْوَاءَ حَتَّى أَتَى الْمَشْعَرَ الْحَرَامَ فَاسْتَقْبَلَ الْقِبْلَةَ (فَدَعَاهُ، وَكَبَّرَهُ، وَهَللَّهُ، وَوَحَّدَهُ) فَلَمْ يَزَلْ وَاقِفاً حَتَّى أَسْفَرَ جِدَّاً فَدَفَعَ قَبْلَ أَنْ تَطْلُعَ الشَّمسُ.",
+   "transliteration": null
+  },
+  {
+   "id": "121:239",
+   "category": "Saying Allahu Akbar while stoning the three pillars at Mina",
+   "arabic": "((يُكَبِّرُ كُلَّمَا رَمَى بِحَصَاةٍ عِنْدَ الْجِمَارِ الثَّلاَثِ، ثُمَّ يَتَقَدَّمُ، ويَقِفُ يَدْعُو مُسْتَقْبِلَ الْقِبلَةِ، رَافِعاً يَدَيْهِ بَعْدَ الْجَمْرَةِ الْأُولَى وَالثَّانِيَةِ. أَمَّا جَمْرَةُ الْعَقَبَةِ فَيَرْمِيهَا وَيُكَبِّرُ عِنْدَ كُلِّ حَصَاةٍ وَيَنْصَرِفُ وَلاَ يَقِفُ عِنْدَهَا)).",
+   "transliteration": null
+  },
+  {
+   "id": "123:242",
+   "category": "What to say when something that pleases you happens",
+   "arabic": "((كَانَ النَّبيُّ صلى الله عليه وسلم إِذَا أَتَاهُ أَمْرٌ يَسُرُّهُ أَوْ يُسَرُّ بِهِ خَرَّ سَاجِداً شُكْراً لِلَّهِ تَبَارَكَ وَتَعَالَى)).",
+   "transliteration": null
+  },
+  {
+   "id": "124:243",
+   "category": "What to say when you feel a pain in your body",
+   "arabic": "((ضَعْ يَدَكَ عَلَى الَّذِي تَألَّمَ مِنْ جَسَدِكَ وَقُلْ: بِسْمِ اللَّهِ، ثَلاَثاً، وَقُلْ سَبْعَ مَرَّاتٍ: أَعُوذُ بِاللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ)).",
+   "transliteration": "(Place your hand at the site of the pain and say: (Bismil-lah (three times)) the supplicate seven times: (aAAoothu billahi waqudratih min sharri ma ajidu wa-ohathir.))"
+  },
+  {
+   "id": "125:244",
+   "category": "What to say when you fear you may afflict something with the evil eye",
+   "arabic": "((إِذَا رَأَى أَحَدُكُم مِنْ أَخِيهِ، أَوْ مِنْ نَفْسِهِ، أَوْ مِنْ مَالِهِ مَا يُعْجِبُهُ [فَلْيَدْعُ لَهُ بِالْبَرَكَةِ] فَإِنَّ الْعَيْنَ حَقٌّ)).",
+   "transliteration": null
+  },
+  {
+   "id": "126:245",
+   "category": "What to say when you feel frightened",
+   "arabic": "((لاَ إِلَهَ إِلاَّ اللَّهُ!)).",
+   "transliteration": "(La ilaha illal-lah.)"
+  },
+  {
+   "id": "127:246",
+   "category": "What to say when slaughtering or sacrificing an animal",
+   "arabic": "((بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ [اللَّهُمَّ مِنْكَ وَلَكَ] اللَّهُمَّ تَقَبَّلْ مِنِّي)).",
+   "transliteration": "(Bismil-lah wallahu akbar, allahumma minka walak, allahumma taqabbal minnee.)"
+  },
+  {
+   "id": "128:247",
+   "category": "What to say to foil the devil's plots",
+   "arabic": "((أَعُوذُ بكَلِمَاتِ اللَّهِ التَّامَّاتِ الَّتِي لاَ يُجَاوِزُهُنَّ بَرٌّ وَلاَ فَاجِرٌ: مِنْ شَرِّ مَا خَلَقَ، وَبَرَأَ وَذَرَأَ، وَمِنْ شَرِّ مَا يَنْزِلُ مِنَ السَّمَاءِ، وَمِنْ شَرِّ مَا يَعْرُجُ فيهَا، وَمِنْ شَرِّ مَا ذَرَأَ فِي الْأَرْضِ، وَمِنْ شَرِّ مَا يَخْرُجُ مِنْهَا، وَمِنْ شَرِّ فِتَنِ اللَّيْلِ وَالنَّهَارِ، وَمِنْ شَرِّ كُلِّ طَارِقٍ إِلاَّ طَارِقاً يَطْرُقُ بِخَيْرٍ يَا رَحْمَنُ)).",
+   "transliteration": "(aAAoothu bikalimatil-lahit-tammat, allatee la yujawizuhunna barrun wala fajir min sharri ma khalaq, wabaraa watharaa, wamin sharri ma yanzilu minas-sama/, wamin sharri ma yaAAruju feeha, wamin sharri ma tharaa fil-ard, wamin sharri ma yakhruju minha, wamin sharri fitnanil-layli wannahar, wamin sharri kulli tariqin illa tariqan yatruqu bikhayrin ya Rahman.)"
+  },
+  {
+   "id": "129:248",
+   "category": "Repentance and seeking forgiveness",
+   "arabic": "قَالَ رَسُولُ اللَّهِ صلى الله عليه وسلم: ((وَاللَّهِ إِنِّي لأَسْتَغفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ فِي الْيَوْمِ أَكْثَرَ مِنْ سَبْعِينَ مَرَّةٍ)).",
+   "transliteration": null
+  },
+  {
+   "id": "129:249",
+   "category": "Repentance and seeking forgiveness",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((يَا أَيُّهَا النَّاسُ تُوبُوا إِلَى اللَّهِ فَإِنِّي أَتُوبُ فِي الْيَوْمِ إِلَيْهِ مِائَةَ مَرَّةٍ)).",
+   "transliteration": null
+  },
+  {
+   "id": "129:250",
+   "category": "Repentance and seeking forgiveness",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((مَنْ قَالَ أَسْتَغْفِرُ اللَّهَ الْعَظيمَ الَّذِي لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ القَيّوُمُ وَأَتُوبُ إِلَيهِ، غَفَرَ اللَّهُ لَهُ وَإِنْ كَانَ فَرَّ مِنَ الزَّحْفِ)).",
+   "transliteration": "(He also said: ‘Whoever says:(Astaghfirul-lahal-lathee la ilaha illa huwal-hayyul-qayyoomu wa-atoobu ilayh.) Allah would forgive him even if he was one who fled during the advance of an army.)"
+  },
+  {
+   "id": "129:251",
+   "category": "Repentance and seeking forgiveness",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((أَقْرَبُ مَا يَكُونُ الرَّبُّ مِنَ الْعَبْدِ فِي جَوْفِ اللَّيْلِ الآخِرِ فَإِنِ اسْتَطَعْتَ أَنْ تَكُونَ مِمَّنْ يَذْكُرُ اللَّهَ فِي تِلْكَ السَّاعَةِ فَكُنْ)).",
+   "transliteration": null
+  },
+  {
+   "id": "129:252",
+   "category": "Repentance and seeking forgiveness",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((أَقْرَبُ مَا يَكُونُ الْعَبْدُ مِنْ رَبِّهِ وَهُوَ سَاجِدٌ فَأَكثِرُوا الدُّعَاءَ)).",
+   "transliteration": null
+  },
+  {
+   "id": "129:253",
+   "category": "Repentance and seeking forgiveness",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((إِنَّهُ لَيُغَانُ عَلَى قَلْبِي وَإِنِّي لأَسْتَغْفِرُ اللَّهَ فِي الْيَوْمِ مِائَةَ مَرَّةٍ)).",
+   "transliteration": null
+  },
+  {
+   "id": "130:254",
+   "category": "The excellence of remembering Allah",
+   "arabic": "قَالَ صلى الله عليه وسلم مَنْ قَالَ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ فِي يَوْمٍ مِائَةَ مَرَّةٍ حُطَّتْ خَطَايَاهُ وَلَوْ كَانَتْ مِثْلَ زَبَدِ الْبَحْر)).",
+   "transliteration": "(Whoever says:(Subhanal-lahi wabihamdih.) a hundred times during the day, his sins are wiped away, even if they are like the foam of the sea.)"
+  },
+  {
+   "id": "130:255",
+   "category": "The excellence of remembering Allah",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((مَنْ قَالَ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ عَشْرَ مِرَارٍ، كَانَ كَمَنْ أَعْتَقَ أَرْبَعَةَ أَنْفُسٍ مِنْ وَلَدِ إِسْمَاعِيلَ)).",
+   "transliteration": "(Abu Hurayrah reported that the Messenger of Allah said: ‘Whoever says: (La ilaha illal-lahu wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shayin qadeer.) a hundred times during the day, has the reward of freeing ten slaves, a hundred good deeds are recorded for him and a hundred bad deeds are wiped away and he has gained refuge from the devil that day until evening and none shall come with anything better except someone who has done more.)",
+   "suggestedMatch": {
+    "title": "There is No Partner for Allah, and To Him Belongs All Things",
+    "source": "Sharh Shahih Muslim, 5: 84",
+    "note": "close variant found in dua-dhikr (\"There is No Partner for Allah, and To Him Belongs All Things\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "130:256",
+   "category": "The excellence of remembering Allah",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحانَ اللَّهِ الْعَظِيمِ)).",
+   "transliteration": "(Aboo Hurayrah reported that the Messenger of Allah said:’(There are) Two words, (which are ) light on the tongue, heavy on the Scale and beloved to The Most Gracious: (Subhanal-lahi wabihamdih, wasubhanal-lahil-AAatheem.))"
+  },
+  {
+   "id": "130:257",
+   "category": "The excellence of remembering Allah",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((لَأَنْ أَقُولَ سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكْبَرُ، أَحَبُّ إِلَيَّ مِمَّا طَلَعَتْ عَلَيْهِ الشَّمسُ)).",
+   "transliteration": "(Aboo Hurayrah reported that the Messenger of Allah said: ‘Saying: (Subhanal-lah, walhamdu lillah, la ilaha illal-lah wallahu akbar.) is more beloved to me than everything the sun has risen over.)"
+  },
+  {
+   "id": "130:258",
+   "category": "The excellence of remembering Allah",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((أَيَعْجِزُ أَحَدُكُم أَنْ يَكْسِبَ كُلَّ يَوْمٍ أَلْفَ حَسَنَةٍ)) فَسَأَلَهُ سَائِلٌ مِنْ جُلَسَائِهِ كَيْفَ يَكْسِبُ أَحَدُنَا أَلْفَ حَسَنَةٍ؟ قَالَ: ((يُسَبِّحُ مِائَةَ تَسْبِيحَةٍ، فَيُكتَبُ لَهُ أَلْفُ حَسَنَةٍ أَوْ يُحَطُّ عَنْهُ أَلْفُ خَطِيئَةٍ)).",
+   "transliteration": "(Sa’d said: ‘We were sitting with the Messenger of Allah , and he said: ‘Are any of you unable to gain a thousand good deeds each day?’ Somebody then asked him : How does one achieve a thousand good deeds? He replied: ‘He should say: (Subhanal-lah.) one hundred times, for a thousand good deeds are recorded for him or a thousand bad deeds are wiped away.)"
+  },
+  {
+   "id": "130:259",
+   "category": "The excellence of remembering Allah",
+   "arabic": "((مَنْ قَالَ: سُبْحَانَ اللَّهِ الْعَظِيمِ وَبِحَمْدِهِ غُرِسَتْ لَهُ نَخْلَةٌ فِي الْجَنَّةِ)).",
+   "transliteration": "(Jabbir related that the Prophet said: ‘Whoever says: (Subhanal-lahil-AAatheemi wabihamdih.) a palm tree is planted for him in paradise.)"
+  },
+  {
+   "id": "130:260",
+   "category": "The excellence of remembering Allah",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((يَا عَبْدَ اللَّهِ بْنَ قَيْسٍ أَلاَ أَدُلُّكَ عَلَى كَنْزٍ مِنْ كُنُوزِ الْجَنَّةِ))؟ فَقُلْتُ: بَلَى يَا رَسُولَ اللَّهِ، قَالَ: ((قُلْ لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ)).",
+   "transliteration": "(AAabdullah Ibn Qays related that the Prophet said to him: ‘ O ‘AAabdullah Ibn Qays, shall I not inform you of a treasure from the treasures of paradise?’ He then said: ‘Say: (La hawla wala quwwata illa billah.))"
+  },
+  {
+   "id": "130:261",
+   "category": "The excellence of remembering Allah",
+   "arabic": "وَقَالَ صلى الله عليه وسلم: ((أَحَبُّ الْكَلاَمِ إِلَى اللَّهِ أَرْبَعٌ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكْبَرُ، لاَ يَضُرُّكَ بِأَيِّهِنَّ بَدَأتَ)).",
+   "transliteration": "(the most beloved words to Allah are four: (Subhanal-lah, walhamdu lillah, wala ilaha illal-lah, wallahu akbar.))(it does not matter which of them you start with.)"
+  },
+  {
+   "id": "130:262",
+   "category": "The excellence of remembering Allah",
+   "arabic": "جَاءَ أَعْرَابِيٌّ إِلَى رَسُولِ اللَّهِ صلى الله عليه وسلم فَقَالَ: عَلِّمْنِي كَلاماً أَقُولُهُ: قَالَ: ((قُلْ: لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، اللَّهُ أَكْبَرُ كَبِيراً، وَالْحَمْدُ لِلَّهِ كَثِيراً، سُبْحَانَ اللَّهِ رَبِّ العَالَمِينَ، لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ الْعَزِيزِ الْحَكِيمِ)) قَالَ: فَهَؤُلاَءِ لِرَبِّي، فَمَا لِي؟ قَالَ: ((قُلْ: اللَّهُمَّ اغْفِرْ لِي، وَارْحَمْنِي، وَاهْدِنِي، وَارْزُقْنِي)).",
+   "transliteration": "(SaAAd Ibn Abee Waqqas narrated that a man came to the Messenger of Allah and said to him: ‘Teach me something which I should say?’ He said: ‘Say: (La ilaha illal-lah, wahdahu la shareeka lah, Allahu akbaru kabeera, walhamdu lillahi katheera, subhanal-lahi rabbil-AAalameen, la hawla wala quwwata illa billahil-AAazeezil-hakeem.) the man then said: ‘These are for my Lord, and what is for me?’ He replied: ‘Say:(Allahummagh-fir lee, warhamnee, wahdinee, warzuqnee.))"
+  },
+  {
+   "id": "130:263",
+   "category": "The excellence of remembering Allah",
+   "arabic": "كَانَ الرَّجُلُ إِذَا أَسْلَمَ عَلَّمَهُ النَّبيُّ صلى الله عليه وسلم الصَّلاَةَ ثُمَّ أَمَرَهُ أَنْ يَدْعُوَ بِهَؤُلاَءِ الْكَلِمَاتِ: ((اللَّهُمَّ اغْفِرِ لِي، وَارْحَمْنِي، وَاهْدِنِي، وَعَافِنِي وَارْزُقْنِي)).",
+   "transliteration": "(Tariq Al-AshjaAAee said: ‘When someone would embrace Islam, the Prophet would teach him how to perform prayer and then order him to supplicate with the following words: (Allahummagh-fir lee, warhamnee, wahdinee, waAAafinee warzuqnee.))"
+  },
+  {
+   "id": "130:264",
+   "category": "The excellence of remembering Allah",
+   "arabic": "((إِنَّ أَفْضَلَ الدُّعَاءِ الْحَمْدُ لِلَّهِ، وَأَفْضَلَ الذِّكْرِ لاَ إِلَهَ إِلاَّ اللَّهُ)).",
+   "transliteration": "(Jabir Ibn ‘AAabdullah related that the Messenger of Allah said: ‘Verily, the best supplication is: (Alhamdu lillah) and indeed, the best form of remembrance is: (La ilaha illal-lah.))"
+  },
+  {
+   "id": "130:265",
+   "category": "The excellence of remembering Allah",
+   "arabic": "الباقيات الصالحات : سبحان الله والحمد لله ، ولا إله إلا الله ،والله أكبر ،و لا حول ولا قوة إلا بالله",
+   "transliteration": "The good deeds which endure are 'Subhaanallaah.', and 'Walhamdulillaah.', and 'Wa laa ilaaha illallaah'., and 'Wallaahu Akbar',and 'Wa laa hawla wa laa guwawala illaa billaah'."
+  },
+  {
+   "id": "131:266",
+   "category": "How the Prophet glorified Allah",
+   "arabic": "عَنْ عَبْدِ اللَّهِ بْنِ عَمْرٍو رضي الله عنه قَالَ: ((رَأَيْتُ النَّبيَّ صلى الله عليه وسلم يَعْقِدُ التَّسْبِيحَ)) وفي زيادةٍ: ((بِيَمِينِهِ)).",
+   "transliteration": null
+  },
+  {
+   "id": "132:267",
+   "category": "Types of goodness and good etiquette for community life",
+   "arabic": "",
+   "transliteration": null
+  },
+  {
+   "id": "95:206",
+   "category": "Invocation for riding in a vehicle or on an animal",
+   "arabic": "((بِسْمِ اللَّهِ، وَالْحَمْدُ للَّهِ ﴿سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ، وَإِنَّا إِلَى رَبِّنَا لَمُنقَلِبُونَ﴾، ((الْحَمْدُ لِلَّهِ، الْحَمْدُ لِلَّهِ، الْحَمْدُ لِلَّهِ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، سُبْحَانَكَ اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي فَاغْفِرْ لِي؛ فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ)).",
+   "transliteration": "bismillah, bismillah, bismillah, alhamdulillah, subhanalladhi sakhkhara lana hadha wa ma kunna lahu muqrinin. wa inna ila rabbina lamunqalibun. subhanaka inni qad dhalamtu nafsi, faghfir li fa innahu la yaghfirudh-dhunuba illa anta",
+   "suggestedMatch": {
+    "title": "Supplication When Mounting a Vehicle",
+    "source": "dua-dhikr (fitrahive)",
+    "note": "close variant found in dua-dhikr, but narration differs (repetition count / missing closing clause) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  },
+  {
+   "id": "96:207",
+   "category": "Invocation for traveling",
+   "arabic": "اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، ﴿سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ * وَإِنَّا إِلَى رَبِّنَا لَمُنقَلِبُونَ﴾ ((اللَّهُمَّ إِنّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا البِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا وَاطْوِ عَنَّا بُعْدَهُ، اللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ، وَالْخَليفَةُ فِي الْأَهْلِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ، وَكَآبَةِ الْمَنْظَرِ، وَسُوءِ الْمُنْقَلَبِ فِي الْمَالِ وَالْأَهْلِ))، وإذا رَجَعَ قَالَهُنَّ وَزَادَ فِيهِنَّ: ((آيِبُونَ، تائِبُونَ، عَابِدُونَ، لِرَبِّنَا حَامِدُونَ)).",
+   "transliteration": "allahu akbar, allahu akbar, allahu akbar. subhanalladhi sakhkhara lana hadha wa ma kunna lahu muqrinin wa inna ila rabbina lamunqalibun. allahumma inna nas'aluka fi safarina hadhal-birra wat-taqwa wa minal-'amali ma tarda. allahumma hawwin 'alayna safarana hadha watwi 'anna bu'dah. allahumma antas-sahibu fis-safar. wal-khalifatu fil-ahl. allahumma inni a'udhu bika min wa'tha'is-safar wa ka'abatil-mandhari wa su'il-munqalabi fil-mali wal-ahl",
+   "suggestedMatch": {
+    "title": "Travel Supplication",
+    "source": "dua-dhikr (fitrahive)",
+    "note": "close variant found in dua-dhikr, but narration differs (repetition count / missing closing clause) — needs exact Hisn al-Muslim variant sourced separately"
+   }
+  }
+ ]
+}
