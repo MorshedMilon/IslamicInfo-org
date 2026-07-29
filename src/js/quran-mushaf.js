@@ -214,7 +214,8 @@
     }
     if (verseKey !== lastSyncAyah) {
       clearMushafHighlight();
-      Array.prototype.forEach.call(ayahSpans, function (s) { s.classList.add('m-ayah-active'); });
+      // Word-by-word only (like Study Mode) — no whole-ayah/whole-line background.
+      // We still track the ayah change here to clear prior highlights + follow-scroll.
       lastSyncAyah = verseKey;
       scrollAncestorIntoView(ayahSpans[0]);
     } else {
