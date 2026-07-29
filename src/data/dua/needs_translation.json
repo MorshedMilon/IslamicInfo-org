@@ -5,7 +5,7 @@
   "sources_checked": [
    "reflection-dua.json / dua-dhikr (fitrahive) full dataset"
   ],
-  "count": 215,
+  "count": 207,
   "schema": 1
  },
  "entries": [
@@ -540,18 +540,6 @@
    }
   },
   {
-   "id": "19:46",
-   "category": "Invocations during Sujood",
-   "arabic": "((اللَّهُمَّ اغْفِرْ لِي ذَنْبِي كُلَّهُ: دِقَّهُ وَجِلَّهُ، وَأَوَّلَهُ وَآخِرَهُ، وَعَلاَنِيَّتَهُ وَسِرَّهُ)).",
-   "transliteration": "(Allahummagh-fir lee thanbee kullah, diqqahu wajillah, wa-awwalahu wa-akhirah, wa- AAalaniyyatahu wa-sirrah.)",
-   "hadithCitation": {
-    "book": "Riyad as-Salihin",
-    "number": 750,
-    "narrator": "Abu Hurairah (May Allah be pleased with him) reported:",
-    "ref": "Riyad as-Salihin 750"
-   }
-  },
-  {
    "id": "19:47",
    "category": "Invocations during Sujood",
    "arabic": "((اللَّهُمَّ إِنِّي أَعُوذُ بِرِضَاكَ مِنْ سَخَطِكَ، وَبِمُعَافَاتِكَ مِنْ عُقوبَتِكَ، وَأَعُوذُ بِكَ مِنْكَ، لاَ أُحْصِي ثَنَاءً عَلَيْكَ، أَنْتَ كَمَا أَثْنَيْتَ عَلَى نَفْسِكَ)).",
@@ -595,18 +583,6 @@
     "number": 3508,
     "narrator": "Al-Hasan bin Muhammad bin Ubaidullah bin Abi Yazid said:",
     "ref": "Jami at-Tirmidhi 3508"
-   }
-  },
-  {
-   "id": "22:52",
-   "category": "Invocation for At-Tashahhud (sitting in prayer)",
-   "arabic": "((التَّحِيَّاتُ لِلَّهِ، وَالصَّلَواتُ، وَالطَّيِّباتُ، السَّلاَمُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلاَمُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ. أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّداً عَبْدُهُ وَرَسولُهُ)).",
-   "transliteration": "(Attahiyyatu lillahi wassalawatu wattayyibat, assalamu AAalayka ayyuhan-nabiyyu warahmatul-lahi wabarakatuh, assalamu AAalayna waAAala AAibadil-lahis-saliheen. Ash-hadu an la ilaha illal-lah, wa-ashhadu anna Muhammadan AAabduhu warasooluh.)",
-   "hadithCitation": {
-    "book": "Sunan an-Nasai",
-    "number": 1164,
-    "narrator": "It was narrated that 'Abdullah said:",
-    "ref": "Sunan an-Nasai 1164"
    }
   },
   {
@@ -685,18 +661,6 @@
     "number": 743,
     "narrator": "Mu'adh (May Allah be pleased with him) reported:",
     "ref": "Riyad as-Salihin 743"
-   }
-  },
-  {
-   "id": "24:60",
-   "category": "Invocations after the final Tash-ahhud and before ending the prayer",
-   "arabic": "((اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْبُخْلِ، وَأَعوذُ بِكَ مِنَ الْجُبْنِ، وَأَعُوذُ بِكَ مِنْ أَنْ أُرَدَّ إِلَى أَرْذَلِ الْعُمُرِ، وَأَعُوذُ بِكَ مِنْ فِتْنَةِ الدُّنْيَا وَعَذَابِ الْقَبْرِ)).",
-   "transliteration": "(Allahumma innee aAAoothu bika minal-bukhl, wa-aAAoothu bika minal-jubn, wa-aAAoothu bika min an oradda ila arthalil- AAumur, wa-aAAoothu bika min fitnatid-dunya waAAathabil-qabr.)",
-   "hadithCitation": {
-    "book": "Sunan an-Nasai",
-    "number": 5487,
-    "narrator": "Mus'ab bin Sa'd said that :",
-    "ref": "Sunan an-Nasai 5487"
    }
   },
   {
@@ -1140,30 +1104,6 @@
    "transliteration": "(Allahummagh-fir lahu warhamh, waAAafihi, waAAfu AAanh, wa-akrim nuzulah, wawassiAA mudkhalah, waghsilhu bilma-i waththalji walbarad, wanaqqihi minal-khataya kama naqqaytath-thawbal-abyada minad-danas, wa-abdilhu daran khayran min darih, wa-ahlan khayran min ahlih wazawjan khayran min zawjih, wa-adkhilhul-jannah, wa-aAAithhu min AAathabil-qabr, waAAathabin-nar)"
   },
   {
-   "id": "55:157",
-   "category": "Invocations for the dead in the Funeral prayer",
-   "arabic": "((اللَّهُمَّ اغْفِرْ لِحَيِّنَا وَمَيِّتِنَا، وَشَاهِدِنَا وَغَائِبِنَا، وَصَغِيرِنَا وَكَبيرِنَا، وَذَكَرِنَا وَأُنْثَانَا. اللَّهُمَّ مَنْ أَحْيَيْتَهُ مِنَّا فَأَحْيِهِ عَلَى الْإِسْلاَمِ، وَمَنْ تَوَفَّيْتَهُ مِنَّا فَتَوَفَّهُ عَلَى الإِيمَانِ، اللَّهُمَّ لاَ تَحْرِمْنَا أَجْرَهُ، وَلاَ تُضِلَّنَا بَعْدَهُ)).",
-   "transliteration": "(Allahummagh-fir lihayyina wamayyitina washahidina, wagha-ibina, wasagheerina wakabeerina, wathakarina wa-onthana. Allahumma man ahyaytahu minna fa-ahyihi AAalal-islam, waman tawaffaytahu minna fatawaffahu AAalal-eeman, allahumma la tahrimna ajrah, wala tudillana baAAdah.)",
-   "hadithCitation": {
-    "book": "Sunan Ibn Majah",
-    "number": 1232,
-    "narrator": "It was\nnarrated that Abu Hurairah said:",
-    "ref": "Sunan Ibn Majah 1232"
-   }
-  },
-  {
-   "id": "55:158",
-   "category": "Invocations for the dead in the Funeral prayer",
-   "arabic": "((اللَّهُمَّ إِنَّ فُلاَنَ بْنَ فُلاَنٍ فِي ذِمَّتِكَ، وَحَبْلِ جِوَارِكَ، فَقِهِ مِنْ فِتْنَةِ الْقَبْرِ، وَعَذَابِ النَّارِ، وَأَنْتَ أَهْلُ الْوَفَاءِ وَالْحَقِّ، فَاغْفِرْ لَهُ وَارْحَمْهُ إِنَّكَ أَنْتَ الغَفُورُ الرَّحيمُ)).",
-   "transliteration": "(Allahumma inna -name the dead- fee thimmatik, wahabli jiwarik, faqihi min fitnatil-qabr waAAathabin-nar, wa-anta ahlul-wafa/, walhaq, faghfir lahu warhamh, innaka antal-ghafoorur-raheem.)",
-   "hadithCitation": {
-    "book": "Sunan Ibn Majah",
-    "number": 1233,
-    "narrator": "It was\nnarrated that Wathilah bin Asqa’ said:",
-    "ref": "Sunan Ibn Majah 1233"
-   }
-  },
-  {
    "id": "55:159",
    "category": "Invocations for the dead in the Funeral prayer",
    "arabic": "((اللَّهُمَّ عَبْدُكَ وَابْنُ أَمَتِكَ احْتَاجَ إِلَى رَحْمَتِكَ، وَأَنْتَ غَنِيٌّ عَنْ عَذَابِهِ، إِنْ كَانَ مُحْسِناً فَزِدْ فِي حَسَنَاتِهِ، وَإِنْ كَانَ مُسِيئاً فَتَجَاوَزْ عَنْهُ)).",
@@ -1210,23 +1150,6 @@
    "category": "Invocation for visiting the graves",
    "arabic": "((السَّلاَمُ عَلَيْكُمْ أَهْلَ الدِّيَارِ، مِنَ الْمُؤْمِنِينَ وَالْمُسْلِمِينَ، وَإِنَّا إِنْ شَاءَ اللَّهُ بِكُمْ لاَحِقُونَ، [وَيَرْحَمُ اللَّهُ الْمُسْتَقدِمِينَ مِنَّا وَالْمُسْتأْخِرِينَ] أَسْاَلُ اللَّهَ لَنَا وَلَكُمُ الْعَافِيَةَ)).",
    "transliteration": "(Assalamu AAalaykum ahlad-diyari minal-mu/mineena walmuslimeen, wa-inna in shaal-lahu bikum lahiqoon, nas-alul-laha lana walakumul-AAafiyah.)"
-  },
-  {
-   "id": "61:167",
-   "category": "Invocations for when the wind blows",
-   "arabic": "((اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَهَا، وَخَيْرَ مَا فِيهَا، وَخَيْرَ مَا أُرْسِلَتْ بِهِ، وَأَعُوذُ بِكَ مِنْ شَرِّهَا، وَشَرِّ مَا فِيهَا، وَشَرِّ مَا أُرْسِلَتْ بِهِ)).",
-   "transliteration": "(Allahumma innee as-aluka khayraha wakhayra ma feeha, wakhayra ma orsilat bih, wa-aAAoothu bika min sharriha, washarri ma feeha washarri ma orsilat bih.)",
-   "suggestedMatch": {
-    "title": "Supplication During Strong Wind",
-    "source": "HR. Abu Dawud and Ibn Majah",
-    "note": "close variant found in dua-dhikr (\"Supplication During Strong Wind\") but it does NOT capture the full corpus text (missing clause/repetition or different narration variant) — needs exact Hisn al-Muslim variant sourced separately"
-   },
-   "hadithCitation": {
-    "book": "Riyad as-Salihin",
-    "number": 1050,
-    "narrator": "'Aishah (May Allah be pleased with her) said:",
-    "ref": "Riyad as-Salihin 1050"
-   }
   },
   {
    "id": "62:168",
@@ -1708,18 +1631,6 @@
    "transliteration": "Allaahumma laa tu'aakhithnee bimaa yaqooloona, waghfir lee maa laa ya'lamoona [waj'alnee khayram-mimmaa yadhunnoon]"
   },
   {
-   "id": "115:233",
-   "category": "The pilgrim's announcement of his arrival for Hajj or Umrah",
-   "arabic": "((لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ، وَالنِّعْمَةَ، لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ)).",
-   "transliteration": "(Labbaykal-lahumma labbayk, labbayka la shareeka laka labbayk, innal-hamda wanniAAmata laka walmulk, la shareeka lak.)",
-   "hadithCitation": {
-    "book": "Sunan an-Nasai",
-    "number": 2754,
-    "narrator": "It was narrated that 'Abdullah bin 'Umar said:",
-    "ref": "Sunan an-Nasai 2754"
-   }
-  },
-  {
    "id": "116:234",
    "category": "Saying Allahu Akbar when passing the Black Stone",
    "arabic": "((طَافَ النَّبيُّ صلى الله عليه وسلم بِالْبَيْتِ عَلَى بَعِيرٍ كُلَّمَا أَتَى الرُّكْنَ أَشَارَ إِلَيْهِ بِشَيْءٍ عِنْدَهُ وَكَبَّرَ)).",
@@ -1890,18 +1801,6 @@
     "number": 6682,
     "narrator": "Mu'sab b. Sa'd reported on the authority of his father that a desert Arab came to Allah's Messenger (ﷺ) and said to him:",
     "ref": "Sahih Muslim 6682"
-   }
-  },
-  {
-   "id": "130:263",
-   "category": "The excellence of remembering Allah",
-   "arabic": "كَانَ الرَّجُلُ إِذَا أَسْلَمَ عَلَّمَهُ النَّبيُّ صلى الله عليه وسلم الصَّلاَةَ ثُمَّ أَمَرَهُ أَنْ يَدْعُوَ بِهَؤُلاَءِ الْكَلِمَاتِ: ((اللَّهُمَّ اغْفِرِ لِي، وَارْحَمْنِي، وَاهْدِنِي، وَعَافِنِي وَارْزُقْنِي)).",
-   "transliteration": "(Tariq Al-AshjaAAee said: ‘When someone would embrace Islam, the Prophet would teach him how to perform prayer and then order him to supplicate with the following words: (Allahummagh-fir lee, warhamnee, wahdinee, waAAafinee warzuqnee.))",
-   "hadithCitation": {
-    "book": "Sahih Muslim",
-    "number": 6684,
-    "narrator": "Abu Malik reported on the authority of his father that when a person embraced Islam, Allah's Messenger (ﷺ) used to teach him how to observe prayer and then commanded him to supplicate in these words:",
-    "ref": "Sahih Muslim 6684"
    }
   },
   {
