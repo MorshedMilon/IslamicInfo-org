@@ -94,8 +94,13 @@
     var cat = d.category || '';
     var translit = d.transliteration
       ? '<div class="dua-transliteration">' + esc(d.transliteration) + '</div>' : '';
+    // Contextual entries are quoted in the Qur'an as examples, not as supplications
+    // to recite — say so on the card rather than letting it read as a recommendation.
+    var note = d.contextNote
+      ? '<div class="dua-context-note"><span class="dcn-label">⚠ ' +
+        esc(d.contextLabel || 'Context') + '</span>' + esc(d.contextNote) + '</div>' : '';
     return '' +
-      '<div data-ai-selectable="dua" class="card dua-card" data-id="' + esc(d.id) + '">' +
+      '<div data-ai-selectable="dua" class="card dua-card' + (d.entryType === 'contextual' ? ' is-contextual' : '') + '" data-id="' + esc(d.id) + '">' +
         '<div class="dua-card-header">' +
           '<div class="dua-tag">' + iconFor(cat) + ' <span>' + esc(cat) + '</span></div>' +
           '<div class="dua-card-actions-top">' +
@@ -104,6 +109,7 @@
             '</button>' +
           '</div>' +
         '</div>' +
+        note +
         '<div class="dua-arabic">' + esc(d.arabic) + '</div>' +
         translit +
         '<p class="dua-translation">' + esc(d.translation) + '</p>' +
@@ -196,6 +202,9 @@
     var parts = [d.arabic];
     if (d.transliteration) parts.push(d.transliteration);
     parts.push(d.translation, '— ' + sourceLine(d));
+    // the caveat travels with the text, so a copied contextual verse is never
+    // mistaken for a recommended supplication
+    if (d.contextNote) parts.push('[' + (d.contextLabel || 'Context') + '] ' + d.contextNote);
     return parts.filter(Boolean).join('\n\n');
   }
 
