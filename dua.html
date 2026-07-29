@@ -495,9 +495,9 @@ img{max-width:100%;}
       <section style="padding:0 clamp(20px,5vw,56px);margin-top:-20px;position:relative;z-index:2;">
         <div class="container" style="padding:0;">
           <div class="stats-strip fade-up fade-up-d1">
-            <div class="stat-item"><div class="stat-num-lg">267</div><div class="stat-label-sm" data-i18n="dua.stats.verifiedDuas">Verified Duas</div></div>
+            <div class="stat-item"><div class="stat-num-lg" id="statDuaCount">364</div><div class="stat-label-sm" data-i18n="dua.stats.verifiedDuas">Verified Duas</div></div>
             <div class="stat-divider"></div>
-            <div class="stat-item"><div class="stat-num-lg">12</div><div class="stat-label-sm" data-i18n="dua.stats.occasions">Occasions</div></div>
+            <div class="stat-item"><div class="stat-num-lg" id="statOccasionCount">132</div><div class="stat-label-sm" data-i18n="dua.stats.occasions">Occasions</div></div>
             <div class="stat-divider"></div>
             <div class="stat-item"><div class="stat-num-lg">100<span>%</span></div><div class="stat-label-sm" data-i18n="dua.stats.sourceCited">Source-Cited</div></div>
             <div class="stat-divider"></div>
@@ -545,7 +545,7 @@ img{max-width:100%;}
           <div class="section-head reveal">
             <div class="section-eyebrow" data-i18n="dua.categories.eyebrow">Browse by Occasion</div>
             <h2 class="section-title" data-i18n="dua.categories.title" data-i18n-html>Duas for <span class="gold-it">Every Moment</span></h2>
-            <p class="section-sub" data-i18n="dua.categories.sub">267 duas organized by occasion — every one verified from Qur'an or authenticated Sunnah.</p>
+            <p class="section-sub" data-i18n="dua.categories.sub">364 duas organized by occasion — every one verified from Qur'an or authenticated Sunnah.</p>
           </div>
           <div class="cat-grid reveal">
             <a href="dua.html?cat=morning-evening" class="cat-card"><span class="cat-icon">🌅</span><div class="cat-title" data-i18n="dua.cat.morningEvening">Morning &amp; Evening</div><div class="cat-count" data-i18n="dua.cat.morningEveningCount">42 duas</div></a>
@@ -575,7 +575,7 @@ img{max-width:100%;}
             <!-- SIDEBAR -->
             <aside class="dua-sidebar">
               <div class="dsb-label" data-i18n="dua.sidebar.byOccasion">By Occasion</div>
-              <a class="dsb-item active" href="dua.html"><span class="dsb-icon">🤲</span><span data-i18n="dua.sidebar.allDuas">All Duas</span><span class="dsb-count">267</span></a>
+              <a class="dsb-item active" href="dua.html"><span class="dsb-icon">🤲</span><span data-i18n="dua.sidebar.allDuas">All Duas</span><span class="dsb-count" id="sidebarAllCount">364</span></a>
               <a class="dsb-item" href="dua.html?cat=morning-evening"><span class="dsb-icon">🌅</span><span data-i18n="dua.cat.morningEvening">Morning &amp; Evening</span><span class="dsb-count">42</span></a>
               <a class="dsb-item" href="dua.html?cat=prayer"><span class="dsb-icon">🕌</span><span data-i18n="dua.cat.prayer">Prayer</span><span class="dsb-count">38</span></a>
               <a class="dsb-item" href="dua.html?cat=sleep"><span class="dsb-icon">😴</span><span data-i18n="dua.cat.sleep">Sleep &amp; Waking</span><span class="dsb-count">24</span></a>
@@ -619,115 +619,8 @@ img{max-width:100%;}
                 <span class="cat-chip" data-cat="protection" data-i18n="dua.sidebar.protection">Protection</span>
                 <span class="cat-chip" data-cat="forgiveness" data-i18n="dua.cat.forgiveness">Forgiveness</span>
               </div>
-              <div class="dua-grid">
-
-                <!-- Dua 1 -->
-                <div data-ai-selectable="dua" class="card dua-card reveal">
-                  <div class="dua-card-header">
-                    <div class="dua-tag">🤲 <span data-i18n="dua.tag.general">General</span></div>
-                    <div class="dua-card-actions-top">
-                      <button class="dua-icon-btn" title="Save to bookmarks" data-i18n-attr="title:dua.actions.saveTitle"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
-                    </div>
-                  </div>
-                  <div class="dua-arabic">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ</div>
-                  <div class="dua-transliteration">Rabbanā ātinā fī al-dunyā ḥasanatan wa fī al-ākhirati ḥasanatan wa qinā ʿadhāb al-nār</div>
-                  <p class="dua-translation" data-i18n="dua.card1.translation">"Our Lord, give us in this world that which is good and in the Hereafter that which is good and protect us from the punishment of the Fire."</p>
-                  <div class="dua-footer">
-                    <div class="dua-source"><span class="dua-source-dot"></span>Qur'an · Al-Baqarah 2:201</div>
-                    <div class="dua-actions">
-                      <button class="dua-btn">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span data-i18n="dua.actions.copy">Copy</span>
-                      </button>
-                      <button class="dua-btn">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><span data-i18n="dua.actions.share">Share</span>
-                      </button>
-                      <button class="dua-btn">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/><path d="M12 8v4l3 3"/></svg><span data-i18n="dua.actions.aiExplain">AI Explain</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Dua 2 -->
-                <div data-ai-selectable="dua" class="card dua-card reveal reveal-d1">
-                  <div class="dua-card-header"><div class="dua-tag">🌅 <span data-i18n="dua.filter.morning">Morning</span></div><div class="dua-card-actions-top"><button class="dua-icon-btn" title="Save" data-i18n-attr="title:dua.actions.saveShort"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button></div></div>
-                  <div class="dua-arabic">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ</div>
-                  <div class="dua-transliteration">Aṣbaḥnā wa aṣbaḥa al-mulku lillāh, wa al-ḥamdu lillāh</div>
-                  <p class="dua-translation" data-i18n="dua.card2.translation">"We have reached the morning and at this very time the dominion belongs to Allah. All praise is for Allah."</p>
-                  <div class="dua-footer">
-                    <div class="dua-source"><span class="dua-source-dot"></span>Muslim · 2723</div>
-                    <div class="dua-actions">
-                      <button class="dua-btn" data-i18n="dua.actions.copy">Copy</button>
-                      <button class="dua-btn" data-i18n="dua.actions.share">Share</button>
-                      <button class="dua-btn" data-i18n="dua.actions.aiExplain">AI Explain</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Dua 3 -->
-                <div data-ai-selectable="dua" class="card dua-card reveal reveal-d2">
-                  <div class="dua-card-header"><div class="dua-tag">🛡️ <span data-i18n="dua.sidebar.protection">Protection</span></div><div class="dua-card-actions-top"><button class="dua-icon-btn" title="Save" data-i18n-attr="title:dua.actions.saveShort"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button></div></div>
-                  <div class="dua-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ</div>
-                  <div class="dua-transliteration">Allāhumma innī aʿūdhu bika min al-hamm wa al-ḥazan</div>
-                  <p class="dua-translation" data-i18n="dua.card3.translation">"O Allah, I seek refuge with You from anxiety and sorrow, weakness and laziness, miserliness and cowardice."</p>
-                  <div class="dua-footer">
-                    <div class="dua-source"><span class="dua-source-dot"></span>Bukhari · 2893</div>
-                    <div class="dua-actions">
-                      <button class="dua-btn" data-i18n="dua.actions.copy">Copy</button>
-                      <button class="dua-btn" data-i18n="dua.actions.share">Share</button>
-                      <button class="dua-btn" data-i18n="dua.actions.aiExplain">AI Explain</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Dua 4 -->
-                <div data-ai-selectable="dua" class="card dua-card reveal reveal-d3">
-                  <div class="dua-card-header"><div class="dua-tag">🙏 <span data-i18n="dua.cat.forgiveness">Forgiveness</span></div><div class="dua-card-actions-top"><button class="dua-icon-btn" title="Save" data-i18n-attr="title:dua.actions.saveShort"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button></div></div>
-                  <div class="dua-arabic">رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ</div>
-                  <div class="dua-transliteration">Rabb ighfir lī wa tub ʿalayya innaka anta al-tawwāb al-raḥīm</div>
-                  <p class="dua-translation" data-i18n="dua.card4.translation">"My Lord, forgive me and accept my repentance. Indeed, You are the Accepting of Repentance, the Merciful."</p>
-                  <div class="dua-footer">
-                    <div class="dua-source"><span class="dua-source-dot"></span>Abu Dawud · 1516</div>
-                    <div class="dua-actions">
-                      <button class="dua-btn" data-i18n="dua.actions.copy">Copy</button>
-                      <button class="dua-btn" data-i18n="dua.actions.share">Share</button>
-                      <button class="dua-btn" data-i18n="dua.actions.aiExplain">AI Explain</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Dua 5 -->
-                <div data-ai-selectable="dua" class="card dua-card reveal">
-                  <div class="dua-card-header"><div class="dua-tag">📖 <span data-i18n="dua.cat.knowledge">Knowledge</span></div><div class="dua-card-actions-top"><button class="dua-icon-btn" title="Save" data-i18n-attr="title:dua.actions.saveShort"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button></div></div>
-                  <div class="dua-arabic">رَبِّ زِدْنِي عِلْمًا</div>
-                  <div class="dua-transliteration">Rabbi zidnī ʿilmā</div>
-                  <p class="dua-translation" data-i18n="dua.card5.translation">"My Lord, increase me in knowledge."</p>
-                  <div class="dua-footer">
-                    <div class="dua-source"><span class="dua-source-dot"></span>Qur'an · Ṭāhā 20:114</div>
-                    <div class="dua-actions">
-                      <button class="dua-btn" data-i18n="dua.actions.copy">Copy</button>
-                      <button class="dua-btn" data-i18n="dua.actions.share">Share</button>
-                      <button class="dua-btn" data-i18n="dua.actions.aiExplain">AI Explain</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Dua 6 -->
-                <div data-ai-selectable="dua" class="card dua-card reveal reveal-d1">
-                  <div class="dua-card-header"><div class="dua-tag">💊 <span data-i18n="dua.cat.illness">Illness</span></div><div class="dua-card-actions-top"><button class="dua-icon-btn" title="Save" data-i18n-attr="title:dua.actions.saveShort"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button></div></div>
-                  <div class="dua-arabic">اللَّهُمَّ رَبَّ النَّاسِ، أَذْهِبِ الْبَاسَ، اشْفِ أَنْتَ الشَّافِي</div>
-                  <div class="dua-transliteration">Allāhumma rabb al-nās, adhhib al-bās, ishfi anta al-shāfī</div>
-                  <p class="dua-translation" data-i18n="dua.card6.translation">"O Allah, Lord of mankind, remove the harm and heal — You are the Healer. There is no healing except Your healing."</p>
-                  <div class="dua-footer">
-                    <div class="dua-source"><span class="dua-source-dot"></span>Bukhari · 5743</div>
-                    <div class="dua-actions">
-                      <button class="dua-btn" data-i18n="dua.actions.copy">Copy</button>
-                      <button class="dua-btn" data-i18n="dua.actions.share">Share</button>
-                      <button class="dua-btn" data-i18n="dua.actions.aiExplain">AI Explain</button>
-                    </div>
-                  </div>
-                </div>
-
+              <div class="dua-grid" id="duaGrid" aria-live="polite">
+                <p class="dua-empty" style="grid-column:1/-1;text-align:center;padding:32px 0;color:var(--ink-muted);">Loading duas…</p>
               </div><!-- /dua-grid -->
 
               <div class="load-more-wrap reveal">
@@ -744,7 +637,7 @@ img{max-width:100%;}
       <!-- CTA — CLAUDE.md §11 -->
       <section class="cta-section">
         <div class="container" style="position:relative;z-index:1;">
-          <div class="cta-badge reveal"><span style="color:#D9B358;">✦</span> <span data-i18n="dua.cta.badge">267 Duas · Fully Verified</span></div>
+          <div class="cta-badge reveal"><span style="color:#D9B358;">✦</span> <span data-i18n="dua.cta.badge">364 Duas · Fully Verified</span></div>
           <h2 class="cta-title reveal" data-i18n="dua.cta.title" data-i18n-html>Every Supplication.<br><em style="font-style:italic;">Source-Cited.</em></h2>
           <p class="cta-sub reveal" data-i18n="dua.cta.sub">Arabic, transliteration, translation, and hadith reference — for every dua in our library.</p>
           <div class="cta-actions reveal">
@@ -878,21 +771,7 @@ img{max-width:100%;}
   }, { threshold: 0 });
   document.querySelectorAll('.fade-up').forEach(el => _fu.observe(el));
 
-  /* ── Category chips — filter cards ── */
-  document.querySelectorAll('.cat-chip').forEach(function(c) {
-    c.addEventListener('click', function() {
-      document.querySelectorAll('.cat-chip').forEach(function(x) { x.classList.remove('active'); });
-      this.classList.add('active');
-      var cat = this.dataset.cat;
-      document.querySelectorAll('.dua-card').forEach(function(card) {
-        if (cat === 'all') { card.style.display = ''; return; }
-        var tag = (card.querySelector('.dua-tag') || {}).textContent || '';
-        var tl = tag.toLowerCase();
-        var match = tl.includes(cat) || (cat === 'quran' && (tl.includes('qur') || tl.includes('quran')));
-        card.style.display = match ? '' : 'none';
-      });
-    });
-  });
+  /* Category chips are owned by src/js/dua-library.js (filters the whole corpus). */
 
   /* ── Sidebar item clicks ── */
   document.querySelectorAll('.dsb-item').forEach(item => {
@@ -940,17 +819,7 @@ img{max-width:100%;}
     });
   });
 
-  /* ── Dua search filter ── */
-  const duaSearchEl = document.getElementById('duaSearch');
-  if (duaSearchEl) {
-    duaSearchEl.addEventListener('input', function() {
-      const q = this.value.toLowerCase().trim();
-      document.querySelectorAll('.dua-card').forEach(card => {
-        const text = card.textContent.toLowerCase();
-        card.style.display = (!q || text.includes(q)) ? '' : 'none';
-      });
-    });
-  }
+  /* Dua search is owned by src/js/dua-library.js (searches all 364 duas, not just the rendered page). */
 
   /* ── Toast ── */
   function showDuaToast(msg) {
@@ -1011,16 +880,12 @@ img{max-width:100%;}
     btn.addEventListener('click', function() { showDuaToast('More duas coming soon ✦'); });
   });
 
-  /* ── Load more ── */
-  var loadMoreBtn = document.querySelector('.load-more-btn');
-  if (loadMoreBtn) {
-    loadMoreBtn.addEventListener('click', function() { showDuaToast('More duas loading soon ✦'); });
-  }
+  /* Load More is owned by src/js/dua-library.js (real pagination over the corpus). */
   </script>
   <script src="src/js/i18n.js"></script>
   <script src="src/js/global.js"></script>
   <script src="src/js/api.js"></script>
-  <script src="src/js/dua.js"></script>
+  <script src="src/js/dua-library.js?v=20260729a"></script>
 <!-- QuranlyAI floating assistant (global, one-tag) -->
 <script src="src/js/quranlyai-widget.js?v=20260718c"></script>
 <script src="src/js/select-to-ask.js?v=20260719a"></script>
