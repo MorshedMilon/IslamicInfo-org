@@ -103,8 +103,11 @@
       return x.variantGroup === d.variantGroup && x.variantRole === 'variant';
     });
     if (!sibs.length) return '';
+    // A family can span collections, so each variant carries its OWN citation and
+    // edition — the lead's edition note must not be read as covering them.
     var items = sibs.map(function (v) {
-      return '<li><p>' + esc(v.translation) + '</p><cite>' + esc(sourceLine(v)) + '</cite></li>';
+      var ed = v.edition ? ' · ' + v.edition.replace(/^.*\(standard /, '').replace(/ English edition\)$/, ' edition') : '';
+      return '<li><p>' + esc(v.translation) + '</p><cite>' + esc(sourceLine(v) + ed) + '</cite></li>';
     }).join('');
     return '<details class="dua-variants">' +
       '<summary>' + sibs.length + ' further narration' + (sibs.length === 1 ? '' : 's') +
@@ -141,6 +144,9 @@
         translit +
         '<p class="dua-translation">' + esc(d.translation) + '</p>' +
         variants +
+        // Which English edition this reading comes from. Phrased as an attribution,
+        // never as "translated by" — the dataset names only the collection's author.
+        (d.editionNote ? '<p class="dua-edition">' + esc(d.editionNote) + '</p>' : '') +
         '<div class="dua-footer">' +
           '<div class="dua-source"><span class="dua-source-dot"></span>' + esc(sourceLine(d)) + '</div>' +
           '<div class="dua-actions">' +
