@@ -83,6 +83,9 @@
   function matchesCat(d, cat) {
     if (!cat || cat === 'all') return true;
     if (cat === 'quran') return !!d.verseRef;
+    // The compilation has no "knowledge" chapter; the duas that actually ask for
+    // knowledge are identified by their text, not their chapter title.
+    if (cat === 'knowledge') return /beneficial knowledge/i.test(d.translation || '');
     var c = (d.category || '').toLowerCase();
     var re = CAT_RULES[cat];
     if (re) return re.test(c);
@@ -187,6 +190,73 @@
       var n = all.filter(function (d) { return matchesCat(d, slug); }).length;
       var c = a.querySelector('.cat-count');
       if (c) c.textContent = n + (n === 1 ? ' dua' : ' duas');
+    });
+  }
+
+  /* ---------- Dua of the Day ----------
+     Rotates once per UTC day so every visitor sees the same dua on a given day
+     (matching the site's other daily rotations), and prev/next step through the
+     pool from that day's position. Contextual/guidance entries are excluded —
+     the featured slot is a recommendation. */
+  var fd = { pool: [], i: 0 };
+
+  function fdRender() {
+    var d = fd.pool[((fd.i % fd.pool.length) + fd.pool.length) % fd.pool.length];
+    if (!d) return;
+    var host = document.querySelector('.featured-dua');
+    if (!host) return;
+    var set = function (sel, text) {
+      var el = host.querySelector(sel);
+      if (!el) return;
+      el.removeAttribute('data-i18n');      // stop i18n re-writing live data
+      el.removeAttribute('data-i18n-html');
+      el.textContent = text;
+      el.style.display = text ? '' : 'none';
+    };
+    set('.fd-badge', '✦ ' + (d.category || 'Supplication'));
+    set('.fd-arabic', d.arabic || '');
+    set('.fd-transliteration', d.transliteration || '');
+    set('.fd-trans', d.translation || '');
+    set('.fd-source', '📖 ' + sourceLine(d));
+    host.dataset.duaId = d.id;
+  }
+
+  function fdInit() {
+    var host = document.querySelector('.featured-dua');
+    if (!host) return;
+    fd.pool = all.filter(function (x) { return !x.entryType && x.arabic && x.translation; });
+    if (!fd.pool.length) return;
+    fd.i = Math.floor(Date.now() / 86400000) % fd.pool.length;   // UTC-daily
+    fdRender();
+
+    var nav = host.querySelectorAll('.fd-nav-btn');
+    if (nav.length >= 2) {
+      nav[0].addEventListener('click', function (e) { e.preventDefault(); fd.i--; fdRender(); });
+      nav[1].addEventListener('click', function (e) { e.preventDefault(); fd.i++; fdRender(); });
+    }
+    // featured copy / share / save act on whichever dua is showing
+    host.querySelectorAll('.fd-action-btn').forEach(function (btn, idx) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        var d = all.find(function (x) { return x.id === host.dataset.duaId; });
+        if (!d) return;
+        if (idx === 0) {
+          navigator.clipboard.writeText(copyText(d))
+            .then(function () { toast('Dua copied with source ✦'); })
+            .catch(function () { toast('Could not copy'); });
+        } else if (idx === 1) {
+          if (navigator.share) navigator.share({ title: 'Dua — IslamicInfo', text: copyText(d) }).catch(function () {});
+          else navigator.clipboard.writeText(copyText(d)).then(function () { toast('Dua copied to share ✦'); }).catch(function () {});
+        } else {
+          try {
+            var key = 'ii-dua-bookmarks';
+            var saved = JSON.parse(localStorage.getItem(key) || '[]');
+            var at = saved.indexOf(d.id);
+            if (at === -1) { saved.push(d.id); toast('Saved ✦'); } else { saved.splice(at, 1); toast('Removed from saved'); }
+            localStorage.setItem(key, JSON.stringify(saved));
+          } catch (err) { toast('Could not save (storage full)'); }
+        }
+      }, true);
     });
   }
 
@@ -311,6 +381,7 @@
         });
         wireDelegates();
         wireControls();
+        fdInit();
         applyFilters();
       })
       .catch(function () { fail('Could not load the dua library. Please refresh to try again.'); });

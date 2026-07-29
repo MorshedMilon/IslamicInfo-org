@@ -863,25 +863,8 @@ img{max-width:100%;}
     }
   });
 
-  /* ── Featured dua action buttons (share, bookmark) ── */
-  document.querySelectorAll('.fd-action-btn').forEach(function(btn, i) {
-    btn.addEventListener('click', function() {
-      if (i === 0) {
-        var arabic = document.querySelector('.fd-arabic');
-        if (arabic) navigator.clipboard.writeText(arabic.textContent.trim()).then(function() { showDuaToast('Arabic text copied ✦'); });
-      } else if (i === 1) {
-        showDuaToast('Link copied ✦');
-      } else if (i === 2) {
-        this.style.color = 'var(--gold-500)';
-        showDuaToast('Saved to bookmarks ✦');
-      }
-    });
-  });
-
-  /* ── Featured dua prev/next ── */
-  document.querySelectorAll('.fd-nav-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() { showDuaToast('More duas coming soon ✦'); });
-  });
+  /* Featured dua (content, prev/next, copy/share/save) is owned by
+     src/js/dua-library.js — it rotates daily from the real corpus. */
 
   /* Load More is owned by src/js/dua-library.js (real pagination over the corpus). */
   </script>
