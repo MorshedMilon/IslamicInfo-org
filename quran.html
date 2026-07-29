@@ -103,6 +103,11 @@ a{text-decoration:none;color:inherit;}
 .mm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
 .mm-link{font-size:18px;color:rgba(255,255,255,.7);padding:12px 0;border-bottom:.5px solid rgba(255,255,255,.06);transition:color .2s,padding-left .2s;text-decoration:none;}
 .mm-link:hover,.mm-link.active{color:#5BC1C7;padding-left:8px;}
+.mm-tools{display:flex;gap:10px;margin-top:20px;padding-top:18px;border-top:.5px solid rgba(255,255,255,.10);}
+.mm-tool{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 10px;border-radius:12px;
+  border:.5px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);
+  font-family:var(--font-body);font-size:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .18s,border-color .18s;}
+.mm-tool:hover,.mm-tool:active{background:rgba(91,193,199,.14);border-color:rgba(91,193,199,.4);color:#5BC1C7;}
 /* HERO */
 .hero{position:relative;overflow:hidden;padding:clamp(20px,3vw,36px) clamp(20px,5vw,56px) clamp(44px,7vw,80px);min-height:75vh;display:flex;align-items:center;}
 .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 18% 28%,rgba(0,105,110,.10),transparent 60%),radial-gradient(ellipse 60% 50% at 82% 20%,rgba(197,160,89,.08),transparent 55%),radial-gradient(ellipse 55% 65% at 55% 88%,rgba(0,105,110,.07),transparent 55%);animation:bgDrift 18s ease-in-out infinite alternate;}
@@ -1959,6 +1964,18 @@ html.wbw-off .wbw-row{display:none!important;}
   <a class="mm-link" href="habits.html" data-i18n="chrome.nav.habits">Habit Tracker</a>
   <a class="mm-link" href="verify.html" data-i18n="chrome.nav.verify">Verify</a>
   <a class="mm-link" href="about.html" data-i18n="chrome.nav.about">About</a>
+  <!-- Site controls (theme + account) so the reader isn't a dead end on mobile — these
+       proxy to the header's own controls, which are hidden in the immersive reader. -->
+  <div class="mm-tools">
+    <button class="mm-tool" type="button" onclick="var b=document.getElementById('themeBtn');if(b)b.click();">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <span data-i18n="chrome.theme.toggle">Theme</span>
+    </button>
+    <button class="mm-tool" type="button" onclick="var a=document.querySelector('[data-account]');if(a){closeMM();a.click();}">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+      <span data-i18n="chrome.account.signin">Sign in</span>
+    </button>
+  </div>
 </div>
 <div class="page-shell">
 <!-- ════ HERO ════ -->
@@ -2081,6 +2098,7 @@ html.wbw-off .wbw-row{display:none!important;}
            desktop two-row layout when the reader toolbar is revealed. Every icon reuses
            an existing handler; labels are tooltips (title=). Hidden ≥901px. ══ -->
       <div class="m-toolbar" id="mToolbar" role="toolbar" aria-label="Reader options">
+        <button class="m-ico" type="button" onclick="openMM()" title="Menu" aria-label="Open site menu — other pages, theme, account"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
         <button class="m-ico" type="button" onclick="openSurahList()" title="Surah list" aria-label="Back to surah list"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
         <span class="m-sep"></span>
         <button class="m-ico js-reciter-trigger" type="button" onclick="toggleReciterPicker(this)" title="Reciter" aria-label="Reciter"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span class="m-caret"></span></button>
@@ -3886,33 +3904,33 @@ function mushafChangePage(dir) {
 <script src="src/js/i18n.js"></script>
 <script src="src/js/global.js"></script>
 <script src="src/js/api.js"></script>
-<script src="src/js/quran-sidebar-core.js?v=20260728d"></script>
-<script src="src/js/quran-sidebar.js?v=20260728d"></script>
-<script src="src/js/quran-verses-core.js?v=20260728d"></script>
-<script src="src/js/quran-verses.js?v=20260728d"></script>
-<script src="src/js/quran-audio-core.js?v=20260728d"></script>
-<script src="src/js/quran-qul-core.js?v=20260728d"></script>
-<script src="src/js/quran-audio.js?v=20260728d"></script>
-<script src="src/js/quran-translations.js?v=20260728d"></script>
-<script src="src/js/quran-compare.js?v=20260728d"></script>
-<script src="src/js/quran-marks-core.js?v=20260728d"></script>
-<script src="src/js/quran-marks.js?v=20260728d"></script>
-<script src="src/js/quran-ai-core.js?v=20260728d"></script>
-<script src="src/js/quran-ai.js?v=20260728d"></script>
-<script src="src/js/quran-share-core.js?v=20260728d"></script>
-<script src="src/js/quran-share.js?v=20260728d"></script>
-<script src="src/js/quran-mushaf-core.js?v=20260728d"></script>
-<script src="src/js/quran-tajweed-core.js?v=20260728d"></script>
-<script src="src/js/quran-mushaf.js?v=20260728d"></script>
-<script src="src/js/quran-tajweed.js?v=20260728d"></script>
+<script src="src/js/quran-sidebar-core.js?v=20260728e"></script>
+<script src="src/js/quran-sidebar.js?v=20260728e"></script>
+<script src="src/js/quran-verses-core.js?v=20260728e"></script>
+<script src="src/js/quran-verses.js?v=20260728e"></script>
+<script src="src/js/quran-audio-core.js?v=20260728e"></script>
+<script src="src/js/quran-qul-core.js?v=20260728e"></script>
+<script src="src/js/quran-audio.js?v=20260728e"></script>
+<script src="src/js/quran-translations.js?v=20260728e"></script>
+<script src="src/js/quran-compare.js?v=20260728e"></script>
+<script src="src/js/quran-marks-core.js?v=20260728e"></script>
+<script src="src/js/quran-marks.js?v=20260728e"></script>
+<script src="src/js/quran-ai-core.js?v=20260728e"></script>
+<script src="src/js/quran-ai.js?v=20260728e"></script>
+<script src="src/js/quran-share-core.js?v=20260728e"></script>
+<script src="src/js/quran-share.js?v=20260728e"></script>
+<script src="src/js/quran-mushaf-core.js?v=20260728e"></script>
+<script src="src/js/quran-tajweed-core.js?v=20260728e"></script>
+<script src="src/js/quran-mushaf.js?v=20260728e"></script>
+<script src="src/js/quran-tajweed.js?v=20260728e"></script>
 <script src="src/js/quran-tafsir-core.js?v=20260716b"></script>
 <script src="src/js/quran-tafsir.js?v=20260716b"></script>
-<script src="src/js/quran-related-core.js?v=20260728d"></script>
-<script src="src/js/quran-related.js?v=20260728d"></script>
-<script src="src/js/quran-related-hadith-core.js?v=20260728d"></script>
-<script src="src/js/quran-related-hadith.js?v=20260728d"></script>
-<script src="src/js/quran-vocab-core.js?v=20260728d"></script>
-<script src="src/js/quran-vocab.js?v=20260728d"></script>
+<script src="src/js/quran-related-core.js?v=20260728e"></script>
+<script src="src/js/quran-related.js?v=20260728e"></script>
+<script src="src/js/quran-related-hadith-core.js?v=20260728e"></script>
+<script src="src/js/quran-related-hadith.js?v=20260728e"></script>
+<script src="src/js/quran-vocab-core.js?v=20260728e"></script>
+<script src="src/js/quran-vocab.js?v=20260728e"></script>
 <script src="src/js/reflection-core.js?v=20260716b"></script>
 <script src="src/js/reflection.js?v=20260716b"></script>
 <script src="src/js/reflection-actions-core.js?v=20260717b"></script>
