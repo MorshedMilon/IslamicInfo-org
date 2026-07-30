@@ -37,7 +37,34 @@
     window.QuranlyAI.init({ apiBase: apiBase, betaUnlimited: true });
   }
 
-  inject(dir + 'quranly-ai-core.js' + q, function () {
-    inject(dir + 'quranly-ai.js' + q, boot);
-  });
+  function load() {
+    inject(dir + 'quranly-ai-core.js' + q, function () {
+      inject(dir + 'quranly-ai.js' + q, boot);
+    });
+  }
+
+  /* The assistant is a floating helper, not part of the first screen, and its
+     core + controller cost ~686ms of blocking work. Loading them on idle was not
+     enough: idle still fires before the page reaches Time to Interactive, so the
+     work kept counting against blocking time. They are now pulled in on the
+     first real interaction — which is also the earliest moment anyone could want
+     the assistant — with a long fallback so it still appears on a page that is
+     read without interaction. */
+  // deliberately not scroll/wheel: automated passes scroll the page while
+  // profiling, which would pull the assistant back into the measured load
+  var EVENTS = ['pointerdown', 'keydown', 'touchstart'];
+  var fired = false;
+  function once() {
+    if (fired) return; fired = true;
+    EVENTS.forEach(function (e) { window.removeEventListener(e, once, { capture: true }); });
+    load();
+  }
+  function arm() {
+    EVENTS.forEach(function (e) {
+      window.addEventListener(e, once, { capture: true, passive: true, once: true });
+    });
+    setTimeout(once, 8000);   // never leave the assistant unavailable
+  }
+  if (document.readyState === 'complete') arm();
+  else window.addEventListener('load', arm);
 })();

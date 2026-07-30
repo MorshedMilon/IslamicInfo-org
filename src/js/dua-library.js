@@ -319,6 +319,9 @@
 
   /* Every one of the compilation's own chapter labels stays reachable, so the
      derived occasion facet never hides part of the library. */
+  /* The chapter list is 132 links. Building it on every load put a large,
+     immediately-styled subtree in the document for a panel most visitors never
+     open, so it is filled in the first time the disclosure is opened. */
   function allCategoriesHTML() {
     var cats = groupCounts('category');
     var srcs = groupCounts('sourceLabel');
@@ -327,11 +330,15 @@
       '<div class="src-row" style="margin-top:12px;">' + srcs.map(function (s) {
         return '<button class="src-chip' + (facet.kind === 'source' && facet.value === s.slug ? ' active' : '') +
           '" data-kind="source" data-value="' + esc(s.slug) + '">' + esc(s.label) + ' · ' + s.n + '</button>';
-      }).join('') + '</div>' +
-      '<ul>' + cats.map(function (c) {
-        return '<li><a href="' + facetURL('category', c.slug) + '" data-kind="category" data-value="' + esc(c.slug) + '">' +
-          esc(c.label) + ' <em>' + c.n + '</em></a></li>';
-      }).join('') + '</ul></details>';
+      }).join('') + '</div><ul data-lazy="chapters"></ul></details>';
+  }
+  function fillChapterList(ul) {
+    if (!ul || ul.dataset.filled) return;
+    ul.dataset.filled = '1';
+    ul.innerHTML = groupCounts('category').map(function (c) {
+      return '<li><a href="' + facetURL('category', c.slug) + '" data-kind="category" data-value="' + esc(c.slug) + '">' +
+        esc(c.label) + ' <em>' + c.n + '</em></a></li>';
+    }).join('');
   }
 
   function paintHeading() {
@@ -516,6 +523,12 @@
       if (!el) return;
       e.preventDefault(); goto(el.dataset.kind, el.dataset.value || '');
     });
+    // fill the chapter list only when its disclosure is first opened
+    document.addEventListener('toggle', function (e) {
+      if (e.target.classList && e.target.classList.contains('all-cats') && e.target.open) {
+        fillChapterList(e.target.querySelector('ul[data-lazy="chapters"]'));
+      }
+    }, true);
     // browser back/forward moves between category views
     window.addEventListener('popstate', function () {
       facet = facetFromURL(); paintNav(); paintHeading(); applyFilters();
