@@ -354,10 +354,17 @@ img{max-width:100%;}
 .cat-heading .ch-back{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;color:var(--teal-700);cursor:pointer;background:none;border:none;padding:0;font-family:inherit;}
 .cat-heading .ch-back:hover{text-decoration:underline;}
 .all-cats{margin-top:24px;border-top:0.5px solid rgba(0,105,110,.14);padding-top:14px;}
-.all-cats summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--teal-700);list-style:none;}
+/* Reads as a control, not a caption: the chapter list is the way into all 132
+   headings, so the disclosure is styled like a select — full-width pill, bold
+   label, caret on the right that flips when it opens. */
+.all-cats summary{cursor:pointer;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;line-height:1.4;color:var(--teal-700);list-style:none;background:var(--teal-50);border:0.5px solid var(--teal-100);border-radius:12px;padding:13px 18px;transition:background .18s var(--ease-premium),border-color .18s var(--ease-premium);}
+.all-cats summary:hover{background:var(--teal-100);border-color:var(--teal-600);}
+/* --teal-700 on the dark surface only reaches 4.1:1 at this size; --teal-300 clears AA. */
+[data-theme="dark"] .all-cats summary{color:var(--teal-300);}
+.all-cats summary:focus-visible{outline:2px solid var(--teal-600);outline-offset:2px;}
 .all-cats summary::-webkit-details-marker{display:none;}
-.all-cats summary::before{content:"▸ ";}
-.all-cats[open] summary::before{content:"▾ ";}
+.all-cats summary::after{content:"▾";margin-left:auto;font-size:15px;line-height:1;opacity:.9;transition:transform .18s var(--ease-premium);}
+.all-cats[open] summary::after{transform:rotate(180deg);}
 .all-cats ul{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 18px;}
 .all-cats li a{font-size:12.5px;color:var(--ink-body);text-decoration:none;display:flex;justify-content:space-between;gap:10px;padding:3px 0;}
 .all-cats li a:hover{color:var(--teal-700);}
