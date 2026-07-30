@@ -71,11 +71,6 @@
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://islamicinfo.org/duas/occasion/food-drink.html</loc>
-    <lastmod>2026-07-29</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://islamicinfo.org/duas/occasion/morning-evening.html</loc>
     <lastmod>2026-07-29</lastmod>
     <priority>0.7</priority>
@@ -96,6 +91,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://islamicinfo.org/duas/occasion/quran-recitation.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://islamicinfo.org/duas/occasion/guidance.html</loc>
     <lastmod>2026-07-29</lastmod>
     <priority>0.7</priority>
@@ -111,27 +111,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://islamicinfo.org/duas/occasion/forgiveness.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://islamicinfo.org/duas/occasion/family-children.html</loc>
     <lastmod>2026-07-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://islamicinfo.org/duas/occasion/funeral-illness.html</loc>
-    <lastmod>2026-07-29</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://islamicinfo.org/duas/occasion/quran-recitation.html</loc>
-    <lastmod>2026-07-29</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://islamicinfo.org/duas/occasion/forgiveness.html</loc>
-    <lastmod>2026-07-29</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://islamicinfo.org/duas/occasion/provision.html</loc>
     <lastmod>2026-07-29</lastmod>
     <priority>0.7</priority>
   </url>
@@ -146,12 +136,22 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://islamicinfo.org/duas/occasion/food-drink.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://islamicinfo.org/duas/occasion/social.html</loc>
     <lastmod>2026-07-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://islamicinfo.org/duas/occasion/praise-dhikr.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://islamicinfo.org/duas/occasion/provision.html</loc>
     <lastmod>2026-07-29</lastmod>
     <priority>0.7</priority>
   </url>
