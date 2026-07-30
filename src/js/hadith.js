@@ -1697,15 +1697,25 @@
       var first = listEl.querySelector('a'); if (first) first.focus();
       document.addEventListener('keydown', onKey);
     }
-    function close() {
+    // restoreFocus is skipped when the sheet closes because a collection was
+    // chosen: the page has routed underneath, so pulling focus back to the
+    // trigger would drop the reader at the bottom-edge pill instead of the
+    // collection they just opened.
+    function close(restoreFocus) {
       backdrop.style.display = 'none'; trigger.setAttribute('aria-expanded', 'false');
       document.removeEventListener('keydown', onKey);
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
+      if (restoreFocus !== false && lastFocus && lastFocus.focus) lastFocus.focus();
     }
     function onKey(e) { if (e.key === 'Escape') close(); }
     trigger.addEventListener('click', open);
-    if (closeBtn) closeBtn.addEventListener('click', close);
+    if (closeBtn) closeBtn.addEventListener('click', function () { close(); });
     backdrop.addEventListener('click', function (e) { if (e.target === backdrop) close(); });
+    // Picking a collection dismisses the sheet. wireRouting()'s document-level
+    // handler does the actual navigation; this only takes the sheet down so the
+    // reader is not left staring at the overlay that covers the result.
+    listEl.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('a[href]')) close(false);
+    });
     ui.focusTrap(panel);
   }
 
