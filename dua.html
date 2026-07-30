@@ -330,12 +330,12 @@ img{max-width:100%;}
 .dua-sidebar::-webkit-scrollbar{width:3px;}
 .dua-sidebar::-webkit-scrollbar-thumb{background:var(--teal-200);border-radius:2px;}
 [data-theme="dark"] .dua-sidebar{background:var(--white);border-color:rgba(0,105,110,.18);}
-.dsb-label{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-subtle);padding:0 16px;margin:14px 0 6px;}
+.dsb-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-subtle);padding:0 16px;margin:14px 0 6px;}
 .dsb-label:first-child{margin-top:0;}
-.dsb-item{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;cursor:pointer;font-size:13px;color:var(--ink-muted);transition:all .18s var(--ease-premium);border-left:2.5px solid transparent;gap:8px;text-decoration:none;}
+.dsb-item{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;cursor:pointer;font-size:14px;color:var(--ink-body);transition:all .18s var(--ease-premium);border-left:2.5px solid transparent;gap:8px;text-decoration:none;}
 .dsb-item:hover{background:rgba(0,105,110,.05);color:var(--ink-primary);border-left-color:rgba(0,105,110,.2);padding-left:18px;}
 .dsb-item.active{background:rgba(0,105,110,.08);color:var(--teal-700);font-weight:500;border-left-color:var(--teal-700);}
-.dsb-count{font-size:10px;font-weight:600;color:var(--teal-600);background:var(--teal-50);border:0.5px solid var(--teal-100);padding:1px 7px;border-radius:10px;flex-shrink:0;}
+.dsb-count{font-size:11px;font-weight:600;color:var(--teal-600);background:var(--teal-50);border:0.5px solid var(--teal-100);padding:1px 7px;border-radius:10px;flex-shrink:0;}
 .dsb-icon{font-size:14px;flex-shrink:0;}
 .dsb-divider{height:0.5px;background:rgba(0,105,110,.08);margin:10px 16px;}
 .dsb-streak{margin:14px 12px 0;background:linear-gradient(135deg,rgba(0,105,110,.07),rgba(197,160,89,.05));border:0.5px solid rgba(0,105,110,.12);border-radius:12px;padding:12px 14px;}
@@ -613,6 +613,14 @@ img{max-width:100%;}
           <div class="dua-layout">
             <!-- SIDEBAR -->
             <aside class="dua-sidebar">
+              <div id="dsbAll"></div>
+              <div class="dsb-divider"></div>
+              <div class="dsb-label" data-i18n="dua.sidebar.bySource">Browse by Source</div>
+              <div id="dsbSources"></div>
+              <div class="dsb-divider"></div>
+              <div class="dsb-label" data-i18n="dua.sidebar.byChapter">Browse by Chapter</div>
+              <div id="dsbChapters"></div>
+              <div class="dsb-divider"></div>
               <div class="dsb-label" data-i18n="dua.sidebar.byOccasion">By Occasion</div>
               <div id="dsbList"></div>
               <div class="dsb-divider"></div>

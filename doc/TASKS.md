@@ -311,6 +311,15 @@ NOT fixable this session (unchanged): DoD-8/9/16 + religious gate (need human sc
 - [ ] **DoD-4/5/13/18 (QA):** live-browser + real-device + VoiceOver/NVDA pass (the environmental gaps this session couldn't cover).
 - [ ] **Scholarly Review (blocking ship of content features):** narrator dataset, topic summaries, trace commentary, reading-path refs, alternate gradings — CONTENT-POLICY §5 human sign-off.
 
+### Follow-up — 2026-07-30 (dua sidebar)
+- [ ] **Dua sidebar type/contrast is a LOCAL override, pending the site-wide WCAG token sync.**
+  `dua.html` raises `.dsb-item` 13px→14px, `.dsb-count` 10px→11px, `.dsb-label` 9.5px→11px, and
+  `.dsb-item` colour `var(--ink-muted)`→`var(--ink-body)`. These are scoped to the dua sidebar
+  only; no design token was changed. Reconcile them into the site-wide token pass rather than
+  letting the dua page fork — if the tokens land first, delete these four overrides.
+  (Note for whoever picks this up: there is no `src/css/tokens.css`; the tokens are the inline
+  `:root` / dark-theme blocks in each page, `dua.html` lines ~50 and ~73.)
+
 ---
 *Source: ARCHITECTURE §3 build stages + §15.3 CI checks + PROJECT_STRUCTURE build order.
 Keep statuses current — this file is only useful if it reflects reality.*

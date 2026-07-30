@@ -283,11 +283,17 @@
 
   function paintNav() {
     var occ = groupCounts('occasion');
+    var sideAll = document.getElementById('dsbAll');
+    if (sideAll) {
+      sideAll.innerHTML = '<a class="dsb-item' + (facet.kind === 'all' ? ' active' : '') +
+        '" href="dua.html" data-kind="all" data-value=""><span class="dsb-icon">🤲</span><span>All Duas</span>' +
+        // before hydration `all` is empty; fall back to the build-time total so the
+        // badge never paints a "0" the page then has to correct
+        '<span class="dsb-count">' + (all.length || (facetData && facetData.total) || '') + '</span></a>';
+    }
     var side = document.getElementById('dsbList');
     if (side) {
-      side.innerHTML = '<a class="dsb-item' + (facet.kind === 'all' ? ' active' : '') +
-        '" href="dua.html" data-kind="all" data-value=""><span class="dsb-icon">🤲</span><span>All Duas</span>' +
-        '<span class="dsb-count">' + all.length + '</span></a>' +
+      side.innerHTML =
         occ.map(function (o) {
           var tip = o.slug === 'general'
             ? ' title="Miscellaneous duas that are not tied to one specific occasion"' : '';
@@ -297,6 +303,41 @@
             '<span class="dsb-count">' + o.n + '</span></a>';
         }).join('');
     }
+
+    // Sources and the largest chapters, surfaced in the sidebar so the library's
+    // breadth is visible without opening a disclosure. Both reuse the existing
+    // ?source= / ?category= URLs — no new parameters.
+    var HIDE_SOURCES = { other: 1, 'dua-dhikr': 1 }; // labels that name no source
+    var CHAPTER_MIN = 15;   // natural break in the data: the next value down is 12
+
+    var sideSrc = document.getElementById('dsbSources');
+    if (sideSrc) {
+      sideSrc.innerHTML = groupCounts('sourceLabel')
+        .filter(function (s) { return !HIDE_SOURCES[s.slug]; })
+        .map(function (s) {
+          return '<a class="dsb-item' +
+            (facet.kind === 'source' && facet.value === s.slug ? ' active' : '') +
+            '" href="' + facetURL('source', s.slug) +
+            '" data-kind="source" data-value="' + esc(s.slug) + '">' +
+            '<span>' + esc(s.label) + '</span>' +
+            '<span class="dsb-count">' + s.n + '</span></a>';
+        }).join('');
+    }
+
+    var sideCh = document.getElementById('dsbChapters');
+    if (sideCh) {
+      sideCh.innerHTML = groupCounts('category')
+        .filter(function (c) { return c.n >= CHAPTER_MIN; })
+        .map(function (c) {
+          return '<a class="dsb-item' +
+            (facet.kind === 'category' && facet.value === c.slug ? ' active' : '') +
+            '" href="' + facetURL('category', c.slug) +
+            '" data-kind="category" data-value="' + esc(c.slug) + '">' +
+            '<span>' + esc(c.label) + '</span>' +
+            '<span class="dsb-count">' + c.n + '</span></a>';
+        }).join('');
+    }
+
     var chips = document.getElementById('catChips');
     if (chips) {
       chips.innerHTML = '<span class="cat-chip' + (facet.kind === 'all' ? ' active' : '') +
@@ -326,7 +367,7 @@
     var cats = groupCounts('category');
     var srcs = groupCounts('sourceLabel');
     return '<details class="all-cats" style="grid-column:1/-1;">' +
-      '<summary>Browse by source, or all ' + cats.length + ' chapter headings</summary>' +
+      '<summary>All ' + cats.length + ' chapter headings</summary>' +
       '<div class="src-row" style="margin-top:12px;">' + srcs.map(function (s) {
         return '<button class="src-chip' + (facet.kind === 'source' && facet.value === s.slug ? ' active' : '') +
           '" data-kind="source" data-value="' + esc(s.slug) + '">' + esc(s.label) + ' · ' + s.n + '</button>';
@@ -512,7 +553,7 @@
     document.addEventListener('click', function (e) {
       var el = e.target.closest('[data-kind]');
       if (!el) return;
-      var host = el.closest('#dsbList, #catChips, #catGrid, #catHeading, .all-cats');
+      var host = el.closest('#dsbAll, #dsbList, #dsbSources, #dsbChapters, #catChips, #catGrid, #catHeading, .all-cats');
       if (!host) return;
       e.preventDefault();
       goto(el.dataset.kind, el.dataset.value || '');
