@@ -13,8 +13,8 @@
   var all = [];        // published duas only
   var view = [];       // current filtered set
   var shown = 0;
-  var activeCat = 'all';
   var query = '';
+  var baseTitle = '';
 
   var grid, searchEl, loadMoreBtn;
 
@@ -63,11 +63,51 @@
     return '🤲';
   }
 
-  /* Slug -> category matcher. The page's slugs (morning-evening, food-drink, …)
-     don't appear literally in the compilation's chapter titles, so each maps to
-     the words those titles actually use. 'quran' keys off verseRef, not the word
-     "Qur'an", which also occurs in hadith chapter titles (e.g. prostration of
-     recitation). */
+  /* ---------- facet state ----------
+     Three ways in, all driven by the data: occasion (derived navigation facet),
+     source (which collection), and category (the compilation's own chapter
+     label — all 132 stay browseable). Each maps to a shareable URL. */
+  var facet = { kind: 'all', value: '' };
+
+  function facetFromURL() {
+    var p = new URLSearchParams(location.search);
+    var o = p.get('occasion'), s = p.get('source'), c = p.get('category') || p.get('cat');
+    if (o) return { kind: 'occasion', value: o };
+    if (s) return { kind: 'source', value: s };
+    if (c) return { kind: 'category', value: c };
+    return { kind: 'all', value: '' };
+  }
+  function facetURL(kind, value) {
+    if (kind === 'all' || !value) return 'dua.html';
+    return 'dua.html?' + kind + '=' + encodeURIComponent(value);
+  }
+  function inFacet(d) {
+    if (facet.kind === 'all') return true;
+    if (facet.kind === 'occasion') return d.occasionSlug === facet.value;
+    if (facet.kind === 'source') return d.sourceKey === facet.value;
+    if (facet.kind === 'category') return d.categorySlug === facet.value || matchesCat(d, facet.value);
+    return true;
+  }
+  function facetLabel() {
+    if (facet.kind === 'all') return null;
+    var hit = all.filter(inFacet)[0];
+    if (!hit) return facet.value;
+    if (facet.kind === 'occasion') return hit.occasion;
+    if (facet.kind === 'source') return hit.sourceLabel;
+    return hit.category;
+  }
+  function groupCounts(key) {
+    var m = {};
+    all.forEach(function (d) {
+      var k = d[key]; if (!k) return;
+      if (!m[k]) m[k] = { n: 0, slug: d[key === 'occasion' ? 'occasionSlug' : (key === 'sourceLabel' ? 'sourceKey' : 'categorySlug')], icon: d.occasionIcon };
+      m[k].n++;
+    });
+    return Object.keys(m).map(function (k) { return { label: k, n: m[k].n, slug: m[k].slug, icon: m[k].icon }; })
+      .sort(function (a, b) { return b.n - a.n; });
+  }
+
+  /* Legacy slug matcher, still used by ?cat= links that predate the facets. */
   var CAT_RULES = {
     'morning':        /morning|evening/,
     'morning-evening': /morning|evening/,
@@ -183,7 +223,7 @@
     var qa = hasArabic(q) ? normArabic(q) : '';
     var ql = qa ? '' : normLatin(q);
     view = all.filter(function (d) {
-      if (!matchesCat(d, activeCat)) return false;
+      if (!inFacet(d)) return false;
       // Browsing shows one card per supplication; a search is intent-driven, so
       // variant narrations become findable again.
       if (!q && d.variantRole === 'variant') return false;
@@ -200,6 +240,85 @@
     var el = document.getElementById('duaResultCount');
     if (el) el.textContent = view.length + (view.length === 1 ? ' dua' : ' duas');
   }
+
+  /* ---------- facet navigation, rendered from the data ---------- */
+  function goto(kind, value, push) {
+    facet = { kind: kind, value: value };
+    if (push !== false) history.pushState({ kind: kind, value: value }, '', facetURL(kind, value));
+    paintNav(); paintHeading(); applyFilters();
+    var sec = document.getElementById('duas-section');
+    if (sec && kind !== 'all') sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function paintNav() {
+    var occ = groupCounts('occasion');
+    var side = document.getElementById('dsbList');
+    if (side) {
+      side.innerHTML = '<a class="dsb-item' + (facet.kind === 'all' ? ' active' : '') +
+        '" href="dua.html" data-kind="all" data-value=""><span class="dsb-icon">🤲</span><span>All Duas</span>' +
+        '<span class="dsb-count">' + all.length + '</span></a>' +
+        occ.map(function (o) {
+          return '<a class="dsb-item' + (facet.kind === 'occasion' && facet.value === o.slug ? ' active' : '') +
+            '" href="' + facetURL('occasion', o.slug) + '" data-kind="occasion" data-value="' + esc(o.slug) + '">' +
+            '<span class="dsb-icon">' + (o.icon || '🤲') + '</span><span>' + esc(o.label) + '</span>' +
+            '<span class="dsb-count">' + o.n + '</span></a>';
+        }).join('');
+    }
+    var chips = document.getElementById('catChips');
+    if (chips) {
+      chips.innerHTML = '<span class="cat-chip' + (facet.kind === 'all' ? ' active' : '') +
+        '" data-kind="all" data-value="" role="button" tabindex="0">All</span>' +
+        occ.slice(0, 7).map(function (o) {
+          return '<span class="cat-chip' + (facet.kind === 'occasion' && facet.value === o.slug ? ' active' : '') +
+            '" data-kind="occasion" data-value="' + esc(o.slug) + '" role="button" tabindex="0">' + esc(o.label) + '</span>';
+        }).join('');
+    }
+    var grid = document.getElementById('catGrid');
+    if (grid) {
+      grid.innerHTML = occ.map(function (o) {
+        return '<a class="cat-card" href="' + facetURL('occasion', o.slug) + '" data-kind="occasion" data-value="' + esc(o.slug) + '">' +
+          '<span class="cat-icon">' + (o.icon || '🤲') + '</span>' +
+          '<div class="cat-title">' + esc(o.label) + '</div>' +
+          '<div class="cat-count">' + o.n + (o.n === 1 ? ' dua' : ' duas') + '</div></a>';
+      }).join('') + allCategoriesHTML();
+    }
+  }
+
+  /* Every one of the compilation's own chapter labels stays reachable, so the
+     derived occasion facet never hides part of the library. */
+  function allCategoriesHTML() {
+    var cats = groupCounts('category');
+    var srcs = groupCounts('sourceLabel');
+    return '<details class="all-cats" style="grid-column:1/-1;">' +
+      '<summary>Browse by source, or all ' + cats.length + ' chapter headings</summary>' +
+      '<div class="src-row" style="margin-top:12px;">' + srcs.map(function (s) {
+        return '<button class="src-chip' + (facet.kind === 'source' && facet.value === s.slug ? ' active' : '') +
+          '" data-kind="source" data-value="' + esc(s.slug) + '">' + esc(s.label) + ' · ' + s.n + '</button>';
+      }).join('') + '</div>' +
+      '<ul>' + cats.map(function (c) {
+        return '<li><a href="' + facetURL('category', c.slug) + '" data-kind="category" data-value="' + esc(c.slug) + '">' +
+          esc(c.label) + ' <em>' + c.n + '</em></a></li>';
+      }).join('') + '</ul></details>';
+  }
+
+  function paintHeading() {
+    var el = document.getElementById('catHeading');
+    if (!el) return;
+    if (facet.kind === 'all') { el.hidden = true; el.innerHTML = ''; document.title = baseTitle; return; }
+    var label = facelabelSafe();
+    var hits = all.filter(inFacet);
+    // count what the grid actually shows; collapsed variants are stated, not hidden
+    var shownN = hits.filter(function (d) { return d.variantRole !== 'variant'; }).length;
+    var collapsed = hits.length - shownN;
+    el.hidden = false;
+    el.innerHTML = '<h2>' + esc(label) + '</h2>' +
+      '<p class="ch-meta">' + shownN + (shownN === 1 ? ' supplication' : ' supplications') +
+      (facet.kind === 'occasion' ? ' · grouped by occasion' : facet.kind === 'source' ? ' · from this collection' : ' · from this chapter') +
+      (collapsed ? ' · ' + collapsed + ' further narration' + (collapsed === 1 ? '' : 's') + ' grouped under their lead card' : '') +
+      '</p><button class="ch-back" data-kind="all" data-value="">← All duas</button>';
+    document.title = label + ' — Duas — IslamicInfo';
+  }
+  function facelabelSafe() { return facetLabel() || 'Duas'; }
 
   /* ---------- live counts (never hardcoded) ---------- */
   function paintCounts() {
@@ -352,31 +471,28 @@
         clearTimeout(t); t = setTimeout(applyFilters, 140);
       });
     }
-    document.querySelectorAll('.cat-chip').forEach(function (chip) {
-      chip.addEventListener('click', function () {
-        document.querySelectorAll('.cat-chip').forEach(function (x) { x.classList.remove('active'); });
-        this.classList.add('active');
-        activeCat = this.dataset.cat || 'all';
-        applyFilters();
-      });
-    });
     if (loadMoreBtn) {
       loadMoreBtn.addEventListener('click', function (e) { e.preventDefault(); renderPage(false); });
     }
-    // sidebar + category cards filter in place instead of reloading the page
-    document.querySelectorAll('.dsb-item[href*="cat="], .cat-card[href*="cat="]').forEach(function (a) {
-      a.addEventListener('click', function (e) {
-        e.preventDefault();
-        activeCat = (a.getAttribute('href').split('cat=')[1] || 'all').split('&')[0];
-        document.querySelectorAll('.dsb-item').forEach(function (x) { x.classList.remove('active'); });
-        if (a.classList.contains('dsb-item')) a.classList.add('active');
-        document.querySelectorAll('.cat-chip').forEach(function (x) {
-          x.classList.toggle('active', (x.dataset.cat || '') === activeCat);
-        });
-        applyFilters();
-        var sec = document.getElementById('duas-section');
-        if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+    // One delegated handler for every facet control — the nav is re-rendered on
+    // each change, so per-element listeners would go stale.
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest('[data-kind]');
+      if (!el) return;
+      var host = el.closest('#dsbList, #catChips, #catGrid, #catHeading, .all-cats');
+      if (!host) return;
+      e.preventDefault();
+      goto(el.dataset.kind, el.dataset.value || '');
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var el = e.target.closest && e.target.closest('.cat-chip[data-kind]');
+      if (!el) return;
+      e.preventDefault(); goto(el.dataset.kind, el.dataset.value || '');
+    });
+    // browser back/forward moves between category views
+    window.addEventListener('popstate', function () {
+      facet = facetFromURL(); paintNav(); paintHeading(); applyFilters();
     });
   }
 
@@ -395,9 +511,10 @@
 
     grid.innerHTML = '<p class="dua-empty" style="grid-column:1/-1;text-align:center;padding:32px 0;color:var(--ink-muted);">Loading duas…</p>';
 
-    var params = new URLSearchParams(location.search);
-    var cat = params.get('cat'); if (cat) activeCat = cat;
-    var q = params.get('q'); if (q) { query = q; if (searchEl) searchEl.value = q; }
+    baseTitle = document.title;
+    facet = facetFromURL();
+    var q = new URLSearchParams(location.search).get('q');
+    if (q) { query = q; if (searchEl) searchEl.value = q; }
 
     fetch(CORPUS_URL)
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
@@ -410,9 +527,8 @@
         });
         if (!all.length) return fail('Dua library is unavailable right now.');
         paintCounts();
-        document.querySelectorAll('.cat-chip').forEach(function (x) {
-          x.classList.toggle('active', (x.dataset.cat || '') === activeCat);
-        });
+        paintNav();
+        paintHeading();
         wireDelegates();
         wireControls();
         fdInit();

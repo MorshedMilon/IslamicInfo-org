@@ -344,6 +344,23 @@ img{max-width:100%;}
 @media(max-width:900px){.dua-sidebar{display:none;}.dua-main{padding-left:0;}}
 
 /* Dua cards */
+.cat-heading{margin:0 0 20px;}
+.cat-heading h2{font-family:var(--font-serif);font-size:clamp(19px,2.5vw,26px);font-weight:400;color:var(--ink-primary);margin:0 0 4px;}
+.cat-heading .ch-meta{font-size:12.5px;color:var(--ink-muted);}
+.cat-heading .ch-back{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;color:var(--teal-700);cursor:pointer;background:none;border:none;padding:0;font-family:inherit;}
+.cat-heading .ch-back:hover{text-decoration:underline;}
+.all-cats{margin-top:24px;border-top:0.5px solid rgba(0,105,110,.14);padding-top:14px;}
+.all-cats summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--teal-700);list-style:none;}
+.all-cats summary::-webkit-details-marker{display:none;}
+.all-cats summary::before{content:"▸ ";}
+.all-cats[open] summary::before{content:"▾ ";}
+.all-cats ul{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 18px;}
+.all-cats li a{font-size:12.5px;color:var(--ink-body);text-decoration:none;display:flex;justify-content:space-between;gap:10px;padding:3px 0;}
+.all-cats li a:hover{color:var(--teal-700);}
+.all-cats li a em{font-style:normal;color:var(--ink-muted);}
+.src-row{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 18px;}
+.src-chip{font-size:11.5px;padding:5px 12px;border-radius:20px;border:0.5px solid rgba(197,160,89,.3);background:rgba(197,160,89,.08);color:var(--ink-muted);cursor:pointer;transition:all .2s;}
+.src-chip:hover,.src-chip.active{background:var(--gold-500,#D9B358);color:#3A2E12;border-color:transparent;}
 .dua-edition{font-size:10.5px;line-height:1.5;color:var(--ink-muted);opacity:.85;margin:0 0 10px;font-style:italic;}
 .dua-variants{margin:0 0 13px;border-top:0.5px solid rgba(0,105,110,.14);padding-top:10px;}
 .dua-variants summary{cursor:pointer;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--teal-700);list-style:none;}
@@ -578,20 +595,7 @@ img{max-width:100%;}
             <h2 class="section-title" data-i18n="dua.categories.title" data-i18n-html>Duas for <span class="gold-it">Every Moment</span></h2>
             <p class="section-sub" data-i18n="dua.categories.sub">536 duas organized by occasion — each one shown with its source.</p>
           </div>
-          <div class="cat-grid reveal">
-            <a href="dua.html?cat=morning-evening" class="cat-card"><span class="cat-icon">🌅</span><div class="cat-title" data-i18n="dua.cat.morningEvening">Morning &amp; Evening</div><div class="cat-count" data-i18n="dua.cat.morningEveningCount">42 duas</div></a>
-            <a href="dua.html?cat=prayer" class="cat-card"><span class="cat-icon">🕌</span><div class="cat-title" data-i18n="dua.cat.prayer">Prayer</div><div class="cat-count" data-i18n="dua.cat.prayerCount">38 duas</div></a>
-            <a href="dua.html?cat=food-drink" class="cat-card"><span class="cat-icon">🍽️</span><div class="cat-title" data-i18n="dua.cat.foodDrink">Food &amp; Drink</div><div class="cat-count" data-i18n="dua.cat.foodDrinkCount">18 duas</div></a>
-            <a href="dua.html?cat=sleep" class="cat-card"><span class="cat-icon">🛌</span><div class="cat-title" data-i18n="dua.cat.sleep">Sleep &amp; Waking</div><div class="cat-count" data-i18n="dua.cat.sleepCount">24 duas</div></a>
-            <a href="dua.html?cat=forgiveness" class="cat-card"><span class="cat-icon">🤲</span><div class="cat-title" data-i18n="dua.cat.forgiveness">Forgiveness</div><div class="cat-count" data-i18n="dua.cat.forgivenessCount">31 duas</div></a>
-            <a href="dua.html?cat=illness" class="cat-card"><span class="cat-icon">💊</span><div class="cat-title" data-i18n="dua.cat.illness">Illness</div><div class="cat-count" data-i18n="dua.cat.illnessCount">15 duas</div></a>
-            <a href="dua.html?cat=travel" class="cat-card"><span class="cat-icon">🧳</span><div class="cat-title" data-i18n="dua.cat.travel">Travel</div><div class="cat-count" data-i18n="dua.cat.travelCount">19 duas</div></a>
-            <a href="dua.html?cat=family" class="cat-card"><span class="cat-icon">👶</span><div class="cat-title" data-i18n="dua.cat.family">Family &amp; Children</div><div class="cat-count" data-i18n="dua.cat.familyCount">22 duas</div></a>
-            <a href="dua.html?cat=knowledge" class="cat-card"><span class="cat-icon">📖</span><div class="cat-title" data-i18n="dua.cat.knowledge">Knowledge</div><div class="cat-count" data-i18n="dua.cat.knowledgeCount">12 duas</div></a>
-            <a href="dua.html?cat=anxiety" class="cat-card"><span class="cat-icon">⚡</span><div class="cat-title" data-i18n="dua.cat.anxiety">Anxiety &amp; Hardship</div><div class="cat-count" data-i18n="dua.cat.anxietyCount">27 duas</div></a>
-            <a href="dua.html?cat=ramadan" class="cat-card"><span class="cat-icon">🌙</span><div class="cat-title" data-i18n="dua.cat.ramadan">Ramadan</div><div class="cat-count" data-i18n="dua.cat.ramadanCount">35 duas</div></a>
-            <a href="dua.html?cat=hajj-umrah" class="cat-card"><span class="cat-icon">🕋</span><div class="cat-title" data-i18n="dua.cat.hajjUmrah">Hajj &amp; Umrah</div><div class="cat-count" data-i18n="dua.cat.hajjUmrahCount">29 duas</div></a>
-          </div>
+          <div class="cat-grid reveal" id="catGrid" aria-live="polite"></div>
         </div>
       </section>
 
@@ -606,20 +610,7 @@ img{max-width:100%;}
             <!-- SIDEBAR -->
             <aside class="dua-sidebar">
               <div class="dsb-label" data-i18n="dua.sidebar.byOccasion">By Occasion</div>
-              <a class="dsb-item active" href="dua.html"><span class="dsb-icon">🤲</span><span data-i18n="dua.sidebar.allDuas">All Duas</span><span class="dsb-count" id="sidebarAllCount">536</span></a>
-              <a class="dsb-item" href="dua.html?cat=morning-evening"><span class="dsb-icon">🌅</span><span data-i18n="dua.cat.morningEvening">Morning &amp; Evening</span><span class="dsb-count">42</span></a>
-              <a class="dsb-item" href="dua.html?cat=prayer"><span class="dsb-icon">🕌</span><span data-i18n="dua.cat.prayer">Prayer</span><span class="dsb-count">38</span></a>
-              <a class="dsb-item" href="dua.html?cat=sleep"><span class="dsb-icon">😴</span><span data-i18n="dua.cat.sleep">Sleep &amp; Waking</span><span class="dsb-count">24</span></a>
-              <a class="dsb-item" href="dua.html?cat=protection"><span class="dsb-icon">🛡️</span><span data-i18n="dua.sidebar.protection">Protection</span><span class="dsb-count">19</span></a>
-              <a class="dsb-item" href="dua.html?cat=forgiveness"><span class="dsb-icon">🙏</span><span data-i18n="dua.cat.forgiveness">Forgiveness</span><span class="dsb-count">31</span></a>
-              <a class="dsb-item" href="dua.html?cat=knowledge"><span class="dsb-icon">📖</span><span data-i18n="dua.cat.knowledge">Knowledge</span><span class="dsb-count">12</span></a>
-              <a class="dsb-item" href="dua.html?cat=illness"><span class="dsb-icon">💊</span><span data-i18n="dua.cat.illness">Illness</span><span class="dsb-count">15</span></a>
-              <a class="dsb-item" href="dua.html?cat=food-drink"><span class="dsb-icon">🍽️</span><span data-i18n="dua.cat.foodDrink">Food &amp; Drink</span><span class="dsb-count">18</span></a>
-              <a class="dsb-item" href="dua.html?cat=travel"><span class="dsb-icon">🧳</span><span data-i18n="dua.cat.travel">Travel</span><span class="dsb-count">19</span></a>
-              <a class="dsb-item" href="dua.html?cat=family"><span class="dsb-icon">👶</span><span data-i18n="dua.sidebar.family">Family</span><span class="dsb-count">22</span></a>
-              <a class="dsb-item" href="dua.html?cat=anxiety"><span class="dsb-icon">⚡</span><span data-i18n="dua.sidebar.anxiety">Anxiety</span><span class="dsb-count">27</span></a>
-              <a class="dsb-item" href="dua.html?cat=ramadan"><span class="dsb-icon">🌙</span><span data-i18n="dua.cat.ramadan">Ramadan</span><span class="dsb-count">35</span></a>
-              <a class="dsb-item" href="dua.html?cat=hajj-umrah"><span class="dsb-icon">🕋</span><span data-i18n="dua.cat.hajjUmrah">Hajj &amp; Umrah</span><span class="dsb-count">29</span></a>
+              <div id="dsbList"></div>
               <div class="dsb-divider"></div>
               <div class="dsb-label" data-i18n="dua.sidebar.dailyStreak">Daily Streak</div>
               <div class="dsb-streak">
@@ -642,14 +633,8 @@ img{max-width:100%;}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
                 <input type="text" placeholder="Search duas by occasion, keyword, or Arabic…" id="duaSearch" data-i18n-attr="placeholder:dua.search.placeholder"/>
               </div>
-              <div class="cat-filter reveal">
-                <span class="cat-chip active" data-cat="all" data-i18n="dua.filter.all">All</span>
-                <span class="cat-chip" data-cat="morning" data-i18n="dua.filter.morning">Morning</span>
-                <span class="cat-chip" data-cat="prayer" data-i18n="dua.cat.prayer">Prayer</span>
-                <span class="cat-chip" data-cat="quran" data-i18n="dua.filter.quranic">Qur'anic</span>
-                <span class="cat-chip" data-cat="protection" data-i18n="dua.sidebar.protection">Protection</span>
-                <span class="cat-chip" data-cat="forgiveness" data-i18n="dua.cat.forgiveness">Forgiveness</span>
-              </div>
+              <div class="cat-filter reveal" id="catChips"></div>
+              <div id="catHeading" class="cat-heading" hidden></div>
               <div class="dua-grid" id="duaGrid" aria-live="polite">
                 <p class="dua-empty" style="grid-column:1/-1;text-align:center;padding:32px 0;color:var(--ink-muted);">Loading duas…</p>
               </div><!-- /dua-grid -->
