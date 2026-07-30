@@ -7,8 +7,28 @@
 (function () {
   'use strict';
 
-  var CORPUS_URL = 'src/data/dua/search-corpus.json';
+  // Compact UI payload (scripts/build-dua-library.mjs). search-corpus.json stays
+  // the canonical record but is far larger and is not needed by the browser.
+  var CORPUS_URL = 'src/data/dua/library.json';
   var PAGE_SIZE = 12;
+  var facetData = null;   // counts inlined at build time, so nav paints with no fetch
+  var hydrated = false;
+
+  // short keys keep ~90KB off the wire; expand once so the rest of the code is unchanged
+  var KEYMAP = { i: 'id', a: 'arabic', t: 'transliteration', e: 'translation', c: 'category',
+    s: 'sourceText', cs: 'categorySlug', o: 'occasion', os: 'occasionSlug', oi: 'occasionIcon',
+    sl: 'sourceLabel', sk: 'sourceKey', vr: 'verseRef', vro: 'variantRole', vg: 'variantGroup',
+    vl: 'variantLead', et: 'entryType', cl: 'contextLabel' };
+  var NOTEKEYS = { en: 'editionNote', on: 'occasionNote', vn: 'variantNote', cn: 'contextNote' };
+  function expand(doc) {
+    var notes = doc.notes || [];
+    return (doc.duas || []).map(function (r) {
+      var d = {};
+      for (var k in r) { if (KEYMAP[k]) d[KEYMAP[k]] = r[k]; }
+      for (var n in NOTEKEYS) { if (r[n] !== undefined) d[NOTEKEYS[n]] = notes[r[n]]; }
+      return d;
+    });
+  }
 
   var all = [];        // published duas only
   var view = [];       // current filtered set
@@ -39,9 +59,10 @@
 
   /* Source line — only ever states what the record carries. */
   function sourceLine(d) {
+    if (d.sourceText) return d.sourceText;     // precomputed at build time
     if (d.verseRef) return "Qur'an · " + d.verseRef;
     var c = d.hadithCitation;
-    if (c && typeof c === 'object') {          // Phase-2 entries store a citation object
+    if (c && typeof c === 'object') {
       return c.book + ' ' + c.number + (c.narrator ? ' · ' + c.narrator : '');
     }
     if (c) return String(c);
@@ -97,6 +118,13 @@
     return hit.category;
   }
   function groupCounts(key) {
+    // before hydration the counts come from the build-time facet block, so the
+    // sidebar, chips and category grid render without waiting on the payload
+    if (!all.length && facetData) {
+      var src = key === 'occasion' ? facetData.occasions
+        : key === 'sourceLabel' ? facetData.sources : facetData.categories;
+      return (src || []).slice();
+    }
     var m = {};
     all.forEach(function (d) {
       var k = d[key]; if (!k) return;
@@ -219,6 +247,9 @@
   }
 
   function applyFilters() {
+    // before the payload lands the grid holds the build-time cards; filtering
+    // against an empty set would blank them out
+    if (!hydrated) return;
     var q = query.trim();
     var qa = hasArabic(q) ? normArabic(q) : '';
     var ql = qa ? '' : normLatin(q);
@@ -326,28 +357,19 @@
 
   /* ---------- live counts (never hardcoded) ---------- */
   function paintCounts() {
-    var total = all.length;
-    var cats = {};
-    all.forEach(function (d) { cats[d.category] = (cats[d.category] || 0) + 1; });
-    var occasions = Object.keys(cats).length;
+    var total, occasions;
+    if (!all.length && facetData) { total = facetData.total; occasions = facetData.occasionCount; }
+    else {
+      total = all.length;
+      var cats = {};
+      all.forEach(function (d) { cats[d.category] = (cats[d.category] || 0) + 1; });
+      occasions = Object.keys(cats).length;
+    }
 
     var s1 = document.getElementById('statDuaCount');       if (s1) s1.textContent = total;
     var s2 = document.getElementById('statOccasionCount');  if (s2) s2.textContent = occasions;
     var sb = document.getElementById('sidebarAllCount');    if (sb) sb.textContent = total;
 
-    // sidebar + category cards: replace invented counts with real ones
-    document.querySelectorAll('.dsb-item[href*="cat="]').forEach(function (a) {
-      var slug = (a.getAttribute('href').split('cat=')[1] || '').split('&')[0];
-      var n = all.filter(function (d) { return matchesCat(d, slug); }).length;
-      var c = a.querySelector('.dsb-count');
-      if (c) c.textContent = n;
-    });
-    document.querySelectorAll('.cat-card[href*="cat="]').forEach(function (a) {
-      var slug = (a.getAttribute('href').split('cat=')[1] || '').split('&')[0];
-      var n = all.filter(function (d) { return matchesCat(d, slug); }).length;
-      var c = a.querySelector('.cat-count');
-      if (c) c.textContent = n + (n === 1 ? ' dua' : ' duas');
-    });
   }
 
   /* ---------- Dua of the Day ----------
@@ -513,32 +535,65 @@
     loadMoreBtn = document.querySelector('.load-more-btn');
     if (!grid) return;
 
-    grid.innerHTML = '<p class="dua-empty" style="grid-column:1/-1;text-align:center;padding:32px 0;color:var(--ink-muted);">Loading duas…</p>';
-
     baseTitle = document.title;
     facet = facetFromURL();
     var q = new URLSearchParams(location.search).get('q');
     if (q) { query = q; if (searchEl) searchEl.value = q; }
 
-    fetch(CORPUS_URL)
-      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-      .then(function (doc) {
-        var list = (doc && doc.duas) || [];
-        // entryType 'guidance' = narration about practice or virtue with no
-        // supplication text; kept in the data, never shown as a dua to recite.
-        all = list.filter(function (d) {
-          return d && d.translation && String(d.translation).trim() && d.entryType !== 'guidance';
+    // 1. paint from what is already in the HTML: counts, nav, and the first page
+    //    of cards are rendered at build time, so nothing here waits on a fetch.
+    var inline = document.getElementById('duaFacets');
+    if (inline) { try { facetData = JSON.parse(inline.textContent); } catch (e) { facetData = null; } }
+    if (facetData) { paintCounts(); paintNav(); }
+    wireControls();
+
+    // 2. fetch the payload only after first paint, so it can never delay LCP
+    var start = function () {
+      fetch(CORPUS_URL)
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(function (doc) {
+          all = expand(doc).filter(function (d) {
+            return d && d.translation && String(d.translation).trim() && d.entryType !== 'guidance';
+          });
+          if (!all.length) return fail('Dua library is unavailable right now.');
+          hydrated = true;
+          wireDelegates(); fdInit();
+          // The build-time cards are already the correct first page of the
+          // default view, so re-rendering them just costs layout work. Adopt
+          // them instead and only render when the view actually changes.
+          var pre = grid.querySelectorAll('.dua-card').length;
+          var untouched = facet.kind === 'all' && !query.trim() && pre > 0;
+          if (untouched) {
+            view = all.filter(function (d) { return d.variantRole !== 'variant'; });
+            shown = pre;
+            if (loadMoreBtn) loadMoreBtn.style.display = shown < view.length ? '' : 'none';
+            updateResultCount();
+          } else {
+            paintHeading();
+            applyFilters();
+          }
+        })
+        .catch(function () {
+          // the pre-rendered cards stay on screen; only the live features are lost
+          if (searchEl) { searchEl.disabled = true; searchEl.placeholder = 'Search is unavailable — please refresh'; }
         });
-        if (!all.length) return fail('Dua library is unavailable right now.');
-        paintCounts();
-        paintNav();
-        paintHeading();
-        wireDelegates();
-        wireControls();
-        fdInit();
-        applyFilters();
-      })
-      .catch(function () { fail('Could not load the dua library. Please refresh to try again.'); });
+    };
+    // The first screen is already usable from the HTML, so the payload waits for
+    // idle time rather than competing with the page's other scripts — but any
+    // interaction that needs live data pulls it in immediately.
+    var started = false;
+    var kick = function () {
+      if (started) return; started = true;
+      if (window.requestIdleCallback) requestIdleCallback(start, { timeout: 4000 });
+      else setTimeout(start, 300);
+    };
+    var eager = function () { if (!started) { started = true; start(); } };
+    ['focus', 'input'].forEach(function (ev) { if (searchEl) searchEl.addEventListener(ev, eager, { once: true }); });
+    document.addEventListener('pointerdown', function (e) {
+      if (e.target.closest && e.target.closest('[data-kind],.load-more-btn,.fd-nav-btn')) eager();
+    }, true);
+    if (document.readyState === 'complete') kick();
+    else window.addEventListener('load', kick);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

@@ -14,9 +14,13 @@ const browse = shown.filter(d => d.variantRole !== 'variant');
 const esc = (s) => String(s == null ? "" : s)
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-// reuse the site's own font links so landing pages match the rest of the site
-const duaHtml = fs.readFileSync("dua.html", "utf8");
-const fonts = (duaHtml.match(/<link[^>]*fonts\.(googleapis|gstatic)[^>]*>/g) || []).join("\n  ");
+// self-hosted fonts (scripts/build-fonts.mjs) + favicon, same as the main site
+const fonts = [
+  '<link rel="icon" href="/src/img/favicon.svg" type="image/svg+xml">',
+  '<link rel="preload" as="font" type="font/woff2" href="/src/fonts/libre-baskerville-400-normal-latin.woff2" crossorigin>',
+  '<link rel="preload" as="font" type="font/woff2" href="/src/fonts/cormorant-garamond-500-normal-latin.woff2" crossorigin>',
+  '<link rel="stylesheet" href="/src/css/fonts.css">'
+].join("\n  ");
 
 function sourceLine(d) {
   if (d.verseRef) return "Qur'an · " + d.verseRef;
@@ -33,10 +37,11 @@ const CSS = [
 "a{color:var(--teal)}",
 ".top{background:linear-gradient(120deg,var(--teal) 0%,var(--teal-d) 100%);color:#fff;padding:14px 0}",
 ".wrap{max-width:940px;margin:0 auto;padding:0 22px}",
-".top a{color:#fff;text-decoration:none;font-weight:700}",
-".top nav{float:right;font-size:13px}.top nav a{margin-left:16px;font-weight:400;opacity:.9}",
+/* underlined so links are not distinguished by colour alone */
+".top a{color:#fff;text-decoration:underline;text-underline-offset:3px;font-weight:700}",
+".top nav{float:right;font-size:13px}.top nav a{margin-left:16px;font-weight:400;opacity:.95;text-decoration:underline;text-underline-offset:3px}",
 ".hero{padding:44px 0 28px;border-bottom:1px solid var(--line);background:#fff}",
-".crumb{font-size:12px;color:var(--muted);margin-bottom:12px}.crumb a{text-decoration:none}",
+".crumb{font-size:12px;color:var(--muted);margin-bottom:12px}.crumb a{text-decoration:underline;text-underline-offset:2px}",
 "h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(30px,5vw,44px);font-weight:500;line-height:1.15}",
 ".lede{margin-top:12px;color:var(--muted);font-size:16px;max-width:64ch}",
 ".count{margin-top:14px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);font-weight:700}",

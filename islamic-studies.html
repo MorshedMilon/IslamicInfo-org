@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title data-i18n="studies.title">Islamic Studies Curriculum — IslamicInfo.org</title>
+<title data-i18n="studies.title">Islamic Studies Curriculum — IslamicInfo.org</title>  <link rel="icon" href="/src/img/favicon.svg" type="image/svg+xml">
+
 <meta name="description" content="Structured Islamic curriculum for every level. Sequential lessons on Aqeedah, Seerah, Prayer, Fasting, and more — with progress tracking, quizzes, and prerequisites. Start learning Islam properly."/>
   <link rel="canonical" href="https://islamicinfo.org/islamic-studies.html"/>
   <meta property="og:type" content="website"/>
@@ -34,12 +35,15 @@
     if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
   })();
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+
+  <link rel="preload" as="font" type="font/woff2" href="/src/fonts/libre-baskerville-400-normal-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/src/fonts/cormorant-garamond-500-normal-latin.woff2" crossorigin>
+  <link rel="stylesheet" href="/src/css/fonts.css">
+
 <style>
 /* ══ TOKENS ══ */
-:root{
+:root{--gold-ink:#8A6D33;--ink-small:#5F7173;
   --teal-900:#0A3A3D;--teal-800:#004E55;--teal-700:#00696E;--teal-600:#0297A1;
   --teal-500:#2CA4AB;--teal-400:#3FBFC7;--teal-300:#6AD7DE;--teal-100:#C8EEF1;--teal-50:#F0FAFB;
   --gold-700:#9A7C3F;--gold-500:#C5A059;--gold-400:#D9B358;--gold-300:#E5C570;--gold-200:#EFD48A;
@@ -56,7 +60,7 @@
   --r-lg:18px;--r-xl:24px;
   --grade-sahih:#0F6E56;
 }
-[data-theme="dark"]{
+[data-theme="dark"]{--gold-ink:#C5A059;--ink-small:#9DA8A9;
   --surface:#0A1314;--surface-card:#0F1B1D;--white:#152527;
   --ink-primary:#F5F8F8;--ink-body:#D4DCDD;--ink-muted:#9AAAAB;--ink-subtle:#6E7E80;--ink-faint:#2A3638;
   --teal-700:#1A8A91;--teal-500:#5BC1C7;--teal-300:#88E0E5;
@@ -432,15 +436,15 @@ a{text-decoration:none;color:inherit;}
 @media(max-width:440px){.ft-top{grid-template-columns:1fr;}}
 .ft-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:-.02em;}
 .ft-logo .ti{color:#5BC1C7;}.ft-logo .fo{color:#C5A059;}
-.ft-tag{font-size:13px;line-height:1.72;color:rgba(255,255,255,.38);max-width:240px;margin-bottom:20px;}
+.ft-tag{font-size:13px;line-height:1.72;color:rgba(255,255,255,.70);max-width:240px;margin-bottom:20px;}
 .ft-verse{font-size:11px;color:rgba(255,255,255,.22);font-style:italic;font-family:'Cormorant Garamond',serif;}
-.ft-col-h{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:16px;}
+.ft-col-h{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:16px;}
 .ft-link{display:block;font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;padding:4px 0;margin-bottom:2px;border-left:2px solid transparent;padding-left:0;transition:color .18s,transform .18s,border-color .18s,padding-left .18s;}
 .ft-link:hover{color:#88E0E5;transform:translateX(4px);border-left-color:rgba(88,193,199,.4);padding-left:6px;}
 .ft-bot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:20px clamp(20px,5vw,64px);}
-.ft-copy{font-size:12px;color:rgba(255,255,255,.24);}
-.ft-copy a{color:#C5A059;text-decoration:none;}
-.ft-note{font-size:11.5px;color:rgba(255,255,255,.18);font-style:italic;font-family:'Cormorant Garamond',serif;}
+.ft-copy{font-size:12px;color:rgba(255,255,255,.70);}
+.ft-copy a{color:#C5A059;text-decoration:underline;text-underline-offset:2px;}
+.ft-note{font-size:11.5px;color:rgba(255,255,255,.66);font-style:italic;font-family:'Cormorant Garamond',serif;}
 
 /* ── Language dropdown ── */
 .lang-wrapper{position:relative;}
