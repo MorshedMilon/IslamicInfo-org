@@ -4,17 +4,22 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title data-i18n="verify.title">Verify Claims — IslamicInfo</title>
-  <meta name="description" content="Check an Islamic claim, hadith or quote against the Qur'an and authenticated hadith collections. We show sources and never issue rulings."/>
+  <meta name="description" content="A work-in-progress claim checker: paste a hadith or quote and see a live demo of our classifier. We cite sources and never issue rulings."/>
   <link rel="canonical" href="https://islamicinfo.org/verify.html"/>
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="IslamicInfo.org"/>
   <meta property="og:title" content="Verify a Claim — IslamicInfo"/>
-  <meta property="og:description" content="Check an Islamic claim, hadith or quote against the Qur'an and authenticated hadith collections. We show sources and never issue rulings."/>
+  <meta property="og:description" content="A work-in-progress claim checker: paste a hadith or quote and see a live demo of our classifier. We cite sources and never issue rulings."/>
   <meta property="og:url" content="https://islamicinfo.org/verify.html"/>
   <meta property="og:locale" content="en"/>
-  <meta name="twitter:card" content="summary"/>
+  <meta property="og:image" content="https://islamicinfo.org/src/img/og-default.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="IslamicInfo — Quran, hadith, duas and learning resources, every claim source-cited"/>
+  <meta name="twitter:image" content="https://islamicinfo.org/src/img/og-default.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Verify a Claim — IslamicInfo"/>
-  <meta name="twitter:description" content="Check an Islamic claim, hadith or quote against the Qur'an and authenticated hadith collections. We show sources and never issue rulings."/>
+  <meta name="twitter:description" content="A work-in-progress claim checker: paste a hadith or quote and see a live demo of our classifier. We cite sources and never issue rulings."/>
   <script>
     /* i18n FOUC guard: set lang/dir before first paint */
     (function(){
@@ -544,7 +549,7 @@ a{text-decoration:none;color:inherit;}
     <div class="bismillah-hero-top">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
     <div class="hero-badge"><span class="badge-dot"></span><span data-i18n="verify.hero.badge">Claim Verification Engine</span></div>
     <h1 class="hero-title" data-i18n="verify.hero.title" data-i18n-html>Trust. <span class="grad-it">Verify.</span> Understand.</h1>
-    <p class="hero-sub" data-i18n="verify.hero.sub">Paste any Islamic claim, hadith, or social media quote. We cross-reference 61,000+ authenticated hadith and the full Qur'an — we cite sources, never issue rulings.</p>
+    <p class="hero-sub" data-i18n="verify.hero.sub">We're building cross-references for tens of thousands of authenticated hadith. This page shows a live demo of the classifier while that work is in progress — we cite sources, never issue rulings.</p>
     <!-- Trust strip -->
     <div class="trust-strip">
       <div class="trust-item"><div class="trust-icon">📚</div><div class="trust-num">61K+</div><div class="trust-label" data-i18n="verify.hero.trustHadith">Hadith</div></div>
@@ -758,7 +763,7 @@ a{text-decoration:none;color:inherit;}
         <div class="how-step-num">01</div>
         <div class="how-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
         <div class="how-title" data-i18n="verify.methodology.step1Title">Parse &amp; Match</div>
-        <p class="how-desc" data-i18n="verify.methodology.step1Desc">Your input is tokenised and matched against 61,000+ hadith in the six canonical collections (Kutub al-Sittah), plus Qur'anic text and classical commentaries.</p>
+        <p class="how-desc" data-i18n="verify.methodology.step1Desc">Your input is tokenised and matched against hadith from the six canonical collections (Kutub al-Sittah), plus Qur'anic text. Coverage is still being expanded.</p>
       </div>
       <div class="card how-card reveal reveal-d1">
         <div class="how-step-num">02</div>
@@ -805,7 +810,7 @@ a{text-decoration:none;color:inherit;}
 <section class="cta-section">
   <div class="cta-badge" data-i18n="verify.cta.badge">✦ IslamicInfo · Free · Always · No Account</div>
   <h2 class="cta-title" data-i18n="verify.cta.title" data-i18n-html>Every Claim.<br><em style="font-style:italic;background:linear-gradient(90deg,#E2C896,#C5A059);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Verified.</em></h2>
-  <p class="cta-sub" data-i18n="verify.cta.sub">Cross-reference any Islamic claim against 61,000+ authenticated hadith — no fabrications, no opinions, no ads.</p>
+  <p class="cta-sub" data-i18n="verify.cta.sub">Check an Islamic claim against authenticated hadith and the Qur'an — no fabrications, no opinions, no ads. Full cross-referencing is still in development.</p>
   <div class="cta-actions">
     <a class="btn-primary" href="quran.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span data-i18n="verify.cta.btn1">Explore Qur'an</span></a>
     <a class="btn-white-ghost" href="hadith.html" data-i18n="verify.cta.btn2">Hadith Library</a>
