@@ -32,8 +32,34 @@ jobs:
           cp *.html _site/
           cp -r src/* _site/src/
           cp CNAME .nojekyll _site/
+          # Crawler entry points. Without these robots.txt and sitemap.xml fall
+          # through to the SPA 404 shim, so the sitemap is undiscoverable.
+          cp robots.txt sitemap.xml _site/
+          # Server-rendered dua landing pages (scripts/build-dua-landing-pages.mjs).
+          # Copied as a tree so new facet directories ship without editing this file.
+          cp -r duas _site/
           echo "Published contents:"
           find _site -type f | sort
+
+      - name: Verify the crawlable surface shipped
+        run: |
+          set -e
+          test -f _site/robots.txt          || { echo "::error::robots.txt missing from _site"; exit 1; }
+          test -f _site/sitemap.xml         || { echo "::error::sitemap.xml missing from _site"; exit 1; }
+          # Every <loc> in the sitemap must exist in the artifact, so a stale sitemap
+          # or an unpublished directory fails the deploy instead of shipping 404s.
+          missing=0
+          for loc in $(grep -o '<loc>[^<]*</loc>' _site/sitemap.xml | sed -e 's|<loc>https://islamicinfo.org||' -e 's|</loc>||'); do
+            case "$loc" in
+              /) path="_site/index.html" ;;
+              */) path="_site${loc}index.html" ;;
+              *)  path="_site${loc}" ;;
+            esac
+            if [ ! -f "$path" ]; then echo "::error::sitemap lists $loc but $path is not in the artifact"; missing=1; fi
+          done
+          [ "$missing" -eq 0 ] || exit 1
+          echo "sitemap URLs published: $(grep -c '<loc>' _site/sitemap.xml)"
+          echo "dua pages published:    $(find _site/duas -name '*.html' | wc -l)"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
