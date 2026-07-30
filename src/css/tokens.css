@@ -1,0 +1,126 @@
+/* ============================================================================
+   LOCKED — do not modify without explicit approval from the project owner.
+   ============================================================================
+
+   Single source of truth for the IslamicInfo.org design tokens.
+   Canonical values, approved 2026-07-30, taken from index.html after the
+   font-role pass. See DESIGN_LOCK.md at the repo root before changing anything.
+
+   THE FONT ROLES ARE THE PART PEOPLE GET WRONG. Three fonts, three jobs:
+
+     --font-serif   Cormorant Garamond
+                    H1 / H2 / H3, page titles, card and row titles, the
+                    wordmark, and <em> gradient/gold accents.
+
+     --font-sans    Baskerville (Libre Baskerville is the web fallback)
+                    Everything else — body copy, nav, buttons, labels, inputs,
+                    table text. Body base is 16.5px / 400.
+
+     --font-mono    Shippori Mincho
+                    All numbers and machine-ish text: KPI values, counts,
+                    currency, deltas, percentages, timestamps, freshness lines,
+                    kbd hints, pills, chips, scores, IDs, code.
+
+   --font-display and --font-body are DEPRECATED aliases kept only so pages that
+   have not been migrated keep working. Never introduce a new use of either.
+
+   Load order matters: this file is linked before each page's inline <style>, so
+   a page can still override a token locally. Those overrides are deliberate and
+   listed in DESIGN_LOCK.md — everything else should resolve from here.
+   ========================================================================= */
+
+:root {
+  /* ── Teal ────────────────────────────────────────────────────────────── */
+  --teal-50:  #F0FAFB;
+  --teal-100: #C8EEF1;
+  --teal-200: #8DD8DE;
+  --teal-300: #6AD7DE;
+  --teal-400: #3FBFC7;
+  --teal-500: #2CA4AB;
+  --teal-600: #0297A1;
+  --teal-650: #028890;
+  --teal-700: #00696E;
+  --teal-750: #005A5F;
+  --teal-800: #004E55;
+  --teal-900: #0A3A3D;
+
+  /* ── Gold ────────────────────────────────────────────────────────────── */
+  --gold-50:  #FDF8EC;
+  --gold-100: #F7E9C2;
+  --gold-200: #EFD48A;
+  --gold-300: #E5C570;
+  --gold-400: #D9B358;
+  --gold-500: #C5A059;
+  --gold-700: #9A7C3F;
+  --gold-900: #5A4420;
+
+  /* ── Ink. Light-mode body/muted are the WCAG-corrected values (ADR: the
+        2026-07 contrast pass). Do not lighten them back. ──────────────────  */
+  --ink-primary: #0F2A2C;
+  --ink-body:    #111111;
+  --ink-muted:   #3A4A4B;
+  --ink-subtle:  #9DA8A9;
+  --ink-faint:   #BCC9C9;
+  --ink-100:     #F5F8F8;
+  --ink-900:     #0A1314;
+
+  /* ── Surfaces ────────────────────────────────────────────────────────── */
+  --surface:      #F4F7F7;
+  --surface-card: #FAFBFB;
+  --white:        #FFFFFF;
+
+  /* ── Elevation ───────────────────────────────────────────────────────── */
+  --elev-1: 0 1px 3px rgba(15,42,44,.06);
+  --elev-2: 0 4px 14px rgba(15,42,44,.08), 0 1px 3px rgba(15,42,44,.04);
+  --elev-3: 0 12px 32px rgba(0,105,110,.10), 0 4px 10px rgba(0,105,110,.06);
+  --elev-4: 0 24px 56px rgba(0,105,110,.13), 0 8px 18px rgba(0,105,110,.07);
+  --inner-light: inset 0 1px 0 rgba(255,255,255,.7);
+  --gold-aura: 0 0 0 1px rgba(197,160,89,.22), 0 8px 32px rgba(197,160,89,.18);
+
+  /* ── Hadith grading. Darkened in the contrast pass; some pages still carry
+        the older lighter pair locally (see DESIGN_LOCK.md). ─────────────── */
+  --grade-sahih: #0F6E56;
+  --grade-hasan: #4A7030;
+  --grade-daif:  #8A5228;
+  --grade-mawdu: #B33A3A;
+
+  /* ── Type. See the role table at the top of this file. ───────────────── */
+  --font-serif:  'Cormorant Garamond', Georgia, serif;
+  --font-sans:   'Libre Baskerville', Georgia, serif;
+  --font-mono:   'Shippori Mincho', ui-monospace, 'SF Mono', monospace;
+  --font-arabic: 'Amiri', 'Cormorant Garamond', serif;
+
+  /* deprecated aliases — migrate call sites to the three roles above */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Libre Baskerville', Georgia, serif;
+
+  /* ── Motion ──────────────────────────────────────────────────────────── */
+  --ease-reverent: cubic-bezier(.22,1,.36,1);
+  --ease: cubic-bezier(.22,1,.36,1);
+  --ease-premium: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* ── Radii ───────────────────────────────────────────────────────────── */
+  --r-sm: 10px; --r-md: 14px; --r-lg: 18px; --r-xl: 24px; --r-2xl: 32px;
+}
+
+/* ── Dark mode ─────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --surface:      #0A1314;
+  --surface-card: #0F1B1D;
+  --white:        #152527;
+  --ink-primary:  #F5F8F8;
+  --ink-body:     #D4DCDD;
+  --ink-muted:    #9AAAAB;
+  --ink-subtle:   #6E7E80;
+  --ink-faint:    #2A3638;
+  --grade-sahih:  #1FA882;
+  --grade-hasan:  #7AB84E;
+  --grade-daif:   #D4884A;
+  --grade-mawdu:  #E05555;
+  --teal-700:     #1A8A91;
+  --teal-500:     #5BC1C7;
+  --teal-300:     #88E0E5;
+  --teal-50:      rgba(0,105,110,.15);
+  --teal-100:     rgba(0,105,110,.25);
+  --gold-50:      rgba(197,160,89,.10);
+}
