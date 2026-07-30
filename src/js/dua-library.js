@@ -258,8 +258,10 @@
         '" href="dua.html" data-kind="all" data-value=""><span class="dsb-icon">🤲</span><span>All Duas</span>' +
         '<span class="dsb-count">' + all.length + '</span></a>' +
         occ.map(function (o) {
+          var tip = o.slug === 'general'
+            ? ' title="Miscellaneous duas that are not tied to one specific occasion"' : '';
           return '<a class="dsb-item' + (facet.kind === 'occasion' && facet.value === o.slug ? ' active' : '') +
-            '" href="' + facetURL('occasion', o.slug) + '" data-kind="occasion" data-value="' + esc(o.slug) + '">' +
+            '" href="' + facetURL('occasion', o.slug) + '" data-kind="occasion" data-value="' + esc(o.slug) + '"' + tip + '>' +
             '<span class="dsb-icon">' + (o.icon || '🤲') + '</span><span>' + esc(o.label) + '</span>' +
             '<span class="dsb-count">' + o.n + '</span></a>';
         }).join('');
@@ -311,7 +313,9 @@
     var shownN = hits.filter(function (d) { return d.variantRole !== 'variant'; }).length;
     var collapsed = hits.length - shownN;
     el.hidden = false;
+    var note = hits[0] && hits[0].occasionNote && facet.kind === 'occasion' ? hits[0].occasionNote : '';
     el.innerHTML = '<h2>' + esc(label) + '</h2>' +
+      (note ? '<p class="ch-meta" style="margin-bottom:3px;">' + esc(note) + '</p>' : '') +
       '<p class="ch-meta">' + shownN + (shownN === 1 ? ' supplication' : ' supplications') +
       (facet.kind === 'occasion' ? ' · grouped by occasion' : facet.kind === 'source' ? ' · from this collection' : ' · from this chapter') +
       (collapsed ? ' · ' + collapsed + ' further narration' + (collapsed === 1 ? '' : 's') + ' grouped under their lead card' : '') +
