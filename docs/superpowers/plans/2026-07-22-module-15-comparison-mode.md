@@ -38,7 +38,7 @@ Core modules use UMD: `module.exports = core` in Node, `window.II.compareViewCor
 - **Modify `worker/test/hadith-feed-core.test.js`** — assert the new button renders.
 - **Modify `hadith.html`** — replace static Stage-4 compare demo with `.compare-drawer` + `.compare-overlay`; add CSS; add the two new `<script>` tags.
 - **Modify `src/js/hadith.js`** — `state.compareSet`, `compare-add` wiring, drawer render, `/hadith/compare` routing branch, `openCompareRoute`, `II.compareView.init(...)`.
-- **Modify `docs/DECISIONS.md`** — three ADR entries.
+- **Modify `doc/DECISIONS.md`** — three ADR entries.
 - **Modify `docs/DATA.md`** — note: no new storage key (in-memory + URL only).
 
 ---
@@ -1128,10 +1128,10 @@ git commit -m "feat(hadith): Module 15 — compareSet state, drawer, compare-add
 ## Task 10: Docs — DECISIONS + DATA note
 
 **Files:**
-- Modify: `docs/DECISIONS.md`
+- Modify: `doc/DECISIONS.md`
 - Modify: `docs/DATA.md`
 
-- [ ] **Step 1: Append three ADR entries to `docs/DECISIONS.md`**
+- [ ] **Step 1: Append three ADR entries to `doc/DECISIONS.md`**
 
 Match the file's existing ADR heading/numbering style (open the file, use the next ADR numbers in sequence). Content:
 
@@ -1176,7 +1176,7 @@ In the localStorage key registry section, add a one-line note (no new key):
 - [ ] **Step 3: Commit**
 
 ```bash
-git add docs/DECISIONS.md docs/DATA.md
+git add doc/DECISIONS.md docs/DATA.md
 git commit -m "docs(hadith): Module 15 — ADRs (dormant chain-diverge, translation-not-diffed, in-memory+URL) (US-H19)"
 ```
 

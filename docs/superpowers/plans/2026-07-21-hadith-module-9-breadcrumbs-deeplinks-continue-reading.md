@@ -19,7 +19,7 @@
 | `src/js/hadith.js` | Modify | IO tracker + persistence, `observeFeed`, `pulseRing`, Tier-2 breadcrumb, restore-scroll, prompt deep-link + precedence |
 | `src/js/tier3-deep-view.js` | Modify | Call `host.observeFeed(listEl)` after Tier-3a paint; replace inline Tier-3b pulse with `host.pulseRing(body)` |
 | `hadith.html` | Modify | Rewrite `.pulse-gold` keyframe/reduced-motion, add ≤700px breadcrumb ellipsis rule, add `reading-progress-core.js` script include |
-| `docs/DECISIONS.md` | Modify | ADR logging the pulse timing change (user-visible) |
+| `doc/DECISIONS.md` | Modify | ADR logging the pulse timing change (user-visible) |
 
 **Verification convention (matches Modules 7/8):** the pure core is TDD-unit-tested; the DOM layers (`hadith.js`, `tier3-deep-view.js`, CSS) are verified by the full unit suite still passing plus a manual browser smoke check (Task 8). There is no jsdom harness in this repo — do not invent one.
 
@@ -734,11 +734,11 @@ git commit -m "feat(hadith): Module 9 — last-read restore-scroll + deep-link p
 ## Task 8: DECISIONS.md ADR + full verification
 
 **Files:**
-- Modify: `docs/DECISIONS.md`
+- Modify: `doc/DECISIONS.md`
 
 - [ ] **Step 1: Add the pulse-timing ADR**
 
-Open `docs/DECISIONS.md`, find the last ADR heading (search for the highest `ADR-0NN`; Module 8 added ADR-029, so this is **ADR-030** — confirm the next free number before writing). Append:
+Open `doc/DECISIONS.md`, find the last ADR heading (search for the highest `ADR-0NN`; Module 8 added ADR-029, so this is **ADR-030** — confirm the next free number before writing). Append:
 
 ```markdown
 ## ADR-030 — Deep-link pulse-ring retimed to spec (Module 9)
@@ -780,7 +780,7 @@ Verify against the DoD in the module prompt:
 - [ ] **Step 4: Commit**
 
 ```bash
-git add docs/DECISIONS.md
+git add doc/DECISIONS.md
 git commit -m "docs(hadith): ADR-030 — Module 9 deep-link pulse retimed to spec (1.8s x2), user-visible QA flag"
 ```
 

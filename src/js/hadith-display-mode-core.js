@@ -7,7 +7,7 @@
    delegates every decision here. UMD: window.II.hadithDisplayMode in
    the browser, module.exports in tests. Mirrors hadith-feed-core.js.
 
-   Design decisions (see docs/DECISIONS.md ADR-040 + Module 16 memory):
+   Design decisions (see doc/DECISIONS.md ADR-040 + Module 16 memory):
    - Modes are mutually exclusive; there is never more than one root
      class. Toggling the active mode's own button clears to 'none';
      toggling the other mode switches straight to it.

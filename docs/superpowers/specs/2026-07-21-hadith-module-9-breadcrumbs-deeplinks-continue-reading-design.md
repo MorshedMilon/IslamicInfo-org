@@ -186,7 +186,7 @@ The prompt said `hadith.html` + `hadith.js` only. Reconciling with Module 7 requ
   ellipsis CSS, `reading-progress-core.js` script include)
 - `src/js/tier3-deep-view.js` (thin `observeFeed` hook + pulse timeout bump)
 - **new** `worker/test/reading-progress-core.test.js`
-- `docs/DECISIONS.md` (pulse-timing ADR)
+- `doc/DECISIONS.md` (pulse-timing ADR)
 
 ---
 

@@ -2,7 +2,7 @@
    governed QuranlyAI pipeline: it reuses the locked QURANLYAI_SYSTEM_PROMPT, callGemini,
    and the safety.js verdict filter (via explain-core.applyExplainSafety). Blocking JSON:
    the filter clears the FULL text server-side before anything reaches the client (DoD-10).
-   No governed file is modified — see docs/DECISIONS.md Module 13 (#1, #2, #5). */
+   No governed file is modified — see doc/DECISIONS.md Module 13 (#1, #2, #5). */
 import { ALLOWED_ORIGINS, corsHeaders, err, json } from './lib/cors.js';
 import { getCached, putCached } from './lib/cache.js';
 import { QURANLYAI_SYSTEM_PROMPT, GEMINI_FLASH, buildExplainUserPrompt } from './lib/prompts.js';

@@ -27,7 +27,7 @@
 | `src/js/hadith-ai.js` | New | DOM controller: inject button (flag-gated), build/toggle `.ai-card`, fetch, render, retry, close. |
 | `src/js/api.js` | Mod | Add `postExplain(payload)` (10s AbortController). |
 | `hadith.html` | Mod | `.ai-card` CSS (copied from quran.html) + `hadith-ai-core.js`/`hadith-ai.js` script tags. |
-| `docs/DECISIONS.md` | Mod | 5 `DECISION:` entries. |
+| `doc/DECISIONS.md` | Mod | 5 `DECISION:` entries. |
 | `worker/test/explain-core.test.js` | New | Parser / cache-key / lang / safety-decision unit tests (incl. adversarial). |
 | `worker/test/explain-quota.test.js` | New | Hourly quota unit tests. |
 | `worker/test/explain.test.js` | New | Handler tests w/ mocked fetch + fakeKV (incl. adversarial + prompt-separation). |
@@ -628,7 +628,7 @@ Create `worker/src/explain.js`:
    governed QuranlyAI pipeline: it reuses the locked QURANLYAI_SYSTEM_PROMPT, callGemini,
    and the safety.js verdict filter (via explain-core.applyExplainSafety). Blocking JSON:
    the filter clears the FULL text server-side before anything reaches the client (DoD-10).
-   No governed file is modified — see docs/DECISIONS.md Module 13 (#1, #2, #5). */
+   No governed file is modified — see doc/DECISIONS.md Module 13 (#1, #2, #5). */
 import { ALLOWED_ORIGINS, corsHeaders, err, json } from './lib/cors.js';
 import { getCached, putCached } from './lib/cache.js';
 import { QURANLYAI_SYSTEM_PROMPT, GEMINI_FLASH, buildExplainUserPrompt } from './lib/prompts.js';
@@ -851,7 +851,7 @@ Create `src/js/hadith-ai-core.js`:
 
   // FEATURE FLAG — the AI Explanation button is DARK until a human reviewer signs off
   // on the system prompt + safety filter + adversarial-test evidence. Flipping this to
-  // true is NOT an automatic build step (see docs/DECISIONS.md Module 13 #4).
+  // true is NOT an automatic build step (see doc/DECISIONS.md Module 13 #4).
   var HADITH_AI_EXPLAIN_ENABLED = false;
 
   function buildExplainPayload(card) {
@@ -1254,12 +1254,12 @@ git commit -m "feat(hadith): Module 13 — .ai-card styles + hadith-ai script in
 
 ---
 
-## Task 11: `docs/DECISIONS.md` — record the 5 decisions
+## Task 11: `doc/DECISIONS.md` — record the 5 decisions
 
 **Files:**
-- Modify: `docs/DECISIONS.md`
+- Modify: `doc/DECISIONS.md`
 
-- [ ] **Step 1: Open `docs/DECISIONS.md` and match its existing entry format** (heading style, numbering/ADR convention). Append a Module 13 section with these five decisions, worded to match the file's style:
+- [ ] **Step 1: Open `doc/DECISIONS.md` and match its existing entry format** (heading style, numbering/ADR convention). Append a Module 13 section with these five decisions, worded to match the file's style:
 
 1. **`/api/explain` shares the governed pipeline internals by design (not drift).** It is a thin new route that imports `callGemini`, the locked `QURANLYAI_SYSTEM_PROMPT`, and `safety.js`’s `verdictLangDetected`. There is exactly one copy of the no-fatwa prompt and filter; `/api/explain` and `/api/quranlyai/ask` sharing them is intentional.
 2. **`/api/explain` is intentionally blocking JSON, not streaming.** The verdict filter must clear the complete model text server-side before anything reaches the client (DoD-10); the SSE `streamSafeText` path is deliberately not used here.
@@ -1270,7 +1270,7 @@ git commit -m "feat(hadith): Module 13 — .ai-card styles + hadith-ai script in
 - [ ] **Step 2: Commit**
 
 ```bash
-git add docs/DECISIONS.md
+git add doc/DECISIONS.md
 git commit -m "docs(hadith): Module 13 — record 5 DECISION entries (/api/explain design)"
 ```
 
@@ -1311,7 +1311,7 @@ Create `docs/superpowers/specs/2026-07-22-module-13-adversarial-results.md` with
 - [ ] Rate limit 20/IP/hour enforced with 429 + `Retry-After` (Task 3 + Task 5 tests).
 - [ ] "✦ Powered by QuranlyAI" present in every successful render (Task 9 `setFoot`).
 - [ ] `hadithAIExplainEnabled` defaults OFF; enabling requires human sign-off (Task 7 + DECISION #4).
-- [ ] 5 `DECISION:` entries in `docs/DECISIONS.md` (Task 11).
+- [ ] 5 `DECISION:` entries in `doc/DECISIONS.md` (Task 11).
 - [ ] `✕` close works during loading and every error state (Task 9 — bound once at card build).
 
 - [ ] **Step 5: Commit**

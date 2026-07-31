@@ -15,7 +15,7 @@ A self-owned Qur'an keyword-search backend: `GET /api/quran/search?q=` returning
 - **Storage/search:** static JSON corpus + Worker scan + KV per-query cache. **D1 + FTS5 is the designated upgrade path** if corpus size or search quality ever demands it.
 - **Reproducibility:** ingest pins/records the translation edition id so re-ingests are deterministic.
 - **Arabic matching:** diacritic-insensitive normalization in the matcher.
-- Both decisions logged in `docs/DECISIONS.md`.
+- Both decisions logged in `doc/DECISIONS.md`.
 
 ## Components
 
@@ -72,7 +72,7 @@ Pure and deterministic → fully unit-testable without network or the Worker.
 - Query < 2 chars / empty handled by the Worker layer (covered in a light handler test if feasible without network; otherwise document as endpoint-level).
 - **Corpus integrity** (`worker/test/quran-corpus.test.js`): load `src/data/quran/search-corpus.json`, assert `meta.verseCount === 6236`, `verses.length === 6236`, every verse has non-empty `arabic` + `translation` + valid `verseKey`, and `meta.translationEditionId === 20`. (Skips with a clear message if the corpus file is absent, so core tests still run pre-ingest.)
 
-### 5. DECISION entries — `docs/DECISIONS.md`
+### 5. DECISION entries — `doc/DECISIONS.md`
 - ADR: **Qur'an search corpus = quran.com API v4, edition 20 (Saheeh International), Arabic `text_uthmani`.** Rationale: consistency with existing display; no model-generated verse text; reproducible pinned edition.
 - ADR: **Qur'an search storage = static JSON corpus + Worker scan + KV per-query cache; D1+FTS5 = upgrade path.** Rationale: matches existing Worker+KV+static-JSON patterns, no new binding; upgrade when scale/quality demands.
 

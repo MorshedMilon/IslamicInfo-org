@@ -293,7 +293,7 @@ is no `/api/tafsir`/`/api/dua`; these work on GitHub Pages too).
 - **No secret in client.** Any new route that touches a keyed API must be added here *and* implemented as a `/api/` proxy before client code calls it.
 - **Every new route declares:** method, params, response shape, cache TTL, fallback, and (if it returns Islamic content) its CONTENT-POLICY obligations.
 - **Universal call pattern** (cache-first, fallback-on-error) is in `ARCHITECTURE §14.1` — all client fetches follow it.
-- **Adding/changing a route** is an architectural decision → record it in `docs/DECISIONS.md`.
+- **Adding/changing a route** is an architectural decision → record it in `doc/DECISIONS.md`.
 
 ---
 *Derived from ARCHITECTURE §5–§6 and §14. Keep this file in sync when routes change —
