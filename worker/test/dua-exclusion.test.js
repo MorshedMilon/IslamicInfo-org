@@ -22,7 +22,7 @@ test('corpus carries a meta.excluded stamp with reasons and a deduped id union',
   assert.ok(Array.isArray(meta.excluded.ids) && meta.excluded.ids.length, 'meta.excluded.ids must be a non-empty array');
   assert.equal(meta.excluded.count, meta.excluded.ids.length);
   assert.equal(new Set(meta.excluded.ids).size, meta.excluded.ids.length, 'ids must be deduped');
-  for (const key of ['gate1-not-a-dua', 'guidance', 'no-translation'])
+  for (const key of ['gate1-not-a-dua', 'guidance', 'no-translation', 'variant-no-lead'])
     assert.ok(Array.isArray(meta.excluded.reasons[key]), `missing reason bucket: ${key}`);
   // the union must be exactly the union of its reasons — no hand-added ids
   const union = new Set(Object.values(meta.excluded.reasons).flat());
@@ -72,11 +72,25 @@ test('library payload contains no excluded record', (t) => {
   assert.deepEqual(leaked, [], 'excluded records leaked into library.json — run scripts/build-dua-library.mjs');
 });
 
+test('variants are held out of search until variantLead exists (ADR-061 reversal condition)', (t) => {
+  if (!existsSync(CORPUS)) { t.skip('corpus not present'); return; }
+  const doc = read(CORPUS);
+  const variants = doc.duas.filter((d) => d.variantRole === 'variant');
+  const held = new Set(doc.meta.excluded.reasons['variant-no-lead']);
+  assert.equal(held.size, variants.length, 'every variant must be held while variantLead is null');
+  // The hold exists ONLY because variantLead is null. If leads ever get
+  // populated, this fails — which is the signal to lift the hold, not to
+  // change the assertion.
+  assert.equal(variants.filter((d) => d.variantLead).length, 0,
+    'variantLead is now populated on some variants — lift the hold per ADR-061 rather than editing this test');
+});
+
 test('no record asserts a source it cannot name', (t) => {
   if (!existsSync(LIBRARY)) { t.skip('library not built'); return; }
   const duas = read(LIBRARY).duas;
   assert.equal(duas.filter((d) => d.sl === 'Other source').length, 0, '"Other source" names nothing and must not fill the attribution slot');
   assert.equal(duas.filter((d) => d.sk === 'other').length, 0);
+  assert.equal(duas.filter((d) => d.sk === 'dua-dhikr').length, 0, 'dua-dhikr names the dataset, not the collection');
   // a record with no resolvable source omits the line entirely rather than guessing
   assert.ok(duas.some((d) => !d.s), 'expected at least one record to carry no source line');
 });

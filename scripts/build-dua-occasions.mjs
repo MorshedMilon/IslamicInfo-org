@@ -55,14 +55,26 @@ for (const d of c.duas) {
    all consumers pick it up on the next build. Do not add a filter anywhere
    downstream.
 
-   Variants are deliberately NOT excluded: a variant carries its own citation
-   and its own sourceLabel, so what it loses on a query is framing, not
-   provenance. Follow-up (unscheduled): a "further narration of …" card line. */
+   Variants ARE excluded, and this is a HOLD, not a ruling. The corpus policy
+   describes variants as "surfaced under the group's lead card", but variantLead
+   is null on all 30 — the lead-card relationship the policy relies on does not
+   exist in the data, so on a query a variant renders as a standalone dua it is
+   not. REVERSAL CONDITION: populate variantLead and render a "one of N
+   narrations" line on the card; then drop 'variant-no-lead' from REASONS and
+   the 30 return. Nothing about their authenticity is in question.
+
+   Missing or vacuous attribution NEVER causes exclusion on its own. A record
+   that cannot name its source is a transparency gap, not a defective record —
+   it renders with no attribution element and is logged in
+   doc/DUA-SOURCING-BACKLOG.md. The 20 label-less records below are excluded
+   because they are guidance narrations or untranslated, NOT because they lack
+   a label. */
 const gate1 = JSON.parse(fs.readFileSync('./src/data/dua/gate1-route-out.json', 'utf8'));
 const REASONS = {
   'gate1-not-a-dua': Object.keys(gate1.entries),
   'guidance': c.duas.filter((d) => d.entryType === 'guidance').map((d) => d.id),
   'no-translation': c.duas.filter((d) => !d.translation || !String(d.translation).trim()).map((d) => d.id),
+  'variant-no-lead': c.duas.filter((d) => d.variantRole === 'variant').map((d) => d.id),
 };
 const excludedIds = [...new Set(Object.values(REASONS).flat())].sort();
 c.meta.excluded = {

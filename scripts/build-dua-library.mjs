@@ -12,12 +12,18 @@ const c = JSON.parse(fs.readFileSync("./src/data/dua/search-corpus.json", "utf8"
    record without a verse ref or hadith citation, which stamped that compilation
    onto records drawn from three other sources. A record that cannot say where
    it comes from shows no source line at all. */
+/* A label that names no source renders as no attribution: 'other' is literally
+   "Other source", and 'dua-dhikr' names the dataset the English came from, not
+   the collection the supplication is from. Neither causes exclusion — see
+   doc/DUA-SOURCING-BACKLOG.md. */
+const UNNAMED_SOURCE_KEYS = new Set(['other', 'dua-dhikr']);
+
 function sourceLine(d) {
   if (d.verseRef) return "Qur'an · " + d.verseRef;
   const h = d.hadithCitation;
   if (h && typeof h === 'object') return h.book + " " + h.number + (h.narrator ? " · " + h.narrator : "");
   if (h) return String(h);
-  if (d.sourceLabel && d.sourceKey !== 'other') return d.sourceLabel;
+  if (d.sourceLabel && !UNNAMED_SOURCE_KEYS.has(d.sourceKey)) return d.sourceLabel;
   return null;
 }
 
@@ -41,7 +47,7 @@ const duas = src.map(d => {
   if (d.transliteration) o.t = d.transliteration;
   if (d.categorySlug) o.cs = d.categorySlug;
   if (d.occasion) { o.o = d.occasion; o.os = d.occasionSlug; o.oi = d.occasionIcon; }
-  if (d.sourceLabel && d.sourceKey !== 'other') { o.sl = d.sourceLabel; o.sk = d.sourceKey; }
+  if (d.sourceLabel && !UNNAMED_SOURCE_KEYS.has(d.sourceKey)) { o.sl = d.sourceLabel; o.sk = d.sourceKey; }
   if (d.verseRef) o.vr = d.verseRef;
   if (d.variantRole) o.vro = d.variantRole;
   if (d.variantGroup) o.vg = d.variantGroup;
