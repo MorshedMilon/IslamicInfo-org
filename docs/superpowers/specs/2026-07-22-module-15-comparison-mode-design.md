@@ -251,7 +251,7 @@ Worker/hadithapi reachable for real hadith data).
 - [ ] Verification note satisfied: one real 2-hadith Arabic diff example showing the
       highlighted words are genuinely different, not whitespace/punctuation false positives.
 
-## DECISIONS log entries (to append to `docs/DECISIONS.md`)
+## DECISIONS log entries (to append to `doc/DECISIONS.md`)
 
 1. **Chain-diverge `◆` not shipped live.** Isnad/narrator data is universally absent
    today; computing divergence with no narrator arrays would render nothing or fabricate

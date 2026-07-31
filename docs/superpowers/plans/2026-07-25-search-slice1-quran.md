@@ -376,18 +376,18 @@ git commit -m "feat(quran-search): GET /api/quran/search endpoint (corpus memo +
 
 ---
 
-## Task 5: DECISION entries — `docs/DECISIONS.md`
+## Task 5: DECISION entries — `doc/DECISIONS.md`
 
 **Files:**
-- Modify: `docs/DECISIONS.md`
+- Modify: `doc/DECISIONS.md`
 
-- [ ] **Step 1: Read the tail** of `docs/DECISIONS.md` for the ADR numbering/format.
+- [ ] **Step 1: Read the tail** of `doc/DECISIONS.md` for the ADR numbering/format.
 - [ ] **Step 2: Append two ADRs** (next sequential numbers, matching heading style):
   1. **Qur'an search corpus source** — quran.com API v4; Arabic `text_uthmani`; English edition **20 (Saheeh International)**, pinned in `ingest-quran-corpus.mjs` (`EDITION_ID`) for reproducibility. Rationale: consistency with the existing Qur'an display module; verse text is ingested/sourced, never model-generated; attribution stored in corpus `meta`.
   2. **Qur'an search storage** — static JSON corpus scanned in the Worker (module-global memo) + per-query KV cache. **D1 + FTS5 = designated upgrade path** if corpus size/quality demands. Rationale: matches existing Worker+KV+static-JSON patterns; no new binding.
 - [ ] **Step 3: Commit**
 ```bash
-git add docs/DECISIONS.md
+git add doc/DECISIONS.md
 git commit -m "docs(decisions): log Qur'an search corpus source + storage ADRs"
 ```
 

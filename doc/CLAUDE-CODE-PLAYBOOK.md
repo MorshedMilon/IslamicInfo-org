@@ -114,7 +114,7 @@ On src/<page>.html, <describe the exact problem and where it appears>.
 ```
 This task needs a decision: <describe>. 
 Before implementing, propose options with trade-offs and recommend one.
-If we proceed, add an ADR to docs/DECISIONS.md. Don't implement until I choose.
+If we proceed, add an ADR to doc/DECISIONS.md. Don't implement until I choose.
 ```
 
 ## 5. Before You Mark It Done

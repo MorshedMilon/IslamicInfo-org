@@ -28,7 +28,7 @@ human check.
 ## 1. Key decisions (with rationale)
 
 These five decisions were made explicitly during brainstorming and each gets a
-`DECISION:` entry in `docs/DECISIONS.md` so a future session does not "correct"
+`DECISION:` entry in `doc/DECISIONS.md` so a future session does not "correct"
 them back:
 
 1. **New `/api/explain` route, shared internals (not a copy).** A literal
@@ -285,7 +285,7 @@ not re-implemented.
 | `src/js/hadith.js` | AI button handler, flag gate, fetch + AbortController, render, ✕/retry |
 | `worker/test/explain.test.js` | **New** — adversarial + behavioral suite |
 | `worker/test/prompts.test.js` | Extend — user-prompt builder cases |
-| `docs/DECISIONS.md` | 4 `DECISION:` entries (see §1) |
+| `doc/DECISIONS.md` | 4 `DECISION:` entries (see §1) |
 
 **Not touched:** `worker/src/lib/safety.js` (reused as-is),
 `QURANLYAI_SYSTEM_PROMPT` (reused as-is), `streamSafeText` / SSE path (deliberately
@@ -314,5 +314,5 @@ not used).
 - [ ] "✦ Powered by QuranlyAI" always visible in every successful rendered output.
 - [ ] `hadithAIExplainEnabled` defaults OFF; documented that enabling requires
       explicit human sign-off.
-- [ ] 5 `DECISION:` entries added to `docs/DECISIONS.md`.
+- [ ] 5 `DECISION:` entries added to `doc/DECISIONS.md`.
 - [ ] `✕` close works during loading and every error state.

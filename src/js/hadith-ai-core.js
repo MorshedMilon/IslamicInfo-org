@@ -9,7 +9,7 @@
 
   // FEATURE FLAG — the AI Explanation button is DARK until a human reviewer signs off
   // on the system prompt + safety filter + adversarial-test evidence. Flipping this to
-  // true is NOT an automatic build step (see docs/DECISIONS.md Module 13 #4).
+  // true is NOT an automatic build step (see doc/DECISIONS.md Module 13 #4).
   var HADITH_AI_EXPLAIN_ENABLED = false;
 
   function buildExplainPayload(card) {

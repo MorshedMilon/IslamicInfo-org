@@ -256,7 +256,7 @@ verifications(user_id, query, result_ref, saved_at)          -- "saved verificat
 ```
 
 Privacy: opt-in only; no PII beyond email; analytics carry no PII. Any of this becoming
-real is an architectural decision → record it in `docs/DECISIONS.md`.
+real is an architectural decision → record it in `doc/DECISIONS.md`.
 
 ---
 *Promoted from ARCHITECTURE §6. ARCHITECTURE should now link here rather than
