@@ -65,7 +65,14 @@
      not support is the same failure class as a hadith shown without its grade.
      A record with no sourceLabel shows NO attribution line rather than a guessed
      one, and belongs in the corpus exclusion set until it is sourced. */
+  /* sourceKey 'other' carries the label "Other source", which fills the
+     attribution slot while naming nothing. That is the same failure as a
+     guessed source, so it takes the same path as a missing one: the card
+     renders no attribution element at all. These records are NOT excluded —
+     an unnamed source is a transparency gap, not a defective record. They are
+     tracked in doc/DUA-SOURCING-BACKLOG.md for resolution. */
   function duaSourceLabel(d) {
+    if (d && d.sourceKey === 'other') return null;
     var s = d && d.sourceLabel;
     return typeof s === 'string' && s.trim() ? s.trim() : null;
   }

@@ -8,24 +8,40 @@
 import fs from 'node:fs';
 const c = JSON.parse(fs.readFileSync("./src/data/dua/search-corpus.json", "utf8"));
 
+/* No guessed attribution. This used to fall back to "Hisn al-Muslim" for any
+   record without a verse ref or hadith citation, which stamped that compilation
+   onto records drawn from three other sources. A record that cannot say where
+   it comes from shows no source line at all. */
 function sourceLine(d) {
   if (d.verseRef) return "Qur'an · " + d.verseRef;
   const h = d.hadithCitation;
   if (h && typeof h === 'object') return h.book + " " + h.number + (h.narrator ? " · " + h.narrator : "");
   if (h) return String(h);
-  return "Hisn al-Muslim";
+  if (d.sourceLabel && d.sourceKey !== 'other') return d.sourceLabel;
+  return null;
 }
-// guidance entries are never shown in the library
-const src = c.duas.filter(d => d.translation && d.entryType !== 'guidance');
+
+/* The exclusion set is read, never re-derived — it is produced once in
+   scripts/build-dua-occasions.mjs and stamped into the corpus. Run that first;
+   if the stamp is missing, fail loudly rather than ship an unfiltered library. */
+const excluded = c.meta && c.meta.excluded && Array.isArray(c.meta.excluded.ids) ? c.meta.excluded.ids : null;
+if (!excluded) {
+  console.error('ABORTING — corpus has no meta.excluded stamp.\n' +
+    'Run: node scripts/build-dua-occasions.mjs   (it produces the exclusion set)');
+  process.exit(1);
+}
+const skip = new Set(excluded);
+const src = c.duas.filter(d => d.translation && !skip.has(d.id));
 const notes = {};      // repeated prose stored once, referenced by index
 const noteId = (s) => { if (!s) return undefined; if (!(s in notes)) notes[s] = Object.keys(notes).length; return notes[s]; };
 
 const duas = src.map(d => {
-  const o = { i: d.id, a: d.arabic, e: d.translation, c: d.category, s: sourceLine(d) };
+  const o = { i: d.id, a: d.arabic, e: d.translation, c: d.category };
+  const sl = sourceLine(d); if (sl) o.s = sl;
   if (d.transliteration) o.t = d.transliteration;
   if (d.categorySlug) o.cs = d.categorySlug;
   if (d.occasion) { o.o = d.occasion; o.os = d.occasionSlug; o.oi = d.occasionIcon; }
-  if (d.sourceLabel) { o.sl = d.sourceLabel; o.sk = d.sourceKey; }
+  if (d.sourceLabel && d.sourceKey !== 'other') { o.sl = d.sourceLabel; o.sk = d.sourceKey; }
   if (d.verseRef) o.vr = d.verseRef;
   if (d.variantRole) o.vro = d.variantRole;
   if (d.variantGroup) o.vg = d.variantGroup;
@@ -43,7 +59,7 @@ fs.writeFileSync("src/data/dua/library.json", JSON.stringify(doc));
 
 const before = fs.statSync("src/data/dua/search-corpus.json").size;
 const after = fs.statSync("src/data/dua/library.json").size;
-console.log("entries:", duas.length, "(guidance dropped:", c.duas.length - duas.length + ")");
+console.log("entries:", duas.length, "of", c.duas.length, "(excluded:", skip.size, "+ no-translation/other drops)");
 console.log("shared note strings:", doc.notes.length);
 console.log("corpus  :", (before / 1024).toFixed(0) + "KB");
 console.log("library :", (after / 1024).toFixed(0) + "KB  (-" + Math.round((1 - after / before) * 100) + "%)");

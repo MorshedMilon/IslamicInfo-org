@@ -2,7 +2,7 @@
 import { json } from './lib/cors.js';
 import { getJson, putJson, TTL } from './lib/hadith-cache.js';
 import { isArabic, normalizeArabic, normalizeLatin } from './lib/quran-search-core.js';
-import { searchDuas } from './lib/dua-search-core.js';
+import { searchDuas, excludedIdSet } from './lib/dua-search-core.js';
 
 const DEFAULT_CORPUS_URL = 'https://islamicinfo.org/src/data/dua/search-corpus.json';
 let CORPUS = null;
@@ -46,7 +46,7 @@ export async function handleDuaSearch(searchParams, env, origin) {
   try { corpus = await loadCorpus(env); }
   catch (_) { return fail('corpus_unavailable', 'Dua search temporarily unavailable', origin, 503, true); }
 
-  const r = searchDuas(corpus.duas, q, { page, limit });
+  const r = searchDuas(corpus.duas, q, { page, limit, exclude: excludedIdSet(corpus) });
   const data = { query: q, page: r.page, totalPages: r.totalPages, total: r.total, results: r.results,
     source: corpus.meta.source || 'Hisn al-Muslim', sourceDataset: corpus.meta.sourceDataset || null };
   if (kv) await putJson(kv, cacheKey, data, TTL.HOUR);

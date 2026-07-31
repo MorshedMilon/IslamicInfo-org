@@ -45,6 +45,46 @@ for (const d of c.duas) {
   d.occasionIcon = b.icon;
 }
 
+/* ── Exclusion set ────────────────────────────────────────────────────────
+   Produced HERE, once, because this is where the corpus is actually written.
+   Every consumer reads meta.excluded.ids and decides nothing for itself —
+   filter-per-consumer is precisely how the Gate 1 records stayed searchable
+   after they had been routed out of /duas/ at build time.
+
+   To add a future gate: add one entry to REASONS. The union recomputes and
+   all consumers pick it up on the next build. Do not add a filter anywhere
+   downstream.
+
+   Variants are deliberately NOT excluded: a variant carries its own citation
+   and its own sourceLabel, so what it loses on a query is framing, not
+   provenance. Follow-up (unscheduled): a "further narration of …" card line. */
+const gate1 = JSON.parse(fs.readFileSync('./src/data/dua/gate1-route-out.json', 'utf8'));
+const REASONS = {
+  'gate1-not-a-dua': Object.keys(gate1.entries),
+  'guidance': c.duas.filter((d) => d.entryType === 'guidance').map((d) => d.id),
+  'no-translation': c.duas.filter((d) => !d.translation || !String(d.translation).trim()).map((d) => d.id),
+};
+const excludedIds = [...new Set(Object.values(REASONS).flat())].sort();
+c.meta.excluded = {
+  note:
+    'Records that must not be rendered as a dua on ANY surface — search, browse or page. ' +
+    'noindex governs crawlers only, so page-layer route-out is not enough on its own. ' +
+    'Consumers filter on ids and never re-derive the set: worker/src/lib/dua-search-core.js ' +
+    '(the /api/dua/search path) and scripts/build-dua-library.mjs (which feeds /dua.html). ' +
+    'Records are excluded, never deleted — the data is sound, the framing was wrong.',
+  generator: 'scripts/build-dua-occasions.mjs',
+  reasons: Object.fromEntries(Object.entries(REASONS).map(([k, v]) => [k, v.slice().sort()])),
+  count: excludedIds.length,
+  ids: excludedIds,
+};
+
+/* entryTypes.supplications counted only the 346 that had been reviewed at the
+   time; it reads as a corpus total. Every record that is neither a guidance
+   narration nor contextual is a supplication: 556 - 18 - 2 = 536. */
+c.meta.entryTypes.supplications = c.duas.filter((d) => !d.entryType).length;
+c.meta.entryTypes.contextual = c.duas.filter((d) => d.entryType === 'contextual').length;
+c.meta.entryTypes.guidanceNarrations = REASONS.guidance.length;
+
 c.meta.facets.occasion.buckets = core.bucketList();
 c.meta.facets.occasion.generator = 'scripts/build-dua-occasions.mjs + src/js/dua-occasion-core.js';
 c.meta.facets.occasion.note =
