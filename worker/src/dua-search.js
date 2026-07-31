@@ -11,10 +11,28 @@ function ok(data, source, origin, maxAge = 0) { return json({ ok: true, data, so
 function fail(code, message, origin, status, retryable) { return json({ ok: false, error: { code, message, retryable }, source: 'fallback' }, origin, { status }); }
 function posInt(v) { const n = parseInt(v, 10); return Number.isInteger(n) && n > 0 ? n : null; }
 
+/* DELIBERATELY UNPUBLISHED, 2026-07-31.
+   src/data/dua/search-corpus.json was untracked from git (git rm --cached) so
+   GitHub Pages stops serving it while the licensing question in ADR-060 is
+   open: 183 of 205 records carry English the corpus meta states was "fully
+   replaced or nulled", byte-identical to an upstream dataset that carries no
+   licence of any kind. This URL therefore 404s by design.
+
+   The asset MUST be re-added before DUA_SEARCH_ENABLED goes back to "true".
+   A backup lives outside the repo (see its README) because this is the corpus
+   of record and the ingest that supposedly generates it is disarmed (ADR-058).
+
+   The 404 fails HARD below — never an empty result set. A dua search that
+   silently returns nothing looks identical to a search with no matches, and
+   this module must not be able to report "no results" when what actually
+   happened is that its data is gone. */
 async function loadCorpus(env) {
   if (CORPUS) return CORPUS;
   const url = (env && env.DUA_CORPUS_URL) || DEFAULT_CORPUS_URL;
   const r = await fetch(url);
+  if (r.status === 404) throw new Error(
+    'dua corpus is deliberately unpublished (ADR-060 licence hold) — re-add ' +
+    'src/data/dua/search-corpus.json to git before enabling DUA_SEARCH_ENABLED');
   if (!r.ok) throw new Error('corpus HTTP ' + r.status);
   const doc = await r.json();
   CORPUS = { duas: doc.duas || [], meta: doc.meta || {} };

@@ -616,10 +616,24 @@
          context. The build-time cards above are clean, so the page keeps them
          and only the live search/filter/load-more go off. Restore once the
          corpus-level exclusion ships. See DUA-CONTENT-INTEGRITY-v1_0 §1.4. */
+      /* SECOND, INDEPENDENT REASON THIS IS OFF, 2026-07-31.
+         src/data/dua/library.json was untracked from git (git rm --cached) so
+         GitHub Pages stops serving it while the licensing question in ADR-060
+         is open. CORPUS_URL now 404s by design, so even flipping LIBRARY_LIVE
+         back to true will NOT restore the page — the asset must be re-added to
+         git first. The 404 is surfaced explicitly below rather than folded into
+         the generic catch, so it can never be mistaken for a transient fetch
+         failure or for an empty library. */
       var LIBRARY_LIVE = false;
       if (!LIBRARY_LIVE) return degrade();
       fetch(CORPUS_URL)
-        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(function (r) {
+          if (r.status === 404) throw new Error(
+            'dua library payload is deliberately unpublished (ADR-060 licence hold) — ' +
+            're-add src/data/dua/library.json to git before setting LIBRARY_LIVE = true');
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
         .then(function (doc) {
           all = expand(doc).filter(function (d) {
             return d && d.translation && String(d.translation).trim() && d.entryType !== 'guidance';
