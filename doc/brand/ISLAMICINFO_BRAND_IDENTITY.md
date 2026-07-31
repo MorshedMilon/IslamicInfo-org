@@ -146,7 +146,7 @@ Styling: 11px, `var(--ink-subtle)`, positioned in footer bottom bar or brand col
 
 ### 4.1 Core Palette — Shared Across All Products
 
-These tokens are defined in CLAUDE.md v3.0 and are the authoritative source. They are **never overridden** at the parent level.
+These tokens are defined in doc/DESIGN-SYSTEM.md v3.0 and are the authoritative source. They are **never overridden** at the parent level.
 
 #### Teal Family (Primary Brand)
 | Token | Light value | Dark value | Use |
@@ -368,7 +368,7 @@ These components are built fresh per product and do not inherit from IslamicInfo
 
 ### 9.1 The Override Contract
 
-A sub-brand inherits ALL tokens from CLAUDE.md v3.0. It may **add** the following — it may never **replace** core tokens.
+A sub-brand inherits ALL tokens from doc/DESIGN-SYSTEM.md v3.0. It may **add** the following — it may never **replace** core tokens.
 
 ```css
 /* Sub-brand override block — placed AFTER the main :root import */
@@ -498,7 +498,7 @@ Across every product, sub-brand, page, and component:
 
 | Forbidden | Why |
 |---|---|
-| Shimmer `::after` sweep on cards | CLAUDE.md §27.4 — degrades the reverent aesthetic |
+| Shimmer `::after` sweep on cards | doc/DESIGN-SYSTEM.md §27.4 — degrades the reverent aesthetic |
 | Raw hex values inline (except SVG `<defs>`) | Tokens ensure dark mode consistency |
 | New font families | Breaks typographic identity |
 | Merged `:root` and `[data-theme="dark"]` blocks | Prevents dark mode from functioning correctly |
@@ -568,7 +568,7 @@ All cross-product links use the exact registered domain. No abbreviations.
 Run this before launching any new product in the family:
 
 ### Design System
-- [ ] CLAUDE.md v3.0 tokens imported as-is — no modifications to core tokens
+- [ ] doc/DESIGN-SYSTEM.md v3.0 tokens imported as-is — no modifications to core tokens
 - [ ] Sub-brand accent color documented in §4.4 and added to `:root` only
 - [ ] Three fonts loaded: Cormorant Garamond, Inter, Amiri — preconnected
 - [ ] `[data-theme="dark"]` block is a sibling to `:root` — never merged
@@ -614,5 +614,5 @@ Run this before launching any new product in the family:
 ---
 
 *End of Brand Identity Document v1.0*
-*IslamicInfo.org Umbrella Brand · CLAUDE.md v3.0 · May 2026*
+*IslamicInfo.org Umbrella Brand · doc/DESIGN-SYSTEM.md v3.0 · May 2026*
 *Covers: IslamicInfo.org · QuranlyAI.com · MosqueFinder.net · TravellyAI.com · LearnSpeakAI.com*

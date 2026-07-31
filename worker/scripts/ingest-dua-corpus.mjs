@@ -1,7 +1,9 @@
 /* Ingest the Hisn al-Muslim (Fortress of the Muslim) dua corpus.
    Source dataset (pinned): github.com/wafaaelmaandy/Hisn-Muslim-Json (husn_en.json).
-   Run: node worker/scripts/ingest-dua-corpus.mjs  →  <repo>/src/data/dua/search-corpus.json */
+   STALE — DO NOT RUN. See the guard below and ADR-058: this script no longer
+   reproduces search-corpus.json and would destroy it. */
 import { writeFile, mkdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
@@ -10,7 +12,50 @@ const __dir = dirname(fileURLToPath(import.meta.url));
 const OUT = resolve(__dir, '../../src/data/dua/search-corpus.json');
 const clean = (s) => String(s == null ? '' : s).replace(/\s+/g, ' ').trim();
 
+/* ─────────────────────────────────────────────────────────────────────────
+   STALE — DO NOT RUN AGAINST THE LIVE CORPUS.
+
+   This script is the documented generator of search-corpus.json (ADR-051) and
+   it no longer generates it. The file it would write bears no relation to the
+   file that exists:
+
+       this script emits   267 records, schema 1,  5 fields, 5 meta keys
+       the live corpus is  556 records, schema 2, ~12 fields, 14 meta keys
+
+   The extra ~289 records and every enrichment pass — entryType, variantRole/
+   variantGroup, the occasion facets, sourceLabel, reviewNote, the four-way
+   translationSources split — were produced by later passes that are not in
+   this script and are not reproducible from it. It also writes the upstream
+   English that the corpus meta records as "unlicensed and has been fully
+   replaced or nulled", so a run would reintroduce a licensing problem on top
+   of the data loss.
+
+   It OVERWRITES; it does not merge. There is no recovery path except git.
+
+   The guard below refuses to run whenever the corpus exists. Do not remove it
+   to "just re-ingest" — there is currently no working generator for the corpus
+   of record, and rebuilding one is a real task, not a flag flip. See ADR-058.
+   ───────────────────────────────────────────────────────────────────────── */
+function guard() {
+  if (!existsSync(OUT)) return;
+  process.stderr.write(
+    '\nREFUSING TO RUN — this script is stale and would destroy the corpus.\n\n' +
+    `  target: ${OUT}\n\n` +
+    '  It emits 267 records with 5 fields each (schema 1). The corpus that\n' +
+    '  exists has 556 records with ~12 fields each (schema 2), including\n' +
+    '  entryType, variantRole, the occasion facets and sourceLabel — none of\n' +
+    '  which this script produces and none of which it can rebuild.\n\n' +
+    '  It OVERWRITES rather than merges, so a run silently discards ~289\n' +
+    '  records and every enrichment pass, and restores upstream English the\n' +
+    '  corpus meta records as unlicensed.\n\n' +
+    '  The corpus of record currently has NO working generator (ADR-058).\n' +
+    '  If you genuinely intend to re-ingest from scratch, move the existing\n' +
+    '  corpus aside deliberately and knowingly first.\n\n');
+  process.exit(1);
+}
+
 async function main() {
+  guard();
   const r = await fetch(SRC);
   if (!r.ok) throw new Error('source HTTP ' + r.status);
   const j = await r.json();

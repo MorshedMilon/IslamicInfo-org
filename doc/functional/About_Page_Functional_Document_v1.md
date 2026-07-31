@@ -3,7 +3,7 @@
 > Maintained by: IslamicInfo founding team
 > Created: 2026-05-17
 > Applies to: `about.html` · About — Our Mission page
-> Design system: CLAUDE.md v3.0
+> Design system: doc/DESIGN-SYSTEM.md v3.0
 > Blueprint: `about_v3.html`
 
 ---
@@ -25,7 +25,7 @@ The About page is an editorial page, not a product feature page. It contains no 
 
 **Core editorial rule:** Every statement on this page is a commitment, not marketing copy. The non-negotiable rules listed are enforced across the entire platform. The methodology described here governs how every hadith, verse, and dua is processed before publication.
 
-All visual implementation must follow **CLAUDE.md v3.0** exactly.
+All visual implementation must follow **doc/DESIGN-SYSTEM.md v3.0** exactly.
 
 ---
 
@@ -118,7 +118,7 @@ Active page: `class="nav-link active"` — teal text (`var(--teal-700)`), weight
 3. **Theme toggle** (`id="themeBtn"`) → sun/moon SVG, persists to `localStorage` key `islamicinfo-theme`
 4. **Admin (user icon)** → placeholder circle/path SVG
 
-No hamburger button in the current `about_v3.html` mockup — however per CLAUDE.md §4.3, a hamburger button must be present and visible only at ≤ 760px with `onclick="openMM()"`. This is a **gap to fix** (see §15).
+No hamburger button in the current `about_v3.html` mockup — however per doc/DESIGN-SYSTEM.md §4.3, a hamburger button must be present and visible only at ≤ 760px with `onclick="openMM()"`. This is a **gap to fix** (see §15).
 
 ### 4.4 Search Popup
 
@@ -129,7 +129,7 @@ No hamburger button in the current `about_v3.html` mockup — however per CLAUDE
 - Search button fires `console.log('Search:', q)` in mockup — wire to real search in production
 - Dark mode: `background: rgba(15,27,29,.97); border-color: rgba(0,105,110,.3)`
 
-### 4.5 Header CSS (CLAUDE.md §4.4)
+### 4.5 Header CSS (doc/DESIGN-SYSTEM.md §4.4)
 
 - Light: `background: rgba(250,251,251,.92); backdrop-filter: blur(24px) saturate(1.6)`
 - Dark: `background: rgba(10,19,20,.92); border-bottom-color: rgba(0,105,110,.2)`
@@ -140,7 +140,7 @@ No hamburger button in the current `about_v3.html` mockup — however per CLAUDE
 
 ## 5. Hero Section
 
-CLAUDE.md §6 structure. `min-height: 72vh`, centered content.
+doc/DESIGN-SYSTEM.md §6 structure. `min-height: 72vh`, centered content.
 
 ### 5.1 Element Order (inside `.hero-inner`)
 
@@ -162,7 +162,7 @@ CLAUDE.md §6 structure. `min-height: 72vh`, centered content.
 | Sub-text | "We build IslamicInfo because authentic Islamic knowledge should be free, source-cited, and free of opinion. This is who we are and why we exist." |
 | Arabic verse | `وَمَا تَوۡفِيقِي إِلَّا بِاللَّهِ` |
 
-### 5.3 Bismillah Color Rules (CLAUDE.md §5.1)
+### 5.3 Bismillah Color Rules (doc/DESIGN-SYSTEM.md §5.1)
 
 - **Light mode:** `linear-gradient(100deg, #00696E 0%, #2CA4AB 50%, #00696E 100%)` — teal clip-text, `opacity: .92`
 - **Dark mode:** `linear-gradient(100deg, #D9B358 0%, #F0D080 50%, #D9B358 100%)` — gold clip-text, `opacity: 1`, `filter: drop-shadow(0 0 14px rgba(217,179,88,.55))`
@@ -335,7 +335,7 @@ Each rule card uses `.rule-row` (flex, `gap: 16px`, `align-items: flex-start`) c
 
 **Rule card entrance animation:** `.rule-card.in-view` — `ruleIn` keyframe (`opacity: 0; translateY(20px)` → visible). Triggered by `ruleObs` IntersectionObserver (`threshold: 0.10`).
 
-**Hover behaviour (standard card system):** `translateY(-5px) scale(1.012)`, teal glow shadow, `border-color: rgba(0,105,110,.2)`. No shimmer `::after` (CLAUDE.md §27.4).
+**Hover behaviour (standard card system):** `translateY(-5px) scale(1.012)`, teal glow shadow, `border-color: rgba(0,105,110,.2)`. No shimmer `::after` (doc/DESIGN-SYSTEM.md §27.4).
 
 ---
 
@@ -579,7 +579,7 @@ Responsive:
 - ≤ 700px: `grid-template-columns: 1fr 1fr; .ii-footer-brand-col { grid-column: 1/-1 }`
 - ≤ 440px: `grid-template-columns: 1fr`
 
-> **Note:** The current `about_v3.html` uses the `ii-footer-*` CSS class system, not the newer `ft-` class system from CLAUDE.md §7.1. Per CLAUDE.md §7, all pages should use `ft-` classes. This is a **gap to fix** in the next build pass (see §15).
+> **Note:** The current `about_v3.html` uses the `ii-footer-*` CSS class system, not the newer `ft-` class system from doc/DESIGN-SYSTEM.md §7.1. Per doc/DESIGN-SYSTEM.md §7, all pages should use `ft-` classes. This is a **gap to fix** in the next build pass (see §15).
 
 ### 14.2 Brand Column (`.ii-footer-brand-col`)
 
@@ -615,7 +615,7 @@ Heading: `Quick Access`
 
 ⚠️ All 8 required. `knowledge-hub.html` must never be omitted. `islamic-studies.html` — never `learn.html`.
 
-### 14.5 Column 3 — Our Ecosystem (CLAUDE.md §7.4 verbatim)
+### 14.5 Column 3 — Our Ecosystem (doc/DESIGN-SYSTEM.md §7.4 verbatim)
 
 Heading: `Our Ecosystem`
 
@@ -649,7 +649,7 @@ Heading: `Company`
 
 ## 15. Design System Tokens & Rules
 
-All styling uses CLAUDE.md §1 CSS variables. No raw hex inline except in SVG gradient `<defs>` blocks.
+All styling uses doc/DESIGN-SYSTEM.md §1 CSS variables. No raw hex inline except in SVG gradient `<defs>` blocks.
 
 ### 15.1 Key Tokens Used on This Page
 
@@ -676,7 +676,7 @@ All styling uses CLAUDE.md §1 CSS variables. No raw hex inline except in SVG gr
 - Dark mode is a **sibling** `[data-theme="dark"]` block — never merged with `:root`
 - No new colors invented outside the token set
 
-### 15.3 Forbidden: No Shimmer (CLAUDE.md §27.4)
+### 15.3 Forbidden: No Shimmer (doc/DESIGN-SYSTEM.md §27.4)
 
 ```css
 /* ✗ BANNED — shimmer sweep on ::after */
@@ -720,7 +720,7 @@ All card hover states use glow shadow system only.
 
 ## 17. Responsive Breakpoints
 
-CLAUDE.md §23 global ladder applies:
+doc/DESIGN-SYSTEM.md §23 global ladder applies:
 
 | Breakpoint | Changes on About page |
 |---|---|
@@ -800,7 +800,7 @@ All JS lives in a single `<script>` block at the bottom of `<body>`.
 
 ## 20. Gaps in Current Mockup (Build Priority Order)
 
-The following features are defined in CLAUDE.md or required by the global standard but are missing or incorrect in `about_v3.html`. Build in this order:
+The following features are defined in doc/DESIGN-SYSTEM.md or required by the global standard but are missing or incorrect in `about_v3.html`. Build in this order:
 
 ### 🔴 High Priority — Fix These First
 
@@ -808,7 +808,7 @@ The following features are defined in CLAUDE.md or required by the global standa
 |---|---|---|---|
 | 1 | **Mobile menu missing** | No hamburger button or `#mobileMenu` overlay | Add hamburger `.icon-btn` to `.header-tools`, add `<div class="mobile-menu" id="mobileMenu">` after `</header>`, wire `openMM()` / `closeMM()`, add `Escape` key listener |
 | 2 | **Mobile menu nav links** | Not present | Add all 10 nav links in correct order; `About` gets `.active` class |
-| 3 | **Footer CSS class system** | Uses `ii-footer-*` classes | Migrate to `ft-` class system per CLAUDE.md §7.1 (`ft-top`, `ft-brand`, `ft-col-h`, `ft-link`, `ft-bot`, `ft-copy`, `ft-note`) |
+| 3 | **Footer CSS class system** | Uses `ii-footer-*` classes | Migrate to `ft-` class system per doc/DESIGN-SYSTEM.md §7.1 (`ft-top`, `ft-brand`, `ft-col-h`, `ft-link`, `ft-bot`, `ft-copy`, `ft-note`) |
 
 ### 🟠 Medium Priority
 
@@ -836,12 +836,12 @@ The following features are defined in CLAUDE.md or required by the global standa
 2. **No fatwa language.** The About page reaffirms this constraint. The wording "We do not issue fatwas" must appear in both the FAQ and the Non-Negotiable Rules.
 3. **Stat numbers must be current.** The 4 stats (6,236 Qur'an verses, 12,000+ hadith, 300+ duas, 0 ads) must reflect actual platform content at build time.
 4. **Email address must be live.** The `mailto:hello@islamicinfo.org` in the Contact CTA must reach a monitored inbox.
-5. **No shimmer on cards.** All card hover states use the glow system only. (CLAUDE.md §27.4)
+5. **No shimmer on cards.** All card hover states use the glow system only. (doc/DESIGN-SYSTEM.md §27.4)
 6. **Design system strict.** No raw hex values inline, no new fonts, no new colour tokens.
 7. **Counter animation fires once only.** The `statsAnimated` boolean prevents re-triggering if the user scrolls past the banner multiple times.
 8. **FAQ closes on second click.** Clicking an already-open FAQ item should close it — not re-open another.
 9. **Smooth scroll for anchor links.** `scroll-behavior: smooth` on `html` handles all `href="#anchor"` CTA buttons — no JS override needed.
-10. **Mobile menu Escape key.** Per CLAUDE.md §8, `document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMM(); })` must be present once the hamburger and mobile menu are added.
+10. **Mobile menu Escape key.** Per doc/DESIGN-SYSTEM.md §8, `document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMM(); })` must be present once the hamburger and mobile menu are added.
 
 ---
 
@@ -850,7 +850,7 @@ The following features are defined in CLAUDE.md or required by the global standa
 ### Global Structure
 - [ ] `<html lang="en" data-theme="light">` present
 - [ ] Fonts: Cormorant Garamond, Inter, Amiri — preconnected and imported in exact order
-- [ ] All 50+ CSS tokens in `:root` exactly as CLAUDE.md §1
+- [ ] All 50+ CSS tokens in `:root` exactly as doc/DESIGN-SYSTEM.md §1
 - [ ] Dark mode `[data-theme="dark"]` sibling block — unmerged with `:root`
 - [ ] Body: Islamic geometric `background-image` at opacity 0.04
 - [ ] `.ambient` radial glow div present, `.shell` wrapper present
@@ -960,7 +960,7 @@ The following features are defined in CLAUDE.md or required by the global standa
 ### Animations & Theme
 - [ ] `.reveal` IntersectionObserver (`_ro`, `threshold: .08`) fires `in` class on scroll
 - [ ] Stagger delays `.reveal-d1` through `.reveal-d5` applied to appropriate elements
-- [ ] No shimmer `::after` sweep on any card (CLAUDE.md §27.4)
+- [ ] No shimmer `::after` sweep on any card (doc/DESIGN-SYSTEM.md §27.4)
 - [ ] All hover transitions use `var(--ease-reverent)` or `var(--ease-premium)`
 - [ ] `floatG` geo animation continuous
 - [ ] `bgD` hero-bg animation continuous
@@ -972,4 +972,4 @@ The following features are defined in CLAUDE.md or required by the global standa
 ---
 
 *End of About Page Functional Document v1.0*
-*IslamicInfo.org · CLAUDE.md v3.0 · Blueprint: `about_v3.html`*
+*IslamicInfo.org · doc/DESIGN-SYSTEM.md v3.0 · Blueprint: `about_v3.html`*
