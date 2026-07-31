@@ -35,3 +35,9 @@ HADITH_API_BASE_URL = "https://hadithapi.com"
 # GET /api/hadith/dorar/search). Default OFF pending owner review of Dorar's
 # terms/attribution + a Worker-reachability check (dorar.net may 403 bots).
 HADITH_SILSILA_DORAR_ENABLED = "true"
+
+# Dua search (GET /api/dua/search). Default OFF as of 2026-07-31: the search
+# scans all 556 corpus records with no exclusion, so Gate 1 not-a-dua entries
+# are returned as dua results. Flip to "true" only after the corpus-level
+# exclusion ships AND the owner re-approves. See doc/DUA-CONTENT-INTEGRITY-v1_0.md.
+DUA_SEARCH_ENABLED = "false"

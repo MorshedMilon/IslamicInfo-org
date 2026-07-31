@@ -601,8 +601,23 @@
     if (facetData) { paintCounts(); paintNav(); }
     wireControls();
 
+    // The page degrades to its build-time cards and loses only the live
+    // features. Used both when the payload fails and when it is gated off.
+    var degrade = function () {
+      if (searchEl) { searchEl.disabled = true; searchEl.placeholder = 'Search is unavailable — please refresh'; }
+    };
+
     // 2. fetch the payload only after first paint, so it can never delay LCP
     var start = function () {
+      /* TAKEN DARK 2026-07-31. library.json carries the 25 Gate 1 not-a-dua
+         records, the 18 guidance narrations and the 2 untranslated records,
+         every one of them rendered through a card built to display a dua; and
+         a query surfaces variant narrations stripped of their primary's
+         context. The build-time cards above are clean, so the page keeps them
+         and only the live search/filter/load-more go off. Restore once the
+         corpus-level exclusion ships. See DUA-CONTENT-INTEGRITY-v1_0 §1.4. */
+      var LIBRARY_LIVE = false;
+      if (!LIBRARY_LIVE) return degrade();
       fetch(CORPUS_URL)
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
         .then(function (doc) {
@@ -627,10 +642,8 @@
             applyFilters();
           }
         })
-        .catch(function () {
-          // the pre-rendered cards stay on screen; only the live features are lost
-          if (searchEl) { searchEl.disabled = true; searchEl.placeholder = 'Search is unavailable — please refresh'; }
-        });
+        // the pre-rendered cards stay on screen; only the live features are lost
+        .catch(degrade);
     };
     // The first screen is already usable from the HTML, so the payload waits for
     // idle time rather than competing with the page's other scripts — but any

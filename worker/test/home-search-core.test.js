@@ -17,9 +17,13 @@ test('dispatchTarget: all navigates to the dedicated results page', () => {
     { kind: 'navigate', url: 'search-results.html?scope=all&q=zakat' });
 });
 
-test('dispatchTarget: dua is public (DUA_SEARCH_PUBLIC=true) and navigates to the results page', () => {
-  assert.deepEqual(core.dispatchTarget('dua', 'sleep'),
-    { kind: 'navigate', url: 'search-results.html?scope=dua&q=sleep' });
+/* Dua search was taken dark on 2026-07-31: the search path scans all 556 corpus
+   records with no exclusion, so Gate 1 not-a-dua entries were returned as duas.
+   This test tracks the flag; flip it back when DUA_SEARCH_PUBLIC is restored. */
+test('dispatchTarget: dua is dark (DUA_SEARCH_PUBLIC=false) and does not navigate to results', () => {
+  const t = core.dispatchTarget('dua', 'sleep');
+  assert.notDeepEqual(t, { kind: 'navigate', url: 'search-results.html?scope=dua&q=sleep' });
+  assert.notEqual(t && t.kind, 'navigate');
 });
 
 test('dispatchTarget: verify keyword navigates to hadith results page', () => {

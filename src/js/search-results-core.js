@@ -11,7 +11,13 @@
   var VALID_SCOPES = ['all', 'hadith', 'quran', 'dua', 'verify'];
 
   // Single source of truth for the Dua-search go-public gate (ADR-051).
-  var DUA_SEARCH_PUBLIC = true;
+  // TAKEN DARK 2026-07-31: the search path scans all 556 corpus records with no
+  // exclusion, so every Gate 1 not-a-dua record is returned as a dua card —
+  // "definite in his asking" returned ibnmajah:3590 as the sole site result, the
+  // exact wording its own narration prohibits. noindex governs crawlers, not
+  // on-site search. Stays false until the corpus-level exclusion ships and the
+  // owner re-approves. See DUA-CONTENT-INTEGRITY-v1_0 §1.4.
+  var DUA_SEARCH_PUBLIC = false;
 
   function validateScope(s) {
     return VALID_SCOPES.indexOf(s) !== -1 ? s : 'all';
@@ -52,19 +58,32 @@
       '</article>';
   }
 
+  /* The attribution line is the record's OWN sourceLabel, never a constant.
+     This card stamped every result "Hisn al-Muslim" while the corpus draws from
+     four translation sources — so a Sunan Ibn Majah or Qur'anic record asserted
+     a source its own data contradicts. A card claiming a source the record does
+     not support is the same failure class as a hadith shown without its grade.
+     A record with no sourceLabel shows NO attribution line rather than a guessed
+     one, and belongs in the corpus exclusion set until it is sourced. */
+  function duaSourceLabel(d) {
+    var s = d && d.sourceLabel;
+    return typeof s === 'string' && s.trim() ? s.trim() : null;
+  }
+
   function buildDuaCardHTML(d) {
     d = d || {};
     var category = escapeHTML(d.category);
     var arabic = escapeHTML(d.arabic);
     var transliteration = escapeHTML(d.transliteration);
     var translation = escapeHTML(d.translation);
+    var source = duaSourceLabel(d);
     return '' +
       '<article class="sr-card sr-card--dua">' +
         '<p class="sr-category">' + category + '</p>' +
         '<p class="sr-arabic" dir="rtl">' + arabic + '</p>' +
         '<p class="sr-transliteration">' + transliteration + '</p>' +
         '<p class="sr-translation">' + translation + '</p>' +
-        '<p class="sr-attrib">Hisn al-Muslim</p>' +
+        (source ? '<p class="sr-attrib">' + escapeHTML(source) + '</p>' : '') +
       '</article>';
   }
 
@@ -88,6 +107,7 @@
     detectClaim: detectClaim,
     buildVerseCardHTML: buildVerseCardHTML,
     buildDuaCardHTML: buildDuaCardHTML,
+    duaSourceLabel: duaSourceLabel,
     resultsHeading: resultsHeading,
     DUA_SEARCH_PUBLIC: DUA_SEARCH_PUBLIC,
     SCOPES: SCOPES,

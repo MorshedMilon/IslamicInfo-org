@@ -21,7 +21,16 @@ async function loadCorpus(env) {
   return CORPUS;
 }
 
+/* Kill switch, default OFF. The frontend flag only darkens the UI; this route
+   stays directly callable, and it scans every corpus record with no exclusion,
+   so Gate 1 not-a-dua entries come back as dua results. Both have to be dark.
+   See DUA-CONTENT-INTEGRITY-v1_0 §1.4. Flip DUA_SEARCH_ENABLED to "true" only
+   once the corpus-level exclusion ships and the owner re-approves. */
+function duaSearchEnabled(env) { return String(env && env.DUA_SEARCH_ENABLED) === 'true'; }
+
 export async function handleDuaSearch(searchParams, env, origin) {
+  if (!duaSearchEnabled(env))
+    return fail('disabled', 'Dua search is temporarily unavailable', origin, 503, true);
   const q = (searchParams.get('q') || '').trim();
   if (q.length < 2) return fail('bad_query', 'search query must be at least 2 characters', origin, 400, false);
   if (q.length > 100) return fail('bad_query', 'search query too long (max 100 chars)', origin, 400, false);
