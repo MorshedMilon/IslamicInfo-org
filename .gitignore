@@ -43,3 +43,21 @@ worker/.dev.vars
 worker/node_modules/
 worker/.wrangler/
 node_modules/
+
+# ── Dua corpus + hub pages: DELIBERATELY UNPUBLISHED (ADR-060 licence hold) ──
+# Untracked 2026-07-31 so GitHub Pages stops serving them while the upstream
+# English licensing question is open. These are ignored, not deleted — every
+# file is still on disk, and scripts/build-dua-landing-pages.mjs regenerates
+# the 30 hubs on every run. Without these entries the next `git add -A`
+# silently re-publishes all 32 files.
+#
+# TO RESTORE once the licence question is resolved: delete this block, then
+# `git add` the paths. Do NOT use `git add -f` to commit one file past the
+# ignore — that reopens the exposure without removing the guard.
+#
+# search-corpus.json is the CORPUS OF RECORD and its documented generator is
+# disarmed (ADR-058). A copy lives outside the repo; see its README.
+duas/occasion/*.html
+duas/source/*.html
+src/data/dua/search-corpus.json
+src/data/dua/library.json
