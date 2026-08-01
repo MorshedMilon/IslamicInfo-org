@@ -37,7 +37,12 @@ jobs:
           cp robots.txt sitemap.xml _site/
           # Server-rendered dua landing pages (scripts/build-dua-landing-pages.mjs).
           # Copied as a tree so new facet directories ship without editing this file.
-          cp -r duas _site/
+          # Conditional: the hub + detail pages are currently held back from main
+          # while they are rebuilt, so duas/ may legitimately not exist. An
+          # unconditional cp failed the whole deploy on d4a3577 and left production
+          # serving the previous commit. The sitemap check below is what actually
+          # guards against shipping 404s, so absence here is safe.
+          if [ -d duas ]; then cp -r duas _site/; else echo "duas/ not present — nothing to publish"; fi
           echo "Published contents:"
           find _site -type f | sort
 
@@ -59,7 +64,7 @@ jobs:
           done
           [ "$missing" -eq 0 ] || exit 1
           echo "sitemap URLs published: $(grep -c '<loc>' _site/sitemap.xml)"
-          echo "dua pages published:    $(find _site/duas -name '*.html' | wc -l)"
+          if [ -d _site/duas ]; then echo "dua pages published:    $(find _site/duas -name '*.html' | wc -l)"; else echo "dua pages published:    0 (duas/ held back)"; fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
