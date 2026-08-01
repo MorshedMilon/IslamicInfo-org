@@ -60,12 +60,17 @@ function card(r) {
       '</div>' +
     '</div>';
 }
-/* CARD HOLD, 2026-07-31 — ADR-063.
-   While the upstream licensing question is open, this page publishes NO dua
-   text. The hold is not a filter: 5 of the 12 cards were upstream-verbatim,
-   and the remaining 7 carry sourceKey "other" or "dua-dhikr", labels that name
-   no source — so their provenance is unknown too, and unknown provenance is
-   not published while this is open.
+/* CARD HOLD, 2026-07-31.
+   While the dua library is being rebuilt, this page publishes NO dua text.
+
+   The hold is not a filter. These 12 cards linked to nothing — the detail
+   pages they belong to have never been committed — and 7 of them carry
+   sourceKey "other" or "dua-dhikr", labels that name no source. The cards
+   return once detail pages exist for them to link to.
+
+   The licensing question that first prompted this is settled: the owner
+   lifted that hold in ADR-064. What keeps the cards out now is navigation
+   and integrity, not permission.
 
    The page and all of its chrome stay; only the card region goes empty, with
    a note that says what is actually true. Facet counts are kept because they
@@ -76,9 +81,7 @@ const CARDS_HOLD = true;
 
 const holdNote =
   '<p class="dua-empty" style="grid-column:1/-1;text-align:center;padding:32px 0;color:var(--ink-muted);">' +
-  'The dua library is temporarily unavailable while we complete a review of the ' +
-  'sources and permissions behind its translations. Nothing has been removed — ' +
-  'it will return once that review is finished.</p>';
+  'The dua library is being rebuilt and will return here soon.</p>';
 
 const cards = CARDS_HOLD ? holdNote : browse.slice(0, PAGE).map(card).join("\n");
 
@@ -103,5 +106,5 @@ else {
 fs.writeFileSync("dua.html", h);
 console.log("facets: total", facets.total, "| occasions", facets.occasions.length,
             "| sources", facets.sources.length, "| categories", facets.categories.length);
-console.log(CARDS_HOLD ? "pre-rendered cards: 0 (CARD HOLD active — ADR-063)" : "pre-rendered cards: " + Math.min(PAGE, browse.length));
+console.log(CARDS_HOLD ? "pre-rendered cards: 0 (CARD HOLD active)" : "pre-rendered cards: " + Math.min(PAGE, browse.length));
 console.log("dua.html size:", (fs.statSync("dua.html").size / 1024).toFixed(0) + "KB");
