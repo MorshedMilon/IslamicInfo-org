@@ -886,3 +886,28 @@ content-deferred posture of Modules 14–16.
 **Consequences.** Track A is unblocked on licensing and remains blocked on integrity (the Gate 3 scan) and transliteration. The two corpus assets are re-tracked and publish again; the `.gitignore` hold block is cleared, since ignore patterns over tracked files would silently skip newly generated hubs.
 **Deployment status (recorded so this entry is not read as describing production).** The determination is effective immediately and the hold is lifted. The **§17 hub rewrite, the corpus re-tracking and the cleared `.gitignore` block are NOT yet deployed** — they sit on `feat/dua-hubs-s17` and are held back deliberately, because the new hubs link to 505 detail pages that have never been committed and would ship as 404s. `main` carries the closures only: the old 193 KB text-dump hubs are un-published, both JSON assets are un-published, `dua.html` renders no cards, and `sitemap.xml` is 14 URLs. Hubs and detail pages ship together or not at all.
 **References.** `doc/evidence/2026-07-31-upstream-source-licence-evidence.md` (retained); ADR-063 (hold superseded, observations stand); ADR-051 (clearance basis corrected); ADR-049; ADR-059/060/061 (attribution); [[content-review-gate-owner]] (ADR-044); `DUA-ENGINE-SEO-ADDENDUM-v1_0.md` §17.
+
+## ADR-065 · Track A shipping scope corrected: 247 shippable, 65 transliteration gaps, 182 ready today — §6's estimate double-subtracted records that were never slugged · Accepted · 2026-07-31 · Dua detail pages (Track A scope)
+**Context.** `DUA-CONTENT-INTEGRITY-v1_0` §6 projects "~215 shippable, 28 transliterations required" for Track A. Item 7 required that figure be re-derived from the corpus against the corrected Gate 1 of 44 (ADR-055) and the enlarged transliteration gap created by nulling the 39 contaminated transliteration fields.
+**Corrected arithmetic.** Track A = the 247 slugged records whose `sourceKey` is not one of the seven collection keys.
+```
+  247   Track A pages (slugged)
+ −  0   Gate 1 removals falling in Track A
+ −  0   guidance entries
+ −  0   no-translation records
+ −  0   variants (held, ADR-061)
+ ─────
+  247   SHIPPABLE
+```
+**All 44 Gate 1 records fall in Track B; none in Track A.** The route-out does not reduce Track A at all. The remaining zeros are not an error: guidance entries, untranslated records and variants were never assigned slugs, so they cannot be subtracted from a slug-derived count.
+**Cause of the discrepancy — §6 subtracts records that are not in the set it subtracts them from.** §6 begins at 247 and removes 20 English-prose entries, ~7 non-dua chapters, 3 Hisn-45 entries and `132:267`. **None of those appear in `slugs.lock.json`**, so they were already outside the 247. **Evidence:** §A1 states Track A has 48 records lacking a transliteration and that removing the 20 English-prose entries leaves "approximately 28". The measured pre-existing gap among the 247 slugged records is **exactly 28**. That equality holds only if the 20 are already outside the slug set — which is what makes the §6 subtraction a double-count.
+**Transliteration gap, enlarged by the nulling.**
+```
+   28   pre-existing gap (matches the §A1 figure exactly)
+ + 37   newly nulled falling in Track A shippable (of 39; 40:133 and 74:185 are not slugged)
+ ─────
+   65   total gap   →   182 pages ready to ship today
+```
+**Chapter coherence (asked before release shape was decided).** The 182 are **not** a scattered remainder. Of 124 Track A chapters, **79 are fully complete with zero gaps, covering 133 of the 182**. Only 6 chapters are partially ready, and the largest — *Words of remembrance for morning and evening* — is 23 ready against 1 gap. 36 chapters have zero ready pages (53 slugged), and those are what the gap work buys. 86 of the 124 chapters contain a single record, so "complete chapter" is frequently a one-page chapter.
+**Consequences.** The §6 estimate is superseded for planning: Track A is larger (247 vs ~215) and its content debt is larger (65 vs 28) than projected. Neither figure is a reason to delay — 182 pages sit in 79 complete chapters and can ship as a coherent set. `DUA-CONTENT-INTEGRITY-v1_0` is **not edited**; the correction lives here, consistent with ADR-055.
+**References.** ADR-055 (Gate 1 = 44); ADR-061 (variant hold); `DUA-CONTENT-INTEGRITY-v1_0.md` §6, §A1; `src/data/dua/slugs.lock.json` (membership evidence); `doc/DUA-INTEGRITY-SCAN.md`.
