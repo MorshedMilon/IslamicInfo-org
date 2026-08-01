@@ -44,20 +44,13 @@ worker/node_modules/
 worker/.wrangler/
 node_modules/
 
-# ── Dua corpus + hub pages: DELIBERATELY UNPUBLISHED (ADR-060 licence hold) ──
-# Untracked 2026-07-31 so GitHub Pages stops serving them while the upstream
-# English licensing question is open. These are ignored, not deleted — every
-# file is still on disk, and scripts/build-dua-landing-pages.mjs regenerates
-# the 30 hubs on every run. Without these entries the next `git add -A`
-# silently re-publishes all 32 files.
+# ── Dua corpus + hub pages ──────────────────────────────────────────────────
+# These were untracked 2026-07-31 during the upstream licensing hold (ADR-063).
+# The owner lifted that hold the same day (ADR-064) and all 32 paths are tracked
+# again, so nothing here is ignored. Kept as a note because the ignore block
+# would have silently skipped any newly generated hub once the files were
+# re-tracked — a trap worth naming rather than deleting quietly.
 #
-# TO RESTORE once the licence question is resolved: delete this block, then
-# `git add` the paths. Do NOT use `git add -f` to commit one file past the
-# ignore — that reopens the exposure without removing the guard.
-#
-# search-corpus.json is the CORPUS OF RECORD and its documented generator is
-# disarmed (ADR-058). A copy lives outside the repo; see its README.
-duas/occasion/*.html
-duas/source/*.html
-src/data/dua/search-corpus.json
-src/data/dua/library.json
+# search-corpus.json remains the CORPUS OF RECORD with no working generator
+# (ADR-058); worker/scripts/ingest-dua-corpus.mjs is deliberately disarmed. A
+# copy lives outside the repo at ../IslamicInfo-org-corpus-backup-2026-07-31/.
