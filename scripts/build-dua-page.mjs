@@ -85,14 +85,54 @@ const holdNote =
 
 const cards = CARDS_HOLD ? holdNote : browse.slice(0, PAGE).map(card).join("\n");
 
+/* ── P0: STATIC OCCASION-HUB LINKS ──────────────────────────────────────────
+   Without these, /duas/ is an island: a crawl from index.html reached dua.html
+   and stopped, because #catGrid is painted by JS (and is empty while
+   LIBRARY_LIVE is false) and its links were `dua.html?occasion=` query facets,
+   never the static hub pages. All 505 detail pages were unreachable from root.
+
+   The detail pages' BreadcrumbList JSON-LD already asserts
+   Home > Duas > Occasion > Dua. This makes the HTML implement the path the
+   structured data claims: root -> dua.html (1) -> occasion hub (2) ->
+   detail (3). Exactly the 3 clicks §17 requires.
+
+   Occasion hubs only, not source hubs — ADR-053 A10 makes source collection
+   metadata, never navigation, and adding both would double the links without
+   adding reach, since the occasion facet already covers all 505 with no orphans.
+
+   Markup reuses .cat-grid / .cat-card / .cat-icon / .cat-title / .cat-count,
+   already defined in dua.html. No new CSS, no new classes. Counts come from
+   the corpus, never hardcoded. */
+const occHubs = facets.occasions
+  .filter(o => o.slug)
+  .map(o => '<a class="cat-card" href="/duas/occasion/' + esc(o.slug) + '.html">' +
+    '<span class="cat-icon">' + (o.icon || '🤲') + '</span>' +
+    '<div class="cat-title">' + esc(o.label) + '</div>' +
+    '<div class="cat-count">' + o.n + (o.n === 1 ? ' dua' : ' duas') + '</div></a>')
+  .join("\n            ");
+
+const hubBlock =
+  '<nav class="cat-grid reveal" aria-label="Browse duas by occasion">\n            ' +
+  occHubs + '\n          </nav>';
+
 let h = fs.readFileSync("dua.html", "utf8");
 const FS = '<!--DUA_FACETS_START-->', FE = '<!--DUA_FACETS_END-->';
 const CS = '<!--DUA_CARDS_START-->', CE = '<!--DUA_CARDS_END-->';
+const HS = '<!--DUA_HUBS_START-->', HE = '<!--DUA_HUBS_END-->';
 const facetBlock = FS + '<script type="application/json" id="duaFacets">' + JSON.stringify(facets) + '</script>' + FE;
 
 // facet block: keep it just before the closing </body> script tags
 if (h.includes(FS)) h = h.replace(new RegExp(FS + "[\\s\\S]*?" + FE), facetBlock);
 else h = h.replace('<script src="src/js/dua-library.js', facetBlock + '\n  <script src="src/js/dua-library.js');
+
+// static occasion-hub links, immediately above the JS-painted #catGrid
+const hubWrapped = HS + "\n          " + hubBlock + "\n          " + HE;
+if (h.includes(HS)) h = h.replace(new RegExp(HS + "[\\s\\S]*?" + HE), hubWrapped);
+else {
+  const anchor = '<div class="cat-grid reveal" id="catGrid"';
+  if (!h.includes(anchor)) { console.error("!! #catGrid not found — cannot place hub links"); process.exit(1); }
+  h = h.replace(anchor, hubWrapped + "\n          " + anchor);
+}
 
 // first page of cards inside the grid
 const gridRe = /(<div class="dua-grid" id="duaGrid"[^>]*>)([\s\S]*?)(<\/div>\s*<!-- \/dua-grid -->|<\/div>)/;
@@ -107,4 +147,5 @@ fs.writeFileSync("dua.html", h);
 console.log("facets: total", facets.total, "| occasions", facets.occasions.length,
             "| sources", facets.sources.length, "| categories", facets.categories.length);
 console.log(CARDS_HOLD ? "pre-rendered cards: 0 (CARD HOLD active)" : "pre-rendered cards: " + Math.min(PAGE, browse.length));
+console.log("occasion hub links:", facets.occasions.filter(o => o.slug).length);
 console.log("dua.html size:", (fs.statSync("dua.html").size / 1024).toFixed(0) + "KB");
