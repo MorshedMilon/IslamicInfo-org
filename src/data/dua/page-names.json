@@ -1,0 +1,2587 @@
+{
+  "_meta": {
+    "purpose": "Resolved per-page H1 and title for every built dua detail page, keyed by corpus id. WRITTEN BY scripts/build-dua-pages.mjs, READ BY scripts/build-dua-landing-pages.mjs so hub cards carry the same name as the page they link to.",
+    "doNotEdit": "Generated. Editing this by hand desynchronises the hub cards from the pages, which is the exact defect it exists to prevent (2026-08-03: 234/234 cards wrong).",
+    "rule": "H1 = §5 keyword stem, with the source reference or opening words appended ONLY where resolveUnique() had to separate a collision. Governed by doc/DUA-KEYWORD-NAMING-v1_0.md as amended by v1_1.",
+    "buildOrder": "build-dua-pages.mjs FIRST, then build-dua-landing-pages.mjs. The hub builder fails loudly if a page it must label is missing from this file.",
+    "generated": "2026-08-03",
+    "count": 515
+  },
+  "pages": {
+    "27:75": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-75",
+      "h1": "“Allāh - there is no deity except…” (Hisn al-Muslim 27:75)",
+      "title": "“Allāh - there is no deity except…” (Hisn al-Muslim 27:75)"
+    },
+    "27:76": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-76",
+      "h1": "“Say, \"He is Allāh, [who is] One…” (Hisn al-Muslim 27:76)",
+      "title": "“Say, \"He is Allāh, [who is] One…” (Hisn al-Muslim 27:76)"
+    },
+    "27:77": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-77",
+      "h1": "“‘We have reached the morning and…” (Hisn al-Muslim 27:77)",
+      "title": "“‘We have reached the morning and…” (Hisn al-Muslim 27:77)"
+    },
+    "27:78": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-78",
+      "h1": "“O Allah, by your leave we have…” (Hisn al-Muslim 27:78)",
+      "title": "“O Allah, by your leave we have…” (Hisn al-Muslim 27:78)"
+    },
+    "27:79": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-79",
+      "h1": "“O Allah, You are my Lord. There is…” (Hisn al-Muslim 27:79)",
+      "title": "“O Allah, You are my Lord. There is…” (Hisn al-Muslim 27:79)"
+    },
+    "27:80": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-80",
+      "h1": "“O Allah, verily I have reached the…” (Hisn al-Muslim 27:80)",
+      "title": "“O Allah, verily I have reached the…” (Hisn al-Muslim 27:80)"
+    },
+    "27:81": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-81",
+      "h1": "“O Allah, what blessing I or any of…” (Hisn al-Muslim 27:81)",
+      "title": "“O Allah, what blessing I or any of…” (Hisn al-Muslim 27:81)"
+    },
+    "27:82": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-82",
+      "h1": "“O Allah, protect my body (from…” (Hisn al-Muslim 27:82)",
+      "title": "“O Allah, protect my body (from…” (Hisn al-Muslim 27:82)"
+    },
+    "27:83": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-83",
+      "h1": "“Allah is Sufficient for me, none…” (Sunan Abi Dawud 5083)",
+      "title": "“Allah is Sufficient for me, none…” (Sunan Abi Dawud 5083)"
+    },
+    "27:84": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-84",
+      "h1": "“O Allah, indeed I ask You for…” (Hisn al-Muslim 27:84)",
+      "title": "“O Allah, indeed I ask You for…” (Hisn al-Muslim 27:84)"
+    },
+    "27:85": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-85",
+      "h1": "“O Allah, Knower of the unseen and…” (Hisn al-Muslim 27:85)",
+      "title": "“O Allah, Knower of the unseen and…” (Hisn al-Muslim 27:85)"
+    },
+    "27:86": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-86",
+      "h1": "“In the name of Allah, with whose…” (Hisn al-Muslim 27:86)",
+      "title": "“In the name of Allah, with whose…” (Hisn al-Muslim 27:86)"
+    },
+    "27:87": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-87",
+      "h1": "“I am pleased with Allah as my Lord…” (Hisn al-Muslim 27:87)",
+      "title": "“I am pleased with Allah as my Lord…” (Hisn al-Muslim 27:87)"
+    },
+    "27:88": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-88",
+      "h1": "“O Ever-Living, O Self-Sustaining…” (Hisn al-Muslim 27:88)",
+      "title": "“O Ever-Living, O Self-Sustaining…” (Hisn al-Muslim 27:88)"
+    },
+    "27:89": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-89",
+      "h1": "“We have reached the morning and at…” (Hisn al-Muslim 27:89)",
+      "title": "“We have reached the morning and at…” (Hisn al-Muslim 27:89)"
+    },
+    "27:90": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-90",
+      "h1": "“In the evening we are upon the…” (Hisn al-Muslim 27:90)",
+      "title": "“In the evening we are upon the…” (Hisn al-Muslim 27:90)"
+    },
+    "27:91": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-91",
+      "h1": "“Glory be to Allah, and praise be…” (Hisn al-Muslim 27:91)",
+      "title": "“Glory be to Allah, and praise be…” (Hisn al-Muslim 27:91)"
+    },
+    "27:92": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-92",
+      "h1": "“There is no deity worthy of…” (Hisn al-Muslim 27:92)",
+      "title": "“There is no deity worthy of…” (Hisn al-Muslim 27:92)"
+    },
+    "27:93": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-93",
+      "h1": "“There is no deity worthy of…” (Hisn al-Muslim 27:93)",
+      "title": "“There is no deity worthy of…” (Hisn al-Muslim 27:93)"
+    },
+    "27:94": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-94",
+      "h1": "“Glory be to Allah, as many as His…” (Hisn al-Muslim 27:94)",
+      "title": "“Glory be to Allah, as many as His…” (Hisn al-Muslim 27:94)"
+    },
+    "27:95": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-95",
+      "h1": "“O Allah, I ask You for beneficial…” (Hisn al-Muslim 27:95)",
+      "title": "“O Allah, I ask You for beneficial…” (Hisn al-Muslim 27:95)"
+    },
+    "27:96": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-96",
+      "h1": "“I seek forgiveness from Allah and…” (Hisn al-Muslim 27:96)",
+      "title": "“I seek forgiveness from Allah and…” (Hisn al-Muslim 27:96)"
+    },
+    "27:97": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-97",
+      "h1": "“I seek refuge in the perfect words…” (Hisn al-Muslim 27:97)",
+      "title": "“I seek refuge in the perfect words…” (Hisn al-Muslim 27:97)"
+    },
+    "27:98": {
+      "slug": "words-of-remembrance-for-morning-and-evening-hisn-27-98",
+      "h1": "“‘O Allaah, send prayers and peace…” (Hisn al-Muslim 27:98)",
+      "title": "“‘O Allaah, send prayers and peace…” (Hisn al-Muslim 27:98)"
+    },
+    "28:100": {
+      "slug": "what-to-say-before-sleeping-hisn-28-100",
+      "h1": "Dua for sleeping (Hisn al-Muslim 28:100)",
+      "title": "Dua for sleeping (Hisn al-Muslim 28:100)"
+    },
+    "28:101": {
+      "slug": "what-to-say-before-sleeping-hisn-28-101",
+      "h1": "Dua for sleeping (Hisn al-Muslim 28:101)",
+      "title": "Dua for sleeping (Hisn al-Muslim 28:101)"
+    },
+    "28:102": {
+      "slug": "what-to-say-before-sleeping-hisn-28-102",
+      "h1": "Dua for sleeping (Jami at-Tirmidhi 3485 · 28:102)",
+      "title": "Dua for sleeping (Jami at-Tirmidhi 3485 · 28:102)"
+    },
+    "28:103": {
+      "slug": "what-to-say-before-sleeping-hisn-28-103",
+      "h1": "Dua for sleeping (Hisn al-Muslim 28:103)",
+      "title": "Dua for sleeping (Hisn al-Muslim 28:103)"
+    },
+    "28:104": {
+      "slug": "what-to-say-before-sleeping-hisn-28-104",
+      "h1": "Dua for sleeping (Sunan Abi Dawud 5047)",
+      "title": "Dua for sleeping (Sunan Abi Dawud 5047)"
+    },
+    "28:105": {
+      "slug": "what-to-say-before-sleeping-hisn-28-105",
+      "h1": "Dua for sleeping (Hisn al-Muslim 28:105)",
+      "title": "Dua for sleeping (Hisn al-Muslim 28:105)"
+    },
+    "28:106": {
+      "slug": "what-to-say-before-sleeping-hisn-28-106",
+      "h1": "Dua for sleeping (Hisn al-Muslim 28:106)",
+      "title": "Dua for sleeping (Hisn al-Muslim 28:106)"
+    },
+    "28:107": {
+      "slug": "what-to-say-before-sleeping-hisn-28-107",
+      "h1": "Dua for sleeping (Hisn al-Muslim 28:107)",
+      "title": "Dua for sleeping (Hisn al-Muslim 28:107)"
+    },
+    "28:108": {
+      "slug": "what-to-say-before-sleeping-hisn-28-108",
+      "h1": "Dua for sleeping (Hisn al-Muslim 28:108)",
+      "title": "Dua for sleeping (Hisn al-Muslim 28:108)"
+    },
+    "28:109": {
+      "slug": "what-to-say-before-sleeping-hisn-28-109",
+      "h1": "Dua for sleeping (Hisn al-Muslim 28:109)",
+      "title": "Dua for sleeping (Hisn al-Muslim 28:109)"
+    },
+    "28:111": {
+      "slug": "what-to-say-before-sleeping-hisn-28-111",
+      "h1": "Dua for sleeping (Sahih al-Bukhari 6076)",
+      "title": "Dua for sleeping (Sahih al-Bukhari 6076)"
+    },
+    "1:1": {
+      "slug": "supplications-for-when-you-wake-up-hisn-1-1",
+      "h1": "Dua when you wake up (Hisn al-Muslim 1:1)",
+      "title": "Dua when you wake up (Hisn al-Muslim 1:1)"
+    },
+    "1:2": {
+      "slug": "supplications-for-when-you-wake-up-hisn-1-2",
+      "h1": "Dua when you wake up (Hisn al-Muslim 1:2)",
+      "title": "Dua when you wake up (Hisn al-Muslim 1:2)"
+    },
+    "1:3": {
+      "slug": "supplications-for-when-you-wake-up-hisn-1-3",
+      "h1": "Dua when you wake up (Jami at-Tirmidhi 3485 · 1:3)",
+      "title": "Dua when you wake up (Jami at-Tirmidhi 3485 · 1:3)"
+    },
+    "1:4": {
+      "slug": "supplications-for-when-you-wake-up-hisn-1-4",
+      "h1": "Dua when you wake up (Hisn al-Muslim 1:4)",
+      "title": "Dua when you wake up (Hisn al-Muslim 1:4)"
+    },
+    "6:10": {
+      "slug": "invocation-for-entering-the-restroom-hisn-6-10",
+      "h1": "Dua for entering the bathroom",
+      "title": "Dua for entering the bathroom – Arabic & English Meaning"
+    },
+    "7:11": {
+      "slug": "invocation-for-leaving-the-restroom-hisn-7-11",
+      "h1": "Dua for leaving the bathroom",
+      "title": "Dua for leaving the bathroom – Arabic & English Meaning"
+    },
+    "8:12": {
+      "slug": "what-to-say-before-performing-ablution-hisn-8-12",
+      "h1": "Dua before wudu",
+      "title": "Dua before wudu – Arabic, Transliteration & Meaning"
+    },
+    "9:13": {
+      "slug": "what-to-say-upon-completing-ablution-hisn-9-13",
+      "h1": "Dua after wudu (Sunan Abi Dawud 525)",
+      "title": "Dua after wudu (Sunan Abi Dawud 525)"
+    },
+    "9:14": {
+      "slug": "what-to-say-upon-completing-ablution-hisn-9-14",
+      "h1": "Dua after wudu (Riyad as-Salihin 353)",
+      "title": "Dua after wudu (Riyad as-Salihin 353)"
+    },
+    "9:15": {
+      "slug": "what-to-say-upon-completing-ablution-hisn-9-15",
+      "h1": "Dua after wudu (Riyad as-Salihin 152 · 9:15)",
+      "title": "Dua after wudu (Riyad as-Salihin 152 · 9:15)"
+    },
+    "10:16": {
+      "slug": "what-to-say-when-leaving-the-home-hisn-10-16",
+      "h1": "Dua for leaving the house (Hisn al-Muslim 10:16)",
+      "title": "Dua for leaving the house (Hisn al-Muslim 10:16)"
+    },
+    "10:17": {
+      "slug": "what-to-say-when-leaving-the-home-hisn-10-17",
+      "h1": "Dua for leaving the house (Hisn al-Muslim 10:17)",
+      "title": "Dua for leaving the house (Hisn al-Muslim 10:17)"
+    },
+    "11:18": {
+      "slug": "what-to-say-when-entering-the-home-hisn-11-18",
+      "h1": "Dua for entering the house",
+      "title": "Dua for entering the house – Arabic & English Meaning"
+    },
+    "12:19": {
+      "slug": "invocation-for-going-to-the-mosque-hisn-12-19",
+      "h1": "Dua for going to the mosque",
+      "title": "Dua for going to the mosque – Arabic & English Meaning"
+    },
+    "13:20": {
+      "slug": "invocation-for-entering-the-mosque-hisn-13-20",
+      "h1": "Dua for entering the mosque",
+      "title": "Dua for entering the mosque – Arabic & English Meaning"
+    },
+    "14:21": {
+      "slug": "invocation-for-leaving-the-mosque-hisn-14-21",
+      "h1": "Dua for leaving the mosque",
+      "title": "Dua for leaving the mosque – Arabic & English Meaning"
+    },
+    "15:22": {
+      "slug": "what-to-say-upon-hearing-the-athan-call-to-prayer-hisn-15-22",
+      "h1": "Dua after azan (Hisn al-Muslim 15:22)",
+      "title": "Dua after azan (Hisn al-Muslim 15:22)"
+    },
+    "15:23": {
+      "slug": "what-to-say-upon-hearing-the-athan-call-to-prayer-hisn-15-23",
+      "h1": "Dua after azan (Hisn al-Muslim 15:23)",
+      "title": "Dua after azan (Hisn al-Muslim 15:23)"
+    },
+    "15:25": {
+      "slug": "what-to-say-upon-hearing-the-athan-call-to-prayer-hisn-15-25",
+      "h1": "Dua after azan (Hisn al-Muslim 15:25)",
+      "title": "Dua after azan (Hisn al-Muslim 15:25)"
+    },
+    "15:26": {
+      "slug": "what-to-say-upon-hearing-the-athan-call-to-prayer-hisn-15-26",
+      "h1": "Dua after azan (Hisn al-Muslim 15:26)",
+      "title": "Dua after azan (Hisn al-Muslim 15:26)"
+    },
+    "2:5": {
+      "slug": "invocation-when-getting-dressed-hisn-2-5",
+      "h1": "Dua for getting dressed",
+      "title": "Dua for getting dressed – Arabic, Transliteration & Meaning"
+    },
+    "3:6": {
+      "slug": "invocation-when-putting-on-new-clothes-hisn-3-6",
+      "h1": "Dua for putting on new clothes",
+      "title": "Dua for putting on new clothes – Arabic & English Meaning"
+    },
+    "4:7": {
+      "slug": "invocations-for-someone-who-has-put-on-new-clothes-hisn-4-7",
+      "h1": "Dua for someone wearing new clothes (Sunan Abi Dawud 4021)",
+      "title": "Dua for someone wearing new clothes (Sunan Abi Dawud 4021)"
+    },
+    "4:8": {
+      "slug": "invocations-for-someone-who-has-put-on-new-clothes-hisn-4-8",
+      "h1": "Dua for someone wearing new clothes (Sunan Ibn Majah 3294)",
+      "title": "Dua for someone wearing new clothes (Sunan Ibn Majah 3294)"
+    },
+    "5:9": {
+      "slug": "what-to-say-when-undressing-hisn-5-9",
+      "h1": "Dua for undressing",
+      "title": "Dua for undressing – Arabic, Transliteration & Meaning"
+    },
+    "16:27": {
+      "slug": "invocations-for-the-beginning-of-the-prayer-hisn-16-27",
+      "h1": "Dua for the beginning of the prayer (Sunan an-Nasai 60)",
+      "title": "Dua for the beginning of the prayer (Sunan an-Nasai 60)"
+    },
+    "16:28": {
+      "slug": "invocations-for-the-beginning-of-the-prayer-hisn-16-28",
+      "h1": "Dua for the beginning of the prayer (Sunan an-Nasai 902)",
+      "title": "Dua for the beginning of the prayer (Sunan an-Nasai 902)"
+    },
+    "16:29": {
+      "slug": "invocations-for-the-beginning-of-the-prayer-hisn-16-29",
+      "h1": "Dua for the beginning of the prayer (Hisn al-Muslim 16:29)",
+      "title": "Dua for the beginning of the prayer (Hisn al-Muslim 16:29)"
+    },
+    "16:30": {
+      "slug": "invocations-for-the-beginning-of-the-prayer-hisn-16-30",
+      "h1": "Dua for the beginning of the prayer (Sahih Muslim 1703)",
+      "title": "Dua for the beginning of the prayer (Sahih Muslim 1703)"
+    },
+    "16:31": {
+      "slug": "invocations-for-the-beginning-of-the-prayer-hisn-16-31",
+      "h1": "Dua for the beginning of the prayer (Sunan Abi Dawud 764)",
+      "title": "Dua for the beginning of the prayer (Sunan Abi Dawud 764)"
+    },
+    "16:32": {
+      "slug": "invocations-for-the-beginning-of-the-prayer-hisn-16-32",
+      "h1": "Dua for the beginning of the prayer (Hisn al-Muslim 16:32)",
+      "title": "Dua for the beginning of the prayer (Hisn al-Muslim 16:32)"
+    },
+    "17:33": {
+      "slug": "invocations-during-ruki-bowing-in-prayer-hisn-17-33",
+      "h1": "Dua for ruku (Sunan Ibn Majah 622 · 17:33)",
+      "title": "Dua for ruku (Sunan Ibn Majah 622 · 17:33)"
+    },
+    "17:34": {
+      "slug": "invocations-during-ruki-bowing-in-prayer-hisn-17-34",
+      "h1": "Dua for ruku (Riyad as-Salihin 746 · 17:34)",
+      "title": "Dua for ruku (Riyad as-Salihin 746 · 17:34)"
+    },
+    "17:35": {
+      "slug": "invocations-during-ruki-bowing-in-prayer-hisn-17-35",
+      "h1": "Dua for ruku (Riyad as-Salihin 747 · 17:35)",
+      "title": "Dua for ruku (Riyad as-Salihin 747 · 17:35)"
+    },
+    "17:36": {
+      "slug": "invocations-during-ruki-bowing-in-prayer-hisn-17-36",
+      "h1": "Dua for ruku (Hisn al-Muslim 17:36)",
+      "title": "Dua for ruku (Hisn al-Muslim 17:36)"
+    },
+    "17:37": {
+      "slug": "invocations-during-ruki-bowing-in-prayer-hisn-17-37",
+      "h1": "Dua for ruku (Sunan an-Nasai 1051 · 17:37)",
+      "title": "Dua for ruku (Sunan an-Nasai 1051 · 17:37)"
+    },
+    "18:38": {
+      "slug": "invocations-for-rising-from-the-ruki-hisn-18-38",
+      "h1": "Dua after rising from ruku (Sunan Abi Dawud 849)",
+      "title": "Dua after rising from ruku (Sunan Abi Dawud 849)"
+    },
+    "18:39": {
+      "slug": "invocations-for-rising-from-the-ruki-hisn-18-39",
+      "h1": "Dua after rising from ruku (Sahih al-Bukhari 782)",
+      "title": "Dua after rising from ruku (Sahih al-Bukhari 782)"
+    },
+    "18:40": {
+      "slug": "invocations-for-rising-from-the-ruki-hisn-18-40",
+      "h1": "Dua after rising from ruku (Hisn al-Muslim 18:40)",
+      "title": "Dua after rising from ruku (Hisn al-Muslim 18:40)"
+    },
+    "19:41": {
+      "slug": "invocations-during-sujood-hisn-19-41",
+      "h1": "Dua for sujood (Sunan Ibn Majah 622 · 19:41)",
+      "title": "Dua for sujood (Sunan Ibn Majah 622 · 19:41)"
+    },
+    "19:42": {
+      "slug": "invocations-during-sujood-hisn-19-42",
+      "h1": "Dua for sujood (Riyad as-Salihin 746 · 19:42)",
+      "title": "Dua for sujood (Riyad as-Salihin 746 · 19:42)"
+    },
+    "19:43": {
+      "slug": "invocations-during-sujood-hisn-19-43",
+      "h1": "Dua for sujood (Riyad as-Salihin 747 · 19:43)",
+      "title": "Dua for sujood (Riyad as-Salihin 747 · 19:43)"
+    },
+    "19:44": {
+      "slug": "invocations-during-sujood-hisn-19-44",
+      "h1": "Dua for sujood (Sahih Muslim 1704)",
+      "title": "Dua for sujood (Sahih Muslim 1704)"
+    },
+    "19:45": {
+      "slug": "invocations-during-sujood-hisn-19-45",
+      "h1": "Dua for sujood (Sunan an-Nasai 1051 · 19:45)",
+      "title": "Dua for sujood (Sunan an-Nasai 1051 · 19:45)"
+    },
+    "19:46": {
+      "slug": "invocations-during-sujood-hisn-19-46",
+      "h1": "Dua for sujood (Hisn al-Muslim 19:46)",
+      "title": "Dua for sujood (Hisn al-Muslim 19:46)"
+    },
+    "19:47": {
+      "slug": "invocations-during-sujood-hisn-19-47",
+      "h1": "Dua for sujood (Riyad as-Salihin 751 · 19:47)",
+      "title": "Dua for sujood (Riyad as-Salihin 751 · 19:47)"
+    },
+    "20:48": {
+      "slug": "invocations-for-sitting-between-two-prostrations-hisn-20-48",
+      "h1": "Dua for sitting between two… (Sunan Ibn Majah 631)",
+      "title": "Dua for sitting between two… (Sunan Ibn Majah 631)"
+    },
+    "20:49": {
+      "slug": "invocations-for-sitting-between-two-prostrations-hisn-20-49",
+      "h1": "Dua for sitting between two… (Hisn al-Muslim 20:49)",
+      "title": "Dua for sitting between two… (Hisn al-Muslim 20:49)"
+    },
+    "21:50": {
+      "slug": "supplications-for-prostrating-due-to-recitation-of-the-quran-hisn-21-50",
+      "h1": "Dua for sajdah tilawah (Hisn al-Muslim 21:50)",
+      "title": "Dua for sajdah tilawah (Hisn al-Muslim 21:50)"
+    },
+    "21:51": {
+      "slug": "supplications-for-prostrating-due-to-recitation-of-the-quran-hisn-21-51",
+      "h1": "Dua for sajdah tilawah (Jami at-Tirmidhi 3508)",
+      "title": "Dua for sajdah tilawah (Jami at-Tirmidhi 3508)"
+    },
+    "22:52": {
+      "slug": "invocation-for-at-tashahhud-sitting-in-prayer-hisn-22-52",
+      "h1": "Tashahhud dua",
+      "title": "Tashahhud dua – Arabic & English Meaning"
+    },
+    "23:53": {
+      "slug": "how-to-recite-blessings-on-the-prophet-after-the-tashahhud-hisn-23-53",
+      "h1": "Durood after tashahhud (Sahih al-Bukhari 3231)",
+      "title": "Durood after tashahhud (Sahih al-Bukhari 3231)"
+    },
+    "23:54": {
+      "slug": "how-to-recite-blessings-on-the-prophet-after-the-tashahhud-hisn-23-54",
+      "h1": "Durood after tashahhud (Sahih Muslim 813)",
+      "title": "Durood after tashahhud (Sahih Muslim 813)"
+    },
+    "24:55": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-55",
+      "h1": "Dua for after the final tash-ahhud… (Hisn al-Muslim 24:55)",
+      "title": "Dua for after the final tash-ahhud… (Hisn al-Muslim 24:55)"
+    },
+    "24:56": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-56",
+      "h1": "Dua for after the final tash-ahhud… (Sunan Abi Dawud 880)",
+      "title": "Dua for after the final tash-ahhud… (Sunan Abi Dawud 880)"
+    },
+    "24:57": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-57",
+      "h1": "Dua for after the final tash-ahhud… (Sunan Ibn Majah 3571)",
+      "title": "Dua for after the final tash-ahhud… (Sunan Ibn Majah 3571)"
+    },
+    "24:58": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-58",
+      "h1": "Dua for after the final tash-ahhud… (Riyad as-Salihin 745)",
+      "title": "Dua for after the final tash-ahhud… (Riyad as-Salihin 745)"
+    },
+    "24:59": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-59",
+      "h1": "Dua for after the final tash-ahhud… (Riyad as-Salihin 743)",
+      "title": "Dua for after the final tash-ahhud… (Riyad as-Salihin 743)"
+    },
+    "24:60": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-60",
+      "h1": "Dua for after the final tash-ahhud… (Hisn al-Muslim 24:60)",
+      "title": "Dua for after the final tash-ahhud… (Hisn al-Muslim 24:60)"
+    },
+    "24:61": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-61",
+      "h1": "Dua for after the final tash-ahhud… (Sunan Abi Dawud 792)",
+      "title": "Dua for after the final tash-ahhud… (Sunan Abi Dawud 792)"
+    },
+    "24:62": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-62",
+      "h1": "Dua for after the final tash-ahhud… (Hisn al-Muslim 24:62)",
+      "title": "Dua for after the final tash-ahhud… (Hisn al-Muslim 24:62)"
+    },
+    "24:63": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-63",
+      "h1": "Dua for after the final tash-ahhud… (Sunan an-Nasai 1303)",
+      "title": "Dua for after the final tash-ahhud… (Sunan an-Nasai 1303)"
+    },
+    "24:64": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-64",
+      "h1": "Dua for after the final tash-ahhud… (Hisn al-Muslim 24:64)",
+      "title": "Dua for after the final tash-ahhud… (Hisn al-Muslim 24:64)"
+    },
+    "24:65": {
+      "slug": "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-65",
+      "h1": "Dua for after the final tash-ahhud… (Jami at-Tirmidhi 3559)",
+      "title": "Dua for after the final tash-ahhud… (Jami at-Tirmidhi 3559)"
+    },
+    "25:66": {
+      "slug": "what-to-say-after-completing-the-prayer-hisn-25-66",
+      "h1": "Dua for completing the prayer (Hisn al-Muslim 25:66)",
+      "title": "Dua for completing the prayer (Hisn al-Muslim 25:66)"
+    },
+    "25:67": {
+      "slug": "what-to-say-after-completing-the-prayer-hisn-25-67",
+      "h1": "Dua for completing the prayer (Hisn al-Muslim 25:67)",
+      "title": "Dua for completing the prayer (Hisn al-Muslim 25:67)"
+    },
+    "25:68": {
+      "slug": "what-to-say-after-completing-the-prayer-hisn-25-68",
+      "h1": "Dua for completing the prayer (Hisn al-Muslim 25:68)",
+      "title": "Dua for completing the prayer (Hisn al-Muslim 25:68)"
+    },
+    "25:69": {
+      "slug": "what-to-say-after-completing-the-prayer-hisn-25-69",
+      "h1": "Dua for completing the prayer (Hisn al-Muslim 25:69)",
+      "title": "Dua for completing the prayer (Hisn al-Muslim 25:69)"
+    },
+    "25:70": {
+      "slug": "what-to-say-after-completing-the-prayer-hisn-25-70",
+      "h1": "Dua for completing the prayer (Hisn al-Muslim 25:70)",
+      "title": "Dua for completing the prayer (Hisn al-Muslim 25:70)"
+    },
+    "25:71": {
+      "slug": "what-to-say-after-completing-the-prayer-hisn-25-71",
+      "h1": "Dua for completing the prayer (Hisn al-Muslim 25:71)",
+      "title": "Dua for completing the prayer (Hisn al-Muslim 25:71)"
+    },
+    "25:72": {
+      "slug": "what-to-say-after-completing-the-prayer-hisn-25-72",
+      "h1": "Dua for completing the prayer (Hisn al-Muslim 25:72)",
+      "title": "Dua for completing the prayer (Hisn al-Muslim 25:72)"
+    },
+    "25:73": {
+      "slug": "what-to-say-after-completing-the-prayer-hisn-25-73",
+      "h1": "Dua for completing the prayer (Hisn al-Muslim 25:73)",
+      "title": "Dua for completing the prayer (Hisn al-Muslim 25:73)"
+    },
+    "26:74": {
+      "slug": "istikharah-seeking-allahs-counsel-hisn-26-74",
+      "h1": "How to pray istikhara",
+      "title": "How to pray istikhara – Arabic & English Meaning"
+    },
+    "29:112": {
+      "slug": "invocation-to-say-if-you-stir-in-the-night-hisn-29-112",
+      "h1": "Dua when waking in the night",
+      "title": "Dua when waking in the night – Arabic & English Meaning"
+    },
+    "30:113": {
+      "slug": "what-to-say-if-you-are-afraid-to-go-to-sleep-or-feel-lonely--hisn-30-113",
+      "h1": "Dua for you are afraid to go to sleep or feel lonely and…",
+      "title": "Dua for you are afraid to go to sleep or feel lonely and…"
+    },
+    "31:114": {
+      "slug": "what-to-do-if-you-have-a-bad-dream-or-nightmare-hisn-31-114",
+      "h1": "Dua for bad dreams (Hisn al-Muslim 31:114)",
+      "title": "Dua for bad dreams (Hisn al-Muslim 31:114)"
+    },
+    "31:115": {
+      "slug": "what-to-do-if-you-have-a-bad-dream-or-nightmare-hisn-31-115",
+      "h1": "Dua for bad dreams (Hisn al-Muslim 31:115)",
+      "title": "Dua for bad dreams (Hisn al-Muslim 31:115)"
+    },
+    "32:116": {
+      "slug": "invocations-for-qunut-in-the-witr-prayer-hisn-32-116",
+      "h1": "Dua for qunut in the witr prayer (Hisn al-Muslim 32:116)",
+      "title": "Dua for qunut in the witr prayer (Hisn al-Muslim 32:116)"
+    },
+    "32:117": {
+      "slug": "invocations-for-qunut-in-the-witr-prayer-hisn-32-117",
+      "h1": "Dua for qunut in the witr… (Riyad as-Salihin 751 · 32:117)",
+      "title": "Dua for qunut in the witr… (Riyad as-Salihin 751 · 32:117)"
+    },
+    "32:118": {
+      "slug": "invocations-for-qunut-in-the-witr-prayer-hisn-32-118",
+      "h1": "Dua for qunut in the witr prayer (Hisn al-Muslim 32:118)",
+      "title": "Dua for qunut in the witr prayer (Hisn al-Muslim 32:118)"
+    },
+    "33:119": {
+      "slug": "what-to-say-immediately-following-the-witr-prayer-hisn-33-119",
+      "h1": "Dua after witr",
+      "title": "Dua after witr – Arabic & English Meaning"
+    },
+    "34:120": {
+      "slug": "invocations-in-times-of-worry-and-grief-hisn-34-120",
+      "h1": "Dua for worry and grief (Hisn al-Muslim 34:120)",
+      "title": "Dua for worry and grief (Hisn al-Muslim 34:120)"
+    },
+    "34:121": {
+      "slug": "invocations-in-times-of-worry-and-grief-hisn-34-121",
+      "h1": "Dua for worry and grief (Sunan an-Nasai 5462 · 34:121)",
+      "title": "Dua for worry and grief (Sunan an-Nasai 5462 · 34:121)"
+    },
+    "35:122": {
+      "slug": "invocations-for-anguish-hisn-35-122",
+      "h1": "Dua for anguish (Sahih al-Bukhari 6109)",
+      "title": "Dua for anguish (Sahih al-Bukhari 6109)"
+    },
+    "35:123": {
+      "slug": "invocations-for-anguish-hisn-35-123",
+      "h1": "Dua for anguish (Sunan Abi Dawud 5092)",
+      "title": "Dua for anguish (Sunan Abi Dawud 5092)"
+    },
+    "35:124": {
+      "slug": "invocations-for-anguish-hisn-35-124",
+      "h1": "Dua for anguish (Jami at-Tirmidhi 3589)",
+      "title": "Dua for anguish (Jami at-Tirmidhi 3589)"
+    },
+    "35:125": {
+      "slug": "invocations-for-anguish-hisn-35-125",
+      "h1": "Dua for anguish (Sunan Ibn Majah 3618)",
+      "title": "Dua for anguish (Sunan Ibn Majah 3618)"
+    },
+    "36:126": {
+      "slug": "invocations-for-when-you-meet-an-adversary-or-a-powerful-rul-hisn-36-126",
+      "h1": "Dua when you meet an adversary or a… (Riyad as-Salihin 648)",
+      "title": "Dua when you meet an adversary or a… (Riyad as-Salihin 648)"
+    },
+    "36:127": {
+      "slug": "invocations-for-when-you-meet-an-adversary-or-a-powerful-rul-hisn-36-127",
+      "h1": "Dua when you meet an adversary or a… (Hisn al-Muslim 36:127)",
+      "title": "Dua when you meet an adversary or a… (Hisn al-Muslim 36:127)"
+    },
+    "36:128": {
+      "slug": "invocations-for-when-you-meet-an-adversary-or-a-powerful-rul-hisn-36-128",
+      "h1": "Dua when you meet an adversary or a… (Riyad as-Salihin 1293)",
+      "title": "Dua when you meet an adversary or a… (Riyad as-Salihin 1293)"
+    },
+    "37:129": {
+      "slug": "invocations-against-the-oppression-of-rulers-hisn-37-129",
+      "h1": "Dua against oppression (Hisn al-Muslim 37:129)",
+      "title": "Dua against oppression (Hisn al-Muslim 37:129)"
+    },
+    "37:130": {
+      "slug": "invocations-against-the-oppression-of-rulers-hisn-37-130",
+      "h1": "Dua against oppression (Hisn al-Muslim 37:130)",
+      "title": "Dua against oppression (Hisn al-Muslim 37:130)"
+    },
+    "38:131": {
+      "slug": "invocation-against-an-enemy-hisn-38-131",
+      "h1": "Dua for an enemy",
+      "title": "Dua for an enemy – Arabic, Transliteration & Meaning"
+    },
+    "39:132": {
+      "slug": "what-to-say-if-you-fear-people-may-harm-you-hisn-39-132",
+      "h1": "Dua for protection from harm from people",
+      "title": "Dua for protection from harm from people"
+    },
+    "40:134": {
+      "slug": "invocations-for-if-you-are-stricken-by-in-your-faith-hisn-40-134",
+      "h1": "Dua for doubts in faith (Hisn al-Muslim 40:134)",
+      "title": "Dua for doubts in faith (Hisn al-Muslim 40:134)"
+    },
+    "40:135": {
+      "slug": "invocations-for-if-you-are-stricken-by-in-your-faith-hisn-40-135",
+      "h1": "Dua for doubts in faith (Hisn al-Muslim 40:135)",
+      "title": "Dua for doubts in faith (Hisn al-Muslim 40:135)"
+    },
+    "41:136": {
+      "slug": "invocations-for-the-setting-of-a-debt-hisn-41-136",
+      "h1": "Dua for debt relief (Hisn al-Muslim 41:136)",
+      "title": "Dua for debt relief (Hisn al-Muslim 41:136)"
+    },
+    "41:137": {
+      "slug": "invocations-for-the-setting-of-a-debt-hisn-41-137",
+      "h1": "Dua for debt relief (Sunan an-Nasai 5462 · 41:137)",
+      "title": "Dua for debt relief (Sunan an-Nasai 5462 · 41:137)"
+    },
+    "43:139": {
+      "slug": "invocation-for-when-you-find-something-becoming-difficult-fo-hisn-43-139",
+      "h1": "Dua when you find something becoming difficult for you",
+      "title": "Dua when you find something becoming difficult for you"
+    },
+    "44:140": {
+      "slug": "what-to-say-and-do-if-you-commit-a-sin-hisn-44-140",
+      "h1": "Dua after committing a sin",
+      "title": "Dua after committing a sin – Arabic & English Meaning"
+    },
+    "45:141": {
+      "slug": "invocations-against-the-devil-and-his-promptings-hisn-45-141",
+      "h1": "“Seeking refuge from him.” (Hisn al-Muslim 45:141)",
+      "title": "“Seeking refuge from him.” (Hisn al-Muslim 45:141)"
+    },
+    "45:142": {
+      "slug": "invocations-against-the-devil-and-his-promptings-hisn-45-142",
+      "h1": "“The Adhaan [call to prayer].” (Hisn al-Muslim 45:142)",
+      "title": "“The Adhaan [call to prayer].” (Hisn al-Muslim 45:142)"
+    },
+    "45:143": {
+      "slug": "invocations-against-the-devil-and-his-promptings-hisn-45-143",
+      "h1": "“Recitation of the Quran and the…” (Hisn al-Muslim 45:143)",
+      "title": "“Recitation of the Quran and the…” (Hisn al-Muslim 45:143)"
+    },
+    "46:144": {
+      "slug": "invocation-for-when-something-you-dislike-happens-or-for-whe-hisn-46-144",
+      "h1": "Dua when something you dislike happens, or for when you…",
+      "title": "Dua when something you dislike happens, or for when you…"
+    },
+    "47:145": {
+      "slug": "congratulations-for-new-parents-and-how-they-should-respond-hisn-47-145",
+      "h1": "Dua for newborn baby",
+      "title": "Dua for newborn baby – Arabic & English Meaning"
+    },
+    "48:146": {
+      "slug": "how-to-seek-allahs-protection-for-children-hisn-48-146",
+      "h1": "Dua for protection of children",
+      "title": "Dua for protection of children – Arabic & English Meaning"
+    },
+    "49:147": {
+      "slug": "invocations-for-visiting-the-sick-hisn-49-147",
+      "h1": "Dua for visiting the sick (Riyad as-Salihin 228)",
+      "title": "Dua for visiting the sick (Riyad as-Salihin 228)"
+    },
+    "49:148": {
+      "slug": "invocations-for-visiting-the-sick-hisn-49-148",
+      "h1": "Dua for visiting the sick (Hisn al-Muslim 49:148)",
+      "title": "Dua for visiting the sick (Hisn al-Muslim 49:148)"
+    },
+    "51:150": {
+      "slug": "invocations-of-the-terminal-ill-hisn-51-150",
+      "h1": "Dua for the terminally ill (Riyad as-Salihin 232)",
+      "title": "Dua for the terminally ill (Riyad as-Salihin 232)"
+    },
+    "51:151": {
+      "slug": "invocations-of-the-terminal-ill-hisn-51-151",
+      "h1": "Dua for the terminally ill (Hisn al-Muslim 51:151)",
+      "title": "Dua for the terminally ill (Hisn al-Muslim 51:151)"
+    },
+    "51:152": {
+      "slug": "invocations-of-the-terminal-ill-hisn-51-152",
+      "h1": "Dua for the terminally ill (Hisn al-Muslim 51:152)",
+      "title": "Dua for the terminally ill (Hisn al-Muslim 51:152)"
+    },
+    "52:153": {
+      "slug": "what-to-encourage-the-dying-person-to-say-hisn-52-153",
+      "h1": "Talqeen for the dying",
+      "title": "Talqeen for the dying – Arabic & English Meaning"
+    },
+    "53:154": {
+      "slug": "invocation-for-when-tragedy-strikes-hisn-53-154",
+      "h1": "Dua when tragedy strikes",
+      "title": "Dua when tragedy strikes – Arabic, Transliteration & Meaning"
+    },
+    "54:155": {
+      "slug": "invocation-for-closing-the-eyes-of-the-dead-hisn-54-155",
+      "h1": "Dua for closing the eyes of the dead",
+      "title": "Dua for closing the eyes of the dead"
+    },
+    "55:156": {
+      "slug": "invocations-for-the-dead-in-the-funeral-prayer-hisn-55-156",
+      "h1": "Dua for the dead in the funeral… (Hisn al-Muslim 55:156)",
+      "title": "Dua for the dead in the funeral… (Hisn al-Muslim 55:156)"
+    },
+    "55:157": {
+      "slug": "invocations-for-the-dead-in-the-funeral-prayer-hisn-55-157",
+      "h1": "Dua for the dead in the funeral… (Hisn al-Muslim 55:157)",
+      "title": "Dua for the dead in the funeral… (Hisn al-Muslim 55:157)"
+    },
+    "55:158": {
+      "slug": "invocations-for-the-dead-in-the-funeral-prayer-hisn-55-158",
+      "h1": "Dua for the dead in the funeral… (Hisn al-Muslim 55:158)",
+      "title": "Dua for the dead in the funeral… (Hisn al-Muslim 55:158)"
+    },
+    "55:159": {
+      "slug": "invocations-for-the-dead-in-the-funeral-prayer-hisn-55-159",
+      "h1": "Dua for the dead in the funeral… (Hisn al-Muslim 55:159)",
+      "title": "Dua for the dead in the funeral… (Hisn al-Muslim 55:159)"
+    },
+    "56:160": {
+      "slug": "invocations-for-a-child-in-the-funeral-prayer-hisn-56-160",
+      "h1": "Dua for a child in the funeral… (Hisn al-Muslim 56:160)",
+      "title": "Dua for a child in the funeral… (Hisn al-Muslim 56:160)"
+    },
+    "56:161": {
+      "slug": "invocations-for-a-child-in-the-funeral-prayer-hisn-56-161",
+      "h1": "Dua for a child in the funeral… (Hisn al-Muslim 56:161)",
+      "title": "Dua for a child in the funeral… (Hisn al-Muslim 56:161)"
+    },
+    "57:162": {
+      "slug": "invocation-for-the-bereaved-hisn-57-162",
+      "h1": "Dua for someone who lost a loved one",
+      "title": "Dua for someone who lost a loved one"
+    },
+    "58:163": {
+      "slug": "invocation-to-be-recited-when-placing-the-dead-in-his-grave-hisn-58-163",
+      "h1": "Dua when placing the dead in his grave",
+      "title": "Dua when placing the dead in his grave"
+    },
+    "59:164": {
+      "slug": "invocation-to-be-recited-after-burying-the-dead-hisn-59-164",
+      "h1": "Dua for after burying the dead",
+      "title": "Dua for after burying the dead – Arabic & English Meaning"
+    },
+    "60:165": {
+      "slug": "invocation-for-visiting-the-graves-hisn-60-165",
+      "h1": "Dua for visiting graveyard",
+      "title": "Dua for visiting graveyard – Arabic & English Meaning"
+    },
+    "61:166": {
+      "slug": "invocations-for-when-the-wind-blows-hisn-61-166",
+      "h1": "Dua when the wind blows (Hisn al-Muslim 61:166)",
+      "title": "Dua when the wind blows (Hisn al-Muslim 61:166)"
+    },
+    "61:167": {
+      "slug": "invocations-for-when-the-wind-blows-hisn-61-167",
+      "h1": "Dua when the wind blows (Hisn al-Muslim 61:167)",
+      "title": "Dua when the wind blows (Hisn al-Muslim 61:167)"
+    },
+    "62:168": {
+      "slug": "invocation-for-when-it-thunder-hisn-62-168",
+      "h1": "Dua for thunder",
+      "title": "Dua for thunder – Arabic, Transliteration & Meaning"
+    },
+    "63:169": {
+      "slug": "some-invocations-for-rain-hisn-63-169",
+      "h1": "Duas for rain and drought (Sunan Abi Dawud 1170)",
+      "title": "Duas for rain and drought (Sunan Abi Dawud 1170)"
+    },
+    "63:170": {
+      "slug": "some-invocations-for-rain-hisn-63-170",
+      "h1": "Duas for rain and drought (Sahih al-Bukhari 986)",
+      "title": "Duas for rain and drought (Sahih al-Bukhari 986)"
+    },
+    "63:171": {
+      "slug": "some-invocations-for-rain-hisn-63-171",
+      "h1": "Duas for rain and drought (Hisn al-Muslim 63:171)",
+      "title": "Duas for rain and drought (Hisn al-Muslim 63:171)"
+    },
+    "64:172": {
+      "slug": "invocation-for-when-it-rains-hisn-64-172",
+      "h1": "Dua when it rains",
+      "title": "Dua when it rains – Arabic, Transliteration & Meaning"
+    },
+    "65:173": {
+      "slug": "supplication-after-it-rains-hisn-65-173",
+      "h1": "Dua after rain",
+      "title": "Dua after rain – Arabic, Transliteration & Meaning"
+    },
+    "66:174": {
+      "slug": "invocation-for-the-withholding-of-the-rain-hisn-66-174",
+      "h1": "Dua to stop the rain",
+      "title": "Dua to stop the rain – Arabic, Transliteration & Meaning"
+    },
+    "67:175": {
+      "slug": "invocation-for-sighting-the-new-moon-hisn-67-175",
+      "h1": "Dua for sighting the moon",
+      "title": "Dua for sighting the moon – Arabic & English Meaning"
+    },
+    "68:176": {
+      "slug": "invocations-for-breaking-the-fast-hisn-68-176",
+      "h1": "Dua for breaking fast (Hisn al-Muslim 68:176)",
+      "title": "Dua for breaking fast (Hisn al-Muslim 68:176)"
+    },
+    "68:177": {
+      "slug": "invocations-for-breaking-the-fast-hisn-68-177",
+      "h1": "Dua for breaking fast (Sunan Ibn Majah 1487)",
+      "title": "Dua for breaking fast (Sunan Ibn Majah 1487)"
+    },
+    "69:178": {
+      "slug": "invocations-before-eating-hisn-69-178",
+      "h1": "Dua before eating (Jami at-Tirmidhi 1922)",
+      "title": "Dua before eating (Jami at-Tirmidhi 1922)"
+    },
+    "69:179": {
+      "slug": "invocations-before-eating-hisn-69-179",
+      "h1": "Dua before eating (Jami at-Tirmidhi 3539)",
+      "title": "Dua before eating (Jami at-Tirmidhi 3539)"
+    },
+    "70:180": {
+      "slug": "invocations-after-eating-hisn-70-180",
+      "h1": "Dua after eating (Hisn al-Muslim 70:180)",
+      "title": "Dua after eating (Hisn al-Muslim 70:180)"
+    },
+    "70:181": {
+      "slug": "invocations-after-eating-hisn-70-181",
+      "h1": "Dua after eating (Hisn al-Muslim 70:181)",
+      "title": "Dua after eating (Hisn al-Muslim 70:181)"
+    },
+    "71:182": {
+      "slug": "a-dinner-guests-invocation-for-his-host-hisn-71-182",
+      "h1": "Dua for the host after eating",
+      "title": "Dua for the host after eating – Arabic & English Meaning"
+    },
+    "72:183": {
+      "slug": "invocation-for-someone-who-gives-you-drink-or-offers-it-to-y-hisn-72-183",
+      "h1": "Dua for someone who gives you drink or offers it to you",
+      "title": "Dua for someone who gives you drink or offers it to you"
+    },
+    "73:184": {
+      "slug": "invocation-for-a-family-who-invites-you-to-break-your-fast-w-hisn-73-184",
+      "h1": "Dua for a family who invites you to break your fast with…",
+      "title": "Dua for a family who invites you to break your fast with…"
+    },
+    "75:186": {
+      "slug": "what-to-say-when-you-are-fasting-and-someone-is-rude-to-you-hisn-75-186",
+      "h1": "What to say when insulted while fasting",
+      "title": "What to say when insulted while fasting"
+    },
+    "76:187": {
+      "slug": "invocation-for-when-you-see-the-first-dates-of-the-season-hisn-76-187",
+      "h1": "Dua for the first fruit of the season",
+      "title": "Dua for the first fruit of the season"
+    },
+    "77:188": {
+      "slug": "invocation-for-sneezing-hisn-77-188",
+      "h1": "Dua for sneezing",
+      "title": "Dua for sneezing – Arabic & English Meaning"
+    },
+    "78:189": {
+      "slug": "what-to-say-to-the-disbeliever-if-he-sneezes-and-praises-all-hisn-78-189",
+      "h1": "Reply to non-muslim sneezing",
+      "title": "Reply to non-muslim sneezing – Arabic & English Meaning"
+    },
+    "79:190": {
+      "slug": "invocation-for-the-groom-hisn-79-190",
+      "h1": "Dua for the groom",
+      "title": "Dua for the groom – Arabic, Transliteration & Meaning"
+    },
+    "80:191": {
+      "slug": "the-grooms-supplication-on-the-wedding-night-or-when-buying--hisn-80-191",
+      "h1": "Dua for wedding night",
+      "title": "Dua for wedding night – Arabic & English Meaning"
+    },
+    "81:192": {
+      "slug": "invocation-to-be-recited-before-intercourse-hisn-81-192",
+      "h1": "Dua before intimacy in islam",
+      "title": "Dua before intimacy in islam – Arabic & English Meaning"
+    },
+    "82:193": {
+      "slug": "invocation-for-anger-hisn-82-193",
+      "h1": "Dua for anger",
+      "title": "Dua for anger – Arabic, Transliteration & Meaning"
+    },
+    "83:194": {
+      "slug": "what-to-say-if-you-see-someone-afflicted-by-misfortune-hisn-83-194",
+      "h1": "Dua when seeing someone in hardship",
+      "title": "Dua when seeing someone in hardship"
+    },
+    "84:195": {
+      "slug": "what-to-say-while-sitting-in-an-assembly-hisn-84-195",
+      "h1": "Dua while sitting in a gathering",
+      "title": "Dua while sitting in a gathering – Arabic & English Meaning"
+    },
+    "85:196": {
+      "slug": "the-expiation-of-assembly-kaffaratul-majlis-hisn-85-196",
+      "h1": "Kaffaratul majlis",
+      "title": "Kaffaratul majlis – Arabic, Transliteration & Meaning"
+    },
+    "86:197": {
+      "slug": "vocation-for-someone-who-says-may-allah-forgive-you-hisn-86-197",
+      "h1": "Reply to may allah forgive you",
+      "title": "Reply to may allah forgive you – Arabic & English Meaning"
+    },
+    "87:198": {
+      "slug": "invocation-for-someone-who-does-good-to-you-hisn-87-198",
+      "h1": "Dua for someone who does good to you",
+      "title": "Dua for someone who does good to you"
+    },
+    "88:199": {
+      "slug": "invocation-for-allahs-protection-from-the-false-messiah-hisn-88-199",
+      "h1": "Dua for protection from dajjal",
+      "title": "Dua for protection from dajjal – Arabic & English Meaning"
+    },
+    "89:200": {
+      "slug": "invocation-for-someone-who-tells-you-i-love-you-for-the-sake-hisn-89-200",
+      "h1": "Dua for someone who tells you i love you for the sake of…",
+      "title": "Dua for someone who tells you i love you for the sake of…"
+    },
+    "90:201": {
+      "slug": "invocation-for-someone-who-offers-you-a-share-of-his-wealth-hisn-90-201",
+      "h1": "Dua for someone who gives you money",
+      "title": "Dua for someone who gives you money"
+    },
+    "91:202": {
+      "slug": "invocation-upon-receipt-of-the-loan-for-someone-who-lends-yo-hisn-91-202",
+      "h1": "Dua for invocation for someone who lends you money",
+      "title": "Dua for invocation for someone who lends you money"
+    },
+    "92:203": {
+      "slug": "invocation-for-fear-of-shirk-hisn-92-203",
+      "h1": "Dua for fear of shirk",
+      "title": "Dua for fear of shirk – Arabic & English Meaning"
+    },
+    "93:204": {
+      "slug": "invocation-for-someone-who-tells-you-may-allah-bless-you-hisn-93-204",
+      "h1": "Reply to barakallahu feek",
+      "title": "Reply to barakallahu feek – Arabic & English Meaning"
+    },
+    "94:205": {
+      "slug": "invocation-against-evil-portent-hisn-94-205",
+      "h1": "Dua for evil portent",
+      "title": "Dua for evil portent – Arabic & English Meaning"
+    },
+    "95:206": {
+      "slug": "invocation-for-riding-in-a-vehicle-or-on-an-animal-hisn-95-206",
+      "h1": "Dua for travelling by car",
+      "title": "Dua for travelling by car – Arabic & English Meaning"
+    },
+    "96:207": {
+      "slug": "invocation-for-traveling-hisn-96-207",
+      "h1": "Dua for traveling",
+      "title": "Dua for traveling – Arabic & English Meaning"
+    },
+    "97:208": {
+      "slug": "invocation-for-entering-a-town-or-city-hisn-97-208",
+      "h1": "Dua for entering a town or city",
+      "title": "Dua for entering a town or city – Arabic & English Meaning"
+    },
+    "98:209": {
+      "slug": "invocation-for-entering-a-market-hisn-98-209",
+      "h1": "Dua for entering a market",
+      "title": "Dua for entering a market – Arabic & English Meaning"
+    },
+    "99:210": {
+      "slug": "invocation-for-when-your-vehicle-or-mount-begins-to-fail-hisn-99-210",
+      "h1": "Dua for vehicle trouble",
+      "title": "Dua for vehicle trouble – Arabic, Transliteration & Meaning"
+    },
+    "100:211": {
+      "slug": "the-travelers-invocation-for-the-one-he-leaves-behind-hisn-100-211",
+      "h1": "Dua before leaving family for a journey",
+      "title": "Dua before leaving family for a journey"
+    },
+    "101:212": {
+      "slug": "the-residents-invocations-for-the-traveler-hisn-101-212",
+      "h1": "Dua for someone travelling (Hisn al-Muslim 101:212)",
+      "title": "Dua for someone travelling (Hisn al-Muslim 101:212)"
+    },
+    "101:213": {
+      "slug": "the-residents-invocations-for-the-traveler-hisn-101-213",
+      "h1": "Dua for someone travelling (Hisn al-Muslim 101:213)",
+      "title": "Dua for someone travelling (Hisn al-Muslim 101:213)"
+    },
+    "102:214": {
+      "slug": "glorifying-and-magnifying-allah-on-the-journey-hisn-102-214",
+      "h1": "Dhikr while travelling",
+      "title": "Dhikr while travelling – Arabic & English Meaning"
+    },
+    "103:215": {
+      "slug": "the-travelers-invocation-at-dawn-hisn-103-215",
+      "h1": "Dua for the traveller at dawn",
+      "title": "Dua for the traveller at dawn – Arabic & English Meaning"
+    },
+    "104:216": {
+      "slug": "invocation-for-a-layover-stopping-along-the-way-on-the-journ-hisn-104-216",
+      "h1": "Dua for a layover on the journey",
+      "title": "Dua for a layover on the journey – Arabic & English Meaning"
+    },
+    "105:217": {
+      "slug": "what-to-say-upon-returning-from-a-journey-hisn-105-217",
+      "h1": "Dua for returning from a journey",
+      "title": "Dua for returning from a journey – Arabic & English Meaning"
+    },
+    "106:218": {
+      "slug": "what-to-say-if-something-happens-to-please-you-or-to-displea-hisn-106-218",
+      "h1": "Dua for something happens to please you or to displease…",
+      "title": "Dua for something happens to please you or to displease…"
+    },
+    "108:225": {
+      "slug": "spreading-the-greetings-of-salam-peace-hisn-108-225",
+      "h1": "Islamic greeting salam",
+      "title": "Islamic greeting salam – Arabic & English Meaning"
+    },
+    "109:227": {
+      "slug": "how-to-reply-to-a-disbeliever-if-he-says-salam-to-you-hisn-109-227",
+      "h1": "Replying to salam from a non-muslim",
+      "title": "Replying to salam from a non-muslim"
+    },
+    "110:228": {
+      "slug": "invocation-upon-hearing-the-cocks-crow-or-the-bray-of-a-donk-hisn-110-228",
+      "h1": "Dua for hearing the cocks crow or the bray of a donkey",
+      "title": "Dua for hearing the cocks crow or the bray of a donkey"
+    },
+    "111:229": {
+      "slug": "invocation-upon-hearing-a-dog-barking-in-the-night-hisn-111-229",
+      "h1": "Dua when hearing a dog bark at night",
+      "title": "Dua when hearing a dog bark at night"
+    },
+    "112:230": {
+      "slug": "invocation-for-someone-you-have-spoken-ill-to-hisn-112-230",
+      "h1": "Dua after backbiting someone",
+      "title": "Dua after backbiting someone – Arabic & English Meaning"
+    },
+    "113:231": {
+      "slug": "how-a-muslim-should-praise-another-muslim-hisn-113-231",
+      "h1": "How to praise someone in islam",
+      "title": "How to praise someone in islam – Arabic & English Meaning"
+    },
+    "114:232": {
+      "slug": "what-a-muslim-should-say-when-he-is-praised-hisn-114-232",
+      "h1": "What to say when someone praises you",
+      "title": "What to say when someone praises you"
+    },
+    "115:233": {
+      "slug": "the-pilgrims-announcement-of-his-arrival-for-hajj-or-umrah-hisn-115-233",
+      "h1": "Talbiyah",
+      "title": "Talbiyah – Arabic & English Meaning"
+    },
+    "116:234": {
+      "slug": "saying-allahu-akbar-when-passing-the-black-stone-hisn-116-234",
+      "h1": "Takbir at the black stone",
+      "title": "Takbir at the black stone – Arabic & English Meaning"
+    },
+    "117:235": {
+      "slug": "invocation-to-be-recited-between-the-yemenite-corner-and-the-hisn-117-235",
+      "h1": "Dua for between the yemenite corner and the black stone",
+      "title": "Dua for between the yemenite corner and the black stone"
+    },
+    "118:236": {
+      "slug": "invocation-to-be-recited-while-standing-at-safa-and-marwah-hisn-118-236",
+      "h1": "Dua at safa and marwah",
+      "title": "Dua at safa and marwah – Arabic & English Meaning"
+    },
+    "119:237": {
+      "slug": "invocation-to-be-recited-on-the-day-of-arafat-hisn-119-237",
+      "h1": "Dua for the day of arafat",
+      "title": "Dua for the day of arafat – Arabic & English Meaning"
+    },
+    "122:240": {
+      "slug": "what-to-say-when-surprised-or-startled-hisn-122-240",
+      "h1": "Dua when startled (Hisn al-Muslim 122:240)",
+      "title": "Dua when startled (Hisn al-Muslim 122:240)"
+    },
+    "122:241": {
+      "slug": "what-to-say-when-surprised-or-startled-hisn-122-241",
+      "h1": "Dua when startled (Hisn al-Muslim 122:241)",
+      "title": "Dua when startled (Hisn al-Muslim 122:241)"
+    },
+    "124:243": {
+      "slug": "what-to-say-when-you-feel-a-pain-in-your-body-hisn-124-243",
+      "h1": "Dua for pain in the body",
+      "title": "Dua for pain in the body – Arabic & English Meaning"
+    },
+    "125:244": {
+      "slug": "what-to-say-when-you-fear-you-may-afflict-something-with-the-hisn-125-244",
+      "h1": "Dua for you fear you may afflict something with the evil…",
+      "title": "Dua for you fear you may afflict something with the evil…"
+    },
+    "126:245": {
+      "slug": "what-to-say-when-you-feel-frightened-hisn-126-245",
+      "h1": "Dua when frightened",
+      "title": "Dua when frightened – Arabic, Transliteration & Meaning"
+    },
+    "127:246": {
+      "slug": "what-to-say-when-slaughtering-or-sacrificing-an-animal-hisn-127-246",
+      "h1": "Dua for qurbani",
+      "title": "Dua for qurbani – Arabic, Transliteration & Meaning"
+    },
+    "128:247": {
+      "slug": "what-to-say-to-foil-the-devils-plots-hisn-128-247",
+      "h1": "Dua against shaytan",
+      "title": "Dua against shaytan – Arabic, Transliteration & Meaning"
+    },
+    "129:249": {
+      "slug": "repentance-and-seeking-forgiveness-hisn-129-249",
+      "h1": "Dua for repentance and forgiveness (Hisn al-Muslim 129:249)",
+      "title": "Dua for repentance and forgiveness (Hisn al-Muslim 129:249)"
+    },
+    "129:250": {
+      "slug": "repentance-and-seeking-forgiveness-hisn-129-250",
+      "h1": "Dua for repentance and forgiveness (Hisn al-Muslim 129:250)",
+      "title": "Dua for repentance and forgiveness (Hisn al-Muslim 129:250)"
+    },
+    "129:251": {
+      "slug": "repentance-and-seeking-forgiveness-hisn-129-251",
+      "h1": "Dua for repentance and forgiveness (Hisn al-Muslim 129:251)",
+      "title": "Dua for repentance and forgiveness (Hisn al-Muslim 129:251)"
+    },
+    "129:252": {
+      "slug": "repentance-and-seeking-forgiveness-hisn-129-252",
+      "h1": "Dua for repentance and forgiveness (Hisn al-Muslim 129:252)",
+      "title": "Dua for repentance and forgiveness (Hisn al-Muslim 129:252)"
+    },
+    "130:254": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-254",
+      "h1": "Virtues of dhikr (Hisn al-Muslim 130:254)",
+      "title": "Virtues of dhikr (Hisn al-Muslim 130:254)"
+    },
+    "130:255": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-255",
+      "h1": "Virtues of dhikr (Hisn al-Muslim 130:255)",
+      "title": "Virtues of dhikr (Hisn al-Muslim 130:255)"
+    },
+    "130:256": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-256",
+      "h1": "Virtues of dhikr (Hisn al-Muslim 130:256)",
+      "title": "Virtues of dhikr (Hisn al-Muslim 130:256)"
+    },
+    "130:257": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-257",
+      "h1": "Virtues of dhikr (Hisn al-Muslim 130:257)",
+      "title": "Virtues of dhikr (Hisn al-Muslim 130:257)"
+    },
+    "130:258": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-258",
+      "h1": "Virtues of dhikr (Hisn al-Muslim 130:258)",
+      "title": "Virtues of dhikr (Hisn al-Muslim 130:258)"
+    },
+    "130:259": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-259",
+      "h1": "Virtues of dhikr (Jami at-Tirmidhi 3549)",
+      "title": "Virtues of dhikr (Jami at-Tirmidhi 3549)"
+    },
+    "130:260": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-260",
+      "h1": "Virtues of dhikr (Hisn al-Muslim 130:260)",
+      "title": "Virtues of dhikr (Hisn al-Muslim 130:260)"
+    },
+    "130:261": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-261",
+      "h1": "Virtues of dhikr (Hisn al-Muslim 130:261)",
+      "title": "Virtues of dhikr (Hisn al-Muslim 130:261)"
+    },
+    "130:262": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-262",
+      "h1": "Virtues of dhikr (Sahih Muslim 6682)",
+      "title": "Virtues of dhikr (Sahih Muslim 6682)"
+    },
+    "130:263": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-263",
+      "h1": "Virtues of dhikr (Hisn al-Muslim 130:263)",
+      "title": "Virtues of dhikr (Hisn al-Muslim 130:263)"
+    },
+    "130:264": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-264",
+      "h1": "Virtues of dhikr (Hisn al-Muslim 130:264)",
+      "title": "Virtues of dhikr (Hisn al-Muslim 130:264)"
+    },
+    "130:265": {
+      "slug": "the-excellence-of-remembering-allah-hisn-130-265",
+      "h1": "Virtues of dhikr (Hisn al-Muslim 130:265)",
+      "title": "Virtues of dhikr (Hisn al-Muslim 130:265)"
+    },
+    "132:267": {
+      "slug": "types-of-goodness-and-good-etiquette-for-community-life-hisn-132-267",
+      "h1": "Islamic etiquette of community life",
+      "title": "Islamic etiquette of community life"
+    },
+    "quran:2:126": {
+      "slug": "quranic-supplications-quran-2-126",
+      "h1": "“My Lord, make this a secure…” (Hisn al-Muslim quran:2:126)",
+      "title": "“My Lord, make this a secure…” (Hisn al-Muslim quran:2:126)"
+    },
+    "quran:2:127": {
+      "slug": "quranic-supplications-quran-2-127",
+      "h1": "“Our Lord, accept [this] from…” (Hisn al-Muslim quran:2:127)",
+      "title": "“Our Lord, accept [this] from…” (Hisn al-Muslim quran:2:127)"
+    },
+    "quran:2:128": {
+      "slug": "quranic-supplications-quran-2-128",
+      "h1": "“Our Lord, and make us…” (Hisn al-Muslim quran:2:128)",
+      "title": "“Our Lord, and make us…” (Hisn al-Muslim quran:2:128)"
+    },
+    "quran:2:129": {
+      "slug": "quranic-supplications-quran-2-129",
+      "h1": "“Our Lord, and send among…” (Hisn al-Muslim quran:2:129)",
+      "title": "“Our Lord, and send among…” (Hisn al-Muslim quran:2:129)"
+    },
+    "quran:2:200": {
+      "slug": "quranic-supplications-quran-2-200",
+      "h1": "“Our Lord, give us in this…” (Hisn al-Muslim quran:2:200)",
+      "title": "“Our Lord, give us in this…” (Hisn al-Muslim quran:2:200)"
+    },
+    "quran:2:201": {
+      "slug": "quranic-supplications-quran-2-201",
+      "h1": "“Our Lord, give us in this…” (Hisn al-Muslim quran:2:201)",
+      "title": "“Our Lord, give us in this…” (Hisn al-Muslim quran:2:201)"
+    },
+    "quran:2:250": {
+      "slug": "quranic-supplications-quran-2-250",
+      "h1": "“Our Lord, pour upon us…” (Hisn al-Muslim quran:2:250)",
+      "title": "“Our Lord, pour upon us…” (Hisn al-Muslim quran:2:250)"
+    },
+    "quran:2:260": {
+      "slug": "quranic-supplications-quran-2-260",
+      "h1": "“My Lord, show me how You…” (Hisn al-Muslim quran:2:260)",
+      "title": "“My Lord, show me how You…” (Hisn al-Muslim quran:2:260)"
+    },
+    "quran:3:8": {
+      "slug": "quranic-supplications-quran-3-8",
+      "h1": "“Our Lord, let not our hearts…” (Hisn al-Muslim quran:3:8)",
+      "title": "“Our Lord, let not our hearts…” (Hisn al-Muslim quran:3:8)"
+    },
+    "quran:3:9": {
+      "slug": "quranic-supplications-quran-3-9",
+      "h1": "“Our Lord, surely You will…” (Hisn al-Muslim quran:3:9)",
+      "title": "“Our Lord, surely You will…” (Hisn al-Muslim quran:3:9)"
+    },
+    "quran:3:16": {
+      "slug": "quranic-supplications-quran-3-16",
+      "h1": "“Our Lord, indeed we have…” (Hisn al-Muslim quran:3:16)",
+      "title": "“Our Lord, indeed we have…” (Hisn al-Muslim quran:3:16)"
+    },
+    "quran:3:35": {
+      "slug": "quranic-supplications-quran-3-35",
+      "h1": "“My Lord, indeed I have…” (Hisn al-Muslim quran:3:35)",
+      "title": "“My Lord, indeed I have…” (Hisn al-Muslim quran:3:35)"
+    },
+    "quran:3:36": {
+      "slug": "quranic-supplications-quran-3-36",
+      "h1": "“My Lord, I have delivered a…” (Hisn al-Muslim quran:3:36)",
+      "title": "“My Lord, I have delivered a…” (Hisn al-Muslim quran:3:36)"
+    },
+    "quran:3:38": {
+      "slug": "quranic-supplications-quran-3-38",
+      "h1": "“My Lord, grant me from…” (Hisn al-Muslim quran:3:38)",
+      "title": "“My Lord, grant me from…” (Hisn al-Muslim quran:3:38)"
+    },
+    "quran:3:40": {
+      "slug": "quranic-supplications-quran-3-40",
+      "h1": "“My Lord, how will I have a…” (Hisn al-Muslim quran:3:40)",
+      "title": "“My Lord, how will I have a…” (Hisn al-Muslim quran:3:40)"
+    },
+    "quran:3:41": {
+      "slug": "quranic-supplications-quran-3-41",
+      "h1": "“My Lord, make for me a sign.” (Hisn al-Muslim quran:3:41)",
+      "title": "“My Lord, make for me a sign.” (Hisn al-Muslim quran:3:41)"
+    },
+    "quran:3:47": {
+      "slug": "quranic-supplications-quran-3-47",
+      "h1": "“My Lord, how will I have a…” (Hisn al-Muslim quran:3:47)",
+      "title": "“My Lord, how will I have a…” (Hisn al-Muslim quran:3:47)"
+    },
+    "quran:3:53": {
+      "slug": "quranic-supplications-quran-3-53",
+      "h1": "“Our Lord, we have believed in…” (Hisn al-Muslim quran:3:53)",
+      "title": "“Our Lord, we have believed in…” (Hisn al-Muslim quran:3:53)"
+    },
+    "quran:3:147": {
+      "slug": "quranic-supplications-quran-3-147",
+      "h1": "“Our Lord, forgive us our…” (Hisn al-Muslim quran:3:147)",
+      "title": "“Our Lord, forgive us our…” (Hisn al-Muslim quran:3:147)"
+    },
+    "quran:4:75": {
+      "slug": "quranic-supplications-quran-4-75",
+      "h1": "“Our Lord, take us out of this…” (Hisn al-Muslim quran:4:75)",
+      "title": "“Our Lord, take us out of this…” (Hisn al-Muslim quran:4:75)"
+    },
+    "quran:4:77": {
+      "slug": "quranic-supplications-quran-4-77",
+      "h1": "“Our Lord, why have You…” (Hisn al-Muslim quran:4:77)",
+      "title": "“Our Lord, why have You…” (Hisn al-Muslim quran:4:77)"
+    },
+    "quran:5:25": {
+      "slug": "quranic-supplications-quran-5-25",
+      "h1": "“My Lord, indeed I do not…” (Hisn al-Muslim quran:5:25)",
+      "title": "“My Lord, indeed I do not…” (Hisn al-Muslim quran:5:25)"
+    },
+    "quran:5:83": {
+      "slug": "quranic-supplications-quran-5-83",
+      "h1": "“Our Lord, we have believed…” (Hisn al-Muslim quran:5:83)",
+      "title": "“Our Lord, we have believed…” (Hisn al-Muslim quran:5:83)"
+    },
+    "quran:6:128": {
+      "slug": "quranic-supplications-quran-6-128",
+      "h1": "“Our Lord, some of us made…” (Hisn al-Muslim quran:6:128)",
+      "title": "“Our Lord, some of us made…” (Hisn al-Muslim quran:6:128)"
+    },
+    "quran:7:23": {
+      "slug": "quranic-supplications-quran-7-23",
+      "h1": "“Our Lord, we have wronged…” (Hisn al-Muslim quran:7:23)",
+      "title": "“Our Lord, we have wronged…” (Hisn al-Muslim quran:7:23)"
+    },
+    "quran:7:38": {
+      "slug": "quranic-supplications-quran-7-38",
+      "h1": "“Our Lord, these had misled us…” (Hisn al-Muslim quran:7:38)",
+      "title": "“Our Lord, these had misled us…” (Hisn al-Muslim quran:7:38)"
+    },
+    "quran:7:47": {
+      "slug": "quranic-supplications-quran-7-47",
+      "h1": "“Our Lord, do not place us…” (Hisn al-Muslim quran:7:47)",
+      "title": "“Our Lord, do not place us…” (Hisn al-Muslim quran:7:47)"
+    },
+    "quran:7:89": {
+      "slug": "quranic-supplications-quran-7-89",
+      "h1": "“Our Lord has encompassed all…” (Hisn al-Muslim quran:7:89)",
+      "title": "“Our Lord has encompassed all…” (Hisn al-Muslim quran:7:89)"
+    },
+    "quran:7:126": {
+      "slug": "quranic-supplications-quran-7-126",
+      "h1": "“Our Lord, pour upon us…” (Hisn al-Muslim quran:7:126)",
+      "title": "“Our Lord, pour upon us…” (Hisn al-Muslim quran:7:126)"
+    },
+    "quran:7:143": {
+      "slug": "quranic-supplications-quran-7-143",
+      "h1": "“My Lord, show me [Yourself]…” (Hisn al-Muslim quran:7:143)",
+      "title": "“My Lord, show me [Yourself]…” (Hisn al-Muslim quran:7:143)"
+    },
+    "quran:7:151": {
+      "slug": "quranic-supplications-quran-7-151",
+      "h1": "“My Lord, forgive me and my…” (Hisn al-Muslim quran:7:151)",
+      "title": "“My Lord, forgive me and my…” (Hisn al-Muslim quran:7:151)"
+    },
+    "quran:7:155": {
+      "slug": "quranic-supplications-quran-7-155",
+      "h1": "“My Lord, if You had willed…” (Hisn al-Muslim quran:7:155)",
+      "title": "“My Lord, if You had willed…” (Hisn al-Muslim quran:7:155)"
+    },
+    "quran:10:85": {
+      "slug": "quranic-supplications-quran-10-85",
+      "h1": "“Our Lord, make us not…” (Hisn al-Muslim quran:10:85)",
+      "title": "“Our Lord, make us not…” (Hisn al-Muslim quran:10:85)"
+    },
+    "quran:10:88": {
+      "slug": "quranic-supplications-quran-10-88",
+      "h1": "“Our Lord, indeed You have…” (Hisn al-Muslim quran:10:88)",
+      "title": "“Our Lord, indeed You have…” (Hisn al-Muslim quran:10:88)"
+    },
+    "quran:11:45": {
+      "slug": "quranic-supplications-quran-11-45",
+      "h1": "“My Lord, indeed my son is of…” (Hisn al-Muslim quran:11:45)",
+      "title": "“My Lord, indeed my son is of…” (Hisn al-Muslim quran:11:45)"
+    },
+    "quran:11:47": {
+      "slug": "quranic-supplications-quran-11-47",
+      "h1": "“My Lord, I seek refuge in…” (Hisn al-Muslim quran:11:47)",
+      "title": "“My Lord, I seek refuge in…” (Hisn al-Muslim quran:11:47)"
+    },
+    "quran:12:33": {
+      "slug": "quranic-supplications-quran-12-33",
+      "h1": "“My Lord, prison is more to…” (Hisn al-Muslim quran:12:33)",
+      "title": "“My Lord, prison is more to…” (Hisn al-Muslim quran:12:33)"
+    },
+    "quran:12:101": {
+      "slug": "quranic-supplications-quran-12-101",
+      "h1": "“My Lord, You have given me…” (Hisn al-Muslim quran:12:101)",
+      "title": "“My Lord, You have given me…” (Hisn al-Muslim quran:12:101)"
+    },
+    "quran:14:35": {
+      "slug": "quranic-supplications-quran-14-35",
+      "h1": "“My Lord, make this city…” (Hisn al-Muslim quran:14:35)",
+      "title": "“My Lord, make this city…” (Hisn al-Muslim quran:14:35)"
+    },
+    "quran:14:36": {
+      "slug": "quranic-supplications-quran-14-36",
+      "h1": "“My Lord, indeed they have…” (Hisn al-Muslim quran:14:36)",
+      "title": "“My Lord, indeed they have…” (Hisn al-Muslim quran:14:36)"
+    },
+    "quran:14:37": {
+      "slug": "quranic-supplications-quran-14-37",
+      "h1": "“Our Lord, I have settled…” (Hisn al-Muslim quran:14:37)",
+      "title": "“Our Lord, I have settled…” (Hisn al-Muslim quran:14:37)"
+    },
+    "quran:14:38": {
+      "slug": "quranic-supplications-quran-14-38",
+      "h1": "“Our Lord, indeed You know…” (Hisn al-Muslim quran:14:38)",
+      "title": "“Our Lord, indeed You know…” (Hisn al-Muslim quran:14:38)"
+    },
+    "quran:14:40": {
+      "slug": "quranic-supplications-quran-14-40",
+      "h1": "“Our Lord, and accept my…” (Hisn al-Muslim quran:14:40)",
+      "title": "“Our Lord, and accept my…” (Hisn al-Muslim quran:14:40)"
+    },
+    "quran:14:41": {
+      "slug": "quranic-supplications-quran-14-41",
+      "h1": "“Our Lord, forgive me and my…” (Hisn al-Muslim quran:14:41)",
+      "title": "“Our Lord, forgive me and my…” (Hisn al-Muslim quran:14:41)"
+    },
+    "quran:14:44": {
+      "slug": "quranic-supplications-quran-14-44",
+      "h1": "“Our Lord, delay us for a…” (Hisn al-Muslim quran:14:44)",
+      "title": "“Our Lord, delay us for a…” (Hisn al-Muslim quran:14:44)"
+    },
+    "quran:15:36": {
+      "slug": "quranic-supplications-quran-15-36",
+      "h1": "“My Lord, then reprieve me…” (Hisn al-Muslim quran:15:36)",
+      "title": "“My Lord, then reprieve me…” (Hisn al-Muslim quran:15:36)"
+    },
+    "quran:15:39": {
+      "slug": "quranic-supplications-quran-15-39",
+      "h1": "“My Lord, because You have…” (Hisn al-Muslim quran:15:39)",
+      "title": "“My Lord, because You have…” (Hisn al-Muslim quran:15:39)"
+    },
+    "quran:16:86": {
+      "slug": "quranic-supplications-quran-16-86",
+      "h1": "“Our Lord, these are our…” (Hisn al-Muslim quran:16:86)",
+      "title": "“Our Lord, these are our…” (Hisn al-Muslim quran:16:86)"
+    },
+    "quran:18:10": {
+      "slug": "quranic-supplications-quran-18-10",
+      "h1": "“Our Lord, grant us from…” (Hisn al-Muslim quran:18:10)",
+      "title": "“Our Lord, grant us from…” (Hisn al-Muslim quran:18:10)"
+    },
+    "quran:19:4": {
+      "slug": "quranic-supplications-quran-19-4",
+      "h1": "“My Lord, indeed my bones have…” (Hisn al-Muslim quran:19:4)",
+      "title": "“My Lord, indeed my bones have…” (Hisn al-Muslim quran:19:4)"
+    },
+    "quran:19:8": {
+      "slug": "quranic-supplications-quran-19-8",
+      "h1": "“My Lord, how will I have a…” (Hisn al-Muslim quran:19:8)",
+      "title": "“My Lord, how will I have a…” (Hisn al-Muslim quran:19:8)"
+    },
+    "quran:20:25": {
+      "slug": "quranic-supplications-quran-20-25",
+      "h1": "“My Lord, expand [i.e.…” (Hisn al-Muslim quran:20:25)",
+      "title": "“My Lord, expand [i.e.…” (Hisn al-Muslim quran:20:25)"
+    },
+    "quran:20:45": {
+      "slug": "quranic-supplications-quran-20-45",
+      "h1": "“Our Lord, indeed we are…” (Hisn al-Muslim quran:20:45)",
+      "title": "“Our Lord, indeed we are…” (Hisn al-Muslim quran:20:45)"
+    },
+    "quran:20:125": {
+      "slug": "quranic-supplications-quran-20-125",
+      "h1": "“My Lord, why have you…” (Hisn al-Muslim quran:20:125)",
+      "title": "“My Lord, why have you…” (Hisn al-Muslim quran:20:125)"
+    },
+    "quran:20:134": {
+      "slug": "quranic-supplications-quran-20-134",
+      "h1": "“Our Lord, why did You not…” (Hisn al-Muslim quran:20:134)",
+      "title": "“Our Lord, why did You not…” (Hisn al-Muslim quran:20:134)"
+    },
+    "quran:21:89": {
+      "slug": "quranic-supplications-quran-21-89",
+      "h1": "“My Lord, do not leave me…” (Hisn al-Muslim quran:21:89)",
+      "title": "“My Lord, do not leave me…” (Hisn al-Muslim quran:21:89)"
+    },
+    "quran:21:112": {
+      "slug": "quranic-supplications-quran-21-112",
+      "h1": "“My Lord, judge [between us]…” (Hisn al-Muslim quran:21:112)",
+      "title": "“My Lord, judge [between us]…” (Hisn al-Muslim quran:21:112)"
+    },
+    "quran:23:26": {
+      "slug": "quranic-supplications-quran-23-26",
+      "h1": "“My Lord, support me because…” (Hisn al-Muslim quran:23:26)",
+      "title": "“My Lord, support me because…” (Hisn al-Muslim quran:23:26)"
+    },
+    "quran:23:94": {
+      "slug": "quranic-supplications-quran-23-94",
+      "h1": "“My Lord, then do not place…” (Hisn al-Muslim quran:23:94)",
+      "title": "“My Lord, then do not place…” (Hisn al-Muslim quran:23:94)"
+    },
+    "quran:23:106": {
+      "slug": "quranic-supplications-quran-23-106",
+      "h1": "“Our Lord, our wretchedness…” (Hisn al-Muslim quran:23:106)",
+      "title": "“Our Lord, our wretchedness…” (Hisn al-Muslim quran:23:106)"
+    },
+    "quran:23:107": {
+      "slug": "quranic-supplications-quran-23-107",
+      "h1": "“Our Lord, remove us from it…” (Hisn al-Muslim quran:23:107)",
+      "title": "“Our Lord, remove us from it…” (Hisn al-Muslim quran:23:107)"
+    },
+    "quran:23:109": {
+      "slug": "quranic-supplications-quran-23-109",
+      "h1": "“Our Lord, we have believed…” (Hisn al-Muslim quran:23:109)",
+      "title": "“Our Lord, we have believed…” (Hisn al-Muslim quran:23:109)"
+    },
+    "quran:25:65": {
+      "slug": "quranic-supplications-quran-25-65",
+      "h1": "“Our Lord, avert from us the…” (Hisn al-Muslim quran:25:65)",
+      "title": "“Our Lord, avert from us the…” (Hisn al-Muslim quran:25:65)"
+    },
+    "quran:25:74": {
+      "slug": "quranic-supplications-quran-25-74",
+      "h1": "“Our Lord, grant us from…” (Hisn al-Muslim quran:25:74)",
+      "title": "“Our Lord, grant us from…” (Hisn al-Muslim quran:25:74)"
+    },
+    "quran:26:12": {
+      "slug": "quranic-supplications-quran-26-12",
+      "h1": "“My Lord, indeed I fear that…” (Hisn al-Muslim quran:26:12)",
+      "title": "“My Lord, indeed I fear that…” (Hisn al-Muslim quran:26:12)"
+    },
+    "quran:26:83": {
+      "slug": "quranic-supplications-quran-26-83",
+      "h1": "“My Lord, grant me authority…” (Hisn al-Muslim quran:26:83)",
+      "title": "“My Lord, grant me authority…” (Hisn al-Muslim quran:26:83)"
+    },
+    "quran:26:117": {
+      "slug": "quranic-supplications-quran-26-117",
+      "h1": "“My Lord, indeed my people…” (Hisn al-Muslim quran:26:117)",
+      "title": "“My Lord, indeed my people…” (Hisn al-Muslim quran:26:117)"
+    },
+    "quran:26:169": {
+      "slug": "quranic-supplications-quran-26-169",
+      "h1": "“My Lord, save me and my…” (Hisn al-Muslim quran:26:169)",
+      "title": "“My Lord, save me and my…” (Hisn al-Muslim quran:26:169)"
+    },
+    "quran:27:19": {
+      "slug": "quranic-supplications-quran-27-19",
+      "h1": "“My Lord, enable me to be…” (Hisn al-Muslim quran:27:19)",
+      "title": "“My Lord, enable me to be…” (Hisn al-Muslim quran:27:19)"
+    },
+    "quran:27:44": {
+      "slug": "quranic-supplications-quran-27-44",
+      "h1": "“My Lord, indeed I have…” (Hisn al-Muslim quran:27:44)",
+      "title": "“My Lord, indeed I have…” (Hisn al-Muslim quran:27:44)"
+    },
+    "quran:28:16": {
+      "slug": "quranic-supplications-quran-28-16",
+      "h1": "“My Lord, indeed I have…” (Hisn al-Muslim quran:28:16)",
+      "title": "“My Lord, indeed I have…” (Hisn al-Muslim quran:28:16)"
+    },
+    "quran:28:17": {
+      "slug": "quranic-supplications-quran-28-17",
+      "h1": "“My Lord, for the favor You…” (Hisn al-Muslim quran:28:17)",
+      "title": "“My Lord, for the favor You…” (Hisn al-Muslim quran:28:17)"
+    },
+    "quran:28:21": {
+      "slug": "quranic-supplications-quran-28-21",
+      "h1": "“My Lord, save me from the…” (Hisn al-Muslim quran:28:21)",
+      "title": "“My Lord, save me from the…” (Hisn al-Muslim quran:28:21)"
+    },
+    "quran:28:24": {
+      "slug": "quranic-supplications-quran-28-24",
+      "h1": "“My Lord, indeed I am, for…” (Hisn al-Muslim quran:28:24)",
+      "title": "“My Lord, indeed I am, for…” (Hisn al-Muslim quran:28:24)"
+    },
+    "quran:28:33": {
+      "slug": "quranic-supplications-quran-28-33",
+      "h1": "“My Lord, indeed I killed…” (Hisn al-Muslim quran:28:33)",
+      "title": "“My Lord, indeed I killed…” (Hisn al-Muslim quran:28:33)"
+    },
+    "quran:28:47": {
+      "slug": "quranic-supplications-quran-28-47",
+      "h1": "“Our Lord, why did You not…” (Hisn al-Muslim quran:28:47)",
+      "title": "“Our Lord, why did You not…” (Hisn al-Muslim quran:28:47)"
+    },
+    "quran:28:63": {
+      "slug": "quranic-supplications-quran-28-63",
+      "h1": "“Our Lord, these are the ones…” (Hisn al-Muslim quran:28:63)",
+      "title": "“Our Lord, these are the ones…” (Hisn al-Muslim quran:28:63)"
+    },
+    "quran:29:30": {
+      "slug": "quranic-supplications-quran-29-30",
+      "h1": "“My Lord, support me against…” (Hisn al-Muslim quran:29:30)",
+      "title": "“My Lord, support me against…” (Hisn al-Muslim quran:29:30)"
+    },
+    "quran:32:12": {
+      "slug": "quranic-supplications-quran-32-12",
+      "h1": "“Our Lord, we have seen and…” (Hisn al-Muslim quran:32:12)",
+      "title": "“Our Lord, we have seen and…” (Hisn al-Muslim quran:32:12)"
+    },
+    "quran:33:67": {
+      "slug": "quranic-supplications-quran-33-67",
+      "h1": "“Our Lord, indeed we obeyed…” (Hisn al-Muslim quran:33:67)",
+      "title": "“Our Lord, indeed we obeyed…” (Hisn al-Muslim quran:33:67)"
+    },
+    "quran:33:68": {
+      "slug": "quranic-supplications-quran-33-68",
+      "h1": "“Our Lord, give them double…” (Hisn al-Muslim quran:33:68)",
+      "title": "“Our Lord, give them double…” (Hisn al-Muslim quran:33:68)"
+    },
+    "quran:34:19": {
+      "slug": "quranic-supplications-quran-34-19",
+      "h1": "“Our Lord, lengthen the…” (Hisn al-Muslim quran:34:19)",
+      "title": "“Our Lord, lengthen the…” (Hisn al-Muslim quran:34:19)"
+    },
+    "quran:35:37": {
+      "slug": "quranic-supplications-quran-35-37",
+      "h1": "“Our Lord, remove us; we will…” (Hisn al-Muslim quran:35:37)",
+      "title": "“Our Lord, remove us; we will…” (Hisn al-Muslim quran:35:37)"
+    },
+    "quran:37:100": {
+      "slug": "quranic-supplications-quran-37-100",
+      "h1": "“My Lord, grant me [a child]…” (Hisn al-Muslim quran:37:100)",
+      "title": "“My Lord, grant me [a child]…” (Hisn al-Muslim quran:37:100)"
+    },
+    "quran:38:16": {
+      "slug": "quranic-supplications-quran-38-16",
+      "h1": "“Our Lord, hasten for us our…” (Hisn al-Muslim quran:38:16)",
+      "title": "“Our Lord, hasten for us our…” (Hisn al-Muslim quran:38:16)"
+    },
+    "quran:38:35": {
+      "slug": "quranic-supplications-quran-38-35",
+      "h1": "“My Lord, forgive me and…” (Hisn al-Muslim quran:38:35)",
+      "title": "“My Lord, forgive me and…” (Hisn al-Muslim quran:38:35)"
+    },
+    "quran:38:61": {
+      "slug": "quranic-supplications-quran-38-61",
+      "h1": "“Our Lord, whoever brought…” (Hisn al-Muslim quran:38:61)",
+      "title": "“Our Lord, whoever brought…” (Hisn al-Muslim quran:38:61)"
+    },
+    "quran:40:7": {
+      "slug": "quranic-supplications-quran-40-7",
+      "h1": "“Our Lord, You have…” (Hisn al-Muslim quran:40:7)",
+      "title": "“Our Lord, You have…” (Hisn al-Muslim quran:40:7)"
+    },
+    "quran:40:8": {
+      "slug": "quranic-supplications-quran-40-8",
+      "h1": "“Our Lord, and admit them to…” (Hisn al-Muslim quran:40:8)",
+      "title": "“Our Lord, and admit them to…” (Hisn al-Muslim quran:40:8)"
+    },
+    "quran:40:11": {
+      "slug": "quranic-supplications-quran-40-11",
+      "h1": "“Our Lord, You made us…” (Hisn al-Muslim quran:40:11)",
+      "title": "“Our Lord, You made us…” (Hisn al-Muslim quran:40:11)"
+    },
+    "quran:41:29": {
+      "slug": "quranic-supplications-quran-41-29",
+      "h1": "“Our Lord, show us those who…” (Hisn al-Muslim quran:41:29)",
+      "title": "“Our Lord, show us those who…” (Hisn al-Muslim quran:41:29)"
+    },
+    "quran:46:15": {
+      "slug": "quranic-supplications-quran-46-15",
+      "h1": "“My Lord, enable me to be…” (Hisn al-Muslim quran:46:15)",
+      "title": "“My Lord, enable me to be…” (Hisn al-Muslim quran:46:15)"
+    },
+    "quran:50:27": {
+      "slug": "quranic-supplications-quran-50-27",
+      "h1": "“Our Lord, I did not make him…” (Hisn al-Muslim quran:50:27)",
+      "title": "“Our Lord, I did not make him…” (Hisn al-Muslim quran:50:27)"
+    },
+    "quran:59:10": {
+      "slug": "quranic-supplications-quran-59-10",
+      "h1": "“Our Lord, forgive us and our…” (Hisn al-Muslim quran:59:10)",
+      "title": "“Our Lord, forgive us and our…” (Hisn al-Muslim quran:59:10)"
+    },
+    "quran:60:5": {
+      "slug": "quranic-supplications-quran-60-5",
+      "h1": "“Our Lord, make us not…” (Hisn al-Muslim quran:60:5)",
+      "title": "“Our Lord, make us not…” (Hisn al-Muslim quran:60:5)"
+    },
+    "quran:63:10": {
+      "slug": "quranic-supplications-quran-63-10",
+      "h1": "“My Lord, if only You would…” (Hisn al-Muslim quran:63:10)",
+      "title": "“My Lord, if only You would…” (Hisn al-Muslim quran:63:10)"
+    },
+    "quran:66:8": {
+      "slug": "quranic-supplications-quran-66-8",
+      "h1": "“Our Lord, perfect for us our…” (Hisn al-Muslim quran:66:8)",
+      "title": "“Our Lord, perfect for us our…” (Hisn al-Muslim quran:66:8)"
+    },
+    "quran:66:11": {
+      "slug": "quranic-supplications-quran-66-11",
+      "h1": "“My Lord, build for me near…” (Hisn al-Muslim quran:66:11)",
+      "title": "“My Lord, build for me near…” (Hisn al-Muslim quran:66:11)"
+    },
+    "quran:71:5": {
+      "slug": "quranic-supplications-quran-71-5",
+      "h1": "“My Lord, indeed I invited my…” (Hisn al-Muslim quran:71:5)",
+      "title": "“My Lord, indeed I invited my…” (Hisn al-Muslim quran:71:5)"
+    },
+    "bukhari:6114": {
+      "slug": "invocations-kitab-al-daawat-bukhari-6114",
+      "h1": "“O Allah! Let me live as long as…” (Sahih al-Bukhari 6114)",
+      "title": "“O Allah! Let me live as long as…” (Sahih al-Bukhari 6114)"
+    },
+    "bukhari:6124": {
+      "slug": "invocations-kitab-al-daawat-bukhari-6124",
+      "h1": "“O Allah! If I should ever abuse a…” (Sahih al-Bukhari 6124)",
+      "title": "“O Allah! If I should ever abuse a…” (Sahih al-Bukhari 6124)"
+    },
+    "bukhari:6131": {
+      "slug": "invocations-kitab-al-daawat-bukhari-6131",
+      "h1": "“O Allah! I seek refuge with You…” (Sahih al-Bukhari 6131)",
+      "title": "“O Allah! I seek refuge with You…” (Sahih al-Bukhari 6131)"
+    },
+    "bukhari:6135": {
+      "slug": "invocations-kitab-al-daawat-bukhari-6135",
+      "h1": "“O Allah! Make us love Medina as…” (Sahih al-Bukhari 6135)",
+      "title": "“O Allah! Make us love Medina as…” (Sahih al-Bukhari 6135)"
+    },
+    "bukhari:6138": {
+      "slug": "invocations-kitab-al-daawat-bukhari-6138",
+      "h1": "“O Allah! I seek refuge with You…” (Sahih al-Bukhari 6138)",
+      "title": "“O Allah! I seek refuge with You…” (Sahih al-Bukhari 6138)"
+    },
+    "bukhari:6140": {
+      "slug": "invocations-kitab-al-daawat-bukhari-6140",
+      "h1": "“O Allah! I seek refuge with You…” (Sahih al-Bukhari 6140)",
+      "title": "“O Allah! I seek refuge with You…” (Sahih al-Bukhari 6140)"
+    },
+    "bukhari:6153": {
+      "slug": "invocations-kitab-al-daawat-bukhari-6153",
+      "h1": "“O Allah, the Revealer of the Holy…” (Sahih al-Bukhari 6153)",
+      "title": "“O Allah, the Revealer of the Holy…” (Sahih al-Bukhari 6153)"
+    },
+    "muslim:6649": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6649",
+      "h1": "“O Allah, keep me alive as long as…” (Sahih Muslim 6649)",
+      "title": "“O Allah, keep me alive as long as…” (Sahih Muslim 6649)"
+    },
+    "muslim:6670": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6670",
+      "h1": "“O Allah, grant us good in the world…” (Sahih Muslim 6670)",
+      "title": "“O Allah, grant us good in the world…” (Sahih Muslim 6670)"
+    },
+    "muslim:6675": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6675",
+      "h1": "“O Allah, grant us the good in this…” (Sahih Muslim 6675)",
+      "title": "“O Allah, grant us the good in this…” (Sahih Muslim 6675)"
+    },
+    "muslim:6683": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6683",
+      "h1": "“O Allah, grant me pardon, have mercy…” (Sahih Muslim 6683)",
+      "title": "“O Allah, grant me pardon, have mercy…” (Sahih Muslim 6683)"
+    },
+    "muslim:6685": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6685",
+      "h1": "“O Allah, grant me pardon, have mercy…” (Sahih Muslim 6685)",
+      "title": "“O Allah, grant me pardon, have mercy…” (Sahih Muslim 6685)"
+    },
+    "muslim:6702": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6702",
+      "h1": "“O Allah, I have done great wrong to…” (Sahih Muslim 6702)",
+      "title": "“O Allah, I have done great wrong to…” (Sahih Muslim 6702)"
+    },
+    "muslim:6704": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6704",
+      "h1": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6704)",
+      "title": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6704)"
+    },
+    "muslim:6706": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6706",
+      "h1": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6706)",
+      "title": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6706)"
+    },
+    "muslim:6709": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6709",
+      "h1": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6709)",
+      "title": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6709)"
+    },
+    "muslim:6714": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6714",
+      "h1": "“O Allah, I turn my face towards Thee…” (Sahih Muslim 6714)",
+      "title": "“O Allah, I turn my face towards Thee…” (Sahih Muslim 6714)"
+    },
+    "muslim:6716": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6716",
+      "h1": "“O Allah, I surrender myself to Thee…” (Sahih Muslim 6716)",
+      "title": "“O Allah, I surrender myself to Thee…” (Sahih Muslim 6716)"
+    },
+    "muslim:6720": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6720",
+      "h1": "“O Allah, Thou created my being and it…” (Sahih Muslim 6720)",
+      "title": "“O Allah, Thou created my being and it…” (Sahih Muslim 6720)"
+    },
+    "muslim:6721": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6721",
+      "h1": "“O Allah, the Lord of the Heavens and…” (Sahih Muslim 6721)",
+      "title": "“O Allah, the Lord of the Heavens and…” (Sahih Muslim 6721)"
+    },
+    "muslim:6728": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6728",
+      "h1": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6728)",
+      "title": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6728)"
+    },
+    "muslim:6730": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6730",
+      "h1": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6730)",
+      "title": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6730)"
+    },
+    "muslim:6731": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6731",
+      "h1": "“O Allah, it is unto Thee that I…” (Sahih Muslim 6731)",
+      "title": "“O Allah, it is unto Thee that I…” (Sahih Muslim 6731)"
+    },
+    "muslim:6733": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6733",
+      "h1": "“O Allah, forgive me my faults, my…” (Sahih Muslim 6733)",
+      "title": "“O Allah, forgive me my faults, my…” (Sahih Muslim 6733)"
+    },
+    "muslim:6735": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6735",
+      "h1": "“O Allah, set right for me my religion…” (Sahih Muslim 6735)",
+      "title": "“O Allah, set right for me my religion…” (Sahih Muslim 6735)"
+    },
+    "muslim:6736": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6736",
+      "h1": "“O Allah. I beg of Thee the right…” (Sahih Muslim 6736)",
+      "title": "“O Allah. I beg of Thee the right…” (Sahih Muslim 6736)"
+    },
+    "muslim:6738": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6738",
+      "h1": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6738)",
+      "title": "“O Allah, I seek refuge in Thee from…” (Sahih Muslim 6738)"
+    },
+    "muslim:6743": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6743",
+      "h1": "“O Allah, direct me to the right path…” (Sahih Muslim 6743)",
+      "title": "“O Allah, direct me to the right path…” (Sahih Muslim 6743)"
+    },
+    "muslim:6744": {
+      "slug": "remembrance-supplication-kitab-al-dhikr-wal-dua-muslim-6744",
+      "h1": "“O Allah, I beg of Thee righteousness…” (Sahih Muslim 6744)",
+      "title": "“O Allah, I beg of Thee righteousness…” (Sahih Muslim 6744)"
+    },
+    "abudawud:1426": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1426",
+      "h1": "“O Allah, guide me among those Thou…” (Sunan Abi Dawud 1426)",
+      "title": "“O Allah, guide me among those Thou…” (Sunan Abi Dawud 1426)"
+    },
+    "abudawud:1481": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1481",
+      "h1": "“O Allah, I ask Thee for Paradise…” (Sunan Abi Dawud 1481)",
+      "title": "“O Allah, I ask Thee for Paradise…” (Sunan Abi Dawud 1481)"
+    },
+    "abudawud:1496": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1496",
+      "h1": "“O Allah, I ask Thee by virtue of…” (Sunan Abi Dawud 1496)",
+      "title": "“O Allah, I ask Thee by virtue of…” (Sunan Abi Dawud 1496)"
+    },
+    "abudawud:1509": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1509",
+      "h1": "“O Allah, our Lord and Lord of…” (Sunan Abi Dawud 1509)",
+      "title": "“O Allah, our Lord and Lord of…” (Sunan Abi Dawud 1509)"
+    },
+    "abudawud:1511": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1511",
+      "h1": "“My Lord, help me and do not give…” (Sunan Abi Dawud 1511)",
+      "title": "“My Lord, help me and do not give…” (Sunan Abi Dawud 1511)"
+    },
+    "abudawud:1513": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1513",
+      "h1": "“O Allah, You are As-Salam, and…” (Sunan Abi Dawud 1513)",
+      "title": "“O Allah, You are As-Salam, and…” (Sunan Abi Dawud 1513)"
+    },
+    "abudawud:1517": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1517",
+      "h1": "“My Lord, forgive me and pardon me…” (Sunan Abi Dawud 1517)",
+      "title": "“My Lord, forgive me and pardon me…” (Sunan Abi Dawud 1517)"
+    },
+    "abudawud:1541": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1541",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan Abi Dawud 1541)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan Abi Dawud 1541)"
+    },
+    "abudawud:1542": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1542",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan Abi Dawud 1542)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan Abi Dawud 1542)"
+    },
+    "abudawud:1543": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1543",
+      "h1": "“O Allah! I seek refuge in You from…” (Sunan Abi Dawud 1543)",
+      "title": "“O Allah! I seek refuge in You from…” (Sunan Abi Dawud 1543)"
+    },
+    "abudawud:1544": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1544",
+      "h1": "“O Allah! I seek refuge in You from…” (Sunan Abi Dawud 1544)",
+      "title": "“O Allah! I seek refuge in You from…” (Sunan Abi Dawud 1544)"
+    },
+    "abudawud:1545": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1545",
+      "h1": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1545)",
+      "title": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1545)"
+    },
+    "abudawud:1547": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1547",
+      "h1": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1547)",
+      "title": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1547)"
+    },
+    "abudawud:1548": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1548",
+      "h1": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1548)",
+      "title": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1548)"
+    },
+    "abudawud:1549": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1549",
+      "h1": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1549)",
+      "title": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1549)"
+    },
+    "abudawud:1550": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1550",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan Abi Dawud 1550)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan Abi Dawud 1550)"
+    },
+    "abudawud:1551": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1551",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan Abi Dawud 1551)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan Abi Dawud 1551)"
+    },
+    "abudawud:1552": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1552",
+      "h1": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1552)",
+      "title": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1552)"
+    },
+    "abudawud:1553": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1553",
+      "h1": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1553)",
+      "title": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1553)"
+    },
+    "abudawud:1555": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1555",
+      "h1": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1555)",
+      "title": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1555)"
+    },
+    "abudawud:1556": {
+      "slug": "supplications-in-the-witr-prayer-kitab-al-witr-abudawud-1556",
+      "h1": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1556)",
+      "title": "“O Allah, I seek refuge in Thee…” (Sunan Abi Dawud 1556)"
+    },
+    "tirmidhi:464": {
+      "slug": "the-book-on-al-witr-kitab-al-witr-tirmidhi-464",
+      "h1": "“O Allah guide me among those You…” (Jami at-Tirmidhi 464)",
+      "title": "“O Allah guide me among those You…” (Jami at-Tirmidhi 464)"
+    },
+    "tirmidhi:3475": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3475",
+      "h1": "“O Allah, by You we enter the…” (Jami at-Tirmidhi 3475)",
+      "title": "“O Allah, by You we enter the…” (Jami at-Tirmidhi 3475)"
+    },
+    "tirmidhi:3476": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3476",
+      "h1": "“O Allah Knower of the Unseen and…” (Jami at-Tirmidhi 3476)",
+      "title": "“O Allah Knower of the Unseen and…” (Jami at-Tirmidhi 3476)"
+    },
+    "tirmidhi:3477": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3477",
+      "h1": "“O Allah, You are my Lord, there…” (Jami at-Tirmidhi 3477)",
+      "title": "“O Allah, You are my Lord, there…” (Jami at-Tirmidhi 3477)"
+    },
+    "tirmidhi:3478": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3478",
+      "h1": "“O Allah, verily, I submit myself…” (Jami at-Tirmidhi 3478)",
+      "title": "“O Allah, verily, I submit myself…” (Jami at-Tirmidhi 3478)"
+    },
+    "tirmidhi:3479": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3479",
+      "h1": "“O Allah, I have submitted myself…” (Jami at-Tirmidhi 3479)",
+      "title": "“O Allah, I have submitted myself…” (Jami at-Tirmidhi 3479)"
+    },
+    "tirmidhi:3482": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3482",
+      "h1": "“O Allah, safeguard me from Your…” (Jami at-Tirmidhi 3482)",
+      "title": "“O Allah, safeguard me from Your…” (Jami at-Tirmidhi 3482)"
+    },
+    "tirmidhi:3484": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3484",
+      "h1": "“O Allah, Lord of the heavens and…” (Jami at-Tirmidhi 3484)",
+      "title": "“O Allah, Lord of the heavens and…” (Jami at-Tirmidhi 3484)"
+    },
+    "tirmidhi:3491": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3491",
+      "h1": "“O Allah, I ask You for…” (Jami at-Tirmidhi 3491)",
+      "title": "“O Allah, I ask You for…” (Jami at-Tirmidhi 3491)"
+    },
+    "tirmidhi:3501": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3501",
+      "h1": "“O Allah, in Your Name I die and I…” (Jami at-Tirmidhi 3501)",
+      "title": "“O Allah, in Your Name I die and I…” (Jami at-Tirmidhi 3501)"
+    },
+    "tirmidhi:3503": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3503",
+      "h1": "“O Allah, I ask You of Your mercy…” (Jami at-Tirmidhi 3503)",
+      "title": "“O Allah, I ask You of Your mercy…” (Jami at-Tirmidhi 3503)"
+    },
+    "tirmidhi:3505": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3505",
+      "h1": "“O Allah, You are the King, there…” (Jami at-Tirmidhi 3505)",
+      "title": "“O Allah, You are the King, there…” (Jami at-Tirmidhi 3505)"
+    },
+    "tirmidhi:3511": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3511",
+      "h1": "“O Allah! We seek refuge in You…” (Jami at-Tirmidhi 3511)",
+      "title": "“O Allah! We seek refuge in You…” (Jami at-Tirmidhi 3511)"
+    },
+    "tirmidhi:3518": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3518",
+      "h1": "“O my Lord, forgive me, and accept…” (Jami at-Tirmidhi 3518)",
+      "title": "“O my Lord, forgive me, and accept…” (Jami at-Tirmidhi 3518)"
+    },
+    "tirmidhi:3522": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3522",
+      "h1": "“O Allah You are the companion on…” (Jami at-Tirmidhi 3522)",
+      "title": "“O Allah You are the companion on…” (Jami at-Tirmidhi 3522)"
+    },
+    "tirmidhi:3523": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3523",
+      "h1": "“O Allah, You are the companion on…” (Jami at-Tirmidhi 3523)",
+      "title": "“O Allah, You are the companion on…” (Jami at-Tirmidhi 3523)"
+    },
+    "tirmidhi:3529": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3529",
+      "h1": "“O Allah make near for him the…” (Jami at-Tirmidhi 3529)",
+      "title": "“O Allah make near for him the…” (Jami at-Tirmidhi 3529)"
+    },
+    "tirmidhi:3530": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3530",
+      "h1": "“O my Lord, forgive me my sins…” (Jami at-Tirmidhi 3530)",
+      "title": "“O my Lord, forgive me my sins…” (Jami at-Tirmidhi 3530)"
+    },
+    "tirmidhi:3531": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3531",
+      "h1": "“O Allah, I ask You in this…” (Jami at-Tirmidhi 3531)",
+      "title": "“O Allah, I ask You in this…” (Jami at-Tirmidhi 3531)"
+    },
+    "tirmidhi:3533": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3533",
+      "h1": "“O Allah, indeed, I ask You for…” (Jami at-Tirmidhi 3533)",
+      "title": "“O Allah, indeed, I ask You for…” (Jami at-Tirmidhi 3533)"
+    },
+    "tirmidhi:3534": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3534",
+      "h1": "“O Allah, do not kill us with Your…” (Jami at-Tirmidhi 3534)",
+      "title": "“O Allah, do not kill us with Your…” (Jami at-Tirmidhi 3534)"
+    },
+    "tirmidhi:3566": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3566",
+      "h1": "“O Allah, I seek refuge in You…” (Jami at-Tirmidhi 3566)",
+      "title": "“O Allah, I seek refuge in You…” (Jami at-Tirmidhi 3566)"
+    },
+    "tirmidhi:3567": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3567",
+      "h1": "“O Allah, inspire me with my…” (Jami at-Tirmidhi 3567)",
+      "title": "“O Allah, inspire me with my…” (Jami at-Tirmidhi 3567)"
+    },
+    "tirmidhi:3568": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3568",
+      "h1": "“O Allah, I seek refuge in You…” (Jami at-Tirmidhi 3568)",
+      "title": "“O Allah, I seek refuge in You…” (Jami at-Tirmidhi 3568)"
+    },
+    "tirmidhi:3569": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3569",
+      "h1": "“O Allah, indeed, I seek refuge in…” (Jami at-Tirmidhi 3569)",
+      "title": "“O Allah, indeed, I seek refuge in…” (Jami at-Tirmidhi 3569)"
+    },
+    "tirmidhi:3573": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3573",
+      "h1": "“O Allah, indeed, I ask You for…” (Jami at-Tirmidhi 3573)",
+      "title": "“O Allah, indeed, I ask You for…” (Jami at-Tirmidhi 3573)"
+    },
+    "tirmidhi:3575": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3575",
+      "h1": "“O Allah grant me Your love and…” (Jami at-Tirmidhi 3575)",
+      "title": "“O Allah grant me Your love and…” (Jami at-Tirmidhi 3575)"
+    },
+    "tirmidhi:3576": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3576",
+      "h1": "“O Allah, indeed I seek refuge in…” (Jami at-Tirmidhi 3576)",
+      "title": "“O Allah, indeed I seek refuge in…” (Jami at-Tirmidhi 3576)"
+    },
+    "tirmidhi:3577": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3577",
+      "h1": "“I seek refuge in Your pleasure…” (Jami at-Tirmidhi 3577)",
+      "title": "“I seek refuge in Your pleasure…” (Jami at-Tirmidhi 3577)"
+    },
+    "tirmidhi:3578": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3578",
+      "h1": "“O Allah, indeed, I seek refuge in…” (Jami at-Tirmidhi 3578)",
+      "title": "“O Allah, indeed, I seek refuge in…” (Jami at-Tirmidhi 3578)"
+    },
+    "tirmidhi:3579": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3579",
+      "h1": "“O Allah, indeed, I seek refuge in…” (Jami at-Tirmidhi 3579)",
+      "title": "“O Allah, indeed, I seek refuge in…” (Jami at-Tirmidhi 3579)"
+    },
+    "tirmidhi:3584": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3584",
+      "h1": "“O Allah, forgive me my sin, and…” (Jami at-Tirmidhi 3584)",
+      "title": "“O Allah, forgive me my sin, and…” (Jami at-Tirmidhi 3584)"
+    },
+    "tirmidhi:3586": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3586",
+      "h1": "“O Allah, apportion for us, fear…” (Jami at-Tirmidhi 3586)",
+      "title": "“O Allah, apportion for us, fear…” (Jami at-Tirmidhi 3586)"
+    },
+    "tirmidhi:3595": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3595",
+      "h1": "“O Allah, I seek reward with You…” (Jami at-Tirmidhi 3595)",
+      "title": "“O Allah, I seek reward with You…” (Jami at-Tirmidhi 3595)"
+    },
+    "tirmidhi:3597": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3597",
+      "h1": "“O Allah, indeed You are…” (Jami at-Tirmidhi 3597)",
+      "title": "“O Allah, indeed You are…” (Jami at-Tirmidhi 3597)"
+    },
+    "tirmidhi:3600": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3600",
+      "h1": "“O Allah, make it good for me and…” (Jami at-Tirmidhi 3600)",
+      "title": "“O Allah, make it good for me and…” (Jami at-Tirmidhi 3600)"
+    },
+    "tirmidhi:3604": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3604",
+      "h1": "“O Allah to You is the praise like…” (Jami at-Tirmidhi 3604)",
+      "title": "“O Allah to You is the praise like…” (Jami at-Tirmidhi 3604)"
+    },
+    "tirmidhi:3607": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3607",
+      "h1": "“O Allah, Lord of the Seven…” (Jami at-Tirmidhi 3607)",
+      "title": "“O Allah, Lord of the Seven…” (Jami at-Tirmidhi 3607)"
+    },
+    "tirmidhi:3611": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3611",
+      "h1": "“O Allah! Verily, I ask You for…” (Jami at-Tirmidhi 3611)",
+      "title": "“O Allah! Verily, I ask You for…” (Jami at-Tirmidhi 3611)"
+    },
+    "tirmidhi:3613": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3613",
+      "h1": "“O Allah, Creator of the heavens…” (Jami at-Tirmidhi 3613)",
+      "title": "“O Allah, Creator of the heavens…” (Jami at-Tirmidhi 3613)"
+    },
+    "tirmidhi:3628": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3628",
+      "h1": "“O Allah, none has the right to be…” (Jami at-Tirmidhi 3628)",
+      "title": "“O Allah, none has the right to be…” (Jami at-Tirmidhi 3628)"
+    },
+    "tirmidhi:3631": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3631",
+      "h1": "“O Allah, cool my heart with snow…” (Jami at-Tirmidhi 3631)",
+      "title": "“O Allah, cool my heart with snow…” (Jami at-Tirmidhi 3631)"
+    },
+    "tirmidhi:3635": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3635",
+      "h1": "“My Lord, aid me and do not aid…” (Jami at-Tirmidhi 3635)",
+      "title": "“My Lord, aid me and do not aid…” (Jami at-Tirmidhi 3635)"
+    },
+    "tirmidhi:3650": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3650",
+      "h1": "“O Allah, I seek refuge in your…” (Jami at-Tirmidhi 3650)",
+      "title": "“O Allah, I seek refuge in your…” (Jami at-Tirmidhi 3650)"
+    },
+    "tirmidhi:3651": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3651",
+      "h1": "“O Allah I seek refuge in You from…” (Jami at-Tirmidhi 3651)",
+      "title": "“O Allah I seek refuge in You from…” (Jami at-Tirmidhi 3651)"
+    },
+    "tirmidhi:3654": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3654",
+      "h1": "“O Allah, have mercy on me by…” (Jami at-Tirmidhi 3654)",
+      "title": "“O Allah, have mercy on me by…” (Jami at-Tirmidhi 3654)"
+    },
+    "tirmidhi:3656": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3656",
+      "h1": "“O Allah, indeed I seek refuge in…” (Jami at-Tirmidhi 3656)",
+      "title": "“O Allah, indeed I seek refuge in…” (Jami at-Tirmidhi 3656)"
+    },
+    "tirmidhi:3658": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3658",
+      "h1": "“O Allah, I submit my face to You…” (Jami at-Tirmidhi 3658)",
+      "title": "“O Allah, I submit my face to You…” (Jami at-Tirmidhi 3658)"
+    },
+    "tirmidhi:3670": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3670",
+      "h1": "“O Allah, make my secret better…” (Jami at-Tirmidhi 3670)",
+      "title": "“O Allah, make my secret better…” (Jami at-Tirmidhi 3670)"
+    },
+    "tirmidhi:3673": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3673",
+      "h1": "“O Allah, this is the coming of…” (Jami at-Tirmidhi 3673)",
+      "title": "“O Allah, this is the coming of…” (Jami at-Tirmidhi 3673)"
+    },
+    "tirmidhi:3675": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3675",
+      "h1": "“O Allah, I seek refuge in You…” (Jami at-Tirmidhi 3675)",
+      "title": "“O Allah, I seek refuge in You…” (Jami at-Tirmidhi 3675)"
+    },
+    "tirmidhi:3683": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3683",
+      "h1": "“O Allah, benefit me with that…” (Jami at-Tirmidhi 3683)",
+      "title": "“O Allah, benefit me with that…” (Jami at-Tirmidhi 3683)"
+    },
+    "tirmidhi:3690": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3690",
+      "h1": "“O Allah, make me revere gratitude…” (Jami at-Tirmidhi 3690)",
+      "title": "“O Allah, make me revere gratitude…” (Jami at-Tirmidhi 3690)"
+    },
+    "tirmidhi:3695": {
+      "slug": "chapters-on-supplication-kitab-al-daawat-tirmidhi-3695",
+      "h1": "“O Allah, give me pleasure in my…” (Jami at-Tirmidhi 3695)",
+      "title": "“O Allah, give me pleasure in my…” (Jami at-Tirmidhi 3695)"
+    },
+    "nasai:5454": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5454",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5454)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5454)"
+    },
+    "nasai:5461": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5461",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5461)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5461)"
+    },
+    "nasai:5464": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5464",
+      "h1": "“I seek refuge in You from the evil…” (Sunan an-Nasai 5464)",
+      "title": "“I seek refuge in You from the evil…” (Sunan an-Nasai 5464)"
+    },
+    "nasai:5467": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5467",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5467)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5467)"
+    },
+    "nasai:5469": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5469",
+      "h1": "“O Allah, I seek refuge with you…” (Sunan an-Nasai 5469)",
+      "title": "“O Allah, I seek refuge with you…” (Sunan an-Nasai 5469)"
+    },
+    "nasai:5471": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5471",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5471)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5471)"
+    },
+    "nasai:5474": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5474",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5474)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5474)"
+    },
+    "nasai:5476": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5476",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5476)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5476)"
+    },
+    "nasai:5477": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5477",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5477)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5477)"
+    },
+    "nasai:5480": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5480",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5480)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5480)"
+    },
+    "nasai:5484": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5484",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5484)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5484)"
+    },
+    "nasai:5494": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5494",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5494)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5494)"
+    },
+    "nasai:5495": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5495",
+      "h1": "“I seek refuge in You from falling…” (Sunan an-Nasai 5495)",
+      "title": "“I seek refuge in You from falling…” (Sunan an-Nasai 5495)"
+    },
+    "nasai:5496": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5496",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5496)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5496)"
+    },
+    "nasai:5499": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5499",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5499)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5499)"
+    },
+    "nasai:5502": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5502",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5502)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5502)"
+    },
+    "nasai:5504": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5504",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5504)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5504)"
+    },
+    "nasai:5506": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5506",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5506)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5506)"
+    },
+    "nasai:5507": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5507",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5507)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5507)"
+    },
+    "nasai:5510": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5510",
+      "h1": "“O Allah, You are our help when we…” (Sunan an-Nasai 5510)",
+      "title": "“O Allah, You are our help when we…” (Sunan an-Nasai 5510)"
+    },
+    "nasai:5512": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5512",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5512)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5512)"
+    },
+    "nasai:5515": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5515",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5515)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5515)"
+    },
+    "nasai:5528": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5528",
+      "h1": "“O Allah, Lord of Jibra'il and…” (Sunan an-Nasai 5528)",
+      "title": "“O Allah, Lord of Jibra'il and…” (Sunan an-Nasai 5528)"
+    },
+    "nasai:5530": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5530",
+      "h1": "“O Allah, admit him to Paradise.'…” (Sunan an-Nasai 5530)",
+      "title": "“O Allah, admit him to Paradise.'…” (Sunan an-Nasai 5530)"
+    },
+    "nasai:5531": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5531",
+      "h1": "“O Allah, You are my Lord, there is…” (Sunan an-Nasai 5531)",
+      "title": "“O Allah, You are my Lord, there is…” (Sunan an-Nasai 5531)"
+    },
+    "nasai:5532": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5532",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5532)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5532)"
+    },
+    "nasai:5534": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5534",
+      "h1": "“I seek refuge with You from the…” (Sunan an-Nasai 5534)",
+      "title": "“I seek refuge with You from the…” (Sunan an-Nasai 5534)"
+    },
+    "nasai:5538": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5538",
+      "h1": "“O Allah, I seek refuge in Your…” (Sunan an-Nasai 5538)",
+      "title": "“O Allah, I seek refuge in Your…” (Sunan an-Nasai 5538)"
+    },
+    "nasai:5539": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5539",
+      "h1": "“O Allah,)' and he mentioned the…” (Sunan an-Nasai 5539)",
+      "title": "“O Allah,)' and he mentioned the…” (Sunan an-Nasai 5539)"
+    },
+    "nasai:5540": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5540",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5540)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5540)"
+    },
+    "nasai:5541": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5541",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5541)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan an-Nasai 5541)"
+    },
+    "nasai:5542": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5542",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5542)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5542)"
+    },
+    "nasai:5543": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5543",
+      "h1": "“I seek refuge in Your forgiveness…” (Sunan an-Nasai 5543)",
+      "title": "“I seek refuge in Your forgiveness…” (Sunan an-Nasai 5543)"
+    },
+    "nasai:5544": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5544",
+      "h1": "“O Allah, forgive me, guide me…” (Sunan an-Nasai 5544)",
+      "title": "“O Allah, forgive me, guide me…” (Sunan an-Nasai 5544)"
+    },
+    "nasai:5547": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5547",
+      "h1": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5547)",
+      "title": "“O Allah, I seek refuge in You from…” (Sunan an-Nasai 5547)"
+    },
+    "nasai:5548": {
+      "slug": "seeking-refuge-with-allah-kitab-al-istiadha-nasai-5548",
+      "h1": "“I seek refuge in You from falling…” (Sunan an-Nasai 5548)",
+      "title": "“I seek refuge in You from falling…” (Sunan an-Nasai 5548)"
+    },
+    "ibnmajah:3566": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3566",
+      "h1": "“O Lord! Help me and do not help…” (Sunan Ibn Majah 3566)",
+      "title": "“O Lord! Help me and do not help…” (Sunan Ibn Majah 3566)"
+    },
+    "ibnmajah:3568": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3568",
+      "h1": "“O Allah, I ask You for guidance…” (Sunan Ibn Majah 3568)",
+      "title": "“O Allah, I ask You for guidance…” (Sunan Ibn Majah 3568)"
+    },
+    "ibnmajah:3569": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3569",
+      "h1": "“O Allah, benefit me by that which…” (Sunan Ibn Majah 3569)",
+      "title": "“O Allah, benefit me by that which…” (Sunan Ibn Majah 3569)"
+    },
+    "ibnmajah:3575": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3575",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan Ibn Majah 3575)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan Ibn Majah 3575)"
+    },
+    "ibnmajah:3576": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3576",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan Ibn Majah 3576)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan Ibn Majah 3576)"
+    },
+    "ibnmajah:3581": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3581",
+      "h1": "“O Allah, forgive me, have mercy on…” (Sunan Ibn Majah 3581)",
+      "title": "“O Allah, forgive me, have mercy on…” (Sunan Ibn Majah 3581)"
+    },
+    "ibnmajah:3582": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3582",
+      "h1": "“O Allah, I ask You for all that is…” (Sunan Ibn Majah 3582)",
+      "title": "“O Allah, I ask You for all that is…” (Sunan Ibn Majah 3582)"
+    },
+    "ibnmajah:3586": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3586",
+      "h1": "“O Allah, You are Forgiving and…” (Sunan Ibn Majah 3586)",
+      "title": "“O Allah, You are Forgiving and…” (Sunan Ibn Majah 3586)"
+    },
+    "ibnmajah:3587": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3587",
+      "h1": "“O Allah, I ask You for Al-Mu'afah…” (Sunan Ibn Majah 3587)",
+      "title": "“O Allah, I ask You for Al-Mu'afah…” (Sunan Ibn Majah 3587)"
+    },
+    "ibnmajah:3600": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3600",
+      "h1": "“O Allah, I ask You for the white…” (Sunan Ibn Majah 3600)",
+      "title": "“O Allah, I ask You for the white…” (Sunan Ibn Majah 3600)"
+    },
+    "ibnmajah:3604": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3604",
+      "h1": "“O Allah, by Your leave we have…” (Sunan Ibn Majah 3604)",
+      "title": "“O Allah, by Your leave we have…” (Sunan Ibn Majah 3604)"
+    },
+    "ibnmajah:3607": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3607",
+      "h1": "“O Allah, I ask You for forgiveness…” (Sunan Ibn Majah 3607)",
+      "title": "“O Allah, I ask You for forgiveness…” (Sunan Ibn Majah 3607)"
+    },
+    "ibnmajah:3610": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3610",
+      "h1": "“O Lord, by Your leave I lie down…” (Sunan Ibn Majah 3610)",
+      "title": "“O Lord, by Your leave I lie down…” (Sunan Ibn Majah 3610)"
+    },
+    "ibnmajah:3612": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3612",
+      "h1": "“O Allah, I have submitted my face…” (Sunan Ibn Majah 3612)",
+      "title": "“O Allah, I have submitted my face…” (Sunan Ibn Majah 3612)"
+    },
+    "ibnmajah:3613": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3613",
+      "h1": "“O Allah, save me from Your…” (Sunan Ibn Majah 3613)",
+      "title": "“O Allah, save me from Your…” (Sunan Ibn Majah 3613)"
+    },
+    "ibnmajah:3620": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3620",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan Ibn Majah 3620)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan Ibn Majah 3620)"
+    },
+    "ibnmajah:3624": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3624",
+      "h1": "“O Allah, I seek refuge with You…” (Sunan Ibn Majah 3624)",
+      "title": "“O Allah, I seek refuge with You…” (Sunan Ibn Majah 3624)"
+    },
+    "ibnmajah:3625": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3625",
+      "h1": "“O Allah, we seek refuge with You…” (Sunan Ibn Majah 3625)",
+      "title": "“O Allah, we seek refuge with You…” (Sunan Ibn Majah 3625)"
+    },
+    "ibnmajah:3626": {
+      "slug": "supplication-kitab-al-dua-ibnmajah-3626",
+      "h1": "“O Allah, make it a wholesome rain…” (Sunan Ibn Majah 3626)",
+      "title": "“O Allah, make it a wholesome rain…” (Sunan Ibn Majah 3626)"
+    },
+    "quran:21:87": {
+      "slug": "quranic-supplications-quran-21-87",
+      "h1": "“And (mention) Dhu'n-Nun…” (Hisn al-Muslim quran:21:87)",
+      "title": "“And (mention) Dhu'n-Nun…” (Hisn al-Muslim quran:21:87)"
+    },
+    "quran:20:26": {
+      "slug": "quranic-supplications-quran-20-26",
+      "h1": "“And ease my task for me;” (Hisn al-Muslim quran:20:26)",
+      "title": "“And ease my task for me;” (Hisn al-Muslim quran:20:26)"
+    },
+    "quran:20:27": {
+      "slug": "quranic-supplications-quran-20-27",
+      "h1": "“And loose a knot from my…” (Hisn al-Muslim quran:20:27)",
+      "title": "“And loose a knot from my…” (Hisn al-Muslim quran:20:27)"
+    },
+    "quran:20:28": {
+      "slug": "quranic-supplications-quran-20-28",
+      "h1": "“That they may understand my…” (Hisn al-Muslim quran:20:28)",
+      "title": "“That they may understand my…” (Hisn al-Muslim quran:20:28)"
+    },
+    "quran:20:114": {
+      "slug": "quranic-supplications-quran-20-114",
+      "h1": "“Then exalted be Allah, the…” (Hisn al-Muslim quran:20:114)",
+      "title": "“Then exalted be Allah, the…” (Hisn al-Muslim quran:20:114)"
+    },
+    "quran:3:173": {
+      "slug": "quranic-supplications-quran-3-173",
+      "h1": "“Those unto whom men said…” (Hisn al-Muslim quran:3:173)",
+      "title": "“Those unto whom men said…” (Hisn al-Muslim quran:3:173)"
+    },
+    "quran:71:28": {
+      "slug": "quranic-supplications-quran-71-28",
+      "h1": "“My Lord! Forgive me and my…” (Hisn al-Muslim quran:71:28)",
+      "title": "“My Lord! Forgive me and my…” (Hisn al-Muslim quran:71:28)"
+    },
+    "quran:17:24": {
+      "slug": "quranic-supplications-quran-17-24",
+      "h1": "“And lower unto them the wing…” (Hisn al-Muslim quran:17:24)",
+      "title": "“And lower unto them the wing…” (Hisn al-Muslim quran:17:24)"
+    },
+    "quran:21:83": {
+      "slug": "quranic-supplications-quran-21-83",
+      "h1": "“And Job, when he cried unto…” (Hisn al-Muslim quran:21:83)",
+      "title": "“And Job, when he cried unto…” (Hisn al-Muslim quran:21:83)"
+    },
+    "quran:3:194": {
+      "slug": "quranic-supplications-quran-3-194",
+      "h1": "“Our Lord! And give us that…” (Hisn al-Muslim quran:3:194)",
+      "title": "“Our Lord! And give us that…” (Hisn al-Muslim quran:3:194)"
+    }
+  }
+}

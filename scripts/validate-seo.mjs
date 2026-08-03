@@ -375,6 +375,75 @@ if (!process.argv.includes("--fixtures")) {
   failed += r8;
 }
 
+/* ---------- R9 — hub card text must be the linked page's §5 name ------------------
+   docs/seo/VALIDATOR-RULES-SESSION-1.md R9, owner instruction 2026-08-03.
+
+   The occasion/source hubs are a SECOND render path for a page's name, and it was
+   never covered by the §5 fixtures — those only ever opened detail pages. On
+   2026-08-03 all 234 hub cards disagreed with the H1 of the page they linked to:
+   every card read `chapterLabel — translationExcerpt` off the corpus record, so 154
+   of them sat in 30 groups sharing one visible label (24 cards reading "Words of
+   remembrance for morning and evening" on two separate hubs). The detail pages were
+   correct the whole time — "Dua after wudu (Sunan Abi Dawud 525)" — which is what
+   made it invisible: every existing assertion passed.
+
+   Two limbs, and the second is what ties this to the CSV rather than to itself:
+     • card text === the linked page's rendered H1   (the two paths agree)
+     • card text === expectedH1(record)              (and they agree with §5)
+   expectedH1 is null for `derive_per_entry` chapters, where §5 sets no fixed
+   keyword; those fall back to the first limb, which checkPage() has already tied to
+   the CSV independently. Uniqueness within a hub is asserted too, since a hub whose
+   cards repeat one label is unusable regardless of where the label came from. */
+{
+  console.log("\n" + "=".repeat(86));
+  console.log("R9 — HUB CARD TEXT vs §5 PAGE NAME");
+  console.log("=".repeat(86));
+
+  const slugToId = {};
+  for (const [id, slug] of Object.entries(lock)) slugToId[slug] = String(id);
+
+  let cards = 0, vsH1 = 0, vsCsv = 0, dupes = 0, hubs = 0;
+  const shown = [];
+  for (const dir of ["duas/occasion", "duas/source"]) {
+    if (!fs.existsSync(P(dir))) continue;
+    for (const f of fs.readdirSync(P(dir)).filter((x) => x.endsWith(".html"))) {
+      hubs++;
+      const html = fs.readFileSync(P(dir, f), "utf8");
+      const seen = new Map();
+      for (const m of html.matchAll(/<a href="\/duas\/([^"/]+)\.html">([\s\S]*?) &rarr;<\/a>/g)) {
+        const slug = m[1], text = decode(m[2].replace(/<[^>]+>/g, "").trim());
+        cards++;
+        if (!seen.has(text)) seen.set(text, 0);
+        seen.set(text, seen.get(text) + 1);
+
+        const page = readPage(slug);
+        if (!page) continue;                       // R8 owns "links a missing page"
+        const h1 = decode(tagText(page, /<h1[^>]*>([\s\S]*?)<\/h1>/));
+        if (text !== h1) {
+          vsH1++;
+          if (shown.length < 8) shown.push(`  FAIL ${dir}/${f}\n         card: ${JSON.stringify(text)}\n         H1  : ${JSON.stringify(h1)}`);
+        }
+        const d = byId[slugToId[slug]];
+        const eH = d ? expectedH1(d) : null;
+        if (eH && text !== eH) {
+          vsCsv++;
+          if (shown.length < 8) shown.push(`  FAIL ${dir}/${f}\n         card    : ${JSON.stringify(text)}\n         CSV §5  : ${JSON.stringify(eH)}`);
+        }
+      }
+      for (const [, n] of seen) if (n > 1) dupes++;
+    }
+  }
+  for (const s of shown) console.log(s);
+  console.log(`  hub pages scanned          : ${hubs}`);
+  console.log(`  cards checked              : ${cards}`);
+  console.log(`  card text != linked H1     : ${vsH1}`);
+  console.log(`  card text != CSV §5 H1     : ${vsCsv}`);
+  console.log(`  duplicate labels in one hub: ${dupes}`);
+  const r9 = vsH1 + vsCsv + dupes;
+  console.log(r9 ? `  R9: FAIL (${r9})` : "  R9: PASS");
+  failed += r9;
+}
+
 console.log("\n" + "-".repeat(86));
 console.log(failed ? `RESULT: FAIL (${failed})` : "RESULT: PASS");
 process.exitCode = failed ? 1 : 0;

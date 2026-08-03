@@ -279,6 +279,94 @@ Current state: **144 published pages, 1809 internal links, 0 held, 0 missing —
 
 ---
 
+## R9 — hub card text must be the linked page's §5 name
+
+Owner instruction 2026-08-03. **Implemented and enforced** in `scripts/validate-seo.mjs`.
+
+The occasion/source hubs are a **second render path for a page's name**, and the §5 fixtures never
+covered it — they only ever opened detail pages. `anchorLabels()` built each card as
+`chapterLabel — translationExcerpt` straight off the corpus record, bypassing the keyword rule
+entirely.
+
+### The audit that produced this rule
+
+| | |
+|---|---|
+| hub pages | 28 |
+| cards | 234 |
+| **cards disagreeing with the linked page's H1** | **234 (100%)** |
+| collision groups (2+ cards sharing one visible label) | **30, covering 154 cards** |
+| worst | **24 cards** all reading "Words of remembrance for morning and evening" |
+
+The detail pages were **correct the whole time** — `Dua after wudu (Sunan Abi Dawud 525)` and
+`Dua after wudu (Riyad as-Salihin 353)` are distinct, keyword-led and source-disambiguated. Only
+the hub text was wrong, which is exactly why nothing caught it: every existing assertion passed.
+Same class of gap as the dropped lede and the FAQ connectives.
+
+### The rule
+
+```
+for every href="/duas/<slug>.html" card on a hub page:
+    assert cardText === the linked page's rendered <h1>      // the two paths agree
+    assert cardText === expectedH1(record)  where derivable  // and they agree with §5
+assert no two cards on one hub share a label
+```
+
+The second limb is what ties the rule to the CSV rather than to itself. `expectedH1` is null for
+`derive_per_entry` chapters, where §5 fixes no keyword; those fall back to the first limb, which
+`checkPage()` has already tied to the CSV independently.
+
+### The fix, and why it is not a third copy of the rule
+
+The name is now resolved **once**, in `build-dua-pages.mjs`, and written to
+`src/data/dua/page-names.json`; the hub builder reads it and uses it verbatim. Re-deriving the §5
+rule inside the hub builder would just have created a third path to drift. A missing or stale
+entry is a **hard build failure**, never a fallback to the chapter label — falling back is how
+this defect would return, and it would return invisibly.
+
+This forced two supporting changes:
+
+- **Build order reversed** to `build-dua-pages.mjs` → `build-dua-landing-pages.mjs`. The old order
+  existed only because the hub builder stripped *every* `/duas/` sitemap entry and the detail
+  builder put them back; both now replace only their own.
+- **Sitemap regexes made line-ending agnostic** (`<\/url>\r?\n`). See below — this was a live bug.
+
+### Verified by negative control
+
+Three injections into a real hub, each reverted, each expected to trip a different limb:
+
+| injection | result |
+|---|---|
+| one card reverted to `chapterLabel — excerpt` | caught (H1 + CSV limbs) |
+| two cards on one hub given the same label | caught (duplicate limb) |
+| plausible but non-§5 name ("Powerful dua for success") | caught (H1 + CSV limbs) |
+
+Hub restored byte-identical; post-restore PASS. Current state: **28 hubs, 234 cards, 0
+mismatches, 0 duplicate labels — R9 PASS.**
+
+---
+
+## The sitemap CRLF bug — root cause of the "duplicate hub URLs"
+
+Found 2026-08-03 while reordering the builders. Both builders rebuilt their sitemap entries with
+
+```js
+xml.replace(/ {2}<url>\s*<loc>…<\/loc>[\s\S]*?<\/url>\n/g, …)   // ← bare \n
+```
+
+`sitemap.xml` is **checked in**, and git restores it with **CRLF** on Windows. A bare `\n`
+terminator cannot match `</url>\r\n`, so the strip silently matched **zero** entries and every URL
+was appended a second time — 169 `<loc>` became 296, then 324.
+
+This is self-hiding: it fires only when the file has just come from git, and the first successful
+build rewrites the file with LF, after which everything looks fine. That is almost certainly the
+"28 duplicate hub URLs" recorded on 2026-08-01 and never explained.
+
+Fixed by `\r?\n` in both builders. Verified idempotent: three consecutive full rebuilds hold at
+169 `<loc>`, 169 unique.
+
+---
+
 ## Test-count assertions that must be re-derived, never copied
 
 `worker/test/dua-source-core.test.js` asserted 219/20/199 transliteration counts for months after

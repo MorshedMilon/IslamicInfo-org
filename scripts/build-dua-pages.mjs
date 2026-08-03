@@ -1,11 +1,18 @@
 /* Generate the individual dua pages + chapter landing pages from the corpus.
 
-     node scripts/build-dua-landing-pages.mjs   # MUST run first — it strips every
-                                                # /duas/ <url> from the sitemap
-     node scripts/build-dua-pages.mjs           # then this
+   BUILD ORDER REVERSED 2026-08-03 — this script now runs FIRST:
 
-   Writes duas/<categorySlug>-<idSlug>.html (506) and duas/chapter/<slug>.html (27),
+     node scripts/build-dua-pages.mjs           # this: also writes page-names.json
+     node scripts/build-dua-landing-pages.mjs   # then the hubs, labelled from it
+
+   The old order existed only because the hub builder stripped every `/duas/` <url>
+   from the sitemap and this script put them back. That is fixed — both scripts now
+   replace only their own entries — and the hubs need this script's resolved H1s,
+   which is why it has to go first.
+
+   Writes duas/<categorySlug>-<idSlug>.html (506) and duas/chapter/<slug>.html,
    mints/reads src/data/dua/slugs.lock.json, maintains src/data/dua/page-state.json,
+   writes src/data/dua/page-names.json (the ONE place a page's name is resolved),
    adds its own sitemap entries, and writes the QA reports into reports/dua/.
 
    Design: this reuses the *existing* landing-page design system verbatim — the same
@@ -1078,11 +1085,53 @@ if (fs.existsSync("duas/chapter")) {
 fs.writeFileSync(LOCK_PATH, JSON.stringify(lock, null, 2) + "\n");
 fs.writeFileSync(STATE_PATH, JSON.stringify(nextState, null, 2) + "\n");
 
+/* ── resolved names, published for the hub builder ─────────────────────────────
+   THE NAME IS COMPUTED ONCE, HERE, AND NOWHERE ELSE.
+
+   The occasion/source hubs used to label each card `chapterLabel — translation
+   excerpt`, taken straight off the corpus record. That was a SECOND naming path
+   that never saw §5: on 2026-08-03 all 234 hub cards disagreed with the H1 of the
+   page they linked to, and 154 of them sat in 30 groups sharing one visible label
+   (24 cards all reading "Words of remembrance for morning and evening"). The H1s
+   themselves were correct and keyword-led the whole time — only the hub text was
+   wrong, the same class of gap as the dropped lede and the FAQ connectives.
+
+   Re-deriving the rule in the hub builder would just be a third path to drift.
+   Instead the resolution that already happened above — keyword stem, plus the
+   source reference or opening words only where two pages would otherwise collide
+   — is written out and consumed verbatim. `titleOf`/`h1Of` are the outputs of
+   resolveUnique(), so the labels are unique by construction, library-wide. */
+const NAMES_PATH = "src/data/dua/page-names.json";
+const names = {
+  _meta: {
+    purpose: "Resolved per-page H1 and title for every built dua detail page, keyed by corpus id. WRITTEN BY scripts/build-dua-pages.mjs, READ BY scripts/build-dua-landing-pages.mjs so hub cards carry the same name as the page they link to.",
+    doNotEdit: "Generated. Editing this by hand desynchronises the hub cards from the pages, which is the exact defect it exists to prevent (2026-08-03: 234/234 cards wrong).",
+    rule: "H1 = §5 keyword stem, with the source reference or opening words appended ONLY where resolveUnique() had to separate a collision. Governed by doc/DUA-KEYWORD-NAMING-v1_0.md as amended by v1_1.",
+    buildOrder: "build-dua-pages.mjs FIRST, then build-dua-landing-pages.mjs. The hub builder fails loudly if a page it must label is missing from this file.",
+    generated: TODAY,
+    count: 0,
+  },
+  pages: {},
+};
+for (const d of browse) {
+  const slug = slugOf(d);
+  if (!slug) continue;
+  names.pages[d.id] = { slug, h1: h1Of(d), title: titleOf(d) };
+}
+names._meta.count = Object.keys(names.pages).length;
+fs.writeFileSync(NAMES_PATH, JSON.stringify(names, null, 2) + "\n");
+
 /* ── sitemap ───────────────────────────────────────────────────────────────── */
 // Only this script's own URLs are replaced; the occasion/source entries written by
 // build-dua-landing-pages.mjs are left untouched.
 let xml = fs.readFileSync("sitemap.xml", "utf8");
-xml = xml.replace(/ {2}<url>\s*<loc>[^<]*<\/loc>[\s\S]*?<\/url>\n/g, (block) => {
+/* `\r?\n`, not `\n`. sitemap.xml is checked in, and git restores it with CRLF on
+   this platform, so a bare `\n` terminator silently matches ZERO existing entries
+   whenever the file has just come from git — the strip becomes a no-op and every
+   URL is appended a second time. That is the real cause of the "duplicate hub URLs"
+   seen on 2026-08-01: the bug appears on a fresh checkout and hides itself as soon
+   as one build has rewritten the file with LF. */
+xml = xml.replace(/ {2}<url>\s*<loc>[^<]*<\/loc>[\s\S]*?<\/url>\r?\n/g, (block) => {
   const loc = (block.match(/<loc>([^<]*)<\/loc>/) || [])[1] || "";
   const mine = loc.includes("/duas/") && !loc.includes("/duas/occasion/") && !loc.includes("/duas/source/");
   return mine ? "" : block;

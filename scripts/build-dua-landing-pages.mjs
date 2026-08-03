@@ -1,7 +1,12 @@
 /* Generate the indexable dua hub pages from the corpus.
-   Run after any change to src/data/dua/search-corpus.json, BEFORE build-dua-pages.mjs:
-     node scripts/build-dua-landing-pages.mjs
-     node scripts/build-dua-pages.mjs
+   BUILD ORDER CHANGED 2026-08-03 — this script now runs SECOND:
+     node scripts/build-dua-pages.mjs          <- computes + writes page-names.json
+     node scripts/build-dua-landing-pages.mjs  <- labels hub cards from it
+
+   The old order existed only because this script used to strip every `/duas/` entry
+   from the sitemap and the other put them back. That is fixed (see the sitemap block
+   below), and the hub cards now need the resolved H1s, which only exist after
+   build-dua-pages.mjs has run.
 
    Writes duas/occasion/<slug>.html + duas/source/<slug>.html and refreshes their
    entries in sitemap.xml. Content is rendered into the HTML rather than by JS,
@@ -60,6 +65,33 @@ const isPublished = (d) => {
   const slug = lock[d.id];
   return !!(slug && pageCopy[slug] && pageCopy[slug].indexable === true);
 };
+
+/* ── resolved page names (see anchorLabels) ────────────────────────────────────
+   Written by build-dua-pages.mjs, which MUST run first. A missing or stale entry is
+   a hard failure, never a silent fallback to the chapter label: falling back is how
+   this defect would return, and it would return invisibly. */
+const NAMES = readJson("src/data/dua/page-names.json", null);
+if (!NAMES || !NAMES.pages) {
+  console.error("FATAL: src/data/dua/page-names.json is missing.\n" +
+    "  Hub cards are labelled with each linked page's resolved H1, which is computed by\n" +
+    "  scripts/build-dua-pages.mjs. Run that FIRST, then re-run this script.");
+  process.exit(1);
+}
+function nameOf(d) {
+  const n = NAMES.pages[d.id];
+  if (!n || !n.h1) {
+    console.error(`FATAL: no resolved name for ${d.id} (${lock[d.id] || "no slug"}) in page-names.json.\n` +
+      "  page-names.json is stale relative to the corpus. Re-run scripts/build-dua-pages.mjs,\n" +
+      "  then this script. Labelling the card from the chapter label instead is exactly the\n" +
+      "  defect this file exists to prevent — so this is a build failure, not a fallback.");
+    process.exit(1);
+  }
+  if (n.slug !== lock[d.id]) {
+    console.error(`FATAL: page-names.json maps ${d.id} to slug "${n.slug}" but the lockfile says "${lock[d.id]}".`);
+    process.exit(1);
+  }
+  return n;
+}
 const esc = (s) => String(s == null ? "" : s)
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const sha = (s) => crypto.createHash("sha1").update(s).digest("hex").slice(0, 16);
@@ -135,12 +167,22 @@ const CSS = [
    appended to the visible label: <p class="meta"> already prints it directly
    below, and printing it twice was doing nothing for 21 entries. Uniqueness now
    comes from the preview text, which differs per entry by construction. */
+/* A card is labelled with the LINKED PAGE'S OWN H1 — never re-derived here.
+
+   Until 2026-08-03 this function built `chapterLabel — translationExcerpt` from the
+   corpus record, which made the hubs a second naming path that never saw §5. The
+   audit that day: 234 of 234 cards disagreed with the H1 of the page they linked to,
+   and 154 sat in 30 groups sharing one visible label — 24 cards on two different hubs
+   all reading "Words of remembrance for morning and evening", differentiated only by
+   a quoted excerpt. The detail-page H1s were already correct and keyword-led
+   ("Dua after wudu (Sunan Abi Dawud 525)"); only this template was wrong.
+
+   The names come from src/data/dua/page-names.json, written by build-dua-pages.mjs
+   from the SAME resolveUnique() output that renders the H1. They are therefore
+   unique library-wide by construction, and the §5 keyword rule is applied in exactly
+   one place. Re-deriving it here would be a third path to drift. */
 function anchorLabels(items) {
-  return items.map(d => {
-    const chapter = snip(displayLabel(d.category), 44);
-    const preview = snip(String(d.translation || "").replace(/^[("']+/, "").trim(), 52);
-    return preview ? chapter + " — " + preview : snip(displayLabel(d.category), 84);
-  });
+  return items.map(d => nameOf(d).h1);
 }
 
 function page(o) {
@@ -301,8 +343,21 @@ for (const [slug, v] of Object.entries(srcMap)) {
 
 fs.writeFileSync(STATE_PATH, JSON.stringify(state, null, 2) + "\n");
 
+/* Replace ONLY this script's own URLs. This used to strip every `/duas/` entry —
+   including the 117 detail and 10 chapter pages owned by build-dua-pages.mjs — and
+   re-add just the 28 hubs, which is the sole reason the build order was
+   landing-then-pages: the destructive script had to go first so the other could put
+   the entries back. That coupling is now gone, so the order is free to be
+   pages-then-landing, which is what lets the hub cards read the resolved H1s.
+   Mirrors the equivalent guard in build-dua-pages.mjs. */
 let xml = fs.readFileSync("sitemap.xml", "utf8");
-xml = xml.replace(/ {2}<url>\s*<loc>[^<]*\/duas\/[^<]*<\/loc>[\s\S]*?<\/url>\n/g, "");
+/* `\r?\n` — see the matching note in build-dua-pages.mjs. git restores sitemap.xml
+   with CRLF, and a bare `\n` terminator makes this strip a silent no-op. */
+xml = xml.replace(/ {2}<url>\s*<loc>[^<]*<\/loc>[\s\S]*?<\/url>\r?\n/g, (block) => {
+  const loc = (block.match(/<loc>([^<]*)<\/loc>/) || [])[1] || "";
+  const mine = loc.includes("/duas/occasion/") || loc.includes("/duas/source/");
+  return mine ? "" : block;
+});
 xml = xml.replace("</urlset>", urls.map(([u, p, lm]) =>
   "  <url>\n    <loc>" + u + "</loc>\n    <lastmod>" + lm + "</lastmod>\n    <priority>" + p + "</priority>\n  </url>\n").join("") + "</urlset>");
 fs.writeFileSync("sitemap.xml", xml);

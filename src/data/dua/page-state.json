@@ -1,116 +1,4 @@
 {
-  "duas/occasion/morning-evening.html": {
-    "hash": "760e7a01959db636",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/sleep-waking.html": {
-    "hash": "d1b322efb79df6e1",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/home-clothing.html": {
-    "hash": "2da8c889a121fac8",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/prayer.html": {
-    "hash": "172874dbe98fd5e8",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/quran-recitation.html": {
-    "hash": "9bfda2bfaee52629",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/guidance.html": {
-    "hash": "812b6965da5ad379",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/distress.html": {
-    "hash": "d34a7d8bc9215df4",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/protection.html": {
-    "hash": "004b6614cff2bfbe",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/forgiveness.html": {
-    "hash": "e844adfde3af3497",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/family-children.html": {
-    "hash": "1915276bd747cfa1",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/funeral-illness.html": {
-    "hash": "1a3bee9ca98316da",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/weather-nature.html": {
-    "hash": "a77697bb8fbf9d13",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/fasting.html": {
-    "hash": "6cdda3c51c112853",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/food-drink.html": {
-    "hash": "79a7a1b76c2e01d4",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/social.html": {
-    "hash": "7d7e4d2330e8dfd7",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/praise-dhikr.html": {
-    "hash": "2554c9345f998c58",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/provision.html": {
-    "hash": "4db43abb2662b48d",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/travel.html": {
-    "hash": "65d0d76e83bd4abd",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/hajj-umrah.html": {
-    "hash": "f4d3fae46963ff49",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/general.html": {
-    "hash": "f02e3a558f97dc8a",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/hisn.html": {
-    "hash": "70aeaebddcfba7f8",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/quran.html": {
-    "hash": "688c8cb4638b302a",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/bukhari.html": {
-    "hash": "fabe83dc62dfebb1",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/muslim.html": {
-    "hash": "cc4fd8250308bd24",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/abudawud.html": {
-    "hash": "edd37ed5d037407c",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/tirmidhi.html": {
-    "hash": "0b24a0d4c716edc9",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/nasai.html": {
-    "hash": "59f4b70050d6237b",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/ibnmajah.html": {
-    "hash": "f9132ea9ddbafa4a",
-    "lastmod": "2026-08-03"
-  },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-75.html": {
     "hash": "ac91111d8715da38",
     "lastmod": "2026-08-03"
@@ -2209,6 +2097,118 @@
   },
   "duas/chapter/invocations-for-when-you-meet-an-adversary-or-a-powerful-rul.html": {
     "hash": "986f7333991ac9d4",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/morning-evening.html": {
+    "hash": "e52f2b2b1a1cee26",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/sleep-waking.html": {
+    "hash": "b7636baca6487bd6",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/home-clothing.html": {
+    "hash": "481470d73f2044c9",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/prayer.html": {
+    "hash": "2cd24bf3a993edfd",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/quran-recitation.html": {
+    "hash": "9f27623adbe9d41a",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/guidance.html": {
+    "hash": "812b6965da5ad379",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/distress.html": {
+    "hash": "1234bdbca24d7789",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/protection.html": {
+    "hash": "69df6e03c77510ab",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/forgiveness.html": {
+    "hash": "af6218f35c475bb0",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/family-children.html": {
+    "hash": "572c7485f7cd21f1",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/funeral-illness.html": {
+    "hash": "f4f864f778380dd6",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/weather-nature.html": {
+    "hash": "4ffe91af0e4aff09",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/fasting.html": {
+    "hash": "a5cce78f62b81718",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/food-drink.html": {
+    "hash": "2ef35ef440a11aaa",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/social.html": {
+    "hash": "5fef089c998d2b62",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/praise-dhikr.html": {
+    "hash": "71da4c1de0b276b4",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/provision.html": {
+    "hash": "5696f86c0c89e282",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/travel.html": {
+    "hash": "af987d16ed744d49",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/hajj-umrah.html": {
+    "hash": "f4d3fae46963ff49",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/general.html": {
+    "hash": "f02e3a558f97dc8a",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/hisn.html": {
+    "hash": "f1ba0ae965a67c2d",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/quran.html": {
+    "hash": "688c8cb4638b302a",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/bukhari.html": {
+    "hash": "fabe83dc62dfebb1",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/muslim.html": {
+    "hash": "cc4fd8250308bd24",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/abudawud.html": {
+    "hash": "edd37ed5d037407c",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/tirmidhi.html": {
+    "hash": "0b24a0d4c716edc9",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/nasai.html": {
+    "hash": "59f4b70050d6237b",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/ibnmajah.html": {
+    "hash": "f9132ea9ddbafa4a",
     "lastmod": "2026-08-03"
   }
 }
