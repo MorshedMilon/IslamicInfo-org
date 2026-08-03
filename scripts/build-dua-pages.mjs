@@ -580,6 +580,16 @@ function stemOf(d) {
   return stem;
 }
 
+/* Does this page render a transliteration whose provenance we cannot name?
+   Shares its definition with validator rule R10 — same vacuous-value list, so the
+   on-page disclosure and the validator can never disagree about which pages are
+   affected. "see site-wide attribution" resolves to the compilation the TEXT came
+   from; it names no transliterator, so it does not count. */
+const TRANSLIT_SRC_VACUOUS = /^(|unknown|n\/?a|tbd|none|various|see site-wide attribution.*|site-wide.*)$/i;
+const translitSourceNamed = (d) => typeof d.transliterationSource === "string"
+  && d.transliterationSource.trim() !== "" && !TRANSLIT_SRC_VACUOUS.test(d.transliterationSource.trim());
+const translitUnsourced = (d) => !!translitOf(d) && !translitSourceNamed(d);
+
 const kmOf = (d) => keywordMap[slugOf(d)] || null;
 const TITLES = resolveUnique(browse, titleCandidates, (d) => (kmOf(d) || {}).titleOverride || null);
 const H1S = resolveUnique(browse, h1Candidates, null);
@@ -788,6 +798,18 @@ function sourceBlock(d) {
     rows.push('    <p class="tr">Source information is unavailable in the current database.</p>');
   }
   if (tr) rows.push('    <p class="ed">Translation: ' + esc(tr) + '</p>');
+  /* Romanisation disclosure (owner decision 2026-08-03). Sits HERE, beside the
+     translation attribution, rather than under the transliteration itself: these are
+     both provenance statements and belong together, and a caveat wedged between the
+     transliteration and the translation breaks the read.
+
+     It DISCLOSES the debt, it does not reduce it — R10's baseline is unchanged. The
+     condition is the same `named()` test R10 uses, so the moment a record gains a real
+     transliterationSource — including "Reviewer-written (adopted)" under the Talbiyah
+     precedent — this line disappears on the next build with no further edit. That
+     coupling is deliberate: a disclosure that outlives the problem is its own defect. */
+  if (translitUnsourced(d)) rows.push('    <p class="ed">Romanization source not verified — ' +
+    'the Arabic and English above are sourced; this transliteration is provided as a reading aid only.</p>');
   // ADDENDUM §15 — where this library lists the same supplication under another
   // chapter, say so and link it, so a reader who lands on either page can see why
   // two URLs carry the same words. Stated from the corpus only: which chapters list
@@ -976,6 +998,24 @@ items.map(d => [
 '    <p class="meta">' + (sourceLine(d) ? esc(sourceLine(d)) + ' · ' : '') +
   '<a href="/duas/' + slugOf(d) + '.html">Open this dua &rarr;</a></p>',
 '  </article>'].filter(Boolean).join("\n")).join("\n"),
+  /* Romanisation disclosure, chapter variant (owner decision 2026-08-03). ONE note at
+     the foot of the listing, not one per supplication: a chapter page shows many duas
+     at once and repeating the same caveat under each would turn a disclosure into
+     noise, which is how a caveat stops being read.
+
+     Placed after the last item and before the CTA, so it is the closing statement
+     about the supplications above rather than a footnote to the navigation below.
+     Uses `.ed` — the same muted italic this template already shares with the detail
+     pages — so no new class and no new style.
+
+     Same translitUnsourced() test the detail pages use, so the two retire in
+     lockstep: when a record gains a real transliterationSource the note drops off
+     both surfaces on the next build. Wording is plural because the subject is the
+     page's whole list. */
+  items.some(translitUnsourced)
+    ? '  <p class="ed">Romanization sources not verified — the Arabic and English above are ' +
+      'sourced; the transliterations are provided as a reading aid only.</p>'
+    : '',
 '  <a class="cta" href="/dua.html?category=' + slug + '">Search and filter the full dua library &rarr;</a>',
 '  <div class="also"><h2>Browse other chapters</h2><div class="chips">',
 others.map(s => '    <a href="/duas/chapter/' + s + '.html">' + esc(snip(displayLabel(catLabel[s]), 64)) + ' (' + byCatPub[s].length + ')</a>').join("\n"),
@@ -983,7 +1023,7 @@ others.map(s => '    <a href="/duas/chapter/' + s + '.html">' + esc(snip(display
 '</div></main>',
 '<footer><div class="wrap">Every supplication above is shown with the source it comes from. IslamicInfo publishes no rulings.<br/><a href="/dua.html">Back to the dua library</a></div></footer>',
 '</body></html>'
-  ].join("\n");
+  ].filter(Boolean).join("\n");   // drops the disclosure slot cleanly when it does not apply
 }
 
 /* ── write ─────────────────────────────────────────────────────────────────────
