@@ -46,10 +46,11 @@
         "prayer (ruku')",
         "prayer (sujood)"
       ],
-      "reason": "Two different intents, no canonical page. 'Aishah's report attests these words in BOTH postures, and Hisn lists them accordingly: `17:35` under Invocations during Ruku' (keyword \"dua for ruku\"), `19:43` under Invocations during Sujood (keyword \"dua for sujood\"). Both chapters carry their own static chapter page. The shared `prayer` occasion bucket is our own facet, not the search intent — \"what to say in ruku\" and \"what to say in sujood\" are distinct queries with distinct answers, and a worshipper in one posture is not served by the other page. Authored prose differs throughout and each names its own posture and narrator.",
+      "reason": "Two different intents, no canonical page. Hisn lists the same words under BOTH chapters — `17:35` under Invocations during Ruku' (keyword \"dua for ruku\") and `19:43` under Invocations during Sujood (keyword \"dua for sujood\") — and both records carry the same underlying citation, Riyad as-Salihin 747 ('Aishah), so this is one narration listed twice rather than two competing claims. What that narration says about either posture is NOT recorded in this corpus, and nothing here asserts it; the placement rests on Hisn's arrangement, which is exactly what the authored prose attributes it to (\"the chapter assigns this to the bowing\"). Both chapters carry their own static chapter page. The shared `prayer` occasion bucket is our own facet, not the search intent — \"what to say in ruku\" and \"what to say in sujood\" are distinct queries with distinct answers, and a worshipper in one posture is not served by the other page. Authored prose differs throughout (Jaccard 0.22) and each names its own posture.",
       "disposition": "both index, cross-linked, no canonical",
       "adjudicatedBy": "owner, 2026-08-03",
-      "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision."
+      "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision.",
+      "reasonCorrected": "2026-08-03 — original reason asserted what the narration attests, which this corpus does not record. Disposition unchanged; basis narrowed to Hisn's arrangement and the shared citation. See ADR-067 Correction."
     },
     {
       "cluster": [
@@ -61,10 +62,11 @@
         "prayer (ruku')",
         "prayer (sujood)"
       ],
-      "reason": "Two different intents, no canonical page. Same disposition and same reasoning as `17:35`/`19:43`: 'Asim bin Humaid's report attests these words in both the bowing and the prostration, and the two pages target \"dua for ruku\" and \"dua for sujood\" respectively. Shared `prayer` bucket, distinct queries, separately authored prose naming each posture.",
+      "reason": "Two different intents, no canonical page. Same disposition and same reasoning as `17:35`/`19:43`: Hisn lists these words under both the bowing and the prostration, both records carry the same citation (Sunan an-Nasai 1051, 'Asim bin Humaid), and the two pages target \"dua for ruku\" and \"dua for sujood\" respectively. As above, this corpus does not record what the narration says about either posture and nothing here asserts it — the placement is Hisn's. Shared `prayer` bucket, distinct queries, separately authored prose (Jaccard 0.24) naming each posture.",
       "disposition": "both index, cross-linked, no canonical",
       "adjudicatedBy": "owner, 2026-08-03",
-      "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision."
+      "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision.",
+      "reasonCorrected": "2026-08-03 — original reason asserted what the narration attests, which this corpus does not record. Disposition unchanged; basis narrowed to Hisn's arrangement and the shared citation. See ADR-067 Correction."
     },
     {
       "cluster": [
