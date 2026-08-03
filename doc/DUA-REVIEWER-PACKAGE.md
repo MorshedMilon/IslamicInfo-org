@@ -1040,6 +1040,102 @@ supplications.
 
 ---
 
+## Part 11 — Transliteration adoption, batch 3 (18 records)
+
+Added 2026-08-03. **⚠ NOT Gate-2 satisfied — machine-proposed, UNVERIFIED.**
+
+Same standing as Parts 9 and 10: nothing written to the corpus, no `transliterationSource` set,
+nothing marked reviewer-written.
+
+The shared-formula seam is now essentially worked out — of the 84 records remaining before this
+batch, only **7** still shared a formula with another remaining record. This batch takes those
+first, then the shortest unique records, on the reasoning that short records are the cheapest to
+rule and clear the most ground per minute of review.
+
+### The batch
+
+| id | Arabic | existing (flawed) | **proposed ALA-LC** | translation |
+|---|---|---|---|---|
+| `27:83` | <div dir="rtl" lang="ar">((حَسْبِيَ اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ عَلَيهِ تَوَكَّلتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ)) (سَبْعَ مَرّاتٍ).</div> | (Hasbiyal-lahu la ilaha illa huwa, AAalayhi tawakkalt, wahuwa rabbul-AAarshil-AAatheem (Recite seven times in Arabic.) | **Ḥasbiya-llāhu lā ilāha illā huwa, ʿalayhi tawakkaltu, wa-huwa rabbu-l-ʿarshi-l-ʿaẓīm** | Allah is Sufficient for me, none has the right to be worshipped except Him, upon Him I rely and He is Lord of the exalted throne.’ (Recite s |
+| `35:123` | <div dir="rtl" lang="ar">((اللَّهُمَّ رَحْمَتَكَ أَرْجُو، فَلاَ تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ، وَأَصْلِحْ لِي شَأْنِي كُلَّهُ، لاَ إِلَهَ إِلاَّ أَنْتَ)).</div> | (Allahumma rahmataka arjoo fala takilnee ila nafsee tarfata AAayn, wa-aslih lee sha/nee kullah, la ilaha illa ant.) | **Allāhumma raḥmataka arjū, fa-lā takilnī ilā nafsī ṭarfata ʿayn, wa-aṣliḥ lī shaʾnī kullah, lā ilāha illā ant** | (O Allah, it is Your mercy that I hope for, so do not leave me in charge of my affairs even for a blink of an eye and rectify for me all of  |
+| `24:58` | <div dir="rtl" lang="ar">((اللَّهُمَّ اغْفِرْ لِي مَا قَدَّمْتُ، وَمَا أَخَّرْتُ، وَمَا أَسْرَرْتُ، وَمَا أَعْلَنْتُ، وَمَا أَسْرَفْتُ، وَمَا أَنْتَ أَعْلَمُ بِهِ مِنِّي. أَنْتَ الْمُقَدِّمُ، وَأَنْتَ الْمُؤَخِّرُ لاَ إِلَهَ إِلاَّ أَنْتَ)).</div> | (Allahummagh-fir lee ma qaddamtu, wama akhkhart, wama asrartu wama aAAlant, wama asraftt, wama anta aAAlamu bihi minnee, antal-muqaddimu wa-antal-mu-akhkhiru la ilaha illa ant.) | **Allāhumma-ghfir lī mā qaddamtu, wa-mā akhkhartu, wa-mā asrartu, wa-mā aʿlantu, wa-mā asraftu, wa-mā anta aʿlamu bihi minnī. Anta-l-Muqaddimu wa-anta-l-Muʾakhkhiru, lā ilāha illā ant** | O Allah, forgive me for those sins which have come to pass as well as those which shall come to pass, and those I have committed in secret a |
+| `27:80` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ، وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلاَئِكَتِكَ، وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلاَّ أَنْتَ وَحْدَكَ لاَ شَرِيكَ لَكَ، وَأَنَّ مُحَمَّداً عَبْدُكَ وَرَسُولُكَ)) (أربعَ مَرَّاتٍ).[ وإذا أمسى قال: اللَّهم إني أمسيت...]</div> | (Allahumma innee asbahtu oshhiduk, wa-oshhidu hamalata AAarshik, wamala-ikatak, wajameeAAa khalqik, annaka antal-lahu la ilaha illa ant, wahdaka la shareeka lak, wa-anna Muhammadan AAabduka warasooluk .) (four times in the morning & evening)(Note: for the evening, one reads (amsaytu) instead of (asbahtu).) | **Allāhumma innī aṣbaḥtu ushhiduka, wa-ushhidu ḥamalata ʿarshika, wa-malāʾikataka, wa-jamīʿa khalqika, annaka anta-llāhu lā ilāha illā anta waḥdaka lā sharīka lak, wa-anna Muḥammadan ʿabduka wa-rasūluk** | (O Allah, verily I have reached the morning and call on You, the bearers of Your throne, Your angles, and all of Your creation to witness th |
+| `27:79` | <div dir="rtl" lang="ar">((اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنوبَ إِلاَّ أَنْتَ)).</div> | allahumma anta rabbi la ilaha illa anta khalaqtani wa ana 'abduka wa ana 'ala 'ahdika wa wa'dika mastata'tu a'udhu bika min sharri ma sana'tu abu'u laka bini'matika 'alayya wa abu'u bidhanbi faghfir li fa innahu la yaghfirudh-dhunuba illa anta | **Allāhumma anta Rabbī lā ilāha illā anta, khalaqtanī wa-anā ʿabduka, wa-anā ʿalā ʿahdika wa-waʿdika mā-staṭaʿtu, aʿūdhu bika min sharri mā ṣanaʿtu, abūʾu laka bi-niʿmatika ʿalayya, wa-abūʾu bi-dhanbī fa-ghfir lī fa-innahu lā yaghfiru-dh-dhunūba illā ant** | O Allah, You are my Lord. There is no deity worthy of worship except You. You created me, and I am Your servant. I abide to Your covenant an |
+| `7:11` | <div dir="rtl" lang="ar">(غُفْرَانَكَ).</div> | ghufranak | **Ghufrānak** | I ask for Your forgiveness (O Allah). |
+| `64:172` | <div dir="rtl" lang="ar">((اللَّهُمَّ صَيِّباً نَافِعاً)).</div> | allahumma sayyiban nafi'a | **Allāhumma ṣayyiban nāfiʿan** | O Allah, make it a beneficial rain. |
+| `18:38` | <div dir="rtl" lang="ar">((سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ)).</div> | (SamiAAal-lahu liman hamidah) | **Samiʿa-llāhu li-man ḥamidah** | (May Allah answer he who praises Him.)(This supplication is to be made while rising.) |
+| `28:105` | <div dir="rtl" lang="ar">((بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا)).</div> | bismika allahumma amutu wa ahya | **Bi-smika-llāhumma amūtu wa-aḥyā** | In Your name, O Allah, I die and I live. |
+| `36:128` | <div dir="rtl" lang="ar">((حَسْبُنا اللَّهُ وَنِعْمَ الْوَكِيلُ)).</div> | (Hasbunal-lahu waniAAmal-wakeel.) | **Ḥasbuna-llāhu wa-niʿma-l-wakīl** | (Allah is sufficient for us, and how fine a trustee (He is).) |
+| `39:132` | <div dir="rtl" lang="ar">((اللَّهُمَّ اكْفِنِيهِمْ بِمَا شِئْتَ)).</div> | (Allahummak-fineehim bima shi/.) | **Allāhumma-kfinīhim bi-mā shiʾta** | (O Allah, protect me from them with what You choose.) |
+| `65:173` | <div dir="rtl" lang="ar">((مُطِرْنَا بِفَضْلِ اللَّهِ وَرَحْمَتِهِ)).</div> | mutirna bi fadlillahi wa rahmatih | **Muṭirnā bi-faḍli-llāhi wa-raḥmatih** | We have been given rain by the bounty and mercy of Allah. |
+| `75:186` | <div dir="rtl" lang="ar">((إِنِّي صَائِمٌ، إِنِّي صَائِمٌ)).</div> | (Innee sa-im, innee sa-im.) | **Innī ṣāʾimun, innī ṣāʾim** | (I am fasting, I am fasting.) |
+| `89:200` | <div dir="rtl" lang="ar">((أَحَبَّكَ الَّذِي أَحْبَبْتَنِي لَهُ)).</div> | (Ahabbakal-lathee ahbabtanee lah.) | **Aḥabbaka-lladhī aḥbabtanī lah** | (May He, for whom you have loved me, love you.) |
+| `27:91` | <div dir="rtl" lang="ar">((سُبْحَانَ اللَّهِ وَبِحَمْدِهِ)) (مائة مرَّةٍ).</div> | subhanallahi wa bihamdihi | **Subḥāna-llāhi wa-bi-ḥamdih** | Glory be to Allah, and praise be to Him. |
+| `59:164` | <div dir="rtl" lang="ar">((اللَّهُمَّ اغْفِرْ لَهُ، اللَّهُمَّ ثَبِّتْهُ)).</div> | Allaahum-maghfir lahu Allaahumma thabbithu | **Allāhumma-ghfir lahu, allāhumma thabbithu** | O Allah, forgive him. O Allah, strengthen him |
+| `20:48` | <div dir="rtl" lang="ar">((رَبِّ اغْفِرْ لِي، رَبِّ اغْفِرْ لِي)).</div> | (Rabbigh-fir lee, rabbigh-fir lee.) | **Rabbi-ghfir lī, rabbi-ghfir lī** | (My Lord forgive me, My Lord forgive me.) |
+| `28:104` | <div dir="rtl" lang="ar">((اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ)).</div> | (Allahumma qinee AAathabaka yawma tabAAathu AAibadak.) | **Allāhumma qinī ʿadhābaka yawma tabʿathu ʿibādak** | (O Allah, protect me from Your punishment on the day Your servants are resurrected.) |
+
+### Source-text defects found while transliterating
+
+**`27:83`** — Old field ends `(Recite seven times in Arabic.` — an **English instruction inside the transliteration field**, with an unbalanced parenthesis. Not recited; not transliterated.
+
+**`35:123`** — Third instance of the stray `/` standing for hamza (`sha/nee` → `shaʾnī`), after `17:37` and `24:56`.
+
+**`24:58`** — Old contains a plain typo — `asraftt` with a doubled final t.
+
+**`27:80`** — The `arabic` field carries a bracketed **evening variant** — `[وإذا أمسى قال: اللَّهم إني أمسيت...]` — i.e. a second recitable form stored as an annotation. Only the morning form (`aṣbaḥtu`) is transliterated. **Whether the evening form should be its own record is a content question, not a transliteration one.**
+
+**`64:172`** — Old `nafi'a` drops the final tanwīn `-an`.
+
+**`39:132`** — **The old romanisation LOST A WORD.** It reads `bima shi/.` — `شِئْتَ` (*shiʾta*, “You choose”) is not transliterated at all, only a stray `/` and a full stop. The most severe defect found so far: this is not a spelling problem, it is a missing word.
+
+**`59:164`** — Old reads `Allaahum-maghfir` — long ā written as doubled `aa`. That is a **FOURTH** convention, distinct from the three already catalogued.
+
+### The 116 contain FOUR romanisation conventions, not one
+
+A census of the existing romanisations across all 116 records:
+
+| n | convention | example |
+|---:|---|---|
+| **54** | `AA` for ʿayn — the Hisn-Muslim-Json scheme | `aAAoothu` |
+| **31** | apostrophe for ʿayn, lowercase | `a'udhu` |
+| **26** | plain ASCII, no ʿayn marker at all | `la ilaha illal-lah` |
+| **5** | **already ALA-LC-like**, with macrons and ʿayn | `yaʿlamu`, `ḥif'ẓuhumā` |
+
+Plus a fourth-convention outlier inside the ASCII group (`59:164`: `Allaahumma`, long ā as
+doubled `aa`).
+
+This is the strongest confirmation yet that **no character-level find-and-replace was ever
+viable** — the same conclusion the upstream sourcing investigation reached from the other
+direction, now established from the data itself.
+
+### A subset may have a nameable source after all — 5 records, deferred
+
+The 5 ALA-LC-like records — `1:4`, `27:75`, `27:76`, `28:100`, `28:101` — are **not**
+from the Hisn dataset. All five carry
+`translationSource: "Saheeh International via quran.com API v4, edition 20"`, i.e. their
+romanisation arrived through the quran.com pipeline alongside the translation, not through
+`wafaaelmaandy/Hisn-Muslim-Json`.
+
+That matters twice over:
+
+1. **Provenance.** Unlike the Hisn set, there is a named upstream pipeline to point at. Whether
+   quran.com itself names a transliteration scheme or author is the open question — but this is
+   the first subset where a metadata-only fix is even conceivable.
+2. **Correction profile.** These are already close. Their defects are systematic rather than
+   wholesale: hamza dropped (`takhudhuhu` → `taʾkhudhuhu`, `shāa` → `shāʾa`,
+   `yaūduhu` → `yaʾūduhu`), gemination lost (`l-ḥayu` → `l-ḥayyu`), and an apostrophe
+   used to mark sukūn (`idh'nihi`, `ʿil'mihi`, `kur'siyyuhu`, `ḥif'ẓuhumā`) which is not
+   an ALA-LC convention.
+
+**They are deliberately held out of this batch.** Correcting them alongside the Hisn set would
+mix two different questions — a full retranscription and a light systematic fix on possibly
+attributable text — into one ruling. They are proposed as their own batch once the quran.com
+provenance question is answered, since a positive answer could clear them without any text change
+at all.
+
+---
+
 ## Sign-off
 
 | | Name | Credentials | Date | Signature |
@@ -1054,6 +1150,7 @@ supplications.
 | Part 8 — Wave 2 Qur'anic clause confirmations (batch 2) | | | | |
 | Part 9 — transliteration adoption, batch 1 | | | | |
 | Part 10 — transliteration adoption, batch 2 | | | | |
+| Part 11 — transliteration adoption, batch 3 | | | | |
 
 The reviewer's name and credentials appear on the site once any part is signed off
 (`DUA-SEO-STRATEGY-v2.md` §6). Please confirm you are content for them to be published.
