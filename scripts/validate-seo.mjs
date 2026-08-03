@@ -396,22 +396,53 @@ if (!process.argv.includes("--fixtures")) {
    cards repeat one label is unusable regardless of where the label came from. */
 {
   console.log("\n" + "=".repeat(86));
-  console.log("R9 — HUB CARD TEXT vs §5 PAGE NAME");
+  console.log("R9 — LINK TEXT TO A DETAIL PAGE vs ITS §5 NAME");
   console.log("=".repeat(86));
 
   const slugToId = {};
   for (const [id, slug] of Object.entries(lock)) slugToId[slug] = String(id);
 
+  /* SCOPE — every published page, not just the hubs. Scoping this to
+     duas/occasion + duas/source was itself the bug's next hiding place: the first
+     version of R9 passed clean while the "Related duas" rail on every DETAIL page
+     was still emitting `chapterLabel — excerpt`, because relLabels() was a THIRD
+     naming path and nothing looked at it. A rule that names one directory only
+     tests that directory. */
+  const pageCopy = JSON.parse(fs.readFileSync(P("src/data/dua/page-copy.json"), "utf8"));
+  const sources = [];
+  for (const dir of ["duas/occasion", "duas/source", "duas/chapter"]) {
+    if (!fs.existsSync(P(dir))) continue;
+    for (const f of fs.readdirSync(P(dir)).filter((x) => x.endsWith(".html"))) sources.push(dir + "/" + f);
+  }
+  for (const [slug, v] of Object.entries(pageCopy)) {
+    if (slug === "_meta" || v.indexable !== true) continue;
+    if (fs.existsSync(P("duas", slug + ".html"))) sources.push("duas/" + slug + ".html");
+  }
+
+  /* Two link shapes are legitimately NOT the page's name, and are exempted by name
+     so the exemption is a decision rather than a gap:
+       - "Open this dua →" on chapter pages: generic, the dua is rendered above it.
+       - the ADDENDUM §15 prose link ("also listed in this library under <chapter>"),
+         which is inside <p class="ed"> and is a sentence ABOUT the chapter. Its text
+         is the chapter label by design; naming the page there would break the
+         sentence. */
+  const EXEMPT_TEXT = /^Open this dua$/;
+
   let cards = 0, vsH1 = 0, vsCsv = 0, dupes = 0, hubs = 0;
   const shown = [];
-  for (const dir of ["duas/occasion", "duas/source"]) {
-    if (!fs.existsSync(P(dir))) continue;
-    for (const f of fs.readdirSync(P(dir)).filter((x) => x.endsWith(".html"))) {
+  {
+    for (const rel of sources) {
       hubs++;
-      const html = fs.readFileSync(P(dir, f), "utf8");
+      const html = fs.readFileSync(P(rel), "utf8");
+      const f = rel;
       const seen = new Map();
-      for (const m of html.matchAll(/<a href="\/duas\/([^"/]+)\.html">([\s\S]*?) &rarr;<\/a>/g)) {
-        const slug = m[1], text = decode(m[2].replace(/<[^>]+>/g, "").trim());
+      // strip the §15 prose paragraphs before scanning; they are exempt by design
+      const scan = html.replace(/<p class="ed">[\s\S]*?<\/p>/g, "");
+      for (const m of scan.matchAll(/<a href="\/duas\/([^"/]+)\.html">([\s\S]*?)<\/a>/g)) {
+        const slug = m[1];
+        const text = decode(m[2].replace(/<[^>]+>/g, "").replace(/\s*&rarr;\s*$/, "").replace(/\s*→\s*$/, "").trim());
+        if (EXEMPT_TEXT.test(text)) continue;
+        if (slug === rel.replace(/^duas\//, "").replace(/\.html$/, "")) continue;  // self-link
         cards++;
         if (!seen.has(text)) seen.set(text, 0);
         seen.set(text, seen.get(text) + 1);
@@ -421,24 +452,24 @@ if (!process.argv.includes("--fixtures")) {
         const h1 = decode(tagText(page, /<h1[^>]*>([\s\S]*?)<\/h1>/));
         if (text !== h1) {
           vsH1++;
-          if (shown.length < 8) shown.push(`  FAIL ${dir}/${f}\n         card: ${JSON.stringify(text)}\n         H1  : ${JSON.stringify(h1)}`);
+          if (shown.length < 8) shown.push(`  FAIL ${f}\n         link: ${JSON.stringify(text)}\n         H1  : ${JSON.stringify(h1)}`);
         }
         const d = byId[slugToId[slug]];
         const eH = d ? expectedH1(d) : null;
         if (eH && text !== eH) {
           vsCsv++;
-          if (shown.length < 8) shown.push(`  FAIL ${dir}/${f}\n         card    : ${JSON.stringify(text)}\n         CSV §5  : ${JSON.stringify(eH)}`);
+          if (shown.length < 8) shown.push(`  FAIL ${f}\n         link    : ${JSON.stringify(text)}\n         CSV §5  : ${JSON.stringify(eH)}`);
         }
       }
       for (const [, n] of seen) if (n > 1) dupes++;
     }
   }
   for (const s of shown) console.log(s);
-  console.log(`  hub pages scanned          : ${hubs}`);
-  console.log(`  cards checked              : ${cards}`);
-  console.log(`  card text != linked H1     : ${vsH1}`);
-  console.log(`  card text != CSV §5 H1     : ${vsCsv}`);
-  console.log(`  duplicate labels in one hub: ${dupes}`);
+  console.log(`  published pages scanned    : ${hubs}`);
+  console.log(`  detail-page links checked  : ${cards}`);
+  console.log(`  link text != linked H1     : ${vsH1}`);
+  console.log(`  link text != CSV §5 H1     : ${vsCsv}`);
+  console.log(`  duplicate labels on a page : ${dupes}`);
   const r9 = vsH1 + vsCsv + dupes;
   console.log(r9 ? `  R9: FAIL (${r9})` : "  R9: PASS");
   failed += r9;

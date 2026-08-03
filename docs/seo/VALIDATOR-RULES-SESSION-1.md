@@ -331,6 +331,31 @@ This forced two supporting changes:
   builder put them back; both now replace only their own.
 - **Sitemap regexes made line-ending agnostic** (`<\/url>\r?\n`). See below — this was a live bug.
 
+### R9 was too narrow on its first pass — a third naming path survived it
+
+**Scoping R9 to `duas/occasion` + `duas/source` was the bug's next hiding place.** It reported
+PASS while the **"Related duas" rail on every detail page** was still emitting
+`chapterLabel — excerpt`, because `relLabels()` in `build-dua-pages.mjs` was a *third*
+implementation of page naming with its own collision-escalation ladder. Found by an owner
+screenshot, not by the rule.
+
+Widened the same day to scan **every published page** — hubs, chapter pages, and the 117 detail
+pages. Re-run against the un-rebuilt output, it reported **585 link-vs-H1 and 388 link-vs-CSV
+failures across 819 links**, then 0 after the rebuild. `relLabels()` is deleted; the rail reads
+`h1Of()` like everything else.
+
+Two link shapes are **exempt by name**, so the exemption is a decision rather than a gap:
+
+- `"Open this dua →"` on chapter pages — generic, and the dua is rendered directly above it.
+- the ADDENDUM §15 prose link (`<p class="ed">`, *"also listed in this library under
+  &lt;chapter&gt;"*) — a sentence *about the chapter*, where the chapter label is the correct
+  text. Naming the page there would break the sentence.
+
+**The lesson, which generalises past this rule:** a rule that names one directory tests one
+directory. R9 v1 was written from the defect that was in front of it (hub cards) rather than from
+the invariant it was actually protecting (*any* link to a detail page carries that page's §5
+name). Prefer the invariant.
+
 ### Verified by negative control
 
 Three injections into a real hub, each reverted, each expected to trip a different limb:

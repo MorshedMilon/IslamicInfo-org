@@ -251,28 +251,11 @@ function related(d, enforceCap) {
   return out; // may be < 5 — never padded with unrelated duas
 }
 
-// Related duas frequently share a chapter, so the chapter label alone produced five
-// identical link texts on 433/506 pages — same anchor text pointing at five different
-// URLs. Where a label repeats within a set, the supplication's own words separate them.
-function relLabels(list) {
-  const n = {};
-  for (const r of list) n[r.category] = (n[r.category] || 0) + 1;
-  const build = (len) => list.map(r => n[r.category] > 1
-    ? snip(displayLabel(r.category), 38) + " — " + snip(r.translation, len)
-    : snip(displayLabel(r.category), 64));
-  const unique = (a) => new Set(a).size === a.length;
-  // Several morning/evening adhkar open with the same clause ("There is no deity worthy
-  // of worship except…"), so a fixed cut still collides. Grow the snippet until the
-  // labels separate, then fall back to the citation for true near-duplicates.
-  let labels = build(42);
-  if (!unique(labels)) labels = build(72);
-  for (let pass = 0; pass < 2 && !unique(labels); pass++) {
-    const seen = {};
-    labels = labels.map((l, i) => (seen[l] = (seen[l] || 0) + 1) > 1
-      ? l + " · " + (pass === 0 ? (srcOf(list[i]).reference || String(list[i].id)) : String(list[i].id)) : l);
-  }
-  return labels;
-}
+/* relLabels() was REMOVED 2026-08-03. It re-derived a display name for the related
+   rail — `chapterLabel — translationExcerpt`, with its own collision-escalation ladder
+   — which made it a third naming path alongside the hub cards and the H1 itself. All
+   three now read the single resolution produced by resolveUnique(). If a name ever
+   needs to change, it changes in one place. See validator rule R9. */
 
 /* ── metadata engine (MASTER SPEC §5, ADDENDUM §14/§21) ────────────────────────
    Chapter labels repeat heavily — 99 entries share "Qur'anic supplications" and 53
@@ -836,7 +819,13 @@ function duaPage(d) {
   const title = titleOf(d), desc = descOf(d);
   const idx = indexDecision(d, slug);
   const vars = (d.variantGroup && variantsOf[d.variantGroup]) || [];
-  const rel = related(d, true), relLab = relLabels(rel);
+  /* Related-dua chips carry the LINKED PAGE'S OWN H1 — the same rule as the hub
+     cards (R9). This was the third render path for a page's name: relLabels() built
+     `chapterLabel — translationExcerpt` with its own collision escalation, so the
+     rail showed four chips reading "What to say after completing the… — <excerpt>"
+     pointing at four different pages. h1Of() is resolveUnique()'s output and is
+     unique library-wide, so no escalation is needed here at all. */
+  const rel = related(d, true), relLab = rel.map(r => h1Of(r));
   for (const r of rel) inboundCount.set(r.id, (inboundCount.get(r.id) || 0) + 1);
   const hasChapterPage = chapterPages.has(d.categorySlug);
   const alt = altNames[slug] || null;
