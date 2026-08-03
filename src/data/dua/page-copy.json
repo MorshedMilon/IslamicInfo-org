@@ -51,11 +51,7 @@
         ],
         "approved": true,
         "approvedDate": "2026-08-03",
-        "approvedBy": "Morshed Milon (project owner, ADR-044)",
-        "heldAfterApproval": [
-          "17:34 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
-          "32:117 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated"
-        ]
+        "approvedBy": "Morshed Milon (project owner, ADR-044)"
       },
       {
         "batch": 5,
@@ -697,10 +693,10 @@
     "timing": "'Aishah reported these words, and the chapter assigns them to the bowing.",
     "reflection": "More of its length goes to addressing Him than to asking. The request arrives last, occupies three words, and closes the supplication without any return to praise.",
     "contentBasis": "translation-and-verified-context",
-    "reviewStatus": "generated",
+    "reviewStatus": "reviewed",
     "batch": 4,
-    "indexable": false,
-    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03; r6-adjudicated-both-index"
   },
   "invocations-during-ruki-bowing-in-prayer-hisn-17-35": {
     "meaning": "Two descriptions open it, Perfect and Holy, and He is spoken about rather than addressed. What follows names what He is Lord of, and the choice is particular rather than sweeping: not Lord of the worlds, but Lord of the angels, and then of the Rooh, which the text identifies as Jibra-eel. A whole class is named, then one member of it singled out. Nothing is requested at any point.",
@@ -787,10 +783,10 @@
     "timing": "'Aishah reported these words; the chapter places them in the Qunut of the Witr prayer.",
     "reflection": "The three refuges shorten as they proceed, from a pair of named attributes down to a single repeated word. What is fled and what is fled to never change.",
     "contentBasis": "translation-and-verified-context",
-    "reviewStatus": "generated",
+    "reviewStatus": "reviewed",
     "batch": 4,
-    "indexable": false,
-    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03; r6-adjudicated-both-index"
   },
   "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-59": {
     "meaning": "One request, extended across three objects. Help is what is asked for, and what it is help toward follows as a list: remembering Him, thanking Him, worshipping Him. Only the last carries a qualifier — in the best of manners — so the standard attaches to the worship rather than to the remembering or the thanking. What is sought is assistance in doing, not something to be given.",

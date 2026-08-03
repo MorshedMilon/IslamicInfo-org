@@ -4,10 +4,11 @@
     "governs": "docs/seo/VALIDATOR-RULES-SESSION-1.md R6",
     "created": "2026-08-02",
     "createdBy": "Session 1.0, at owner instruction",
-    "status": "PARTLY ENFORCED. R6 itself is still not implemented in any script; R8 (validate-seo.mjs) enforces the related question of never linking an unpublished page. 4 of the 8 registered clusters were adjudicated by the owner on 2026-08-03 and moved to `allowed`; the rest remain unadjudicated and are NOT permitted.",
+    "status": "PARTLY ENFORCED. R6 itself is still not implemented in any script; R8 (validate-seo.mjs) enforces the related question of never linking an unpublished page. 6 of the 8 registered clusters are adjudicated and moved to `allowed`. The remaining 2 are NOT permitted: the Bismillah three-way and `9:15`/`85:196` are routed to the reviewer package as sourcing questions this corpus cannot answer.",
     "normalisationIsPartOfTheRule": "R6 compares NORMALISED Arabic, never raw. The seed pair is NOT byte-identical and NOT equal under the corpus's ordinary diacritic strip — it differs only in Uthmani orthography. A rule written on `identical arabic` is a no-op against the exact pair it was created for. See R6 §Normalisation.",
     "clusteringIsCorpusWide": "Clusters are computed across the whole corpus, not across the sitemap, so a pair is registered before either member is ever approved for indexing. R6 then fails only when 2+ members of a cluster are simultaneously indexed.",
-    "adjudicationIsNotClaudeCode's": "Deciding whether two occasions genuinely share a text is a sourcing question about what each narration attests. Entries move from `pendingAdjudication` to `allowed` on a reviewer or owner ruling, never on a code change."
+    "adjudicationIsNotClaudeCode's": "Deciding whether two occasions genuinely share a text is a sourcing question about what each narration attests. Entries move from `pendingAdjudication` to `allowed` on a reviewer or owner ruling, never on a code change.",
+    "crossListingRule": "Owner ruling 2026-08-03: where Hisn lists the same wording under two chapters, that cross-listing is by itself sufficient basis to index both members, cross-linked and self-canonical. This corpus does not record narration wording, so no entry may assert what a narration attests about a placement — see ADR-067 Correction."
   },
   "allowed": [
     {
@@ -34,7 +35,8 @@
       "reason": "Two different intents, no canonical page. `27:85` is the supplication placed by its chapter at morning and at evening (occasion: morning-evening, chapter keyword derived per entry); `28:109` is the same wording placed before sleeping (occasion: sleep-waking, chapter keyword \"dua for sleeping\"). Different chapters, different occasion buckets, different chapter keywords, and separately authored prose that frames each for its own moment. A reader searching what to say before sleeping and a reader searching the morning and evening adhkar are not the same reader, and collapsing them would lose a real query for one of the two.",
       "disposition": "both index, cross-linked, no canonical",
       "adjudicatedBy": "owner, 2026-08-03",
-      "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision."
+      "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision.",
+      "openQuestion": "FLAGGED FOR REVIEWER PACKAGE, owner 2026-08-03 — not resolved from this corpus. Neither member carries a `hadithCitation` at all (source: \"dua-dhikr collection\"), so both pages publish with no hadith reference in the A2 block. That is a sourcing question about where this wording is recorded, not a duplicate-scripture question, and it is independent of this cluster's R6 disposition. The R6 ruling (both index) stands; the citation gap is routed to doc/DUA-REVIEWER-PACKAGE.md."
     },
     {
       "cluster": [
@@ -82,6 +84,36 @@
       "disposition": "both index, cross-linked, no canonical",
       "adjudicatedBy": "owner, 2026-08-03",
       "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision."
+    },
+    {
+      "cluster": [
+        "17:34",
+        "19:42"
+      ],
+      "text": "Subhanaka-llahumma Rabbana wa bihamdika, Allahumma-ghfir li",
+      "occasions": [
+        "prayer (ruku')",
+        "prayer (sujood)"
+      ],
+      "reason": "Two different intents, no canonical page. Same disposition and same basis as `17:35`/`19:43`: Hisn lists these words under BOTH Invocations during Ruku' (`17:34`, keyword \"dua for ruku\") and Invocations during Sujood (`19:42`, keyword \"dua for sujood\"), and both records carry the same citation, Riyad as-Salihin 746 ('Aishah) -- one narration listed twice, not two competing claims. Owner ruling 2026-08-03: Hisn's cross-listing under two chapters is by itself sufficient basis to index both members. This corpus does not record what the narration says about either posture and nothing here asserts it. Distinct chapters, distinct keywords, both with static chapter pages; shared `prayer` bucket is our own facet, not the search intent. Authored prose Jaccard 0.30.",
+      "disposition": "both index, cross-linked, no canonical",
+      "adjudicatedBy": "owner, 2026-08-03",
+      "notes": "Asymmetric narrator attribution, recorded and ruled acceptable: `17:34`'s authored prose names 'Aishah while `19:42`'s attributes placement to its chapter alone. Under the owner's 2026-08-03 rule the chapter assignment is the operative basis, so the asymmetry does not block indexing. `19:42` was already live from batch 3; this releases `17:34` alongside it. Cross-linking is automatic (ADDENDUM §15, R8-filtered). No rel=canonical on either member."
+    },
+    {
+      "cluster": [
+        "19:47",
+        "32:117"
+      ],
+      "text": "Allahumma inni a'udhu bi-ridaka min sakhatika…",
+      "occasions": [
+        "prayer (sujood)",
+        "prayer (qunut in witr)"
+      ],
+      "reason": "Two different intents, no canonical page. Hisn lists these words under both Invocations for Qunut in the Witr prayer (`32:117`, keyword \"dua for qunut in the witr prayer\") and Invocations during Sujood (`19:47`, keyword \"dua for sujood\"), both carrying Riyad as-Salihin 751 ('Aishah). Owner ruling 2026-08-03: the cross-listing is sufficient basis. The two keywords are the most sharply distinct of any cluster in this file -- Qunut in Witr is a differently named practice from prostration, and a reader searching one is not served by the other. This corpus does not record what the narration says about either placement and nothing here asserts it. Authored prose Jaccard 0.26.",
+      "disposition": "both index, cross-linked, no canonical",
+      "adjudicatedBy": "owner, 2026-08-03",
+      "notes": "Asymmetric narrator attribution, recorded and ruled acceptable: `32:117` names 'Aishah, `19:47` attributes placement to its chapter alone. `19:47` was already live from batch 3; this releases `32:117` alongside it. Cross-linking is automatic (ADDENDUM §15, R8-filtered). No rel=canonical on either member."
     }
   ],
   "pendingAdjudication": [
@@ -115,29 +147,8 @@
         "home-clothing (when undressing)",
         "travel (when a mount begins to fail)"
       ],
-      "likelyDisposition": "REVIEW CAREFULLY — three-member cluster, and the shared text is the single word 'Bismillah'. This is an incidental collision on a very short text rather than a cross-listing of one supplication, which DUA-CONTENT-INTEGRITY-v1_0 §4 names as a distinct cause. Three near-identical pages whose entire dua is one word is a thin-content and cannibalisation risk independent of R6, and may be better served by one page than three."
-    },
-    {
-      "cluster": [
-        "17:34",
-        "19:42"
-      ],
-      "occasions": [
-        "prayer (ruku')",
-        "prayer (sujood)"
-      ],
-      "likelyDisposition": "allow — the same tasbih is narrated for both bowing and prostration; same occasion facet, different position in the prayer"
-    },
-    {
-      "cluster": [
-        "19:47",
-        "32:117"
-      ],
-      "occasions": [
-        "prayer (sujood)",
-        "prayer (qunut in witr)"
-      ],
-      "likelyDisposition": "allow — narrated for both positions"
+      "likelyDisposition": "REVIEW CAREFULLY — three-member cluster, and the shared text is the single word 'Bismillah'. This is an incidental collision on a very short text rather than a cross-listing of one supplication, which DUA-CONTENT-INTEGRITY-v1_0 §4 names as a distinct cause. Three near-identical pages whose entire dua is one word is a thin-content and cannibalisation risk independent of R6, and may be better served by one page than three.",
+      "routedTo": "doc/DUA-REVIEWER-PACKAGE.md — owner 2026-08-03: not resolvable from this corpus. Three pages whose entire Arabic is Bismillah; thin-content and cannibalisation questions independent of R6."
     }
   ]
 }

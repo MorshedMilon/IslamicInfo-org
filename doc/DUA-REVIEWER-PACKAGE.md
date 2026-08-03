@@ -691,6 +691,68 @@ Ayat al-Kursi is printed after a taʿawwudh (*A'ūdhu billāhi min ash-shayṭā
 
 ---
 
+## Part 6 — Duplicate-scripture clusters this corpus cannot resolve
+
+Added 2026-08-03 (owner routing, ADR-067). Validator rule R6 groups records whose Arabic is
+identical under the Uthmani-folding normalisation. Eight clusters were registered in
+`src/data/dua/duplicate-scripture-allowlist.json`; **six are adjudicated and indexed**, on the
+owner's rule that *where Hisn lists the same wording under two chapters, that cross-listing is
+by itself sufficient basis to index both members*.
+
+**Two are routed here instead, because they turn on sourcing questions the corpus cannot
+answer.** Neither is resolvable by inspecting the data, and neither should be settled by a code
+change — the allowlist's own `_meta` says adjudication moves entries "on a reviewer or owner
+ruling, never on a code change".
+
+### 6.1 — `27:85` / `28:109`: indexed, but neither record carries any hadith citation
+
+These two are already **live** (cluster A, adjudicated on occasion/keyword grounds: morning &
+evening vs before sleeping). The R6 question is settled. What is **not** settled is that
+**neither record carries a `hadithCitation` at all** — their source is recorded only as the
+`dua-dhikr collection`, with the site-wide Hisn translation attribution. Every other adjudicated
+cluster carries a citation on both members.
+
+The charter requires that every hadith or claim carries a source or is not shown. These pages
+render a supplication with a source *label* but no hadith *reference*, so the A2 block has no
+citation to print.
+
+**Question for the reviewer:** where is this wording recorded, and what citation should these two
+pages carry? If none can be established, the follow-up question is whether they should stay
+indexed at all — that is a content decision, not an R6 one, and it is deliberately left open here
+rather than resolved by inference.
+
+| id | slug | chapter | occasion | citation |
+|---|---|---|---|---|
+| `27:85` | `words-of-remembrance-for-morning-and-evening-hisn-27-85` | Words of remembrance for morning and evening | morning-evening | **none** |
+| `28:109` | `what-to-say-before-sleeping-hisn-28-109` | What to say before sleeping | sleep-waking | **none** |
+
+### 6.2 — `8:12` / `5:9` / `99:210`: three pages whose entire Arabic is *Bismillah*
+
+**NOT indexed. Not permitted by the allowlist.** A three-member cluster where the whole Arabic of
+each page is `بسم الله`. This is an incidental collision on a very short text rather than a
+deliberate cross-listing, so the "Hisn lists it under two chapters" rule that resolved the other
+six **does not apply**.
+
+Two problems sit on top of R6 and are the reason this is a reviewer question:
+
+- **Thin content.** A page whose entire scripture is two words has very little to distinguish it
+  from its two siblings, whatever the chapter label says.
+- **Cannibalisation.** Three pages competing for the same short phrase is the clearest
+  cannibalisation risk in the corpus.
+
+**Question for the reviewer:** should any of the three be indexed, and if so which one — or is the
+right outcome a single page for the phrase with the other two routed out? Please also confirm
+whether the three chapter placements are genuinely distinct occasions of use.
+
+### Not in scope here
+
+`9:15` / `85:196` remains in `pendingAdjudication` and is already covered: ADR-066 dropped
+`85:196` because it shares a **byte-identical `hadithCitation`** with `9:15` under a different
+occasion, so at most one is correct. That is a citation-correctness question, tracked there.
+
+
+---
+
 ## Sign-off
 
 | | Name | Credentials | Date | Signature |
@@ -700,6 +762,7 @@ Ayat al-Kursi is printed after a taʿawwudh (*A'ūdhu billāhi min ash-shayṭā
 | Part 3 — transliteration | | | | |
 | Part 4 — Class B Arabic (Wave 1–2) | | | | |
 | Part 5 — Qur'anic clause extraction | | | | |
+| Part 6 — duplicate-scripture clusters (6.1 citation gap, 6.2 Bismillah) | | | | |
 
 The reviewer's name and credentials appear on the site once any part is signed off
 (`DUA-SEO-STRATEGY-v2.md` §6). Please confirm you are content for them to be published.
