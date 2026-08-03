@@ -687,6 +687,75 @@ if (!process.argv.includes("--fixtures")) {
   failed += r9;
 }
 
+/* ---------- R10 — a rendered transliteration must name its source ----------------
+   docs/seo/VALIDATOR-RULES-SESSION-1.md R10, owner instruction 2026-08-03.
+
+   Gate 2 requires a transliteration whose provenance is NAMED — sourced or
+   reviewer-supplied, never machine-generated. Nothing enforced that, which is how
+   54 live pages shipped carrying a romanisation traced to an anonymous 2019 JSON
+   dump with no README, no licence and no stated scheme, stored upstream in a field
+   called `LANGUAGE_ARABIC_TRANSLATED_TEXT`.
+
+   The rule is deliberately about the SOURCE FIELD, not the text. A transliteration
+   can be perfectly rendered and still fail this: unattributable is unattributable
+   however clean it looks. Conversely, fixing the `AA` artifact would not satisfy
+   R10 by itself — which is exactly the confusion this rule exists to prevent.
+
+   Vacuous values are rejected explicitly. "see site-wide attribution" resolves to
+   meta.attribution, which names the compilation, which is where the text came from
+   — circular, and it identifies no transliterator. */
+{
+  console.log("\n" + "=".repeat(86));
+  console.log("R10 — A RENDERED TRANSLITERATION MUST NAME ITS SOURCE");
+  console.log("=".repeat(86));
+
+  const VACUOUS = /^(|unknown|n\/?a|tbd|none|various|see site-wide attribution.*|site-wide.*)$/i;
+  const named = (v) => typeof v === "string" && v.trim() !== "" && !VACUOUS.test(v.trim());
+
+  const sitemapSlugs = new Set([...(fs.existsSync(P("sitemap.xml")) ? fs.readFileSync(P("sitemap.xml"), "utf8") : "")
+    .matchAll(/<loc>[^<]*\/duas\/([^<"/]+)\.html<\/loc>/g)].map((m) => m[1]));
+
+  /* RATCHET, not a flat assertion (owner decision 2026-08-03). 116 live pages
+     already carried an unsourced transliteration when this rule was written, and a
+     permanently-red validator is a validator nobody reads — a real new failure would
+     hide inside the noise. So: the pre-existing set is frozen in a baseline file,
+     printed on EVERY run so it cannot go quiet, and R10 fails only when a page
+     appears OUTSIDE it. The debt cannot grow; it can only shrink. */
+  const baseline = fs.existsSync(P("src/data/dua/transliteration-debt-baseline.json"))
+    ? JSON.parse(fs.readFileSync(P("src/data/dua/transliteration-debt-baseline.json"), "utf8"))
+    : { ids: [] };
+  const known = new Set(baseline.ids || []);
+
+  let live = 0, held = 0;
+  const fresh = [], stillKnown = [];
+  for (const [id, slug] of Object.entries(lock)) {
+    const d = byId[id]; if (!d) continue;
+    if (!d.transliteration || !String(d.transliteration).trim()) continue;   // nothing rendered, nothing to source
+    if (named(d.transliterationSource)) continue;
+    const isLive = sitemapSlugs.has(slug);
+    isLive ? live++ : held++;
+    if (!isLive) continue;
+    known.has(id) ? stillKnown.push(id) : fresh.push(id);
+  }
+  const cleared = [...known].filter((id) => !stillKnown.includes(id));
+
+  for (const id of fresh.slice(0, 8)) console.log(`  FAIL ${id} is a NEW live page rendering a transliteration with no named transliterationSource`);
+  if (fresh.length > 8) console.log(`  … and ${fresh.length - 8} more`);
+  console.log(`  records carrying a transliteration : ${corpus.duas.filter((d) => d.transliteration && String(d.transliteration).trim()).length}`);
+  console.log(`  with a NAMED transliterationSource : ${corpus.duas.filter((d) => named(d.transliterationSource)).length}`);
+  console.log(`  unsourced but held (not published) : ${held}`);
+  console.log(`  KNOWN DEBT (baseline ${baseline._meta ? baseline._meta.frozen : "?"}) : ${stillKnown.length} live pages` +
+    (cleared.length ? `   (${cleared.length} cleared since — baseline may be pruned)` : ""));
+  console.log(`  NEW since the baseline             : ${fresh.length}`);
+  if (stillKnown.length) {
+    console.log("  ↳ known debt is NOT a pass: these pages render a romanisation with no");
+    console.log("    attributable source (doc/DUA-PARKED-REVIEWER-QUESTIONS.md item 8). The");
+    console.log("    ratchet stops it growing; it does not make it acceptable.");
+  }
+  console.log(fresh.length ? `  R10: FAIL (${fresh.length})` : "  R10: PASS");
+  failed += fresh.length;
+}
+
 console.log("\n" + "-".repeat(86));
 console.log(failed ? `RESULT: FAIL (${failed})` : "RESULT: PASS");
 process.exitCode = failed ? 1 : 0;

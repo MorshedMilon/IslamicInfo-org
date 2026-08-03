@@ -9,7 +9,9 @@
     },
     "ownerDecision": "2026-07-31 — route-out mechanism approved for all Gate 1 entries. ibnmajah:3590 removed today and permanently. Condemned-speech entries noindex today; permanent route-out contingent on second-signal confirmation.",
     "note": "The 19 NARRATIVE entries are deliberately ABSENT from this file. They are tafsir-level adjudication routed to qualified scholarly review (§1.3) and no action is taken on them here.",
-    "generated": "Authored 2026-07-31 from doc/TRACK-B-TOPICS.md Phase 1 flags; checked in as a governance artifact, not a build product."
+    "generated": "Authored 2026-07-31 from doc/TRACK-B-TOPICS.md Phase 1 flags; checked in as a governance artifact, not a build product.",
+    "lastUpdated": "2026-08-03",
+    "partTwoRuling": "Reviewer package Part 2 ruled 10/10 on 2026-08-03. 8 routed out as narrative statements (31:115, 40:134, 40:135, 113:231, 129:249, 129:251, 129:252, 130:254); 2 kept as supplications (15:26, 31:114). Two of the eight carry an embedded recitable phrase the owner noted but did NOT keep as a corpus dua under that record — 40:134 and 130:254 — so neither is later reinstated on the grounds that a dua is visible in the text. The ruling is about what the RECORD is."
   },
   "entries": {
     "quran:2:200": {
@@ -236,6 +238,78 @@
       "secondSignalConfirmed": true,
       "approvedBy": "owner 2026-07-31 (ADR-054)",
       "slug": "supplication-kitab-al-dua-ibnmajah-3590"
+    },
+    "31:115": {
+      "ref": "Hisn al-Muslim 31:115",
+      "class": "narrative-statement",
+      "status": "removed",
+      "reason": "Owner (Morshed Milon), 2026-08-03: pure instruction, no recitation text — remove from dua corpus.",
+      "secondSignalConfirmed": true,
+      "approvedBy": "owner 2026-08-03 (ADR-044), reviewer package Part 2",
+      "slug": "what-to-do-if-you-have-a-bad-dream-or-nightmare-hisn-31-115"
+    },
+    "40:134": {
+      "ref": "Hisn al-Muslim 40:134",
+      "class": "narrative-statement",
+      "status": "removed",
+      "reason": "Owner (Morshed Milon), 2026-08-03: ruled narrative (the \"He should say\" frame). Embedded phrase \"I have believed in Allah and His Messenger\" noted but not kept as a corpus dua.",
+      "secondSignalConfirmed": true,
+      "approvedBy": "owner 2026-08-03 (ADR-044), reviewer package Part 2",
+      "slug": "invocations-for-if-you-are-stricken-by-in-your-faith-hisn-40-134"
+    },
+    "40:135": {
+      "ref": "Hisn al-Muslim 40:135",
+      "class": "narrative-statement",
+      "status": "removed",
+      "reason": "Owner (Morshed Milon), 2026-08-03: instruction to recite Qur'an 57:3 (an ayah, not a dua) — remove from dua corpus.",
+      "secondSignalConfirmed": true,
+      "approvedBy": "owner 2026-08-03 (ADR-044), reviewer package Part 2",
+      "slug": "invocations-for-if-you-are-stricken-by-in-your-faith-hisn-40-135"
+    },
+    "113:231": {
+      "ref": "Hisn al-Muslim 113:231",
+      "class": "narrative-statement",
+      "status": "removed",
+      "reason": "Owner (Morshed Milon), 2026-08-03: hadith narrative / praise etiquette addressed to people, not to Allah — remove from dua corpus.",
+      "secondSignalConfirmed": true,
+      "approvedBy": "owner 2026-08-03 (ADR-044), reviewer package Part 2",
+      "slug": "how-a-muslim-should-praise-another-muslim-hisn-113-231"
+    },
+    "129:249": {
+      "ref": "Hisn al-Muslim 129:249",
+      "class": "narrative-statement",
+      "status": "removed",
+      "reason": "Owner (Morshed Milon), 2026-08-03: exhortation to people (\"O People, Repent!\"), not an address to Allah — remove from dua corpus.",
+      "secondSignalConfirmed": true,
+      "approvedBy": "owner 2026-08-03 (ADR-044), reviewer package Part 2",
+      "slug": "repentance-and-seeking-forgiveness-hisn-129-249"
+    },
+    "129:251": {
+      "ref": "Hisn al-Muslim 129:251",
+      "class": "narrative-statement",
+      "status": "removed",
+      "reason": "Owner (Morshed Milon), 2026-08-03: teaching statement about when to remember Allah, no recitation text — remove from dua corpus.",
+      "secondSignalConfirmed": true,
+      "approvedBy": "owner 2026-08-03 (ADR-044), reviewer package Part 2",
+      "slug": "repentance-and-seeking-forgiveness-hisn-129-251"
+    },
+    "129:252": {
+      "ref": "Hisn al-Muslim 129:252",
+      "class": "narrative-statement",
+      "status": "removed",
+      "reason": "Owner (Morshed Milon), 2026-08-03: teaching + instruction to supplicate, no worded dua — remove from dua corpus.",
+      "secondSignalConfirmed": true,
+      "approvedBy": "owner 2026-08-03 (ADR-044), reviewer package Part 2",
+      "slug": "repentance-and-seeking-forgiveness-hisn-129-252"
+    },
+    "130:254": {
+      "ref": "Hisn al-Muslim 130:254",
+      "class": "narrative-statement",
+      "status": "removed",
+      "reason": "Owner (Morshed Milon), 2026-08-03: ruled narrative (reward/virtue frame). Embedded dhikr \"Subhan Allah wa bihamdih\" noted but not kept as a corpus dua under this record.",
+      "secondSignalConfirmed": true,
+      "approvedBy": "owner 2026-08-03 (ADR-044), reviewer package Part 2",
+      "slug": "the-excellence-of-remembering-allah-hisn-130-254"
     }
   }
 }

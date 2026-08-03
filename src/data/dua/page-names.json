@@ -5,7 +5,7 @@
     "rule": "H1 = §5 keyword stem, with the source reference or opening words appended ONLY where resolveUnique() had to separate a collision. Governed by doc/DUA-KEYWORD-NAMING-v1_0.md as amended by v1_1.",
     "buildOrder": "build-dua-pages.mjs FIRST, then build-dua-landing-pages.mjs. The hub builder fails loudly if a page it must label is missing from this file.",
     "generated": "2026-08-03",
-    "count": 515
+    "count": 507
   },
   "pages": {
     "27:75": {
@@ -560,13 +560,8 @@
     },
     "31:114": {
       "slug": "what-to-do-if-you-have-a-bad-dream-or-nightmare-hisn-31-114",
-      "h1": "Dua for bad dreams (Hisn al-Muslim 31:114)",
-      "title": "Dua for bad dreams (Hisn al-Muslim 31:114)"
-    },
-    "31:115": {
-      "slug": "what-to-do-if-you-have-a-bad-dream-or-nightmare-hisn-31-115",
-      "h1": "Dua for bad dreams (Hisn al-Muslim 31:115)",
-      "title": "Dua for bad dreams (Hisn al-Muslim 31:115)"
+      "h1": "Dua for bad dreams",
+      "title": "Dua for bad dreams – Arabic & English Meaning"
     },
     "32:116": {
       "slug": "invocations-for-qunut-in-the-witr-prayer-hisn-32-116",
@@ -652,16 +647,6 @@
       "slug": "what-to-say-if-you-fear-people-may-harm-you-hisn-39-132",
       "h1": "Dua for protection from harm from people",
       "title": "Dua for protection from harm from people"
-    },
-    "40:134": {
-      "slug": "invocations-for-if-you-are-stricken-by-in-your-faith-hisn-40-134",
-      "h1": "Dua for doubts in faith (Hisn al-Muslim 40:134)",
-      "title": "Dua for doubts in faith (Hisn al-Muslim 40:134)"
-    },
-    "40:135": {
-      "slug": "invocations-for-if-you-are-stricken-by-in-your-faith-hisn-40-135",
-      "h1": "Dua for doubts in faith (Hisn al-Muslim 40:135)",
-      "title": "Dua for doubts in faith (Hisn al-Muslim 40:135)"
     },
     "41:136": {
       "slug": "invocations-for-the-setting-of-a-debt-hisn-41-136",
@@ -1088,11 +1073,6 @@
       "h1": "Dua after backbiting someone",
       "title": "Dua after backbiting someone – Arabic & English Meaning"
     },
-    "113:231": {
-      "slug": "how-a-muslim-should-praise-another-muslim-hisn-113-231",
-      "h1": "How to praise someone in islam",
-      "title": "How to praise someone in islam – Arabic & English Meaning"
-    },
     "114:232": {
       "slug": "what-a-muslim-should-say-when-he-is-praised-hisn-114-232",
       "h1": "What to say when someone praises you",
@@ -1158,30 +1138,10 @@
       "h1": "Dua against shaytan",
       "title": "Dua against shaytan – Arabic, Transliteration & Meaning"
     },
-    "129:249": {
-      "slug": "repentance-and-seeking-forgiveness-hisn-129-249",
-      "h1": "Dua for repentance and forgiveness (Hisn al-Muslim 129:249)",
-      "title": "Dua for repentance and forgiveness (Hisn al-Muslim 129:249)"
-    },
     "129:250": {
       "slug": "repentance-and-seeking-forgiveness-hisn-129-250",
-      "h1": "Dua for repentance and forgiveness (Hisn al-Muslim 129:250)",
-      "title": "Dua for repentance and forgiveness (Hisn al-Muslim 129:250)"
-    },
-    "129:251": {
-      "slug": "repentance-and-seeking-forgiveness-hisn-129-251",
-      "h1": "Dua for repentance and forgiveness (Hisn al-Muslim 129:251)",
-      "title": "Dua for repentance and forgiveness (Hisn al-Muslim 129:251)"
-    },
-    "129:252": {
-      "slug": "repentance-and-seeking-forgiveness-hisn-129-252",
-      "h1": "Dua for repentance and forgiveness (Hisn al-Muslim 129:252)",
-      "title": "Dua for repentance and forgiveness (Hisn al-Muslim 129:252)"
-    },
-    "130:254": {
-      "slug": "the-excellence-of-remembering-allah-hisn-130-254",
-      "h1": "Virtues of dhikr (Hisn al-Muslim 130:254)",
-      "title": "Virtues of dhikr (Hisn al-Muslim 130:254)"
+      "h1": "Dua for repentance and forgiveness",
+      "title": "Dua for repentance and forgiveness – Arabic & Meaning"
     },
     "130:255": {
       "slug": "the-excellence-of-remembering-allah-hisn-130-255",

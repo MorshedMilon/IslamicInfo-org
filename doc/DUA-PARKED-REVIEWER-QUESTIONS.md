@@ -188,3 +188,76 @@ boundary work is deliberately **not** being done in advance.
 stripped. That set continues as Part 8.
 
 ---
+
+## 8. Transliteration provenance — 182 records, 116 LIVE, no attributable source
+
+**Investigated 2026-08-03 at owner instruction. Not parked as "someday" — this one is already
+published.** Unlike items 5 and 7, which hold *unpublished* work, this is a Gate 2 failure
+discovered **after** publication.
+
+### The sourcing check, and its answer
+
+The question was whether the upstream ingest source documents its transliteration scheme or
+author. If it did, that string becomes `transliterationSource` and the whole thing is a
+metadata-only fix with no text touched.
+
+**It does not. There is nothing attributable to name.**
+
+`github.com/wafaaelmaandy/Hisn-Muslim-Json`, checked directly:
+
+| | |
+|---|---|
+| README | **none — the repo contains exactly one file**, `husn_en.json` |
+| Licence | **none declared** |
+| Commits | **one**, `d0dcf9d`, 2019-01-27, message `"englishVirsionOfhisnAlMuslim"` |
+| Repo description | *"hisn AlMuslim book at english and Arabic as Json File"* — mentions English and Arabic, **never transliteration** |
+| Stated scheme or transliterator | **none anywhere** |
+| Field the romanisation lives in | **`LANGUAGE_ARABIC_TRANSLATED_TEXT`** — not "transliteration"; the name says *translated text* |
+
+The provenance chain is confirmed, not inferred: **87 of our 95 `AA` records are byte-identical**
+to that field upstream (the other 8 differ by our own later edits), and the upstream file contains
+**444 `AA` tokens**. Our own `meta.arabicSourceDataset` says the dataset was used *"only for
+Arabic text + category labels"* — it makes **no claim about transliteration at all**, because
+nobody recorded that it had been taken from there.
+
+### What that means
+
+These records fail Gate 2 **the same way the Class B set does** (item 7) — no named provenance,
+cannot be machine-generated-or-not verified — except that **116 of them are live**. The romanisation
+was unlabeled at the upstream project, so it cannot be attributed by any amount of metadata work.
+
+**`AA` is not the defect; it is the symptom.** `AA` encodes `ع` consistently — all 95 records
+carrying it have `ع` in their Arabic and **zero** do not — so the character mapping is verifiable.
+But 113 records also carry `oo`/`ee` long vowels and 46 carry apostrophes from the same
+romanisation family. Fixing `AA` alone yields a hybrid — proper `ʿayn` beside `innee`,
+`oshhiduk` — which is *worse than consistent-but-crude*, because it looks corrected. And it would
+not satisfy Gate 2 or R10 either way, since neither is about how the text reads.
+
+### No word-aligned rescue exists here
+
+All 95 `AA` records are **Hisn**; **zero are Qur'anic**. The quran.com word-level alignment that
+solves the Qur'anic set (`scripts/align-quran-transliteration.mjs`, 20/20 exact) helps **none** of
+them — quran.com serves Qur'anic text only. Same wall as item 5 (Block B2) and item 7 (Class B).
+
+### Now enforced
+
+**Validator rule R10** asserts a named `transliterationSource` for any indexed page rendering a
+transliteration. It reports `FAIL (116)` and will keep `validate-seo.mjs` red until the live set
+is resolved. That is deliberate: the rule cannot stop what already shipped, but it stops the set
+growing on Wave 2.
+
+### Owner decision required — deliberately not taken
+
+Nothing has been changed on any live page, and **nothing has been noindexed**. The options, none
+of them free:
+
+1. **Source a named romanised edition of Hisn al-Muslim** and attribute properly — the only route
+   that makes these pages Gate 2 compliant as published.
+2. **Withdraw the transliteration line** from the 116 live pages. Loses a genuinely useful reading
+   aid, but the pages otherwise stay live and become compliant.
+3. **Noindex the 116** pending sourcing. Largest SEO cost; treats it as the same class of hold as
+   Class B.
+4. **Accept and document** the unattributed romanisation as a stated limitation. Cheapest, and the
+   hardest to square with *"every claim carries a source — or it is not shown."*
+
+---

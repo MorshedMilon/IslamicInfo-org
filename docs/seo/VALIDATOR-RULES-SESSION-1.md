@@ -437,6 +437,57 @@ Fixed by `\r?\n` in both builders. Verified idempotent: three consecutive full r
 
 ---
 
+## R10 — a rendered transliteration must name its source
+
+Owner instruction 2026-08-03. **Implemented and enforced**, with negative controls.
+
+Gate 2 requires a transliteration whose provenance is **named** — sourced or reviewer-supplied,
+never machine-generated. Nothing enforced that, and **116 live pages shipped without it**.
+
+```
+for every record with a non-empty transliteration whose page is in the sitemap:
+    assert record.transliterationSource is present AND not vacuous
+```
+
+Vacuous values are rejected explicitly: empty, `unknown`, `n/a`, `none`, `various`, and
+**`see site-wide attribution`** — that last one resolves to `meta.attribution`, which names the
+*compilation the text came from*. It is circular, and it identifies no transliterator.
+
+### The rule is about the SOURCE FIELD, not the text
+
+A transliteration can be perfectly rendered and still fail R10 — unattributable is unattributable
+however clean it looks. And the converse matters more: **fixing the `AA` artifact would not
+satisfy R10.** That confusion is exactly what this rule exists to prevent.
+
+### What it found on its first run
+
+| | |
+|---|---|
+| records carrying a transliteration | 182 |
+| with a **named** `transliterationSource` | **0** |
+| unsourced and **LIVE** | **116** |
+| unsourced but held | 66 |
+
+**This is pre-existing debt, not a new regression** — the pages were published before R10 existed.
+The rule's job is to stop the set growing on Wave 2 and beyond. `validate-seo.mjs` therefore
+reports `RESULT: FAIL (116)` until the live set is resolved, which is an owner decision.
+
+### Negative control — the POSITIVE case is the load-bearing one
+
+R10 currently fails on the entire live set, so "does it fire" proves nothing; it fires on
+everything. Three cases, all passing:
+
+- a new page with an empty source → **FAIL** (the Wave 2 case the rule exists for)
+- every transliteration given a named source → **PASS** ← *the one that proves the rule can be satisfied at all*
+- every transliteration given `see site-wide attribution` → **FAIL** (vacuous ≠ named)
+
+### A harness bug this exposed
+
+The control harness matched verdicts with `/^s{2}(Rd[a]?): (PASS|FAIL)/` — a **single-digit**
+class. It read `R10` as `R1`, so every R10 case reported `(absent)` *and* R1's real verdict was
+silently overwritten. Fixed to `Rd+`. Worth noting as the same family as the CRLF trap: the check
+was wrong, not the thing being checked.
+
 ## Test-count assertions that must be re-derived, never copied
 
 `worker/test/dua-source-core.test.js` asserted 219/20/199 transliteration counts for months after

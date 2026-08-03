@@ -1053,6 +1053,27 @@ for (const slug of chapterPages) {
        chapterPage(slug, byCatPub[slug]), "0.5", true);
 }
 
+/* Prune DETAIL pages whose record has left the build set — a Gate 1 route-out, a
+   retired duplicate, or any other reason `browse` no longer contains it.
+
+   Same defect class as the stale chapter pages below, found the same way: on
+   2026-08-03 the owner ruled 8 records out of the corpus as narrative statements,
+   the builder stopped generating them, and all 8 HTML files stayed on disk. That
+   silently changed `pagesPerChapter` as validate-seo.mjs computes it — it counts
+   pages ON DISK — so two surviving neighbours (`31:114`, `129:250`) were expected to
+   carry a disambiguating source reference they no longer need, and failed §5.
+
+   A routed-out page left on disk is worse than a build error: it is still a complete,
+   renderable page for a record we have ruled is not a supplication. */
+const expectedDetail = new Set(browse.map(d => slugOf(d)).filter(Boolean).map(s => s + ".html"));
+const prunedDetail = [];
+for (const f of fs.readdirSync("duas").filter(x => x.endsWith(".html"))) {
+  if (expectedDetail.has(f)) continue;
+  fs.unlinkSync("duas/" + f);
+  delete nextState["duas/" + f];
+  prunedDetail.push(f.replace(/\.html$/, ""));
+}
+
 /* Prune chapter pages that no longer qualify. The D5 >=3 threshold is now computed on
    PUBLISHED children, so a chapter drops out whenever its pages are held — and this
    script previously only ever wrote chapter files, never removed them. That left 18
@@ -1372,7 +1393,8 @@ write("internal-link-report", rows.map(r => ({
 
 /* ── console summary ───────────────────────────────────────────────────────── */
 const indexable = rows.filter(r => r.indexable).length;
-console.log("dua pages:       ", browse.length, "(" + changed + " changed, " + unchanged + " unchanged this build)");
+console.log("dua pages:       ", browse.length, "(" + changed + " changed, " + unchanged + " unchanged this build)" +
+  (prunedDetail.length ? " | pruned " + prunedDetail.length + " routed-out/stale" : ""));
 console.log("chapter pages:   ", chapterPages.size, "(of", Object.keys(byCat).length, "chapters, threshold >=" + CHAPTER_MIN + " PUBLISHED children)" +
   (prunedChapters.length ? " | pruned " + prunedChapters.length + " stale" : ""));
 console.log("slugs minted:    ", minted, "| lockfile total:", Object.keys(lock).length);

@@ -1,10 +1,11 @@
-/* Negative control for R1-R6 + R3a.
+/* Negative control for R1-R6, R3a, R8, R9, R10.
    Each case mutates a real input, runs validate-seo.mjs, and asserts the intended
    rule flips to FAIL. Every file is restored from a byte-exact backup in a finally
    block, and the run ends by re-asserting a clean PASS.
 
-   Two cases are POSITIVE controls (expect PASS): they prove a rule's exclusion
-   actually excludes, rather than the rule simply never firing. */
+   Three cases are POSITIVE controls (expect PASS). They matter as much as the
+   failures: a rule that always fails looks identical to one that works until you
+   prove it can also pass. */
 import fs from "node:fs";
 import { execSync } from "node:child_process";
 
@@ -15,6 +16,7 @@ const FILES = [
   "src/data/dua/search-corpus.json",
   "sitemap.xml",
   "doc/DUA-REVIEWER-PACKAGE.md",          // R3a's sign-off-trail limb mutates this
+  "src/data/dua/transliteration-debt-baseline.json",   // R10 ratchet cases mutate this
 ];
 const lockEarly = JSON.parse(fs.readFileSync("src/data/dua/slugs.lock.json", "utf8"));
 const r3aId = Object.keys(lockEarly).find((k) => /^27:7[5-9]$/.test(k));
@@ -27,7 +29,9 @@ const run = () => {
   try { out = execSync("node scripts/validate-seo.mjs", { encoding: "utf8" }); }
   catch (e) { out = e.stdout || ""; }
   const v = {};
-  for (const m of out.matchAll(/^\s{2}(R\d[a]?): (PASS|FAIL)/gm)) v[m[1]] = m[2];
+  /* R\d+ not R\d — a single-digit class silently read "R10" as "R1", so every R10
+     case reported "(absent)" while R1's verdict was quietly overwritten. */
+  for (const m of out.matchAll(/^\s{2}(R\d+[a]?): (PASS|FAIL)/gm)) v[m[1]] = m[2];
   return v;
 };
 
@@ -130,6 +134,42 @@ const CASES = [
 
   { rule: "R3a", expect: "FAIL", name: "dua_clause_verified with no sign-off trail in the reviewer package",
     patch: () => { setVerified(R3A_ID); compliantClausePage(R3A_ID); stripTrail(R3A_ID); } },
+
+  /* R10 currently FAILS on the whole live set (116 pre-existing), so a plain
+     "does it fire" case proves nothing — it fires on everything. The load-bearing
+     case is the POSITIVE one: naming a source must actually clear it. */
+  /* Under the ratchet, "unsourced and live" is not enough to fail — the known 116
+     are baselined. The failure condition is being OUTSIDE the baseline, so the case
+     has to drop an id from it, which is what a genuinely new page looks like. */
+  { rule: "R10", expect: "FAIL", name: "a live unsourced page appears OUTSIDE the baseline (the Wave 2 case)",
+    patch: () => { const p = "src/data/dua/transliteration-debt-baseline.json";
+      const b = JSON.parse(fs.readFileSync(p, "utf8"));
+      b.ids = b.ids.slice(1);                       // simulate a page the baseline never knew about
+      fs.writeFileSync(p, JSON.stringify(b, null, 2) + "\n"); } },
+
+  { rule: "R10", expect: "PASS", name: "POSITIVE CONTROL — the known debt alone does NOT fail the ratchet",
+    patch: () => {} },
+
+  { rule: "R10", expect: "PASS", name: "POSITIVE CONTROL — every live transliteration gains a named source",
+    patch: () => { const c = corpus();
+      for (const d of c.duas) if (d.transliteration) d.transliterationSource = "Example Named Edition (Reviewer, 2026)";
+      writeCorpus(c); } },
+
+  /* Under the ratchet a vacuous value on a BASELINED page just leaves it as known
+     debt, so the case has to prove the thing that actually matters: a vacuous value
+     must not rescue a page that is OUTSIDE the baseline. Drop an id from the
+     baseline, then give that same record "see site-wide attribution" — if the
+     vacuous list is working, it stays a failure. */
+  { rule: "R10", expect: "FAIL", name: "a VACUOUS source does not rescue a page outside the baseline",
+    patch: () => { const p = "src/data/dua/transliteration-debt-baseline.json";
+      const b = JSON.parse(fs.readFileSync(p, "utf8"));
+      const dropped = b.ids[0];
+      b.ids = b.ids.slice(1);
+      fs.writeFileSync(p, JSON.stringify(b, null, 2) + "\n");
+      const c = corpus();
+      const d = c.duas.find((x) => String(x.id) === dropped);
+      if (d) d.transliterationSource = "see site-wide attribution";
+      writeCorpus(c); } },
 
   { rule: "R4", expect: "FAIL", name: "a build_gate record is placed in the sitemap",
     patch: () => { const c = corpus(); const d = c.duas.find((x) => x.build_gate);
