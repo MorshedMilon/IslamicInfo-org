@@ -1,0 +1,27 @@
+{
+  "_meta": {
+    "purpose": "Registry of retired dua URLs, for ADDENDUM §15(C). A slug listed here is excluded from the sitemap, never appears in Related Duas, and is never regenerated.",
+    "hostingConstraint": "islamicinfo.org is served by GitHub Pages, which cannot issue server-side redirects. A 301 recorded here is therefore a DOCUMENTED INTENT, not a served response — the retired URL will 404 until the site gains a redirect-capable edge layer. Weigh that before retiring any URL that has been live long enough to be indexed.",
+    "rules": {
+      "slugsStayFrozen": "A retired slug is never deleted from slugs.lock.json. It stays reserved forever so the URL can never be reused for a different dua.",
+      "approvalRequired": "Retiring a URL requires explicit owner approval before commit (MASTER SPEC §1(D))."
+    },
+    "shape": {
+      "{retired-slug}": { "target": "{canonical-slug}", "status": 301, "reason": "string", "approvedOn": "YYYY-MM-DD" }
+    }
+  },
+  "duas/source/other.html": {
+    "target": "duas/source/hisn.html",
+    "status": 301,
+    "reason": "not-a-collection — 'Other source' was a catch-all produced by deriving sourceKey from translation provenance. All 15 entries are Hisn al-Muslim; the hub now has zero children.",
+    "approvedOn": "2026-07-31",
+    "note": "Published 2026-07-29, two days before retirement, so indexation exposure is minimal. GitHub Pages will serve 404 until an edge redirect exists."
+  },
+  "duas/source/dua-dhikr.html": {
+    "target": "duas/source/hisn.html",
+    "status": 301,
+    "reason": "not-a-collection — 'dua-dhikr collection' is the fitrahive translation dataset, not a compilation. All 45 entries are Hisn al-Muslim; the hub now has zero children.",
+    "approvedOn": "2026-07-31",
+    "note": "Published 2026-07-29, two days before retirement, so indexation exposure is minimal. GitHub Pages will serve 404 until an edge redirect exists."
+  }
+}

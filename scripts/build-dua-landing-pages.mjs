@@ -44,6 +44,22 @@ const gate1Removed = new Set(
 const shown = c.duas.filter(d =>
   d.translation && d.entryType !== 'guidance' && !gate1Removed.has(d.id));
 const browse = shown.filter(d => d.variantRole !== 'variant');
+
+/* ── what actually ships (validator rule R8, owner decision 2026-08-03) ─────────
+   Only indexable detail pages are committed and copied into the deploy artifact, so
+   a hub that lists every child links 408 files that do not exist in production. The
+   hub is a LINK LAYER (ADDENDUM §17) — a link to a page nobody can open is the one
+   thing it must never emit.
+
+   Read straight from page-copy.json's per-entry `indexable`, which is the same field
+   `indexDecision()` in build-dua-pages.mjs consults FIRST, so the two builders cannot
+   disagree about what ships. Counts rendered on these hubs follow from this set, so
+   they stay truthful as batches are approved. */
+const pageCopy = readJson("src/data/dua/page-copy.json", {});
+const isPublished = (d) => {
+  const slug = lock[d.id];
+  return !!(slug && pageCopy[slug] && pageCopy[slug].indexable === true);
+};
 const esc = (s) => String(s == null ? "" : s)
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const sha = (s) => crypto.createHash("sha1").update(s).digest("hex").slice(0, 16);
@@ -54,9 +70,11 @@ const snip = (s, n) => {
 };
 const displayLabel = (l) => { const s = String(l); return s.charAt(0).toUpperCase() + s.slice(1); };
 
-/* src/img/ does not exist in the repo and is not copied by the deploy workflow, so
-   /src/img/og-default.png is a 404. MASTER SPEC §5(C) forbids inventing an image
-   asset, so no og:image is emitted and the card falls back to `summary`. */
+/* Favicon + social card. src/img/og-default.png is a real committed asset
+   (verified 1200x630 PNG) and src/img/ ships via the deploy workflow's
+   `cp -r src/* _site/src/`, so both URLs resolve. MASTER SPEC §5(C) forbids
+   inventing an image asset; this is the approved branded default, used on every
+   generated page rather than a per-page image. */
 const fonts = [
   '<link rel="preload" as="font" type="font/woff2" href="/src/fonts/libre-baskerville-400-normal-latin.woff2" crossorigin>',
   '<link rel="preload" as="font" type="font/woff2" href="/src/fonts/cormorant-garamond-500-normal-latin.woff2" crossorigin>',
@@ -105,27 +123,41 @@ const CSS = [
 /* Descriptive anchor text derived from the chapter label. Labels repeat inside a
    hub, so where one does, the supplication's own opening words separate them —
    never a generic anchor, never five identical link texts. */
+/* Every entry gets a preview of the dua itself, not just its chapter name.
+   Previously a chapter contributing exactly ONE entry to a hub was labelled with
+   the bare chapter name — unique, but 192 of 1010 links told the reader nothing
+   about the supplication. "Invocation for entering the restroom" is
+   self-describing; "Qur'anic supplications" and "Chapters on Supplication
+   (Kitab al-Da'awat)" are not, and a reader should never have to guess which
+   links show the dua and which do not. Applied uniformly.
+
+   Collisions are broken with the entry's reference, but that reference is NOT
+   appended to the visible label: <p class="meta"> already prints it directly
+   below, and printing it twice was doing nothing for 21 entries. Uniqueness now
+   comes from the preview text, which differs per entry by construction. */
 function anchorLabels(items) {
-  const n = {};
-  for (const d of items) n[d.category] = (n[d.category] || 0) + 1;
-  const labels = items.map(d => n[d.category] > 1
-    ? snip(displayLabel(d.category), 44) + " — " + snip(String(d.translation).replace(/^[("']+/, ""), 52)
-    : snip(displayLabel(d.category), 84));
-  const seen = {};
-  return labels.map((l, i) => (seen[l] = (seen[l] || 0) + 1) > 1
-    ? l + " · " + (SRC.assign(items[i]).reference || items[i].id) : l);
+  return items.map(d => {
+    const chapter = snip(displayLabel(d.category), 44);
+    const preview = snip(String(d.translation || "").replace(/^[("']+/, "").trim(), 52);
+    return preview ? chapter + " — " + preview : snip(displayLabel(d.category), 84);
+  });
 }
 
 function page(o) {
-  const listed = o.items.filter(d => lock[d.id]);
+  // R8: a slug in the lockfile is not enough — the page must also ship.
+  const listed = o.items.filter(d => lock[d.id] && isPublished(d));
   const anchors = anchorLabels(listed);
   const ld = [{
     "@context": "https://schema.org", "@type": "CollectionPage",
     name: o.h1, url: o.url, description: o.desc, inLanguage: "en",
     isPartOf: { "@type": "WebSite", name: SITE, url: ORIGIN + "/" },
     mainEntity: { "@type": "ItemList", numberOfItems: listed.length,
+      /* name is the ITEM's own label, not its chapter. Using the chapter name gave
+         every ListItem on a hub the same handful of values — on source/hisn.html,
+         247 items collapsed to a few repeated names. anchors[i] is the same string
+         the visible link shows, so the structured data and the page agree. */
       itemListElement: listed.map((d, i) => ({ "@type": "ListItem", position: i + 1,
-        name: snip(displayLabel(d.category), 110), url: ORIGIN + "/duas/" + lock[d.id] + ".html" })) },
+        name: snip(anchors[i], 110), url: ORIGIN + "/duas/" + lock[d.id] + ".html" })) },
     dateModified: "__DATEMOD__"
   }, {
     "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
@@ -160,6 +192,12 @@ function page(o) {
 '<meta property="og:title" content="' + esc(o.title) + '"/>',
 '<meta property="og:description" content="' + esc(o.desc) + '"/>',
 '<meta property="og:url" content="' + o.url + '"/>',
+'<link rel="icon" href="/src/img/favicon.svg" type="image/svg+xml"/>',
+'<meta property="og:image" content="https://islamicinfo.org/src/img/og-default.png"/>',
+'<meta property="og:image:width" content="1200"/>',
+'<meta property="og:image:height" content="630"/>',
+'<meta property="og:image:alt" content="IslamicInfo — Quran, hadith, duas and learning resources, every claim source-cited"/>',
+'<meta name="twitter:image" content="https://islamicinfo.org/src/img/og-default.png"/>',
 '<meta name="twitter:card" content="summary"/>',
 '<meta name="twitter:title" content="' + esc(o.title) + '"/>',
 '<meta name="twitter:description" content="' + esc(o.desc) + '"/>',
@@ -196,8 +234,13 @@ for (const d of browse) {
   const s = SRC.assign(d);
   (srcMap[s.key] = srcMap[s.key] || { label: s.label, items: [] }).items.push(d);
 }
-const occList = Object.entries(occMap).map(([s, v]) => ({ slug: s, label: v.label, n: v.items.length })).sort((a, b) => b.n - a.n);
-const srcList = Object.entries(srcMap).map(([s, v]) => ({ slug: s, label: v.label, n: v.items.length })).sort((a, b) => b.n - a.n);
+/* Sibling-chip counts are PUBLISHED counts (R8). Rendering the corpus total here put
+   "(45)" on a chip leading to a hub that lists 3 — the same class of untruth R5 exists
+   to stop, arrived at from the other direction. The count a reader sees must be the
+   number of links they will find. */
+const pubCount = (items) => items.filter(isPublished).length;
+const occList = Object.entries(occMap).map(([s, v]) => ({ slug: s, label: v.label, n: pubCount(v.items) })).sort((a, b) => b.n - a.n);
+const srcList = Object.entries(srcMap).map(([s, v]) => ({ slug: s, label: v.label, n: pubCount(v.items) })).sort((a, b) => b.n - a.n);
 
 /* Retire hub pages that no longer have children. Recorded in redirects.json;
    GitHub Pages cannot 301, so these URLs 404 until an edge layer exists. */
@@ -264,11 +307,17 @@ xml = xml.replace("</urlset>", urls.map(([u, p, lm]) =>
   "  <url>\n    <loc>" + u + "</loc>\n    <lastmod>" + lm + "</lastmod>\n    <priority>" + p + "</priority>\n  </url>\n").join("") + "</urlset>");
 fs.writeFileSync("sitemap.xml", xml);
 
-const orphans = browse.filter(d => lock[d.id]).length -
-  new Set([...Object.values(occMap).flatMap(v => v.items.map(d => lock[d.id]))].filter(Boolean)).size;
+/* Both figures below count PUBLISHED children only (R8). Before 2026-08-03 they
+   counted every slugged record, so they reported "515 linked / 0 orphans" while the
+   hubs actually emitted 107 links — a green number describing a page that no longer
+   existed. The orphan check is only worth having if it watches the set that ships. */
+const publishedChildren = (items) => items.map(d => isPublished(d) ? lock[d.id] : null).filter(Boolean);
+const linkedFromOcc = new Set(Object.values(occMap).flatMap(v => publishedChildren(v.items)));
+const orphans = browse.filter(d => lock[d.id] && isPublished(d)).length - linkedFromOcc.size;
 console.log("occasion pages:", Object.keys(occMap).length, "| source pages:", Object.keys(srcMap).length,
             "(" + changed + " changed, " + unchanged + " unchanged)");
 if (retired.length) console.log("retired hubs: ", retired.join(", "), "— recorded in redirects.json");
-console.log("children linked:", new Set(Object.values(occMap).flatMap(v => v.items.map(d => lock[d.id])).filter(Boolean)).size,
-            "| unlinked from an occasion hub:", orphans);
+console.log("published children linked:", linkedFromOcc.size,
+            "| unlinked from an occasion hub:", orphans,
+            "| held (built, not published):", browse.filter(d => lock[d.id] && !isPublished(d)).length);
 console.log("sitemap <loc>: ", (xml.match(/<loc>/g) || []).length);

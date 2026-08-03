@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "purpose": "Manually researched search-intent targeting per frozen slug, for ADDENDUM §14. Read by scripts/build-dua-pages.mjs, which uses titleOverride / descriptionOverride when present and otherwise falls back to the MASTER SPEC §5 default formulas.",
+    "rules": {
+      "overridesAreTheException": "Leave titleOverride and descriptionOverride null unless real keyword research exists for that page. The generated defaults are already collision-resolved against real corpus data.",
+      "confidenceDefault": "targetingConfidence defaults to \"none\". Only set \"researched\" when actual keyword data backs it. Never guess and then label it researched.",
+      "uniquePrimaryQuery": "primaryQuery must be unique across the corpus. Two frozen slugs targeting the same query is a consolidation signal under ADDENDUM §15, not something to resolve here.",
+      "targetingOnly": "secondaryQueries inform targeting only. They are never written into visible page copy, which stays governed by MASTER SPEC §8.",
+      "noUnsupportedClaims": "Never target a query the dua's verified data does not actually support."
+    },
+    "shape": {
+      "{frozen-slug}": {
+        "primaryQuery": "string",
+        "secondaryQueries": ["string"],
+        "intent": "informational | navigational | practical",
+        "titleOverride": null,
+        "descriptionOverride": null,
+        "targetingConfidence": "researched | inferred | none",
+        "reviewedOn": "YYYY-MM-DD"
+      }
+    },
+    "status": "EMPTY BY DESIGN as of 2026-07-31. No keyword research has been carried out for this corpus, so no entry may claim \"researched\". The builder's default title/lede/description formulas are in force for all 506 pages."
+  }
+}

@@ -1,0 +1,1277 @@
+{
+  "_meta": {
+    "purpose": "Authored prose for sections 6 (Context & Meaning), 7 (When & How to Recite) and 8 (Reflection) of the individual dua pages. Read by scripts/build-dua-pages.mjs and injected into duas/<slug>.html. Keyed by the FROZEN slug from src/data/dua/slugs.lock.json — never re-kebab or regenerate a key.",
+    "authoringBasis": "Explication only. Sections 6 and 8 restate and unpack THIS dua's own translation field — what it asks for, whom it addresses, how its clauses are ordered. Section 7 derives from chapterLabel / sourceReference only where those state timing explicitly; otherwise `timing` is null and the builder prints the null-safe fallback. No historical context, no hadith background, no reward claims, no rulings, no outside commentary. Nothing here is sourced from model knowledge of the tradition.",
+    "policy": "doc/CONTENT-POLICY.md §3 (authored text is visually labelled on every page via the existing .note component) and §5 (owner reviews each batch before it goes live).",
+    "approver": "Morshed Milon (project owner, ADR-044)",
+    "rules": {
+      "missingKey": "A slug absent from this file renders with NO sections 6/7/8 at all. Never emit a placeholder.",
+      "timingNull": "timing: null -> the 'When & how to recite' section is OMITTED ENTIRELY, unless the Arabic itself states a repetition count, in which case only that count is printed. There is no site-wide default sentence: MASTER SPEC §4 names 'Recite whenever this situation arises.' as boilerplate not to ship, and it was removed on 2026-07-31.",
+      "noPadding": "Prose is only as long as the translation genuinely supports. Pages under 150 combined words are reported by scripts/check-dua-page-copy.mjs for review, not padded.",
+      "contentBasis": "translation-only | verified-context | translation-and-verified-context. Records what the prose was actually built from.",
+      "reviewStatus": "generated | reviewed | needs-review. Only the owner may set 'reviewed'.",
+      "indexable": "false until the entry's batch is approved. The builder emits noindex,follow and drops the page from the sitemap while it is held; internal links stay intact so the page remains crawlable (ADDENDUM §16). noindex is a staging state, never permanent."
+    },
+    "batches": [
+      {
+        "batch": 1,
+        "range": "corpus entries 1-20 (chapter: Words of remembrance for morning and evening)",
+        "authored": 20,
+        "omitted": [],
+        "approved": true,
+        "approvedDate": "2026-08-03",
+        "approvedBy": "Morshed Milon (project owner, ADR-044)",
+        "heldAfterApproval": [
+          "27:85 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated"
+        ]
+      },
+      {
+        "batch": 2,
+        "range": "corpus entries 21-40 (chapters: morning & evening, before sleeping, on waking, entering the restroom)",
+        "authored": 20,
+        "omitted": [],
+        "approved": true,
+        "approvedDate": "2026-08-03",
+        "approvedBy": "Morshed Milon (project owner, ADR-044)",
+        "heldAfterApproval": [
+          "28:109 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated"
+        ]
+      },
+      {
+        "batch": 3,
+        "range": "168-set batch 1 — 20 records across 9 chapters (prayer, sujood, ablution, anguish, leaving home, adversary)",
+        "authored": 20,
+        "omitted": [],
+        "approved": true,
+        "approvedDate": "2026-08-02",
+        "approvedBy": "Morshed Milon (project owner, ADR-044)"
+      },
+      {
+        "batch": 4,
+        "range": "168-set batch 2 — 17 records (prayer positions, Qunut, Tashahhud, worry/debt pair)",
+        "authored": 17,
+        "omitted": [
+          "8:12",
+          "5:9",
+          "99:210 — identical 5-word translation \"In the name of Allah.\"; escape-hatch per spec A1, not padded"
+        ],
+        "approved": true,
+        "approvedDate": "2026-08-03",
+        "approvedBy": "Morshed Milon (project owner, ADR-044)",
+        "heldAfterApproval": [
+          "17:34 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
+          "17:35 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
+          "19:43 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
+          "17:37 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
+          "19:45 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
+          "32:117 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
+          "34:121 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
+          "41:137 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated"
+        ]
+      },
+      {
+        "batch": 5,
+        "range": "168-set batch 3 — 19 records (social, weather, travel, funeral, home)",
+        "authored": 19,
+        "omitted": [
+          "46:144 — appended explanatory clause in translation, same class as 49:148"
+        ],
+        "approved": true,
+        "approvedDate": "2026-08-03",
+        "approvedBy": "Morshed Milon (project owner, ADR-044)"
+      },
+      {
+        "batch": 6,
+        "range": "168-set batch 4 — 19 records (food, weather, illness, social, home)",
+        "authored": 19,
+        "omitted": [
+          "37:130 — translation carries a recitation rubric and a [name of the person] placeholder"
+        ],
+        "approved": true,
+        "approvedDate": "2026-08-03",
+        "approvedBy": "Morshed Milon (project owner, ADR-044)"
+      },
+      {
+        "batch": 7,
+        "range": "168-set batch 5 — 2 records (fasting reply, fright)",
+        "authored": 2,
+        "omitted": [
+          "122:240 \"Glory be to Allah\" (4w) and 122:241 \"Allah is the Greatest\" (4w) — escape-hatch per spec A1: too short to support 80 words without padding"
+        ],
+        "approved": true,
+        "approvedDate": "2026-08-03",
+        "approvedBy": "Morshed Milon (project owner, ADR-044)"
+      }
+    ]
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-75": {
+    "meaning": "These words make no request at all. They are a sustained description: that there is no deity except Him, that He is the Ever-Living and the Self-Sustaining, and that neither drowsiness nor sleep ever reaches Him. From there the wording widens outward — everything in the heavens and on the earth belongs to Him, no one may intercede without His permission, and He knows what lies before people and what will come after them. The passage closes by placing His Kursi over the heavens and the earth, and stating that upholding them does not tire Him.",
+    "timing": "Recited at both ends of the day, morning and evening.",
+    "reflection": "Two denials sit at either end of the passage — no sleep overtakes Him at the opening, no fatigue reaches Him in preserving creation at the close. Between them nothing is ever asked for; the wording only establishes who is being addressed.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-76": {
+    "meaning": "Three separate passages are gathered here, and each opens with the same instruction: Say. The first defines the One being turned to — One, the Eternal Refuge, neither begetting nor begotten, with no equivalent anywhere. The second and third turn from definition to flight, naming what refuge is sought from: the evil of everything He created, of darkness once it settles, of those who blow on knots, and of an envier at the moment envy actually stirs in him. The last passage addresses Him three ways — Lord, Sovereign and God of mankind — before naming the whisperer.",
+    "timing": "Its chapter assigns these words to morning and to evening alike.",
+    "reflection": "The final passage locates the danger inside rather than outside: something that retreats and returns, whispering into the breasts of people. It then widens again in its closing clause, saying this whisperer comes from among both jinn and mankind.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-77": {
+    "meaning": "The supplication timestamps itself. It opens by marking that morning has been reached and that at this very moment sovereignty and praise belong to Allah alone, without partner. What follows is built in matched pairs: the good of this day and the good of whatever comes after it are asked for, and refuge is then sought from the evil of this day and the evil of what follows it. Three further refuges are named in sequence — from laziness, from senility, and from torment in the Fire alongside punishment in the grave.",
+    "timing": "Said twice daily, once in the morning and once in the evening.",
+    "reflection": "Those three closing refuges move steadily further out in time. Laziness threatens the day just begun, senility waits at the far end of a lifetime, and the grave and the Fire lie beyond it altogether.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-78": {
+    "meaning": "One phrase carries the whole supplication: by Your leave. It is repeated across every clause — reaching the morning, reaching the evening, living and dying all happen by His leave, and the sentence ends by naming resurrection as the return. The voice is plural throughout, saying we rather than I. A second form is given for the evening, in which morning and evening exchange places and the closing word becomes return instead of resurrection.",
+    "timing": "Morning and evening both, according to the chapter. The text supplies a separate evening wording.",
+    "reflection": "Nothing is requested anywhere in these words. Each clause simply attributes an event to His permission, and the list runs the full span from one morning through death without ever breaking that pattern.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-79": {
+    "meaning": "The wording builds in a deliberate order before it asks for anything. It first establishes relationship — You are my Lord, there is no deity worthy of worship except You — then creation, then servanthood. The admission that follows is carefully limited: the covenant is kept as best I can, not perfectly. Refuge is sought from the evil of what has already been done, and two acknowledgements are then set side by side, one of blessings received and one of sin committed. Only after all of this does the request for forgiveness arrive.",
+    "timing": "The chapter sets this among the morning and evening remembrances.",
+    "reflection": "Blessing and sin are confessed in the same breath, neither one cancelling the other. The closing line gives the reason the request is directed here at all — that none can forgive sins except Him.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-80": {
+    "meaning": "This supplication is framed as testimony, and it summons its witnesses before stating anything at all. The circle widens with each name: Allah Himself, then the bearers of His Throne, then His angels, then the whole of His creation. What all of them are called to witness is set out afterwards — that He is Allah, that none has the right to be worshipped except Him, that He is alone and without partner, and that Muhammad is His Servant and Messenger.",
+    "timing": "Belongs to what is said at morning and again at evening.",
+    "reflection": "The Prophet is named with two titles in a fixed order, servant placed before messenger. The text also notes that a single opening word changes between the morning form and the evening form, leaving the testimony itself untouched.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-81": {
+    "meaning": "The supplication begins narrow and immediately widens. Whatever blessing the one reciting has woken to is named first, and then the same statement is extended to any of Your creation — every blessing that anyone at all has risen upon. All of it is traced back to a single origin, from You alone, without partner. Because that source is one, the response is stated in two parts: all praise belongs to Him, and all thanks are directed to Him.",
+    "timing": "Assigned by its chapter to the morning and the evening.",
+    "reflection": "A note carried in the text attaches an entire day's thanks to this sentence said in the morning, and an entire night's thanks to the same words said in the evening.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-82": {
+    "meaning": "Rather than asking for well-being in general, this supplication names parts of the body one at a time. Protection is requested for the body, then for the hearing, then for the sight, each as its own separate request rather than folded into a single one. Between these requests the declaration that there is no deity worthy of worship except Him returns as a refrain. Two refuges close the supplication: one from disbelief and poverty named together, and one from the punishment of the grave.",
+    "timing": "These words are for morning and for evening, per the chapter.",
+    "reflection": "Disbelief and poverty are placed inside a single request, one a loss of faith and the other a loss of means. The declaration of tawhid then returns once more, ending the supplication exactly as it had punctuated the middle.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-83": {
+    "meaning": "The supplication is a statement of sufficiency rather than a request. It declares that Allah is enough for the one saying it, that none has the right to be worshipped except Him, and that reliance is placed upon Him. The declaration of tawhid sits in the middle, between the statement of sufficiency and the statement of reliance. It closes by naming Him Lord of the exalted throne, so the One described as sufficient is identified by His sovereignty.",
+    "timing": "Read in the morning, and read again when evening arrives.",
+    "reflection": "Sufficiency and reliance state the same thing from two directions — one describes what He is, the other what the speaker does about it. No particular need is ever named for Him to be sufficient against.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-84": {
+    "meaning": "The requests here move from the widest frame down to the most concrete. Well-being and safety are asked for first across this world and the Hereafter, then narrowed to four named domains — religion, worldly life, family and wealth. Two more specific requests follow: that flaws be covered and that fear be settled. The supplication then turns to direction itself, asking for protection from the front, from behind, from the right, from the left, and from above.",
+    "timing": "The chapter groups this with the remembrances of morning and evening.",
+    "reflection": "One direction is handled unlike all the others. Rather than asking for protection from below, the wording seeks refuge in His greatness against being snatched from underneath — the single point where the request becomes an appeal to an attribute.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-85": {
+    "meaning": "Three titles open the supplication before any request is made: Knower of the unseen and the seen, Creator of the heavens and the earth, and Lord of all things and their Sovereign. A statement of witness follows, that there is no deity worthy of worship except Him. Only then does the asking begin, and the first evil named is not an external one — refuge is sought from the evil of my own self, before Satan and his soldiers are mentioned at all.",
+    "timing": "Placed by the chapter at morning and at evening.",
+    "reflection": "The closing clause reaches past the one praying. Having asked protection from committing evil against himself, the wording asks the same regarding evil dragged toward another Muslim.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "generated",
+    "batch": 1,
+    "indexable": false,
+    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-86": {
+    "meaning": "The whole supplication is a single sentence, and the protection it describes is attached to the name it opens with. Nothing in the earth or in the heavens can cause harm alongside that name — the scope is stated in both directions at once rather than limited to any one danger or any one place. It closes by naming two attributes, the All-Hearing and the All-Knowing.",
+    "timing": "Said each morning and each evening.",
+    "reflection": "Both closing attributes concern attention rather than force. What is offered to the one reciting is that he is heard and known, and no specific threat is ever described or named.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-87": {
+    "meaning": "This is a declaration of contentment rather than a request, and it names three things in turn. Allah is accepted as Lord, Islam as religion, and Muhammad as Prophet. Each clause takes the same shape — a relationship stated as already settled — so the supplication reports a position held rather than asking for anything to be changed or granted.",
+    "timing": "Its place in the chapter is the morning and the evening.",
+    "reflection": "Nothing at all is asked for in these words. The supplication consists entirely of being pleased with what has already been given, which sets it apart from the requests surrounding it in the same chapter.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-88": {
+    "meaning": "The supplication opens by addressing two names together, the Ever-Living and the Self-Sustaining, and then asks by means of His mercy rather than on any other grounds. Two requests follow. The first is comprehensive — that all affairs be set right, with none excepted. The second asks not to be handed over to oneself, and it attaches a duration to that request.",
+    "timing": "For the morning, and for the evening as well.",
+    "reflection": "The measure chosen for that second request is the blink of an eye, the smallest interval the wording could have named. What is asked against is not a long abandonment but any gap at all.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-89": {
+    "meaning": "Instead of asking for good in general, this supplication itemises it. After marking that morning has been reached and that all sovereignty belongs to Allah, Lord of the worlds, it asks for the good of this day and then lists what that good consists of: its triumphs, its victories, its light, its blessings and its guidance. The corresponding request runs the other way, seeking refuge from the evil of this day and from the evil that follows it.",
+    "timing": "Morning and evening alike. A separate evening wording is supplied by the text.",
+    "reflection": "The evening form supplied alongside it keeps the list completely intact and changes only the frame, so the same five goods are asked for of tonight rather than of this day.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-90": {
+    "meaning": "The supplication states what the one reciting is standing upon as evening arrives, and it names four things in sequence: the fitrah of Islam, the word of sincerity, the religion of the Prophet Muhammad, and the religion of Abraham. Abraham is then described further, as one who stood upon the straight path and who was a Muslim. The order of the four moves outward, beginning with what is innate and ending with two people named directly.",
+    "timing": "Recited morning and evening; this wording is the evening form.",
+    "reflection": "The final clause is a negation rather than an affirmation. Having listed everything that is affiliated with, the wording closes by stating what is not — that he was not among the polytheists.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-91": {
+    "meaning": "The supplication has two halves and nothing else. The first glorifies Allah, declaring Him far above any deficiency; the second attaches praise to that same glorification. No request is made and no need is named, so the whole sentence consists of what is said about Him rather than anything asked of Him.",
+    "timing": "The chapter's timing for this is morning and evening.",
+    "reflection": "Among the wordings gathered in this chapter it is the briefest, holding only two acts — glorification and praise — with no petition attached to either half.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-92": {
+    "meaning": "The supplication opens by denying that any deity is worthy of worship except Allah, then reinforces that denial twice over — alone, and without partner. Nothing at all is affirmed until that denial has been completed. What follows assigns two things to Him inside a single clause: dominion and praise, named together rather than separately. The closing statement widens from ownership to capability, declaring Him competent over all things.",
+    "timing": "Twice a day — at morning, then at evening.",
+    "reflection": "Dominion and praise are paired deliberately — one is what He possesses, the other what is owed for it. The final clause then moves from what He owns to what He is able to do.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-93": {
+    "meaning": "The sentence contains no request anywhere in it; it consists entirely of statements made about Allah. Four of them are set out in order — that no deity is worthy of worship except Him, that He is alone with no partner, that dominion and praise both belong to Him, and that He is competent over all things. The one reciting asks for nothing and says nothing about his own circumstances.",
+    "timing": "Kept to the morning and the evening by its chapter.",
+    "reflection": "Nowhere does the wording use the first person. There is no I and no my anywhere in it, so the one saying it never appears in his own supplication — only the One being described.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-94": {
+    "meaning": "The same glorification is repeated four times over, and what changes on each repetition is the measure attached to it rather than the glorification itself. Allah is glorified as many as the number of His creations, then as much as His own pleasure, then as much as the weight of His Throne, and finally as much as the ink of His written words. One unchanged sentence is given four different scales.",
+    "timing": "Spoken when morning comes and when evening comes.",
+    "reflection": "The four measures do not stay in one register. They begin with something countable in creation and end with the ink of His written words, so the final measure is no longer a quantity at all.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 1,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-95": {
+    "meaning": "Three requests are made inside a single sentence, and each one carries a qualifier that narrows it. Knowledge is not asked for on its own but beneficial knowledge; provision is asked for as good provision; deeds are asked for as accepted deeds. The adjective does the work in every case, so what is sought is not the amount of any of the three but the quality that makes it worth having.",
+    "timing": "The chapter files these words under morning and evening.",
+    "reflection": "Of the three qualifiers, only the last is passive. Beneficial and good describe the things themselves, while accepted describes a verdict passed on them, and the wording leaves that verdict with the One being asked.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-96": {
+    "meaning": "The sentence holds two acts and nothing else. The first seeks forgiveness for what has already passed; the second turns back toward the One being asked. Both are stated in the first person and in the present, so neither is described as finished. No particular sin is named and no condition is attached to either act.",
+    "timing": "Morning and evening are the times the chapter gives.",
+    "reflection": "The two acts are given in a fixed order — the request for forgiveness comes first and the turning back follows it, rather than the other way round.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-97": {
+    "meaning": "Refuge is sought in something specifically named — the perfect words of Allah — rather than stated in general terms. What is fled from is described just as broadly: the evil of what He has created, with no particular danger singled out and no category set aside. The One whose words serve as the refuge is also the One who created everything the refuge is sought from.",
+    "timing": "Said at the start of the day and at its close.",
+    "reflection": "Refuge and threat are traced back to the same source within one sentence. The wording draws no line around which created things are meant, so nothing at all falls outside its scope.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "words-of-remembrance-for-morning-and-evening-hisn-27-98": {
+    "meaning": "The request in this sentence is not made for the one saying it. Two things are asked — prayers and peace — and both are asked for the Prophet Muhammad rather than for the speaker or for anyone close to him. The possessive used is plural, our Prophet, so even the relationship it names is a shared one rather than a personal claim.",
+    "timing": "The chapter places this in both the morning and the evening.",
+    "reflection": "Every other wording gathered in this chapter asks something for the one reciting. This one directs its entire request outward, toward a person it names, and keeps nothing back for the speaker.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-before-sleeping-hisn-28-100": {
+    "meaning": "Three times the passage narrows a statement with an exception. There is no deity except Him; no one intercedes except by His permission; and none encompasses anything of His knowledge except what He wills. Each exception works the same way — a sweeping negative is stated first, and then the single case standing outside it is named, and in all three that case is Himself. Set between them, His ownership of the heavens and the earth is stated with no exception attached at all.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "The passage also puts a question rather than only making assertions — who is it that can intercede with Him — and then answers it inside the same sentence, leaving no room for the question to remain open.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-before-sleeping-hisn-28-101": {
+    "meaning": "The passage divides into two halves that face in opposite directions. The first reports what has been believed: that the Messenger and the believers alike accepted what was revealed, that no distinction is drawn between any of His messengers, and that the response given was we hear and we obey. The second half turns into direct address and begins asking — not to be blamed for forgetting or erring, not to be given a burden like the one laid on those before, not to be charged beyond capacity, and then for pardon, forgiveness and mercy.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "Between the two halves sits the rule the requests depend on — that no soul is charged beyond its capacity, and that each keeps the consequence of what it earns either way. The asking begins only once that has been laid down.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-before-sleeping-hisn-28-102": {
+    "meaning": "The supplication is built on two conditions and does not assume which will follow. Lying down and rising are both placed in His name first. Two outcomes are then set side by side: if the soul is taken, mercy is asked for it; if it is returned, protection is asked for it. Each outcome is given its own request rather than one request stretched to cover both.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "The protection asked for in the second case is defined by comparison — that the soul be protected in the manner His righteous servants are protected — so the request names a standard rather than an amount.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-before-sleeping-hisn-28-103": {
+    "meaning": "Ownership is established before anything is asked for. The soul is said to have been created by Him, to be taken by Him, and to belong to Him in both its life and its death. Only after that do two conditional requests appear, one asking protection if it is kept alive and one asking forgiveness if it is taken. The supplication then closes with a request that stands outside both conditions.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "That closing request breaks the pattern the rest of the supplication follows. Everything before it depends on an outcome not yet known, while the request for good health is made plainly, with no condition attached to it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-before-sleeping-hisn-28-104": {
+    "meaning": "A single request is made, and it is fixed to one specific time rather than to the present. Protection is asked for, and what it is asked against is named directly as His punishment. The day it concerns is identified not by any date but by what happens on it — the raising of His servants.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "Although it is said at the end of a day, nothing in the wording concerns the night ahead of it. The only moment the sentence names lies far beyond that night.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-before-sleeping-hisn-28-105": {
+    "meaning": "Two opposite events are placed inside one short sentence and given the same frame. Dying and living are both said to happen in His name, and neither is qualified or expanded on. The order is worth noting — dying is named before living — and no request follows either of them.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "The sentence makes no petition at all. It states a relationship and then stops, with no outcome asked for and no condition attached to either of its two verbs.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-before-sleeping-hisn-28-106": {
+    "meaning": "Three separate formulas are gathered into one practice rather than a single sentence being repeated. The first declares Allah free of every imperfection, the second assigns all praise to Him, and the third states His greatness. Each is short enough to stand on its own, and they are said in a fixed order rather than chosen between.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "The three are not given equal counts. Two are said the same number of times and the third once more than the others, so the totals are left deliberately uneven rather than rounded off.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-before-sleeping-hisn-28-107": {
+    "meaning": "The supplication names Him at length through what He has made and revealed: Lord of the seven heavens and the exalted throne, Splitter of the seed and the date stone, and Revealer of the Tawrah, the Injeel and the Furqan. Refuge is then sought from the evil of everything He holds by the forelock. Four further names follow in paired opposites — the First and the Last, then Aththahir and Al-Batin — and each is explained by what it rules out: nothing before, nothing after, nothing above, nothing nearer.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "After an opening on that scale, the two things actually requested are strikingly ordinary — that a debt be settled and that poverty be kept away. The size of the address and the plainness of the request sit directly against one another.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-before-sleeping-hisn-28-108": {
+    "meaning": "Praise is given first and the grounds for it are listed afterwards: being fed, being given drink, being sufficed and being sheltered. All four are stated in the plural, as things done for us rather than for the speaker alone. The sentence then turns outward at its close, noting how many people have no one at all to suffice or shelter them.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "That final clause measures the blessing by its absence elsewhere rather than by its size. Nothing is asked for anywhere in the sentence, and the comparison itself is what completes the praise.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-before-sleeping-hisn-28-109": {
+    "meaning": "The opening works in pairs. He is named as Knower of two things set against each other, the unseen and the seen; as Creator of two more, the heavens and the earth; and then in two roles at once, Lord of all things and their Sovereign. The pairing stops as soon as the witness is given, because that names only one thing — that there is no deity worthy of worship except Him.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "What refuge is sought from is stated twice over, once as evil that might be committed and once as evil that might be passed to someone else. Between them the two cover the act and its reach.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "generated",
+    "batch": 2,
+    "indexable": false,
+    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+  },
+  "what-to-say-before-sleeping-hisn-28-111": {
+    "meaning": "Four parallel clauses open the supplication, and each hands something over: the soul is submitted, the affair is entrusted, the face is turned, and reliance is placed. All four are directed to the same place, and they are then given a single motive stated as a pair — in hope and fear together, rather than one or the other. Two statements of belief close it, in the Book revealed and the Prophet sent.",
+    "timing": "The chapter this belongs to places these words before sleeping.",
+    "reflection": "The middle line turns back on itself: there is no refuge nor safe haven from Him except with Him. The One being fled to is named as the One being fled from, and no third place is offered to stand.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "supplications-for-when-you-wake-up-hisn-1-1": {
+    "meaning": "Waking is described here as being given life again, and the sleep before it as having been caused to die. The praise is stated first and the reason for it follows. The sentence then moves past the morning entirely and closes on the resurrection, so the small return that has just happened is set beside the larger one.",
+    "timing": "The chapter this belongs to places these words on waking.",
+    "reflection": "The wording never once says woken. It uses the language of dying and being given life for what has just taken place, describing an ordinary morning in terms otherwise reserved for something final.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "supplications-for-when-you-wake-up-hisn-1-2": {
+    "meaning": "The supplication is assembled from several short formulas set one after another. It begins by denying any deity except Allah and assigning Him sovereignty, praise and capability over all things. It then moves through declaring His perfection, praising Him, denying again, declaring His greatness, and stating that no power nor might exists except with Him. Only at the very end does anything get asked for.",
+    "timing": "The chapter this belongs to places these words on waking.",
+    "reflection": "That closing request is short and personal — forgive me — arriving after a long sequence in which nothing whatever was requested. The asking occupies the smallest part of the whole.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "supplications-for-when-you-wake-up-hisn-1-3": {
+    "meaning": "Three things are named as grounds for praise, and they are given in an order that builds. Health is restored, then the soul is returned, and then remembrance of Him is permitted. The first two concern the body and the life within it; the third concerns what the one waking is now able to do with them.",
+    "timing": "The chapter this belongs to places these words on waking.",
+    "reflection": "The third item is not a possession but a permission. It is described as something allowed rather than something handed over, which sets it in a different category from the two named before it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "supplications-for-when-you-wake-up-hisn-1-4": {
+    "meaning": "The passage begins with observation rather than request, pointing to the creation of the heavens and the earth and the alternation of night and day as signs for those who think. It then quotes what such people say — that none of this was created aimlessly — and turns that observation into a sequence of requests: protection from the Fire, forgiveness of sins, removal of misdeeds, death among the righteous, and what was promised through the messengers.",
+    "timing": "The chapter this belongs to places these words on waking.",
+    "reflection": "A reply is then given to those requests directly, stating that no worker's deeds will be lost, male or female alike. The passage ends not with a plea but with an instruction — to persevere, endure, remain stationed and be conscious of Allah.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-entering-the-restroom-hisn-6-10": {
+    "meaning": "The wording opens with the name of Allah and then makes a single request. Refuge is sought from two things rather than one — from evil itself, and from those who do it — so the request covers both the abstraction and the people who act on it. Nothing further is specified about either.",
+    "timing": "The chapter this belongs to places these words on entering the restroom.",
+    "reflection": "No particular harm is named anywhere and nothing besides refuge is asked for, so the whole supplication is a single request stated in the broadest terms available to it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 2,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-62": {
+    "meaning": "Two attributes are named before anything is asked for: Your knowledge of the unseen, and Your power over creation. Every request that follows leans on them. Life and death come first — continue this life only while You know it to be good, end it when death is better. What follows arrives in matched pairs: fear of You in secret and in public, truthfulness in pleasure and in anger, moderation in wealth and in poverty. The closing requests turn from conduct toward encounter, asking for the sweetness of looking upon Your Face.",
+    "timing": "The chapter places these words after the final Tashahhud, in the sitting before the prayer is ended.",
+    "reflection": "The request for longing is guarded on both sides — it asks to encounter Him without a calamity that brings harm or a trial that causes deviation. Only in its final line does the wording widen from I to us.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-58": {
+    "meaning": "Forgiveness is asked for once, and the wording then works to leave nothing outside it. Sins are divided by time — what has come to pass and what is still to come. They are divided again by visibility, what was committed in secret and what was made public. A third pair covers excess, where all bounds were exceeded, then hands over the remainder: those things about which You are more knowledgeable. Two of His names close it, Al-Muqaddim and Al-Mu-akhkhir, followed by the declaration that none has the right to be worshipped except Him.",
+    "timing": "This belongs to the words said after the final Tashahhud, before the prayer is brought to an end.",
+    "reflection": "Each pair closes a gap the previous one left open. The last category is not defined by the speaker at all — it is left to His knowledge, covering whatever the earlier divisions failed to name.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-64": {
+    "meaning": "The request is placed last, and everything before it establishes who is being asked. It opens by asking on the strength of praise itself — as unto You is all praise — then states that none has the right to be worshipped except Him, alone and without partner. A run of titles follows, each addressed directly: the Benefactor, Originator of the heavens and the Earth, Possessor of majesty and honour, Ever Living, Self-Subsisting and Supporter of all. Only after that sequence do the two requests arrive, and they point in opposite directions.",
+    "timing": "The chapter sets these words in the final sitting, after the Tashahhud and before the prayer ends.",
+    "reflection": "Five forms of address stack up before a single thing is requested. What is finally asked for is the shortest part of the supplication: Paradise sought, and refuge taken from the Fire.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-56": {
+    "meaning": "Refuge is sought four times, and the dangers named are not of one kind. The first lies beyond death — the punishment of the grave. The second is a figure named directly, Al-Maseeh Ad-Dajjal, and what is feared is his temptation and trial. The third widens to cover both states at once, the trials and tribulations of life and death together. The last returns to what is near at hand and names two burdens in a single breath: sin and debt.",
+    "timing": "These are among the words the chapter places in the final sitting, said after the Tashahhud.",
+    "reflection": "The four refuges cross very different distances — the grave, a named figure, the whole span of living and dying, and then something as ordinary as debt. The supplication ends on the smallest of them.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-during-sujood-hisn-19-44": {
+    "meaning": "Three statements open the supplication and all three are directed to the same place: to You I have prostrated, in You I have believed, to You I have submitted. The wording then narrows from the whole person to a single part. My face has prostrated — and the face is described by what was done to it rather than by what it is: created, then fashioned, then brought forth with its faculties of hearing and seeing. The closing line turns from the speaker back to the One described, naming Him Blessed and the Best of creators.",
+    "timing": "The chapter places these words in the prostration itself.",
+    "reflection": "The face is the part that touches the ground in prostration, and it is the part the supplication stops to describe. Everything said about it — created, fashioned, given hearing and sight — is credited to the One it is being lowered before.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-during-sujood-hisn-19-47": {
+    "meaning": "Refuge is sought three times, and each time it is sought in Him from Him. The first pair sets Your pleasure against Your displeasure, the second Your pardon against Your punishment — in both, the shelter and the thing sheltered from belong to the same One. The third drops the pairing and states it plainly: I take refuge in You from You. What follows is an admission rather than a request. Praise cannot be counted out, and the wording closes by handing that task back.",
+    "timing": "According to its chapter, this is said while in prostration.",
+    "reflection": "The supplication ends by giving up its own attempt. Having praised, it concedes the praise cannot be enumerated, and states that the only adequate account of Him is the one He has already given of Himself.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-during-sujood-hisn-19-42": {
+    "meaning": "Two sentences, and they do different work. The first declares perfection and praise together — how perfect You are, and I praise You — and addresses Him twice over, as Allah and as our Lord. The second is a single request with nothing attached to it: forgive me. No reason is offered for the request, and no condition is placed on it. The declaration simply precedes the asking, and the asking is left bare.",
+    "timing": "Its chapter gathers this among the words said in prostration.",
+    "reflection": "The praise is plural, naming Him our Lord, while the request that follows is singular. The wording moves from what is true of Him for everyone to what is being asked for one person.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "what-to-say-after-completing-the-prayer-hisn-25-68": {
+    "meaning": "The declaration that none is worthy of worship except Allah returns three times, and each return carries something new. The first states His oneness and what belongs to Him — dominion, praise, power over all things — and adds that no power or strength exists except by Him. The second turns from what is true of Him to what those saying it do: we do not worship except Him, and every favour, grace and good praise is His. The third attaches sincerity of religion to the declaration.",
+    "timing": "The chapter places these words after the prayer has been completed.",
+    "reflection": "The closing clause is the only one that mentions anyone besides Allah and those speaking. It does not ask for the disbelievers' dislike to stop — it states that the sincerity is held even if they dislike it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "what-to-say-after-completing-the-prayer-hisn-25-67": {
+    "meaning": "The opening is a declaration of oneness — no partner, dominion and praise His, power over all things. What follows turns that into a statement about giving and withholding, built as a closed pair: no one can prevent what He gives, and no one can give what He withholds. Between the two, no third party is left with any say. The last lines take up wealth and honour twice, first to say they do not benefit their possessor, then to say that they come only from Him.",
+    "timing": "The chapter places these words after the completed prayer.",
+    "reflection": "Wealth and honour are named as things that do not benefit their owner and, in the same breath, as things that come from Him alone. Neither of them is ever asked for.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "what-to-say-after-completing-the-prayer-hisn-25-69": {
+    "meaning": "Three short phrases come first and none of them is a request — declaring Allah's perfection, that all praise is His, and that He is the greatest. The text attaches a count to that portion. A fourth statement then follows the counted phrases and runs longer than all three together: that none has the right to be worshipped except Allah, alone and without partner, that all sovereignty and praise belong to Him, and that He is omnipotent over all things.",
+    "timing": "The chapter sets this after the prayer is completed.",
+    "reflection": "Nothing is asked for anywhere in the wording. The supplication consists entirely of statements about Him, and the only instruction it carries is how many times the opening phrases are repeated.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-for-anguish-hisn-35-122": {
+    "meaning": "One sentence is repeated three times, and only its ending changes. Each repetition declares that none has the right to be worshipped except Allah, and each then names Him differently. The first names Him Forbearing. The second names Him Lord of the magnificent throne. The third widens furthest — Lord of the heavens, Lord of the Earth, and Lord of the noble throne — naming three domains where the earlier statements named one.",
+    "timing": "The chapter places these words at a time of anguish.",
+    "reflection": "For words said in distress, nothing at all is requested. The supplication repeats a single declaration and spends its length enlarging the description of the One it is addressed to.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-for-anguish-hisn-35-123": {
+    "meaning": "Hope is stated before anything is asked: it is Your mercy that I hope for. The request that follows is put negatively — do not leave me in charge of my affairs — and a measure is attached to it, not even for the blink of an eye. The positive form of the same request comes next: rectify for me all of my affairs. One word, affairs, carries both halves, once as something not to be left to the speaker and once as something asked to be put right. A declaration of oneness closes it.",
+    "timing": "This sits among the chapter's words for anguish.",
+    "reflection": "The measure given is the shortest available — the blink of an eye. It sets the length of time the speaker is asking not to be left alone for, and the request is made twice over, once as a refusal and once as a plea.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-for-anguish-hisn-35-124": {
+    "meaning": "Three clauses, moving in one direction. The first declares that none has the right to be worshipped except Him. The second declares His perfection. The third turns away from Him and back onto the speaker, and it is the only clause not about Him: verily I was among the wrong-doers. It is stated in the past tense, as an admission rather than a request, and the wording ends there.",
+    "timing": "Tirmidhi records these words from Sa'd, and the chapter gathers them among what is said in anguish.",
+    "reflection": "No request is made anywhere in it. Two statements about Him are followed by one about the speaker, and the supplication closes on that admission rather than returning to praise.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "what-to-say-upon-completing-ablution-hisn-9-13": {
+    "meaning": "Both halves open the same way, with I bear witness, and that repetition is what holds the supplication together. The first testimony concerns Allah: that none has the right to be worshipped except Him, alone and without partner. The second concerns Muhammad ﷺ and gives him two descriptions in a fixed order, His slave before His Messenger. Nothing is requested in either half — the whole of it is testimony.",
+    "timing": "The chapter places these words at the completion of the ablution.",
+    "reflection": "The order within the second testimony is not incidental. Servanthood is stated first and messengership second, and the wording does not reverse them or state one without the other.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "what-to-say-upon-completing-ablution-hisn-9-14": {
+    "meaning": "Two requests, and both are phrased the same way — not make me repentant, but make me of those who. The speaker asks to be placed among a group rather than given a quality outright. The first group returns to Him often in repentance; the second remains clean and pure. Repetition of that opening formula is the entire structure of the supplication, and nothing further is attached to either request.",
+    "timing": "Its chapter sets these words at the end of the ablution.",
+    "reflection": "Both requests ask for inclusion rather than for a change described directly. Neither says what the speaker is now, and neither states what the repentance or the purity is from.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "what-to-say-when-leaving-the-home-hisn-10-17": {
+    "meaning": "Refuge is sought from four things, and each is named twice — once as something the speaker might do, and once as something that might be done to him. Straying is paired with being led astray, slipping with being tripped, wronging with being wronged, and acting foolishly with having foolishness done to him. The pairing holds without a break across all four, so every danger named covers both directions at once.",
+    "timing": "The chapter places these words at the moment of leaving the home.",
+    "reflection": "The wording does not separate harm done from harm suffered. Both are asked refuge from in the same breath, and neither is given more weight than the other.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-for-when-you-meet-an-adversary-or-a-powerful-rul-hisn-36-127": {
+    "meaning": "The wording divides in two. The first half states what He is to the speaker, twice over: my supporter, and my helper. The second half states what the speaker does, and every verb is prefixed the same way — by You I move, by You I attack, by You I battle. Three actions, three repetitions of by You, and no request is made anywhere in it.",
+    "timing": "The chapter places these words at the meeting with an adversary or a powerful ruler.",
+    "reflection": "It is said at a confrontation and yet asks for nothing — no victory, no protection, no outcome. Each action the speaker names is attributed to Him before it is described.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-for-the-beginning-of-the-prayer-hisn-16-30": {
+    "meaning": "A long address comes before any request. He is named Lord of three by name — Jibra-eel, Meeka-eel and Israfeel — then Creator of the heavens and the Earth, then Knower of the seen and the unseen. A statement follows rather than a request: You are the arbitrator between Your servants in that which they have disputed. Only then does the request arrive, and it is shaped by that statement — guide me to the truth in that which they have differed, by Your leave.",
+    "timing": "The chapter places these words at the beginning of the prayer.",
+    "reflection": "Disagreement is named twice, first as something He arbitrates and then as the exact place guidance is asked for. The request is not that the dispute be settled, but that the speaker be guided within it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-for-the-beginning-of-the-prayer-hisn-16-27": {
+    "meaning": "Three requests are made and all three concern the same thing, the speaker's sins, but each is given its own image. The first asks for distance, and measures it against a distance already in place, that between the East and the West. The second asks for purification and compares it to a white robe cleaned of filth. The third asks for cleansing and names three things to do it with: snow, water, and ice. Each request opens by addressing Him again.",
+    "timing": "This belongs to the words the chapter places at the opening of the prayer.",
+    "reflection": "The three images move from distance to cloth to water, and only the last names its instruments. Nothing is said about what the sins are, and each request is made without any of them being specified.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-for-rising-from-the-ruki-hisn-18-38": {
+    "meaning": "A single sentence, and it is not addressed to Allah but spoken about Him: may Allah answer he who praises Him. The one praising is not identified as the speaker, so the wording covers whoever is doing it rather than naming a person. The text carries one instruction of its own alongside the words, stating that they are said while rising.",
+    "timing": "The text states these words are said while rising, and the chapter places them at the rising from the Ruki'.",
+    "reflection": "Unlike the supplications around it, this one speaks in the third person throughout. It makes no request for the speaker in particular, and states a response rather than asking for one.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 3,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-02"
+  },
+  "invocations-during-ruki-bowing-in-prayer-hisn-17-34": {
+    "meaning": "Allah is addressed at the opening of each of the two clauses, and that doubling is the shape of the whole supplication. The first clause sets perfection beside praise — how perfect You are, and I praise You — with the title our Lord placed between them. The second abandons description entirely and asks for one thing: forgive me. No reason accompanies the request, no condition limits it, and no further words follow it.",
+    "timing": "'Aishah reported these words, and the chapter assigns them to the bowing.",
+    "reflection": "More of its length goes to addressing Him than to asking. The request arrives last, occupies three words, and closes the supplication without any return to praise.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "generated",
+    "batch": 4,
+    "indexable": false,
+    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+  },
+  "invocations-during-ruki-bowing-in-prayer-hisn-17-35": {
+    "meaning": "Two descriptions open it, Perfect and Holy, and He is spoken about rather than addressed. What follows names what He is Lord of, and the choice is particular rather than sweeping: not Lord of the worlds, but Lord of the angels, and then of the Rooh, which the text identifies as Jibra-eel. A whole class is named, then one member of it singled out. Nothing is requested at any point.",
+    "timing": "The chapter assigns this to the bowing, on 'Aishah's report.",
+    "reflection": "The scope narrows steadily — two absolute descriptions, then a class of creatures, then a single name. It closes at the most particular point rather than the widest.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "generated",
+    "batch": 4,
+    "indexable": false,
+    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+  },
+  "invocations-during-ruki-bowing-in-prayer-hisn-17-36": {
+    "meaning": "Three parallel statements open it, each ending in the same place: to You I have bowed, in You I have believed, to You I have submitted. The second half then itemises where it could have summarised. Rather than saying the whole self is humbled, it lists parts — hearing, sight, mind, bones, tendons — and finishes with a phrase that catches whatever the list omits: what my feet carry. All of it is said to be humbled before Him.",
+    "timing": "The chapter places these words in the bowing.",
+    "reflection": "The list runs from faculties to structure — senses, then mind, then bone and tendon. Its final item names no body part at all and gathers up everything the enumeration left out.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 4,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-during-ruki-bowing-in-prayer-hisn-17-37": {
+    "meaning": "One declaration of perfection, followed by a single title that carries four nouns: power, sovereignty, magnificence and grandeur. The title is possessive — He is named as the One who possesses these, not as one who displays them. The four are not ordered toward a climax, and none is marked as greater than the others. He is referred to throughout in the third person, and nothing is asked for.",
+    "timing": "Nasa'i records this from 'Asim bin Humaid, said in the bowing.",
+    "reflection": "Two of the four nouns name authority and two name stature. The wording keeps them inside one title rather than separating what He commands from what He is.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "generated",
+    "batch": 4,
+    "indexable": false,
+    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+  },
+  "invocations-during-sujood-hisn-19-43": {
+    "meaning": "The wording never uses the second person. Allah is described rather than spoken to, and the sentence carries no verb of its own, which is why the translation supplies one inside brackets. Two attributes come first, Perfect and Holy. The remainder identifies Him by what falls under His lordship — the angels, and the Rooh, glossed in the text as Jibra-eel. The one saying it does not appear in the sentence anywhere.",
+    "timing": "'Aishah reported it; the chapter places these words in the prostration.",
+    "reflection": "No part of it refers to the speaker or to any need. It is said in the prostration and consists entirely of description, ending without a request of any kind.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "generated",
+    "batch": 4,
+    "indexable": false,
+    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+  },
+  "invocations-during-sujood-hisn-19-45": {
+    "meaning": "The whole supplication is one sentence and makes no request. It opens by declaring perfection, then attaches a title built from four nouns — power, sovereignty, magnificence and grandeur — of which only the first is qualified, as total. That qualifier is the sole intensifying word in the sentence, and the other three nouns stand unmodified. Allah is spoken about here rather than addressed directly.",
+    "timing": "'Asim bin Humaid reported it, and the chapter sets it in the prostration.",
+    "reflection": "None of its length is spent on the one saying it. What it offers is not a petition but a list, and that list is the entire content of the supplication.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "generated",
+    "batch": 4,
+    "indexable": false,
+    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+  },
+  "invocations-for-rising-from-the-ruki-hisn-18-39": {
+    "meaning": "It addresses Him as our Lord and then makes one statement: all praise is for You. The remainder does not extend that statement but describes the praise itself, stacking three adjectives onto it — abundant, beautiful, blessed. No request follows at any point. The opening word is plural, and nothing later narrows the praise back to the single person saying it.",
+    "timing": "Bukhari records this from Rifa'a bin Rafi' Az-Zuraqi, said on rising from the bowing.",
+    "reflection": "Three adjectives qualify the praise and none qualifies Him. The supplication spends its length describing what is offered rather than the One receiving it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 4,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-for-sitting-between-two-prostrations-hisn-20-48": {
+    "meaning": "The same four words twice, and nothing besides. Each half addresses Him as my Lord and asks a single thing, forgiveness. No sin is named, no reason is offered, and no description of Him precedes the asking. Repetition is the only structure present here, and the second half introduces no word that the first did not already carry.",
+    "timing": "Ibn Majah records it from Hudhaifah, said between the two prostrations.",
+    "reflection": "Where other supplications build a case before requesting, this one asks at once and then asks again. The repetition is exact rather than developed or extended.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 4,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-for-the-beginning-of-the-prayer-hisn-16-28": {
+    "meaning": "Four statements, none of them a request. The first sets perfection beside praise. The second turns to His name and calls it blessed. The third turns to His position and calls it lofty. The fourth leaves description for a denial that admits no exception: none has the right to be worshipped except You. The movement runs from what the speaker offers, through two things belonging to Him, to a statement about everyone else.",
+    "timing": "Nasa'i records this from Abu Sa'eed, said at the opening of the prayer.",
+    "reflection": "Only the closing clause mentions anything outside Him, and it does so in order to exclude it. Nothing at all is requested across the four statements.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 4,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-for-qunut-in-the-witr-prayer-hisn-32-117": {
+    "meaning": "Refuge is sought three times and the construction tightens with each. The first sets two of His attributes against each other, pleasure against displeasure. The second does the same with pardon and punishment. The third strips the attributes away and leaves only the pronoun standing on both sides. A statement then replaces the requests altogether: praise cannot be enumerated. The closing line points away from the speaker's words and toward His own.",
+    "timing": "'Aishah reported these words; the chapter places them in the Qunut of the Witr prayer.",
+    "reflection": "The three refuges shorten as they proceed, from a pair of named attributes down to a single repeated word. What is fled and what is fled to never change.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "generated",
+    "batch": 4,
+    "indexable": false,
+    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+  },
+  "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-59": {
+    "meaning": "One request, extended across three objects. Help is what is asked for, and what it is help toward follows as a list: remembering Him, thanking Him, worshipping Him. Only the last carries a qualifier — in the best of manners — so the standard attaches to the worship rather than to the remembering or the thanking. What is sought is assistance in doing, not something to be given.",
+    "timing": "Mu'adh reported this, and the chapter places it after the final Tashahhud.",
+    "reflection": "All three objects are things the speaker is to perform. The supplication asks for help in performing them rather than for the obligation to be lightened.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 4,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-after-the-final-tash-ahhud-and-before-ending-the-hisn-24-61": {
+    "meaning": "Two clauses, exactly balanced. One asks for something, one seeks shelter from something, and the objects are opposites: Paradise and the Fire. Both clauses are directed at Him, since He is the one asked and also the one taken refuge in. Nothing separates them, no description of Him precedes them, and no reason is given for either. That is the whole supplication.",
+    "timing": "Abu Dawud records it from companions of the Prophet ﷺ, said after the final Tashahhud.",
+    "reflection": "The symmetry holds on both sides: ask and take refuge, grant and flee, Paradise and Fire. Nothing is added to weight one half against the other.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 4,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "how-to-recite-blessings-on-the-prophet-after-the-tashahhud-hisn-23-54": {
+    "meaning": "The request is made twice with one word changed. Prayers are asked for upon Muhammad ﷺ and upon his wives and descendants; then blessings are asked for upon the same three. Each half carries the same comparison — just as You sent prayers, and just as You sent blessings, upon the family of Ibraheem. The final line stops requesting and describes Him instead, as full of praise and majesty.",
+    "timing": "Abu Humaid as-Sa'idi reported it, and the chapter places it after the Tashahhud.",
+    "reflection": "Wives and descendants are named separately rather than folded into a single word, while the comparison uses family for Ibraheem. The two halves differ only in prayers against blessings.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 4,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-after-completing-the-prayer-hisn-25-73": {
+    "meaning": "Three things are asked for in one sentence, and each carries a qualifier that limits it. Knowledge is not requested plainly but as beneficial knowledge. Provision is asked for as good provision. Deeds are asked for as accepted deeds. Nothing is sought without its adjective, so in each case what is wanted is a particular kind of the thing rather than the thing itself.",
+    "timing": "The chapter places these words after the prayer is completed.",
+    "reflection": "The three qualifiers carry the weight. Knowledge, provision and deeds could each be had without being beneficial, good or accepted, and the wording asks past all three.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 4,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "supplications-for-prostrating-due-to-recitation-of-the-quran-hisn-21-51": {
+    "meaning": "Four requests follow one another, and the last introduces a comparison. A reward is asked to be recorded, a sin to be removed, the act to be saved, and then accepted. Only after those four does the wording reach outside itself, asking that it be accepted just as You had accepted it from Your servant Dawood. The comparison names a person and describes him by his relation to Allah rather than by anything else.",
+    "timing": "Tirmidhi records this, said in the prostration made on reciting the Qur'an.",
+    "reflection": "The first four requests concern the act just performed. The fifth measures it against an acceptance already granted, making a past acceptance the standard for this one.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 4,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-in-times-of-worry-and-grief-hisn-34-121": {
+    "meaning": "Eight things are named and they arrive in pairs. Anxiety is set beside sorrow, weakness beside laziness, miserliness beside cowardice. The final pair breaks that pattern: the burden of debts is a circumstance rather than a state of mind, and being overpowered by men involves other people entirely. Refuge is asked for once at the opening and then covers the whole list without being repeated.",
+    "timing": "Nasa'i records this from Anas bin Malik; the chapter places it in times of worry and grief.",
+    "reflection": "The list moves outward — from feeling, to disposition, to obligation, to other people. Only the last two involve anything outside the person saying the words.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "generated",
+    "batch": 4,
+    "indexable": false,
+    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+  },
+  "invocations-for-the-setting-of-a-debt-hisn-41-137": {
+    "meaning": "Only one of the eight things named concerns debt, and it sits seventh in the list. The rest are states of mind and character — anxiety and sorrow, weakness and laziness, miserliness and cowardice — followed at the end by being overpowered by men. Refuge is sought once, at the opening, and governs everything after it. The wording never singles debt out or treats it differently from the seven around it.",
+    "timing": "Anas bin Malik reported these words, gathered by the chapter under the settling of a debt.",
+    "reflection": "The chapter files it under debt, yet the wording gives debt a single clause among eight and never returns to it. What surrounds it is interior rather than financial.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "generated",
+    "batch": 4,
+    "indexable": false,
+    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+  },
+  "a-dinner-guests-invocation-for-his-host-hisn-71-182": {
+    "meaning": "Three requests are made, and none of them is for the person speaking. The first asks for blessing, aimed not at the hosts generally but at a specific thing — that which You have provided them. The second and third widen past provision altogether, asking for forgiveness and for mercy. The wording stays in the third person throughout, and the guest never appears in it.",
+    "timing": "Abu Dawud records this from 'Abd Allah b. Busr, said by a guest for his host.",
+    "reflection": "It begins with the meal and does not stay there. Two of the three requests have nothing to do with food, and the last asks for more than the hospitality did.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-upon-receipt-of-the-loan-for-someone-who-lends-yo-hisn-91-202": {
+    "meaning": "The first sentence asks for blessing on three things belonging to the lender — the person, the family, the wealth — widening in scope as it goes. The second sentence stops addressing anyone and states a general principle instead: commendation and payment are what a loan earns in return. The supplication therefore supplies both halves of that repayment, the words and the money, and names them together.",
+    "timing": "These words are recorded by Nasa'i, said when the loan is handed back.",
+    "reflection": "Blessing is asked for wealth that lending has just diminished. What the second sentence calls reward includes the very commendation being spoken in the first.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-against-an-enemy-hisn-38-131": {
+    "meaning": "Two titles are given before anything is asked: Revealer of the Book, and Swift at reckoning. Both concern judgement rather than power in battle. The request that follows is a single word carried across two sentences — defeat — first naming its object as the confederates, then reducing them to a pronoun. One further verb is added at the very end, convulse, and nothing follows it.",
+    "timing": "Muslim records this from Ibn Abu Aufa, said against an enemy.",
+    "reflection": "The second sentence says less than the first and asks for more. It drops the titles, drops the name of the enemy, and adds a verb the first did not have.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-a-family-who-invites-you-to-break-your-fast-w-hisn-73-184": {
+    "meaning": "Three wishes, and each names a different set of visitors to the host's house. The first asks that people who are fasting break their fast there. The second asks that the dutiful and pious eat the food. The third leaves human guests behind entirely and asks that the angels send prayers upon the host. None of the three mentions the speaker, and none asks for anything material.",
+    "timing": "Ibn Majah records this from 'Abdullah bin Zubair, said for a family who provide the meal ending a fast.",
+    "reflection": "Each wish raises the standing of the guest. The house receives the fasting, then the pious, then the angels, and only the last of them brings nothing to eat.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-entering-a-market-hisn-98-209": {
+    "meaning": "The declaration runs a long way before doing anything else. It states that none has the right to be worshipped except Allah, alone and without partner, that sovereignty and praise belong to Him, that He gives life and causes death — and then turns that last pairing back on Him: He is living and does not die. Two clauses close it, placing all good in His hand and all things within His power. Nothing is requested.",
+    "timing": "The chapter places these words at the entrance to a market.",
+    "reflection": "It is said where buying and selling happen, and the two clauses nearest the end concern what is owned and what is possible. Neither of them asks for any of it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-entering-a-town-or-city-hisn-97-208": {
+    "meaning": "Four lordships are named before the requests begin, and each is paired with what it contains: the seven heavens and all they envelop, the seven earths and all they carry, the devils and all whom they misguide, the winds and all whom they whisk away. The requests then arrive as an exact pair. Goodness is asked for in three forms — of this village, of its inhabitants, of all found within it — and refuge sought from evil in the same three.",
+    "timing": "The chapter places these words on entering a town or city.",
+    "reflection": "The two halves mirror one another clause for clause. What differs is only whether goodness is being asked for or evil escaped; the three targets stay identical.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-leaving-the-mosque-hisn-14-21": {
+    "meaning": "It opens on two things that ask for nothing: the name of Allah, and prayers and peace upon His Messenger ﷺ. Only then do two requests follow, and they run in opposite directions. The first asks for something to be given — from Your favour — and the second for something to be kept away, the accursed devil. Each request restarts with its own address, so He is named at the head of both.",
+    "timing": "The chapter places these words at the moment of leaving the mosque.",
+    "reflection": "The favour asked for is left unspecified while the danger is named exactly. One request stays open and the other is precise about what it wants guarded against.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-leaving-the-restroom-hisn-7-11": {
+    "meaning": "Four words carry the whole of it, and the address is supplied in brackets by the translation rather than standing in the sentence itself. Forgiveness is asked for with no object attached — nothing is named as the thing to be forgiven, no reason is offered, and no description of Him precedes the request. The supplication asks once and then stops.",
+    "timing": "The chapter places these words on leaving the restroom.",
+    "reflection": "It is the shortest form a request can take: a verb, a pronoun, and the thing sought. Nothing surrounds it on either side, and nothing follows it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-someone-who-offers-you-a-share-of-his-wealth-hisn-90-201": {
+    "meaning": "One sentence, naming three things to be blessed: the person addressed, that person's family, and their wealth. The order widens outward from the individual. Allah is spoken about rather than addressed, so the words are directed at the giver rather than upward. Nothing is asked for the speaker, and the wealth just shared is folded into what is blessed.",
+    "timing": "Nasa'i records these words, said to someone who offers a share of his wealth.",
+    "reflection": "The wealth that prompted the supplication is the last of the three things named. What comes before it — the person, then the family — is not what was offered.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-someone-who-tells-you-i-love-you-for-the-sake-hisn-89-200": {
+    "meaning": "The sentence turns the statement it answers back onto the one who made it. Someone has said they love for the sake of Allah; the reply asks that the One for whose sake that love was given should Himself love them. Allah is not addressed but described, and described only by His relation to the love just declared. The whole reply is a single clause, and it requests nothing for the speaker.",
+    "timing": "Abu Dawud records this from Anas ibn Malik, said in reply to that declaration.",
+    "reflection": "The reply does not return the declaration in kind. It asks for something larger than what was offered and directs it away from the speaker entirely.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-the-groom-hisn-79-190": {
+    "meaning": "Blessing is asked for twice, and the two are not the same request. The first is blessing in something — the translation supplies your spouse in brackets — and the second is blessing upon the person addressed. A third request then takes in both parties at once, asking that they be united in goodness. The wording moves from one, to the other, to the pair.",
+    "timing": "Recorded by ad-Darimi, and placed by the chapter as words said to a groom.",
+    "reflection": "Only the final clause treats the two as a unit. What precedes it blesses each of them separately, and the goodness named is what joins the requests together.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-when-it-rains-hisn-64-172": {
+    "meaning": "One request, and it does not ask for rain. The rain has already come; what is asked is that it be of a particular kind. The single qualifier, beneficial, carries the whole supplication, and nothing else is named — no crops, no land, no people. Allah is addressed once at the opening, and the sentence ends immediately after the request.",
+    "timing": "The chapter places these words at the falling of rain.",
+    "reflection": "What it asks for is a distinction rather than a thing. Rain that has already arrived can still do harm, and the request separates the two possibilities.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-when-it-thunder-hisn-62-168": {
+    "meaning": "Allah is not addressed here but described, and the description is built out of what other things are doing. His perfection is declared, and then two witnesses to it are named: the thunder, which declares that perfection along with His praise, and the angels, who do the same out of fear of Him. The one saying the words is not part of the sentence, and no request appears in it.",
+    "timing": "The chapter places these words at the moment thunder is heard.",
+    "reflection": "Thunder and angels are set side by side as though doing the same thing. Only the angels are given a motive, and the motive given for them is fear.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-when-tragedy-strikes-hisn-53-154": {
+    "meaning": "Two facts are stated before anything is asked, and both concern belonging: that we belong to Allah, and that to Him we return. Only afterwards do the requests come, and there are two. The first asks for reward in the affliction itself, treating what has happened as something that earns. The second asks for replacement, and the replacement is qualified — not merely something else, but something better.",
+    "timing": "The chapter places these words at the moment tragedy strikes.",
+    "reflection": "Nothing here asks for the affliction to be undone. One request finds worth in it as it stands, and the other looks past it to whatever comes next.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-for-when-you-find-something-becoming-difficult-fo-hisn-43-139": {
+    "meaning": "Both halves say the same thing from opposite ends. The first is a denial: there is no ease anywhere except in what You make easy. The second is an assertion: You make the difficult easy. A condition then closes it — if You wish — which leaves the second statement dependent rather than settled. No request is actually made; the supplication states what is possible and where it comes from.",
+    "timing": "The chapter places these words when something becomes difficult.",
+    "reflection": "It is said in difficulty and never asks for the difficulty to lift. The closing condition keeps a statement about what He can do from becoming a claim about what He will.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-to-be-recited-after-burying-the-dead-hisn-59-164": {
+    "meaning": "Two requests, each with its own address, and both concerning the person just buried. The first asks for forgiveness and the second for strength. Neither is qualified or explained, no reason is offered for either, and the one speaking does not appear in the wording at all. The supplication is made entirely on behalf of someone who can no longer make it.",
+    "timing": "The chapter places these words after the dead has been buried.",
+    "reflection": "Forgiveness concerns what is past and strength concerns what follows. The two face in opposite directions, and the wording sets them side by side without joining them.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-to-be-recited-before-intercourse-hisn-81-192": {
+    "meaning": "It opens on the name of Allah, then makes the same request twice with the object changed. The devil is to be kept away from us, and then kept away from what you have blessed us with. The second phrasing does not name what that is; it identifies it only as something already given. The verb does not vary between the two, and nothing further is asked for.",
+    "timing": "Ibn 'Abbas reported these words, placed by the chapter before intercourse.",
+    "reflection": "The repetition extends one protection from the people to whatever comes of them. What the second clause guards is described only as a blessing and never specified.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-to-be-recited-when-placing-the-dead-in-his-grave-hisn-58-163": {
+    "meaning": "Two phrases joined by and, and neither is a request. The first invokes the name of Allah. The second names the pattern the act is being performed on — the sunnah of the Messenger of Allah ﷺ. Nothing is asked for the dead, nothing for those burying, and no description of either is given. The words state under what authority the burial proceeds.",
+    "timing": "Abu Dawud records this from Abdullah ibn Umar, said while placing the dead in the grave.",
+    "reflection": "It is spoken at a graveside and contains no petition at all. Both halves point toward a source rather than toward a need.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-when-getting-dressed-hisn-2-5": {
+    "meaning": "Praise opens it, and everything afterwards is a clause describing what the praise is for. Two actions are named: that He clothed the speaker with this garment, and that He provided it. The closing phrase then removes the speaker from both — without any power or strength from me. No request follows at any point, and the wording ends on that denial rather than on the praise.",
+    "timing": "The chapter places these words at the moment of getting dressed.",
+    "reflection": "The garment is present and particular — this garment, not clothing in general. The final clause takes the credit for it away from the one now wearing it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 5,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocation-when-putting-on-new-clothes-hisn-3-6": {
+    "meaning": "Praise comes first, then a statement of fact: You have clothed me with this. The requests that follow are built as an exact mirror. Goodness is asked for twice — the goodness of the garment itself, and the goodness of what it was made for — and refuge is then sought from evil in those same two forms. Nothing is added on either side, so request and refuge cover identical ground in opposite directions.",
+    "timing": "The chapter places these words when new clothes are first put on.",
+    "reflection": "The garment is treated as having a purpose separate from itself. Both halves distinguish what the thing is from what it was made for, and ask about each in turn.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-after-eating-hisn-70-180": {
+    "meaning": "The praise names two separate acts rather than one. He fed the speaker this, and He provided for the speaker — the first tied to the meal just eaten, the second broader than it. The closing phrase then withdraws the speaker from both, saying they happened without any power or strength from me. Nothing is asked for anywhere in the sentence.",
+    "timing": "The chapter places these words once eating is finished.",
+    "reflection": "The word this points at something particular while provided does not. One clause is fixed to the meal in front of the speaker and the other reaches well past it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-for-breaking-the-fast-hisn-68-176": {
+    "meaning": "Three statements in a row, and none of them is a request. The first two report physical facts about the body: the thirst has gone, the veins are moistened. The third moves to something that cannot be observed — the reward is confirmed — and qualifies it immediately with Insha Allah. That qualifier attaches only to the third clause, leaving the two bodily statements unconditioned.",
+    "timing": "The chapter places these words at the breaking of the fast.",
+    "reflection": "Certainty drops as the sentence proceeds. What the body can verify is stated plainly, and what it cannot is stated with a condition attached to it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-for-breaking-the-fast-hisn-68-177": {
+    "meaning": "The request rests on a stated basis, and the basis is named before the request itself: Your mercy which envelopes all things. Only afterwards does the thing being asked arrive — that You forgive me. The mercy is described by its reach rather than its degree, covering all things, and what is finally requested is a single item falling well inside that reach.",
+    "timing": "Ibn Majah records this from 'Abdullah bin 'Amr, said at the breaking of the fast.",
+    "reflection": "The description given to the mercy is far larger than what is then asked of it. One person's forgiveness is requested on grounds said to envelop everything.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-for-visiting-the-sick-hisn-49-147": {
+    "meaning": "It opens by dismissing rather than requesting: never mind. What follows reinterprets the illness instead of asking for its removal — may it be a purification. The translation supplies the sickness in brackets, since the sentence itself says only it. A condition then closes the wording, if Allah wills, so even that reinterpretation is left dependent rather than asserted.",
+    "timing": "Ibn 'Abbas reported these words, said when visiting someone who is sick.",
+    "reflection": "Nothing here asks for recovery. The supplication addresses the sick person rather than Allah, and offers a way of reading the illness rather than an end to it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-for-when-the-wind-blows-hisn-61-166": {
+    "meaning": "Two clauses, and they are exact opposites. Good is asked for and evil is fled from, and both concern the same subject: this wind, present and particular rather than wind in general. He is addressed once at the start and is both the one asked and the one taken refuge in. Nothing further is said about what that good or evil might consist of.",
+    "timing": "The chapter places these words when the wind blows.",
+    "reflection": "The wind is treated as capable of either, and the supplication does not decide which it is. Both possibilities are named and neither is described any further.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-for-when-you-meet-an-adversary-or-a-powerful-rul-hisn-36-126": {
+    "meaning": "Two clauses, both plural, and both position Him between the speakers and the adversary. The first is spatial: we place You before them. The second is the more familiar form, taking refuge in Him from their evil. He is not asked to act in either clause — He is asked to be somewhere, and to be the place fled to. No specific harm is ever named.",
+    "timing": "Abu Musa Al-Ash'ari reported these words, said on meeting an adversary or a powerful ruler.",
+    "reflection": "Neither clause requests a defeat or any outcome. Both describe a position rather than an event, and the adversary is referred to only as them.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-for-when-you-meet-an-adversary-or-a-powerful-rul-hisn-36-128": {
+    "meaning": "It makes no request at all. The first clause states a sufficiency — Allah is sufficient for us — and the second praises Him in the role that sufficiency implies, as a trustee. The translation supplies He is in brackets, since the Arabic states it without a verb. Nothing is named as the thing He is sufficient against, and no adversary appears in the wording.",
+    "timing": "Ibn 'Abbas reported these words for the meeting with an adversary or a powerful ruler.",
+    "reflection": "It is said at a confrontation and never mentions the other party. What it asserts is a relationship, and the confrontation stays entirely outside the sentence.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "invocations-of-the-terminal-ill-hisn-51-150": {
+    "meaning": "Three requests in sequence, moving outward in scope. The first two concern the speaker directly — forgive me, have mercy upon me — and are made without qualification or reason attached. The third asks for something that is not about the self alone but about placement among others: unite me with the highest companions. It is the only request naming anyone besides Allah and the speaker.",
+    "timing": "'Aishah reported these words, gathered by the chapter as the supplication of the terminally ill.",
+    "reflection": "The first two requests could be made at any time. Only the third belongs specifically to the end, and it asks about company rather than about recovery.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "some-invocations-for-rain-hisn-63-169": {
+    "meaning": "Rain is asked for, and almost every word after the request narrows what kind. Three adjectives come first — helpful, wholesome, healthy. Then a contrast sharpens it further: beneficial not harmful. Finally the timing is pinned in that same contrastive form, now, not later. Twice the wording states what is wanted and then states what is not, rather than leaving the opposite unmentioned.",
+    "timing": "Abu Dawud records this from Jabir ibn Abdullah, said when rain is sought.",
+    "reflection": "The request itself is one word long and everything else qualifies it. Rain alone is not what is asked for; a particular kind, arriving at a particular time, is.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "some-invocations-for-rain-hisn-63-170": {
+    "meaning": "The same three words, repeated three times, with the address restated before each. Nothing is added between the repetitions and nothing is named as the thing to be relieved from. The whole supplication consists of one request and its repetition, and it is plural throughout — relieve us, never relieve me.",
+    "timing": "Bukhari records this from Sharik, among the supplications for rain.",
+    "reflection": "The chapter places it with requests for rain, yet rain is never mentioned. What is asked for is relief, and what the relief is from is left entirely unstated.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "supplication-after-it-rains-hisn-65-173": {
+    "meaning": "A single statement, and it is not addressed to Allah but spoken about Him. Rain has been received, and the sentence assigns the cause: the bounty and mercy of Allah. Two attributes are named rather than one. Nothing is requested, and the construction is passive — we have been given — so no agent appears until the final phrase arrives.",
+    "timing": "The chapter places these words after rain has fallen.",
+    "reflection": "It is said once the rain has already come, and its only work is to name where it came from. That naming is placed at the very end of the sentence.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "the-travelers-invocation-at-dawn-hisn-103-215": {
+    "meaning": "Three movements, and the voice changes in each. The first calls for a witness to the praise being offered, and speaks about Allah rather than to Him. The second turns to direct address — Our Lord — and makes three requests in a row: protect us, show favour on us, deliver us from every evil. The third drops back to the third person and narrows to one speaker taking refuge from the fire.",
+    "timing": "Muslim records this from Abu Huraira, said by a traveller at dawn.",
+    "reflection": "It opens and closes speaking about Him and addresses Him only in the middle. The final clause is also the only one that says I rather than we.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-a-muslim-should-say-when-he-is-praised-hisn-114-232": {
+    "meaning": "All three requests concern the gap between what people say and what is true. The first asks not to be held to account for what they say — the praise itself. The second asks forgiveness for what they have no knowledge of, meaning whatever the praise did not see. The third, supplied in brackets by the text, asks to be made better than they imagine. Each clause treats the praise as incomplete rather than deserved.",
+    "timing": "The chapter places these words in the moment a Muslim is praised.",
+    "reflection": "The praise is never accepted or refused. Every clause measures it against something the praisers do not know, and asks about that instead.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-if-you-fear-people-may-harm-you-hisn-39-132": {
+    "meaning": "One request, and the means of carrying it out is deliberately left open. Protection is asked for from them — the feared people are never described — and the manner is handed over entirely: with what You choose. The speaker names neither the danger nor the remedy, and the sentence ends as soon as that choice has been surrendered.",
+    "timing": "Suhaib reported these words, said when harm from people is feared.",
+    "reflection": "Both unknowns are left unfilled. Who they are is not stated and how the protection should come is not stated, and the second is given away deliberately.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-if-you-see-someone-afflicted-by-misfortune-hisn-83-194": {
+    "meaning": "Praise is offered and two reasons are attached to it, both comparative. The first names the affliction directly as a test, and states that the speaker was saved from it. The second widens past the person being looked at to much of His creation, and says the speaker was favoured over them. The one afflicted is addressed as you, so the comparison is spoken in their presence.",
+    "timing": "Ibn Majah records this from Ibn 'Umar, said on seeing someone afflicted by misfortune.",
+    "reflection": "Nothing is asked for the afflicted person. Both clauses concern the speaker's own position, and the affliction is named only as the thing that was avoided.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-when-entering-the-home-hisn-11-18": {
+    "meaning": "The same phrase opens two clauses describing opposite movements — in the name of Allah we enter, and in the name of Allah we leave. Entering and leaving are given identical wording, so neither is treated as the more significant. A third clause then leaves motion behind altogether and states where trust is placed. It is plural throughout and contains no request.",
+    "timing": "Abu Dawud records this from AbuMalik Al-Ash'ari, said on entering the home.",
+    "reflection": "The chapter assigns it to entering, yet the wording covers leaving in the same breath. Both directions are named before the sentence settles on trust.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-when-leaving-the-home-hisn-10-16": {
+    "meaning": "Allah is named three times across two short sentences, and each naming does different work. The first invokes the name, the second places trust in Him, and the third denies that might or power exists anywhere apart from Him. No request appears at any point. The movement runs from invoking, to relying, to a denial that leaves nothing else to rely on.",
+    "timing": "The chapter places these words at the moment of leaving the home.",
+    "reflection": "The final clause supplies the reason the second is possible. Trust is placed first, and only afterwards is it explained why nothing else could have held it.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-when-slaughtering-or-sacrificing-an-animal-hisn-127-246": {
+    "meaning": "It opens with two declarations, the name of Allah and His greatness, before addressing Him directly. What follows is a statement of ownership made in both directions: it is from You and belongs to You. Only once that ownership is established does a request appear, and it is a single one — accept this from me. He is addressed twice, once before the statement and once before the request.",
+    "timing": "The chapter places these words at the slaughter or sacrifice of an animal.",
+    "reflection": "What is offered is said to come from Him and to belong to Him before anything is asked. The only request made is that it be received.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 6,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-when-you-are-fasting-and-someone-is-rude-to-you-hisn-75-186": {
+    "meaning": "The words are not addressed to Allah at all. They are spoken to the person who has been rude, and they state a fact rather than making a request or returning an insult. The statement is then repeated once, and the repetition adds no new information — the same three words twice over. Nothing is asked for, nothing is denied, and the other person’s conduct is never described or answered directly.",
+    "timing": "Recorded in the Muwatta of Malik, said while fasting when someone is rude.",
+    "reflection": "It answers rudeness by naming the speaker’s own state rather than the other’s behaviour. Repetition is the only emphasis available, since no further words are ever added.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 7,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  },
+  "what-to-say-when-you-feel-frightened-hisn-126-245": {
+    "meaning": "It is a declaration rather than a request, and nothing in it refers to fear or to whatever is feared. The sentence is built as an exclusion: it denies the right of worship to everything, then admits a single exception. No protection is asked for, no danger is named, and the one saying it does not appear anywhere in the wording.",
+    "timing": "Abu Sa’id Al-Khudri reported these words, said at the moment fear is felt.",
+    "reflection": "The chapter assigns it to fright, yet the words never mention it. What stands in place of a request is a statement about who alone is owed worship.",
+    "contentBasis": "translation-and-verified-context",
+    "reviewStatus": "reviewed",
+    "batch": 7,
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "purpose": "Genuine romanisation variants of a dua's established popular name, for ADDENDUM §13. Read by scripts/build-dua-pages.mjs and rendered as ONE factual sentence in the lede plus schema.org alternateName.",
+    "rules": {
+      "populateManually": "Entries must be typed by hand from verified reference works. Never AI-generate a name, and never derive one from the chapter label.",
+      "sameDuaOnly": "alternateNames must be romanisation variants of the SAME dua (Ayat al-Kursi / Ayatul Kursi / Ayat ul Kursi). Never an unrelated keyword, English descriptor or invented title.",
+      "mostHaveNone": "Most of the 506 entries have no established popular name. An absent key is the correct and expected state, not a gap to fill.",
+      "verifiedFlag": "The builder ignores any entry whose `verified` is not true, so a draft can sit here safely without reaching a page.",
+      "uniqueness": "No alternate name may duplicate another dua's primaryName, and no alternate name may appear under more than one frozen slug."
+    },
+    "shape": {
+      "{frozen-slug}": {
+        "primaryName": "string",
+        "alternateNames": ["string"],
+        "arabicName": "string",
+        "openingWords": "string",
+        "verified": false
+      }
+    },
+    "status": "EMPTY BY DESIGN as of 2026-07-31. Ayat al-Kursi is the obvious first candidate (frozen slug what-to-say-before-sleeping-hisn-28-100, also words-of-remembrance-for-morning-and-evening-hisn-27-75), but naming it requires the owner to confirm which frozen slug is the primary page for that text — both currently exist. Held pending that decision."
+  }
+}

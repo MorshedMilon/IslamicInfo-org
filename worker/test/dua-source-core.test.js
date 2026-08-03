@@ -127,12 +127,22 @@ test('genuine romanised Arabic is kept', () => {
   assert.equal(core.usableTransliteration({ transliteration: t }), t);
 });
 
-test('exactly the 20 known prose transliterations are filtered out of the corpus', () => {
+/* Numbers updated 2026-08-02. Commit 2a7b68b nulled the contaminated transliterations in
+   the corpus itself, which moved all three counts and was never reflected here — the test
+   had been asserting the pre-nulling shape (219 / 20 / 199) ever since.
+
+   `prose` is now 0, and that is the substantive change: the runtime filter has nothing
+   left to catch because the defect was removed at the data layer instead. The assertion is
+   kept rather than deleted — it is now a regression guard proving no prose transliteration
+   has been reintroduced. If it ever goes non-zero again, an ingest has regressed.
+   The 182 does NOT include the 10 Qur'anic records added by ingest-dua-quran-gaps.mjs;
+   those carry transliteration: null pending the Gate 2 reviewer. */
+test('no prose transliteration survives in the corpus', () => {
   const withT = browse.filter((d) => d.transliteration);
   const prose = withT.filter((d) => core.transliterationIsProse(d));
-  assert.equal(withT.length, 219);
-  assert.equal(prose.length, 20);
-  assert.equal(browse.filter((d) => core.usableTransliteration(d)).length, 199);
+  assert.equal(withT.length, 182);
+  assert.equal(prose.length, 0, 'a prose transliteration has been reintroduced');
+  assert.equal(browse.filter((d) => core.usableTransliteration(d)).length, 182);
 });
 
 test('a missing transliteration is null, never a placeholder string', () => {

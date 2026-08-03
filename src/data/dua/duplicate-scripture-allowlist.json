@@ -1,0 +1,74 @@
+{
+  "_meta": {
+    "purpose": "Governs validator rule R6. Two indexed pages may render the same Arabic only when the cluster appears in `allowed` below with a stated reason and a named adjudicator. Anything else fails the build.",
+    "governs": "docs/seo/VALIDATOR-RULES-SESSION-1.md R6",
+    "created": "2026-08-02",
+    "createdBy": "Session 1.0, at owner instruction",
+    "status": "PROPOSED — not yet enforced; scripts/validate-seo.mjs does not exist",
+    "normalisationIsPartOfTheRule": "R6 compares NORMALISED Arabic, never raw. The seed pair is NOT byte-identical and NOT equal under the corpus's ordinary diacritic strip — it differs only in Uthmani orthography. A rule written on `identical arabic` is a no-op against the exact pair it was created for. See R6 §Normalisation.",
+    "clusteringIsCorpusWide": "Clusters are computed across the whole corpus, not across the sitemap, so a pair is registered before either member is ever approved for indexing. R6 then fails only when 2+ members of a cluster are simultaneously indexed.",
+    "adjudicationIsNotClaudeCode's": "Deciding whether two occasions genuinely share a text is a sourcing question about what each narration attests. Entries move from `pendingAdjudication` to `allowed` on a reviewer or owner ruling, never on a code change."
+  },
+
+  "allowed": [
+    {
+      "cluster": ["117:235", "quran:2:201"],
+      "text": "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar",
+      "scripture": "Qur'an 2:201",
+      "reason": "Two different intents, no canonical page. `117:235` is the supplication narrated for the specific station between the Yemenite Corner and the Black Stone during tawaf (occasion: hajj-umrah). `quran:2:201` is the ayah itself, indexed as general Qur'anic supplication (occasion: protection). Neither is a duplicate of the other in search intent, and neither is the canonical version of the other — collapsing them would lose a real query for one of the two.",
+      "adjudicatedBy": "owner, 2026-08-02",
+      "notes": "Not a live collision today: `quran:2:201` has a null transliteration and is `wave_assignment: 1b`, and R3 blocks every `quran:` record from the sitemap until a reviewer-verified clause field exists. `117:235` sits in Wave 1a but no dua detail page is in the sitemap yet (`page-copy.json` `_meta.batches[].approved` is false on both batches). This entry is a forward guard, registered before the collision can occur rather than after."
+    }
+  ],
+
+  "pendingAdjudication": [
+    {
+      "_note": "These 8 clusters were found by the same corpus-wide scan that produced the seed pair. Every one has 2+ SLUGGED members, so each becomes a live R6 failure the moment two of its members are approved for indexing. They are recorded here so the rule's cost is visible in advance — NOT allowed. R6 fails on them until each is adjudicated and moved to `allowed` with a reason, or one member is deindexed. None of them blocks Wave 1a.",
+      "_seeAlso": "DUA-CONTENT-INTEGRITY-v1_0.md §4 A9 #11 — 'Never auto-merge on similarity… Each cluster still needs individual adjudication.' These are that adjudication queue, cited by member id per the same section's convention."
+    },
+    {
+      "cluster": ["9:15", "85:196"],
+      "text": "Subhanaka-llahumma wa bihamdika, ashhadu an la ilaha illa anta, astaghfiruka wa atubu ilayk",
+      "occasions": ["prayer (upon completing ablution)", "forgiveness (expiation of an assembly)"],
+      "likelyDisposition": "allow — plausibly a deliberate cross-listing; the same words are narrated for both occasions",
+      "blocker": "Both records carry the BYTE-IDENTICAL hadithCitation 'Riyad as-Salihin 152 (Abu Hurairah (May Allah be pleased with him) reported:)'. At most one occasion is what that reference attests, so the pair cannot be allowlisted until a reviewer says which. This is also why `85:196` was dropped from Wave 1a — see doc/DUA-WAVE-1A-GATE-EVIDENCE.md §5.1.",
+      "alreadyKnown": "DUA-CONTENT-INTEGRITY-v1_0.md §4 A9 #11 identifies this pair as a full duplicate differing only in punctuation."
+    },
+    {
+      "cluster": ["27:85", "28:109"],
+      "occasions": ["morning-evening", "sleep-waking"],
+      "likelyDisposition": "allow — the Hisn compilation lists this supplication under both morning/evening remembrance and before sleeping"
+    },
+    {
+      "cluster": ["8:12", "5:9", "99:210"],
+      "text": "Bismillah",
+      "occasions": ["prayer (before ablution)", "home-clothing (when undressing)", "travel (when a mount begins to fail)"],
+      "likelyDisposition": "REVIEW CAREFULLY — three-member cluster, and the shared text is the single word 'Bismillah'. This is an incidental collision on a very short text rather than a cross-listing of one supplication, which DUA-CONTENT-INTEGRITY-v1_0 §4 names as a distinct cause. Three near-identical pages whose entire dua is one word is a thin-content and cannibalisation risk independent of R6, and may be better served by one page than three."
+    },
+    {
+      "cluster": ["17:34", "19:42"],
+      "occasions": ["prayer (ruku')", "prayer (sujood)"],
+      "likelyDisposition": "allow — the same tasbih is narrated for both bowing and prostration; same occasion facet, different position in the prayer"
+    },
+    {
+      "cluster": ["17:35", "19:43"],
+      "occasions": ["prayer (ruku')", "prayer (sujood)"],
+      "likelyDisposition": "allow — same basis as 17:34/19:42"
+    },
+    {
+      "cluster": ["17:37", "19:45"],
+      "occasions": ["prayer (ruku')", "prayer (sujood)"],
+      "likelyDisposition": "allow — same basis as 17:34/19:42"
+    },
+    {
+      "cluster": ["19:47", "32:117"],
+      "occasions": ["prayer (sujood)", "prayer (qunut in witr)"],
+      "likelyDisposition": "allow — narrated for both positions"
+    },
+    {
+      "cluster": ["34:121", "41:137"],
+      "occasions": ["distress (worry and grief)", "distress (settling a debt)"],
+      "likelyDisposition": "REVIEW — both members sit in the SAME occasion bucket (`distress`), so unlike every other cluster here these two compete for the same queries directly. Cross-listing is defensible; two indexed pages in one bucket rendering identical Arabic is the cannibalisation case R6 exists to catch."
+    }
+  ]
+}

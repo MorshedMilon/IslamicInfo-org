@@ -115,6 +115,32 @@ const hubBlock =
   '<nav class="cat-grid reveal" aria-label="Browse duas by occasion">\n            ' +
   occHubs + '\n          </nav>';
 
+
+/* ── (d) LIVE COUNTS — never hardcode the corpus size ───────────────────────
+   dua.html shipped "536 supplications" in its meta description, og/twitter
+   titles and descriptions, the stats strip, the categories sub-heading and the
+   CTA badge. The real figure is the browsable library count, which moves every
+   time the exclusion set changes — it was 536, is now {N}, and hardcoding it
+   guarantees it goes stale again. Every occurrence is rewritten from the data
+   at build time.
+
+   browseCount counts what a reader can actually browse: library.json rows minus
+   variants, which are folded into their primary's page rather than listed. */
+const browseCount = browse.length;
+const occasionCount = facets.occasions.filter(o => o.slug).length;
+
+function retargetCounts(html) {
+  let n = 0;
+  const sub = (re, make) => { html = html.replace(re, (...a) => { n++; return make(...a); }); };
+  // Match ANY number in these phrases rather than the literal 536, so the rewrite
+  // is idempotent and keeps working the next time the count moves.
+  sub(/\b\d+(\s+(?:supplications|Supplications|duas|Duas))/g, (m, tail) => browseCount + tail);
+  sub(/\b\d+(\s+Source-Cited)/g, (m, tail) => browseCount + tail);
+  sub(/(id="statDuaCount">)\d+(<)/g, (m, a, b) => a + browseCount + b);
+  sub(/(id="statOccasionCount">)\d+(<)/g, (m, a, b) => a + occasionCount + b);
+  return { html, n };
+}
+
 let h = fs.readFileSync("dua.html", "utf8");
 const FS = '<!--DUA_FACETS_START-->', FE = '<!--DUA_FACETS_END-->';
 const CS = '<!--DUA_CARDS_START-->', CE = '<!--DUA_CARDS_END-->';
@@ -143,9 +169,11 @@ else {
   if (!m) { console.error("!! #duaGrid not found"); process.exit(1); }
   h = h.replace(m[0], m[1] + "\n" + block + "\n              " + m[3]);
 }
+const rc = retargetCounts(h); h = rc.html;
 fs.writeFileSync("dua.html", h);
 console.log("facets: total", facets.total, "| occasions", facets.occasions.length,
             "| sources", facets.sources.length, "| categories", facets.categories.length);
 console.log(CARDS_HOLD ? "pre-rendered cards: 0 (CARD HOLD active)" : "pre-rendered cards: " + Math.min(PAGE, browse.length));
-console.log("occasion hub links:", facets.occasions.filter(o => o.slug).length);
+console.log("occasion hub links:", occasionCount);
+console.log("live counts rewritten:", rc.n, "-> browse=" + browseCount + ", occasions=" + occasionCount);
 console.log("dua.html size:", (fs.statSync("dua.html").size / 1024).toFixed(0) + "KB");

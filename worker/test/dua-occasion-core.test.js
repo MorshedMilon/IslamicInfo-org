@@ -60,14 +60,28 @@ test('a more specific chapter rule beats a broader one that also matches', () =>
 });
 
 test('a book chapter names no occasion, so the text decides', () => {
+  // A label that is ONLY a book reference still defers to the text.
+  assert.equal(core.assign({ category: "Chapters on Supplication (Kitab al-Da'awat)", translation: 'O Allah, forgive me my sins and have mercy on me.' }).via, 'text');
+  assert.equal(core.assign({ category: "The Book on Al-Witr (Kitab al-Witr)", translation: 'O Allah, forgive me my sins.' }).via, 'text');
+  assert.equal(core.assign({ category: "Supplication (Kitab al-Du'a)", translation: 'O Allah, I seek refuge in You from Your punishment.' }).slug, 'protection');
+});
+
+/* Previously this case asserted via:'text' → 'protection', using this very chapter as the
+   example. That was the bug, not the contract: "Supplications in the Witr Prayer" names an
+   occasion, and the trailing "(Kitab al-Witr)" is a citation appended to it. Reading the raw
+   string put all 21 of the chapter's entries in Protection on the strength of the Qunut
+   wording, which is why "dua qunut" had no candidate sitting in Prayer. The rule is now
+   positional: strip the trailing citation, then ask whether what remains names an occasion. */
+test('a citation appended to an occasion label does not hide the occasion', () => {
   const r = core.assign({
     category: "Supplications in the Witr Prayer (Kitab al-Witr)",
     translation: 'O Allah, I seek refuge in You from Your punishment.'
   });
-  assert.equal(r.via, 'text', 'a "Kitab al-" label must not be read as an occasion');
-  assert.equal(r.slug, 'protection');
+  assert.equal(r.via, 'chapter', 'the label names the Witr prayer before the citation');
+  assert.equal(r.slug, 'prayer');
 
-  assert.equal(core.assign({ category: "Chapters on Supplication (Kitab al-Da'awat)", translation: 'O Allah, forgive me my sins and have mercy on me.' }).via, 'text');
+  // The remainder must still be tested — a bare book name is not rescued by stripping.
+  assert.equal(core.assign({ category: "Invocations (Kitab al-Da'awat)", translation: 'O Allah, forgive me.' }).via, 'text');
 });
 
 test('nothing lands in food-drink unless it is actually about food or drink', () => {

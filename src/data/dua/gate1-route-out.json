@@ -1,0 +1,241 @@
+{
+  "_meta": {
+    "spec": "doc/DUA-CONTENT-INTEGRITY-v1_0.md",
+    "adr": "ADR-054 (doc/DECISIONS.md)",
+    "purpose": "Gate 1 route-out register. Entries here are NOT supplications a Muslim recites. Records are never deleted; the framing was wrong, not the data.",
+    "statuses": {
+      "removed": "Permanently out of /duas/. No page is generated, no sitemap entry, no internal link. The slug stays frozen in slugs.lock.json so it is never reissued.",
+      "noindex-hold": "Page is still generated but forced noindex,follow regardless of batch approval or page-copy.json. Provisional, pending §1.5 second-signal confirmation (§7 item 6). Not a final ruling."
+    },
+    "ownerDecision": "2026-07-31 — route-out mechanism approved for all Gate 1 entries. ibnmajah:3590 removed today and permanently. Condemned-speech entries noindex today; permanent route-out contingent on second-signal confirmation.",
+    "note": "The 19 NARRATIVE entries are deliberately ABSENT from this file. They are tafsir-level adjudication routed to qualified scholarly review (§1.3) and no action is taken on them here.",
+    "generated": "Authored 2026-07-31 from doc/TRACK-B-TOPICS.md Phase 1 flags; checked in as a governance artifact, not a build product."
+  },
+  "entries": {
+    "quran:2:200": {
+      "ref": "Qur'an 2:200",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "Already flagged `contextual` in the corpus: the Qur'an quotes this as the request of those who ask only for this world. 2:201 is the praised form.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-2-200"
+    },
+    "quran:6:128": {
+      "ref": "Qur'an 6:128",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "Speech of jinn and men on the Day of Judgement.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-6-128"
+    },
+    "quran:7:38": {
+      "ref": "Qur'an 7:38",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned in the Fire asking for their misleaders to be doubly punished.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-7-38"
+    },
+    "quran:14:44": {
+      "ref": "Qur'an 14:44",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The wrongdoers on the Day of Judgement asking to be sent back.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-14-44"
+    },
+    "quran:15:36": {
+      "ref": "Qur'an 15:36",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "Speech of Iblis, asking to be reprieved until the Day of Resurrection.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-15-36"
+    },
+    "quran:15:39": {
+      "ref": "Qur'an 15:39",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "Speech of Iblis, vowing to make disobedience attractive to mankind.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-15-39"
+    },
+    "quran:16:86": {
+      "ref": "Qur'an 16:86",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The polytheists pointing to their idols on the Day of Judgement.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-16-86"
+    },
+    "quran:20:125": {
+      "ref": "Qur'an 20:125",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The one raised blind on the Day of Judgement, asking why.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-20-125"
+    },
+    "quran:20:134": {
+      "ref": "Qur'an 20:134",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned asking why no messenger was sent to them.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-20-134"
+    },
+    "quran:23:106": {
+      "ref": "Qur'an 23:106",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned admitting their wretchedness in the Fire.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-23-106"
+    },
+    "quran:23:107": {
+      "ref": "Qur'an 23:107",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned asking to be removed from the Fire.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-23-107"
+    },
+    "quran:28:47": {
+      "ref": "Qur'an 28:47",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned asking why no messenger was sent.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-28-47"
+    },
+    "quran:28:63": {
+      "ref": "Qur'an 28:63",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "Those who misled others disowning them on the Day of Judgement.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-28-63"
+    },
+    "quran:32:12": {
+      "ref": "Qur'an 32:12",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The criminals asking to be returned to the world.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-32-12"
+    },
+    "quran:33:67": {
+      "ref": "Qur'an 33:67",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned blaming their leaders.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-33-67"
+    },
+    "quran:33:68": {
+      "ref": "Qur'an 33:68",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned asking that their leaders be doubly punished.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-33-68"
+    },
+    "quran:34:19": {
+      "ref": "Qur'an 34:19",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "Already flagged `contextual`: the people of Saba asking for hardship in their travels, and punished for it.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-34-19"
+    },
+    "quran:35:37": {
+      "ref": "Qur'an 35:37",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned asking to be removed so they may do righteousness.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-35-37"
+    },
+    "quran:38:16": {
+      "ref": "Qur'an 38:16",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The mockers asking for their share of punishment to be hastened.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-38-16"
+    },
+    "quran:38:61": {
+      "ref": "Qur'an 38:61",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned asking for double punishment on whoever brought it upon them.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-38-61"
+    },
+    "quran:40:11": {
+      "ref": "Qur'an 40:11",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned confessing their sins and asking for a way out.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-40-11"
+    },
+    "quran:41:29": {
+      "ref": "Qur'an 41:29",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The damned asking to see those who misled them.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-41-29"
+    },
+    "quran:50:27": {
+      "ref": "Qur'an 50:27",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "Satan's companion disowning him on the Day of Judgement.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-50-27"
+    },
+    "quran:63:10": {
+      "ref": "Qur'an 63:10",
+      "class": "condemned-speech",
+      "status": "noindex-hold",
+      "reason": "The one who neglected charity, asking at death to be delayed.",
+      "secondSignalConfirmed": false,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "quranic-supplications-quran-63-10"
+    },
+    "ibnmajah:3590": {
+      "ref": "Sunan Ibn Majah 3590",
+      "class": "inverted-narration",
+      "status": "removed",
+      "reason": "The hadith teaches the OPPOSITE — \"O Allah, forgive me if You will\" is quoted as the wording one must NOT use; the narration continues \"Let him be definite in his asking\". Publishing this as a dua would invert the hadith. Same class as Qur'an 2:200.",
+      "secondSignalConfirmed": true,
+      "approvedBy": "owner 2026-07-31 (ADR-054)",
+      "slug": "supplication-kitab-al-dua-ibnmajah-3590"
+    }
+  }
+}

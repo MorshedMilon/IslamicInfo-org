@@ -1,0 +1,14 @@
+{
+  "_meta": {
+    "purpose": "The manually approved high-value page list, for MASTER SPEC §10. Only slugs listed here may receive word-by-word data, a visible FAQ, or extra verified context.",
+    "rules": {
+      "notAutomatic": "A page is never added here because it looks popular. Addition requires the owner's explicit approval, recorded with a date.",
+      "noRicherClaims": "Priority status permits MORE VERIFIED DETAIL, never more assertion. Every additional statement must still be sourced.",
+      "faqGate": "A visible FAQ requires all four §4 conditions, including an existing approved FAQ component. None exists in the locked design system today, so no FAQ may be generated.",
+      "wordByWordGate": "Word-by-word Arabic requires a verified word-level dataset. None exists for this corpus, and Arabic word meanings are never AI-generated, so the section stays omitted."
+    },
+    "shape": { "slugs": ["{frozen-slug}"], "approvedOn": "YYYY-MM-DD" },
+    "status": "EMPTY BY DESIGN as of 2026-07-31. Candidates named in the spec (Ayat al-Kursi, morning/evening adhkar, sleep duas, protection, travel, Istikhara) all exist in the corpus, but none has been approved, and none of the enrichments they would unlock has a verified dataset or an approved component behind it yet."
+  },
+  "slugs": []
+}

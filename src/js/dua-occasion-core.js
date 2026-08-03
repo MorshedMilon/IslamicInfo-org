@@ -64,6 +64,16 @@
   /* A chapter label that only locates the entry inside a collection. */
   var BOOK_CHAPTER = /kitab\s*al|^the book on\b|^chapters on supplication\b/i;
 
+  /* A trailing "(Kitab al-…)" is a citation appended to a label, not the label. Testing
+     BOOK_CHAPTER against the raw string treated "Supplications in the Witr Prayer
+     (Kitab al-Witr)" as a pure book reference and skipped layer 1 — so its 21 entries
+     fell through to the text layer, where the Qunut wording ("protect me… pardon me")
+     put them in Protection rather than Prayer. Stripping the parenthetical first lets a
+     label that names an occasion BEFORE the citation be read as one, while a label that
+     is only a book name ("The Book on Al-Witr", "Invocations (Kitab al-Da'awat)") still
+     fails BOOK_CHAPTER on the remainder and still skips layer 1. */
+  var BOOK_PAREN = /\s*\((?:kitab|kitāb)[^)]*\)\s*$/i;
+
   /* ---- layer 1: the chapter names the occasion ---- */
   var CHAPTER_RULES = [
     // Hajj before prayer/fasting: the Day of Arafat is a Hajj station, and the
@@ -131,8 +141,9 @@
   function assign(entry) {
     var e = entry || {};
     var cat = String(e.category == null ? '' : e.category);
-    if (cat && !BOOK_CHAPTER.test(cat)) {
-      var c = firstMatch(CHAPTER_RULES, cat);
+    var label = cat.replace(BOOK_PAREN, '').trim();
+    if (label && !BOOK_CHAPTER.test(label)) {
+      var c = firstMatch(CHAPTER_RULES, label);
       if (c) return { slug: c[0], via: 'chapter', rule: String(c[1]) };
     }
     var text = String(e.translation == null ? '' : e.translation);
