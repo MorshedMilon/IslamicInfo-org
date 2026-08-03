@@ -889,6 +889,82 @@ page.
 
 ---
 
+## Part 9 — Transliteration adoption, batch 1 (18 records, 12 distinct texts)
+
+Added 2026-08-03. **⚠ NOT Gate-2 satisfied — machine-proposed, UNVERIFIED.**
+
+Every proposal below is machine-proposed and carries that flag until you individually **adopt,
+correct, or reject** it, exactly as row 43 (the Talbiyah) was handled. **Nothing has been written
+to the corpus and no `transliterationSource` has been set.** Only your ruling clears the ⚠.
+"Reviewer-written (adopted)" has deliberately **not** been pre-applied.
+
+### Why these 18 first
+
+12 distinct texts cover 18 records because **six of them are exact-duplicate Arabic** —
+the same six R6 clusters already adjudicated. One ruling clears both members of each pair.
+
+### House style, following row 43
+
+The adopted Talbiyah set the conventions, and these follow it rather than inventing a second
+style: long vowels **ā ī ū**; **ʿ** for ʿayn and **ʾ** for hamza; emphatics **ḥ ṣ ḍ ṭ ẓ**;
+digraphs **th dh kh sh gh**; sun letters assimilated (`wa-n-niʿmata`, not `wa-l-niʿmata`);
+the article hyphenated; elision marked (`Labbayka-llāhumma`).
+
+**This is a full correction, not an `AA`→`ʿ` swap.** A partial fix produces a worse hybrid —
+proper ʿayn beside `innee`, `oshhiduk` — that reads as corrected while still being wrong. Long
+vowels, hamza, emphatics and assimilation are all restored together.
+
+### The batch
+
+| id | Arabic | existing (flawed) | **proposed ALA-LC** | translation |
+|---|---|---|---|---|
+| `17:34`<br>`19:42` | <div dir="rtl" lang="ar">((سُبْحَانَكَ اللَّهُمَّ رَبَّنَا وَبِحَمْدِكَ، اللَّهُمَّ اغْفِرْ لِي)).</div> | (Subhanakal-lahumma rabbana wabihamdik, allahummagh-fir lee) | **Subḥānaka-llāhumma rabbanā wa-biḥamdika, allāhumma-ghfir lī** | (How perfect You are O Allah, our Lord and I praise You. O Allah, forgive me.) |
+| `17:35`<br>`19:43` | <div dir="rtl" lang="ar">((سُبُّوُحٌ، قُدُّوسٌ، رَبُّ المَلاَئِكَةِ وَالرُّوحِ)).</div> | (Subboohun quddoos, rabbul-mala-ikati warrooh.) | **Subbūḥun, Quddūsun, rabbu-l-malāʾikati wa-r-rūḥ** | (Perfect and Holy (He is), Lord of the angles and the Rooh (i.e. Jibra-eel).) |
+| `17:37`<br>`19:45` | <div dir="rtl" lang="ar">((سُبْحَانَ ذِي الْجَبَرُوتِ، وَالْمَلَكُوتِ، وَالْكِبْرِيَاءِ، وَالْعَظَمَةِ)).</div> | (Subhana thil-jabaroot, walmalakoot, walkibriya/, walAAathamah.) | **Subḥāna dhī-l-jabarūti, wa-l-malakūti, wa-l-kibriyāʾi, wa-l-ʿaẓamah** | (How perfect He is, The Possessor of total power, sovereignty, magnificence and grandeur.) |
+| `19:47`<br>`32:117` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَعُوذُ بِرِضَاكَ مِنْ سَخَطِكَ، وَبِمُعَافَاتِكَ مِنْ عُقوبَتِكَ، وَأَعُوذُ بِكَ مِنْكَ، لاَ أُحْصِي ثَنَاءً عَلَيْكَ، أَنْتَ كَمَا أَثْنَيْتَ عَلَى نَفْسِكَ)).</div> | (Allahumma innee aAAoothu biridaka min sakhatik, wa-bimuAAafatika min AAuqoobatik, wa-aAAoothu bika mink, la ohsee thana-an AAalayk, anta kama athnayta AAala nafsik.) | **Allāhumma innī aʿūdhu bi-riḍāka min sakhaṭika, wa-bi-muʿāfātika min ʿuqūbatika, wa-aʿūdhu bika minka, lā uḥṣī thanāʾan ʿalayka, anta kamā athnayta ʿalā nafsika** | (O Allah, I take refuge within Your pleasure from Your displeasure and within Your pardon from Your punishment, and I take refuge in You from You. I cannot enumerate Your praise, You are as You have praised Yourself.) |
+| `27:85`<br>`28:109` | <div dir="rtl" lang="ar">((اللَّهُمَّ عَالِمَ الغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي، وَمِنْ شَرِّ الشَّيْطانِ وَشَرَكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءاً، أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ)).</div> | allahumma 'alimal-ghaybi wash-shahadati, fatiras-samawati wal-ard, rabbakulli shayin wa malikahu. ashhadu alla ilaha illa anta, a'udhu bika min sharri nafsi, wa min sharri ash-shaytani wa shirkih. wa an aqtarifa 'ala nafsi su'an aw ajurrahu ila muslim | **Allāhumma ʿālima-l-ghaybi wa-sh-shahādati, fāṭira-s-samāwāti wa-l-arḍi, rabba kulli shayʾin wa-malīkahu, ashhadu an lā ilāha illā anta, aʿūdhu bika min sharri nafsī, wa-min sharri-sh-shayṭāni wa-sharakihi, wa-an aqtarifa ʿalā nafsī sūʾan, aw ajurrahu ilā muslim** | O Allah, Knower of the unseen and the seen, Creator of the heavens and the earth, Lord of all things and their Sovereign. I bear witness that there is no deity worthy of worship except You. I seek refuge in You from the evil of myself, Satan and his soldiers (temptations to commit shirk against Allah), and I (seek refuge in You) from committing evil against myself or dragging it to a Muslim. |
+| `34:121`<br>`41:137` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ)).</div> | (Allahumma innee aAAoothu bika minal-hammi walhuzn, walAAajzi walkasali walbukhli waljubn, wadalAAid-dayni waghalabatir-rijal.) | **Allāhumma innī aʿūdhu bika mina-l-hammi wa-l-ḥazani, wa-l-ʿajzi wa-l-kasali, wa-l-bukhli wa-l-jubni, wa-ḍalaʿi-d-dayni wa-ghalabati-r-rijāl** | (O Allah, I take refuge in You from anxiety and sorrow, weakness and laziness, miserliness and cowardice, the burden of debts and from being over powered by men.) |
+| `126:245` | <div dir="rtl" lang="ar">((لاَ إِلَهَ إِلاَّ اللَّهُ!)).</div> | (La ilaha illal-lah.) | **Lā ilāha illā-llāh** | (None has the right to be worshipped except Allah.) |
+| `27:95` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْماً نَافِعاً، وَرِزْقاً طَيِّباً، وَعَمَلاً مُتَقَبَّلاً)) (إذا أصبحَ).</div> | allahumma inni as'aluka 'ilman nafi'an, wa rizqan tayyiban, wa 'amalan mutaqabbalan | **Allāhumma innī asʾaluka ʿilman nāfiʿan, wa-rizqan ṭayyiban, wa-ʿamalan mutaqabbalan** | O Allah, I ask You for beneficial knowledge, good provision, and accepted deeds. |
+| `24:61` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ)).</div> | (Allahumma innee as-alukal-jannah, wa-aAAoothu bika minan-nar.) | **Allāhumma innī asʾaluka-l-jannata wa-aʿūdhu bika mina-n-nār** | (O Allah, I ask You to grant me Paradise and I take refuge in You from the Fire.) |
+| `61:166` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَسْــــــأَلُكَ خَيْرَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّهَا)).</div> | allahumma inni as'aluka khayraha wa a'udhu bika min sharriha | **Allāhumma innī asʾaluka khayrahā, wa-aʿūdhu bika min sharrihā** | O Allah, I ask You for the good of this wind, and I seek refuge in You from its evil. |
+| `27:93` | <div dir="rtl" lang="ar">((لاَ إِلَهَ إِلاَّ اللَّهُ، وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ)) (مائةَ مرَّةٍ إذا أصبحَ).</div> | la ilaha illa allah wahdahu la sharika lah. lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadir | **Lā ilāha illā-llāhu, waḥdahu lā sharīka lah, lahu-l-mulku wa-lahu-l-ḥamdu wa-huwa ʿalā kulli shayʾin qadīr** | There is no deity worthy of worship except Allah alone, He has no partner. To Him belongs dominion and praise, and He is over all things competent. |
+| `6:10` | <div dir="rtl" lang="ar">([بِسْمِ اللَّهِ] اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبْثِ وَالْخَبائِث).</div> | ((Bismil-lah) allahumma innee aAAoothu bika minal-khubthi wal-khaba-ith.) | **[Bismi-llāh] Allāhumma innī aʿūdhu bika mina-l-khubthi wa-l-khabāʾith** | ((In the name of Allah). O Allah, I take refuge with you from all evil and evil-doers.) |
+
+### Source-text defects found while transliterating
+
+**`17:35` / `19:43`** — The Arabic field reads `سُبُّوُحٌ` — a damma on the wāw that is not standard orthography (expected `سُبُّوحٌ`). Transliterated as the standard form; **flagging the source text, not silently normalising it**.
+
+**`17:37` / `19:45`** — Old romanisation contained a stray `/` (`walkibriya/`) and rendered `ظ` as `th` (`walAAathamah`); `ظ` is ẓ.
+
+**`27:85` / `28:109`** — This pair's existing romanisation is in a DIFFERENT scheme from the `AA` set (apostrophe for ʿayn, all-lowercase). The 116 are not one scheme — see the note under the table.
+
+**`34:121` / `41:137`** — Old read `walhuzn`; the Arabic is `الْحَزَنِ` (ḥazan), not ḥuzn.
+
+**`27:95`** — The Arabic field carries a trailing Arabic instruction `(إذا أصبحَ)` — “when morning comes”. NOT transliterated: it is an annotation, not recited text. Related to parked item 1.
+
+**`61:166`** — The Arabic contains tatweel (kashida) padding: `أَسْــــــأَلُكَ`. Decorative elongation, carries no sound; ignored for transliteration and flagged as a source defect.
+
+**`27:93`** — Trailing `(مائةَ مرَّةٍ إذا أصبحَ)` is a repetition instruction, not recited text — not transliterated.
+
+**`6:10`** — Square brackets preserved from the source, which marks `بِسْمِ اللَّهِ` as an optional/variant opening.
+
+### One finding that changes the shape of the remaining work
+
+**The 116 are not a single romanisation scheme.** `27:85`/`28:109` use apostrophe-for-ʿayn
+lowercase (`allahumma 'alimal-ghaybi`), while the `AA` set uses `AAala`. At least two upstream
+conventions are mixed in, so a single find-and-replace was never going to work — which is the
+same conclusion the sourcing investigation reached from the other direction.
+
+### What we are asking
+
+Per record (or per pair): **adopt** the proposal as reviewer-written, **correct** the wording, or
+**reject** it. Adoption is what sets `transliterationSource` and clears both Gate 2 and validator
+rule R10 for that record — and the on-page "Romanization source not verified" note retires itself
+automatically on the next build, since it is gated on the same test.
+
+---
+
 ## Sign-off
 
 | | Name | Credentials | Date | Signature |
@@ -901,6 +977,7 @@ page.
 | Part 6 — duplicate-scripture clusters (6.1 citation gap, 6.2 Bismillah) | | | | |
 | Part 7 — Wave 2 Class B clause proposals (batch 1) | | | | |
 | Part 8 — Wave 2 Qur'anic clause confirmations (batch 2) | | | | |
+| Part 9 — transliteration adoption, batch 1 | | | | |
 
 The reviewer's name and credentials appear on the site once any part is signed off
 (`DUA-SEO-STRATEGY-v2.md` §6). Please confirm you are content for them to be published.
