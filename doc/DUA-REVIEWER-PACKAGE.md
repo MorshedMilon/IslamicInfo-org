@@ -254,16 +254,16 @@ Candidates surfaced: **10**
 
 | # | id | Chapter | English | Citation | **Reviewer ruling** (narrative / supplication) | **Notes** |
 |---|---|---|---|---|---|---|
-| 1 | `15:26` | What to say upon hearing the Athan (call to pr | One should also supplicate for himself during the time between the athan and the iqamah as supplication at such time is not rejected. | not recorded | | |
-| 2 | `31:114` | What to do if you have a bad dream or nightmar | [((Spit on your left three times)(Spit: A form of spitting comprising mainly of air with little spittle)) - (Seek refuge in Allah from shaytan and the evil of what you sa | not recorded | | |
-| 3 | `31:115` | What to do if you have a bad dream or nightmar | (Get up and pray if you so desire.) | not recorded | | |
-| 4 | `40:134` | Invocations for if you are stricken by in your | (He should say: (I have believed in Allah and His Messenger.)) | not recorded | | |
-| 5 | `40:135` | Invocations for if you are stricken by in your | (He should also recite the following verse: (He is The First and The Last, Aththahir and Al-Batin and He knows well all things.)(ththahir: Indicates the greatness of His | not recorded | | |
-| 6 | `113:231` | How a Muslim should praise another Muslim | (He said: ‘If anyone of you is impelled to praise his brother, then he should say: ‘I deem so-and-so to be…and Allah is his reckoner…and I don’t praise anyone, putting it | not recorded | | |
-| 7 | `129:249` | Repentance and seeking forgiveness | (He also said: ‘O People, Repent! Verily I repent to Allah, a hundred times a day.) | not recorded | | |
-| 8 | `129:251` | Repentance and seeking forgiveness | (He said: ‘The nearest the Lord comes to His servant is in the middle of the night, so if you are able to be of those who remember Allah at that time, then be so.) | not recorded | | |
-| 9 | `129:252` | Repentance and seeking forgiveness | (He also said: ‘The nearest a servant is to his Lord is when he is prostrating, so supplicate much therein.) | not recorded | | |
-| 10 | `130:254` | The excellence of remembering Allah | (Whoever says:(How perfect Allah is and I praise Him.) a hundred times during the day, his sins are wiped away, even if they are like the foam of the sea.) | not recorded | | |
+| 1 | `15:26` | What to say upon hearing the Athan (call to pr | One should also supplicate for himself during the time between the athan and the iqamah as supplication at such time is not rejected. | not recorded | **Supplication** | Owner (Morshed Milon), 2026-08-03: keep as supplication. |
+| 2 | `31:114` | What to do if you have a bad dream or nightmar | [((Spit on your left three times)(Spit: A form of spitting comprising mainly of air with little spittle)) - (Seek refuge in Allah from shaytan and the evil of what you sa | not recorded | **Supplication** | Owner (Morshed Milon), 2026-08-03: keep — the "seek refuge in Allah from shaytan" content is recitable. |
+| 3 | `31:115` | What to do if you have a bad dream or nightmar | (Get up and pray if you so desire.) | not recorded | **Narrative statement** | Owner (Morshed Milon), 2026-08-03: pure instruction, no recitation text — remove from dua corpus. |
+| 4 | `40:134` | Invocations for if you are stricken by in your | (He should say: (I have believed in Allah and His Messenger.)) | not recorded | **Narrative statement** | Owner (Morshed Milon), 2026-08-03: ruled narrative (the "He should say" frame). Embedded phrase "I have believed in Allah and His Messenger" noted but not kept as a corpus dua. |
+| 5 | `40:135` | Invocations for if you are stricken by in your | (He should also recite the following verse: (He is The First and The Last, Aththahir and Al-Batin and He knows well all things.)(ththahir: Indicates the greatness of His | not recorded | **Narrative statement** | Owner (Morshed Milon), 2026-08-03: instruction to recite Qur'an 57:3 (an ayah, not a dua) — remove from dua corpus. |
+| 6 | `113:231` | How a Muslim should praise another Muslim | (He said: ‘If anyone of you is impelled to praise his brother, then he should say: ‘I deem so-and-so to be…and Allah is his reckoner…and I don’t praise anyone, putting it | not recorded | **Narrative statement** | Owner (Morshed Milon), 2026-08-03: hadith narrative / praise etiquette addressed to people, not to Allah — remove from dua corpus. |
+| 7 | `129:249` | Repentance and seeking forgiveness | (He also said: ‘O People, Repent! Verily I repent to Allah, a hundred times a day.) | not recorded | **Narrative statement** | Owner (Morshed Milon), 2026-08-03: exhortation to people ("O People, Repent!"), not an address to Allah — remove from dua corpus. |
+| 8 | `129:251` | Repentance and seeking forgiveness | (He said: ‘The nearest the Lord comes to His servant is in the middle of the night, so if you are able to be of those who remember Allah at that time, then be so.) | not recorded | **Narrative statement** | Owner (Morshed Milon), 2026-08-03: teaching statement about when to remember Allah, no recitation text — remove from dua corpus. |
+| 9 | `129:252` | Repentance and seeking forgiveness | (He also said: ‘The nearest a servant is to his Lord is when he is prostrating, so supplicate much therein.) | not recorded | **Narrative statement** | Owner (Morshed Milon), 2026-08-03: teaching + instruction to supplicate, no worded dua — remove from dua corpus. |
+| 10 | `130:254` | The excellence of remembering Allah | (Whoever says:(How perfect Allah is and I praise Him.) a hundred times during the day, his sins are wiped away, even if they are like the foam of the sea.) | not recorded | **Narrative statement** | Owner (Morshed Milon), 2026-08-03: ruled narrative (reward/virtue frame). Embedded dhikr "Subhan Allah wa bihamdih" noted but not kept as a corpus dua under this record. |
 
 ### Arabic for Part 2
 
@@ -893,8 +893,8 @@ page.
 
 | | Name | Credentials | Date | Signature |
 |---|---|---|---|---|
-| Part 1 — condemned-speech confirmation | Morshed Milon (site owner / approver, ADR-044) | _pending_ | 2026-08-03 | 24/24 confirmed route-out, 0 rejected — per-record rulings in Part 1 table. Credentials + publication consent pending owner. |
-| Part 2 — narrative-statement ruling | | | | |
+| Part 1 — condemned-speech confirmation | Morshed Milon (site owner / approver, ADR-044) | DO NOT PUBLISH — owner declined 2026-08-03 | 2026-08-03 | 24/24 confirmed route-out, 0 rejected — per-record rulings in Part 1 table. |
+| Part 2 — narrative-statement ruling | Morshed Milon (site owner / approver, ADR-044) | DO NOT PUBLISH — owner declined 2026-08-03 | 2026-08-03 | 10/10 ruled: 2 supplication (15:26, 31:114), 8 narrative (31:115, 40:134, 40:135, 113:231, 129:249, 129:251, 129:252, 130:254) — per-record rulings in Part 2 table. |
 | Part 3 — transliteration | | | | |
 | Part 4 — Class B Arabic (Wave 1–2) | | | | |
 | Part 5 — Qur'anic clause extraction | | | | |
@@ -904,3 +904,7 @@ page.
 
 The reviewer's name and credentials appear on the site once any part is signed off
 (`DUA-SEO-STRATEGY-v2.md` §6). Please confirm you are content for them to be published.
+
+> **Publication consent: DECLINED.** Owner (Morshed Milon), 2026-08-03 — the reviewer's
+> name and credentials are **not** to be published on the site for any part. The §6
+> "name appears on the site" behaviour must be suppressed for this reviewer.
