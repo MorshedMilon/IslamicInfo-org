@@ -1136,6 +1136,639 @@ at all.
 
 ---
 
+## Part 12 — The 5 quran.com-sourced transliterations, corrected and normalised (5 records)
+
+Added 2026-08-03. **⚠ NOT Gate-2 satisfied — machine-proposed, UNVERIFIED.**
+Nothing written to the corpus. `transliterationSource` is **not** set until you approve.
+
+### The mapping was proven, not assumed
+
+None of these 5 carries a `verseRef` — all are `sourceKey: "other"` with no citation — so the
+verse mapping could not be looked up. It was established by **reproduction**: assembling
+quran.com's per-word transliteration for a candidate range and comparing to the string already in
+our corpus.
+
+| record | verse range | evidence |
+|---|---|---|
+| `27:75` | Qur'an 2:255 | assembled == stored, exact |
+| `28:100` | Qur'an 2:255 | assembled == stored, exact |
+| `28:101` | Qur'an 2:285–286 | assembled == stored, exact |
+| `27:76` | Qur'an 112:1–4, 113:1–5, 114:1–6 | assembled == stored, exact |
+| `1:4` | Qur'an 3:190–200 | assembled == stored, exact, 195 words |
+
+A 195-word string reproducing character-for-character is not coincidence. It also **proves the
+source**: the stored romanisation IS quran.com word-level output, so its defects were quran.com's,
+not ours. My first candidate for `1:4` was 3:190–191; the data rejected it and the range widened
+until it matched, so the mapping is evidence-led throughout.
+
+### Two passes, applied in order
+
+**Pass 1 — defect correction.** An explicit hand-verified map of **45 rules**; every rule matched
+at least once, and any word not in the map kept quran.com's text unchanged.
+
+| class | example | rules |
+|---|---|---|
+| gemination restored | `l-ḥayu` → `l-ḥayyu`, `l-qayūmu` → `l-qayyūmu` | 5 |
+| medial/final hamza restored | `takhudhuhu` → `taʾkhudhuhu`, `shāa` → `shāʾa` | 13 |
+| apostrophe-for-sukūn removed | `kur'siyyuhu` → `kursiyyuhu`, `ʿil'mihi` → `ʿilmihi` | 27 |
+
+**Pass 2 — house-style normalisation (owner ruling 2026-08-03).** Sun-letter assimilation of the
+article, matching Parts 9–11 and the Talbiyah row. **10 distinct transforms:**
+
+```
+l-samāwāti  -> s-samāwāti      wal-nāsi    -> wa-n-nāsi
+l-rasūlu    -> r-rasūlu        wal-nahāri  -> wa-n-nahāri
+l-ṣamadu    -> ṣ-ṣamadu        l-nāri      -> n-nāri
+l-nafāthāti -> n-nafāthāti     l-nāra      -> n-nāra
+l-nāsi      -> n-nāsi          l-thawābi   -> th-thawābi
+```
+
+Moon letters keep `l-` (`l-arḍi`, `l-ʿaẓīmu`); lām+lām is already written doubled
+(`al-layli`); `al-lahu` is left as the conventional form of the divine name.
+
+**Scope limit, stated so it is not mistaken for an oversight.** Only the ARTICLE was normalised.
+The tokens' hyphenation to neighbouring words is left exactly as quran.com tokenises it —
+restructuring token boundaries across a 195-word passage is a different and much larger change,
+and was not what was ruled.
+
+### This ruling is library-wide
+
+Sun-letter assimilation is now the **standing convention for the whole dua library**, not a local
+choice for these 5. Parts 9–11 already follow it; every future batch will. Recorded here because
+it is the first point at which the convention was applied against a *named external base* rather
+than to our own text.
+
+### What this does to the provenance claim
+
+Normalising conventions means these are no longer quran.com's text lightly corrected — they are
+**reviewer-normalised**. The proposed `transliterationSource` says exactly that, so the base and
+the intervention stay separable:
+
+```
+Base: quran.com API v4 word-level transliteration (verses/by_key,
+word_fields=transliteration). Reviewer-corrected for gemination, medial hamza and
+sukūn notation, and normalised to house-style sun-letter assimilation —
+<date>, owner (ADR-044).
+```
+
+Same shape as the Talbiyah row: a named base plus a named intervention, neither claimed as the
+other, and neither overstated.
+
+#### `27:75` — Qur'an 2:255
+
+*50 words · chapter: Words of remembrance for morning and evening*
+
+**Base — quran.com API v4, verbatim:**
+
+> al-lahu lā ilāha illā huwa l-ḥayu l-qayūmu lā takhudhuhu sinatun walā nawmun lahu mā fī l-samāwāti wamā fī l-arḍi man dhā alladhī yashfaʿu ʿindahu illā bi-idh'nihi yaʿlamu mā bayna aydīhim wamā khalfahum walā yuḥīṭūna bishayin min ʿil'mihi illā bimā shāa wasiʿa kur'siyyuhu l-samāwāti wal-arḍa walā yaūduhu ḥif'ẓuhumā wahuwa l-ʿaliyu l-ʿaẓīmu
+
+**Proposed — corrected + normalised to house style:**
+
+> al-lahu lā ilāha illā huwa l-ḥayyu l-qayyūmu lā taʾkhudhuhu sinatun walā nawmun lahu mā fī s-samāwāti wamā fī l-arḍi man dhā alladhī yashfaʿu ʿindahu illā bi-idhnihi yaʿlamu mā bayna aydīhim wamā khalfahum walā yuḥīṭūna bishayʾin min ʿilmihi illā bimā shāʾa wasiʿa kursiyyuhu s-samāwāti wal-arḍa walā yaʾūduhu ḥifẓuhumā wahuwa l-ʿaliyyu l-ʿaẓīmu
+
+**Translation on record:** Allāh - there is no deity except Him, the Ever-Living, the Self-Sustaining. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is i…
+
+#### `28:100` — Qur'an 2:255
+
+*50 words · chapter: What to say before sleeping*
+
+**Base — quran.com API v4, verbatim:**
+
+> al-lahu lā ilāha illā huwa l-ḥayu l-qayūmu lā takhudhuhu sinatun walā nawmun lahu mā fī l-samāwāti wamā fī l-arḍi man dhā alladhī yashfaʿu ʿindahu illā bi-idh'nihi yaʿlamu mā bayna aydīhim wamā khalfahum walā yuḥīṭūna bishayin min ʿil'mihi illā bimā shāa wasiʿa kur'siyyuhu l-samāwāti wal-arḍa walā yaūduhu ḥif'ẓuhumā wahuwa l-ʿaliyu l-ʿaẓīmu
+
+**Proposed — corrected + normalised to house style:**
+
+> al-lahu lā ilāha illā huwa l-ḥayyu l-qayyūmu lā taʾkhudhuhu sinatun walā nawmun lahu mā fī s-samāwāti wamā fī l-arḍi man dhā alladhī yashfaʿu ʿindahu illā bi-idhnihi yaʿlamu mā bayna aydīhim wamā khalfahum walā yuḥīṭūna bishayʾin min ʿilmihi illā bimā shāʾa wasiʿa kursiyyuhu s-samāwāti wal-arḍa walā yaʾūduhu ḥifẓuhumā wahuwa l-ʿaliyyu l-ʿaẓīmu
+
+**Translation on record:** Allāh - there is no deity except Him, the Ever-Living, the Self-Sustaining. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is i…
+
+#### `28:101` — Qur'an 2:285-286
+
+*76 words · chapter: What to say before sleeping*
+
+**Base — quran.com API v4, verbatim:**
+
+> āmana l-rasūlu bimā unzila ilayhi min rabbihi wal-mu'minūna kullun āmana bil-lahi wamalāikatihi wakutubihi warusulihi lā nufarriqu bayna aḥadin min rusulihi waqālū samiʿ'nā wa-aṭaʿnā ghuf'rānaka rabbanā wa-ilayka l-maṣīru lā yukallifu l-lahu nafsan illā wus'ʿahā lahā mā kasabat waʿalayhā mā ik'tasabat rabbanā lā tuākhidh'nā in nasīnā aw akhṭanā rabbanā walā taḥmil ʿalaynā iṣ'ran kamā ḥamaltahu ʿalā alladhīna min qablinā rabbanā walā tuḥammil'nā mā lā ṭāqata lanā bihi wa-uʿ'fu ʿannā wa-igh'fir lanā wa-ir'ḥamnā anta mawlānā fa-unṣur'nā ʿalā l-qawmi l-kāfirīna
+
+**Proposed — corrected + normalised to house style:**
+
+> āmana r-rasūlu bimā unzila ilayhi min rabbihi wal-muʾminūna kullun āmana bil-lahi wa-malāʾikatihi wakutubihi warusulihi lā nufarriqu bayna aḥadin min rusulihi waqālū samiʿnā wa-aṭaʿnā ghufrānaka rabbanā wa-ilayka l-maṣīru lā yukallifu l-lahu nafsan illā wusʿahā lahā mā kasabat waʿalayhā mā iktasabat rabbanā lā tuʾākhidhnā in nasīnā aw akhṭaʾnā rabbanā walā taḥmil ʿalaynā iṣran kamā ḥamaltahu ʿalā alladhīna min qablinā rabbanā walā tuḥammilnā mā lā ṭāqata lanā bihi wa-uʿfu ʿannā wa-ighfir lanā wa-irḥamnā anta mawlānā fa-unṣurnā ʿalā l-qawmi l-kāfirīna
+
+**Translation on record:** The Messenger has believed in what was revealed to him from his Lord, and [so have] the believers. All of them have believed in Allāh and His angels and His books and His messengers, [saying], "We mak…
+
+#### `27:76` — Qur'an 112:1-4, 113:1-5, 114:1-6
+
+*58 words · chapter: Words of remembrance for morning and evening*
+
+**Base — quran.com API v4, verbatim:**
+
+> qul huwa l-lahu aḥadun al-lahu l-ṣamadu lam yalid walam yūlad walam yakun lahu kufuwan aḥadun qul aʿūdhu birabbi l-falaqi min sharri mā khalaqa wamin sharri ghāsiqin idhā waqaba wamin sharri l-nafāthāti fī l-ʿuqadi wamin sharri ḥāsidin idhā ḥasada qul aʿūdhu birabbi l-nāsi maliki l-nāsi ilāhi l-nāsi min sharri l-waswāsi l-khanāsi alladhī yuwaswisu fī ṣudūri l-nāsi mina l-jinati wal-nāsi
+
+**Proposed — corrected + normalised to house style:**
+
+> qul huwa l-lahu aḥadun al-lahu ṣ-ṣamadu lam yalid walam yūlad walam yakun lahu kufuwan aḥadun qul aʿūdhu birabbi l-falaqi min sharri mā khalaqa wamin sharri ghāsiqin idhā waqaba wamin sharri n-nafāthāti fī l-ʿuqadi wamin sharri ḥāsidin idhā ḥasada qul aʿūdhu birabbi n-nāsi maliki n-nāsi ilāhi n-nāsi min sharri l-waswāsi l-khannāsi alladhī yuwaswisu fī ṣudūri n-nāsi mina l-jinnati wa-n-nāsi
+
+**Translation on record:** Say, "He is Allāh, [who is] One, Allāh, the Eternal Refuge. He neither begets nor is born, Nor is there to Him any equivalent." Say, "I seek refuge in the Lord of daybreak From the evil of that which …
+
+#### `1:4` — Qur'an 3:190-200
+
+*195 words · chapter: supplications for when you wake up*
+
+**Base — quran.com API v4, verbatim:**
+
+> inna fī khalqi l-samāwāti wal-arḍi wa-ikh'tilāfi al-layli wal-nahāri laāyātin li-ulī l-albābi alladhīna yadhkurūna l-laha qiyāman waquʿūdan waʿalā junūbihim wayatafakkarūna fī khalqi l-samāwāti wal-arḍi rabbanā mā khalaqta hādhā bāṭilan sub'ḥānaka faqinā ʿadhāba l-nāri rabbanā innaka man tud'khili l-nāra faqad akhzaytahu wamā lilẓẓālimīna min anṣārin rabbanā innanā samiʿ'nā munādiyan yunādī lil'īmāni an āminū birabbikum faāmannā rabbanā fa-igh'fir lanā dhunūbanā wakaffir ʿannā sayyiātinā watawaffanā maʿa l-abrāri rabbanā waātinā mā waʿadttanā ʿalā rusulika walā tukh'zinā yawma l-qiyāmati innaka lā tukh'lifu l-mīʿāda fa-is'tajāba lahum rabbuhum annī lā uḍīʿu ʿamala ʿāmilin minkum min dhakarin aw unthā baʿḍukum min baʿḍin fa-alladhīna hājarū wa-ukh'rijū min diyārihim waūdhū fī sabīlī waqātalū waqutilū la-ukaffiranna ʿanhum sayyiātihim wala-ud'khilannahum jannātin tajrī min taḥtihā l-anhāru thawāban min ʿindi l-lahi wal-lahu ʿindahu ḥus'nu l-thawābi lā yaghurrannaka taqallubu alladhīna kafarū fī l-bilādi matāʿun qalīlun thumma mawāhum jahannamu wabi'sa l-mihādu lākini alladhīna ittaqaw rabbahum lahum jannātun tajrī min taḥtihā l-anhāru khālidīna fīhā nuzulan min ʿindi l-lahi wamā ʿinda l-lahi khayrun lil'abrāri wa-inna min ahli l-kitābi laman yu'minu bil-lahi wamā unzila ilaykum wamā unzila ilayhim khāshiʿīna lillahi lā yashtarūna biāyāti l-lahi thamanan qalīlan ulāika lahum ajruhum ʿinda rabbihim inna l-laha sarīʿu l-ḥisābi yāayyuhā alladhīna āmanū iṣ'birū waṣābirū warābiṭū wa-ittaqū l-laha laʿallakum tuf'liḥūna
+
+**Proposed — corrected + normalised to house style:**
+
+> inna fī khalqi s-samāwāti wal-arḍi wa-ikhtilāfi al-layli wa-n-nahāri laāyātin li-ulī l-albābi alladhīna yadhkurūna l-laha qiyāman waquʿūdan waʿalā junūbihim wayatafakkarūna fī khalqi s-samāwāti wal-arḍi rabbanā mā khalaqta hādhā bāṭilan subḥānaka faqinā ʿadhāba n-nāri rabbanā innaka man tudkhili n-nāra faqad akhzaytahu wamā lilẓẓālimīna min anṣārin rabbanā innanā samiʿnā munādiyan yunādī lil-īmāni an āminū birabbikum faāmannā rabbanā fa-ighfir lanā dhunūbanā wakaffir ʿannā sayyiātinā watawaffanā maʿa l-abrāri rabbanā waātinā mā waʿadttanā ʿalā rusulika walā tukhzinā yawma l-qiyāmati innaka lā tukhlifu l-mīʿāda fa-istajāba lahum rabbuhum annī lā uḍīʿu ʿamala ʿāmilin minkum min dhakarin aw unthā baʿḍukum min baʿḍin fa-alladhīna hājarū wa-ukhrijū min diyārihim waūdhū fī sabīlī waqātalū waqutilū la-ukaffiranna ʿanhum sayyiātihim wala-udkhilannahum jannātin tajrī min taḥtihā l-anhāru thawāban min ʿindi l-lahi wal-lahu ʿindahu ḥusnu th-thawābi lā yaghurrannaka taqallubu alladhīna kafarū fī l-bilādi matāʿun qalīlun thumma maʾwāhum jahannamu wa-biʾsa l-mihādu lākini alladhīna ittaqaw rabbahum lahum jannātun tajrī min taḥtihā l-anhāru khālidīna fīhā nuzulan min ʿindi l-lahi wamā ʿinda l-lahi khayrun lil-abrāri wa-inna min ahli l-kitābi laman yuʾminu bil-lahi wamā unzila ilaykum wamā unzila ilayhim khāshiʿīna lillahi lā yashtarūna biāyāti l-lahi thamanan qalīlan ulāʾika lahum ajruhum ʿinda rabbihim inna l-laha sarīʿu l-ḥisābi yā ayyuhā alladhīna āmanū iṣbirū waṣābirū warābiṭū wa-ittaqū l-laha laʿallakum tufliḥūna
+
+**Translation on record:** Indeed, in the creation of the heavens and the earth and the alternation of the night and the day are signs for those of understanding - Who remember Allāh while standing or sitting or [lying] on thei…
+
+---
+
+## Part 13 — Multi-verse records: a content-structure question (parked)
+
+Added 2026-08-03. **Parked — does NOT block Part 12.** Surfaced by the alignment work, but it is
+not a transliteration question and should not be settled inside one.
+
+| record | contains | stored as |
+|---|---|---|
+| `27:76` | **three complete sūrahs** — al-Ikhlāṣ, al-Falaq, an-Nās | one record, one page |
+| `1:4` | **eleven verses** — Āl ʿImrān 3:190–200 | one record, one page |
+
+Alignment made this visible: assembling them required 15 and 11 separate verse fetches.
+
+**The question:** is a record one supplication, or one *recitation unit*? Both readings are
+defensible — a reader looking up "what to recite on waking" wants the whole passage, while a reader
+looking up al-Ikhlāṣ will not find it at its own URL. It bears on page granularity, titling,
+keyword targeting, and R6 (a sūrah stored inside a composite record cannot cluster against the same
+sūrah stored alone).
+
+**Deliberately not inferred.** Whatever is decided, the Part 12 transliterations remain correct for
+the text as currently stored — so approving Part 12 does not prejudge this, and this does not hold
+up Part 12.
+
+---
+
+## Part 14 — Transliteration adoption, batch 4 (18 records)
+
+Added 2026-08-03. **⚠ NOT Gate-2 satisfied — machine-proposed, UNVERIFIED.**
+Nothing written to the corpus, no `transliterationSource` set, nothing marked reviewer-written.
+
+First batch written under the **confirmed library-wide convention** (owner ruling, Part 12):
+sun-letter assimilation of the article throughout. Parts 9–11 already followed it; Part 12
+normalised the quran.com set to it; it is now simply the house style.
+
+The shared-formula seam is exhausted, so selection is by **shortest first** — cheapest to rule,
+most records cleared per minute of review. All 18 are 6–10 words.
+
+### The batch
+
+| id | Arabic | existing (flawed) | **proposed ALA-LC** | translation |
+|---|---|---|---|---|
+| `49:147` | <div dir="rtl" lang="ar">((لاَ بأْسَ طَهُورٌ إِنْ شَاءَ اللَّهُ)).</div> | (La ba'sa tahoorun in shaal-lah.) | **Lā baʾsa ṭahūrun in shāʾa-llāh** | (Never mind, may it (the sickness) be a purification, if Allah wills.) |
+| `58:163` | <div dir="rtl" lang="ar">((بِسْمِ اللَّهِ وَعَلَى سُنَّةِ رَسُولِ اللَّهِ)).</div> | (Bismil-lahi waAAala sunnati rasoolil-lah.) | **Bi-smi-llāhi wa-ʿalā sunnati rasūli-llāh** | In the name of Allah and upon the sunnah of the Messenger of Allah. |
+| `63:170` | <div dir="rtl" lang="ar">((اللَّهُمَّ أَغِثْنَا، اللَّهُمَّ أَغِثْنَا، اللَّهُمَّ أَغِثْنَا)).</div> | (Allahumma aghithna, allahumma aghithna, allahumma aghithna.) | **Allāhumma aghithnā, allāhumma aghithnā, allāhumma aghithnā** | (O Allah, relieve us, O Allah, relieve us, O Allah, relieve us.) |
+| `90:201` | <div dir="rtl" lang="ar">((بَارَكَ اللَّهُ لَكَ فِي أَهْلِكَ وَمَالِكَ)).</div> | (Barakal-lahu laka fee ahlika wamalik.) | **Bāraka-llāhu laka fī ahlika wa-mālik** | (May Allah bless for you, your family and wealth.) |
+| `24:59` | <div dir="rtl" lang="ar">((اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ، وَشُكْرِكَ، وَحُسْنِ عِبادَتِكَ)).</div> | (Allahumma aAAinnee AAala thikrik, washukrik, wahusni AAibadatik.) | **Allāhumma aʿinnī ʿalā dhikrika, wa-shukrika, wa-ḥusni ʿibādatik** | (O Allah, help me to remember You, to thank You, and to worship You in the best of manners.) |
+| `51:150` | <div dir="rtl" lang="ar">((اللَّهُمَّ اغْفِرْ لِي، وَارْحَمْنِي، وَأَلْحِقْنِي بِالرَّفِيقِ الْأَعْلَى)).</div> | (Allahummagh-fir lee, warhamnee wa-alhiqnee birrafeeqil-aAAla.) | **Allāhumma-ghfir lī, wa-rḥamnī, wa-alḥiqnī bi-r-rafīqi-l-aʿlā** | ‘O Allaah, forgive me, have mercy upon me and unite me with the highest companions |
+| `9:14` | <div dir="rtl" lang="ar">(اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ)</div> | (Allahummaj-AAalnee minat-tawwabeena wajAAalnee minal-mutatahhireen.) | **Allāhumma-jʿalnī mina-t-tawwābīna wa-jʿalnī mina-l-mutaṭahhirīn** | (O Allah, make me of those who return to You often in repentance and make me of those who remain clean and pure.) |
+| `18:39` | <div dir="rtl" lang="ar">((رَبَّنَا وَلَكَ الْحَمْدُ، حَمْداً كَثيراً طَيِّباً مُبارَكاً فِيهِ)).</div> | (Rabbana walakal-hamdu hamdan katheeran tayyiban mubarakan feeh.) | **Rabbanā wa-laka-l-ḥamdu, ḥamdan kathīran ṭayyiban mubārakan fīh** | (Our Lord, for You is all praise, an abundant beautiful blessed praise.) |
+| `27:96` | <div dir="rtl" lang="ar">((أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ)) (مِائَةَ مَرَّةٍ فِي الْيَوْمِ).</div> | astaghfirullah wa atubu ilayh | **Astaghfiru-llāha wa-atūbu ilayh** | I seek forgiveness from Allah and repent to Him. |
+| `27:98` | <div dir="rtl" lang="ar">((اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبَيِّنَا مُحَمَّدٍ)) (عشرَ مرَّاتٍ).</div> | Allaahumma salli wa sallim 'alaa Nabiyyinaa Muhammadin[ten times] | **Allāhumma ṣalli wa-sallim ʿalā nabiyyinā Muḥammad** | ‘O Allaah, send prayers and peace upon our Prophet Muhammad.’ [ten times] |
+| `62:168` | <div dir="rtl" lang="ar">((سُبْحَانَ الَّذِي يُسَبِّحُ الرَّعْدُ بِحَمْدِهِ وَالْمَلاَئِكةُ مِنْ خِيفَتِهِ)).</div> | (Subhanal-lathee yusabbihur-raAAdu bihamdih, walmala-ikatu min kheefatih.) | **Subḥāna-lladhī yusabbiḥu-r-raʿdu bi-ḥamdihi, wa-l-malāʾikatu min khīfatih** | (How perfect He is, (The One) Whom the thunder declares His perfection with His praise, as do the angles out of fear of Him.) |
+| `71:182` | <div dir="rtl" lang="ar">((اللَّهُمَّ بَارِكْ لَهُمْ فِيمَا رَزَقْتَهُم، وَاغْفِرْ لَهُمْ وَارْحَمْهُمْ)).</div> | (Allahumma barik lahum feema razaqtahum, waghfir lahum warhamhum.) | **Allāhumma bārik lahum fīmā razaqtahum, wa-ghfir lahum wa-rḥamhum** | (O Allah, bless for them, that which You have provided them, forgive them and have mercy upon them.) |
+| `36:126` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنَّا نَجْعَلُكَ فِي نُحُورِهِم، وَنَعُوذُ بِكَ مِنْ شُرُورِهِمْ)).</div> | (Allahumma inna najAAaluka fee nuhoorihim wanaAAoothu bika min shuroorihim.) | **Allāhumma innā najʿaluka fī nuḥūrihim, wa-naʿūdhu bika min shurūrihim** | (O Allah, we place You before them and we take refuge in You from their evil.) |
+| `68:176` | <div dir="rtl" lang="ar">((ذَهَبَ الظَّمَأُ وَابْتَلَّتِ العُرُوقُ، وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ)).</div> | dhahabadh-dhama'u wabtallatil-'uruqu wa thabatal-ajru insha allah | **Dhahaba-ẓ-ẓamaʾu wa-btallati-l-ʿurūqu, wa-thabata-l-ajru in shāʾa-llāh** | The thirst has gone, the veins are moistened, and the reward is confirmed, Insha Allah. |
+| `73:184` | <div dir="rtl" lang="ar">((أَفْطَرَ عِنْدَكُمُ الصَّائِمُونَ، وَأَكَلَ طَعَامَكُمُ الْأَبْرَارُ، وَصَلَّتْ عَلَيْكُمُ الْمَلاَئِكَةُ)).</div> | (Aftara AAindakumus-sa-imoon, wa-akala taAAamakumul-abrar, wasallat AAalaykumul-mala-ikah.) | **Afṭara ʿindakumu-ṣ-ṣāʾimūna, wa-akala ṭaʿāmakumu-l-abrāru, wa-ṣallat ʿalaykumu-l-malāʾikah** | (May the fasting break their fast in your home, and may the dutiful and pious eat your food, and may the angles send prayers upon  |
+| `79:190` | <div dir="rtl" lang="ar">((بَارَكَ اللَّهُ لَكَ، وَبَارَكَ عَلَيْكَ، وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ)).</div> | (Barakal-lahu lak, wabaraka AAalayk, wajamaAAa baynakuma fee khayr.) | **Bāraka-llāhu lak, wa-bāraka ʿalayk, wa-jamaʿa baynakumā fī khayr** | (May Allah bless for you (your spouse) and bless you, and may He unite both of you in goodness.) |
+| `81:192` | <div dir="rtl" lang="ar">((بِسْمِ اللَّهِ، اللَّهُمَّ جَنِّبْنَا الشَّيْطَانَ، وَجَنِّبِ الشَّيْطَانَ مَا رَزَقْتَنَا)).</div> | (Bismil-lah, allahumma jannibnash-shaytan, wajannibish-shaytana ma razaqtana.) | **Bi-smi-llāh, allāhumma jannibnā-sh-shayṭāna, wa-jannibi-sh-shayṭāna mā razaqtanā** | (In the name of Allah. O Allah, keep the devil away from us and keep the devil away from what you have blessed us with.) |
+| `127:246` | <div dir="rtl" lang="ar">((بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ [اللَّهُمَّ مِنْكَ وَلَكَ] اللَّهُمَّ تَقَبَّلْ مِنِّي)).</div> | (Bismil-lah wallahu akbar, allahumma minka walak, allahumma taqabbal minnee.) | **Bi-smi-llāhi wa-llāhu akbar. [Allāhumma minka wa-lak.] Allāhumma taqabbal minnī** | (In the name of Allah, and Allah is the greatest. O Allah, (it is) from You and belongs to You, O Allah, accept this from me.) |
+
+### Source-text defects found while transliterating
+
+**`49:147`** — Old `in shaal-lah` loses the hamza of `شَاءَ` and runs the words together.
+
+**`51:150`** — Assimilation: `الرَّفِيقِ` → `bi-r-rafīqi` (sun letter r), against the old `birrafeeqil`.
+
+**`9:14`** — Both articles in one line, one of each kind: `التَّوَّابِينَ` assimilates (`mina-t-tawwābīn`), `الْمُتَطَهِّرِينَ` does not (`mina-l-mutaṭahhirīn`).
+
+**`27:96`** — The count `(مِائَةَ مَرَّةٍ فِي الْيَوْمِ)` is an instruction; not transliterated.
+
+**`27:98`** — **Two defects.** The Arabic reads `نَبَيِّنَا` — vowelled *nabayyinā*, where the word is `نَبِيِّنَا` (*nabiyyinā*); transliterated as the correct form, source flagged. And the old field ends `Muhammadin[ten times]` — an English instruction fused to the last word with **no separator at all**.
+
+**`68:176`** — Old runs `insha allah` together and drops the hamza; `الظَّمَأُ` assimilates to `-ẓ-ẓamaʾu`.
+
+**`127:246`** — **CORRECTED 2026-08-03 under the owner's bracket ruling.** As first proposed, the brackets were dropped and `[اللَّهُمَّ مِنْكَ وَلَكَ]` was folded into the running text — silently promoting an *optional* clause to an unconditional one, and treating this record differently from `6:10`, which is the same case and kept its brackets. The brackets are now preserved, so the optionality the source marked survives into the transliteration. Rule 3 below.
+
+### Assimilation in practice
+
+`9:14` is the clearest single illustration of the ruled convention, carrying both kinds of
+article in one line:
+
+```
+التَّوَّابِينَ   sun letter t  ->  mina-t-tawwābīna
+الْمُتَطَهِّرِينَ  moon letter m ->  mina-l-mutaṭahhirīn
+```
+
+Others in this batch: `bi-r-rafīqi` (`51:150`), `-ṣ-ṣāʾimūna` (`73:184`),
+`-sh-shayṭāna` (`81:192`), `-ẓ-ẓamaʾu` (`68:176`), `-r-raʿdu` (`62:168`).
+
+---
+
+## Part 13a — Bracket policy (ruled) and four records routed here
+
+Added 2026-08-03, **owner-ruled**. Square brackets are used for three different things in this
+corpus and the notation itself does not distinguish them. The rule below is now binding on every
+batch; before it, the calls were being made case by case and **inconsistently** — `6:10` and
+`127:246` are the same case and were handled two different ways until this ruling.
+
+| # | span looks like | ruling | example |
+|---|---|---|---|
+| 1 | a count or a time, only | **drop** — instruction, not recited | `[ثلاثاً]` (`25:67`) |
+| 2 | conditional + speech verb (`وإذا أمسى قال: …`) | **do not transliterate**; route to Part 13 | `27:80` |
+| 3 | address to Allah, no framing | **transliterate AND keep the brackets** | `6:10`, `127:246` |
+
+Rule 3 is the correction: the brackets carry meaning — they mark the clause optional — so
+removing them changes what the page tells a reader to recite.
+
+### A signal that was tried and does not work
+
+"Does the pre-existing romanisation cover the span", proxied by word count, **fails on half the
+cases** and must not be relied on. Two confounds: transliteration tokens merge Arabic words
+(`Bismil-lah` is one token for two words), and English instructions live *inside* the
+transliteration field — `27:80`'s field carries `(four times in the morning & evening)(Note: …)`,
+inflating its count by about 13 words. Only the framing-language signal survived scrutiny.
+
+### Four records routed here: they may contain TWO supplications, not one
+
+Each stores the **evening form** inside the morning record's `arabic` field as a bracketed
+annotation. The upstream romanised both: `27:89`'s transliteration field holds two complete
+supplications separated by `[For the evening, the supplication is read as follows: ]`, and
+`27:78` the same with `[In the evening:]`.
+
+| record | morning form | evening form in source | note |
+|---|---|---|---|
+| `27:78` | complete | **complete** | both forms fully present |
+| `27:89` | complete | **complete** | both forms fully present, both romanised upstream |
+| `27:81` | complete | **TRUNCATED** — `اللَّهم ما أمسى بي...` | ⚠ incomplete in source |
+| `27:90` | complete | **TRUNCATED** — `أمسينا على فطرة الإسلام...` | ⚠ incomplete in source |
+
+**The truncation matters for whatever Part 13 decides.** If the ruling is "yes, separate them",
+`27:78` and `27:89` can be split from data already held — but `27:81` and `27:90` **cannot**.
+Their evening text ends in an ellipsis, so splitting them would require sourcing the missing
+wording, which is a content task and not a split. A ruling of "separate" is therefore only
+half-executable today, and the other half needs the same sourcing route as any other gap.
+
+None of the four is transliterated in any batch. They are held here.
+
+### Rule 4 — honorifics embedded mid-text are excluded (standing rule, owner-ruled 2026-08-03)
+
+`صلى الله عليه وسلم` (ﷺ), `رضي الله عنه` and the like, where they appear **inside** a record's
+`arabic` field, are **editorial/compiler convention, not part of the recitable supplication**, and
+are excluded from the transliteration.
+
+**This is a standing rule, not a per-record judgment.** It settles `27:87` (Part 15), where the
+honorific sits mid-sentence and the old romanisation transliterated it
+(`sallallahu 'alayhi wa sallama`), and it applies to every future record without being re-argued.
+
+The rule governs **transliteration only**. It says nothing about whether the honorific should
+render on the page in Arabic or in English — that is a display question, untouched here.
+
+### Rule 5 — parentheses are OVERLOADED and no parenthesised span is treated by analogy
+
+`2:5` carries `(الثَّوْبَ)` — "the garment" — an *optional word* in round brackets: the rule-3
+shape, in the wrong notation. Rules 1–3 govern **square** brackets only, so nothing in the ruled
+policy reaches it.
+
+**Until this is ruled, no parenthesised span is transliterated by analogy to rule 3.** `2:5`'s
+Part 15 proposal keeps `(th-thawba)` on that basis and is flagged there; it should not be adopted
+before this is settled.
+
+#### The census, and what it actually shows
+
+Run across all 116, stripping the outer recitation delimiter first:
+
+| | count |
+|---|---:|
+| inner parenthesised Arabic spans | 26 |
+| …that are instructions (count/time/how) | 6 |
+| …that are the supplication text itself, surfaced as an artifact | 19 |
+| …that are a genuine optional word | **1** (`2:5`) |
+
+**The scope is one record.** That is the useful result: this needs a ruling, not a policy
+programme.
+
+**The census itself demonstrates the overload.** It took two attempts. The first conflated the
+`((…))` recitation delimiter with real inner parentheses and reported 107 spurious spans. Even
+after stripping the outer delimiter, 19 of the remaining 26 are still the supplication text —
+because a record with a trailing instruction takes the shape `((dua)) (instruction)`, which
+defeats a single outer strip. One mark doing three jobs is not a cosmetic complaint: **it defeats
+mechanical classification**, which is why the ruling has to be human and why nothing here was
+extended by analogy.
+
+This is the same class of finding as Part 10's — instruction annotations stored inconsistently
+defeat de-duplication; here inconsistent bracketing defeats classification. Both trace to the
+same root cause: **annotations live inside the `arabic` field with no structural separation.**
+
+
+---
+
+## Part 15 — Transliteration adoption, batch 5 (18 records)
+
+Added 2026-08-03. **⚠ NOT Gate-2 satisfied — machine-proposed, UNVERIFIED.**
+Nothing written to the corpus, no `transliterationSource` set, nothing marked reviewer-written.
+
+First batch under the **ruled bracket policy** (Part 13a). The two straightforwardly transliterable
+bracketed records lead — `114:232` and `17:36`, both rule 3, both keeping their brackets — and
+the rest is shortest-first from the remaining pool.
+
+### The batch
+
+| id | Arabic | existing (flawed) | **proposed ALA-LC** | translation |
+|---|---|---|---|---|
+| `114:232` | <div dir="rtl" lang="ar">((اللَّهُمَّ لاَ تُؤَاخِذْنِي بِمَا يَقُولُونَ، وَاغْفِرْ لِي مَا لاَ يَعْلَمُونَ، [وَاجْعَلْنِي خَيْراً مِمَّا يَظُّنُّونَ])).</div> | Allaahumma laa tu'aakhithnee bimaa yaqooloona, waghfir lee maa laa ya'lamoona [waj'alnee khayram-mimmaa yadhunnoon] | **Allāhumma lā tuʾākhidhnī bi-mā yaqūlūna, wa-ghfir lī mā lā yaʿlamūna, [wa-jʿalnī khayran mimmā yaẓunnūn]** | O Allah, do not call me to account for what they say and forgive me for what they have no knowledge of [and make me better th |
+| `17:36` | <div dir="rtl" lang="ar">((اللَّهُمَّ لَكَ رَكَعْتُ، وَبِكَ آمَنْتُ، وَلَكَ أَسْلَمْتُ، خَشَعَ لَكَ سَمْعِي، وَبَصَرِي، وَمُخِّي، وَعَــــظْمِي، وَعَصَبِي، [وَمَا استَقَلَّتْ بِهِ قَدَمِي])).</div> | (Allahumma laka rakaAAt, wabika amant, walaka aslamt, khashaAAa laka samAAee, wabasaree, wamukhkhee, waAAathmee, waAAasabee, wamas-taqalla bihi qadamee.) | **Allāhumma laka rakaʿtu, wa-bika āmantu, wa-laka aslamtu, khashaʿa laka samʿī, wa-baṣarī, wa-mukhkhī, wa-ʿaẓmī, wa-ʿaṣabī, [wa-mā-staqallat bihi qadamī]** | (O Allah, unto You I have bowed, and in You I have believed, and to You I have submitted. My hearing, sight, mind, bones, ten |
+| `16:28` | <div dir="rtl" lang="ar">((سُبْحانَكَ اللَّهُمَّ وَبِحَمْدِكَ، وَتَبارَكَ اسْمُكَ، وَتَعَالَى جَدُّكَ، وَلاَ إِلَهَ غَيْرُكَ)).</div> | (Subhanakal-lahumma wabihamdika watabarakas-muka wataAAala jadduka wala ilaha ghayruk.) | **Subḥānaka-llāhumma wa-bi-ḥamdika, wa-tabāraka-smuka, wa-taʿālā jadduka, wa-lā ilāha ghayruk** | (How perfect You are O Allah, and I praise You. Blessed be Your name, and lofty is Your position and none has the right to be |
+| `38:131` | <div dir="rtl" lang="ar">((اللَّهُمَّ مُنْزِلَ الْكِتَابِ، سَرِيعَ الْحِسَابِ، اهْزِمِ الأَحْزَابَ، اللَّهُمَّ اهزِمْهُمْ وَزَلْزِلْهُمْ)).</div> | (Allahumma munzilal-kitab, sareeAAal-hisab, ihzimil-ahzab, allahummah-zimhum wazalzilhum.) | **Allāhumma munzila-l-kitāb, sarīʿa-l-ḥisāb, ihzimi-l-aḥzāb, allāhumma-hzimhum wa-zalzilhum** | (O Allah, Revealer of the Book, Swift at reckoning, defeat the confederates. O Allah, defeat them and convulse them.) |
+| `10:16` | <div dir="rtl" lang="ar">(بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، وَلَاَ حَوْلَ وَلَا قُوَّةَ إِلاَّ بِاللَّهِ).</div> | bismillah, tawakkaltu 'alallah, la hawla wa la quwwata illa billah | **Bi-smi-llāh, tawakkaltu ʿalā-llāh, wa-lā ḥawla wa-lā quwwata illā bi-llāh** | In the name of Allah, I place my trust in Allah. There is no might nor power except with Allah. |
+| `36:127` | <div dir="rtl" lang="ar">((اللَّهُمَّ أَنْتَ عَضُدِي، وَأَنْتَ نَصِيرِي، بِكَ أَحُولُ وَبِكَ أَصُولُ، وَبِكَ أُقاتِلُ)).</div> | (Allahumma anta AAadudee, wa-anta naseeree, bika ajoolu wabika asoolu wabika oqatil) | **Allāhumma anta ʿaḍudī, wa-anta naṣīrī, bika aḥūlu wa-bika aṣūlu, wa-bika uqātil** | (O Allah, You are my supporter and You are my helper, by You I move and by You I attack and by You I battle.) |
+| `68:177` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَسْأَلُكَ بِرَحْمَتِكَ الَّتِي وَسِعَتْ كُلَّ شَيْءٍ أَنْ تَغْفِرَ لِي)).</div> | (Allahumma inne as-aluka birahmatikal-latee wasiAAat kulla shay, an taghfira lee.) | **Allāhumma innī asʾaluka bi-raḥmatika-llatī wasiʿat kulla shayʾin an taghfira lī** | (O Allah, I ask You by Your mercy which envelopes all things, that You forgive me.) |
+| `91:202` | <div dir="rtl" lang="ar">((بارَكَ اللَّهُ لَكَ فِي أَهْلِكَ وَمَالِكَ، إِنَّمَا جَزَاءُ السَّلَفِ الْحَمْدُ وَالأَدَاءُ)).</div> | (Barakal-lahu laka fee ahlika wamalik, innama jaza-os-salafil-hamdu wal-ada'.) | **Bāraka-llāhu laka fī ahlika wa-mālik, innamā jazāʾu-s-salafi-l-ḥamdu wa-l-adāʾ** | (May Allah bless for you, your family and wealth. Surely commendation and payment are the reward for a loan.) |
+| `1:3` | <div dir="rtl" lang="ar">( الْحَمْدُ لِلَّهِ الَّذِي عَافَانِي فِي جَسَدِي، وَرَدَّ عَلَيَّ رُوحِي، وَأَذِنَ لي بِذِكْرِهِ )</div> | (Alhamdu lillahil-lathee AAafanee fee jasadee waradda AAalayya roohee wa-athina lee bithikrih.) | **Al-ḥamdu li-llāhi-lladhī ʿāfānī fī jasadī, wa-radda ʿalayya rūḥī, wa-adhina lī bi-dhikrih** | (All praise is for Allah who restored to me my health and returned my soul and has allowed me to remember Him.) |
+| `27:97` | <div dir="rtl" lang="ar">((أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ)) (ثلاثَ مرَّاتٍ إذا أمسى).</div> | a'udhu bikalimatillahit-tammati min sharri ma khalaq | **Aʿūdhu bi-kalimāti-llāhi-t-tāmmāti min sharri mā khalaq** | I seek refuge in the perfect words of Allah from the evil of what He has created. |
+| `28:106` | <div dir="rtl" lang="ar">((سُبْحَانَ اللَّهِ (ثلاثاً وثلاثين) وَالْحَمْدُ لِلَّهِ (ثلاثاً وثلاثين) وَاللَّهُ أَكْبَرُ (أربعاً وثلاثينَ))).</div> | (Subhanal-lah. (thirty-three times) Alhamdu lillah. (thirty-three times) Allahu akbar. (thirty-four times)) | **Subḥāna-llāh. Wa-l-ḥamdu li-llāh. Wa-llāhu akbar** | (How Perfect Allah is. (thirty-three times) All praise is for Allah.(thirty-three times) Allah is the greatest.(thirty-four t |
+| `63:169` | <div dir="rtl" lang="ar">((اللَّهُمَّ اسْقِنَا غَيْثاً مُغِيثاً مَرِيئاً مَرِيعاً، نَافِعاً غَيْرَ ضَارٍّ، عَاجِلاً غَيْرَ آجِلٍ)).</div> | (Allahummas-qina ghaythan mugheethan maree-an mureeAAan, nafiAAan, ghayra dar, AAajilan ghayra ajil.) | **Allāhumma-sqinā ghaythan mughīthan marīʾan marīʿan, nāfiʿan ghayra ḍārr, ʿājilan ghayra ājil** | (O Allah, send upon us helpful, wholesome and healthy rain, beneficial not harmful rain, now, not later.) |
+| `70:180` | <div dir="rtl" lang="ar">((الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا، وَرَزَقَنِيهِ، مِنْ غَيْرِ حَوْلٍ مِنِّي وَلاَ قُوَّةٍ)).</div> | alhamdulillahilladhi at'amani hadha wa razaqanihi min ghayri hawlin minni wa la quwwah | **Al-ḥamdu li-llāhi-lladhī aṭʿamanī hādhā, wa-razaqanīhi, min ghayri ḥawlin minnī wa-lā quwwah** | All praise is to Allah who has fed me this and provided for me without any power or strength from me. |
+| `27:87` | <div dir="rtl" lang="ar">((رَضِيتُ بِاللَّهِ رَبَّاً، وَبِالْإِسْلاَمِ دِيناً، وَبِمُحَمَّدٍ صلى الله عليه وسلم نَبِيّاً)) (ثلاثَ مرَّاتٍ).</div> | raditu billahi rabba, wa bil-islami dina, wa bi-muhammadin sallallahu 'alayhi wa sallama nabiyya | **Raḍītu bi-llāhi rabban, wa-bi-l-islāmi dīnan, wa-bi-Muḥammadin nabiyyan** | I am pleased with Allah as my Lord, Islam as my religion, and Muhammad, sallallahu 'alayhi wa sallam, as my Prophet. |
+| `2:5` | <div dir="rtl" lang="ar">(الْحَمْدُ للَّهِ الَّذِي كَسَانِي هَذَا (الثَّوْبَ) وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلاَ قُوَّة...)</div> | alhamdulillahilladhi kasani hadha wa razaqanihi min ghayri hawlin minni wa la quwwah | **Al-ḥamdu li-llāhi-lladhī kasānī hādhā (th-thawba) wa-razaqanīhi min ghayri ḥawlin minnī wa-lā quwwah** | Praise be to Allah who has clothed me with this garment and provided it for me without any power or strength from me. |
+| `43:139` | <div dir="rtl" lang="ar">((اللَّهُمَّ لاَ سَهْلَ إِلاَّ مَا جَعَلْتَهُ سَهْلاً، وَأَنْتَ تَجْعَلُ الْحَزْنَ إِذَا شِئْتَ سَهْلاً)).</div> | allahumma la sahla illa ma ja'altahu sahla, wa anta taj'alul-hazna idha shi'ta sahla | **Allāhumma lā sahla illā mā jaʿaltahu sahlan, wa-anta tajʿalu-l-ḥazna idhā shiʾta sahlan** | O Allah, there is no ease except in that which You make easy, and You make the difficult easy if You wish. |
+| `53:154` | <div dir="rtl" lang="ar">((إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ، اللَّهُمَّ أْجُرْنِي فِي مُصِيبَتِي، وَأَخْلِفْ لِي خَيْرَاً مِنْهَا)).</div> | inna lillahi wa inna ilayhi raji'un. allahumma'jurni fi musibati wa akhlif li khayran minha | **Innā li-llāhi wa-innā ilayhi rājiʿūn. Allāhumma ʾjurnī fī muṣībatī, wa-akhlif lī khayran minhā** | Indeed we belong to Allah, and indeed to Him we will return. O Allah, reward me for my affliction and replace it with somethi |
+| `83:194` | <div dir="rtl" lang="ar">((الْحَمْدُ لِلَّهِ الَّذِي عَافَانِي مِمَّا ابْتَلاَكَ بِهِ، وَفَضَّلَنِي عَلَى كَثِيرٍ مِمَّنْ خَلَقَ تَفْضِيلاً)).</div> | (Alhamdu lillahil-lathee AAafanee mimmab-talaka bih, wafaddalanee AAala katheerin mimman khalaqa tafdeela.) | **Al-ḥamdu li-llāhi-lladhī ʿāfānī mimmā-btalāka bihi, wa-faḍḍalanī ʿalā kathīrin mimman khalaqa tafḍīlan** | (All praise is for Allah Who saved me from that which He tested you with and Who most certainly favoured me over much of His  |
+
+### Source-text defects found while transliterating
+
+**`114:232`** — **Bracket rule 3 applied** — address to Allah, no framing, so transliterated with the brackets kept. Arabic reads `يَظُّنُّونَ` with a shadda on **both** ẓ and n; the standard form is `يَظُنُّونَ`. Transliterated as standard, source flagged. Old field also uses the doubled-`aa` convention (`Allaahumma`).
+
+**`17:36`** — **Bracket rule 3 applied.** The old romanisation drops the brackets *and* mis-renders `استَقَلَّتْ` as `mas-taqalla`, losing the final `-at`. Arabic also carries tatweel padding (`وَعَــــظْمِي`).
+
+**`36:127`** — **The old romanisation contradicts the Arabic.** It reads `bika ajoolu` — jīm — where the Arabic is `أَحُولُ`, ḥāʾ. Not a spelling variant: two different roots. The proposal follows the **Arabic**, and the discrepancy is flagged rather than resolved, since which one is correct is a sourcing question. **Escalated to Part 16 as a Gate 3 defect on a live page** — the translation appears to corroborate the transliteration, not the Arabic, so this proposal should not be adopted before Part 16 is settled.
+
+**`27:97`** — Trailing `(ثلاثَ مرَّاتٍ إذا أمسى)` is a count plus a time — bracket rule 1, dropped.
+
+**`28:106`** — **Three counts interleaved through the text**, not trailing it. All are rule-1 instructions and are dropped. The old field rendered each as English (`(thirty-three times)`) inside the transliteration — the same category error as `25:69` and `27:83`.
+
+**`27:87`** — **Judgment flagged, not silently made.** The Arabic field carries the honorific `صلى الله عليه وسلم` mid-sentence, and the old romanisation includes it (`sallallahu 'alayhi wa sallama`). It is excluded here on the reading that it is an editorial honorific rather than part of this supplication's wording — but that is the same *class* of call as the bracket question, and it is **not covered by the ruled policy**. See the note below.
+
+**`2:5`** — **Two problems.** `(الثَّوْبَ)` is an *optional word* in parentheses — the parenthesis analogue of bracket rule 3, which the ruling does not currently reach. Kept, in parentheses, by analogy; flagged for confirmation. And the Arabic field **ends in an ellipsis** (`وَلاَ قُوَّة...`) — truncated in source, same class as `27:81`/`27:90`.
+
+### Two gaps in the ruled policy, surfaced by this batch
+
+The bracket ruling covers **square brackets**. Two records here carry the same *kind* of question
+in notation the ruling does not reach. Both are flagged rather than decided.
+
+**1. Optional text in ROUND brackets — `2:5`.** `(الثَّوْبَ)` is an optional word, exactly the
+rule-3 shape but parenthesised. Parentheses are otherwise used in this corpus for instructions
+(rule 1) and as the `((…))` recitation delimiters, so the same mark now carries three jobs.
+Kept in parentheses here **by analogy only**. If rule 3 extends to round brackets, say so; the
+alternative readings are "drop it" or "promote it to unconditional", and they give different pages.
+
+**2. The honorific inside the text — `27:87`.** The Arabic carries
+`صلى الله عليه وسلم` mid-sentence and the old romanisation transliterates it. Excluded here as
+editorial rather than recited — but that is a judgment of the same class the bracket policy was
+written to stop me making silently, so it is surfaced, not buried. A ruling would also settle any
+other record where the honorific sits inside the recited span.
+
+### Not a notation question: `36:127`
+
+Worth separating from the above. The old romanisation reads `bika ajoolu` (jīm) where the Arabic
+reads `أَحُولُ` (ḥāʾ) — **two different roots**, not a transcription variant. The proposal follows
+the Arabic. Which of the two the source intends is a sourcing question and is left open.
+
+---
+
+## Part 16 — Gate 3 defect on a LIVE page: `36:127` Arabic and English are on different roots
+
+Added 2026-08-03. **This is a Gate 3 text-integrity issue, not a transliteration note.** It was
+found while preparing a transliteration, but it is not fixed by one, and the page is live now.
+
+### The three fields disagree
+
+| field | reads | root |
+|---|---|---|
+| `arabic` | `بِكَ أَحُولُ` | **ح-و-ل** (ḥ-w-l) |
+| `transliteration` | `bika ajoolu` | **ج-و-ل** (j-w-l) |
+| `translation` | "by You I move" | — |
+
+**This is not a transcription variant.** ḥāʾ and jīm are different letters and these are different
+roots: ح-و-ل is to turn, shift, change, interpose; ج-و-ل is to roam, range, move about. The
+transliteration is not a sloppy rendering of the Arabic — it is a rendering of a *different word*.
+
+### What the translation appears to corroborate — stated as suggestive, not proven
+
+The English reads **"by You I move"**. "Move" is the natural sense of ج-و-ل (*to move about,
+range*); a translator working from ح-و-ل would more naturally write "I turn", "I shift" or
+"I manoeuvre". On that reading, **two of the three fields point to ج-و-ل and only the Arabic
+points to ح-و-ل**.
+
+**That inference is suggestive, not conclusive, and should not be treated as a finding.** "I move"
+is generic enough to render either root loosely, and both verbs are plausible in this supplication's
+martial context — it sits beside `أَصُولُ` ("I attack") and `أُقَاتِلُ` ("I battle"). What is *not*
+in doubt is that the Arabic and the transliteration are on different roots. That much is a hard
+disagreement whichever way the sourcing question falls.
+
+### No corpus-internal evidence is available
+
+`36:127` is the **only** record in all 566 containing either root, the only one whose
+transliteration contains `ajool`, and the only one whose translation contains "I move". There is
+no second instance to compare against, so this cannot be resolved from our own data.
+
+### Why this is Gate 3 and why it is urgent-ish
+
+Gate 3 is text integrity — narration leakage, truncation, bleed, fields that disagree. This is
+squarely that, with two aggravating facts:
+
+- **The page is LIVE.** `invocations-for-when-you-meet-an-adversary-or-a-powerful-rul-hisn-36-127`
+  is in the sitemap and in R10's baseline of 116.
+- **The divergence is audible.** A reader reciting from the Arabic says *aḥūlu*; a reader following
+  the transliteration on the same page says *ajūlu*. The page gives two different words for the
+  same position in the supplication, and does not disclose that it is doing so.
+
+The existing "Romanization source not verified" note does **not** cover this. That note is about
+provenance; this is a contradiction between two sourced fields.
+
+### What is needed, and what was deliberately not done
+
+**Needed:** a sourcing decision — what does Ḥiṣn al-Muslim actually read at this entry? That
+settles which field is wrong and therefore which one is corrected.
+
+**Not done, deliberately:**
+- The Arabic was **not** "corrected" to match the transliteration, nor the reverse. Either would be
+  inventing the resolution rather than sourcing it.
+- The page was **not** noindexed. That call is the owner's, and this is flagged for it rather than
+  actioned.
+- The Part 15 proposal for `36:127` follows the **Arabic** (`bika aḥūlu`) and says so. If the
+  sourcing decision goes the other way, that proposal changes with it — which is why it should not
+  be adopted before this is settled.
+
+### The wider question this raises
+
+This was found by hand, on one record, while doing something else. Nothing systematically compares
+the Arabic against its own transliteration or translation. `36:127` is the only record where all
+three fields could be checked against each other *because* the transliteration happened to be
+legible enough to disagree — most of the 116 are in the `AA` scheme, where a root-level
+disagreement of exactly this kind would be far harder to notice. **The absence of other findings
+is not evidence that there are none.**
+
+
+---
+
+## Part 17 — Transliteration adoption, batch 6 (11 records)
+
+Added 2026-08-03. **⚠ NOT Gate-2 satisfied — machine-proposed, UNVERIFIED.**
+Nothing written to the corpus, no `transliterationSource` set, nothing marked reviewer-written.
+
+**First half of the final 21.** The three heaviest records were deliberately separated rather than
+stacked: `24:62` (76 words) sits here; `28:107` (56) and `27:84` (42) go to batch 7. That keeps
+both batches mixed rather than one being uniformly dense — 293 words here against 266 in batch 7.
+
+Ruled policy from Part 13a applied throughout: rule 1 drops counts and times, rule 4 excludes
+honorifics, and no parenthesised span is treated by analogy.
+
+### The batch
+
+| id | Arabic | existing (flawed) | **proposed ALA-LC** | translation |
+|---|---|---|---|---|
+| `11:18` | <div dir="rtl" lang="ar">(بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا، ثُمَّ لِيُسَلِّمْ عَلَى أَهْلِهِ).</div> | (Bismil-lahi walajna, wabismil-lahi kharajna, waAAala rabbina tawakkalna.) | **Bi-smi-llāhi walajnā, wa-bi-smi-llāhi kharajnā, wa-ʿalā-llāhi rabbinā tawakkalnā** | (In the name of Allah we enter and in the name of Allah we leave, and upon our Lord we place our trust.) |
+| `28:108` | <div dir="rtl" lang="ar">((الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا، وَكَفَانَا، وَآوَانَا، فَكَمْ مِمَّنْ لاَ كَافِيَ لَهُ وَلاَ مُؤْوِيَ)).</div> | (Alhamdu lillahil-lathee atAAamana wasaqana, wakafana, wa-awana, fakam mimman la kafiya lahu wala mu'wee.) | **Al-ḥamdu li-llāhi-lladhī aṭʿamanā wa-saqānā, wa-kafānā, wa-āwānā, fa-kam mimman lā kāfiya lahu wa-lā muʾwiya** | (All praise is for Allah, Who fed us and gave us drink, and Who is sufficient for us and has sheltered us, for how many  |
+| `27:94` | <div dir="rtl" lang="ar">((سُبْحَانَ اللَّهِ وَبِحَمْدِهِ: عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ)) (ثلاثَ مرَّاتٍ إذا أصبحَ).</div> | subhanallahi wa bihamdihi 'adada khalqihi wa rida nafsihi wa zinata 'arshihi wa midada kalimatihi | **Subḥāna-llāhi wa-bi-ḥamdihi: ʿadada khalqihi, wa-riḍā nafsihi, wa-zinata ʿarshihi, wa-midāda kalimātih** | Glory be to Allah, as many as His creations, Glory be to Allah as much as His pleasure, Glory be to Allah as much as the |
+| `27:88` | <div dir="rtl" lang="ar">((يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغيثُ أَصْلِحْ لِي شَأْنِيَ كُلَّهُ وَلاَ تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ)).</div> | ya hayyu ya qayyum, bi-rahmatika astaghith, wa aslih li sha'ni kullahu wa la takilni ila nafsi tarfata 'aynin abada | **Yā Ḥayyu yā Qayyūm, bi-raḥmatika astaghīthu, aṣliḥ lī shaʾniya kullahu wa-lā takilnī ilā nafsī ṭarfata ʿayn** | O Ever-Living, O Self-Sustaining, by Your mercy I seek help, rectify all my affairs and do not leave me to myself even f |
+| `3:6` | <div dir="rtl" lang="ar">( اللَّهُمَّ لَكَ الْحَمْدُ أَنْتَ كَسَوْتَنِيهِ، أَسْأَلُكَ مِنْ خَيْرِهِ وَخَيْرِ مَا صُنِعَ لَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّهِ وَشَرِّ مَا صُنِعَ لَهُ).</div> | allahumma lakal-hamdu anta kasawtanihi. as'aluka min khayrihi wa khayri ma suni'a lah, wa a'udhu bika min sharrihi wa sharri ma suni'a lah | **Allāhumma laka-l-ḥamdu anta kasawtanīhi, asʾaluka min khayrihi wa-khayri mā ṣuniʿa lah, wa-aʿūdhu bika min sharrihi wa-sharri mā ṣuniʿa lah** | O Allah, to You is all praise. You have clothed me with this. I ask You for its goodness and the goodness for which it w |
+| `10:17` | <div dir="rtl" lang="ar">(اللَّهُمَّ إِنِّي أَعُوذُ بِكَ أَنْ أَضِلَّ، أَوْ أُضَلَّ، أَوْ أَزِلَّ، أَوْ أُزَلَّ، أَوْ أَظْلِمَ، أَوْ أُظْلَمَ، أَوْ أَجْهَلَ، أَوْ يُجْهَلَ عَلَيَّ).</div> | allahumma inni a'udhu bika an adilla aw udalla, aw azilla aw uzalla, aw adhlima aw udhlama, aw ajhala aw yujhala 'alayya | **Allāhumma innī aʿūdhu bika an aḍilla, aw uḍalla, aw azilla, aw uzalla, aw aẓlima, aw uẓlama, aw ajhala, aw yujhala ʿalayya** | O Allah, I seek refuge in You lest I should stray or be led astray, slip or be tripped, wrong or be wronged, or act fool |
+| `21:51` | <div dir="rtl" lang="ar">((اللَّهُمَّ اكْتُبْ لِي بِهَا عِنْدَكَ أَجْراً، وَضَعْ عَنِّي بِهَا وِزْراً، وَاجْعَلْهَا لِي عِنْدَكَ ذُخْراً، وَتَقَبَّلْهَا مِنِّي كَمَا تَقَبَّلْتَهَا مِنْ عَبْدِكَ دَاوُدَ)).</div> | (Allahummak-tub lee biha AAindaka ajra, wadaAA AAannee biha wizra, wajAAalha lee AAindaka thukhra, wataqabbalha minnee kama taqabbaltaha min AAabdika Dawood.) | **Allāhumma-ktub lī bihā ʿindaka ajran, wa-ḍaʿ ʿannī bihā wizran, wa-jʿalhā lī ʿindaka dhukhran, wa-taqabbalhā minnī kamā taqabbaltahā min ʿabdika Dāwūd** | (O Allah, record for me a reward for this (prostration), and remove from me a sin. Save it for me and accept it from me  |
+| `23:54` | <div dir="rtl" lang="ar">((اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى أَزْوَاجِهِ وَذُرِّيَّتِهِ، كَمَا صَلَّيْتَ عَلَى آلِ إِبْرَاهِيمَ. وَبَارِكْ عَلَى مُحَمَّدٍ وَعَلَى أَزْواجِهِ وَذُرِّيَّتِهِ، كَمَا بَارَكْتَ عَلَى آلِ إِبْرَاهِيمَ. إِنَّكَ حَمِيدٌ مَجِيدٌ)).</div> | (Allahumma salli AAala Muhammad wa-AAala azwajihi wathurriyyatihi kama sallayta AAala ali Ibraheem, wabarik AAala Muhammad, wa-AAala azwajihi wathurriyyatih, kama barakta AAala ali Ibraheem. innaka Hameedun Majeed.) | **Allāhumma ṣalli ʿalā Muḥammadin wa-ʿalā azwājihi wa-dhurriyyatihi, kamā ṣallayta ʿalā āli Ibrāhīm. Wa-bārik ʿalā Muḥammadin wa-ʿalā azwājihi wa-dhurriyyatihi, kamā bārakta ʿalā āli Ibrāhīm. Innaka Ḥamīdun Majīd** | (O Allah, send prayers upon Muhammad and upon the wives and descendants of Muhammad, just as You sent prayers upon the f |
+| `16:30` | <div dir="rtl" lang="ar">((اللَّهُمَّ رَبَّ جِبْرَائِيلَ، وَمِيْكَائِيلَ، وَإِسْرَافِيلَ، فَاطِرَ السَّمَوَاتِ وَالأَرْضِ، عَالِمَ الغَيْبِ وَالشَّهَادَةِ أَنْتَ تَحْكُمُ بَيْنَ عِبَادِكَ فِيمَا كَانُوا فِيهِ يَخْتَلِفُونَ. اهْدِنِي لِمَا اخْتُلِفَ فِيهِ مِنَ الْحَقِّ بِإِذْنِكَ إِنَّكَ تَهْدِي مَنْ تَشَاءُ إِلَى صِرَاطٍ مُسْتَقيمٍ)).</div> | (Allahumma rabba jibra-eel, wameeka-eel, wa-israfeel fatiras-samawati walard, AAalimal-ghaybi washshahadah, anta tahkumu bayna AAibadika feema kanoo feehi yakhtalifoon. ihdinee limakh-tulifa feehi minal-haqqi bi-ithnik, innaka tahdee man tasha-o ila siratin mustaqeem.) | **Allāhumma Rabba Jibrāʾīla, wa-Mīkāʾīla, wa-Isrāfīl, fāṭira-s-samāwāti wa-l-arḍ, ʿālima-l-ghaybi wa-sh-shahādah, anta taḥkumu bayna ʿibādika fīmā kānū fīhi yakhtalifūn. Ihdinī li-mā-khtulifa fīhi mina-l-ḥaqqi bi-idhnik, innaka tahdī man tashāʾu ilā ṣirāṭin mustaqīm** | (O Allah, Lord of Jibra-eel, Meeka-eel and Israfeel (great angles), Creator of the heavens and the Earth, Knower of the  |
+| `97:208` | <div dir="rtl" lang="ar">((اللَّهُمَّ رَبَّ السَّمَوَاتِ السَّبْعِ وَمَا أَظْلَلْنَ، وَرَبَّ الأَرَضِينَ السَّبْعِ وَمَا أَقْلَلْنَ، وَرَبَّ الشَّياطِينِ وَمَا أَضْلَلْنَ، وَرَبَّ الرِّيَاحِ وَمَا ذَرَيْنَ، أَسْأَلُكَ خَيْرَ هَذِهِ الْقَرْيَةِ، وَخَيْرَ أَهْلِهَا، وَخَيْرَ مَا فِيهَا، وَأَعُوذُ بِكَ مِنْ شَرِّهَا، وَشَرِّ أَهْلِهَا، وَشَرِّ مَا فِيهَا)).</div> | (Allahumma rabbas-samawatis-sabAAi wama athlaln, warabbal-aradeenas-sabAAi wama aqlaln, warabbash-shayateeni wama adlaln, warabbar-riyahi wama tharayn, as-aluka khayra hathihil-qaryah, wakhayra ahlilha wakhayra ma feeha, wa-aAAoothu bika min sharriha washarri ahliha, washarri ma feeha.) | **Allāhumma Rabba-s-samāwāti-s-sabʿi wa-mā aẓlaln, wa-Rabba-l-araḍīna-s-sabʿi wa-mā aqlaln, wa-Rabba-sh-shayāṭīni wa-mā aḍlaln, wa-Rabba-r-riyāḥi wa-mā dharayn, asʾaluka khayra hādhihi-l-qaryah, wa-khayra ahlihā, wa-khayra mā fīhā, wa-aʿūdhu bika min sharrihā, wa-sharri ahlihā, wa-sharri mā fīhā** | (O Allah, Lord of the seven heavens and all that they envelop, Lord of the seven earths and all that they carry, Lord of |
+| `24:62` | <div dir="rtl" lang="ar">((اللَّهُمَّ بِعِلْمِكَ الغَيْبَ وَقُدْرَتِكَ عَلَى الْخَلقِ أَحْيِنِي مَا عَلِمْتَ الْحَيَاةَ خَيْراً لِي، وَتَوَفَّنِي إِذَا عَلِمْتَ الْوَفَاةَ خَيْراً لِي، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَشْيَتَكَ فِي الْغَيْبِ وَالشَّهَادَةِ، وَأَسْأَلُكَ كَلِمَةَ الْحَقِّ فِي الرِّضَا وَالْغَضَبِ، وَأَسْأَلُكَ الْقَصْدَ فِي الْغِنَى وَالْفَقْرِ، وَأَسْأَلُكَ نَعِيماً لاَ يَنْفَدُ، وَأَسْأَلُكَ قُرَّةَ عَيْنٍ لاَ تَنْقَطِعُ، وَأَسْأَلُكَ الرِّضَا بَعْدَ الْقَضَاءِ، وَأَسْــــأَلُكَ بَرْدَ الْعَيْشِ بَعْدَ الْمَوْتِ، وَأَسْأَلُكَ لَذَّةَ النَّظَرِ إِلَى وَجْهِكَ، وَالشَّوْقَ إِلَى لِقائِكَ فِي غَيرِ ضَرَّاءَ مُضِرَّةٍ، وَلاَ فِتْنَةٍ مُضِلَّةٍ، اللَّهُمَّ زَيِّنَا بِزِينَةِ الإِيمَانِ، وَاجْعَلْنَا هُدَاةً مُهْتَدِينَ)).</div> | (Allahumma biAAilmikal-ghayb, waqudratika AAalal-khalq, ahyinee ma AAalimtal-hayata khayran lee watawaffanee itha AAalimtal-wafata khayran lee, allahumma innee as-aluka khashyataka fil-ghaybi washshahadah, wa-as-aluka kalimatal-haqqi fir-rida walghadab, wa-as-alukal-qasda fil-ghina walfaqr, wa-as-aluka naAAeeman la yanfad, wa-as-aluka qurrata AAaynin la tanqatiAA, wa-as-alukar-rida baAAdal-qada/, wa-as-aluka bardal-AAayshi baAAdal-mawt, wa-as-aluka laththatan-nathari ila wajhik, washshawqa ila liqa-ik fee ghayri darraa mudirrah, wala fitnatin mudillah, allahumma zayyinna bizeenatil-eeman wajAAalna hudatan muhtadeen.) | **Allāhumma bi-ʿilmika-l-ghayba wa-qudratika ʿalā-l-khalqi aḥyinī mā ʿalimta-l-ḥayāta khayran lī, wa-tawaffanī idhā ʿalimta-l-wafāta khayran lī. Allāhumma innī asʾaluka khashyataka fī-l-ghaybi wa-sh-shahādah, wa-asʾaluka kalimata-l-ḥaqqi fī-r-riḍā wa-l-ghaḍab, wa-asʾaluka-l-qaṣda fī-l-ghinā wa-l-faqr, wa-asʾaluka naʿīman lā yanfad, wa-asʾaluka qurrata ʿaynin lā tanqaṭiʿ, wa-asʾaluka-r-riḍā baʿda-l-qaḍāʾ, wa-asʾaluka barda-l-ʿayshi baʿda-l-mawt, wa-asʾaluka ladhdhata-n-naẓari ilā wajhik, wa-sh-shawqa ilā liqāʾika fī ghayri ḍarrāʾa muḍirrah, wa-lā fitnatin muḍillah. Allāhumma zayyinnā bi-zīnati-l-īmān, wa-jʿalnā hudātan muhtadīn** | (O Allah, by Your knowledge of the unseen and Your power over creation, keep me alive so long as You know such life to b |
+
+### Source-text defects found while transliterating
+
+**`11:18`** — **Two problems.** The field ends `ثُمَّ لِيُسَلِّمْ عَلَى أَهْلِهِ` — *"then let him greet his family"* — an instruction in **bare prose**, neither bracketed nor parenthesised. That is a **third storage form** for annotations, after square brackets and parentheses, and no ruled policy reaches it (same shape as `25:73` in Part 10). Not transliterated. Separately, the old romanisation reads `waAAala rabbina` — it **drops `اللَّهِ`** from `وَعَلَى اللَّهِ رَبِّنَا`.
+
+**`27:94`** — Trailing `(ثلاثَ مرَّاتٍ إذا أصبحَ)` is a count plus a time — rule 1, dropped.
+
+**`27:88`** — **The old romanisation adds a word the Arabic does not have** — it ends `tarfata 'aynin abada`, but `أَبَداً` (*abadan*, "ever") appears nowhere in the Arabic field. Same class as `27:82`, where the old text inserted a second `allahumma inni a'udhu bika`. The proposal follows the **Arabic**.
+
+**`10:17`** — Old renders `ظ` as `dh` (`adhlima`, `udhlama`); `ظ` is ẓ. Eight paired verbs, active and passive throughout — the pairing is what the vowelling carries, so it is preserved exactly.
+
+**`24:62`** — **The longest record in the set (76 words) and it carries three defects.** Tatweel padding (`وَأَسْــــأَلُكَ`); a **fourth** stray `/` for hamza in the old text (`baAAdal-qada/`, for `الْقَضَاءِ`), after `17:37`, `24:56` and `35:123`; and the Arabic reads `زَيِّنَا` where the sense requires `زَيِّنَّا` (*zayyinnā*, "adorn **us**") — the shadda on the nūn is missing. Transliterated as `zayyinnā`, matching the translation ("beautify **us**"), with the source flagged.
+
+### A third storage form for annotations — `11:18`
+
+The ruled policy covers **square brackets** (rules 1–3) and names **parentheses** as unruled
+(rule 5). `11:18` ends with an instruction in **bare prose**, delimited by nothing at all:
+
+```
+… وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا، ثُمَّ لِيُسَلِّمْ عَلَى أَهْلِهِ
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                              "then let him greet his family"
+```
+
+This is the same shape as `25:73` in Part 10, whose bare `بَعْدَ السّلامِ مِنْ صَلاَةِ الفَجْرِ`
+defeated de-duplication. So annotations are stored **three** ways — bracketed, parenthesised, and
+bare — and only the first is ruled.
+
+Not transliterated here, on the reading that an imperative addressed to the reader in the third
+person (*"let him greet"*) cannot be part of a supplication addressed to Allah. **That reading is
+stated rather than assumed**, and it is the kind of call rule 5 exists to stop being made silently.
+It is flagged for the same census-and-rule treatment the bracket question received.
+
+### Two records where the old romanisation and the Arabic disagree on CONTENT
+
+Not spelling — words present in one field and absent from the other:
+
+- **`27:88`** — old ends `tarfata 'aynin abada`; `أَبَداً` is **not in the Arabic**.
+- **`11:18`** — old reads `waAAala rabbina`; it **drops `اللَّهِ`**.
+
+Both join `27:82` (Part 11, an inserted `allahumma inni a'udhu bika`) and `36:127` (Part 16, a
+different root entirely). That is now **four records** where the romanisation is not a rendering of
+the stored Arabic. All four followed the Arabic; none was resolved, because which field is right is
+a sourcing question. Worth noting that all four were found by hand — see the scheduled cross-field
+consistency check in `doc/TASKS.md`.
+
+---
+
+## Part 18 — Transliteration adoption, batch 7 — FINAL (10 records)
+
+Added 2026-08-03. **⚠ NOT Gate-2 satisfied — machine-proposed, UNVERIFIED.**
+Nothing written to the corpus, no `transliterationSource` set, nothing marked reviewer-written.
+
+**This completes the proposal pass over all 116 records.** With Parts 9–12, 14, 15 and 17, and the
+4 routed to Part 13a, the set is fully accounted for.
+
+### The batch
+
+| id | Arabic | existing (flawed) | **proposed ALA-LC** | translation |
+|---|---|---|---|---|
+| `103:215` | <div dir="rtl" lang="ar">((سَمَّعَ سَامِعٌ بِحَمْدِ اللَّهِ، وَحُسْنِ بَلاَئِهِ عَلَيْنَا، رَبَّنَا صاحِبْنَا، وَأَفْضِلْ عَلَيْنَا، عَائِذاً بِاللَّهِ مِنَ النَّارِ)).</div> | (SamiAAa samiAAun bihamdil-lahi wahusni bala-ihi AAalayna. Rabbana sahibna wa-afdil AAalayna AAa-ithan billahi minan-nar.) | **Sammaʿa sāmiʿun bi-ḥamdi-llāhi, wa-ḥusni balāʾihi ʿalaynā. Rabbanā ṣāḥibnā, wa-afḍil ʿalaynā, ʿāʾidhan bi-llāhi mina-n-nār** | (May a witness, be witness to our praise of Allah for His favours and bounties upon us. Our Lord, protect us,  |
+| `27:86` | <div dir="rtl" lang="ar">((بِسْمِ اللَّهِ الَّذِي لاَ يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلاَ فِي السّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ)) (ثلاثَ مرَّاتٍ).</div> | bismillahilladhi la yadurru ma'asmihi shay'un fil-ardi wa la fis-sama' wa huwas-sami'ul-'alim | **Bi-smi-llāhi-lladhī lā yaḍurru maʿa-smihi shayʾun fī-l-arḍi wa-lā fī-s-samāʾi wa-huwa-s-Samīʿu-l-ʿAlīm** | In the name of Allah, with whose name nothing in the earth or the heavens can cause harm, and He is the All-He |
+| `28:102` | <div dir="rtl" lang="ar">((بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، فَإِن أَمْسَكْتَ نَفْسِي فارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا، بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ)).</div> | (Bismika rabbee wadaAAtu janbee wabika arfaAAuh, fa-in amsakta nafsee farhamha, wa-in arsaltaha fahfathha bima tahfathu bihi AAibadakas-saliheen.) | **Bi-smika Rabbī waḍaʿtu janbī, wa-bika arfaʿuh, fa-in amsakta nafsī fa-rḥamhā, wa-in arsaltahā fa-ḥfaẓhā, bi-mā taḥfaẓu bihi ʿibādaka-ṣ-ṣāliḥīn** | (In Your name my Lord, I lie down and in Your name I rise, so if You should take my soul then have mercy upon  |
+| `19:44` | <div dir="rtl" lang="ar">((اللَّهُمَّ لَكَ سَجَدْتُ وَبِكَ آمَنْتُ، وَلَكَ أَسْلَمْتُ، سَجَدَ وَجْهِيَ لِلَّذِي خَلَقَهُ، وَصَوَّرَهُ، وَشَقَّ سَمْعَهُ وَبَصَرَهُ، تَبَارَكَ اللَّهُ أَحْسنُ الْخَالِقينَ)).</div> | (Allahumma laka sajadt, wabika amant, walaka aslamt, sajada wajhee lillathee khalaqahu wasawwarahu washaqqa samAAahu wabasarahu, tabarakal-lahu ahsanul-khaliqeen.) | **Allāhumma laka sajadtu wa-bika āmantu, wa-laka aslamtu, sajada wajhiya li-lladhī khalaqahu, wa-ṣawwarahu, wa-shaqqa samʿahu wa-baṣarahu, tabāraka-llāhu aḥsanu-l-khāliqīn** | (O Allah, unto You I have prostrated and in You I have believed, and unto You I have submitted. My face has pr |
+| `28:103` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنَّكَ خَلَقْتَ نَفْسِي وَأَنْتَ تَوَفَّاهَا، لَكَ مَمَاتُهَا وَمَحْياهَا، إِنْ أَحْيَيْتَهَا فَاحْفَظْهَا، وَإِنْ أَمَتَّهَا فَاغْفِرْ لَهَا. اللَّهُمَّ إِنِّي أَسْأَلُكَ العَافِيَةَ)).</div> | (Allahumma innaka khalaqta nafsee wa-anta tawaffaha, laka mamatuha wamahyaha in ahyaytaha fahfathha, wa-in amattaha faghfir laha. Allahumma innee as-alukal-AAafiyah.) | **Allāhumma innaka khalaqta nafsī wa-anta tawaffāhā, laka mamātuhā wa-maḥyāhā, in aḥyaytahā fa-ḥfaẓhā, wa-in amattahā fa-ghfir lahā. Allāhumma innī asʾaluka-l-ʿāfiyah** | (O Allah, verily You have created my soul and You shall take it’s life, to You belongs it’s life and death. If |
+| `14:21` | <div dir="rtl" lang="ar">((يَبْدَأُ بِرِجْلِهِ الْيُسْرَى)) وَيَقُولُ: ((بِسْمِ اللَّهِ وَالصّلَاةُ وَالسَّلَامُ عَلَى رَسُولِ اللَّهِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِك، اللَّهُمَّ اعْصِمْنِي مِنَ الشَّيْطَانِ الرَّجِيمِ)).</div> | (Bismil-lah wassalatu wassalamu AAala rasoolil-lah, allahumma innee as-aluka min fadlik, allahumma iAAsimnee minash-shaytanir-rajeem.) | **Bi-smi-llāhi wa-ṣ-ṣalātu wa-s-salāmu ʿalā rasūli-llāh, allāhumma innī asʾaluka min faḍlik, allāhumma-ʿṣimnī mina-sh-shayṭāni-r-rajīm** | In the name of Allah, and prayers and peace be upon the Messenger of Allah. O Allah, I ask You from Your favou |
+| `16:27` | <div dir="rtl" lang="ar">((اللَّهُمَّ بَاعِدْ بَيْنِي وَبَيْنَ خَطَايَايَ كَمَا بَاعَدْتَ بَيْنَ الْمَشْرِقِ وَالْمَغْرِبِ، اللَّهُمَّ نَقِّنِي مِنْ خَطَايَايَ كَمَا يُنَقَّى الثَّوْبُ الْأَبْيَضُ مِنَ الدَّنَسِ، اللَّهُمَّ اغْسِلْني مِنْ خَطَايَايَ، بِالثَّلْجِ وَالْماءِ وَالْبَرَدِ)).</div> | (Allahumma baAAid baynee wabayna khatayaya kama baAAadta baynal-mashriqi walmaghrib, allahumma naqqinee min khatayaya kama yunaqqath-thawbul-abyadu minad-danas, allahummagh-silnee min khatayaya biththalji walma/i walbarad.) | **Allāhumma bāʿid baynī wa-bayna khaṭāyāya kamā bāʿadta bayna-l-mashriqi wa-l-maghrib, allāhumma naqqinī min khaṭāyāya kamā yunaqqā-th-thawbu-l-abyaḍu mina-d-danas, allāhumma-ghsilnī min khaṭāyāya bi-th-thalji wa-l-māʾi wa-l-barad** | (O Allah, distance me from my sins just as You have distanced The East from The West, O Allah, purify me of my |
+| `28:111` | <div dir="rtl" lang="ar">((اللَّهُمَّ أَسْلَمْتُ نَفْسِي إِلَيْكَ، وَفَوَّضْتُ أَمْرِي إِلَيْكَ، وَوَجَّهْتُ وَجْهِي إِلَيْكَ، وَأَلْجَأْتُ ظَهْرِي إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لاَ مَلْجَأَ وَلاَ مَنْجَا مِنْكَ إِلاَّ إِلَيْكَ، آمَنْتُ بِكِتَابِكَ الَّذِي أَنْزَلْتَ، وَبِنَبِيِّكَ الَّذِي أَرْسَلْتَ)).</div> | (Allahumma aslamtu nafsee ilayk, wafawwadtu amree ilayk, wawajjahtu wajhee ilayk, wa-alja/tu thahree ilayk, raghbatan warahbatan ilayk, la maljaa wala manja minka illa ilayk, amantu bikitabikal-lathee anzalt, wabinabiyyikal-lathee arsalt.) | **Allāhumma aslamtu nafsī ilayk, wa-fawwaḍtu amrī ilayk, wa-wajjahtu wajhī ilayk, wa-aljaʾtu ẓahrī ilayk, raghbatan wa-rahbatan ilayk, lā maljaʾa wa-lā manjā minka illā ilayk, āmantu bi-kitābika-lladhī anzalt, wa-bi-nabiyyika-lladhī arsalt** | (O Allah, I submit my soul unto You, and I entrust my affair unto You, and I turn my face towards You, and I t |
+| `27:84` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ: فِي دِينِي وَدُنْيَايَ وَأَهْلِي، وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَينِ يَدَيَّ، وَمِنْ خَلْفِي، وَعَنْ يَمِينِي، وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي)).</div> | allahumma inni as'alukal-'afwa wal-'afiyah fid-dunya wal-akhirah. allahumma inni as'alukal-'afwa wal-'afiyah fi dini wa dunyaya wa ahli wa mali. allahummastur 'awrati wa amin raw'ati. allahummahfadhni min bayni yadayya wa min khalfi wa 'an yamini wa 'an shimali wa min fawqi wa a'udhu bi 'adhamatika an ughtala min tahti | **Allāhumma innī asʾaluka-l-ʿafwa wa-l-ʿāfiyata fī-d-dunyā wa-l-ākhirah. Allāhumma innī asʾaluka-l-ʿafwa wa-l-ʿāfiyata fī dīnī wa-dunyāya wa-ahlī wa-mālī. Allāhumma-stur ʿawrātī, wa-āmin rawʿātī. Allāhumma-ḥfaẓnī min bayni yadayya, wa-min khalfī, wa-ʿan yamīnī, wa-ʿan shimālī, wa-min fawqī, wa-aʿūdhu bi-ʿaẓamatika an ughtāla min taḥtī** | O Allah, indeed I ask You for well-being and safety in this world and the Hereafter. O Allah, indeed I ask You |
+| `28:107` | <div dir="rtl" lang="ar">((اللَّهُمَّ رَبَّ السَّمَوَاتِ السَّبْعِ وَرَبَّ الأَرْضِ، وَرَبَّ الْعَرْشِ الْعَظِيمِ، رَبَّنَا وَرَبَّ كُلِّ شَيْءٍ، فَالِقَ الْحَبِّ وَالنَّوَى، وَمُنْزِلَ التَّوْرَاةِ وَالْإِنْجِيلِ، وَالْفُرْقَانِ، أَعُوذُ بِكَ مِنْ شَرِّ كُلِّ شَيْءٍ أَنْتَ آخِذٌ بِنَاصِيَتِهِ. اللَّهُمَّ أَنْتَ الأَوَّلُ فَلَيْسَ قَبْلَكَ شَيْءٌ، وَأَنْتَ الآخِرُ فَلَيسَ بَعْدَكَ شَيْءٌ، وَأَنْتَ الظَّاهِرُ فَلَيْسَ فَوْقَكَ شَيْءٌ، وَأَنْتَ الْبَاطِنُ فَلَيْسَ دُونَكَ شَيْءٌ، اقْضِ عَنَّا الدَّيْنَ وَأَغْنِنَا مِنَ الْفَقْرِ)).</div> | (Allahumma rabbas-samawatis-sabAA, warabbal-AAarshil-AAatheem, rabbana warabba kulli shay/, faliqal-habbi wannawa, wamunazzilat-tawra, wal-injeel, walfurqan, aAAoothu bika min sharri kulli shayin anta akhithun binasiyatih. Allahumma antal-awwal, falaysa qablaka shay/, wa-antal-akhir, falaysa baAAdaka shay/, wa-antath-thahir falaysa fawqaka shay/, waantal-batin, falaysa doonaka shay/, iqdi AAannad-dayna wa-aghnina minal-faqr.) | **Allāhumma Rabba-s-samāwāti-s-sabʿi wa-Rabba-l-arḍ, wa-Rabba-l-ʿarshi-l-ʿaẓīm, Rabbanā wa-Rabba kulli shayʾ, fāliqa-l-ḥabbi wa-n-nawā, wa-munzila-t-Tawrāti wa-l-Injīli wa-l-Furqān, aʿūdhu bika min sharri kulli shayʾin anta ākhidhun bi-nāṣiyatih. Allāhumma anta-l-Awwalu fa-laysa qablaka shayʾ, wa-anta-l-Ākhiru fa-laysa baʿdaka shayʾ, wa-anta-ẓ-Ẓāhiru fa-laysa fawqaka shayʾ, wa-anta-l-Bāṭinu fa-laysa dūnaka shayʾ, iqḍi ʿanna-d-dayna wa-aghninā mina-l-faqr** | (O Allah, Lord of the seven heavens and the exalted throne, our Lord and Lord of all things, Splitter of the s |
+
+### Source-text defects found while transliterating
+
+**`103:215`** — **Verb-form disagreement.** The Arabic reads `سَمَّعَ` (*sammaʿa*, form II — "made [others] hear, proclaimed"); the old romanisation reads `SamiAAa` (*samiʿa*, form I — "heard"). Same root, **different form and different meaning**. Below the word-level threshold that pulled `11:18` and `27:88` — one verb, not a missing or added one — so it is flagged, not held. The proposal follows the Arabic.
+
+**`28:102`** — Old renders `ظ` as `th` throughout (`fahfathha`, `tahfathu`); `ظ` is ẓ.
+
+**`14:21`** — **A fourth notation problem, and the worst of them.** The field opens `((يَبْدَأُ بِرِجْلِهِ الْيُسْرَى)) وَيَقُولُ:` — *"he begins with his left foot, and says:"* — an **instruction wrapped in the very `((…))` delimiter that marks recited text**, followed by bare prose. So the delimiter that identifies what to recite is here used for what NOT to recite. Not transliterated. This defeats any rule keyed on the delimiter, and it is why the parenthesis census in Part 13a could not classify mechanically.
+
+**`16:27`** — Fifth stray `/` for hamza (`walma/i`, for `وَالْماءِ`).
+
+**`28:111`** — Sixth stray `/` (`wa-alja/tu`), and `ظ` as `th` again (`thahree` for `ظَهْرِي`).
+
+**`27:84`** — `ظ` as `dh` twice (`allahummahfadhni`, `'adhamatika`).
+
+**`28:107`** — **WORD-LEVEL OMISSION — this record is being held.** The old romanisation reads `rabbas-samawatis-sabAA, warabbal-AAarshil-AAatheem`, skipping `وَرَبَّ الأَرْضِ` — *"and Lord of the earth"* — entirely. Same class as `11:18`, so the same standard applies and the page is pulled. It also carries `wamunazzilat-tawra` for `وَمُنْزِلَ التَّوْرَاةِ` (wrong form *munazzil* for *munzil*, and `Tawrāt` truncated to `tawra`), plus four more stray `/` marks.
+
+### The stray-`/` count is now 6
+
+`17:37`, `24:56`, `35:123`, `24:62`, `16:27`, `28:111` — plus several more inside
+`28:107`. In every case it stands where a hamza belongs. It is a **systematic upstream encoding
+failure**, not scattered typos, and it is one of the clearest arguments that the existing
+romanisation cannot be repaired by patching: the same defect recurs across records that share no
+other property.
+
+### `14:21` — the delimiter itself is unreliable
+
+`((يَبْدَأُ بِرِجْلِهِ الْيُسْرَى)) وَيَقُولُ:` puts an **instruction inside the `((…))`
+delimiter that marks recited text**. Every other record uses that delimiter to mean "this is what
+you say". Here it means the opposite.
+
+This is the fourth distinct way an annotation is stored — bracketed, parenthesised, bare prose, and
+now inside the recitation delimiter — and it is decisive for Part 13a's rule 5: **no notation in
+this corpus reliably distinguishes recited text from instruction.** A rule keyed on any single mark
+will be wrong somewhere.
+
+### Records this batch sends for holding
+
+| record | defect | disposition |
+|---|---|---|
+| `28:107` | `وَرَبَّ الأَرْضِ` **absent** from the romanisation | **held** — word-level, same standard as `11:18` |
+| `103:215` | `سَمَّعَ` (form II) vs `samiʿa` (form I) | flagged, **not** held — one verb's form, not a missing word |
+
+The line between them is the one applied throughout: **a word added, dropped or replaced pulls the
+page; an inflection or form error does not**, because the latter is what the "Romanization source
+not verified" disclosure already covers and the former is not.
+
+---
+
 ## Sign-off
 
 | | Name | Credentials | Date | Signature |
@@ -1151,6 +1784,14 @@ at all.
 | Part 9 — transliteration adoption, batch 1 | | | | |
 | Part 10 — transliteration adoption, batch 2 | | | | |
 | Part 11 — transliteration adoption, batch 3 | | | | |
+| Part 12 — quran.com 5, corrected + normalised | | | | |
+| Part 13 — multi-verse records (parked) | | | | |
+| Part 13a — bracket policy + 4 routed records | | | | |
+| Part 14 — transliteration adoption, batch 4 | | | | |
+| Part 15 — transliteration adoption, batch 5 | | | | |
+| Part 16 — Gate 3: 36:127 root disagreement (LIVE) | | | | |
+| Part 17 — transliteration adoption, batch 6 | | | | |
+| Part 18 — transliteration adoption, batch 7 (FINAL) | | | | |
 
 The reviewer's name and credentials appear on the site once any part is signed off
 (`DUA-SEO-STRATEGY-v2.md` §6). Please confirm you are content for them to be published.
