@@ -83,18 +83,43 @@ Until then the assertion is what keeps those pages out of a sitemap.
 Companion to R3, from `DUA-PAGE-CONTENT-SPEC.md` §1.1. R3 stops an unverified clause rendering at
 all; R3a governs how a **verified** one is allowed to appear.
 
-Where zone 1 renders `dua_clause_arabic` rather than the record's whole `arabic`, the page must
-carry all three of:
+Where zone 1 renders `dua_clause_arabic` rather than the record's whole `arabic`, all of the
+following must hold — three things the page must carry, one it must not, one internal:
 
 ```
 assert page labels the clause as the recitable portion (not as the whole ayah/narration)
 assert page shows or links the full source text it was extracted from
-assert the A2 authentication note names the extraction shape and the confirming reviewer
+assert the A2 authentication note names the extraction shape
+assert the page names NO reviewer, anywhere in rendered HTML   # amended 2026-08-03
+assert the record id appears in doc/DUA-REVIEWER-PACKAGE.md    # the sign-off trail
 ```
 
-Fail the build if a page renders a clause without all three. The failure mode this prevents is a
+Fail the build on any of them. The failure mode this prevents is a
 page that silently redraws the boundary of an āyah — a reader memorising from it learns the wrong
 boundary, and nothing on the page tells them so.
+
+### Amended 2026-08-03 — verification is internal, and naming a reviewer is now FORBIDDEN
+
+R3a originally required the A2 note to **name the confirming reviewer**. That limb is
+**withdrawn**. It collided with the public-credit-deferred decision taken on
+`editorial-policy.html` the same day — the site publishes no reviewer name and no institutional
+credit in rendered HTML — and requiring one on every clause page would have reintroduced through
+the back door exactly what that decision removed from the front.
+
+**The requirement is relocated, not dropped.** Verification still has to be real and traceable;
+it just lives internally:
+
+| | |
+|---|---|
+| who sets `dua_clause_verified: true` | the owner, under ADR-044 |
+| where the sign-off is recorded | `doc/DUA-REVIEWER-PACKAGE.md` |
+| what the validator asserts | the record id appears in that package, so a `true` cannot be set by a code change alone and leave no trail |
+| what the page may say | the extraction shape, the full source text — and **no reviewer, ever** |
+
+So the third limb **inverts**: what R3a once required in the HTML, it now forbids. That inversion
+is the point — it is the same shape as the editorial-policy page, where the internal record
+(ADR-044, the DECISIONS log, the package sign-off rows) stays authoritative while the public
+surface carries no name.
 
 ## R4 — `build_gate` blocks indexing regardless of batch approval
 

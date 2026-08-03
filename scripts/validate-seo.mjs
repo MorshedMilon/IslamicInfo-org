@@ -405,16 +405,44 @@ if (!process.argv.includes("--fixtures")) {
   verdict("R3", r3bad.length, r3bad.length === 0 && (cbTotal + qTotal) > 0
     ? `(VACUOUS TODAY: ${cbTotal + qTotal} such records exist but NONE is indexed — this passes by set composition, not enforcement)` : "");
 
-  // R3a — a verified clause must be PRESENTED as an extract. Governs how a verified
-  // clause may appear, so it can only bind once R3's clause fields exist.
+  /* R3a — a verified clause must be PRESENTED as an extract, and its verification
+     must be INTERNAL. Amended 2026-08-03 (owner ruling).
+
+     The original third limb required the A2 note to "name the confirming reviewer".
+     That is withdrawn. It collided with the public-credit-deferred decision taken on
+     editorial-policy.html the same day: the site publishes no reviewer name, no
+     institutional credit, anywhere in rendered HTML. Requiring one on every clause
+     page would have reintroduced by the back door exactly what that decision removed
+     from the front.
+
+     The requirement is not dropped, it is RELOCATED. Verification still has to be
+     real and traceable — it just lives internally:
+       - `dua_clause_verified: true` is set ONLY by owner sign-off (ADR-044),
+         recorded in doc/DUA-REVIEWER-PACKAGE.md;
+       - the record id must appear in that package, so a `true` cannot be set by a
+         code change alone and leave no trail;
+       - and the rendered page must name NO reviewer at all.
+
+     So the third limb inverts: what R3a once REQUIRED in the HTML, it now FORBIDS. */
   const clauseRendered = indexedRecords.filter(verifiedClause);
+  const reviewerPkg = fs.existsSync(P("doc/DUA-REVIEWER-PACKAGE.md"))
+    ? fs.readFileSync(P("doc/DUA-REVIEWER-PACKAGE.md"), "utf8") : "";
+  const CREDIT = /\b(confirmed|reviewed|verified|approved|checked)\s+by\b|\breviewer:|\bcredential/i;
   let r3a = 0;
   for (const d of clauseRendered) {
     const html = readPage(lock[String(d.id)]); if (!html) continue;
     const labelled = /recitable portion|the portion recited|extract/i.test(html);
     const showsFull = /full (text|ayah|narration)|complete (verse|narration)/i.test(html);
-    const noteNames = /extract|clause/i.test(html) && /confirmed by|reviewed by/i.test(html);
-    if (!(labelled && showsFull && noteNames)) { r3a++; console.log(`  FAIL R3a ${d.id} renders a clause without all three required disclosures`); }
+    const namesShape = /extract|clause/i.test(html);
+    // strip comments before the credit scan — a commented note is not rendered text
+    const visible = html.replace(/<!--[\s\S]*?-->/g, "");
+    const namesReviewer = CREDIT.test(visible);
+    const traceable = reviewerPkg.includes(String(d.id));
+    if (!labelled) { r3a++; console.log(`  FAIL R3a ${d.id} does not label the clause as the recitable portion`); }
+    if (!showsFull) { r3a++; console.log(`  FAIL R3a ${d.id} does not show or link the full source text`); }
+    if (!namesShape) { r3a++; console.log(`  FAIL R3a ${d.id} A2 note does not name the extraction shape`); }
+    if (namesReviewer) { r3a++; console.log(`  FAIL R3a ${d.id} names a reviewer in rendered HTML — verification is internal only`); }
+    if (!traceable) { r3a++; console.log(`  FAIL R3a ${d.id} is dua_clause_verified but appears nowhere in doc/DUA-REVIEWER-PACKAGE.md — a verified flag must be traceable to a sign-off`); }
   }
   console.log(`  R3a — pages rendering a verified clause: ${clauseRendered.length}`);
   verdict("R3a", r3a, clauseRendered.length === 0 ? "(VACUOUS: no record carries dua_clause_verified yet, so nothing can violate it)" : "");

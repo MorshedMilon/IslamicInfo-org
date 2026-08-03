@@ -14,7 +14,11 @@ const FILES = [
   "docs/seo/hub_pages_keywords_v2.csv",
   "src/data/dua/search-corpus.json",
   "sitemap.xml",
+  "doc/DUA-REVIEWER-PACKAGE.md",          // R3a's sign-off-trail limb mutates this
 ];
+const lockEarly = JSON.parse(fs.readFileSync("src/data/dua/slugs.lock.json", "utf8"));
+const r3aId = Object.keys(lockEarly).find((k) => /^27:7[5-9]$/.test(k));
+if (r3aId) FILES.push("duas/" + lockEarly[r3aId] + ".html");   // R3a mutates the rendered page
 const backup = new Map(FILES.map((f) => [f, fs.readFileSync(f)]));   // Buffer = byte exact
 const restore = () => { for (const [f, b] of backup) fs.writeFileSync(f, b); };
 
@@ -63,6 +67,36 @@ const csvPatch = (file, pred, col, val) => {
   fs.writeFileSync(file, out.join(crlf ? "\r\n" : "\n"));
 };
 
+/* ---- R3a helpers ----
+   R3a only binds on a record that is INDEXED and carries a verified clause, so each
+   case has to manufacture that state, then vary one limb at a time. */
+const R3A_ID = Object.keys(lock).find((k) => /^27:7[5-9]$/.test(k));
+const R3A_PAGE = "duas/" + lock[R3A_ID] + ".html";
+const PKG = "doc/DUA-REVIEWER-PACKAGE.md";
+
+const setVerified = (id) => {
+  const c = corpus();
+  const d = c.duas.find((x) => String(x.id) === id);
+  d.dua_clause_arabic = "اللَّهُمَّ"; d.dua_clause_verified = true;
+  writeCorpus(c);
+};
+/* satisfies the three positive limbs: labelled as the recitable portion, shows the
+   full source, names the extraction shape */
+const compliantClausePage = (id, extra = "") => {
+  const f = "duas/" + lock[id] + ".html";
+  const h = fs.readFileSync(f, "utf8");
+  fs.writeFileSync(f, h.replace("</main>",
+    `<p>This is the recitable portion, an extract; the full text of the narration is shown above.</p>${extra}</main>`));
+};
+const ensureTrail = (id) => {
+  const p = fs.readFileSync(PKG, "utf8");
+  if (!p.includes(id)) fs.appendFileSync(PKG, `\n<!-- signoff trail: ${id} -->\n`);
+};
+const stripTrail = (id) => {
+  const p = fs.readFileSync(PKG, "utf8");
+  fs.writeFileSync(PKG, p.split(id).join("XX:XX"));
+};
+
 const CASES = [
   { rule: "R1", expect: "FAIL", name: "two live rows claim the same keyword",
     patch: () => csvPatch("docs/seo/famous_named_duas_v2.csv", (r) => r.build_status === "ready" && r.primary_keyword, "primary_keyword", "dua for sujood") },
@@ -82,10 +116,20 @@ const CASES = [
     patch: () => { const id = Object.keys(lock).find((k) => /^quran:/.test(k) && lock[k]); addToSitemap([lock[id]]); } },
 
   { rule: "R3a", expect: "FAIL", name: "an indexed page gains a verified clause but shows no extract disclosures",
-    patch: () => { const c = corpus();
-      const id = Object.keys(lock).find((k) => /^27:7[5-9]$/.test(k));
-      const d = c.duas.find((x) => String(x.id) === id);
-      d.dua_clause_arabic = "اللَّهُمَّ"; d.dua_clause_verified = true; writeCorpus(c); } },
+    patch: () => { setVerified(R3A_ID); } },
+
+  /* R3a's third limb INVERTED on 2026-08-03: naming a reviewer went from REQUIRED to
+     FORBIDDEN, so it needs proving in both directions. The positive control matters
+     as much as the failures — without it, a rule that always failed would look
+     identical to one that works. */
+  { rule: "R3a", expect: "PASS", name: "POSITIVE CONTROL — compliant clause page, traceable, names no reviewer",
+    patch: () => { setVerified(R3A_ID); compliantClausePage(R3A_ID); ensureTrail(R3A_ID); } },
+
+  { rule: "R3a", expect: "FAIL", name: "clause page NAMES a reviewer in rendered HTML (now forbidden)",
+    patch: () => { setVerified(R3A_ID); compliantClausePage(R3A_ID, "<p>Confirmed by Dr Example, PhD.</p>"); ensureTrail(R3A_ID); } },
+
+  { rule: "R3a", expect: "FAIL", name: "dua_clause_verified with no sign-off trail in the reviewer package",
+    patch: () => { setVerified(R3A_ID); compliantClausePage(R3A_ID); stripTrail(R3A_ID); } },
 
   { rule: "R4", expect: "FAIL", name: "a build_gate record is placed in the sitemap",
     patch: () => { const c = corpus(); const d = c.duas.find((x) => x.build_gate);

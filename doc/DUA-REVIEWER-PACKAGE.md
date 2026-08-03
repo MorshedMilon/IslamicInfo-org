@@ -108,30 +108,30 @@ reading**, before any is routed out permanently. All are marked `secondSignalCon
 
 | # | Ref | Verse text (English) | Why it was flagged | **Reviewer ruling** (confirm / reject) | **Reviewer notes** |
 |---|---|---|---|---|---|
-| 1 | Qur'an 2:200 | Our Lord, give us in this world | Already flagged `contextual` in the corpus: the Qur'an quotes this as the request of those who ask only for this world. 2:201 is the praised form. | | |
-| 2 | Qur'an 6:128 | Our Lord, some of us made use of others, and we have [now] reached our term which You appointed for us. | Speech of jinn and men on the Day of Judgement. | | |
-| 3 | Qur'an 7:38 | Our Lord, these had misled us, so give them a double punishment of the Fire. | The damned in the Fire asking for their misleaders to be doubly punished. | | |
-| 4 | Qur'an 14:44 | Our Lord, delay us for a short term; we will answer Your call and follow the messengers. | The wrongdoers on the Day of Judgement asking to be sent back. | | |
-| 5 | Qur'an 15:36 | My Lord, then reprieve me until the Day they are resurrected. | Speech of Iblis, asking to be reprieved until the Day of Resurrection. | | |
-| 6 | Qur'an 15:39 | My Lord, because You have put me in error, I will surely make [disobedience] attractive to them [i.e., mankind] on earth, and I will mislead them all | Speech of Iblis, vowing to make disobedience attractive to mankind. | | |
-| 7 | Qur'an 16:86 | Our Lord, these are our partners [to You] whom we used to invoke [in worship] besides You. | The polytheists pointing to their idols on the Day of Judgement. | | |
-| 8 | Qur'an 20:125 | My Lord, why have you raised me blind while I was [once] seeing? | The one raised blind on the Day of Judgement, asking why. | | |
-| 9 | Qur'an 20:134 | Our Lord, why did You not send to us a messenger so we could have followed Your verses [i.e., teachings] before we were humiliated and disgraced? | The damned asking why no messenger was sent to them. | | |
-| 10 | Qur'an 23:106 | Our Lord, our wretchedness overcame us, and we were a people astray. | The damned admitting their wretchedness in the Fire. | | |
-| 11 | Qur'an 23:107 | Our Lord, remove us from it, and if we were to return [to evil], we would indeed be wrongdoers. | The damned asking to be removed from the Fire. | | |
-| 12 | Qur'an 28:47 | Our Lord, why did You not send us a messenger so we could have followed Your verses and been among the believers? | The damned asking why no messenger was sent. | | |
-| 13 | Qur'an 28:63 | Our Lord, these are the ones we led to error. We led them to error just as we were in error. We declare our disassociation [from them] to You. They did not used to worship [i.e., obey] us. | Those who misled others disowning them on the Day of Judgement. | | |
-| 14 | Qur'an 32:12 | Our Lord, we have seen and heard, so return us [to the world]; we will work righteousness. Indeed, we are [now] certain. | The criminals asking to be returned to the world. | | |
-| 15 | Qur'an 33:67 | Our Lord, indeed we obeyed our masters and our dignitaries, and they led us astray from the [right] way. | The damned blaming their leaders. | | |
-| 16 | Qur'an 33:68 | Our Lord, give them double the punishment and curse them with a great curse. | The damned asking that their leaders be doubly punished. | | |
-| 17 | Qur'an 34:19 | Our Lord, lengthen the distance between our journeys | Already flagged `contextual`: the people of Saba asking for hardship in their travels, and punished for it. | | |
-| 18 | Qur'an 35:37 | Our Lord, remove us; we will do righteousness - other than what we were doing! | The damned asking to be removed so they may do righteousness. | | |
-| 19 | Qur'an 38:16 | Our Lord, hasten for us our share [of the punishment] before the Day of Account. | The mockers asking for their share of punishment to be hastened. | | |
-| 20 | Qur'an 38:61 | Our Lord, whoever brought this upon us - increase for him double punishment in the Fire. | The damned asking for double punishment on whoever brought it upon them. | | |
-| 21 | Qur'an 40:11 | Our Lord, You made us lifeless twice and gave us life twice, and we have confessed our sins. So is there to an exit any way? | The damned confessing their sins and asking for a way out. | | |
-| 22 | Qur'an 41:29 | Our Lord, show us those who misled us of the jinn and men [so] we may put them under our feet that they will be among the lowest. | The damned asking to see those who misled them. | | |
-| 23 | Qur'an 50:27 | Our Lord, I did not make him transgress, but he [himself] was in extreme error. | Satan's companion disowning him on the Day of Judgement. | | |
-| 24 | Qur'an 63:10 | My Lord, if only You would delay me for a brief term so I would give charity and be of the righteous. | The one who neglected charity, asking at death to be delayed. | | |
+| 1 | Qur'an 2:200 | Our Lord, give us in this world | Already flagged `contextual` in the corpus: the Qur'an quotes this as the request of those who ask only for this world. 2:201 is the praised form. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: 2:200 is the deficient half of the deliberate 2:200/2:201 contrast — "give us in this world" with no hereafter clause and no protection-from-the-Fire clause. The Qur'an holds it up as the incomplete example so 2:201 can follow as the praised model; uncontroversial in tafsir, not a contested question. Publishing it alone would have a reader reciting the exact prayer the Qur'an presents as lacking. 2:201 already exists as the rank-2 famous dua ("rabbana atina fid-dunya hasanah"), so routing out 2:200 loses nothing and protects the real page. |
+| 2 | Qur'an 6:128 | Our Lord, some of us made use of others, and we have [now] reached our term which You appointed for us. | Speech of jinn and men on the Day of Judgement. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 3 | Qur'an 7:38 | Our Lord, these had misled us, so give them a double punishment of the Fire. | The damned in the Fire asking for their misleaders to be doubly punished. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 4 | Qur'an 14:44 | Our Lord, delay us for a short term; we will answer Your call and follow the messengers. | The wrongdoers on the Day of Judgement asking to be sent back. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 5 | Qur'an 15:36 | My Lord, then reprieve me until the Day they are resurrected. | Speech of Iblis, asking to be reprieved until the Day of Resurrection. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed (speech of Iblis). |
+| 6 | Qur'an 15:39 | My Lord, because You have put me in error, I will surely make [disobedience] attractive to them [i.e., mankind] on earth, and I will mislead them all | Speech of Iblis, vowing to make disobedience attractive to mankind. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed (speech of Iblis). |
+| 7 | Qur'an 16:86 | Our Lord, these are our partners [to You] whom we used to invoke [in worship] besides You. | The polytheists pointing to their idols on the Day of Judgement. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 8 | Qur'an 20:125 | My Lord, why have you raised me blind while I was [once] seeing? | The one raised blind on the Day of Judgement, asking why. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 9 | Qur'an 20:134 | Our Lord, why did You not send to us a messenger so we could have followed Your verses [i.e., teachings] before we were humiliated and disgraced? | The damned asking why no messenger was sent to them. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 10 | Qur'an 23:106 | Our Lord, our wretchedness overcame us, and we were a people astray. | The damned admitting their wretchedness in the Fire. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 11 | Qur'an 23:107 | Our Lord, remove us from it, and if we were to return [to evil], we would indeed be wrongdoers. | The damned asking to be removed from the Fire. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 12 | Qur'an 28:47 | Our Lord, why did You not send us a messenger so we could have followed Your verses and been among the believers? | The damned asking why no messenger was sent. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 13 | Qur'an 28:63 | Our Lord, these are the ones we led to error. We led them to error just as we were in error. We declare our disassociation [from them] to You. They did not used to worship [i.e., obey] us. | Those who misled others disowning them on the Day of Judgement. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 14 | Qur'an 32:12 | Our Lord, we have seen and heard, so return us [to the world]; we will work righteousness. Indeed, we are [now] certain. | The criminals asking to be returned to the world. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 15 | Qur'an 33:67 | Our Lord, indeed we obeyed our masters and our dignitaries, and they led us astray from the [right] way. | The damned blaming their leaders. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 16 | Qur'an 33:68 | Our Lord, give them double the punishment and curse them with a great curse. | The damned asking that their leaders be doubly punished. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 17 | Qur'an 34:19 | Our Lord, lengthen the distance between our journeys | Already flagged `contextual`: the people of Saba asking for hardship in their travels, and punished for it. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed (Saba ingratitude, punished). |
+| 18 | Qur'an 35:37 | Our Lord, remove us; we will do righteousness - other than what we were doing! | The damned asking to be removed so they may do righteousness. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 19 | Qur'an 38:16 | Our Lord, hasten for us our share [of the punishment] before the Day of Account. | The mockers asking for their share of punishment to be hastened. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 20 | Qur'an 38:61 | Our Lord, whoever brought this upon us - increase for him double punishment in the Fire. | The damned asking for double punishment on whoever brought it upon them. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 21 | Qur'an 40:11 | Our Lord, You made us lifeless twice and gave us life twice, and we have confessed our sins. So is there to an exit any way? | The damned confessing their sins and asking for a way out. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 22 | Qur'an 41:29 | Our Lord, show us those who misled us of the jinn and men [so] we may put them under our feet that they will be among the lowest. | The damned asking to see those who misled them. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 23 | Qur'an 50:27 | Our Lord, I did not make him transgress, but he [himself] was in extreme error. | Satan's companion disowning him on the Day of Judgement. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
+| 24 | Qur'an 63:10 | My Lord, if only You would delay me for a brief term so I would give charity and be of the righteous. | The one who neglected charity, asking at death to be delayed. | **Confirm route-out** | Owner (Morshed Milon), 2026-08-03: confirmed. |
 
 ### Arabic for Part 1
 
@@ -753,16 +753,154 @@ occasion, so at most one is correct. That is a citation-correctness question, tr
 
 ---
 
+## Part 7 — Wave 2, Class B clause proposals (batch 1) — PARKED
+
+Added 2026-08-03, and **parked the same day**. Recorded here so the batch is not silently
+re-attempted; the reason it stopped is in `doc/DUA-PARKED-REVIEWER-QUESTIONS.md`.
+
+**Proposals only. Nothing written to the corpus, no page built.** `dua-clause-core.js` returns
+`verified: false` on every result by design, and R3 blocks any Class B record from indexing
+until a confirmed clause field exists. Confirmed: **0 of 566 records carry `dua_clause_arabic`
+or `dua_clause_verified`.**
+
+**17 of these 20 are medium confidence, 3 are low.**
+
+### The blocker no ruling here can clear
+
+**Not one of the 154 Class B records carries a transliteration.** Zero, not a shortfall. Gate 2
+requires one that is sourced, provenance-named and covers the whole rendered Arabic — and a
+clause needs a transliteration *of the clause*, which exists nowhere in our data and, unlike the
+Qur'anic set in Part 8, has no word-aligned source to assemble one from. Confirming a clause here
+is necessary but not sufficient.
+
+### What the extractor got wrong — 3 of 3 low-confidence proposals
+
+Checked against each record's own translation:
+
+**`abudawud:1481`** — The proposed span is **not a supplication** — it reads *“There will be people who transgress in supplication”*, the narration's warning **about** dua. The record's own translation (*“O Allah, I ask Thee for Paradise…”*) does not appear in the span at all.
+
+**`abudawud:1496`** — The proposed span is the Prophet's **comment on** the supplication (*“He has supplicated Allah by His greatest name…”*), not the supplication itself.
+
+**`abudawud:1552`** — The span opens with **`قُلِ` (“Say:”)** — an instruction verb that is not part of the recited words. Published as-is a reader would recite the instruction. Same defect class as the Ibn Majah 3590 inversion.
+
+Every medium-confidence proposal in this batch matched its translation and every low-confidence
+one did not, so the confidence signal separated cleanly here — but 20 rows is not enough to treat
+`low` as a filter, and it is **not** grounds to accept `medium` unread.
+
+### The batch
+
+| id | confidence | proposed recitable span | the record's own translation |
+|---|---|---|---|
+| `abudawud:1426` | medium | اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ وَعَافِنِ… | O Allah, guide me among those Thou hast guided, gran… |
+| `abudawud:1481` | low ⚠ | سَيَكُونُ قَوْمٌ يَعْتَدُونَ فِي الدُّعَاءِ | O Allah, I ask Thee for Paradise, its blessings, its… |
+| `abudawud:1496` | low ⚠ | لَقَدْ دَعَا اللَّهَ بِاسْمِهِ الْعَظِيمِ الَّ… | O Allah, I ask Thee by virtue of the fact that prais… |
+| `abudawud:1509` | medium | اللَّهُمَّ رَبَّنَا وَرَبَّ كُلِّ شَىْءٍ أَنَا… | O Allah, our Lord and Lord of everything, I bear wit… |
+| `abudawud:1511` | medium | رَبِّ أَعِنِّي وَلاَ تُعِنْ عَلَىَّ وَانْصُرْن… | My Lord, help me and do not give help against me; gr… |
+| `abudawud:1513` | medium | اللَّهُمَّ أَنْتَ السَّلاَمُ وَمِنْكَ السَّلاَ… | O Allah, You are As-Salam, and from you is As-Salam.… |
+| `abudawud:1517` | medium | رَبِّ اغْفِرْ لِي وَتُبْ عَلَىَّ إِنَّكَ أَنْت… | My Lord, forgive me and pardon me; Thou art the Pard… |
+| `abudawud:1541` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْعَجْزِ … | O Allah, I seek refuge in You from weakness, and laz… |
+| `abudawud:1542` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ و… | O Allah, I seek refuge in You from grief and anxiety… |
+| `abudawud:1543` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ جَ… | O Allah! I seek refuge in You from the punishment of… |
+| `abudawud:1544` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ فِتْنَةِ ا… | O Allah! I seek refuge in You from the trials of the… |
+| `abudawud:1545` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْفَقْرِ … | O Allah, I seek refuge in Thee from poverty", lack a… |
+| `abudawud:1547` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الشِّقَاقِ… | O Allah, I seek refuge in Thee from divisiveness, hy… |
+| `abudawud:1548` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْجُوعِ ف… | O Allah, I seek refuge in Thee from hunger, for it i… |
+| `abudawud:1549` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الأَرْبَعِ… | O Allah, I seek refuge in Thee from four things: Kno… |
+| `abudawud:1550` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ صَلاَةٍ لا… | O Allah, I seek refuge in You from a prayer that is … |
+| `abudawud:1551` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ مَا … | O Allah, I seek refuge in You from the evil of what … |
+| `abudawud:1552` | low ⚠ | قُلِ اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ… | O Allah, I seek refuge in Thee from the evil of what… |
+| `abudawud:1553` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَدْمِ … | O Allah, I seek refuge in Thee from my house falling… |
+| `abudawud:1555` | medium | اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْبَرَصِ … | O Allah, I seek refuge in Thee from leprosy, madness… |
+
+`abudawud:1426` is already in this package under **Part 4** and is not a second question; it
+appears here only because it falls in this batch. One ruling covers both.
+
+---
+
+## Part 8 — Wave 2, Qur'anic clause confirmations (batch 2)
+
+Added 2026-08-03. **Proposals only. Nothing written to the corpus, no page built.** These are the
+`quran:` records not already covered by Part 5 — 58 remain in total, 20 here.
+
+**A lighter ask than Part 7, and different in kind.** All 20 extract at **medium confidence with
+none low**, because the work has largely already been done at ingest: **15 of 20 records
+already store the supplication clause with the narrative frame stripped.** Checked word-by-word
+against quran.com, `quran:10:85` begins at word 5 of 10 — the corpus has already dropped *“So
+they said, upon Allah we have relied”*; `quran:11:45` begins at word 5 of 15, dropping *“And
+Noah called out to his Lord and said”*; `quran:21:89` likewise drops *“And Zechariah, when he
+called to his Lord”*.
+
+So the question is **not “where does the supplication begin”** but **“is the boundary already in
+our data the right one”**. That is a confirmation, not a transcription.
+
+### All 20 of 20 align exactly to quran.com word-by-word
+
+Every stored clause matched a contiguous run of words in its āyah. That matters for Gate 2:
+because the alignment is exact, a transliteration can be **assembled from the per-word
+transliteration quran.com already publishes** rather than transcribed by hand. The assembled
+column below is generated that way, and none of it carries the `AA` romanisation artifact that
+contaminates much of our existing transliteration data.
+
+**Shown for review, not adopted.** Nothing is written to the corpus, and Gate 2 separately
+requires that the provenance be named — a decision about crediting quran.com's word-by-word data,
+which this table does not settle.
+
+### The batch
+
+| id | clause begins | stored Arabic (the proposed clause) | translation | assembled transliteration |
+|---|---|---|---|---|
+| `quran:10:85` | word 5/10 | رَبَّنَا لَا تَجْعَلْنَا فِتْنَةً لِّلْق… | Our Lord, make us not [objects of] trial for t… | rabbanā lā tajʿalnā fit'natan lil'qawmi … |
+| `quran:10:88` | word 3/29 | رَبَّنَآ إِنَّكَ ءَاتَيْتَ فِرْعَوْنَ و… | Our Lord, indeed You have given Pharaoh and hi… | rabbanā innaka ātayta fir'ʿawna wamala-a… |
+| `quran:11:45` | word 5/15 | رَبِّ إِنَّ ٱبْنِى مِنْ أَهْلِى وَإِنَّ … | My Lord, indeed my son is of my family; and in… | rabbi inna ib'nī min ahlī wa-inna waʿdak… |
+| `quran:12:33` | word 2/17 | رَبِّ ٱلسِّجْنُ أَحَبُّ إِلَىَّ مِمَّا ي… | My Lord, prison is more to my liking than that… | rabbi l-sij'nu aḥabbu ilayya mimmā yadʿū… |
+| `quran:14:36` | whole āyah | رَبِّ إِنَّهُنَّ أَضْلَلْنَ كَثِيرًا مِّ… | My Lord, indeed they have led astray many amon… | rabbi innahunna aḍlalna kathīran mina l-… |
+| `quran:14:37` | word 13/26 | رَبَّنَا لِيُقِيمُوا۟ ٱلصَّلَوٰةَ فَٱجْع… | Our Lord, I have settled some of my descendant… | rabbanā liyuqīmū l-ṣalata fa-ij'ʿal afid… |
+| `quran:14:38` | whole āyah | رَبَّنَآ إِنَّكَ تَعْلَمُ مَا نُخْفِى و… | Our Lord, indeed You know what we conceal and … | rabbanā innaka taʿlamu mā nukh'fī wamā n… |
+| `quran:14:40` | word 7/9 | رَبَّنَا وَتَقَبَّلْ دُعَآءِ | Our Lord, and accept my supplication. | rabbanā wataqabbal duʿāi |
+| `quran:14:41` | whole āyah | رَبَّنَا ٱغْفِرْ لِى وَلِوَٰلِدَىَّ وَلِ… | Our Lord, forgive me and my parents and the be… | rabbanā igh'fir lī waliwālidayya walil'm… |
+| `quran:18:10` | word 7/16 | رَبَّنَآ ءَاتِنَا مِن لَّدُنكَ رَحْمَةً… | Our Lord, grant us from Yourself mercy and pre… | rabbanā ātinā min ladunka raḥmatan wahay… |
+| `quran:19:4` | word 2/14 | رَبِّ إِنِّى وَهَنَ ٱلْعَظْمُ مِنِّى وَٱ… | My Lord, indeed my bones have weakened, and my… | rabbi innī wahana l-ʿaẓmu minnī wa-ish't… |
+| `quran:19:8` | word 2/14 | رَبِّ أَنَّىٰ يَكُونُ لِى غُلَـٰمٌ وَكَا… | My Lord, how will I have a boy when my wife ha… | rabbi annā yakūnu lī ghulāmun wakānati i… |
+| `quran:2:126` | word 4/30 | رَبِّ ٱجْعَلْ هَـٰذَا بَلَدًا ءَامِنًا و… | My Lord, make this a secure city and provide i… | rabbi ij'ʿal hādhā baladan āminan wa-ur'… |
+| `quran:2:128` | whole āyah | رَبَّنَا وَٱجْعَلْنَا مُسْلِمَيْنِ لَكَ … | Our Lord, and make us Muslims [in submission] … | rabbanā wa-ij'ʿalnā mus'limayni laka wam… |
+| `quran:2:129` | whole āyah | رَبَّنَا وَٱبْعَثْ فِيهِمْ رَسُولًا مِّن… | Our Lord, and send among them a messenger from… | rabbanā wa-ib'ʿath fīhim rasūlan min'hum… |
+| `quran:2:260` | word 4/39 | رَبِّ أَرِنِى كَيْفَ تُحْىِ ٱلْمَوْتَىٰ … | My Lord, show me how You give life to the dead… | rabbi arinī kayfa tuḥ'yī l-mawtā qāla aw… |
+| `quran:20:45` | word 2/10 | رَبَّنَآ إِنَّنَا نَخَافُ أَن يَفْرُطَ … | Our Lord, indeed we are afraid that he will ha… | rabbanā innanā nakhāfu an yafruṭa ʿalayn… |
+| `quran:21:112` | word 2/10 | رَبِّ ٱحْكُم بِٱلْحَقِّ ۗ وَرَبُّنَا ٱلر… | My Lord, judge [between us] in truth. And our … | rabbi uḥ'kum bil-ḥaqi warabbunā l-raḥmān… |
+| `quran:21:89` | word 5/11 | رَبِّ لَا تَذَرْنِى فَرْدًا وَأَنتَ خَيْ… | My Lord, do not leave me alone [with no heir],… | rabbi lā tadharnī fardan wa-anta khayru … |
+| `quran:23:109` | word 7/14 | رَبَّنَآ ءَامَنَّا فَٱغْفِرْ لَنَا وَٱر… | Our Lord, we have believed, so forgive us and … | rabbanā āmannā fa-igh'fir lanā wa-ir'ḥam… |
+
+### What we are asking
+
+One question per row: **is the stored Arabic the supplication, at the right boundary?** Useful
+answers take three shapes — *confirmed*; *move the boundary* (say which word it starts or ends
+at); or *not a supplication*, which is a Gate 1 answer and a valid one.
+
+The row marked **“whole āyah”** stores the entire verse rather than a clause and deserves a
+second look: either the āyah is supplication throughout, or the frame was missed at ingest.
+
+### Not asked
+
+We are not asking you to transcribe transliteration — the assembled column exists so that work
+does not fall to you. Not asking about occasion assignment. And **no** `dua_clause_arabic` or
+`dua_clause_verified` value has been written: under R3a as amended on 2026-08-03 that flag is
+set only by owner sign-off recorded in this document, and never carries a name onto a rendered
+page.
+
+---
+
 ## Sign-off
 
 | | Name | Credentials | Date | Signature |
 |---|---|---|---|---|
-| Part 1 — condemned-speech confirmation | | | | |
+| Part 1 — condemned-speech confirmation | Morshed Milon (site owner / approver, ADR-044) | _pending_ | 2026-08-03 | 24/24 confirmed route-out, 0 rejected — per-record rulings in Part 1 table. Credentials + publication consent pending owner. |
 | Part 2 — narrative-statement ruling | | | | |
 | Part 3 — transliteration | | | | |
 | Part 4 — Class B Arabic (Wave 1–2) | | | | |
 | Part 5 — Qur'anic clause extraction | | | | |
 | Part 6 — duplicate-scripture clusters (6.1 citation gap, 6.2 Bismillah) | | | | |
+| Part 7 — Wave 2 Class B clause proposals (batch 1) | | | | |
+| Part 8 — Wave 2 Qur'anic clause confirmations (batch 2) | | | | |
 
 The reviewer's name and credentials appear on the site once any part is signed off
 (`DUA-SEO-STRATEGY-v2.md` §6). Please confirm you are content for them to be published.

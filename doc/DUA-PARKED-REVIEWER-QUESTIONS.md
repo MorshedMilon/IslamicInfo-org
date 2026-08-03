@@ -1,7 +1,7 @@
 # Parked — reviewer and owner questions on held dua records
 
 **Filed 2026-08-02. Parked deliberately: none of these blocks any other work.**
-They affect ~34 held records only. Nothing waits on them; they are recorded so they
+They affect ~34 held records, plus the 154 Class B records parked at item 7. Nothing waits on them; they are recorded so they
 are not rediscovered, and so the held records have a route back in when answered.
 
 Governing: `DUA-CONTENT-INTEGRITY-v1_0.md`, `doc/DUA-INTEGRITY-SCAN.md`, ADR-044
@@ -133,3 +133,58 @@ These remain live and are not part of this file:
 - **The corrected `DUA-PAGE-CONTENT-SPEC.md`** — the attachment never arrived; §5
   check 6 still contradicts §2 A2 on grading.
 - **The four R6 duplicate clusters** — they go live the moment batches 4–7 index.
+
+---
+
+## 7. Wave 2 Class B clause extraction (all 154) — PARKED, needs source data
+
+**Owner decision 2026-08-03: parked, same status as B1/B2.** A real future item, not
+blocked on a ruling — blocked on **missing source data with no clean fix visible today.**
+Attempted as Wave 2 batch 1 (20 records, routed as Part 7 of the reviewer package) and
+stopped there. Recorded with its evidence so nobody re-opens it without seeing why it
+stopped.
+
+### Why it stopped — two independent blockers
+
+**1. Transliteration: 0 of 154.** Not a shortfall, zero. Gate 2 requires a
+transliteration that is sourced, provenance-named, and covers the whole of the Arabic a
+page renders. A clause extraction needs a transliteration **of the clause**, and unlike
+the Qur'anic set there is **no word-aligned source to assemble one from** — quran.com's
+word-by-word data serves Qur'anic text only, which is the same wall Block B2 hit. No
+ruling on any clause boundary can clear this.
+
+**2. The extractor is not reliable enough to accept unread.** Across the 154:
+**122 medium confidence, 32 low.** In batch 1, all three low-confidence proposals were
+checked against their own record's translation and **all three were wrong**:
+
+| id | proposed span | what is wrong |
+|---|---|---|
+| `abudawud:1481` | *"There will be people who transgress in supplication"* | **Not a supplication** — the narration's warning *about* dua. The record's own translation (*"O Allah, I ask Thee for Paradise…"*) does not appear in the span at all. |
+| `abudawud:1496` | *"He has supplicated Allah by His greatest name…"* | The Prophet's **comment on** the supplication, not the supplication. |
+| `abudawud:1552` | opens with `قُلِ` — *"Say:"* | An **instruction verb inside the recitable text**. Published as-is a reader would recite the instruction. Same defect class as the Ibn Majah 3590 inversion, which `DUA-CONTENT-INTEGRITY-v1_0.md` §1.2 calls the most urgent single page in the corpus. |
+
+Every medium-confidence proposal in that batch matched its translation and every
+low-confidence one did not, so confidence separated cleanly on 20 rows — but that is far
+too small a sample to treat `low` as a filter, and it is **not** grounds to accept
+`medium` unread. 32 rows sit in the class that was 3-for-3 wrong.
+
+### What it is NOT blocked on
+
+Not on a clause-boundary ruling, and not on R3a. R3a was amended on 2026-08-03 so
+verification is internal-only (owner sign-off recorded in the reviewer package, no name
+in rendered HTML), which removed the collision with the public-credit-deferred decision.
+That collision is resolved; this is not waiting on it.
+
+### To unblock
+
+Source a transliteration for Class B narrations — either a published romanised edition of
+the six collections, or a per-record reviewer-supplied transliteration of the confirmed
+clause (Part 3 territory, and 154 records is far larger than Part 3's current 75). Until
+one exists, confirming clause boundaries produces pages that still cannot publish, so the
+boundary work is deliberately **not** being done in advance.
+
+**Not parked:** the Qur'anic clause set. It has a word-aligned transliteration source, all
+20 of batch 2 aligned exactly, and 15 of 20 already store the clause with the frame
+stripped. That set continues as Part 8.
+
+---
