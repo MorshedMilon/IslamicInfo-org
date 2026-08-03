@@ -57,3 +57,28 @@ before touching /duas/ titles, slugs, H1s, or meta descriptions.
 supersedes v1.1 §A1 (ADR-054). Naming is downstream of integrity: naming,
 topic-assignment and indexing work is paused until its Gates 1–3 clear.
 Read it first.
+
+## Repo trap — line endings (STANDING RULE, added 2026-08-03)
+
+**This repo's tracked text files are restored by git with CRLF on Windows.** Any operation
+that is line-ending sensitive — regex strip or insert, file splicing, anchor matching,
+"replace everything between X and Y" — **must normalise first, or match `\r?\n` explicitly.**
+
+This is a known trap, not a one-off. It silently defeated **three separate operations in a
+single session on 2026-08-03**, and in every case the failure was invisible — the operation
+reported success and did nothing:
+
+1. **`sitemap.xml` strip-and-rebuild** in both dua builders. The regex ended ``<\/url>\n``,
+   matched zero of the CRLF entries, so the strip became a no-op and every URL was appended a
+   second time. This is the real cause of the "duplicate hub URLs" seen on 2026-08-01 — the
+   bug appears on a fresh checkout and hides itself as soon as one build rewrites the file
+   with LF. Fixed to ``<\/url>\r?\n``.
+2. **`editorial-policy.html` splice** from `about.html`. The `<main>…</main>` anchor used
+   ``\n``, matched nothing, and produced a page that was a byte-for-byte copy of about.html.
+3. **Reviewer-package Part 7/8 insertion**. The anchor ``\n---\n\n## Sign-off`` matched
+   nothing, so both document bodies were silently dropped.
+
+**Verify against a string that only exists if the operation worked.** Incident 3 was reported
+as successful because the check tested a substring that also appeared in a sign-off row added
+by the *same* run — a self-confirming check. Assert on something unique to the payload, and
+prefer asserting a count or a parse over asserting a substring.
