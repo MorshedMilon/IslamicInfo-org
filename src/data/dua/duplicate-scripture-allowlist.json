@@ -4,71 +4,138 @@
     "governs": "docs/seo/VALIDATOR-RULES-SESSION-1.md R6",
     "created": "2026-08-02",
     "createdBy": "Session 1.0, at owner instruction",
-    "status": "PROPOSED — not yet enforced; scripts/validate-seo.mjs does not exist",
+    "status": "PARTLY ENFORCED. R6 itself is still not implemented in any script; R8 (validate-seo.mjs) enforces the related question of never linking an unpublished page. 4 of the 8 registered clusters were adjudicated by the owner on 2026-08-03 and moved to `allowed`; the rest remain unadjudicated and are NOT permitted.",
     "normalisationIsPartOfTheRule": "R6 compares NORMALISED Arabic, never raw. The seed pair is NOT byte-identical and NOT equal under the corpus's ordinary diacritic strip — it differs only in Uthmani orthography. A rule written on `identical arabic` is a no-op against the exact pair it was created for. See R6 §Normalisation.",
     "clusteringIsCorpusWide": "Clusters are computed across the whole corpus, not across the sitemap, so a pair is registered before either member is ever approved for indexing. R6 then fails only when 2+ members of a cluster are simultaneously indexed.",
     "adjudicationIsNotClaudeCode's": "Deciding whether two occasions genuinely share a text is a sourcing question about what each narration attests. Entries move from `pendingAdjudication` to `allowed` on a reviewer or owner ruling, never on a code change."
   },
-
   "allowed": [
     {
-      "cluster": ["117:235", "quran:2:201"],
+      "cluster": [
+        "117:235",
+        "quran:2:201"
+      ],
       "text": "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar",
       "scripture": "Qur'an 2:201",
       "reason": "Two different intents, no canonical page. `117:235` is the supplication narrated for the specific station between the Yemenite Corner and the Black Stone during tawaf (occasion: hajj-umrah). `quran:2:201` is the ayah itself, indexed as general Qur'anic supplication (occasion: protection). Neither is a duplicate of the other in search intent, and neither is the canonical version of the other — collapsing them would lose a real query for one of the two.",
       "adjudicatedBy": "owner, 2026-08-02",
       "notes": "Not a live collision today: `quran:2:201` has a null transliteration and is `wave_assignment: 1b`, and R3 blocks every `quran:` record from the sitemap until a reviewer-verified clause field exists. `117:235` sits in Wave 1a but no dua detail page is in the sitemap yet (`page-copy.json` `_meta.batches[].approved` is false on both batches). This entry is a forward guard, registered before the collision can occur rather than after."
+    },
+    {
+      "cluster": [
+        "27:85",
+        "28:109"
+      ],
+      "text": "Allahumma 'alima l-ghaybi wa-sh-shahadah, fatira s-samawati wa-l-ard…",
+      "occasions": [
+        "morning-evening",
+        "sleep-waking"
+      ],
+      "reason": "Two different intents, no canonical page. `27:85` is the supplication placed by its chapter at morning and at evening (occasion: morning-evening, chapter keyword derived per entry); `28:109` is the same wording placed before sleeping (occasion: sleep-waking, chapter keyword \"dua for sleeping\"). Different chapters, different occasion buckets, different chapter keywords, and separately authored prose that frames each for its own moment. A reader searching what to say before sleeping and a reader searching the morning and evening adhkar are not the same reader, and collapsing them would lose a real query for one of the two.",
+      "disposition": "both index, cross-linked, no canonical",
+      "adjudicatedBy": "owner, 2026-08-03",
+      "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision."
+    },
+    {
+      "cluster": [
+        "17:35",
+        "19:43"
+      ],
+      "text": "Subbuhun Quddusun, Rabbu l-mala'ikati wa-r-Ruh",
+      "occasions": [
+        "prayer (ruku')",
+        "prayer (sujood)"
+      ],
+      "reason": "Two different intents, no canonical page. 'Aishah's report attests these words in BOTH postures, and Hisn lists them accordingly: `17:35` under Invocations during Ruku' (keyword \"dua for ruku\"), `19:43` under Invocations during Sujood (keyword \"dua for sujood\"). Both chapters carry their own static chapter page. The shared `prayer` occasion bucket is our own facet, not the search intent — \"what to say in ruku\" and \"what to say in sujood\" are distinct queries with distinct answers, and a worshipper in one posture is not served by the other page. Authored prose differs throughout and each names its own posture and narrator.",
+      "disposition": "both index, cross-linked, no canonical",
+      "adjudicatedBy": "owner, 2026-08-03",
+      "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision."
+    },
+    {
+      "cluster": [
+        "17:37",
+        "19:45"
+      ],
+      "text": "Subhana dhi l-jabaruti wa-l-malakuti wa-l-kibriya'i wa-l-'azamah",
+      "occasions": [
+        "prayer (ruku')",
+        "prayer (sujood)"
+      ],
+      "reason": "Two different intents, no canonical page. Same disposition and same reasoning as `17:35`/`19:43`: 'Asim bin Humaid's report attests these words in both the bowing and the prostration, and the two pages target \"dua for ruku\" and \"dua for sujood\" respectively. Shared `prayer` bucket, distinct queries, separately authored prose naming each posture.",
+      "disposition": "both index, cross-linked, no canonical",
+      "adjudicatedBy": "owner, 2026-08-03",
+      "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision."
+    },
+    {
+      "cluster": [
+        "34:121",
+        "41:137"
+      ],
+      "text": "Allahumma inni a'udhu bika mina l-hammi wa-l-hazan…",
+      "occasions": [
+        "distress (worry and grief)",
+        "distress (settling a debt)"
+      ],
+      "reason": "Two different intents, no canonical page — the cluster that needed the most scrutiny, since both members sit in the same `distress` occasion bucket. They resolve apart on the evidence: the supplication names eight things, and Hisn lists it under Invocations in times of worry and grief (`34:121`, keyword \"dua for worry and grief\") AND under Invocations for the settling of a debt (`41:137`, keyword \"dua for debt relief\") because its own wording covers both — it seeks refuge from anxiety and sorrow AND from the burden of debt and being overpowered by men. \"Dua for debt relief\" is a distinct query with a distinct need, and the text genuinely answers it. The authored prose on `41:137` states the proportion honestly rather than overclaiming — \"Only one of the eight things named concerns debt, and it sits seventh in the list\" — so the page serves the debt query without pretending to be a debt-specific supplication. Neither is the canonical version of the other.",
+      "disposition": "both index, cross-linked, no canonical",
+      "adjudicatedBy": "owner, 2026-08-03",
+      "notes": "Cross-linking is automatic and already built: ADDENDUM §15 emits \"The same wording is also listed in this library under …\" on each member, filtered to published pages by validator rule R8. No rel=canonical is set on either member, by decision."
     }
   ],
-
   "pendingAdjudication": [
     {
       "_note": "These 8 clusters were found by the same corpus-wide scan that produced the seed pair. Every one has 2+ SLUGGED members, so each becomes a live R6 failure the moment two of its members are approved for indexing. They are recorded here so the rule's cost is visible in advance — NOT allowed. R6 fails on them until each is adjudicated and moved to `allowed` with a reason, or one member is deindexed. None of them blocks Wave 1a.",
       "_seeAlso": "DUA-CONTENT-INTEGRITY-v1_0.md §4 A9 #11 — 'Never auto-merge on similarity… Each cluster still needs individual adjudication.' These are that adjudication queue, cited by member id per the same section's convention."
     },
     {
-      "cluster": ["9:15", "85:196"],
+      "cluster": [
+        "9:15",
+        "85:196"
+      ],
       "text": "Subhanaka-llahumma wa bihamdika, ashhadu an la ilaha illa anta, astaghfiruka wa atubu ilayk",
-      "occasions": ["prayer (upon completing ablution)", "forgiveness (expiation of an assembly)"],
+      "occasions": [
+        "prayer (upon completing ablution)",
+        "forgiveness (expiation of an assembly)"
+      ],
       "likelyDisposition": "allow — plausibly a deliberate cross-listing; the same words are narrated for both occasions",
       "blocker": "Both records carry the BYTE-IDENTICAL hadithCitation 'Riyad as-Salihin 152 (Abu Hurairah (May Allah be pleased with him) reported:)'. At most one occasion is what that reference attests, so the pair cannot be allowlisted until a reviewer says which. This is also why `85:196` was dropped from Wave 1a — see doc/DUA-WAVE-1A-GATE-EVIDENCE.md §5.1.",
       "alreadyKnown": "DUA-CONTENT-INTEGRITY-v1_0.md §4 A9 #11 identifies this pair as a full duplicate differing only in punctuation."
     },
     {
-      "cluster": ["27:85", "28:109"],
-      "occasions": ["morning-evening", "sleep-waking"],
-      "likelyDisposition": "allow — the Hisn compilation lists this supplication under both morning/evening remembrance and before sleeping"
-    },
-    {
-      "cluster": ["8:12", "5:9", "99:210"],
+      "cluster": [
+        "8:12",
+        "5:9",
+        "99:210"
+      ],
       "text": "Bismillah",
-      "occasions": ["prayer (before ablution)", "home-clothing (when undressing)", "travel (when a mount begins to fail)"],
+      "occasions": [
+        "prayer (before ablution)",
+        "home-clothing (when undressing)",
+        "travel (when a mount begins to fail)"
+      ],
       "likelyDisposition": "REVIEW CAREFULLY — three-member cluster, and the shared text is the single word 'Bismillah'. This is an incidental collision on a very short text rather than a cross-listing of one supplication, which DUA-CONTENT-INTEGRITY-v1_0 §4 names as a distinct cause. Three near-identical pages whose entire dua is one word is a thin-content and cannibalisation risk independent of R6, and may be better served by one page than three."
     },
     {
-      "cluster": ["17:34", "19:42"],
-      "occasions": ["prayer (ruku')", "prayer (sujood)"],
+      "cluster": [
+        "17:34",
+        "19:42"
+      ],
+      "occasions": [
+        "prayer (ruku')",
+        "prayer (sujood)"
+      ],
       "likelyDisposition": "allow — the same tasbih is narrated for both bowing and prostration; same occasion facet, different position in the prayer"
     },
     {
-      "cluster": ["17:35", "19:43"],
-      "occasions": ["prayer (ruku')", "prayer (sujood)"],
-      "likelyDisposition": "allow — same basis as 17:34/19:42"
-    },
-    {
-      "cluster": ["17:37", "19:45"],
-      "occasions": ["prayer (ruku')", "prayer (sujood)"],
-      "likelyDisposition": "allow — same basis as 17:34/19:42"
-    },
-    {
-      "cluster": ["19:47", "32:117"],
-      "occasions": ["prayer (sujood)", "prayer (qunut in witr)"],
+      "cluster": [
+        "19:47",
+        "32:117"
+      ],
+      "occasions": [
+        "prayer (sujood)",
+        "prayer (qunut in witr)"
+      ],
       "likelyDisposition": "allow — narrated for both positions"
-    },
-    {
-      "cluster": ["34:121", "41:137"],
-      "occasions": ["distress (worry and grief)", "distress (settling a debt)"],
-      "likelyDisposition": "REVIEW — both members sit in the SAME occasion bucket (`distress`), so unlike every other cluster here these two compete for the same queries directly. Cross-listing is defensible; two indexed pages in one bucket rendering identical Arabic is the cannibalisation case R6 exists to catch."
     }
   ]
 }

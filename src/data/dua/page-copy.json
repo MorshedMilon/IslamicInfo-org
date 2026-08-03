@@ -20,10 +20,7 @@
         "omitted": [],
         "approved": true,
         "approvedDate": "2026-08-03",
-        "approvedBy": "Morshed Milon (project owner, ADR-044)",
-        "heldAfterApproval": [
-          "27:85 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated"
-        ]
+        "approvedBy": "Morshed Milon (project owner, ADR-044)"
       },
       {
         "batch": 2,
@@ -32,10 +29,7 @@
         "omitted": [],
         "approved": true,
         "approvedDate": "2026-08-03",
-        "approvedBy": "Morshed Milon (project owner, ADR-044)",
-        "heldAfterApproval": [
-          "28:109 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated"
-        ]
+        "approvedBy": "Morshed Milon (project owner, ADR-044)"
       },
       {
         "batch": 3,
@@ -60,13 +54,7 @@
         "approvedBy": "Morshed Milon (project owner, ADR-044)",
         "heldAfterApproval": [
           "17:34 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
-          "17:35 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
-          "19:43 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
-          "17:37 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
-          "19:45 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
-          "32:117 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
-          "34:121 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated",
-          "41:137 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated"
+          "32:117 — R6 duplicate scripture, cluster in duplicate-scripture-allowlist.pendingAdjudication; batch prose is approved, this page stays noindex until the cluster is adjudicated"
         ]
       },
       {
@@ -209,10 +197,10 @@
     "timing": "Placed by the chapter at morning and at evening.",
     "reflection": "The closing clause reaches past the one praying. Having asked protection from committing evil against himself, the wording asks the same regarding evil dragged toward another Muslim.",
     "contentBasis": "translation-and-verified-context",
-    "reviewStatus": "generated",
+    "reviewStatus": "reviewed",
     "batch": 1,
-    "indexable": false,
-    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03; r6-adjudicated-both-index"
   },
   "words-of-remembrance-for-morning-and-evening-hisn-27-86": {
     "meaning": "The whole supplication is a single sentence, and the protection it describes is attached to the name it opens with. Nothing in the earth or in the heavens can cause harm alongside that name — the scope is stated in both directions at once rather than limited to any one danger or any one place. It closes by naming two attributes, the All-Hearing and the All-Knowing.",
@@ -439,10 +427,10 @@
     "timing": "The chapter this belongs to places these words before sleeping.",
     "reflection": "What refuge is sought from is stated twice over, once as evil that might be committed and once as evil that might be passed to someone else. Between them the two cover the act and its reach.",
     "contentBasis": "translation-and-verified-context",
-    "reviewStatus": "generated",
+    "reviewStatus": "reviewed",
     "batch": 2,
-    "indexable": false,
-    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03; r6-adjudicated-both-index"
   },
   "what-to-say-before-sleeping-hisn-28-111": {
     "meaning": "Four parallel clauses open the supplication, and each hands something over: the soul is submitted, the affair is entrusted, the face is turned, and reliance is placed. All four are directed to the same place, and they are then given a single motive stated as a pair — in hope and fear together, rather than one or the other. Two statements of belief close it, in the Book revealed and the Prophet sent.",
@@ -719,10 +707,10 @@
     "timing": "The chapter assigns this to the bowing, on 'Aishah's report.",
     "reflection": "The scope narrows steadily — two absolute descriptions, then a class of creatures, then a single name. It closes at the most particular point rather than the widest.",
     "contentBasis": "translation-and-verified-context",
-    "reviewStatus": "generated",
+    "reviewStatus": "reviewed",
     "batch": 4,
-    "indexable": false,
-    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03; r6-adjudicated-both-index"
   },
   "invocations-during-ruki-bowing-in-prayer-hisn-17-36": {
     "meaning": "Three parallel statements open it, each ending in the same place: to You I have bowed, in You I have believed, to You I have submitted. The second half then itemises where it could have summarised. Rather than saying the whole self is humbled, it lists parts — hearing, sight, mind, bones, tendons — and finishes with a phrase that catches whatever the list omits: what my feet carry. All of it is said to be humbled before Him.",
@@ -739,30 +727,30 @@
     "timing": "Nasa'i records this from 'Asim bin Humaid, said in the bowing.",
     "reflection": "Two of the four nouns name authority and two name stature. The wording keeps them inside one title rather than separating what He commands from what He is.",
     "contentBasis": "translation-and-verified-context",
-    "reviewStatus": "generated",
+    "reviewStatus": "reviewed",
     "batch": 4,
-    "indexable": false,
-    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03; r6-adjudicated-both-index"
   },
   "invocations-during-sujood-hisn-19-43": {
     "meaning": "The wording never uses the second person. Allah is described rather than spoken to, and the sentence carries no verb of its own, which is why the translation supplies one inside brackets. Two attributes come first, Perfect and Holy. The remainder identifies Him by what falls under His lordship — the angels, and the Rooh, glossed in the text as Jibra-eel. The one saying it does not appear in the sentence anywhere.",
     "timing": "'Aishah reported it; the chapter places these words in the prostration.",
     "reflection": "No part of it refers to the speaker or to any need. It is said in the prostration and consists entirely of description, ending without a request of any kind.",
     "contentBasis": "translation-and-verified-context",
-    "reviewStatus": "generated",
+    "reviewStatus": "reviewed",
     "batch": 4,
-    "indexable": false,
-    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03; r6-adjudicated-both-index"
   },
   "invocations-during-sujood-hisn-19-45": {
     "meaning": "The whole supplication is one sentence and makes no request. It opens by declaring perfection, then attaches a title built from four nouns — power, sovereignty, magnificence and grandeur — of which only the first is qualified, as total. That qualifier is the sole intensifying word in the sentence, and the other three nouns stand unmodified. Allah is spoken about here rather than addressed directly.",
     "timing": "'Asim bin Humaid reported it, and the chapter sets it in the prostration.",
     "reflection": "None of its length is spent on the one saying it. What it offers is not a petition but a list, and that list is the entire content of the supplication.",
     "contentBasis": "translation-and-verified-context",
-    "reviewStatus": "generated",
+    "reviewStatus": "reviewed",
     "batch": 4,
-    "indexable": false,
-    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03; r6-adjudicated-both-index"
   },
   "invocations-for-rising-from-the-ruki-hisn-18-39": {
     "meaning": "It addresses Him as our Lord and then makes one statement: all praise is for You. The remainder does not extend that statement but describes the praise itself, stacking three adjectives onto it — abundant, beautiful, blessed. No request follows at any point. The opening word is plural, and nothing later narrows the praise back to the single person saying it.",
@@ -859,20 +847,20 @@
     "timing": "Nasa'i records this from Anas bin Malik; the chapter places it in times of worry and grief.",
     "reflection": "The list moves outward — from feeling, to disposition, to obligation, to other people. Only the last two involve anything outside the person saying the words.",
     "contentBasis": "translation-and-verified-context",
-    "reviewStatus": "generated",
+    "reviewStatus": "reviewed",
     "batch": 4,
-    "indexable": false,
-    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03; r6-adjudicated-both-index"
   },
   "invocations-for-the-setting-of-a-debt-hisn-41-137": {
     "meaning": "Only one of the eight things named concerns debt, and it sits seventh in the list. The rest are states of mind and character — anxiety and sorrow, weakness and laziness, miserliness and cowardice — followed at the end by being overpowered by men. Refuge is sought once, at the opening, and governs everything after it. The wording never singles debt out or treats it differently from the seven around it.",
     "timing": "Anas bin Malik reported these words, gathered by the chapter under the settling of a debt.",
     "reflection": "The chapter files it under debt, yet the wording gives debt a single clause among eight and never returns to it. What surrounds it is interior rather than financial.",
     "contentBasis": "translation-and-verified-context",
-    "reviewStatus": "generated",
+    "reviewStatus": "reviewed",
     "batch": 4,
-    "indexable": false,
-    "indexReason": "r6-duplicate-scripture-pending-adjudication"
+    "indexable": true,
+    "indexReason": "approved-by-owner-2026-08-03; r6-adjudicated-both-index"
   },
   "a-dinner-guests-invocation-for-his-host-hisn-71-182": {
     "meaning": "Three requests are made, and none of them is for the person speaking. The first asks for blessing, aimed not at the hosts generally but at a specific thing — that which You have provided them. The second and third widen past provision altogether, asking for forgiveness and for mercy. The wording stays in the third person throughout, and the guest never appears in it.",
