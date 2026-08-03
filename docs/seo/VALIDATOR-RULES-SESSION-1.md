@@ -1,5 +1,25 @@
 # Validator rules carried into Session 1
 
+> **STATUS 2026-08-03 — R1–R6 are now ENFORCED.** Every rule in this document is implemented in
+> `scripts/validate-seo.mjs` and each was put through a negative control before being trusted:
+> `node scripts/test/negative-control-validator-rules.mjs` mutates a real input per rule, asserts
+> the rule flips to FAIL, and restores every file byte-identically. **10 of 10 cases behave as
+> specified.** Read the luck-vs-design table below before assuming the green result means much.
+>
+> ### Which rules were already satisfied by luck, and which by design
+>
+> | Rule | Verdict | Why |
+> |---|---|---|
+> | **R1** | **luck — vacuous today** | 85 claimants, 0 collisions. Only one `dropped` row parks a keyword (`dua for waswasa`) and nothing else claims it, so the exclusion changes no outcome. A positive control confirms the exclusion *works* — a dropped row may park a contested term without failing the build — but it is not currently load-bearing. |
+> | **R2** | **luck, with real drift underneath** | 0 collisions, but **16 chapters are flagged `gets_static_chapter_page=yes` while only 10 chapter pages exist**. Claimancy is now derived from what is BUILT, not from the flag, so the CSV can no longer grant a claim to a page that does not exist. The drift is reported, not failed. |
+> | **R3 / R3a** | **luck — pure set composition** | **189 Class B + 109 `quran:` records exist and not one is indexed.** R3 passes because the published set happens to exclude them, not because anything enforced it. R3a is fully vacuous: no record carries `dua_clause_verified`, so nothing can violate it. **Wave 2 is exactly what changes this.** |
+> | **R4** | **luck** | 10 records carry `build_gate: awaiting-original-rendering`; none is in the sitemap — but none is approved either, so the gate is not what is holding them. It would hold them if a batch approved them, which is the point. |
+> | **R5** | **design** | 5 rows carry "Authentic Duas" in `title_tag` and **none** carries a count. The counts were genuinely removed and titles now render the count from the corpus; the rule guards the regression. |
+> | **R6** | **design** | **6 clusters are indexed together right now and pass only because they were adjudicated onto the allowlist** on 2026-08-03. Before that ruling this rule would have failed the build. The seed-pair normalisation check is asserted every run, so an orthography regression cannot silently turn the rule into a no-op. |
+>
+> **Four of six were vacuous.** They are implemented before Wave 2 authoring rather than after
+> precisely because Wave 2 changes the set that makes them vacuous.
+
 Rules discovered during Sessions 0–0.7 that `scripts/validate-seo.mjs` must implement.
 They are recorded here because each was found by hitting the failure, not by reading a spec —
 none of them appears in `DUA-SEO-STRATEGY-v2.md` §8, and all of them would be re-discovered the

@@ -306,6 +306,190 @@ if (!process.argv.includes("--fixtures")) {
   failed += bad + dupH + dupT;
 }
 
+/* ---------- R1-R6 — docs/seo/VALIDATOR-RULES-SESSION-1.md ------------------------
+   Owner directive 2026-08-03: these six were recorded as rules but implemented by
+   nothing. Until now `validate-seo.mjs` asserted §5 naming, rendered-output shape,
+   R8 and R9 only. Each is written here on R8/R9's pattern, and each was put through
+   a negative control before being trusted — see the report in that document.
+
+   READ THE VACUITY NOTES. Four of the six pass today because of what the published
+   SET happens to contain, not because anything was enforcing them. That distinction
+   is the whole reason they are being implemented before Wave 2 authoring rather
+   than after: Wave 2 is precisely what changes the set. Each block below states
+   whether it currently binds anything. */
+{
+  const rawCsv = (p) => {
+    const L = fs.readFileSync(P(p), "utf8").split(/\r?\n/).filter(Boolean);
+    const H = parseCsv(L[0]);
+    return L.slice(1).map((l) => { const r = parseCsv(l); const o = {}; H.forEach((h, i) => (o[h] = (r[i] ?? "").trim())); return o; });
+  };
+  const FAMOUS = rawCsv("docs/seo/famous_named_duas_v2.csv");
+  const HUBS = rawCsv("docs/seo/hub_pages_keywords_v2.csv");
+  const CHAPTERS = rawCsv("docs/seo/chapter_keywords_v2.csv");
+
+  const sitemap = fs.existsSync(P("sitemap.xml")) ? fs.readFileSync(P("sitemap.xml"), "utf8") : "";
+  const sitemapDetail = new Set([...sitemap.matchAll(/<loc>[^<]*\/duas\/([^<"/]+)\.html<\/loc>/g)].map((m) => m[1]));
+  const builtChapters = new Set(fs.existsSync(P("duas/chapter"))
+    ? fs.readdirSync(P("duas/chapter")).filter((f) => f.endsWith(".html")).map((f) => f.replace(/\.html$/, "")) : []);
+
+  let rFail = 0;
+  const head = (n, t) => console.log("\n" + "=".repeat(86) + `\n${n} — ${t}\n` + "=".repeat(86));
+  const verdict = (n, bad, note) => {
+    console.log(bad ? `  ${n}: FAIL (${bad})` : `  ${n}: PASS${note ? "   " + note : ""}`);
+    rFail += bad;
+  };
+
+  /* ---- R1 — `dropped` rows are excluded from the keyword claim set ---------------
+     A famous row with build_status=dropped keeps its primary_keyword so the term
+     stays parked and nobody silently reassigns it. It builds no page, so it must not
+     count as a claimant — otherwise the first page that legitimately targets a parked
+     term fails against a row that does not exist. */
+  head("R1", "KEYWORD CLAIM SET EXCLUDES `dropped` ROWS");
+  const claimants = [];
+  for (const r of FAMOUS) if (r.build_status !== "dropped" && r.primary_keyword) claimants.push({ kw: r.primary_keyword.toLowerCase(), from: `famous rank ${r.rank}` });
+  for (const r of HUBS) if (r.primary_keyword) claimants.push({ kw: r.primary_keyword.toLowerCase(), from: `hub ${r.slug}` });
+  /* R2's limb: a chapter claims only where a page ACTUALLY exists — see below. */
+  for (const r of CHAPTERS) if (builtChapters.has(r.chapter_slug) && r.primary_keyword) claimants.push({ kw: r.primary_keyword.toLowerCase(), from: `chapter ${r.chapter_slug}` });
+  const kwMap = {};
+  for (const c of claimants) (kwMap[c.kw] = kwMap[c.kw] || []).push(c.from);
+  const r1collide = Object.entries(kwMap).filter(([, v]) => v.length > 1);
+  for (const [k, v] of r1collide.slice(0, 6)) console.log(`  FAIL keyword "${k}" claimed by ${v.length}: ${v.join(" | ")}`);
+  const droppedParked = FAMOUS.filter((r) => r.build_status === "dropped" && r.primary_keyword);
+  console.log(`  claimants                 : ${claimants.length}`);
+  console.log(`  distinct keywords         : ${Object.keys(kwMap).length}`);
+  console.log(`  dropped rows parking a kw : ${droppedParked.length}  ${droppedParked.map((r) => JSON.stringify(r.primary_keyword)).join(", ")}`);
+  verdict("R1", r1collide.length,
+    droppedParked.length && !droppedParked.some((r) => kwMap[r.primary_keyword.toLowerCase()])
+      ? "(VACUOUS TODAY: no parked term is contested, so the exclusion changes no outcome)" : "");
+
+  /* ---- R2 — a chapter claims its keyword only when it gets a static page ---------
+     Re-checked EVERY build, never once: flipping gets_static_chapter_page to `yes` is
+     a one-character edit that silently creates a collision — exactly how two chapter
+     pages became live collisions between earlier sessions. Claimancy above is derived
+     from what is BUILT, not from the CSV flag, so the CSV cannot grant a claim to a
+     page that does not exist. This block asserts the two sets agree. */
+  head("R2", "CHAPTER CLAIMS ITS KEYWORD ONLY WHERE A PAGE EXISTS");
+  const csvYes = new Set(CHAPTERS.filter((r) => r.gets_static_chapter_page === "yes").map((r) => r.chapter_slug));
+  const builtNotFlagged = [...builtChapters].filter((s) => !csvYes.has(s));
+  const flaggedNotBuilt = [...csvYes].filter((s) => !builtChapters.has(s));
+  for (const s of builtNotFlagged.slice(0, 6)) console.log(`  FAIL chapter page exists but CSV gets_static_chapter_page != yes: ${s}`);
+  const ghostClaims = CHAPTERS.filter((r) => flaggedNotBuilt.includes(r.chapter_slug) && r.primary_keyword)
+    .filter((r) => kwMap[r.primary_keyword.toLowerCase()]);
+  for (const r of ghostClaims.slice(0, 6)) console.log(`  FAIL chapter "${r.chapter_slug}" is flagged yes but NOT built, and its keyword "${r.primary_keyword}" is claimed by a real page`);
+  console.log(`  chapter pages built       : ${builtChapters.size}`);
+  console.log(`  CSV rows flagged yes      : ${csvYes.size}`);
+  console.log(`  flagged yes, not built    : ${flaggedNotBuilt.length}  (drift — the CSV over-promises; not a failure on its own)`);
+  console.log(`  built but not flagged yes : ${builtNotFlagged.length}`);
+  verdict("R2", builtNotFlagged.length + ghostClaims.length);
+
+  /* ---- R3 / R3a — no Arabic block from an unverified Class B or full-ayah record --
+     Class B = hadith-collection record holding the whole narration incl. isnad:
+     no `((` delimiter AND an isnad verb present after diacritic stripping.
+     Full ayah = every `quran:` record; the supplication is often one clause of a
+     longer verse. Neither may render an Arabic block until a reviewer-verified
+     clause field exists on the record. */
+  head("R3", "NO ARABIC BLOCK FROM AN UNVERIFIED CLASS B OR FULL-AYAH RECORD");
+  const ISNAD = /حدثنا|أخبرنا|حدثني|أخبرني/;
+  const stripDia = (s) => String(s || "").replace(/[ً-ْٰ]/g, "");
+  const isClassB = (d) => !/\(\(/.test(d.arabic || "") && ISNAD.test(stripDia(d.arabic));
+  const isQuranRec = (d) => /^quran:/.test(String(d.id));
+  const verifiedClause = (d) => !!(d.dua_clause_arabic && d.dua_clause_verified === true);
+  const indexedRecords = [];
+  for (const [id, slug] of Object.entries(lock)) if (sitemapDetail.has(slug) && byId[id]) indexedRecords.push(byId[id]);
+  const r3bad = indexedRecords.filter((d) => (isClassB(d) || isQuranRec(d)) && !verifiedClause(d));
+  for (const d of r3bad.slice(0, 6)) console.log(`  FAIL ${d.id} indexed as ${isQuranRec(d) ? "full-ayah (quran:)" : "Class B (isnad)"} with no verified clause field`);
+  const cbTotal = corpus.duas.filter(isClassB).length, qTotal = corpus.duas.filter(isQuranRec).length;
+  console.log(`  indexed pages             : ${indexedRecords.length}`);
+  console.log(`  corpus Class B / quran:   : ${cbTotal} / ${qTotal}`);
+  console.log(`  offending indexed pages   : ${r3bad.length}`);
+  verdict("R3", r3bad.length, r3bad.length === 0 && (cbTotal + qTotal) > 0
+    ? `(VACUOUS TODAY: ${cbTotal + qTotal} such records exist but NONE is indexed — this passes by set composition, not enforcement)` : "");
+
+  // R3a — a verified clause must be PRESENTED as an extract. Governs how a verified
+  // clause may appear, so it can only bind once R3's clause fields exist.
+  const clauseRendered = indexedRecords.filter(verifiedClause);
+  let r3a = 0;
+  for (const d of clauseRendered) {
+    const html = readPage(lock[String(d.id)]); if (!html) continue;
+    const labelled = /recitable portion|the portion recited|extract/i.test(html);
+    const showsFull = /full (text|ayah|narration)|complete (verse|narration)/i.test(html);
+    const noteNames = /extract|clause/i.test(html) && /confirmed by|reviewed by/i.test(html);
+    if (!(labelled && showsFull && noteNames)) { r3a++; console.log(`  FAIL R3a ${d.id} renders a clause without all three required disclosures`); }
+  }
+  console.log(`  R3a — pages rendering a verified clause: ${clauseRendered.length}`);
+  verdict("R3a", r3a, clauseRendered.length === 0 ? "(VACUOUS: no record carries dua_clause_verified yet, so nothing can violate it)" : "");
+
+  /* ---- R4 — build_gate blocks indexing regardless of batch approval -------------- */
+  head("R4", "`build_gate` BLOCKS INDEXING WHATEVER THE BATCH SAYS");
+  const gatedRecs = corpus.duas.filter((d) => d.build_gate && String(d.build_gate).trim());
+  const r4bad = gatedRecs.filter((d) => sitemapDetail.has(lock[String(d.id)]));
+  for (const d of r4bad.slice(0, 6)) console.log(`  FAIL ${d.id} carries build_gate="${d.build_gate}" but is in the sitemap`);
+  const gates = {};
+  for (const d of gatedRecs) gates[d.build_gate] = (gates[d.build_gate] || 0) + 1;
+  console.log(`  records carrying build_gate: ${gatedRecs.length}  ${JSON.stringify(gates)}`);
+  console.log(`  of those, in the sitemap   : ${r4bad.length}`);
+  verdict("R4", r4bad.length, r4bad.length === 0 && gatedRecs.length > 0
+    ? `(VACUOUS TODAY: all ${gatedRecs.length} gated records are unapproved anyway, so the gate is not what is holding them)` : "");
+
+  /* ---- R5 — hub dua counts are rendered, never baked into a title ----------------
+     duas_covered in the CSV is documentation, not truth: counts move whenever the
+     occasion facet or the exclusion set changes. The assertion is the REVERSE of what
+     you would expect — fail if a title_tag has a count baked back in. */
+  head("R5", "NO DUA COUNT BAKED INTO A title_tag");
+  const allRows = [...FAMOUS, ...HUBS, ...CHAPTERS];
+  const r5bad = allRows.filter((r) => /\d+\s*\+?\s*Authentic Duas/i.test(r.title_tag || ""));
+  for (const r of r5bad.slice(0, 6)) console.log(`  FAIL title_tag has a baked count: ${JSON.stringify(r.title_tag)}`);
+  const withPhrase = allRows.filter((r) => /Authentic Duas/i.test(r.title_tag || "")).length;
+  console.log(`  rows carrying "Authentic Duas": ${withPhrase}`);
+  console.log(`  of those, with a leading count: ${r5bad.length}`);
+  verdict("R5", r5bad.length, withPhrase > 0 ? "(BINDING: the phrase is in use, so a re-baked count would be caught)" : "");
+
+  /* ---- R6 — identical scripture across two indexed pages ------------------------
+     NORMALISATION IS THE RULE, NOT A DETAIL. The pair this was created for is not
+     byte-identical and is NOT equal under the corpus's ordinary diacritic strip — it
+     differs in Uthmani orthography. A rule written on "identical arabic" is a no-op
+     against the exact pair it was seeded with. Folds: harakat + Qur'anic marks,
+     tatweel, alef wasla, hamza+alef / alef madda, orthographic variance, the `((` ))
+     recitation delimiters and ornate ayah brackets, whitespace. */
+  head("R6", "IDENTICAL SCRIPTURE ON TWO INDEXED PAGES MUST BE ALLOWLISTED");
+  const HARAKAT = /[ً-ْٰٓ-ٕۖ-ۭ]/g;
+  const normAr = (s) => String(s || "")
+    .replace(HARAKAT, "").replace(/ـ/g, "")
+    .replace(/ٱ/g, "ا").replace(/ءا/g, "ا").replace(/آ/g, "ا")
+    .replace(/[أإ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه")
+    .replace(/[()\[\]{}﴾﴿«»"'’‘.،,؛;:!?]/g, "").replace(/\s+/g, " ").trim();
+  const allowFile = fs.existsSync(P("src/data/dua/duplicate-scripture-allowlist.json"))
+    ? JSON.parse(fs.readFileSync(P("src/data/dua/duplicate-scripture-allowlist.json"), "utf8")) : { allowed: [] };
+  const allowedSets = (allowFile.allowed || []).map((a) => new Set(a.cluster.map(String)));
+  const clusterMap = new Map();
+  for (const d of corpus.duas) {            // corpus-wide, so a pair is registered before either is approved
+    const k = normAr(d.arabic); if (!k) continue;
+    if (!clusterMap.has(k)) clusterMap.set(k, []);
+    clusterMap.get(k).push(String(d.id));
+  }
+  let r6bad = 0, r6live = 0;
+  for (const [, ids] of clusterMap) {
+    const live = ids.filter((id) => sitemapDetail.has(lock[id]));   // fails only when 2+ index AT ONCE
+    if (live.length < 2) continue;
+    r6live++;
+    if (!allowedSets.some((s) => live.every((m) => s.has(m)))) {
+      r6bad++;
+      if (r6bad <= 6) console.log(`  FAIL cluster indexed together and not allowlisted: ${live.join(", ")}`);
+    }
+  }
+  // sanity: the seed pair must compare equal, or the normalisation has regressed
+  const seedA = byId["117:235"], seedB = byId["quran:2:201"];
+  const seedOk = !seedA || !seedB || normAr(seedA.arabic) === normAr(seedB.arabic);
+  if (!seedOk) { console.log("  FAIL normalisation regressed: 117:235 and quran:2:201 no longer compare equal"); r6bad++; }
+  console.log(`  corpus clusters (2+ members): ${[...clusterMap.values()].filter((v) => v.length > 1).length}`);
+  console.log(`  clusters with 2+ INDEXED    : ${r6live}`);
+  console.log(`  allowlisted clusters        : ${allowedSets.length}`);
+  console.log(`  seed-pair normalisation     : ${seedOk ? "equal ✓" : "REGRESSED"}`);
+  verdict("R6", r6bad, r6live > 0 ? `(BINDING: ${r6live} clusters are live together and pass only because they are allowlisted)` : "");
+
+  failed += rFail;
+}
+
 /* ---------- R8 — no published page may link to a page that does not ship ----------
    docs/seo/VALIDATOR-RULES-SESSION-1.md R8, owner instruction 2026-08-03.
 

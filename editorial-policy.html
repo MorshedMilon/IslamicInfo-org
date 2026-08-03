@@ -3,8 +3,24 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title data-i18n="contact.title">Contact Us — IslamicInfo</title>  <link rel="icon" href="/src/img/favicon.svg" type="image/svg+xml">
-
+  <title data-i18n="editorial.title">Editorial Policy — How We Source and Verify — IslamicInfo</title>
+  <link rel="icon" href="/src/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="How IslamicInfo sources, verifies and publishes Islamic content: every claim carries a citation, nothing is generated, and no page ships until it clears our checks."/>
+  <link rel="canonical" href="https://islamicinfo.org/editorial-policy.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="IslamicInfo.org"/>
+  <meta property="og:title" content="Editorial Policy — IslamicInfo"/>
+  <meta property="og:description" content="How IslamicInfo sources, verifies and publishes Islamic content: every claim carries a citation, nothing is generated, and no page ships until it clears our checks."/>
+  <meta property="og:url" content="https://islamicinfo.org/editorial-policy.html"/>
+  <meta property="og:locale" content="en"/>
+  <meta property="og:image" content="https://islamicinfo.org/src/img/og-default.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="IslamicInfo — Quran, hadith, duas and learning resources, every claim source-cited"/>
+  <meta name="twitter:image" content="https://islamicinfo.org/src/img/og-default.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Editorial Policy — IslamicInfo"/>
+  <meta name="twitter:description" content="How IslamicInfo sources, verifies and publishes Islamic content: every claim carries a citation, nothing is generated, and no page ships until it clears our checks."/>
   <script>
     /* i18n FOUC guard: set lang/dir before first paint */
     (function(){
@@ -13,22 +29,6 @@
       if (l === 'ar' || l === 'ur') document.documentElement.setAttribute('dir', 'rtl');
     })();
   </script>
-  <meta name="description" content="Contact the IslamicInfo team — questions, corrections, and collaboration ideas."
-  <link rel="canonical" href="https://islamicinfo.org/contact.html"/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:site_name" content="IslamicInfo.org"/>
-  <meta property="og:title" content="Contact Us — IslamicInfo"/>
-  <meta property="og:description" content="Contact the IslamicInfo team — questions, corrections, and collaboration ideas."/>
-  <meta property="og:url" content="https://islamicinfo.org/contact.html"/>
-  <meta property="og:locale" content="en"/>
-  <meta property="og:image" content="https://islamicinfo.org/src/img/og-default.png"/>
-  <meta property="og:image:width" content="1200"/>
-  <meta property="og:image:height" content="630"/>
-  <meta property="og:image:alt" content="IslamicInfo — Quran, hadith, duas and learning resources, every claim source-cited"/>
-  <meta name="twitter:image" content="https://islamicinfo.org/src/img/og-default.png"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Contact Us — IslamicInfo"/>
-  <meta name="twitter:description" content="Contact the IslamicInfo team — questions, corrections, and collaboration ideas."/>/>
 
 
   <link rel="preload" as="font" type="font/woff2" href="/src/fonts/libre-baskerville-400-normal-latin.woff2" crossorigin>
@@ -236,10 +236,10 @@ img{max-width:100%;}
 
 
 /* Stats banner */
-.stats-banner{display:grid;grid-template-columns:repeat(4,1fr);background:linear-gradient(135deg,var(--teal-900),#062628);padding:clamp(36px,5vw,56px) clamp(20px,5vw,64px);gap:24px;border-bottom:0.5px solid rgba(255,255,255,.07);}
+.stats-banner{display:grid;grid-template-columns:repeat(4,1fr);background:linear-gradient(135deg,var(--teal-900),#062628);padding:clamp(36px,5vw,56px) clamp(20px,5vw,64px);gap:24px;border-bottom:0.5px solid rgba(255,255,255,.07);position:relative;overflow:hidden;}
 @media(max-width:700px){.stats-banner{grid-template-columns:repeat(2,1fr);}}
 .stat-item{text-align:center;}
-.stat-num{font-family:var(--font-serif);font-size:clamp(32px,5vw,52px);font-weight:500;color:white;line-height:1;margin-bottom:8px;}
+.stat-num{font-family:var(--font-serif);font-size:clamp(26px,5vw,52px);font-weight:500;color:white;line-height:1;margin-bottom:8px;}
 .stat-label{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);}
 
 /* Mission */
@@ -489,22 +489,6 @@ img{max-width:100%;}
 [dir="rtl"] .header-tools{margin-left:0;margin-right:auto;}
 [dir="rtl"] .ii-footer-link:hover{transform:translateX(-4px);}
   </style>
-  <style>
-    /* ── Legal page layout — design-system tokens only ── */
-    .legal-hero{padding:clamp(120px,16vw,180px) 24px clamp(36px,5vw,56px);text-align:center;}
-    .legal-eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-700);margin-bottom:14px;font-weight:600;}
-    .legal-title{font-family:var(--font-serif);font-size:clamp(34px,5vw,52px);font-weight:500;color:var(--ink-primary);line-height:1.12;}
-    .legal-updated{margin-top:14px;font-size:13px;color:var(--ink-subtle);}
-    .legal-wrap{max-width:780px;margin:0 auto;padding:0 24px clamp(64px,9vw,110px);}
-    .legal-wrap h2{font-family:var(--font-serif);font-size:clamp(22px,3vw,28px);font-weight:500;color:var(--ink-primary);margin:clamp(36px,5vw,48px) 0 14px;}
-    .legal-wrap h2:first-of-type{margin-top:0;}
-    .legal-wrap p{font-size:15px;line-height:1.85;color:var(--ink-muted);margin:0 0 16px;}
-    .legal-wrap ul{margin:0 0 16px;padding-left:22px;}
-    .legal-wrap li{font-size:15px;line-height:1.8;color:var(--ink-muted);margin-bottom:8px;}
-    .legal-wrap a{color:#00696E;text-decoration:underline;text-underline-offset:3px;}
-    [data-theme="dark"] .legal-wrap a{color:#5BC1C7;}
-    .legal-note{border:1px solid rgba(197,160,89,.35);background:rgba(197,160,89,.07);border-radius:14px;padding:18px 20px;font-size:14px;line-height:1.75;color:var(--ink-muted);margin:24px 0;}
-  </style>
 </head>
 <body>
   <div class="ambient"></div>
@@ -596,28 +580,225 @@ img{max-width:100%;}
 </div>
     <main>
 
-      <section class="legal-hero">
-        <div class="legal-eyebrow" data-i18n="contact.hero.badge">✦ We'd Love to Hear From You</div>
-        <h1 class="legal-title" data-i18n="contact.hero.title" data-i18n-html>Get in <em class="gradient-italic">Touch</em></h1>
-        <p class="legal-updated" data-i18n="contact.hero.sub">Questions, corrections, collaboration ideas — we read everything.</p>
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+          <div class="hero-inner">
+            <div class="hero-eyebrow" data-i18n="editorial.hero.eyebrow">Editorial Policy</div>
+            <h1 class="hero-title" data-i18n="editorial.hero.title" data-i18n-html>How we source and <span class="gold-it">verify</span></h1>
+            <p class="hero-sub" data-i18n="editorial.hero.sub">This page describes where our text comes from, the checks it passes before it is published, and the things we will not do. It is a description of process, not a statement of authority.</p>
+          </div>
+        </div>
       </section>
 
-      <div class="legal-wrap">
-        <h2 data-i18n="contact.email.heading">Email Us</h2>
-        <p data-i18n="contact.email.body">The fastest way to reach the IslamicInfo team is by email. Whether you've spotted an error in a citation, have an idea for the platform, or want to collaborate — write to us:</p>
-        <p style="margin:24px 0;"><a class="btn-primary" href="mailto:hello@islamicinfo.org" style="text-decoration:none;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          hello@islamicinfo.org
-        </a></p>
+      <!-- THE STANDARD -->
+      <section class="section" id="standard">
+        <div class="container">
+          <div class="section-head reveal">
+            <div class="section-eyebrow" data-i18n="editorial.standard.eyebrow">The Standard</div>
+            <h2 class="section-title" data-i18n="editorial.standard.title" data-i18n-html>Sourced, never <span class="gold-it">generated</span></h2>
+            <p class="section-sub" data-i18n="editorial.standard.sub">Three rules govern everything on this site. They are constraints on what may be published, not aspirations.</p>
+          </div>
+          <div class="scholars-grid">
+            <div class="card scholar-card reveal">
+              <div class="scholar-name" data-i18n="editorial.standard.r1.title">Every claim carries its source</div>
+              <p class="scholar-desc" data-i18n="editorial.standard.r1.desc">A Qur'anic verse, a hadith, or a statement about either is shown with the reference it comes from — or it is not shown at all. There is no third option where something appears without provenance.</p>
+            </div>
+            <div class="card scholar-card reveal reveal-d1">
+              <div class="scholar-name" data-i18n="editorial.standard.r2.title">We publish no rulings</div>
+              <p class="scholar-desc" data-i18n="editorial.standard.r2.desc">No fatwas, no verdicts, no declarations that a thing is permitted or forbidden. We present sourced text and say what our sources say. Questions of ruling belong with a qualified scholar who knows your circumstances.</p>
+            </div>
+            <div class="card scholar-card reveal reveal-d2">
+              <div class="scholar-name" data-i18n="editorial.standard.r3.title">A gap is stated, not filled</div>
+              <p class="scholar-desc" data-i18n="editorial.standard.r3.desc">Where our sources do not record something — a grading, a narrator, a chain — the page says so. A plausible-sounding answer supplied in place of a missing one is the specific failure this rule exists to prevent.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <h2 data-i18n="contact.corrections.heading">Corrections</h2>
-        <p data-i18n="contact.corrections.body">Accuracy is the heart of this platform. If you believe a verse, translation, hadith grading, or citation is incorrect, please include the page URL and the source you are checking against — corrections are reviewed against the original references and fixed promptly.</p>
+      <!-- WHAT WE NEVER DO -->
+      <section class="section" id="never" style="background:var(--surface-card);">
+        <div class="container">
+          <div class="section-head reveal">
+            <div class="section-eyebrow" data-i18n="editorial.never.eyebrow">Hard Limits</div>
+            <h2 class="section-title" data-i18n="editorial.never.title" data-i18n-html>What we <span class="gold-it">never</span> do</h2>
+            <p class="section-sub" data-i18n="editorial.never.sub">These are not editorial preferences. Content that would breach any of them is withheld instead.</p>
+          </div>
+          <div class="sources-grid reveal">
+            <div class="source-pill"><span class="sp-icon">✕</span><div><div class="sp-name" data-i18n="editorial.never.n1.name">Invent scripture</div><div class="sp-type" data-i18n="editorial.never.n1.type">No Qur'anic verse or hadith text is ever composed, paraphrased or reconstructed.</div></div></div>
+            <div class="source-pill"><span class="sp-icon">✕</span><div><div class="sp-name" data-i18n="editorial.never.n2.name">Supply a grading</div><div class="sp-type" data-i18n="editorial.never.n2.type">An authenticity grade is shown only where a named source records one. We never infer or estimate a grade.</div></div></div>
+            <div class="source-pill"><span class="sp-icon">✕</span><div><div class="sp-name" data-i18n="editorial.never.n3.name">Invent a chain or a narrator verdict</div><div class="sp-type" data-i18n="editorial.never.n3.type">Chains of transmission and narrator assessments are reproduced from named references or omitted.</div></div></div>
+            <div class="source-pill"><span class="sp-icon">✕</span><div><div class="sp-name" data-i18n="editorial.never.n4.name">Hide a weak narration</div><div class="sp-type" data-i18n="editorial.never.n4.type">Where a source grades a narration weak, that is shown. Removing it would conceal the fact that it is weak.</div></div></div>
+            <div class="source-pill"><span class="sp-icon">✕</span><div><div class="sp-name" data-i18n="editorial.never.n5.name">Add commentary of our own</div><div class="sp-type" data-i18n="editorial.never.n5.type">Explanatory notes restate what the text on the page already says. They add no history, no ruling and no interpretation beyond it.</div></div></div>
+            <div class="source-pill"><span class="sp-icon">✕</span><div><div class="sp-name" data-i18n="editorial.never.n6.name">Let a machine write religious text</div><div class="sp-type" data-i18n="editorial.never.n6.type">No scripture, translation, grading or citation on this site is model-generated. Automated tools assemble and check sourced material; they never author it.</div></div></div>
+          </div>
+        </div>
+      </section>
 
-        <h2 data-i18n="contact.scholars.heading">Scholars and Reviewers</h2>
-        <p data-i18n="contact.scholars.body">If you are a student of knowledge or scholar interested in reviewing content or methodology, we would be honoured to hear from you.</p>
+      <!-- THE THREE GATES -->
+      <section class="section" id="gates">
+        <div class="container">
+          <div class="section-head reveal">
+            <div class="section-eyebrow" data-i18n="editorial.gates.eyebrow">Verification</div>
+            <h2 class="section-title" data-i18n="editorial.gates.title" data-i18n-html>The three <span class="gold-it">gates</span></h2>
+            <p class="section-sub" data-i18n="editorial.gates.sub">Every supplication in our dua library must pass all three before it is published. They are applied to each record individually, and a record that fails any one of them is held back rather than corrected by guesswork.</p>
+          </div>
+          <div class="method-steps">
 
-        <div class="legal-note" data-i18n="contact.note" data-i18n-html><strong>A note on questions:</strong> IslamicInfo does not issue fatwas or religious rulings, so we are unable to answer personal fiqh questions by email. For rulings on your circumstances, please consult a qualified scholar in your community.</div>
-      </div>
+            <div class="method-step reveal">
+              <div class="ms-left"><div class="ms-num">١</div><div class="ms-line"></div></div>
+              <div class="ms-content">
+                <div class="ms-title" data-i18n="editorial.gates.g1.title">Gate 1 — Is it a supplication?</div>
+                <p class="ms-desc" data-i18n="editorial.gates.g1.desc">Scripture quotes a great deal of speech in order to report or condemn it — the words of Iblis, the pleas of the damned, statements and questions that are not petitions at all. Presented as a dua, such a passage would be read as something to recite. Gate 1 identifies those records and routes them out of the library entirely. A page whose title alone would mislead is not fixed by a note in its body, because the title is what reaches the reader first.</p>
+              </div>
+            </div>
+
+            <div class="method-step reveal reveal-d1">
+              <div class="ms-left"><div class="ms-num">٢</div><div class="ms-line"></div></div>
+              <div class="ms-content">
+                <div class="ms-title" data-i18n="editorial.gates.g2.title">Gate 2 — Can it be read aloud accurately?</div>
+                <p class="ms-desc" data-i18n="editorial.gates.g2.desc">Where a page carries a transliteration, that transliteration must come from a named source and must cover the whole of the Arabic shown beside it. Machine-generated romanisation is not accepted. A partial transliteration is treated as a failure, not a partial success: a reader following it would silently skip a line of the Arabic in front of them, and would never know.</p>
+              </div>
+            </div>
+
+            <div class="method-step reveal reveal-d2">
+              <div class="ms-left"><div class="ms-num">٣</div><div class="ms-line"></div></div>
+              <div class="ms-content">
+                <div class="ms-title" data-i18n="editorial.gates.g3.title">Gate 3 — Is the text intact?</div>
+                <p class="ms-desc" data-i18n="editorial.gates.g3.desc">Compiled datasets carry defects: a narrator's framing left inside the supplication, a chain of transmission bled into the Arabic, a truncated line, a translation that has absorbed part of the surrounding narration. Gate 3 is a deliberate scan of every record for these, rather than a reaction to the ones that happen to be noticed. Its findings are treated as a floor rather than a complete list, because a defect class found by accident has not been bounded.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- FROM SOURCE TO PAGE -->
+      <section class="section" id="pipeline" style="background:var(--surface-card);">
+        <div class="container">
+          <div class="section-head reveal">
+            <div class="section-eyebrow" data-i18n="editorial.pipeline.eyebrow">Publication</div>
+            <h2 class="section-title" data-i18n="editorial.pipeline.title" data-i18n-html>From source to <span class="gold-it">page</span></h2>
+            <p class="section-sub" data-i18n="editorial.pipeline.sub">Publication is the last step, not the default state.</p>
+          </div>
+          <div class="method-steps">
+            <div class="method-step reveal">
+              <div class="ms-left"><div class="ms-num">١</div><div class="ms-line"></div></div>
+              <div class="ms-content">
+                <div class="ms-title" data-i18n="editorial.pipeline.s1.title">The text is taken from a published source</div>
+                <p class="ms-desc" data-i18n="editorial.pipeline.s1.desc">Arabic, translation and reference are read from an established compilation or collection. Nothing is composed at this stage or any later one.</p>
+              </div>
+            </div>
+            <div class="method-step reveal reveal-d1">
+              <div class="ms-left"><div class="ms-num">٢</div><div class="ms-line"></div></div>
+              <div class="ms-content">
+                <div class="ms-title" data-i18n="editorial.pipeline.s2.title">It is checked against the three gates</div>
+                <p class="ms-desc" data-i18n="editorial.pipeline.s2.desc">Each record is tested individually. Automated checks find candidates; they do not clear them. A record that fails is held, and the reason is recorded against it.</p>
+              </div>
+            </div>
+            <div class="method-step reveal reveal-d2">
+              <div class="ms-left"><div class="ms-num">٣</div><div class="ms-line"></div></div>
+              <div class="ms-content">
+                <div class="ms-title" data-i18n="editorial.pipeline.s3.title">Explanatory notes are written from the text itself</div>
+                <p class="ms-desc" data-i18n="editorial.pipeline.s3.desc">Where a page carries notes on meaning or timing, they explain the wording already shown on that page. They introduce no history, no reward claim and no ruling. Pages carrying such notes say so on the page.</p>
+              </div>
+            </div>
+            <div class="method-step reveal reveal-d3">
+              <div class="ms-left"><div class="ms-num">٤</div><div class="ms-line"></div></div>
+              <div class="ms-content">
+                <div class="ms-title" data-i18n="editorial.pipeline.s4.title">It is approved before it goes live</div>
+                <p class="ms-desc" data-i18n="editorial.pipeline.s4.desc">Nothing reaches the site automatically. A page that has not been approved is not published — it is absent from the site and from our sitemap, rather than quietly live. Approval is recorded per page.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHERE THE TEXT COMES FROM -->
+      <section class="section" id="sources">
+        <div class="container">
+          <div class="section-head reveal">
+            <div class="section-eyebrow" data-i18n="editorial.sources.eyebrow">Provenance</div>
+            <h2 class="section-title" data-i18n="editorial.sources.title" data-i18n-html>Where our <span class="gold-it">text</span> comes from</h2>
+            <p class="section-sub" data-i18n="editorial.sources.sub">Our supplications are drawn from established compilations and collections. The English is quoted from those sources; it is not our own rendering, and each page names the source it was taken from.</p>
+          </div>
+          <div class="sources-grid reveal">
+            <div class="source-pill"><span class="sp-icon">🕌</span><div><div class="sp-name" data-i18n="editorial.sources.s1.name">Ḥiṣn al-Muslim</div><div class="sp-type" data-i18n="editorial.sources.s1.type">Compilation — Saʿīd al-Qaḥṭānī</div></div></div>
+            <div class="source-pill"><span class="sp-icon">📗</span><div><div class="sp-name" data-i18n="editorial.sources.s2.name">Ṣaḥīḥ al-Bukhārī</div><div class="sp-type" data-i18n="editorial.sources.s2.type">Primary hadith</div></div></div>
+            <div class="source-pill"><span class="sp-icon">📘</span><div><div class="sp-name" data-i18n="editorial.sources.s3.name">Ṣaḥīḥ Muslim</div><div class="sp-type" data-i18n="editorial.sources.s3.type">Primary hadith</div></div></div>
+            <div class="source-pill"><span class="sp-icon">📙</span><div><div class="sp-name" data-i18n="editorial.sources.s4.name">Sunan Abu Dawud</div><div class="sp-type" data-i18n="editorial.sources.s4.type">Sunan</div></div></div>
+            <div class="source-pill"><span class="sp-icon">📕</span><div><div class="sp-name" data-i18n="editorial.sources.s5.name">Jāmiʿ al-Tirmidhī</div><div class="sp-type" data-i18n="editorial.sources.s5.type">Sunan</div></div></div>
+            <div class="source-pill"><span class="sp-icon">📔</span><div><div class="sp-name" data-i18n="editorial.sources.s6.name">Sunan al-Nasāʾī</div><div class="sp-type" data-i18n="editorial.sources.s6.type">Sunan</div></div></div>
+            <div class="source-pill"><span class="sp-icon">📓</span><div><div class="sp-name" data-i18n="editorial.sources.s7.name">Sunan Ibn Mājah</div><div class="sp-type" data-i18n="editorial.sources.s7.type">Sunan</div></div></div>
+            <div class="source-pill"><span class="sp-icon">🌙</span><div><div class="sp-name" data-i18n="editorial.sources.s8.name">Riyāḍ al-Ṣāliḥīn</div><div class="sp-type" data-i18n="editorial.sources.s8.type">al-Nawawī compilation</div></div></div>
+          </div>
+          <p class="section-sub reveal" style="margin-top:24px;" data-i18n="editorial.sources.note">Where a compilation quotes an underlying collection, the page shows that collection's reference. Where our record carries no reference beyond the compilation itself, the page names the compilation and claims nothing further.</p>
+        </div>
+      </section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     INSERTION POINT — REVIEWER CREDIT
+     ══════════════════════════════════════════════════════════════════════════
+     Intentionally absent. This page carries NO attribution line, no named
+     reviewer and no institutional credit, by decision (2026-08-03).
+
+     Internal records are unaffected and remain the system of record for who
+     approves content: ADR-044, doc/DECISIONS.md, and the sign-off rows in
+     doc/DUA-REVIEWER-PACKAGE.md. Nothing here changes any of them. What is
+     withheld is the PUBLIC credit, not the internal accountability.
+
+     TO ADD IT LATER, this is a one-section insertion. Paste a single
+     <section> at THIS point and change nothing else — no CSS, no new classes,
+     no nav change, no layout change. The surrounding sections alternate
+     background, so this slot expects the plain (non-card) background and the
+     "Corrections" section below it already carries surface-card; if you give
+     this one a background, flip the one below.
+
+     Skeleton, using existing vocabulary only:
+
+     <section class="section" id="review">
+       <div class="container">
+         <div class="section-head reveal">
+           <div class="section-eyebrow">Review</div>
+           <h2 class="section-title">Reviewed by</h2>
+           <p class="section-sub">…scope of what was reviewed, and when…</p>
+         </div>
+         <div class="scholars-grid">
+           <div class="card scholar-card reveal">
+             <div class="scholar-name">…name…</div>
+             <div class="scholar-era">…credential…</div>
+             <p class="scholar-desc">…which parts were signed off…</p>
+           </div>
+         </div>
+       </div>
+     </section>
+
+     Before adding one, settle two things that are currently open:
+       1. WHICH reviewer this is. CONTENT-POLICY §5 (ADR-044) makes the project
+          owner the sole approver and does not require an external scholar;
+          DUA-SEO-STRATEGY-v2 §6 asks for a named external reviewer for a
+          different reason (E-E-A-T). They are not the same role and should not
+          be published as though they were.
+       2. WHAT was actually reviewed. A credit must name the scope it covers.
+          As of 2026-08-03 no part of doc/DUA-REVIEWER-PACKAGE.md is signed off,
+          so any credit added today would overstate the position.
+     ══════════════════════════════════════════════════════════════════════════ -->
+
+      <!-- CORRECTIONS -->
+      <section class="section" id="corrections" style="background:var(--surface-card);">
+        <div class="container">
+          <div class="section-head reveal">
+            <div class="section-eyebrow" data-i18n="editorial.corrections.eyebrow">Corrections</div>
+            <h2 class="section-title" data-i18n="editorial.corrections.title" data-i18n-html>If we have it <span class="gold-it">wrong</span></h2>
+            <p class="section-sub" data-i18n="editorial.corrections.sub">Compiled sources contain errors, and so will our reproduction of them. If you find a misattributed reference, a defective transliteration, a passage presented as a supplication that is not one, or a translation that does not match the Arabic beside it, please tell us. Reports that identify the specific page and the specific line are the ones we can act on fastest.</p>
+          </div>
+          <div class="section-head reveal" style="margin-top:8px;">
+            <a class="btn btn-primary" href="about.html#contact" data-i18n="editorial.corrections.cta">Report a correction</a>
+          </div>
+        </div>
+      </section>
+
     </main>
     <footer id="ii-footer">
   <div class="ii-footer-top">
@@ -698,6 +879,7 @@ img{max-width:100%;}
     <div class="ii-footer-note" data-i18n="chrome.footer.note">All content source-verified · Privacy-first · Built with sincerity</div>
   </div>
 </footer>
+  </div>
   <script>
 
   // ── Header scroll
@@ -727,7 +909,7 @@ img{max-width:100%;}
   sPopup.querySelector('.search-popup-btn').addEventListener('click',()=>{
     sPopup.classList.remove('open');
     const q=sInput.value.trim();
-    const faqEl=document.getElementById('faq'); if(q&&faqEl) faqEl.scrollIntoView({behavior:'smooth',block:'start'});
+    if(q) document.getElementById('faq').scrollIntoView({behavior:'smooth',block:'start'});
   });
 
   // ── General reveal on scroll
