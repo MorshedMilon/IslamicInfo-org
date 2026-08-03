@@ -965,6 +965,81 @@ automatically on the next build, since it is gated on the same test.
 
 ---
 
+## Part 10 — Transliteration adoption, batch 2 (14 records)
+
+Added 2026-08-03. **⚠ NOT Gate-2 satisfied — machine-proposed, UNVERIFIED.**
+
+Same standing as Part 9: nothing written to the corpus, no `transliterationSource` set, nothing
+marked reviewer-written. Only your ruling — **adopt, correct or reject** — clears the ⚠.
+
+These continue the shared-formula priority: all 14 carry the tahlil
+(`لا إله إلا الله وحده لا شريك له…`), the `اللهم إني أسألك` opening, or the
+`أعوذ بك من` formula, so the recurring phrases are ruled once and reused.
+
+### The batch
+
+| id | Arabic | existing (flawed) | **proposed ALA-LC** | translation |
+|---|---|---|---|---|
+| `27:92` | <div dir="rtl" lang="ar">((لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ)) (عشرَ مرَّات) ، أَوْ (مرَّةً واحدةً عندَ الكَسَلِ).</div> | la ilaha illa allah wahdahu la sharika lah. lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadir | **Lā ilāha illā-llāhu waḥdahu lā sharīka lah, lahu-l-mulku wa-lahu-l-ḥamdu, wa-huwa ʿalā kulli shayʾin qadīr** | There is no deity worthy of worship except Allah alone, He has no partner. To Him belongs dominion and praise, and He is over all things competent. |
+| `25:69` | <div dir="rtl" lang="ar">((سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَاللَّهُ أَكْبَرُ (ثلاثاً وثلاثين) لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ)).</div> | (Subhanal-lah walhamdu lillah, wallahu akbar (thirty-three times). (La ilaha illal-lahu wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shayin qadeer.)) | **Subḥāna-llāhi, wa-l-ḥamdu li-llāhi, wa-llāhu akbar. Lā ilāha illā-llāhu waḥdahu lā sharīka lah, lahu-l-mulku wa-lahu-l-ḥamdu wa-huwa ʿalā kulli shayʾin qadīr** | (How perfect Allah is, all praise is for Allah, and Allah is the greatest.(thirty-three times) (None has the right to be worshipped except Allah, alon |
+| `98:209` | <div dir="rtl" lang="ar">((لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، يُحْيِي وَيُمِيتُ، وَهُوَ حَيٌّ لاِ يَمُوتُ، بِيَدِهِ الْخَيْرُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ)).</div> | (La ilaha illal-lah, wahdahu la shareeka lah, lahul-mulku walahul-hamd, yuhyee wayumeetu wahuwa hayyun la yamoot, biyadihil-khayru wahuwa AAala kulli shayin qadeer.) | **Lā ilāha illā-llāhu waḥdahu lā sharīka lah, lahu-l-mulku wa-lahu-l-ḥamdu, yuḥyī wa-yumītu, wa-huwa ḥayyun lā yamūtu, bi-yadihi-l-khayru, wa-huwa ʿalā kulli shayʾin qadīr** | (None has the right to be worshipped except Allah, alone, without partner, to Him belongs all sovereignty and praise. He gives life and causes death,  |
+| `25:73` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْماً نافِعاً، وَرِزْقاً طَيِّباً، وَعَمَلاً مُتَقَبَّلاً)) بَعْدَ السّلامِ مِنْ صَلاَةِ الفَجْرِ.</div> | allahumma inni as'aluka 'ilman nafi'an, wa rizqan tayyiban, wa 'amalan mutaqabbalan | **Allāhumma innī asʾaluka ʿilman nāfiʿan, wa-rizqan ṭayyiban, wa-ʿamalan mutaqabbalan** | O Allah, I ask You for beneficial knowledge, good provision, and accepted deeds. |
+| `24:56` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَعوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، وَأَعوذُ بِكَ مِنْ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ، وَأَعوذُ بِكَ مِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ. اللَّهُمَّ إِنِّي أَعوذُ بِكَ مِنَ الْمَأْثَمِ وَالْمَغْرَمِ)).</div> | (Allahumma innee aAAoothu bika min AAathabil-qabr, wa-aAAoothu bika min fitnatil-maseehid-dajjal, wa-aAAoothu bika min fitnatil-mahya walmamat. Allahumma innee aAAoothu bika minal-ma/thami walmaghram.) | **Allāhumma innī aʿūdhu bika min ʿadhābi-l-qabri, wa-aʿūdhu bika min fitnati-l-masīḥi-d-dajjāli, wa-aʿūdhu bika min fitnati-l-maḥyā wa-l-mamāti. Allāhumma innī aʿūdhu bika mina-l-maʾthami wa-l-maghram** | (O Allah, I take refuge in You from the punishment of the grave, and I take refuge in You from the temptation and trial of Al-Maseeh Ad-Dajjal, and I  |
+| `9:13` | <div dir="rtl" lang="ar">(أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ وَأَشْهَدُ أَنَّ مُحَمَّداً عَبْدُهُ وَرَسُولُهُ..).</div> | (Ashhadu an la ilaha illal-lahu wahdahu la shareeka lah, wa-ashhadu anna Muhammadan AAabduhu warasooluh.) | **Ashhadu an lā ilāha illā-llāhu waḥdahu lā sharīka lah, wa-ashhadu anna Muḥammadan ʿabduhu wa-rasūluh** | (I bear witness that none has the right to be worshipped except Allah, alone without partner, and I bear witness that Muhammad is His slave and Messen |
+| `35:122` | <div dir="rtl" lang="ar">((لاَ إِلَهَ إِلاَّ اللَّهُ الْعَظِيمُ الْحَلِيمُ، لاَ إِلَهَ إِلاَّ اللَّهُ رَبُّ الْعَرْشِ الْعَظِيمِ، لاَ إِلَهَ إِلاَّ اللَّهُ رَبُّ السَّمَوَاتِ وَرَبُّ الْأَرْضِ وَرَبُّ الْعَرْشِ الْكَرِيمِ)).</div> | (La ilaha illal-lahul-AAatheemul-haleem, la ilaha illal-lahu rabbul-AAarshil-AAatheem, la ilaha illal-lahu rabbus-samawati warabbul-ardi warabbul-AAarshil-kareem.) | **Lā ilāha illā-llāhu-l-ʿaẓīmu-l-ḥalīm, lā ilāha illā-llāhu rabbu-l-ʿarshi-l-ʿaẓīm, lā ilāha illā-llāhu rabbu-s-samāwāti wa-rabbu-l-arḍi wa-rabbu-l-ʿarshi-l-karīm** | (None has the right to be worshipped except Allah Forbearing. None has the right to be worshipped except Allah, Lord of the magnificent throne. None h |
+| `35:124` | <div dir="rtl" lang="ar">((لاَ إِلَهَ إِلاَّ أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظّالِمِينَ)).</div> | (La ilaha illa anta subhanaka innee kuntu minath-thalimeen.) | **Lā ilāha illā anta subḥānaka innī kuntu mina-ẓ-ẓālimīn** | (None has the right to be worshipped except You. How perfect You are, verily I was among the wrong-doers.) |
+| `1:1` | <div dir="rtl" lang="ar">(.الْحَمْدُ للَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا، وَإِلَيْهِ النُّشُورُ )</div> | alhamdulillahilladhi ahyana ba'da ma amatana wa ilayhin-nushur | **Al-ḥamdu li-llāhi-lladhī aḥyānā baʿda mā amātanā, wa-ilayhi-n-nushūr** | All praise is for Allah who gives us life after He has caused us to die, and to Him is the resurrection. |
+| `27:82` | <div dir="rtl" lang="ar">((اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لاَ إِلَهَ إِلاَّ أَنْتَ. اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ، وَالفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ، لاَ إِلَهَ إِلاَّ أَنْتَ)) (ثلاثَ مرَّاتٍ).</div> | allahumma 'afini fi badani, allahumma 'afini fi sam'i, allahumma 'afini fi basari, la ilaha illa anta. allahumma inni a'udhu bika minal-kufri wal-faqr, allahumma inni a'udhu bika min 'adhabil-qabr, la ilaha illa anta | **Allāhumma ʿāfinī fī badanī, allāhumma ʿāfinī fī samʿī, allāhumma ʿāfinī fī baṣarī, lā ilāha illā anta. Allāhumma innī aʿūdhu bika mina-l-kufri wa-l-faqri, wa-aʿūdhu bika min ʿadhābi-l-qabri, lā ilāha illā anta** | O Allah, protect my body (from illness and from what I do not want). O Allah, protect my hearing (from illness and disobedience or from what I do not  |
+| `24:64` | <div dir="rtl" lang="ar">((اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَنَّ لَكَ الْحَمْدَ لَا إِلَهَ إِلاَّ أَنْتَ وَحْدَكَ لاَ شَرِيكَ لَكَ، الْمَنَّانُ، يَا بَدِيعَ السَّمَوَاتِ وَالْأَرْضِ يَا ذَا الْجَلاَلِ وَالْإِكْرَامِ، يَا حَيُّ يَا قَيُّومُ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ)).</div> | (Allahumma innee as-aluka bianna lakal-hamd, la ilaha illa ant wahdaka la shareeka lak, almannan, ya badeeAAas-samawati wal-ard, ya thal-jalali wal-ikram, ya hayyu ya qayyoom, innee as-alukal-jannah, wa-aAAoothu bika minan-nar.) | **Allāhumma innī asʾaluka bi-anna laka-l-ḥamda, lā ilāha illā anta waḥdaka lā sharīka lak, al-Mannān, yā Badīʿa-s-samāwāti wa-l-arḍ, yā Dhā-l-jalāli wa-l-ikrām, yā Ḥayyu yā Qayyūm, innī asʾaluka-l-jannata wa-aʿūdhu bika mina-n-nār** | (O Allah, I ask You as unto You is all praise, none has the right to be worshipped except You, alone, without partner. You are the Benefactor. O Origi |
+| `1:2` | <div dir="rtl" lang="ar">لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَريكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، سُبْحَانَ اللَّهِ، وَالْحَمْدُ للَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكبَرُ، وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ الْعَلِيِّ الْعَظِيمِ، رَبِّ اغْفرْ لِي</div> | (La ilaha illal-lahu wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shay-in qadeer, subhanal-lah, walhamdu lillah, wala ilaha illal-lah wallahu akbar, wala hawla wala quwwata illa billahil-AAaliyyil AAatheem. Rabbigh-fir lee) | **Lā ilāha illā-llāhu waḥdahu lā sharīka lah, lahu-l-mulku wa-lahu-l-ḥamdu, wa-huwa ʿalā kulli shayʾin qadīr. Subḥāna-llāhi, wa-l-ḥamdu li-llāhi, wa-lā ilāha illā-llāhu, wa-llāhu akbar, wa-lā ḥawla wa-lā quwwata illā bi-llāhi-l-ʿaliyyi-l-ʿaẓīm. Rabbi-ghfir lī** | (None has the right to be worshipped except Allah, alone without associate, to Him belongs sovereignty and praise and He is over all things wholly cap |
+| `25:67` | <div dir="rtl" lang="ar">((لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ [ثلاثاً]، اللَّهُمَّ لاَ مَانِعَ لِمَا أَعْطَيْتَ، وَلاَ مُعْطِيَ لِمَا مَنَعْتَ، وَلاَ يَنْفَعُ ذَا الْجَدِّ مِنْكَ الجَدُّ)).</div> | la ilaha illa allah wahdahu la sharika lah, lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadir. allahumma la mani'a lima a'tayta wa la mu'tiya lima mana'ta wa la yanfa'u dhal-jaddi minkal-jaddu | **Lā ilāha illā-llāhu waḥdahu lā sharīka lah, lahu-l-mulku wa-lahu-l-ḥamdu wa-huwa ʿalā kulli shayʾin qadīr. Allāhumma lā māniʿa li-mā aʿṭayta, wa-lā muʿṭiya li-mā manaʿta, wa-lā yanfaʿu dhā-l-jaddi minka-l-jadd** | There is no deity worthy of worship except Allah alone, He has no partner. To Him belongs dominion and praise, and He is over all things competent. O  |
+| `25:68` | <div dir="rtl" lang="ar">((لَا إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ. لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ، وَلاَ نَعْبُدُ إِلاَّ إِيَّاهُ, لَهُ النِّعْمَةُ وَلَهُ الْفَضْلُ وَلَهُ الثَّنَاءُ الْحَسَنُ، لَا إِلَهَ إِلاَّ اللَّهُ مُخْلِصِينَ لَهُ الدِّينَ وَلَوْ كَرِهَ الكَافِرُونَ)).</div> | la ilaha illa allah wahdahu la sharika lah. lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadir. la hawla wa la quwwata illa billah. la ilaha illa allah wa la na'budu illa iyyah. lahun-ni'mah wa lahul-fadl wa lahuth-thana'ul-hasan. la ilaha illa allah mukhlisina lahud-dina wa law karihal-kafirun | **Lā ilāha illā-llāhu waḥdahu lā sharīka lah, lahu-l-mulku wa-lahu-l-ḥamdu, wa-huwa ʿalā kulli shayʾin qadīr. Lā ḥawla wa-lā quwwata illā bi-llāh, lā ilāha illā-llāh, wa-lā naʿbudu illā iyyāh, lahu-n-niʿmatu wa-lahu-l-faḍlu wa-lahu-th-thanāʾu-l-ḥasan, lā ilāha illā-llāhu mukhliṣīna lahu-d-dīna wa-law kariha-l-kāfirūn** | There is no deity worthy of worship except Allah alone, He has no partner. To Him belongs dominion and praise, and He is over all things competent. Th |
+
+### Source-text defects found while transliterating
+
+**`27:92`** — **Recited text is identical to `27:93` in Part 9.** The stored fields differ by a single stranded word — `أَوْ` (“or”), sitting between two instruction parentheticals and inside neither, so it survives annotation-stripping. One ruling should cover both.
+
+**`25:69`** — The count `(ثلاثاً وثلاثين)` sits mid-text and is an instruction, not recited words — not transliterated. The old romanisation rendered it as English “(thirty-three times)”, i.e. it **translated inside a transliteration field**.
+
+**`98:209`** — Arabic reads `لاِ يَمُوتُ` — a kasra on the alif of `لا`, not standard (expected `لاَ`). Transliterated as the standard form; source flagged, not silently rewritten.
+
+**`25:73`** — **Recited text is identical to `27:95` in Part 9.** The fields differ only because this record stores its instruction as bare prose — `بَعْدَ السّلامِ مِنْ صَلاَةِ الفَجْرِ` — rather than in parentheses, so no mechanical strip catches it. One ruling should cover both.
+
+**`24:56`** — Old romanisation contained a stray `/` (`minal-ma/thami`) — the same corruption seen at `17:37`. It stands for the hamza in `الْمَأْثَمِ`.
+
+**`35:124`** — Old rendered `ظ` as `th` (`minath-thalimeen`); `ظ` is ẓ, and the article assimilates: `mina-ẓ-ẓālimīn`.
+
+**`1:1`** — The Arabic field opens with a stray full stop before the text (`(.الْحَمْدُ`) — a source artifact, not recited.
+
+**`27:82`** — The old romanisation inserts a second `allahumma inni a'udhu bika` before `min 'adhabil-qabr`; the Arabic reads only `وَأَعُوذُ بِكَ`. The proposal follows the **Arabic**, not the old romanisation.
+
+### A counting correction, and why it matters for planning
+
+Part 9 stated **110 distinct transliterations** for the 116 records, from de-duplicating on raw
+Arabic. Two refinements since:
+
+- Stripping instruction annotations before comparing gives **109**, not 110.
+- More importantly, **mechanical de-duplication UNDERCOUNTS the real overlap**, because
+  instruction annotations are stored in at least three inconsistent forms — parenthesised
+  (`(إذا أصبحَ)`), bracketed (`[ثلاثاً]`), and **bare prose**
+  (`بَعْدَ السّلامِ مِنْ صَلاَةِ الفَجْرِ`). Two pairs in this batch are word-for-word identical
+  in **recited text** yet differ as stored fields: `27:92`/`27:93` by a single stranded
+  `أَوْ` between two parentheticals, and `25:73`/`27:95` by a bare unparenthesised
+  instruction.
+
+So the number of distinct **recited** texts is lower than 109, and cannot be established by
+string comparison while annotations live inside the `arabic` field. That is the same defect as
+parked item 1, surfacing from a new direction: it does not just affect display, it defeats
+de-duplication.
+
+**A first honest correction was itself caught here.** An earlier version of the de-dup regex
+matched from the outer `((` delimiter and swallowed a whole prefix, reporting `25:69` and
+`27:93` as identical when they are not. Recorded because the failure mode — a grouping that
+looks like leverage but is an artifact — would have had you adopt one ruling across two different
+supplications.
+
+---
+
 ## Sign-off
 
 | | Name | Credentials | Date | Signature |
@@ -978,6 +1053,7 @@ automatically on the next build, since it is gated on the same test.
 | Part 7 — Wave 2 Class B clause proposals (batch 1) | | | | |
 | Part 8 — Wave 2 Qur'anic clause confirmations (batch 2) | | | | |
 | Part 9 — transliteration adoption, batch 1 | | | | |
+| Part 10 — transliteration adoption, batch 2 | | | | |
 
 The reviewer's name and credentials appear on the site once any part is signed off
 (`DUA-SEO-STRATEGY-v2.md` §6). Please confirm you are content for them to be published.
