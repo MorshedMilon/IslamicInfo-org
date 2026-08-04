@@ -39,15 +39,24 @@ _Top of the backlog, unblocked, scoped._
   so anyone who skips the validator ships broken internal links.
   Rule to encode: **any change to `page-copy.json` or the corpus requires BOTH builders to run, in
   the order above.**
-  Two options:
-  - a single `scripts/build-dua-all.mjs` that runs both in sequence and is what CI and the playbook
-    call, or
-  - a staleness assertion in `build-dua-landing-pages.mjs`: fail if any published detail page or
-    `page-copy.json` is newer than the landing pages it is about to link.
-  **Prefer doing both** — an orchestrator only helps people who use it, while the assertion also
-  catches whoever runs a builder directly out of habit. Whichever is chosen, add a negative control
-  that proves it fires (hold a record, run one builder only, confirm the build refuses), per the
-  R1–R6 precedent above — an ordering check never made to fail on purpose is not known to work.
+  **Owner-specified implementation (2026-08-04):** each builder checks whether its *input* is newer
+  than its own last *output*, and aborts FATAL if so — the same shape as the `page-names.json`
+  staleness check already in `build-dua-landing-pages.mjs:73–92` (missing/stale/slug-mismatch are
+  all `process.exit(1)`, never a silent fallback). Optionally also add
+  `scripts/build-dua-all.mjs` running both in sequence, as the thing CI and the playbook call — but
+  the assertion is the part that matters, because an orchestrator only helps people who use it.
+  **Use the HASH, not mtime.** `src/data/dua/page-state.json` already stores exactly what this
+  needs — `{"<output path>": {"hash": "...", "lastmod": "..."}}` for all 544 outputs, and both
+  builders already share and preserve each other's keys in it. So the check is: recompute the input
+  hash, compare against the stored hash for the outputs this builder owns, abort if they diverge.
+  ⚠ **mtime is not usable on its own here.** Git does not preserve mtimes — a fresh clone stamps
+  every file with the checkout time, so input-vs-output mtime ordering is meaningless right after
+  a checkout, which is precisely when someone is most likely to run a builder cold. This is the
+  same class of trap as the CRLF rule in `.claude/CLAUDE.md`: an operation that silently does
+  nothing and reports success. mtime is fine as a cheap pre-filter, never as the sole signal.
+  Add a negative control that proves it fires (hold a record, run one builder only, confirm the
+  build refuses), per the R1–R6 precedent above — an ordering check never made to fail on purpose
+  is not known to work.
 - [ ] Create `docs/DATA.md` link-back from `ARCHITECTURE §6` (remove duplicated key tables; point to DATA.md).
 - [ ] Stand up CI checks (see §CI below) before building more pages.
 - [x] **api.js — `API_BASE` seam added (INERT), 2026-07-21 (ADR-028).** `_get`/`_getHadith`/`_post`
