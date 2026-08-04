@@ -24,6 +24,22 @@ _Top of the backlog, unblocked, scoped._
   **OWNER + DATE (assigned 2026-08-04): owner Morshed Milon (ADR-044); start the session on completion of the final adoption batch, i.e. once R10 named sources reach 109. UNBLOCKS AT THAT POINT — the blocker above (54 of 116 in the AA scheme) is cleared by adoption itself.** This check is the ONLY thing that validates the Arabic → transliteration step; the re-derivation harness validates ALA-LC → popular spelling only and is blind to an error inherited from the proposal (`97:208` shipping `aẓlaln` is the worked example). An unscheduled task is a dropped one — this line is the schedule.
   **Why it is blocked and must not be started early:** the check is only as good as the romanisation it reads. `36:127` was catchable *because* its transliteration was legible enough to disagree; **54 of the 116 are in the `AA` scheme** (`aAAoothu`), where a root-level disagreement of exactly this kind is far harder to see, and 26 more are plain ASCII with no ʿayn marker at all. Running this before adoption would produce a low-signal pass and, worse, **manufacture false confidence** — the absence of findings would be read as absence of defects. Adoption is what produces the clean base this depends on.
   **Scope note:** `36:127` was found by hand while doing something else. Nothing systematically compares these fields today, so the current count of known root disagreements is **1 found, not 1 existing** — treat it as a floor, the same way `DUA-INTEGRITY-SCAN.md` treats its detector counts.
+- [ ] 🚧 **DATA LAYER — the `arabic` field is not clean recited text.** Escalated 2026-08-04 from a
+  transliteration footnote to its own item, because **everything downstream inherits it**, not just
+  the romanisation: copy-to-clipboard, audio, search indexing and the Verify engine all consume this
+  field. A user copying the Arabic copies a compiler's instruction along with the supplication.
+  **Four storage forms for annotation inside one field**, all live:
+  | form | example |
+  |---|---|
+  | `((…))` recitation delimiter used for an INSTRUCTION | `14:21` — `((يَبْدَأُ بِرِجْلِهِ الْيُسْرَى)) وَيَقُولُ:` |
+  | `[…]` bracketed variant | `27:78` `27:81` `27:89` — the evening form |
+  | `(…)` parenthesised count/time | `27:93` — `(مائةَ مرَّةٍ إذا أصبحَ)` |
+  | **bare prose, no delimiter at all** | `11:18` — `ثُمَّ لِيُسَلِّمْ عَلَى أَهْلِهِ` · `25:73` — `بَعْدَ السّلامِ مِنْ صَلاَةِ الفَجْرِ` |
+  All four were confirmed live by the cross-field scan, which flagged `11:18`, `14:21` and `25:73`
+  precisely because the Arabic's first or last word is not recited text. **No rule keyed on a single
+  delimiter can be trusted** — `14:21` uses the recitation delimiter to mean the opposite of what it
+  means everywhere else. The fix is structural: separate `arabic` (recited only) from an
+  `arabicNote` / `instruction` field. Do not patch per-record.
 - [ ] **Enforce package↔corpus agreement in `validate-seo.mjs`.** `src/data/dua/search-corpus.json`
   is authoritative; `doc/DUA-REVIEWER-PACKAGE.md` is a review document. They drifted silently on
   2026-08-04 — `Alhamdu` × 6 plus three owner rulings written to the corpus only — and the corpus

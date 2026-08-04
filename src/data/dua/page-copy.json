@@ -245,8 +245,8 @@
     "contentBasis": "translation-and-verified-context",
     "reviewStatus": "reviewed",
     "batch": 1,
-    "indexable": true,
-    "indexReason": "approved-by-owner-2026-08-03"
+    "indexable": false,
+    "indexReason": "hold-field-provenance-divergence-27-90-OPEN"
   },
   "words-of-remembrance-for-morning-and-evening-hisn-27-91": {
     "meaning": "The supplication has two halves and nothing else. The first glorifies Allah, declaring Him far above any deficiency; the second attaches praise to that same glorification. No request is made and no need is named, so the whole sentence consists of what is said about Him rather than anything asked of Him.",

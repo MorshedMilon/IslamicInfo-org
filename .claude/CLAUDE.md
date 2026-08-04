@@ -187,20 +187,81 @@ Every one was a step that silently did not execute and reported success:
    `validate-seo.mjs` (R1–R6) — it is now general: regexes, build gates, verification scripts,
    mutation tests. For a gate, prove **both** directions: it fires when it should and does not when
    it shouldn't.
+3. **AMENDED 2026-08-04 — end-to-end controls are not enough; every RULE carries its own fixture.**
+   The cross-field scan's `dedupe` rule silently never fired — twice — because an escaping layer
+   turned its backreference into a literal `0x01` byte. **The scan's own end-to-end controls passed
+   the whole time**; it was caught only because the flag count looked implausibly high. A control on
+   the gate protects the gate, not the rules inside it.
+   **Requirement:** every rule in a pipeline carries a known-positive fixture, and a **pre-run
+   self-test asserts each rule matches at least one fixture before the run proceeds. A rule matching
+   zero fixtures ABORTS the run rather than reporting clean.** This makes the whole family
+   structurally impossible instead of caught by luck: the `\b`-after-non-ASCII bug, the `0x01`
+   backreference, and the mutation with the bad anchor were all the same shape.
+   Implemented in `occasion.mjs` — 6 rules, 6 fixtures, `process.exit(2)` on any dead rule.
+4. **A parser that visibly mis-handles one construction must be cleared on ALL instances of it.**
+   The visible failure is the lucky one; the same weakness usually also produces a *silent skip*,
+   which reports as clean. Worked example: nested/wrapper parens in the `arabic` field produced one
+   visible false positive (`2:5`) **and one silent skip (`27:76`, verified correct by hand)**. Count
+   the construction across the corpus and account for every instance, not just the one that shouted.
 
 **The two things that worked are this rule already operating**: the sync no-op was caught by
 re-reading the package, and the unapplied mutation was refused a pass rather than counted. That is
 why it is written down rather than left as four fixes.
 
+## CANONICAL DENOMINATORS (recomputed 2026-08-04 — do not quote a count from memory)
+
+Both scope claims that have failed in this programme were **reconstructed by hand**; every claim
+about derivation *mechanics* was computed and has held. Hence the rule, and hence this table:
+
+> **If a claim was not computed from stored data, it is a hypothesis until it is.**
+
+| count | what it is | what it excludes |
+|---:|---|---|
+| **566** | records in `search-corpus.json` | — the whole corpus, most never published |
+| **114** | LIVE published pages (tracked + `indexable !== false`) | the 3 held; the 452 never published |
+| **113** | live pages carrying a transliteration | `27:77`, which has no transliteration field and so correctly shows no disclosure note |
+| **109** | records with `transliterationSource` (**R10's number**) | — provenance only; says nothing about accuracy |
+| **0** | records with `transliterationVerified` | — nothing has been checked against the Arabic |
+| **3** | HELD (`indexable:false`, untracked, 404) | `27:90` `36:127` `103:215` |
+| **116** | the reviewer set, Parts 9–18 | — |
+| **112** | of the 116 that got a written proposal | the 4 routed to Part 13a (`27:78` `27:81` `27:89` `27:90`) — content questions, never proposed |
+| **5** | live, carry a transliteration, have **no** provenance | `27:76` `27:78` `27:81` `27:89` `1:4` — R10's entire remaining debt. Was 6; `27:90` left this set by being held |
+| **45 / 32** | `dua-dhikr`/fitrahive records in corpus / live | was reported as "1" — wrong by a factor of 33 |
+| **166** | `<loc>` entries in `sitemap.xml` | the 3 held |
+
+Relationships worth stating because they have been confused: **109 ≠ 112 − 3.** The 109 includes
+`115:233` (the Talbiyah), which was adopted in Part 3 and was never in the 112; and it excludes the
+5 above plus `27:76`/`1:4`, which are in the 112 but parked. The reviewer set (116) and the live set
+(114) are **different populations that overlap**, not subsets of one another.
+
 ## KNOWN LIMITATIONS of the transliteration programme (read before claiming anything is verified)
 
-**0. Six LIVE pages have never been through the derivation programme at all.** They carry a
-transliteration, have **no** `transliterationSource`, and were never in the 112 that were diffed:
-`27:76` `27:78` `27:81` `27:89` `27:90` `1:4`. Four are the Part 13a morning/evening split
-candidates and two are the multi-verse records — all parked on **content** questions, which is why
-they fell out of the derivation denominator, but they are **published**. `27:81` and `27:90`
-additionally carry the source-truncation flag (their Arabic ends mid-text). They are the entirety
-of R10's remaining known debt. Do not read "109 adopted" as "the library is covered".
+**0. FIVE live pages have never been through the derivation programme at all** (was six; `27:90` is
+now held — see below). They carry a transliteration, have **no** `transliterationSource`, and were
+never in the 112 that were diffed: `27:76` `27:78` `27:81` `27:89` `1:4`. They are parked on
+**content** questions, which is why they left the derivation denominator while staying published,
+and they are R10's entire remaining debt. Do not read "109 adopted" as "the library is covered".
+
+⚠ **This item was previously WRONG IN TWO DIRECTIONS, and the correction is the point.** It said
+`27:81`/`27:90` "carry the source-truncation flag (their Arabic ends mid-text)". That **overstated
+damage to recited text**: in both records the ellipsis sits inside the *bracketed evening
+annotation*, and the main `((…))` supplication is complete. It simultaneously **understated a real
+cross-field defect sitting in the same records** — `27:90` had morning Arabic under an evening
+transliteration, translation, H1 and title, which is far more serious than a truncated annotation
+and was not mentioned at all. **A limitations register that misdescribes its own items is worse
+than a short one**; re-derive each entry from stored data before trusting it.
+
+**0a. `27:90` — field provenance divergence, the defect class re-derivation cannot see.** Its
+`arabic` is Hisn's morning text; its `transliteration`, `translation`, H1 and `<title>` are
+fitrahive's **evening** supplication. Two supplications joined on an id. Every prior defect was
+*within-field* ("the Arabic → Latin transform was imperfect") and therefore findable by
+re-derivation; this one is *cross-field*, the transform was never run on it, and **the harness is
+blind to it by construction** — there is no ALA-LC lineage to validate. Only a cross-field
+agreement check finds it. Held 2026-08-04 (`indexable:false`, untracked, 404). The evidence points
+to it being an **evening record with the wrong Arabic**, not a morning record with four wrong
+fields — three of four content fields agree on evening. Resolves with the Part 13a split.
+Cross-field scan over all live records: **`27:90` was the only instance**; occasion-consistency scan
+across `arabic`/`transliteration`/`translation`/`title`: **0 conflicts remaining**.
 
 **1. Nothing in the corpus has been derived from the Arabic.** All 112 proposals came from one
 machine pass. The re-derivation harness validates the **ALA-LC → popular** transform only; it
