@@ -590,6 +590,25 @@ const translitSourceNamed = (d) => typeof d.transliterationSource === "string"
   && d.transliterationSource.trim() !== "" && !TRANSLIT_SRC_VACUOUS.test(d.transliterationSource.trim());
 const translitUnsourced = (d) => !!translitOf(d) && !translitSourceNamed(d);
 
+/* PROVENANCE vs ACCURACY — split 2026-08-04 (owner ruling), and they must never be
+   re-merged. `transliterationSource` answers "who wrote this and did a human read it"
+   (Gate 2). It is what R10 counts, and adoption sets it. It says NOTHING about whether
+   the transliteration actually renders the Arabic.
+
+   `transliterationVerified` answers "has this been derived from the stored Arabic
+   independently of the proposal it came from". Only that clears the reader-facing
+   disclosure. ADOPTION MUST NOT SET IT — the whole point of the split is that adoption
+   is a provenance event and the note is an accuracy signal.
+
+   Why this exists: the re-derivation harness validates ALA-LC -> popular spelling only.
+   It takes the ALA-LC as input, so it is structurally blind to an error inherited from
+   the proposal. 97:208 is the proof — the proposal itself carried `aẓlaln`, the restyle
+   preserved it faithfully, and the diff came back clean. Accuracy is unestablished
+   corpus-wide until ADR-044 completes. See .claude/CLAUDE.md, Known Limitations. */
+const translitVerified = (d) => typeof d.transliterationVerified === "string"
+  && d.transliterationVerified.trim() !== "";
+const translitUnverified = (d) => !!translitOf(d) && !translitVerified(d);
+
 const kmOf = (d) => keywordMap[slugOf(d)] || null;
 const TITLES = resolveUnique(browse, titleCandidates, (d) => (kmOf(d) || {}).titleOverride || null);
 const H1S = resolveUnique(browse, h1Candidates, null);
@@ -808,8 +827,14 @@ function sourceBlock(d) {
      transliterationSource — including "Reviewer-written (adopted)" under the Talbiyah
      precedent — this line disappears on the next build with no further edit. That
      coupling is deliberate: a disclosure that outlives the problem is its own defect. */
-  if (translitUnsourced(d)) rows.push('    <p class="ed">Romanization source not verified — ' +
-    'the Arabic and English above are sourced; this transliteration is provided as a reading aid only.</p>');
+  /* Gated on ACCURACY, not provenance. A named transliterationSource does not retire
+     this line — only an independent derivation from the Arabic does. */
+  /* Copy scope matters (owner ruling 2026-08-04): an unqualified "not verified" on a dua
+     page reads as "this dua is unsourced", which is false. Name what IS verified first —
+     the Arabic and its reference — then scope the caveat to the Latin rendering alone. */
+  if (translitUnverified(d)) rows.push('    <p class="ed">The Arabic text above and its source ' +
+    'reference are verified. The Latin-script transliteration has not yet been independently ' +
+    'checked against the Arabic, and is provided as a pronunciation aid only.</p>');
   // ADDENDUM §15 — where this library lists the same supplication under another
   // chapter, say so and link it, so a reader who lands on either page can see why
   // two URLs carry the same words. Stated from the corpus only: which chapters list
@@ -1008,13 +1033,14 @@ items.map(d => [
      Uses `.ed` — the same muted italic this template already shares with the detail
      pages — so no new class and no new style.
 
-     Same translitUnsourced() test the detail pages use, so the two retire in
-     lockstep: when a record gains a real transliterationSource the note drops off
-     both surfaces on the next build. Wording is plural because the subject is the
+     Same translitUnverified() ACCURACY test the detail pages use, so the two retire in
+     lockstep — and neither retires on adoption, which is a provenance event. Wording
+     is plural because the subject is the
      page's whole list. */
-  items.some(translitUnsourced)
-    ? '  <p class="ed">Romanization sources not verified — the Arabic and English above are ' +
-      'sourced; the transliterations are provided as a reading aid only.</p>'
+  items.some(translitUnverified)
+    ? '  <p class="ed">The Arabic texts above and their source references are verified. The ' +
+      'Latin-script transliterations have not yet been independently checked against the Arabic, ' +
+      'and are provided as a pronunciation aid only.</p>'
     : '',
 '  <a class="cta" href="/dua.html?category=' + slug + '">Search and filter the full dua library &rarr;</a>',
 '  <div class="also"><h2>Browse other chapters</h2><div class="chips">',

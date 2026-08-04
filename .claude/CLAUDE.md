@@ -125,6 +125,127 @@ wrote `allaahumma ighfir lee`, restoring a vowel that is silent in connected spe
 old romanisation had this right. All 27 affected records were corrected, including the
 already-live `39:132`.
 
+**H5 reaches VERBS, not the divine name.** `allaah` / `allaahumma` / `allatee` / `alladhee`
+stay **split** from the preceding word unless the result is on the closed fusion list.
+Confirmed against 16 live records (`Subhaanaka allaahumma`, `wa'alaa allaahi`,
+`anta allaahu`, `lillaahi alladhee`, `Subhaana alladhee`, `dhaa alladhee`,
+`yukallifu allaahu`, `Bismika allaahumma`, `Labbayka allaahumma`, `Ahabbaka alladhee`).
+Closed list: `illallaah bismillaah lillaah billaah wallaah Subhaanallaah Hasbiyallaah
+Hasbunallaah Sami'allaah Astaghfirullaah Baarakallaah Tabaarakallaah shaa'allaah`.
+
+**Honorifics live in the translation field, never in the transliteration** (Part 13a rule 4,
+owner-confirmed 2026-08-04). `27:87` carries ﷺ in its `arabic` and in its `translation`, and
+deliberately **not** in its `transliteration`. The two fields disagreeing on this is intended,
+not drift. Normalising honorifics in translations would be a separate pass over all records.
+
+**Round brackets are ruled** as of 2026-08-04 — Part 13a **rule 5b**: a round-bracketed
+optional/variant WORD is transliterated **with its brackets**, exactly like square-bracket
+rule 3. `2:5` → `haadhaa (ath thawba) warazaqaneehi`. Rule 5 ("unruled") is superseded.
+
+**Rule P — pause form (owner-ruled 2026-08-04, after a defect).** Pause form may drop only
+**iʿrāb** (case/mood) vowels and pronoun-suffix vowels, and only at the **end of an utterance**.
+It must **never** drop a **bināʾ** vowel — those are part of the word, not inflection.
+The failure that produced this rule: `97:208` shipped as proposed with `aẓlaln aqlaln aḍlaln
+dharayn` for أَظْلَلْنَ أَقْلَلْنَ أَضْلَلْنَ ذَرَيْنَ. That final fatḥa is **nūn an-niswah**,
+structural, and does not drop; `azlaln` is an unpronounceable cluster, which is the tell.
+Correct: `azlalna aqlalna adlalna dharayna`. **The ALA-LC proposal already had it wrong** —
+it copied the old romanisation's `wama athlaln` — so Part 17's "full correction, not a partial
+fix" claim did not hold for that record.
+
+⚠ **Rule P is stated but NOT yet applied library-wide.** Pause form is currently applied *by
+feel*, inherited from the ALA-LC proposals, and it does not track the stored vowelling: the
+Arabic is fully vowelled in every case checked, yet identical `لَهُ` renders `lah` in `3:6`
+and `lahu` in `28:108`, and `وَالأَرْضِ` renders `wal ard` at an internal comma in `16:30`.
+Sweeping this needs per-record Arabic alignment — logged in `doc/TASKS.md`, not mechanisable
+from the romanisation alone.
+
+**Rule A's ʿ/ʾ collision is accepted, never patched per-word.** `63:169` renders
+`مَرِيئاً مَرِيعاً` (two distinct words) as `maree'an maree'an`. Owner-ruled 2026-08-04:
+keep it, because the convention's value is that it is mechanically derivable from the
+Arabic — a one-off exception means the transliteration can no longer be re-derived by rule.
+Record the loss in the record's `textNote`; do not alter the transliteration.
+
+## STANDING RULE — no mechanical step is trusted on its own report
+
+**Owner-ruled 2026-08-04, promoted from four separate incidents with one failure mode.**
+Every one was a step that silently did not execute and reported success:
+
+| incident | what happened |
+|---|---|
+| `/\bli-lladhī\b/` | `\b` after a macron can never fire. The rule never once executed, and reported nothing. |
+| mutation 1 | the seeded defect's anchor didn't match, so the mutation never applied — and scored as a pass. |
+| package↔corpus sync | reported "3 synced", did 2; the third was a no-op on a stale anchor. |
+| `fuseArticleLeft` | swallowed the particle أَنْ, deleting a word, and produced valid-looking output. |
+
+**The rule, in two parts:**
+1. **Assert on the artifact afterwards, never on the step's report.** Re-read the file, re-parse
+   the JSON, count the matches. A script that prints "done" is not evidence that anything changed.
+   Prefer asserting a **count or a parse** over asserting a substring, and assert the *absence* of
+   the old value as well as the presence of the new one.
+2. **No pattern or rule ships without a negative control proving it can fire at all.** A rule that
+   matches nothing is indistinguishable from a rule that passes. This already applies to
+   `validate-seo.mjs` (R1–R6) — it is now general: regexes, build gates, verification scripts,
+   mutation tests. For a gate, prove **both** directions: it fires when it should and does not when
+   it shouldn't.
+
+**The two things that worked are this rule already operating**: the sync no-op was caught by
+re-reading the package, and the unapplied mutation was refused a pass rather than counted. That is
+why it is written down rather than left as four fixes.
+
+## KNOWN LIMITATIONS of the transliteration programme (read before claiming anything is verified)
+
+**0. Six LIVE pages have never been through the derivation programme at all.** They carry a
+transliteration, have **no** `transliterationSource`, and were never in the 112 that were diffed:
+`27:76` `27:78` `27:81` `27:89` `27:90` `1:4`. Four are the Part 13a morning/evening split
+candidates and two are the multi-verse records — all parked on **content** questions, which is why
+they fell out of the derivation denominator, but they are **published**. `27:81` and `27:90`
+additionally carry the source-truncation flag (their Arabic ends mid-text). They are the entirety
+of R10's remaining known debt. Do not read "109 adopted" as "the library is covered".
+
+**1. Nothing in the corpus has been derived from the Arabic.** All 112 proposals came from one
+machine pass. The re-derivation harness validates the **ALA-LC → popular** transform only; it
+re-runs the spelling step and cannot see an error in the **Arabic → ALA-LC** step, because it
+takes the ALA-LC as its input. `97:208` is the proof: the ALA-LC proposal itself carried
+`aẓlaln` (copied from the old romanisation `wama athlaln`), the restyle faithfully preserved it,
+and the diff came back clean. **A clean diff means the spelling transform is faithful, not that
+the text is right.** Closing that gap is the scheduled cross-field consistency check.
+
+**2. `transliterationSource: "Reviewer-written (adopted)"` is a Gate-2 provenance value, NOT a
+verification claim.** Owner rulings resolved flagged edge cases in the derivation; they are not a
+scholarly check of the text against a named source. Adopted records keep `indexable:true` **and**
+the on-page disclosure note is retired only because R10 is gated on the same field — that is a
+provenance gate, not an accuracy gate. Never let "owner-ruled" read as "verified" in metadata,
+changelogs or commit messages.
+
+**3. Article fusion is keyed on the LATIN shape, not on ال in the Arabic.** `fuseArticleLeft`
+guesses Arabic grammar from the romanisation, with a same-consonant back-reference as its only
+guard. That guard is necessary and not sufficient: a particle followed by a word beginning with
+that particle's final consonant would still fuse wrongly (`an` + a nūn-initial verb). Scanned
+2026-08-04 across all 112 — **zero hits today** — but the residual is structural. The real fix is
+to key fusion on the article in the `arabic` field. Not built; recorded.
+
+**4. Rule P (pause form) is stated but NOT applied library-wide.** See Rule P above and
+`doc/TASKS.md`. Do not attempt it as a regex.
+
+**Verification standard, learned the hard way (2026-08-04).** Re-derivation beats inspection, and
+the evidence is `1:4`: the particle أَنْ had been silently swallowed into the preceding word by
+the article-fusion bug — a word gone from the text, reading perfectly. **Inspection had passed
+over it repeatedly; only re-deriving all 112 and diffing surfaced it.** Cite this the next time
+verifying-by-reading is proposed. Two further corollaries:
+- **A checker repeatedly adjusted until its diff goes clean is fitted to its target.** Three gaps
+  in the harness were fixed exactly that way. Measure sensitivity with a **mutation test** —
+  seed one synthetic defect per failure class and require every one to be flagged (10/10 on
+  2026-08-04) — otherwise "0 defects" only means the two artifacts agree.
+- **A script that reports success is not evidence.** The package↔corpus sync reported "3 synced"
+  having done 2; the third was a no-op. Assert on the artifact afterwards, never on the report.
+
+**`src/data/dua/search-corpus.json` is AUTHORITATIVE; the reviewer package is a review document.**
+The builder reads the corpus and the corpus is what ships. They drifted silently once
+(`Alhamdu` × 6, plus 3 owner rulings applied to the corpus only) and the corpus happened to be
+correct — luck, not architecture. One divergence is legitimate and documented in Part 9:
+`27:85`/`28:109` share a table row but not a transliteration. **Nothing enforces this today** —
+a package↔corpus diff belongs in `validate-seo.mjs`; logged in `doc/TASKS.md`.
+
 **Never re-derive from the Arabic when restyling.** Restyling is a spelling operation
 only. Which words are present and which root is right is settled work — carry it
 through untouched. Gate 2/3 rulings, `transliterationSource` and hold status are

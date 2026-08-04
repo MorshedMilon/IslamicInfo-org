@@ -21,8 +21,35 @@ _Top of the backlog, unblocked, scoped._
 
 - [x] **R1–R6 enforced in `scripts/validate-seo.mjs`** (owner directive 2026-08-03) — done. All nine rules (R1–R6, R3a, R8, R9) now run every validator pass, each verified by a negative control in `scripts/test/negative-control-validator-rules.mjs` (10/10 cases fire and restore byte-identically). **Luck-vs-design reported: R1, R2, R3/R3a and R4 were vacuous — passing on set composition, not enforcement; R5 and R6 were genuinely load-bearing.** R2 surfaced real drift: 16 chapters flagged `gets_static_chapter_page=yes` against 10 built pages. Table in `docs/seo/VALIDATOR-RULES-SESSION-1.md`.
 - [ ] 🔒 **BLOCKED UNTIL THE TRANSLITERATION ADOPTION BATCH COMPLETES — cross-field consistency check (Arabic ↔ transliteration ↔ translation).** Owner directive 2026-08-03, logged not started. Build a check that derives each record's Arabic root(s) and compares them against what its transliteration and its translation actually say, flagging disagreements. **The worked example is `36:127`**: `arabic` reads `بِكَ أَحُولُ` (ح-و-ل, *to turn/shift*), `transliteration` reads `bika ajoolu` (ج-و-ل, *to roam/move*), and `translation` reads "by You I move" — so two of three fields agree with each other and disagree with the Arabic. Different roots, not a transcription variant. That record is now held (`indexReason: gate3-hold-36-127-root-disagreement`) and written up as reviewer-package Part 16.
+  **OWNER + DATE (assigned 2026-08-04): owner Morshed Milon (ADR-044); start the session on completion of the final adoption batch, i.e. once R10 named sources reach 109. UNBLOCKS AT THAT POINT — the blocker above (54 of 116 in the AA scheme) is cleared by adoption itself.** This check is the ONLY thing that validates the Arabic → transliteration step; the re-derivation harness validates ALA-LC → popular spelling only and is blind to an error inherited from the proposal (`97:208` shipping `aẓlaln` is the worked example). An unscheduled task is a dropped one — this line is the schedule.
   **Why it is blocked and must not be started early:** the check is only as good as the romanisation it reads. `36:127` was catchable *because* its transliteration was legible enough to disagree; **54 of the 116 are in the `AA` scheme** (`aAAoothu`), where a root-level disagreement of exactly this kind is far harder to see, and 26 more are plain ASCII with no ʿayn marker at all. Running this before adoption would produce a low-signal pass and, worse, **manufacture false confidence** — the absence of findings would be read as absence of defects. Adoption is what produces the clean base this depends on.
   **Scope note:** `36:127` was found by hand while doing something else. Nothing systematically compares these fields today, so the current count of known root disagreements is **1 found, not 1 existing** — treat it as a floor, the same way `DUA-INTEGRITY-SCAN.md` treats its detector counts.
+- [ ] **Enforce package↔corpus agreement in `validate-seo.mjs`.** `src/data/dua/search-corpus.json`
+  is authoritative; `doc/DUA-REVIEWER-PACKAGE.md` is a review document. They drifted silently on
+  2026-08-04 — `Alhamdu` × 6 plus three owner rulings written to the corpus only — and the corpus
+  happened to be the correct side. That is luck, not architecture. Add a rule that diffs every
+  adopted record's `transliteration` against its package row and fails on mismatch, with **one
+  documented exception**: `27:85`/`28:109` share a Part 9 table row but not a transliteration
+  (`washarakihi` vs `washirkihi`), so the row can only show one. Negative control required.
+- [ ] **Sweep Rule P (pause form) across the dua library — needs Arabic alignment, not a regex.**
+  Rule P is stated in `.claude/CLAUDE.md` (owner-ruled 2026-08-04): pause form may drop only
+  **iʿrāb** vowels and pronoun-suffix vowels, only at utterance end, **never a bināʾ vowel**.
+  It is **not yet applied library-wide**. Pause form today is applied *by feel*, inherited from
+  the ALA-LC proposals, and does not track the stored vowelling. Confirmed cases:
+  | record | Arabic | vowel written? | rendered |
+  |---|---|---|---|
+  | `3:6` | لَهُ | yes | `lah` — dropped |
+  | `28:108` | لَهُ | yes | `lahu` — **kept** |
+  | `16:30` | وَالأَرْضِ | yes | `wal ard` — dropped at an **internal comma** |
+  | `24:62` | الْغَضَبِ | yes | `ghadab` — dropped |
+  | `21:51` | أَجْراً | yes | `ajran` — kept |
+  Same word, same vowelling, opposite output. **This is not a source defect** — the Arabic is
+  consistent; the rule is not. Fixing it requires reading each record's Arabic and deciding per
+  word whether the ending is iʿrāb or bināʾ and whether the position is utterance-final, which
+  cannot be derived from the romanisation. Natural home: fold into the scheduled **cross-field
+  consistency check** above, which already has to align Arabic against transliteration.
+  Do not attempt a regex sweep — a rule that guesses from the Latin text will silently
+  reintroduce the `azlaln` class of error.
 - [ ] **Make the dua build sequence unmissable — orchestrating script and/or a staleness assertion.**
   The correct order is **`build-dua-pages.mjs` → `build-dua-landing-pages.mjs`**. Verified from the
   code, not from habit: `build-dua-pages.mjs` **writes** `src/data/dua/page-names.json`
