@@ -97,22 +97,33 @@ be restyled**.
 `th dh kh sh gh` unchanged.
 
 **Rule A — apostrophe.** ʿayn and hamza both become `'`. Keep it everywhere **except
-word-finally**, where it is dropped. `aʿūdhu→a'oodhu` · `asʾaluka→as'aluka` ·
-`duʿāʾ→du'aa` · `ʿalā→'alaa`.
-*Known cost:* this also deletes a pronounced word-final ʿayn. Two records only —
-`21:51` (`wa-ḍaʿ→wada`) and `24:62` (`tanqaṭiʿ→tanqati`). If the rule is ever
-refined to "drop final hamza, keep final ʿayn", those two are the entire blast radius.
+word-finally**, where it is dropped — with one refinement (owner-ruled 2026-08-04):
+**final hamza is dropped, final ʿayn is KEPT**, because dropping a final ʿayn removes a
+real consonant sound while dropping a final hamza barely changes pronunciation.
+`aʿūdhu→a'oodhu` · `asʾaluka→as'aluka` · `duʿāʾ→du'aa` · `ʿalā→'alaa` ·
+`wa-ḍaʿ→wada'` · `tanqaṭiʿ→tanqati'`.
+Only `21:51` and `24:62` carry a word-final ʿayn — that is the entire blast radius.
 
-**Rule H — word division. Sun-letter assimilation is KEPT** (this does *not* reverse
-the Part 12 library-wide ruling):
+**Rule H — word division (FINAL, owner-ruled 2026-08-04 as "Option A").**
+Sun-letter assimilation is KEPT — this does *not* reverse the Part 12 ruling — but the
+academic hyphenated joins are gone. **The article fuses onto the word before it, then a
+SPACE before its noun.** Never fused to the noun (`minal hammi`, not `minalhammi`), never
+hyphenated (not `mina-l-hammi`).
 
 | | example |
 |---|---|
-| prefix particle (`wa bi li fa ka`, attached in Arabic) **absorbs** the article | `wal-hamdu` `bir-rafeeqi` `bith-thalji` |
-| separate word keeps its form, hyphen before the assimilated consonant | `mina-z-zaalimeen` `lahu-l-mulku` `fee-d-dunyaa` |
-| elision hyphens are resolved into **full separate words** | `allaahumma ighfir lee` · `maa istata'tu` |
+| article fuses left, space before the noun | `minal hammi` `wal hazani` `lahul mulku` `as'alukal jannata` |
+| assimilation shows as the doubled consonant across the space | `wash shahaadati` `faatiras samaawaati` `minan naar` `war rooh` |
+| **Rule H5 — hamzat al-waṣl ELIDES in connected speech** and fuses onto the preceding word | `allaahummaghfir lee` · `warhamnee` · `Allaahummakfineehim` · `waj'alnee` |
+| …a preceding long vowel shortens before the cluster | `maa istata'tu → mastata'tu` · `mimmaa ibtalaaka → mimmabtalaaka` |
+| …but waṣl at the START of an utterance keeps its vowel | `Ihdinee` · `Isbiroo` |
 | a prefix never fuses onto a vowel-initial stem or a proper noun | `wa anta` · `wa Rabba` · `wabi Muhammadin` |
 | conventional divine-name fusions (closed list) | `bismillaah lillaah billaah wallaah illallaah allaahumma lilladhee` |
+
+**Rule H5 was wrong until 2026-08-04** and shipped that way in the first 5 adoptions: it
+wrote `allaahumma ighfir lee`, restoring a vowel that is silent in connected speech. The
+old romanisation had this right. All 27 affected records were corrected, including the
+already-live `39:132`.
 
 **Never re-derive from the Arabic when restyling.** Restyling is a spelling operation
 only. Which words are present and which root is right is settled work — carry it
