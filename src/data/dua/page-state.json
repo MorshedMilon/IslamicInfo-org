@@ -1,26 +1,138 @@
 {
+  "duas/occasion/morning-evening.html": {
+    "hash": "3f3ded2f3ced15cc",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/sleep-waking.html": {
+    "hash": "b9228bf098e97782",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/home-clothing.html": {
+    "hash": "ce25063763602eb2",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/prayer.html": {
+    "hash": "4d7accbe8333177b",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/quran-recitation.html": {
+    "hash": "00d5fd61f3abe957",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/guidance.html": {
+    "hash": "c662331b1fa53d0f",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/distress.html": {
+    "hash": "baec56b90a8b0008",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/protection.html": {
+    "hash": "c8a0d93ee783c31c",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/forgiveness.html": {
+    "hash": "a3e4c3a827e1d8d0",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/family-children.html": {
+    "hash": "75ad32030d80fa73",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/funeral-illness.html": {
+    "hash": "b0605107d5aae249",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/weather-nature.html": {
+    "hash": "255d5176e0d31269",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/fasting.html": {
+    "hash": "0e2e03e1c1fb31c8",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/food-drink.html": {
+    "hash": "4f4298c4ecd704c1",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/social.html": {
+    "hash": "78338fdcee780105",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/praise-dhikr.html": {
+    "hash": "143b77628b0f079f",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/provision.html": {
+    "hash": "2c9ed52193b6acd7",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/travel.html": {
+    "hash": "2b21c96c67714249",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/hajj-umrah.html": {
+    "hash": "4b2e7ed3add214de",
+    "lastmod": "2026-08-03"
+  },
+  "duas/occasion/general.html": {
+    "hash": "fd90edb888b45c4b",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/hisn.html": {
+    "hash": "acd9ea5b5a5b6fe7",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/quran.html": {
+    "hash": "39370602e9ffe01a",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/bukhari.html": {
+    "hash": "fe5702fdb1d2c5ab",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/muslim.html": {
+    "hash": "231972941a02c191",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/abudawud.html": {
+    "hash": "944f6b495eeb82f8",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/tirmidhi.html": {
+    "hash": "19bbe6404790be6d",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/nasai.html": {
+    "hash": "4a08be16abd0165a",
+    "lastmod": "2026-08-03"
+  },
+  "duas/source/ibnmajah.html": {
+    "hash": "5759520cd835eb60",
+    "lastmod": "2026-08-03"
+  },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-75.html": {
     "hash": "dd4e4609da4eddc9",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-76.html": {
-    "hash": "0a3ea57d32298428",
+    "hash": "0163f6165f320a49",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-77.html": {
-    "hash": "488cbe557fc50980",
+    "hash": "7b78b72299df5a04",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-78.html": {
-    "hash": "c2f2e83bd45ff53a",
+    "hash": "571d4933d9c78910",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-79.html": {
-    "hash": "4a2cbc24c795d9c2",
+    "hash": "87a4102cafa90723",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-80.html": {
-    "hash": "a5ac9279cc63326b",
+    "hash": "bb09256a59f6518f",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-81.html": {
@@ -28,23 +140,23 @@
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-82.html": {
-    "hash": "1e83a1ca0eb0082d",
+    "hash": "28f48a0546cdb7a4",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-83.html": {
-    "hash": "31edd1e2b3ce85d8",
+    "hash": "59b08e6ec5d211d6",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-84.html": {
-    "hash": "324baf281757796c",
+    "hash": "b928a4a2e6202709",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-85.html": {
-    "hash": "c13f7cf232fbb14c",
+    "hash": "58b25050f56ae6c3",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-86.html": {
-    "hash": "fbb364aa8b1ae88d",
+    "hash": "3dde8ef93eb97f22",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-87.html": {
@@ -52,7 +164,7 @@
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-88.html": {
-    "hash": "afa03e696a1eb140",
+    "hash": "e3ebb08965036cb1",
     "lastmod": "2026-08-03"
   },
   "duas/words-of-remembrance-for-morning-and-evening-hisn-27-89.html": {
@@ -100,23 +212,23 @@
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-before-sleeping-hisn-28-101.html": {
-    "hash": "4b1ac4c284e17c37",
+    "hash": "45936c12929a44d9",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-before-sleeping-hisn-28-102.html": {
-    "hash": "7107e11567fbce1c",
+    "hash": "ade585c768612460",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-before-sleeping-hisn-28-103.html": {
-    "hash": "791f6e2c3b2917b4",
+    "hash": "0e522728533f8df9",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-before-sleeping-hisn-28-104.html": {
-    "hash": "cd7ef17aa9ce2cf4",
+    "hash": "1c499dcc59aa55de",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-before-sleeping-hisn-28-105.html": {
-    "hash": "0d1518305a3ee01e",
+    "hash": "23d84ffc06ba1c0a",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-before-sleeping-hisn-28-106.html": {
@@ -124,7 +236,7 @@
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-before-sleeping-hisn-28-107.html": {
-    "hash": "6e053f53ec942547",
+    "hash": "063211f867b1e845",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-before-sleeping-hisn-28-108.html": {
@@ -156,11 +268,11 @@
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-entering-the-restroom-hisn-6-10.html": {
-    "hash": "3f007e35dbe7a177",
+    "hash": "02657aec9516e9a3",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-leaving-the-restroom-hisn-7-11.html": {
-    "hash": "33821dea7225ce91",
+    "hash": "b128674c794eb0a2",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-before-performing-ablution-hisn-8-12.html": {
@@ -180,7 +292,7 @@
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-when-leaving-the-home-hisn-10-16.html": {
-    "hash": "7dd22b76c42f3c55",
+    "hash": "ead114b65e26b9c2",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-when-leaving-the-home-hisn-10-17.html": {
@@ -188,7 +300,7 @@
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-when-entering-the-home-hisn-11-18.html": {
-    "hash": "778f861d1e8da802",
+    "hash": "a5ef7aaf78bb4b02",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-going-to-the-mosque-hisn-12-19.html": {
@@ -220,23 +332,23 @@
     "lastmod": "2026-08-03"
   },
   "duas/invocation-when-getting-dressed-hisn-2-5.html": {
-    "hash": "030a4e343cb392b5",
+    "hash": "ee40bd9a7e0cd4d1",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-when-putting-on-new-clothes-hisn-3-6.html": {
-    "hash": "a82901d06f6d8912",
+    "hash": "4d43f642da5c2333",
     "lastmod": "2026-08-03"
   },
   "duas/invocations-for-someone-who-has-put-on-new-clothes-hisn-4-7.html": {
-    "hash": "85c7cb7079cfb5c1",
+    "hash": "4f70b3f321dc8370",
     "lastmod": "2026-08-03"
   },
   "duas/invocations-for-someone-who-has-put-on-new-clothes-hisn-4-8.html": {
-    "hash": "02b5a49e1592c184",
+    "hash": "0d17a99e159062cf",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-when-undressing-hisn-5-9.html": {
-    "hash": "14790ba231c59813",
+    "hash": "7d7fd333187a89e8",
     "lastmod": "2026-08-03"
   },
   "duas/invocations-for-the-beginning-of-the-prayer-hisn-16-27.html": {
@@ -508,7 +620,7 @@
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-if-you-fear-people-may-harm-you-hisn-39-132.html": {
-    "hash": "1aa43ae69661f7a3",
+    "hash": "42b005e7efeb4423",
     "lastmod": "2026-08-03"
   },
   "duas/invocations-for-the-setting-of-a-debt-hisn-41-136.html": {
@@ -616,11 +728,11 @@
     "lastmod": "2026-08-03"
   },
   "duas/invocation-to-be-recited-after-burying-the-dead-hisn-59-164.html": {
-    "hash": "d101500c3074c2ae",
+    "hash": "ca3de2eac6026c88",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-visiting-the-graves-hisn-60-165.html": {
-    "hash": "e2c1370753859443",
+    "hash": "6b173db47920c7f3",
     "lastmod": "2026-08-03"
   },
   "duas/invocations-for-when-the-wind-blows-hisn-61-166.html": {
@@ -672,207 +784,207 @@
     "lastmod": "2026-08-03"
   },
   "duas/invocations-before-eating-hisn-69-178.html": {
-    "hash": "61ed6b4d9b7a678f",
+    "hash": "731603f32c6a05c4",
     "lastmod": "2026-08-03"
   },
   "duas/invocations-before-eating-hisn-69-179.html": {
-    "hash": "25bfbb1cc87f6eb3",
+    "hash": "f37b7e29056adfe9",
     "lastmod": "2026-08-03"
   },
   "duas/invocations-after-eating-hisn-70-180.html": {
-    "hash": "d1def36e4429a60a",
+    "hash": "f55ec6aab1bf7cdb",
     "lastmod": "2026-08-03"
   },
   "duas/invocations-after-eating-hisn-70-181.html": {
-    "hash": "91c0b4d4779f7bd5",
+    "hash": "1e02fc1f142dbc3a",
     "lastmod": "2026-08-03"
   },
   "duas/a-dinner-guests-invocation-for-his-host-hisn-71-182.html": {
-    "hash": "14d983a8dc47b0d4",
+    "hash": "f410f8454209bc8c",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-someone-who-gives-you-drink-or-offers-it-to-y-hisn-72-183.html": {
-    "hash": "04aa9d3516617168",
+    "hash": "a9c7af02644c6fab",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-a-family-who-invites-you-to-break-your-fast-w-hisn-73-184.html": {
-    "hash": "1b85ed0b91951880",
+    "hash": "86aa2640b7b78082",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-when-you-are-fasting-and-someone-is-rude-to-you-hisn-75-186.html": {
-    "hash": "8a7b7fd875c46bb9",
+    "hash": "45d4b147daa0a002",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-when-you-see-the-first-dates-of-the-season-hisn-76-187.html": {
-    "hash": "74f4e6a0dc45e256",
+    "hash": "8270144ce8bb7be5",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-sneezing-hisn-77-188.html": {
-    "hash": "463c4cc3570f57ac",
+    "hash": "17796b0357d593db",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-to-the-disbeliever-if-he-sneezes-and-praises-all-hisn-78-189.html": {
-    "hash": "d433a60162f9d28e",
+    "hash": "4a1bbdb4d851734e",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-the-groom-hisn-79-190.html": {
-    "hash": "16201bf83bd4a559",
+    "hash": "8cceb0a86e198238",
     "lastmod": "2026-08-03"
   },
   "duas/the-grooms-supplication-on-the-wedding-night-or-when-buying--hisn-80-191.html": {
-    "hash": "279850f95aaf0510",
+    "hash": "07c95b3cd946c4cc",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-to-be-recited-before-intercourse-hisn-81-192.html": {
-    "hash": "68a59846594153bb",
+    "hash": "24dd6aeb3cdd9167",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-anger-hisn-82-193.html": {
-    "hash": "58e17fcadf782ff7",
+    "hash": "2eebcd6669ea66e2",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-if-you-see-someone-afflicted-by-misfortune-hisn-83-194.html": {
-    "hash": "3652517dc4152f4a",
+    "hash": "8eb0f222bc1be9bc",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-while-sitting-in-an-assembly-hisn-84-195.html": {
-    "hash": "fad2774e308f4991",
+    "hash": "2c34e5e7af2a4383",
     "lastmod": "2026-08-03"
   },
   "duas/the-expiation-of-assembly-kaffaratul-majlis-hisn-85-196.html": {
-    "hash": "766b3b07e1f399d4",
+    "hash": "c1055bed2342963d",
     "lastmod": "2026-08-03"
   },
   "duas/vocation-for-someone-who-says-may-allah-forgive-you-hisn-86-197.html": {
-    "hash": "700ee09fd5615fab",
+    "hash": "4c1c46f3513a67a3",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-someone-who-does-good-to-you-hisn-87-198.html": {
-    "hash": "a62a94511ce4b098",
+    "hash": "28cf8c4ca69ce0db",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-allahs-protection-from-the-false-messiah-hisn-88-199.html": {
-    "hash": "14fe404d1fd53228",
+    "hash": "bb4f7830c74d9811",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-someone-who-tells-you-i-love-you-for-the-sake-hisn-89-200.html": {
-    "hash": "b37aad45c2d0abb5",
+    "hash": "f855ef7a836730f6",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-someone-who-offers-you-a-share-of-his-wealth-hisn-90-201.html": {
-    "hash": "84cc507b79e72b52",
+    "hash": "0d3dc0f50047370f",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-upon-receipt-of-the-loan-for-someone-who-lends-yo-hisn-91-202.html": {
-    "hash": "da986eb603a99ac2",
+    "hash": "60a4ea1eb8777da2",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-fear-of-shirk-hisn-92-203.html": {
-    "hash": "dd89d4f46853e258",
+    "hash": "e19dc537ed9d86b9",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-someone-who-tells-you-may-allah-bless-you-hisn-93-204.html": {
-    "hash": "f508fe28e68b49f1",
+    "hash": "bdd543402542edb3",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-against-evil-portent-hisn-94-205.html": {
-    "hash": "0ac6ff922093dd53",
+    "hash": "78754fa4e74cc8b9",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-riding-in-a-vehicle-or-on-an-animal-hisn-95-206.html": {
-    "hash": "d25db6146da54d32",
+    "hash": "f0a131f6e5fa83ae",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-traveling-hisn-96-207.html": {
-    "hash": "b5ef52c410143fa0",
+    "hash": "eba609dd46c4ffd8",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-entering-a-town-or-city-hisn-97-208.html": {
-    "hash": "e5bd3db2de9e33e5",
+    "hash": "5d0f114cc28caf68",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-entering-a-market-hisn-98-209.html": {
-    "hash": "43a4877566099410",
+    "hash": "258f4a4550a03e8e",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-when-your-vehicle-or-mount-begins-to-fail-hisn-99-210.html": {
-    "hash": "c8a936159fb3dcbc",
+    "hash": "2b88696245fede92",
     "lastmod": "2026-08-03"
   },
   "duas/the-travelers-invocation-for-the-one-he-leaves-behind-hisn-100-211.html": {
-    "hash": "322f396f188ed029",
+    "hash": "0a3a99aac1e13a23",
     "lastmod": "2026-08-03"
   },
   "duas/the-residents-invocations-for-the-traveler-hisn-101-212.html": {
-    "hash": "6ba51ca63c237fda",
+    "hash": "f02f405680b22897",
     "lastmod": "2026-08-03"
   },
   "duas/the-residents-invocations-for-the-traveler-hisn-101-213.html": {
-    "hash": "2269d6e934798e8c",
+    "hash": "943536dcefc01cf5",
     "lastmod": "2026-08-03"
   },
   "duas/glorifying-and-magnifying-allah-on-the-journey-hisn-102-214.html": {
-    "hash": "8d78437406870c7f",
+    "hash": "5e97fbd990670019",
     "lastmod": "2026-08-03"
   },
   "duas/the-travelers-invocation-at-dawn-hisn-103-215.html": {
-    "hash": "078399fb208e755c",
+    "hash": "c1108da865b5f2a7",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-a-layover-stopping-along-the-way-on-the-journ-hisn-104-216.html": {
-    "hash": "858f49b41114c28f",
+    "hash": "b95f541d42ca56f2",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-upon-returning-from-a-journey-hisn-105-217.html": {
-    "hash": "52dea380177e277d",
+    "hash": "54c94043532ca08a",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-if-something-happens-to-please-you-or-to-displea-hisn-106-218.html": {
-    "hash": "6fa929f2926522de",
+    "hash": "f6522c9738a3285d",
     "lastmod": "2026-08-03"
   },
   "duas/spreading-the-greetings-of-salam-peace-hisn-108-225.html": {
-    "hash": "75aab9df77329d6f",
+    "hash": "0bcc8b7bf8d9aaf0",
     "lastmod": "2026-08-03"
   },
   "duas/how-to-reply-to-a-disbeliever-if-he-says-salam-to-you-hisn-109-227.html": {
-    "hash": "6e616eb60aa1b390",
+    "hash": "037074f854bd3f76",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-upon-hearing-the-cocks-crow-or-the-bray-of-a-donk-hisn-110-228.html": {
-    "hash": "8236a11d05638bd4",
+    "hash": "dcb0f396e3e617d6",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-upon-hearing-a-dog-barking-in-the-night-hisn-111-229.html": {
-    "hash": "ea5489cd4702f047",
+    "hash": "6b9e59f199988477",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-for-someone-you-have-spoken-ill-to-hisn-112-230.html": {
-    "hash": "17c6701b433f84a5",
+    "hash": "ed040c93d01e1c6c",
     "lastmod": "2026-08-03"
   },
   "duas/what-a-muslim-should-say-when-he-is-praised-hisn-114-232.html": {
-    "hash": "336f6f7c37c12dbe",
+    "hash": "50ac4546c8434b68",
     "lastmod": "2026-08-03"
   },
   "duas/the-pilgrims-announcement-of-his-arrival-for-hajj-or-umrah-hisn-115-233.html": {
-    "hash": "bace661a0a08437b",
+    "hash": "b8efabae85906617",
     "lastmod": "2026-08-03"
   },
   "duas/saying-allahu-akbar-when-passing-the-black-stone-hisn-116-234.html": {
-    "hash": "42ac68e47f1d6d06",
+    "hash": "fdcefc8dfd35c6b9",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-to-be-recited-between-the-yemenite-corner-and-the-hisn-117-235.html": {
-    "hash": "7fee16c8cc140c5d",
+    "hash": "99f6a9bec77cc771",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-to-be-recited-while-standing-at-safa-and-marwah-hisn-118-236.html": {
-    "hash": "2c1777b0061c0503",
+    "hash": "89b74a4a9e7cf121",
     "lastmod": "2026-08-03"
   },
   "duas/invocation-to-be-recited-on-the-day-of-arafat-hisn-119-237.html": {
-    "hash": "c54433f0f846637d",
+    "hash": "7700895a87c44763",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-when-surprised-or-startled-hisn-122-240.html": {
@@ -884,11 +996,11 @@
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-when-you-feel-a-pain-in-your-body-hisn-124-243.html": {
-    "hash": "41f3f460a695c797",
+    "hash": "dcd21cb0d67b5143",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-when-you-fear-you-may-afflict-something-with-the-hisn-125-244.html": {
-    "hash": "8d16848eb7b19c5d",
+    "hash": "9141c6d68dea876c",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-when-you-feel-frightened-hisn-126-245.html": {
@@ -896,63 +1008,63 @@
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-when-slaughtering-or-sacrificing-an-animal-hisn-127-246.html": {
-    "hash": "7c3c95304ae4c7cd",
+    "hash": "9e64ccfa20bf0533",
     "lastmod": "2026-08-03"
   },
   "duas/what-to-say-to-foil-the-devils-plots-hisn-128-247.html": {
-    "hash": "0ac47a2cd66d2174",
+    "hash": "b899a0ab0989f4b3",
     "lastmod": "2026-08-03"
   },
   "duas/repentance-and-seeking-forgiveness-hisn-129-250.html": {
-    "hash": "412c03f70648f3fb",
+    "hash": "743bf5cf6c7c8dc2",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-255.html": {
-    "hash": "4a7aa9323c4c1ae8",
+    "hash": "8a7920f1ca964715",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-256.html": {
-    "hash": "3e044615b732e224",
+    "hash": "56310e4eca51817f",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-257.html": {
-    "hash": "b422573e98f4e082",
+    "hash": "f73e6765d424f05c",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-258.html": {
-    "hash": "d82370841759caea",
+    "hash": "964f755e73f10e87",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-259.html": {
-    "hash": "4f9688e4526f4303",
+    "hash": "e67e181b18b12800",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-260.html": {
-    "hash": "934f2cada1860def",
+    "hash": "a2a9dd81d4feb36f",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-261.html": {
-    "hash": "c36ff785280f00c8",
+    "hash": "aba9161487abc822",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-262.html": {
-    "hash": "79d9f4cc5de768be",
+    "hash": "59aef81c043ba1c3",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-263.html": {
-    "hash": "aaae5fc965856190",
+    "hash": "118989d8ca7123cf",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-264.html": {
-    "hash": "5560ec35ef99c1c1",
+    "hash": "b00ad37c67f0ba27",
     "lastmod": "2026-08-03"
   },
   "duas/the-excellence-of-remembering-allah-hisn-130-265.html": {
-    "hash": "41f32332b26ee9cd",
+    "hash": "5c8220796e12bb5f",
     "lastmod": "2026-08-03"
   },
   "duas/types-of-goodness-and-good-etiquette-for-community-life-hisn-132-267.html": {
-    "hash": "48de52e348b3db10",
+    "hash": "9e2c17d214af7e37",
     "lastmod": "2026-08-03"
   },
   "duas/quranic-supplications-quran-2-126.html": {
@@ -1280,7 +1392,7 @@
     "lastmod": "2026-08-03"
   },
   "duas/quranic-supplications-quran-34-19.html": {
-    "hash": "c9239813821ff73d",
+    "hash": "33a625f2623c5562",
     "lastmod": "2026-08-03"
   },
   "duas/quranic-supplications-quran-35-37.html": {
@@ -1608,15 +1720,15 @@
     "lastmod": "2026-08-03"
   },
   "duas/chapters-on-supplication-kitab-al-daawat-tirmidhi-3522.html": {
-    "hash": "e41b1d27faad1f76",
+    "hash": "57e768fad43ec41b",
     "lastmod": "2026-08-03"
   },
   "duas/chapters-on-supplication-kitab-al-daawat-tirmidhi-3523.html": {
-    "hash": "1f9b9c98941c04e4",
+    "hash": "f93f31c98964dac5",
     "lastmod": "2026-08-03"
   },
   "duas/chapters-on-supplication-kitab-al-daawat-tirmidhi-3529.html": {
-    "hash": "ac3f2c0095622633",
+    "hash": "c19fe96c85f1038a",
     "lastmod": "2026-08-03"
   },
   "duas/chapters-on-supplication-kitab-al-daawat-tirmidhi-3530.html": {
@@ -1624,7 +1736,7 @@
     "lastmod": "2026-08-03"
   },
   "duas/chapters-on-supplication-kitab-al-daawat-tirmidhi-3531.html": {
-    "hash": "fffa6da656e710ad",
+    "hash": "5cb4d06a6ad7e468",
     "lastmod": "2026-08-03"
   },
   "duas/chapters-on-supplication-kitab-al-daawat-tirmidhi-3533.html": {
@@ -1768,63 +1880,63 @@
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5454.html": {
-    "hash": "d98cfa8d57e0af27",
+    "hash": "b8b160aaeb20e10e",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5461.html": {
-    "hash": "e4e2a872088f1bc9",
+    "hash": "814831dcb2b01bcb",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5464.html": {
-    "hash": "1f8c38e66a3fc747",
+    "hash": "c79d6f228605ccb3",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5467.html": {
-    "hash": "d52ae6c157bd9db7",
+    "hash": "d570e08f09bc8b50",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5469.html": {
-    "hash": "e8ac6fb58976eec0",
+    "hash": "b280b679b0ae274b",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5471.html": {
-    "hash": "756bda12fd88f1d1",
+    "hash": "9c8eca492248d99d",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5474.html": {
-    "hash": "635f54881dce46e2",
+    "hash": "ceaa800e4c1aa2de",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5476.html": {
-    "hash": "c70f9a5ee7908a76",
+    "hash": "5fa428d0600efda8",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5477.html": {
-    "hash": "6805d5753c6a3613",
+    "hash": "17b6a2cba230edbd",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5480.html": {
-    "hash": "d8df71154ae3827b",
+    "hash": "d47bc58b310a44e0",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5484.html": {
-    "hash": "d7f8d7abebef8e0e",
+    "hash": "b2c69ea22e4779fb",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5494.html": {
-    "hash": "cf97624fc5aeca5d",
+    "hash": "97e081a0e9a0f050",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5495.html": {
-    "hash": "ea037e1488d83b18",
+    "hash": "081cf5736311e6c3",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5496.html": {
-    "hash": "2b666cc33b9fd5bc",
+    "hash": "c24d0f1996814c49",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5499.html": {
-    "hash": "c1387598f5f8ae20",
+    "hash": "1498644f7748b117",
     "lastmod": "2026-08-03"
   },
   "duas/seeking-refuge-with-allah-kitab-al-istiadha-nasai-5502.html": {
@@ -1960,7 +2072,7 @@
     "lastmod": "2026-08-03"
   },
   "duas/supplication-kitab-al-dua-ibnmajah-3610.html": {
-    "hash": "01222e756782868f",
+    "hash": "5d3d5936c487b0f0",
     "lastmod": "2026-08-03"
   },
   "duas/supplication-kitab-al-dua-ibnmajah-3612.html": {
@@ -2028,151 +2140,39 @@
     "lastmod": "2026-08-03"
   },
   "duas/chapter/words-of-remembrance-for-morning-and-evening.html": {
-    "hash": "ccc723ca34824dd6",
+    "hash": "27ecb1a9dd885f16",
     "lastmod": "2026-08-03"
   },
   "duas/chapter/what-to-say-before-sleeping.html": {
-    "hash": "97b56e0260f1809d",
+    "hash": "97aab17d07514774",
     "lastmod": "2026-08-03"
   },
   "duas/chapter/supplications-for-when-you-wake-up.html": {
-    "hash": "d6fa34902c1b5779",
+    "hash": "ab25e29d1ba489b5",
     "lastmod": "2026-08-03"
   },
   "duas/chapter/invocations-for-the-beginning-of-the-prayer.html": {
-    "hash": "8fe6ba12d92a4a3e",
+    "hash": "a9822f7f9e5d04c7",
     "lastmod": "2026-08-03"
   },
   "duas/chapter/invocations-during-ruki-bowing-in-prayer.html": {
-    "hash": "c5beea7d47ec9674",
+    "hash": "7e7687b6b51566e0",
     "lastmod": "2026-08-03"
   },
   "duas/chapter/invocations-during-sujood.html": {
-    "hash": "e0f42dce0e758582",
+    "hash": "24713d07487b7141",
     "lastmod": "2026-08-03"
   },
   "duas/chapter/invocations-after-the-final-tash-ahhud-and-before-ending-the.html": {
-    "hash": "1ec510122e1cc375",
+    "hash": "c499697b53814455",
     "lastmod": "2026-08-03"
   },
   "duas/chapter/what-to-say-after-completing-the-prayer.html": {
-    "hash": "dc3ae012e289379e",
+    "hash": "e4f8cca4de77a955",
     "lastmod": "2026-08-03"
   },
   "duas/chapter/invocations-for-anguish.html": {
-    "hash": "27f679f317293827",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/morning-evening.html": {
-    "hash": "f8931e1f6bfc60e4",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/sleep-waking.html": {
-    "hash": "3bb7c81e7638a169",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/home-clothing.html": {
-    "hash": "2dbf9b61ef24510a",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/prayer.html": {
-    "hash": "446bb4bafb420591",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/quran-recitation.html": {
-    "hash": "a1cd22452d01151f",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/guidance.html": {
-    "hash": "e22c518d51644e01",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/distress.html": {
-    "hash": "d3108854f71792fa",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/protection.html": {
-    "hash": "ddb4e4eaff672eb7",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/forgiveness.html": {
-    "hash": "76f6365592732c4a",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/family-children.html": {
-    "hash": "02203170b76792cf",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/funeral-illness.html": {
-    "hash": "04cf4ce8a8e877a1",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/weather-nature.html": {
-    "hash": "d04ed07eff25f569",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/fasting.html": {
-    "hash": "8d9e2ac6b0c03c9d",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/food-drink.html": {
-    "hash": "6254bb7b53a5c5ba",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/social.html": {
-    "hash": "5d5afe135be644f5",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/praise-dhikr.html": {
-    "hash": "59ca4495d1d45f1d",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/provision.html": {
-    "hash": "7b5a928696f38af2",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/travel.html": {
-    "hash": "e331d9932c9f6123",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/hajj-umrah.html": {
-    "hash": "536bde524700548b",
-    "lastmod": "2026-08-03"
-  },
-  "duas/occasion/general.html": {
-    "hash": "5993cc5e846509df",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/hisn.html": {
-    "hash": "a941ac45f2045e48",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/quran.html": {
-    "hash": "6d6c412838c01bab",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/bukhari.html": {
-    "hash": "3888101a461c5e55",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/muslim.html": {
-    "hash": "64c024e7032f8c51",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/abudawud.html": {
-    "hash": "3d4b6d19bcca0dda",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/tirmidhi.html": {
-    "hash": "13777924cd72e2ff",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/nasai.html": {
-    "hash": "10ffb48f1cf6a007",
-    "lastmod": "2026-08-03"
-  },
-  "duas/source/ibnmajah.html": {
-    "hash": "d3f845fc3c6a9779",
+    "hash": "b776103d145c7348",
     "lastmod": "2026-08-03"
   }
 }

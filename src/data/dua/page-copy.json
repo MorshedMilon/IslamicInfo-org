@@ -165,8 +165,8 @@
     "contentBasis": "translation-and-verified-context",
     "reviewStatus": "reviewed",
     "batch": 1,
-    "indexable": false,
-    "indexReason": "gate3-hold-arabic-transliteration-word-disagreement"
+    "indexable": true,
+    "indexReason": "gate3-cleared-transliteration-adopted-2026-08-03"
   },
   "words-of-remembrance-for-morning-and-evening-hisn-27-83": {
     "meaning": "The supplication is a statement of sufficiency rather than a request. It declares that Allah is enough for the one saying it, that none has the right to be worshipped except Him, and that reliance is placed upon Him. The declaration of tawhid sits in the middle, between the statement of sufficiency and the statement of reliance. It closes by naming Him Lord of the exalted throne, so the One described as sufficient is identified by His sovereignty.",
@@ -225,8 +225,8 @@
     "contentBasis": "translation-and-verified-context",
     "reviewStatus": "reviewed",
     "batch": 1,
-    "indexable": false,
-    "indexReason": "gate3-hold-arabic-transliteration-word-disagreement"
+    "indexable": true,
+    "indexReason": "gate3-cleared-transliteration-adopted-2026-08-03"
   },
   "words-of-remembrance-for-morning-and-evening-hisn-27-89": {
     "meaning": "Instead of asking for good in general, this supplication itemises it. After marking that morning has been reached and that all sovereignty belongs to Allah, Lord of the worlds, it asks for the good of this day and then lists what that good consists of: its triumphs, its victories, its light, its blessings and its guidance. The corresponding request runs the other way, seeking refuge from the evil of this day and from the evil that follows it.",
@@ -405,8 +405,8 @@
     "contentBasis": "translation-and-verified-context",
     "reviewStatus": "reviewed",
     "batch": 2,
-    "indexable": false,
-    "indexReason": "gate3-hold-arabic-transliteration-word-disagreement"
+    "indexable": true,
+    "indexReason": "gate3-cleared-transliteration-adopted-2026-08-03"
   },
   "what-to-say-before-sleeping-hisn-28-108": {
     "meaning": "Praise is given first and the grounds for it are listed afterwards: being fed, being given drink, being sufficed and being sheltered. All four are stated in the plural, as things done for us rather than for the speaker alone. The sentence then turns outward at its close, noting how many people have no one at all to suffice or shelter them.",
@@ -1175,8 +1175,8 @@
     "contentBasis": "translation-and-verified-context",
     "reviewStatus": "reviewed",
     "batch": 6,
-    "indexable": true,
-    "indexReason": "approved-by-owner-2026-08-03"
+    "indexable": false,
+    "indexReason": "gate3-hold-arabic-transliteration-semantic-disagreement-OPEN"
   },
   "what-a-muslim-should-say-when-he-is-praised-hisn-114-232": {
     "meaning": "All three requests concern the gap between what people say and what is true. The first asks not to be held to account for what they say — the praise itself. The second asks forgiveness for what they have no knowledge of, meaning whatever the praise did not see. The third, supplied in brackets by the text, asks to be made better than they imagine. Each clause treats the praise as incomplete rather than deserved.",
@@ -1195,8 +1195,8 @@
     "contentBasis": "translation-and-verified-context",
     "reviewStatus": "reviewed",
     "batch": 6,
-    "indexable": false,
-    "indexReason": "gate3-hold-arabic-transliteration-word-disagreement"
+    "indexable": true,
+    "indexReason": "gate3-cleared-transliteration-adopted-2026-08-03"
   },
   "what-to-say-if-you-see-someone-afflicted-by-misfortune-hisn-83-194": {
     "meaning": "Praise is offered and two reasons are attached to it, both comparative. The first names the affliction directly as a test, and states that the speaker was saved from it. The second widens past the person being looked at to much of His creation, and says the speaker was favoured over them. The one afflicted is addressed as you, so the comparison is spoken in their presence.",
@@ -1215,8 +1215,8 @@
     "contentBasis": "translation-and-verified-context",
     "reviewStatus": "reviewed",
     "batch": 6,
-    "indexable": false,
-    "indexReason": "gate3-hold-arabic-transliteration-word-disagreement"
+    "indexable": true,
+    "indexReason": "gate3-cleared-transliteration-adopted-2026-08-03"
   },
   "what-to-say-when-leaving-the-home-hisn-10-16": {
     "meaning": "Allah is named three times across two short sentences, and each naming does different work. The first invokes the name, the second places trust in Him, and the third denies that might or power exists anywhere apart from Him. No request appears at any point. The movement runs from invoking, to relying, to a denial that leaves nothing else to rely on.",

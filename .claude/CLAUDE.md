@@ -58,6 +58,45 @@ supersedes v1.1 §A1 (ADR-054). Naming is downstream of integrity: naming,
 topic-assignment and indexing work is paused until its Gates 1–3 clear.
 Read it first.
 
+## Transliteration house style (STANDING CONVENTION, owner-ruled 2026-08-03)
+
+**Popular style, not academic ALA-LC.** Binding on all dua work from now on — the
+remaining adoption batches, Wave 2, and Class B whenever it unblocks. Superseded the
+ALA-LC used in reviewer-package Parts 9–18; those proposals were re-spelled in place.
+The ALA-LC originals survive in git history at commit `430d7cd` and in Part 12's
+"Base — quran.com API v4, verbatim" blocks, which are **quoted source and must never
+be restyled**.
+
+**Characters.** `ā→aa  ī→ee  ū→oo` · `ḥ→h  ṭ→t  ṣ→s  ḍ→d  ẓ→z` · digraphs
+`th dh kh sh gh` unchanged.
+
+**Rule A — apostrophe.** ʿayn and hamza both become `'`. Keep it everywhere **except
+word-finally**, where it is dropped. `aʿūdhu→a'oodhu` · `asʾaluka→as'aluka` ·
+`duʿāʾ→du'aa` · `ʿalā→'alaa`.
+*Known cost:* this also deletes a pronounced word-final ʿayn. Two records only —
+`21:51` (`wa-ḍaʿ→wada`) and `24:62` (`tanqaṭiʿ→tanqati`). If the rule is ever
+refined to "drop final hamza, keep final ʿayn", those two are the entire blast radius.
+
+**Rule H — word division. Sun-letter assimilation is KEPT** (this does *not* reverse
+the Part 12 library-wide ruling):
+
+| | example |
+|---|---|
+| prefix particle (`wa bi li fa ka`, attached in Arabic) **absorbs** the article | `wal-hamdu` `bir-rafeeqi` `bith-thalji` |
+| separate word keeps its form, hyphen before the assimilated consonant | `mina-z-zaalimeen` `lahu-l-mulku` `fee-d-dunyaa` |
+| elision hyphens are resolved into **full separate words** | `allaahumma ighfir lee` · `maa istata'tu` |
+| a prefix never fuses onto a vowel-initial stem or a proper noun | `wa anta` · `wa Rabba` · `wabi Muhammadin` |
+| conventional divine-name fusions (closed list) | `bismillaah lillaah billaah wallaah illallaah allaahumma lilladhee` |
+
+**Never re-derive from the Arabic when restyling.** Restyling is a spelling operation
+only. Which words are present and which root is right is settled work — carry it
+through untouched. Gate 2/3 rulings, `transliterationSource` and hold status are
+orthogonal to style and are never changed by a restyle.
+
+The transform is **lossy and one-way**: `ḥ/h`, `ṣ/s`, `ṭ/t`, `ḍ/d`, `ẓ/z` collapse and
+ʿ/ʾ merge, so the ALA-LC cannot be recovered from the popular form. Keep the audit
+trail.
+
 ## Repo trap — line endings (STANDING RULE, added 2026-08-03)
 
 **This repo's tracked text files are restored by git with CRLF on Windows.** Any operation
