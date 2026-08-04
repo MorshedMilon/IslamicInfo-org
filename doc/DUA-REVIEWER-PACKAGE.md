@@ -1224,7 +1224,7 @@ other, and neither overstated.
 
 **Proposed — corrected + normalised to house style:**
 
-> allaahu laa ilaaha illaa huwal hayyul qayyoomu laa ta'khudhuhu sinatun walaa nawmun lahu maa fees samaawaati wamaa feel ardi man dhaa alladhee yashfa'u 'indahu illaa bi idhnihi ya'lamu maa bayna aydeehim wamaa khalfahum walaa yuheetoona bishay'in min 'ilmihi illaa bimaa shaa'a wasi'a kursiyyuhus samaawaati wal arda walaa ya'ooduhu hifzuhumaa wahuwal 'aliyyul 'azeemu
+> A'oodhu billaahi minash shaytaanir rajeem. Allaahu laa ilaaha illaa huwal hayyul qayyoomu, laa ta'khudhuhu sinatun walaa nawmun lahu maa fees samaawaati wamaa feel ardi man dhaa alladhee yashfa'u 'indahu illaa bi idhnihi ya'lamu maa bayna aydeehim wamaa khalfahum walaa yuheetoona bishay'in min 'ilmihi illaa bimaa shaa'a wasi'a kursiyyuhus samaawaati wal arda walaa ya'ooduhu hifzuhumaa wahuwal 'aliyyul 'azeemu
 
 **Translation on record:** Allāh - there is no deity except Him, the Ever-Living, the Self-Sustaining. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is i…
 
