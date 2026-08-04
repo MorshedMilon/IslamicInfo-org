@@ -24,22 +24,49 @@ _Top of the backlog, unblocked, scoped._
   **OWNER + DATE (assigned 2026-08-04): owner Morshed Milon (ADR-044); start the session on completion of the final adoption batch, i.e. once R10 named sources reach 109. UNBLOCKS AT THAT POINT — the blocker above (54 of 116 in the AA scheme) is cleared by adoption itself.** This check is the ONLY thing that validates the Arabic → transliteration step; the re-derivation harness validates ALA-LC → popular spelling only and is blind to an error inherited from the proposal (`97:208` shipping `aẓlaln` is the worked example). An unscheduled task is a dropped one — this line is the schedule.
   **Why it is blocked and must not be started early:** the check is only as good as the romanisation it reads. `36:127` was catchable *because* its transliteration was legible enough to disagree; **54 of the 116 are in the `AA` scheme** (`aAAoothu`), where a root-level disagreement of exactly this kind is far harder to see, and 26 more are plain ASCII with no ʿayn marker at all. Running this before adoption would produce a low-signal pass and, worse, **manufacture false confidence** — the absence of findings would be read as absence of defects. Adoption is what produces the clean base this depends on.
   **Scope note:** `36:127` was found by hand while doing something else. Nothing systematically compares these fields today, so the current count of known root disagreements is **1 found, not 1 existing** — treat it as a floor, the same way `DUA-INTEGRITY-SCAN.md` treats its detector counts.
-- [ ] 🚧 **DATA LAYER — the `arabic` field is not clean recited text.** Escalated 2026-08-04 from a
-  transliteration footnote to its own item, because **everything downstream inherits it**, not just
-  the romanisation: copy-to-clipboard, audio, search indexing and the Verify engine all consume this
-  field. A user copying the Arabic copies a compiler's instruction along with the supplication.
-  **Four storage forms for annotation inside one field**, all live:
-  | form | example |
-  |---|---|
-  | `((…))` recitation delimiter used for an INSTRUCTION | `14:21` — `((يَبْدَأُ بِرِجْلِهِ الْيُسْرَى)) وَيَقُولُ:` |
-  | `[…]` bracketed variant | `27:78` `27:81` `27:89` — the evening form |
-  | `(…)` parenthesised count/time | `27:93` — `(مائةَ مرَّةٍ إذا أصبحَ)` |
-  | **bare prose, no delimiter at all** | `11:18` — `ثُمَّ لِيُسَلِّمْ عَلَى أَهْلِهِ` · `25:73` — `بَعْدَ السّلامِ مِنْ صَلاَةِ الفَجْرِ` |
-  All four were confirmed live by the cross-field scan, which flagged `11:18`, `14:21` and `25:73`
-  precisely because the Arabic's first or last word is not recited text. **No rule keyed on a single
-  delimiter can be trusted** — `14:21` uses the recitation delimiter to mean the opposite of what it
-  means everywhere else. The fix is structural: separate `arabic` (recited only) from an
-  `arabicNote` / `instruction` field. Do not patch per-record.
+- [ ] 🚧 **DATA LAYER — recited text and instruction are not separated. ONE cause, three fields.**
+  **Cause:** the upstream compilers (Hisn, fitrahive, quran.com) store instructions *inline* inside
+  content fields instead of as structured data. **Fix:** structural separation — a record carries
+  recited text in its content fields and instructions in their own field. **Kept as one ticket
+  deliberately**: three separate tickets would fragment one architectural change into three that
+  each look optional; one undifferentiated ticket lets a single field get fixed and the ticket
+  close while the other two persist silently. The three items below are field-scoped under the one
+  cause and the ticket is not done until all three are.
+  Field sweep 2026-08-04 across **every** prose-bearing field of all 114 live records (7 marker
+  rules, each with a fixture and an aborting self-test) — **no fourth field carries annotation.**
+  Two candidates were checked and cleared: `h1`/`title` on `27:76` inherits Saheeh International's
+  translator interpolation `[who is]` from the translation, and `category` hits on `23:54`/`114:232`
+  are ordinary chapter titles ("How to **recite**…", "What a Muslim **should say**…").
+  - [ ] **`arabic` — 23 live records. FOUR storage forms.** Consumers: copy-to-clipboard, audio,
+    search indexing, Verify. A user copying the Arabic copies the instruction.
+    | form | example |
+    |---|---|
+    | `((…))` recitation delimiter used for an INSTRUCTION | `14:21` — `((يَبْدَأُ بِرِجْلِهِ الْيُسْرَى)) وَيَقُولُ:` |
+    | `[…]` bracketed variant | `27:78` `27:81` `27:89` — the evening form |
+    | `(…)` parenthesised count/time | `27:93` — `(مائةَ مرَّةٍ إذا أصبحَ)` |
+    | **bare prose, no delimiter at all** | `11:18` — `ثُمَّ لِيُسَلِّمْ عَلَى أَهْلِهِ` · `25:73` — `بَعْدَ السّلامِ مِنْ صَلاَةِ الفَجْرِ` |
+    **No rule keyed on a single delimiter can be trusted** — `14:21` uses the recitation delimiter
+    to mean the opposite of what it means everywhere else.
+  - [ ] **`transliteration` — 2 live records**, `27:78` and `27:89`, both English evening markers.
+    `27:81` done 2026-08-04. These two **wait on the Part 13a split**: each transliterates *both*
+    variants in one field, so removing the marker leaves two supplications run together with nothing
+    separating them — strictly worse than the violation.
+    Excluded as correct: `6:10` `17:36` `114:232` `127:246` carry ruled-kept optional clauses
+    (bracket rules 3 / 5b), which are not annotation.
+  - [ ] **`translation` — 8 live records**: `27:78` `27:80` `27:81` `27:83` `27:89` `27:98`
+    `28:106` `25:69`. Consumer is **the reader, directly** — no intermediate field. Example,
+    `27:81`: `…(Note: for the evening, one reads (amsa) instead of (asbaha).)`. Note that `27:81`'s
+    transliteration was cleaned while its translation was not, so the same note is currently live in
+    one field and gone from the other — which is exactly the "one field fixed, ticket closed" failure
+    this item structure exists to prevent.
+    Excluded as correct: `27:75` `27:76` `28:100` `28:101` `1:4` use `[…]` for Saheeh
+    International's translator interpolation, a translation convention, not annotation.
+  **SUCCESS CRITERION — the ratio-test heuristic is DELETED, not tuned.** The wrapper heuristic in
+  the cross-field scan (keep a parenthetical only above 60% of the string) fails in *both*
+  directions near its cutoff: `27:76` at 0.37 silently skipped, `2:5` at 0.46 falsely flagged,
+  the other ten at 0.79–0.98 passed on merit. A heuristic that fails both ways invites tuning
+  forever. It exists only because annotation and recited text share a field; once they are
+  separated it is unnecessary. **This ticket is not done while that heuristic still exists.**
 - [ ] **Enforce package↔corpus agreement in `validate-seo.mjs`.** `src/data/dua/search-corpus.json`
   is authoritative; `doc/DUA-REVIEWER-PACKAGE.md` is a review document. They drifted silently on
   2026-08-04 — `Alhamdu` × 6 plus three owner rulings written to the corpus only — and the corpus

@@ -84,6 +84,15 @@ Removing the page from the sitemap and the index does *not* cover the search sur
 never made to fail on purpose is not known to work (same standard as the R1–R6 negative controls
 in `doc/TASKS.md`).
 
+✅ **ENFORCED 2026-08-04 — this is no longer a written precondition, it is validator rule R11.**
+"Logged in CLAUDE.md" is precisely the artefact class this programme has repeatedly shown to be
+unreliable: it depends on someone remembering at the moment it matters. R11 fails the build if a
+held record is present in the served `search-corpus.json` while `DUA_SEARCH_PUBLIC` is true, and
+**fails closed** if it cannot read the flag at all. Negative control run and passing: flipping the
+flag to true produced `R11: FAIL (3)` naming `27:90`, `36:127`, `103:215`; reverting restored PASS.
+The preferred permanent fix is still to exclude held records from the served artifact entirely, at
+which point the flag coupling disappears — R11 then passes on structure rather than on the flag.
+
 ## Transliteration house style (STANDING CONVENTION, owner-ruled 2026-08-03)
 
 **Popular style, not academic ALA-LC.** Binding on all dua work from now on — the

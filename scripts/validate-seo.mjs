@@ -38,6 +38,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { execSync } from "node:child_process";
 /* The canonical provenance mapping (sourceKey -> display label). This is a DATA
    module, the same class of input as the CSV — not the builder's template logic —
    so the test stays independent of how pages are rendered. */
@@ -754,6 +755,65 @@ if (!process.argv.includes("--fixtures")) {
   }
   console.log(fresh.length ? `  R10: FAIL (${fresh.length})` : "  R10: PASS");
   failed += fresh.length;
+}
+
+/* ---------- R11 — a HELD record must not be reachable through dua search ----------
+   Owner directive 2026-08-04. This replaces a written precondition with a gate that
+   fires. "Logged in CLAUDE.md" is the artefact class this programme has repeatedly
+   shown to be unreliable: it depends on someone remembering at the moment it matters.
+
+   A hold means the record's stored fields disagree and which is correct is NOT
+   established. Surfacing it in search publishes the unresolved text as settled — the
+   exact thing the hold exists to prevent. Removing the page from the sitemap and the
+   index does not cover the search surface.
+
+   search-corpus.json IS the dua index — there is no separate build step — and it is
+   served in production. So the guarantee today rests entirely on DUA_SEARCH_PUBLIC
+   being false. This rule makes that coupling explicit and enforced: if the flag is
+   ever flipped true while a held record is still present in the served asset, the
+   build fails. Preferred permanent fix is to exclude held records from the served
+   artifact entirely, at which point the flag coupling can be dropped. */
+{
+  console.log("\n" + "=".repeat(86));
+  console.log("R11 — A HELD RECORD MUST NOT BE REACHABLE THROUGH DUA SEARCH");
+  console.log("=".repeat(86));
+
+  const lock11 = lock;
+  const copy11 = JSON.parse(fs.readFileSync(P("src/data/dua/page-copy.json"), "utf8"));
+  const tracked11 = new Set(execSync("git ls-files", { cwd: ROOT }).toString().split("\n"));
+
+  const heldIds = corpus.duas
+    .filter((d) => { const s = lock11[d.id]; return s && copy11[s] && copy11[s].indexable === false; })
+    .map((d) => d.id);
+
+  const coreSrc = fs.existsSync(P("src/js/search-results-core.js"))
+    ? fs.readFileSync(P("src/js/search-results-core.js"), "utf8") : "";
+  const m = coreSrc.match(/DUA_SEARCH_PUBLIC\s*=\s*(true|false)/);
+  const flag = m ? m[1] === "true" : null;
+
+  const servedAsset = "src/data/dua/search-corpus.json";
+  const servedTracked = tracked11.has(servedAsset);
+  const presentInServed = servedTracked ? heldIds : [];
+
+  console.log(`  held records                       : ${heldIds.length}${heldIds.length ? "  (" + heldIds.join(", ") + ")" : ""}`);
+  console.log(`  DUA_SEARCH_PUBLIC                  : ${flag === null ? "NOT FOUND" : flag}`);
+  console.log(`  ${servedAsset} tracked (= served) : ${servedTracked}`);
+  console.log(`  held records inside the served asset: ${presentInServed.length}`);
+
+  let r11 = 0;
+  if (flag === null) {
+    console.log("  FAIL could not read DUA_SEARCH_PUBLIC — the gate cannot evaluate, so it fails closed");
+    r11 = 1;
+  } else if (flag === true && presentInServed.length) {
+    for (const id of presentInServed) console.log(`  FAIL ${id} is HELD but present in the served search corpus while DUA_SEARCH_PUBLIC=true`);
+    r11 = presentInServed.length;
+  } else if (flag === false && presentInServed.length) {
+    console.log("  ↳ held records ARE in the served asset, but dua search is disabled, so nothing");
+    console.log("    surfaces them. This is the coupling, not a clearance: flipping the flag");
+    console.log("    without first excluding them from the artifact turns this into a FAIL.");
+  }
+  console.log(r11 ? `  R11: FAIL (${r11})` : "  R11: PASS");
+  failed += r11;
 }
 
 console.log("\n" + "-".repeat(86));
