@@ -58,6 +58,32 @@ supersedes v1.1 §A1 (ADR-054). Naming is downstream of integrity: naming,
 topic-assignment and indexing work is paused until its Gates 1–3 clear.
 Read it first.
 
+## PRECONDITION — `DUA_SEARCH_PUBLIC` must not flip until held records are excluded
+
+**Standing requirement, logged 2026-08-03. Blocks the flag, not the search work.**
+
+Before `DUA_SEARCH_PUBLIC` (`src/js/search-results-core.js`, currently `false`) is set true,
+whatever powers dua search **must explicitly exclude every record whose `page-copy.json` entry
+has `indexable:false`.** This is general: it covers `36:127` and `103:215`, and **every future
+Gate 3 hold automatically**. Do not special-case ids.
+
+**There is nothing to add a filter to today — the exclusion has to be built, not amended.**
+Checked 2026-08-03: there is **no dua search-index build step at all**. `search-corpus.json` *is*
+the index — the raw 566-record corpus, tracked, and already served in production at
+`/src/data/dua/search-corpus.json` (HTTP 200, ~795 KB, both held records present in it). No
+client code fetches it yet, which is the only reason held records are not currently reachable
+through search. So the guarantee rests entirely on the flag being off, and flipping the flag
+without building the exclusion first would surface held records immediately.
+
+Why it matters: a Gate 3 hold means the stored Arabic and the stored transliteration/translation
+disagree and **which one is right is not established**. Surfacing such a record in search
+publishes the unresolved text as if it were settled — the exact thing the hold exists to prevent.
+Removing the page from the sitemap and the index does *not* cover the search surface.
+
+**Check at flip time:** hold a record, then confirm it returns no search result. An exclusion
+never made to fail on purpose is not known to work (same standard as the R1–R6 negative controls
+in `doc/TASKS.md`).
+
 ## Transliteration house style (STANDING CONVENTION, owner-ruled 2026-08-03)
 
 **Popular style, not academic ALA-LC.** Binding on all dua work from now on — the

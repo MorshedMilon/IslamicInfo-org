@@ -4,7 +4,7 @@
     "doNotEdit": "Generated. Editing this by hand desynchronises the hub cards from the pages, which is the exact defect it exists to prevent (2026-08-03: 234/234 cards wrong).",
     "rule": "H1 = §5 keyword stem, with the source reference or opening words appended ONLY where resolveUnique() had to separate a collision. Governed by doc/DUA-KEYWORD-NAMING-v1_0.md as amended by v1_1.",
     "buildOrder": "build-dua-pages.mjs FIRST, then build-dua-landing-pages.mjs. The hub builder fails loudly if a page it must label is missing from this file.",
-    "generated": "2026-08-03",
+    "generated": "2026-08-04",
     "count": 507
   },
   "pages": {

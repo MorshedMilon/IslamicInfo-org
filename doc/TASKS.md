@@ -23,6 +23,31 @@ _Top of the backlog, unblocked, scoped._
 - [ ] 🔒 **BLOCKED UNTIL THE TRANSLITERATION ADOPTION BATCH COMPLETES — cross-field consistency check (Arabic ↔ transliteration ↔ translation).** Owner directive 2026-08-03, logged not started. Build a check that derives each record's Arabic root(s) and compares them against what its transliteration and its translation actually say, flagging disagreements. **The worked example is `36:127`**: `arabic` reads `بِكَ أَحُولُ` (ح-و-ل, *to turn/shift*), `transliteration` reads `bika ajoolu` (ج-و-ل, *to roam/move*), and `translation` reads "by You I move" — so two of three fields agree with each other and disagree with the Arabic. Different roots, not a transcription variant. That record is now held (`indexReason: gate3-hold-36-127-root-disagreement`) and written up as reviewer-package Part 16.
   **Why it is blocked and must not be started early:** the check is only as good as the romanisation it reads. `36:127` was catchable *because* its transliteration was legible enough to disagree; **54 of the 116 are in the `AA` scheme** (`aAAoothu`), where a root-level disagreement of exactly this kind is far harder to see, and 26 more are plain ASCII with no ʿayn marker at all. Running this before adoption would produce a low-signal pass and, worse, **manufacture false confidence** — the absence of findings would be read as absence of defects. Adoption is what produces the clean base this depends on.
   **Scope note:** `36:127` was found by hand while doing something else. Nothing systematically compares these fields today, so the current count of known root disagreements is **1 found, not 1 existing** — treat it as a floor, the same way `DUA-INTEGRITY-SCAN.md` treats its detector counts.
+- [ ] **Make the dua build sequence unmissable — orchestrating script and/or a staleness assertion.**
+  The correct order is **`build-dua-pages.mjs` → `build-dua-landing-pages.mjs`**. Verified from the
+  code, not from habit: `build-dua-pages.mjs` **writes** `src/data/dua/page-names.json`
+  (`NAMES_PATH`, "the ONE place a page's name is resolved") and `build-dua-landing-pages.mjs`
+  **reads** it and aborts `FATAL` if it is missing or stale. Same order is asserted in that file's
+  own `_meta.buildOrder`.
+  **The real defect is not ordering — it is that neither builder knows the other is stale.**
+  Both write `sitemap.xml`, and each on its own produces a self-consistent, clean-looking result.
+  On 2026-08-03, holding `103:215` and re-running **only** the pages builder gave a clean
+  `INDEXABLE: 115 / sitemap 167` while `validate-seo.mjs` came back `RESULT: FAIL (2)` — R8,
+  `duas/occasion/travel.html` and `duas/source/hisn.html` still linking
+  `/duas/the-travelers-invocation-at-dawn-hisn-103-215.html : no such file`. The landing pages were
+  simply never rebuilt. **The failure is silent in the builder and only surfaces in the validator**,
+  so anyone who skips the validator ships broken internal links.
+  Rule to encode: **any change to `page-copy.json` or the corpus requires BOTH builders to run, in
+  the order above.**
+  Two options:
+  - a single `scripts/build-dua-all.mjs` that runs both in sequence and is what CI and the playbook
+    call, or
+  - a staleness assertion in `build-dua-landing-pages.mjs`: fail if any published detail page or
+    `page-copy.json` is newer than the landing pages it is about to link.
+  **Prefer doing both** — an orchestrator only helps people who use it, while the assertion also
+  catches whoever runs a builder directly out of habit. Whichever is chosen, add a negative control
+  that proves it fires (hold a record, run one builder only, confirm the build refuses), per the
+  R1–R6 precedent above — an ordering check never made to fail on purpose is not known to work.
 - [ ] Create `docs/DATA.md` link-back from `ARCHITECTURE §6` (remove duplicated key tables; point to DATA.md).
 - [ ] Stand up CI checks (see §CI below) before building more pages.
 - [x] **api.js — `API_BASE` seam added (INERT), 2026-07-21 (ADR-028).** `_get`/`_getHadith`/`_post`
