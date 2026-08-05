@@ -77,7 +77,7 @@ function card(r) {
    are navigation metadata and contain no dua text.
 
    Set CARDS_HOLD = false to restore, and re-run this script. */
-const CARDS_HOLD = true;
+const CARDS_HOLD = false;
 
 const holdNote =
   '<p class="dua-empty" style="grid-column:1/-1;text-align:center;padding:32px 0;color:var(--ink-muted);">' +
