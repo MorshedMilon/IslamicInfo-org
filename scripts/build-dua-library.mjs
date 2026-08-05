@@ -6,6 +6,7 @@
    so hadithCitation need not ship, and keys are shortened because every key
    name is paid 500+ times. */
 import fs from 'node:fs';
+import { execSync } from 'node:child_process';
 const c = JSON.parse(fs.readFileSync("./src/data/dua/search-corpus.json", "utf8"));
 
 /* No guessed attribution. This used to fall back to "Hisn al-Muslim" for any
@@ -54,7 +55,41 @@ const held = new Set(c.duas
   .map(d => d.id));
 if (held.size) console.log("held records excluded from the library:", held.size, "(" + [...held].join(", ") + ")");
 
-const src = c.duas.filter(d => d.translation && !skip.has(d.id) && !held.has(d.id));
+/* ── THE INVARIANT: A CARD RENDERS ONLY IF ITS DETAIL PAGE IS LIVE ──────────
+   Owner ruling 2026-08-04. This is not a workaround for the current backlog; it
+   is the rule that makes "cards linked to nothing" STRUCTURALLY IMPOSSIBLE — the
+   exact condition CARDS_HOLD was set to guard by hand. With this in place both
+   CARDS_HOLD and LIBRARY_LIVE become dead code guarding a state the pipeline can
+   no longer produce, and they are deleted rather than toggled.
+
+   LIVE means TRACKED IN GIT. That is the deploy contract, not a proxy for it:
+   the workflow ships tracked files only. Measured against production 2026-08-04
+   by crawling all 516 lockfile slugs — tracked 115/115 returned 200, untracked
+   0/401 returned 200. A perfectly clean split, so tracked-ness IS liveness.
+
+   `!held` is redundant today (every held record is also untracked) and is kept
+   deliberately: it makes the invariant survive someone setting indexable:false
+   without also removing the file, which is the mistake that put 27:90, 36:127
+   and 103:215 on the page in the first place.
+
+   The count is NOT a target. It is whatever is live today, and it rises on its
+   own as detail pages are published — no edit here required. */
+const trackedPages = new Set(
+  execSync("git ls-files duas", { cwd: process.cwd(), maxBuffer: 64 * 1024 * 1024 })
+    .toString().split("\n").filter(Boolean)
+);
+const isLive = (d) => {
+  const s = lock[d.id];
+  return !!s && trackedPages.has("duas/" + s + ".html") && !held.has(d.id);
+};
+const notLive = c.duas.filter(d => d.translation && !skip.has(d.id) && !isLive(d));
+console.log("not-live records excluded (detail page not published):", notLive.length);
+
+const src = c.duas.filter(d => d.translation && !skip.has(d.id) && !held.has(d.id) && isLive(d));
+if (!src.length) {
+  console.error("ABORTING — the live projection is empty. Refusing to ship a library with no cards.");
+  process.exit(1);
+}
 const notes = {};      // repeated prose stored once, referenced by index
 const noteId = (s) => { if (!s) return undefined; if (!(s in notes)) notes[s] = Object.keys(notes).length; return notes[s]; };
 

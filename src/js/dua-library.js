@@ -624,7 +624,7 @@
          git first. The 404 is surfaced explicitly below rather than folded into
          the generic catch, so it can never be mistaken for a transient fetch
          failure or for an empty library. */
-      var LIBRARY_LIVE = false;
+      var LIBRARY_LIVE = true;
       if (!LIBRARY_LIVE) return degrade();
       fetch(CORPUS_URL)
         .then(function (r) {
