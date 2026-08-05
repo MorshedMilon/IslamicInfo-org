@@ -11,6 +11,49 @@
 
 ---
 
+## ▶ HANDOFF — /dua.html remediation, resume here (2026-08-05)
+
+**Run `node scripts/validate-dua-page.mjs` first. It fails, and it tells you what to fix.**
+
+**ORDER, do not reorder.** Rebuild **twice** after each step and confirm the fix survives —
+a fix that does not survive a rebuild has not been made.
+
+1. **T1 / T2 / T4 / D1** — builder + template. Confirm `R12`, `R14`, `R17`, `R18` flip to PASS.
+2. **T5** — annotation delimiters in `.dua-arabic`. **Fix in the DATA, not the renderer.**
+   99 of 115 live records affected. Confirm `R15` flips.
+3. **T6** — card → detail-page anchor. Confirm `R16` flips, and that **`R13` and `R22` go from
+   BLOCKED to binding**. Report what they find on their first real run.
+
+**`R13` and `R22` are BLOCKED, not passing.** They check card links, and cards currently have
+none — so they would deduplicate and status-check an empty set and report a green PASS. They
+declare `dependsOn: ["R16"]`; BLOCKED never counts toward a green run. Do not "fix" them by
+removing the dependency.
+
+**CORRECTED DENOMINATORS — quote these, not this file's older prose:**
+`115` live detail pages (crawled, not inferred) · `12` cards in `/dua.html` served markup ·
+`11` validator rules `R12–R22` · `566` corpus records · `109` adopted transliterations ·
+`0` records with `transliterationVerified`.
+**Any figure not from the CANONICAL DENOMINATORS table in `.claude/CLAUDE.md` is superseded** —
+505, 480, 481, 114, 36 cards and R18's "13" were all wrong at some point in this programme.
+
+**Blockers on publishing the 401 unpublished pages — BOTH must clear:**
+- **(a)** T5 fixed at data level. Publishing first means fixing 401 pages afterwards.
+- **(b)** `/duas/**` §24 conformance — **not started.** Build **one** reference template from
+  `doc/DESIGN-SYSTEM.md`, validate it against §24 item by item (10 nav items in order, dark-mode
+  sibling block unmerged, Bismillah first child of `.hero-inner`, CTA last before footer, footer
+  verbatim §7.1, both themes, breakpoints 1100/900/760/700/440), **owner reviews that one page**,
+  and only then regenerate 516. Also honour the wave gate in
+  `docs/seo/CLAUDE-CODE-DUA-BUILD-BRIEF-v2.md`: no parallel waves, 21-day Search Console hold.
+
+**DESIGN AUTHORITY: `doc/DESIGN-SYSTEM.md`, sole and tracked** (v3.0, 27 sections, owner-approved
+via `DESIGN_LOCK.md`). A root `CLAUDE.md` was deleted 2026-08-05 as foreign material — it arrived
+from chat, was untracked, and collapsed §16–§22 into a stub. **No chat-supplied document is
+authoritative**; see the standing rule in `.claude/CLAUDE.md`. `scripts/test/no-shadow-copies.mjs`
+now fails the build on an untracked near-copy of a tracked file.
+
+**Held, do not publish:** `27:90` `36:127` `103:215`. **Parked on Part 13:** `27:76` `1:4`.
+Nothing gains `transliterationVerified` outside ADR-044.
+
 ## Now — In Progress
 _Move tasks here as you pick them up. Keep this short (1–3 items)._
 

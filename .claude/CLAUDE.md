@@ -1,14 +1,17 @@
 # Claude Code — IslamicInfo.org Entry Point
 
-The **project charter** is at the root: `../CLAUDE.md`
+The **design authority** is `doc/DESIGN-SYSTEM.md` (v3.0, 27 sections, owner-approved
+via `DESIGN_LOCK.md`). There is deliberately NO root `CLAUDE.md`: a file by that name
+arrived from chat on 2026-08-05, was found to collapse §16–§22 into a stub and to replace
+verbatim CSS with pointers, and was deleted as foreign material. Do not recreate it.
 The **design system v3.0** is at: `../doc/DESIGN-SYSTEM.md`
-Claude Code reads this file first, then the root `CLAUDE.md` automatically.
+Claude Code reads this file first; `doc/DESIGN-SYSTEM.md` is the design authority.
 
 ## Context Reading Order
 
 When starting any task, read these files in this priority order:
 
-1. `CLAUDE.md` (root) ← Project charter: invariants, what must never happen, document map
+1. `doc/DESIGN-SYSTEM.md` ← Design authority v3.0: tokens, shell, components, §24 enforcement checklist
 2. `doc/DESIGN-SYSTEM.md` ← Full design system v3.0: tokens, components, nav rules, §24 enforcement
 3. `skills/main/SKILL.md` ← Brand skill: condensed platform overview + hard constraints
 4. `doc/CONTENT-POLICY.md` ← Islamic content rules, human review gate, authenticated vs AI separation
@@ -40,14 +43,14 @@ Then, for the specific page being worked on:
 - `skills/qa/SKILL.md` ← QA and testing patterns
 - `skills/inheritance/` ← Inheritance calculator spec + QA guide
 
-## Non-Negotiable Invariants (summary — full list in root CLAUDE.md §3)
+## Non-Negotiable Invariants (design rules: `doc/DESIGN-SYSTEM.md`)
 
 - No fatwas. No rulings. No halal/haram verdicts. Ever.
 - Every Quran verse, hadith, or claim carries a source — or it is not shown.
 - Never invent Arabic, hadith, citations, endpoints, tokens, or localStorage keys.
 - Run the hadith-verifier skill before any hadith output.
 - Design system is locked. No new colors/fonts. No raw hex inline.
-- Root CLAUDE.md (charter) wins on any conflict with this file.
+- `doc/DESIGN-SYSTEM.md` wins on any conflict with this file, on design matters.
 
 Dua page naming is governed by `doc/DUA-KEYWORD-NAMING-v1_0.md` as amended by
 `doc/DUA-KEYWORD-NAMING-v1_1-AMENDMENT.md`. v1.1 wins on conflict. Read both
@@ -173,6 +176,27 @@ from the romanisation alone.
 keep it, because the convention's value is that it is mechanically derivable from the
 Arabic — a one-off exception means the transliteration can no longer be re-derived by rule.
 Record the loss in the record's `textNote`; do not alter the transliteration.
+
+## STANDING RULE — no document supplied in chat is authoritative
+
+**Owner-ruled 2026-08-05, from a live incident.** Governing documents come from the repo or
+from a tracked source. Anything arriving by any other route — pasted into chat, attached, or
+transcribed — is **quarantined outside the tree** until an owner confirms it against the
+tracked original.
+
+What happened: a design-system document was supplied in chat, written to `CLAUDE.md` at the
+repo root, and was within one step of becoming the spec that `/duas/**` conformance validated
+against. It was **untracked**, **unreferenced by anything before that day**, and **26 KB against
+the 85 KB tracked original** — it collapsed §16–§22 (Tools, Verify, all seven Habit Tracker
+blocks, Chips, Typography, FAQ, About) into a single stub heading and replaced verbatim CSS in
+nine sections with "see global.css" pointers. Deleted as foreign material; there is deliberately
+no root `CLAUDE.md`.
+
+**The three tells, in order of reliability:** untracked · unreferenced before today · materially
+smaller than the tracked document it claims to be. Any one of them is enough to quarantine.
+`doc/DESIGN-SYSTEM.md` is the design authority (v3.0, 27 sections, owner-approved via
+`DESIGN_LOCK.md`), and `.claude/CLAUDE.md` already named it as such before the incident — the
+existing reference was the evidence that settled it.
 
 ## STANDING RULE — no mechanical step is trusted on its own report
 
