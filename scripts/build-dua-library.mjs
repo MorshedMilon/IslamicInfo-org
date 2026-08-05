@@ -37,7 +37,24 @@ if (!excluded) {
   process.exit(1);
 }
 const skip = new Set(excluded);
-const src = c.duas.filter(d => d.translation && !skip.has(d.id));
+
+/* HELD RECORDS — added 2026-08-04 after they shipped to /dua.html.
+   meta.excluded covers Gate 1 route-outs. It does NOT cover a HOLD, which is a
+   different mechanism: page-copy.json `indexable:false` plus removing the detail
+   page from the index. Without this filter a held record keeps its card on
+   /dua.html, linking to a URL that now 404s — which is exactly what happened to
+   27:90, 36:127 and 103:215.
+
+   Read from page-copy.json, the same source the detail-page builder and the
+   sitemap use, so a hold cannot mean one thing here and another there. */
+const lock = JSON.parse(fs.readFileSync("./src/data/dua/slugs.lock.json", "utf8"));
+const pageCopy = JSON.parse(fs.readFileSync("./src/data/dua/page-copy.json", "utf8"));
+const held = new Set(c.duas
+  .filter(d => { const s = lock[d.id]; return s && pageCopy[s] && pageCopy[s].indexable === false; })
+  .map(d => d.id));
+if (held.size) console.log("held records excluded from the library:", held.size, "(" + [...held].join(", ") + ")");
+
+const src = c.duas.filter(d => d.translation && !skip.has(d.id) && !held.has(d.id));
 const notes = {};      // repeated prose stored once, referenced by index
 const noteId = (s) => { if (!s) return undefined; if (!(s in notes)) notes[s] = Object.keys(notes).length; return notes[s]; };
 
