@@ -169,7 +169,34 @@ else {
   if (!m) { console.error("!! #duaGrid not found"); process.exit(1); }
   h = h.replace(m[0], m[1] + "\n" + block + "\n              " + m[3]);
 }
-const rc = retargetCounts(h); h = rc.html;
+/* D2 ROOT CAUSE, fixed 2026-08-04. retargetCounts() rewrites "<n> duas" anywhere
+   in the document, and it runs AFTER the hub block is injected — so it matched the
+   PER-OCCASION counts inside the hub cards and overwrote all 18 with browseCount.
+   The hub builder was always correct (it emits o.n); the rewriter clobbered it.
+   That is why every card read "480 duas", and would have read "115 duas" after the
+   count fix — the same bug wearing a truthful number.
+
+   The library-wide count and a per-occasion count are different facts, so the
+   rewriter must not see the hub block at all. Split it out, rewrite only the
+   remainder, then reassemble. */
+const hubStart = h.indexOf(HS);
+const hubEnd = h.indexOf(HE);
+let rc;
+if (hubStart !== -1 && hubEnd !== -1 && hubEnd > hubStart) {
+  const head = h.slice(0, hubStart);
+  const hub = h.slice(hubStart, hubEnd + HE.length);   // protected: per-occasion counts
+  const tail = h.slice(hubEnd + HE.length);
+  const a = retargetCounts(head), b = retargetCounts(tail);
+  rc = { html: a.html + hub + b.html, n: a.n + b.n };
+  const clobbered = (hub.match(/cat-count">\d+/g) || []).filter(s => s.endsWith(">" + browseCount));
+  if (clobbered.length > 1) {
+    console.error("!! " + clobbered.length + " hub cards still show the library count — the guard failed");
+    process.exit(1);
+  }
+} else {
+  rc = retargetCounts(h);
+}
+h = rc.html;
 fs.writeFileSync("dua.html", h);
 console.log("facets: total", facets.total, "| occasions", facets.occasions.length,
             "| sources", facets.sources.length, "| categories", facets.categories.length);
