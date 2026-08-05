@@ -207,7 +207,18 @@ Every one was a step that silently did not execute and reported success:
    structurally impossible instead of caught by luck: the `\b`-after-non-ASCII bug, the `0x01`
    backreference, and the mutation with the bad anchor were all the same shape.
    Implemented in `occasion.mjs` — 6 rules, 6 fixtures, `process.exit(2)` on any dead rule.
-4. **A parser that visibly mis-handles one construction must be cleared on ALL instances of it.**
+4. **A CONDITIONAL PASS MUST NAME ITS CONDITION IN ITS OWN OUTPUT, never only in a doc.**
+   A bare `PASS` in a log six months from now is read as "safe" by someone who never knew a flag
+   existed. If a check passes *because* of a condition rather than on structure, the pass message
+   itself has to say so. The pattern to copy is R11's:
+   > `↳ held records ARE in the served asset, but dua search is disabled, so nothing`
+   > `  surfaces them. This is the coupling, not a clearance: flipping the flag`
+   > `  without first excluding them from the artifact turns this into a FAIL.`
+   The gate states its own weakness inside its pass message, where the next reader cannot miss it.
+   **And where a rule blocks a foreseeable launch, name the valid remedies in the rule** — rules
+   that block work get edited by whoever is blocked, so the acceptable fixes must be written down
+   before anyone is under pressure. R11 does this too.
+5. **A parser that visibly mis-handles one construction must be cleared on ALL instances of it.**
    The visible failure is the lucky one; the same weakness usually also produces a *silent skip*,
    which reports as clean. Worked example: nested/wrapper parens in the `arabic` field produced one
    visible false positive (`2:5`) **and one silent skip (`27:76`, verified correct by hand)**. Count

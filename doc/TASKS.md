@@ -24,6 +24,14 @@ _Top of the backlog, unblocked, scoped._
   **OWNER + DATE (assigned 2026-08-04): owner Morshed Milon (ADR-044); start the session on completion of the final adoption batch, i.e. once R10 named sources reach 109. UNBLOCKS AT THAT POINT — the blocker above (54 of 116 in the AA scheme) is cleared by adoption itself.** This check is the ONLY thing that validates the Arabic → transliteration step; the re-derivation harness validates ALA-LC → popular spelling only and is blind to an error inherited from the proposal (`97:208` shipping `aẓlaln` is the worked example). An unscheduled task is a dropped one — this line is the schedule.
   **Why it is blocked and must not be started early:** the check is only as good as the romanisation it reads. `36:127` was catchable *because* its transliteration was legible enough to disagree; **54 of the 116 are in the `AA` scheme** (`aAAoothu`), where a root-level disagreement of exactly this kind is far harder to see, and 26 more are plain ASCII with no ʿayn marker at all. Running this before adoption would produce a low-signal pass and, worse, **manufacture false confidence** — the absence of findings would be read as absence of defects. Adoption is what produces the clean base this depends on.
   **Scope note:** `36:127` was found by hand while doing something else. Nothing systematically compares these fields today, so the current count of known root disagreements is **1 found, not 1 existing** — treat it as a floor, the same way `DUA-INTEGRITY-SCAN.md` treats its detector counts.
+- [ ] **DISPLAY — strip translator brackets when a translation is reused as `h1`/`title`.** Small,
+  cheap, and separate from the annotation ticket on purpose: `[…]` in a translation **body** is
+  correct — Saheeh International supplies implied sense that way. In a **heading** it is wrong,
+  because a heading is not the translation. `27:76`'s H1 and `<title>` currently render
+  `“Say, "He is Allāh, [who is] One…” (Hisn al-Muslim 27:76)`, which reads to any reader as a broken
+  template. Fix in `build-dua-pages.mjs` where the H1 falls back to the translation: strip `[…]`
+  spans (keep their inner text) for heading use only, never in the rendered translation. Live scope
+  today is `27:76`; the same fallback path serves every `derive_per_entry` chapter, so it will recur.
 - [ ] 🚧 **DATA LAYER — recited text and instruction are not separated. ONE cause, three fields.**
   **Cause:** the upstream compilers (Hisn, fitrahive, quran.com) store instructions *inline* inside
   content fields instead of as structured data. **Fix:** structural separation — a record carries

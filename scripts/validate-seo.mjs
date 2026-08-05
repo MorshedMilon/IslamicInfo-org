@@ -771,8 +771,24 @@ if (!process.argv.includes("--fixtures")) {
    served in production. So the guarantee today rests entirely on DUA_SEARCH_PUBLIC
    being false. This rule makes that coupling explicit and enforced: if the flag is
    ever flipped true while a held record is still present in the served asset, the
-   build fails. Preferred permanent fix is to exclude held records from the served
-   artifact entirely, at which point the flag coupling can be dropped. */
+   build fails.
+
+   ⚠ READ THIS BEFORE "FIXING" R11.
+   The day someone wants dua search live, this rule WILL fail and name the held
+   records, and the quickest way to unblock will look like relaxing the assertion.
+   Rules that block a launch get edited by whoever is blocked, so this is stated in
+   advance: there are exactly TWO valid remedies.
+
+     1. Exclude held records from the served artifact (preferred — the flag coupling
+        then disappears and R11 passes on structure rather than on a flag), or
+     2. Have no held records: resolve each hold on its merits first.
+
+   Weakening the assertion — narrowing it to specific ids, downgrading FAIL to a
+   warning, or skipping it when the flag is true — is NOT a remedy. A hold means the
+   record's stored fields disagree and which is correct is not established; shipping
+   it into search publishes unresolved text as settled. If this rule is genuinely
+   wrong, change it in a commit that says so and explains why, never as a side effect
+   of a launch. */
 {
   console.log("\n" + "=".repeat(86));
   console.log("R11 — A HELD RECORD MUST NOT BE REACHABLE THROUGH DUA SEARCH");
